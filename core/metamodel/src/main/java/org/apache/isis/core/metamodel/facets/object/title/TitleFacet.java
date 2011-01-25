@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.title;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -36,5 +37,5 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
  */
 public interface TitleFacet extends Facet {
 
-    String title(final ObjectAdapter object);
+    String title(final ObjectAdapter object, Localization localization);
 }

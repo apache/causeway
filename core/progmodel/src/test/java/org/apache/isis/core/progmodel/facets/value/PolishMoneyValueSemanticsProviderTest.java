@@ -31,6 +31,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -83,17 +84,17 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testTitleOfWithZlotych() {
-        assertEquals("10,5 " + ZLOTYCH_SYMBOL, adapter.displayTitleOf(originalMoney));
+        assertEquals("10,5 " + ZLOTYCH_SYMBOL, adapter.displayTitleOf(originalMoney, (Localization) null));
     }
 
     @Test
     public void testTitleOfWithNonLocalCurrency() {
-        assertEquals("10,5 USD", adapter.displayTitleOf(createMoney(10.50, "usd")));
+        assertEquals("10,5 USD", adapter.displayTitleOf(createMoney(10.50, "usd"), (Localization) null));
     }
 
     @Test
     public void testTitleWithUnknownCurrency() {
-        assertEquals("10,5 UNK", adapter.displayTitleOf(createMoney(10.50, "UNK")));
+        assertEquals("10,5 UNK", adapter.displayTitleOf(createMoney(10.50, "UNK"), (Localization) null));
     }
 
     @Test
@@ -118,20 +119,20 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
     @Test
     public void testSpecifyingCurrencyInEntry() {
         final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 cad");
-        assertEquals("3" + CURRENCY_SPACE + "021,5 CAD", adapter.displayTitleOf(parsed));
+        assertEquals("3" + CURRENCY_SPACE + "021,5 CAD", adapter.displayTitleOf(parsed, (Localization) null));
     }
 
     @Test
     public void testUsingLocalCurrencySymbol() {
         // MoneyValueSemanticsProvider adapter = new MoneyValueSemanticsProvider(new Money(0L, "gbp"));
         final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 " + ZLOTYCH_SYMBOL);
-        assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed));
+        assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed, (Localization) null));
     }
 
     @Test
     public void testInvalidCurrencySuffixRejected() throws Exception {
         final Object parsed = adapter.parseTextEntry(originalMoney, "3" + CURRENCY_SPACE + "021,50  Dm");
-        assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed));
+        assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed, null));
     }
 
     @Test
@@ -145,7 +146,7 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
     @Test
     public void testNewValueDefaultsToLocalCurrency() throws Exception {
         final Money parsed = adapter.parseTextEntry(originalMoney, "3021,50");
-        assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.displayTitleOf(parsed));
+        assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.displayTitleOf(parsed, (Localization) null));
     }
 
     @Test

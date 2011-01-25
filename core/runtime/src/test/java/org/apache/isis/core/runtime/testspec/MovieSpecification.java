@@ -23,6 +23,7 @@ package org.apache.isis.core.runtime.testspec;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -238,7 +239,7 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter) {
+    public String getTitle(final ObjectAdapter adapter, Localization localization) {
         return ((Movie) adapter.getObject()).title();
     }
 

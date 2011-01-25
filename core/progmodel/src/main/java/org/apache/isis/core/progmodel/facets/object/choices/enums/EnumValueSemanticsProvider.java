@@ -22,6 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.choices.enums;
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -83,7 +84,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     protected String doEncode(Object object) {
-        return titleString(object);
+        return titleString(object, null);
     }
 
     @Override
@@ -92,13 +93,13 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     }
 
     @Override
-    protected String titleString(Object object) {
+    protected String titleString(Object object, Localization localization) {
         return object.toString();
     }
 
     @Override
     public String titleStringWithMask(Object value, String usingMask) {
-        return titleString(value);
+        return titleString(value, null);
     }
 
 }

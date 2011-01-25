@@ -23,6 +23,7 @@ package org.apache.isis.core.runtime.userprofile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -34,6 +35,7 @@ public class UserProfile implements DebuggableWithTitle {
     private final Options options = new Options();
     private final List<PerspectiveEntry> entries = new ArrayList<PerspectiveEntry>();
     private PerspectiveEntry entry;
+    private Localization localization;
 
     public UserProfile() {}
 
@@ -88,6 +90,14 @@ public class UserProfile implements DebuggableWithTitle {
         return options;
     }
 
+    public Localization getLocalization() {
+        return localization;
+    }
+    
+    public void setLocalization(Localization localization) {
+        this.localization = localization;
+    }
+    
     public PerspectiveEntry newPerspective(String name) {
         entry = new PerspectiveEntry();
         entry.setName(name);

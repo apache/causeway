@@ -27,6 +27,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -217,7 +218,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter) {
+    public String getTitle(final ObjectAdapter adapter, Localization localization) {
         return title;
     }
 

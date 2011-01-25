@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -103,7 +104,7 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public String displayTitleOf(final T object) {
+        public String displayTitleOf(final T object, Localization localization) {
             return null;
         }
 

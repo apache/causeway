@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -66,7 +67,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testTitleOf() {
-        assertEquals("32.5", value.displayTitleOf(float1));
+        assertEquals("32.5", value.displayTitleOf(float1, (Localization) null));
     }
 
     @Test

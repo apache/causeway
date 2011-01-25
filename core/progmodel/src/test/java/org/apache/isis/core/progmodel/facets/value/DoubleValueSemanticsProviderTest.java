@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -58,7 +59,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testValue() {
-        assertEquals("32.5", getValue().displayTitleOf(doubleObj));
+        assertEquals("32.5", getValue().displayTitleOf(doubleObj, (Localization) null));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testTitleOf() {
-        assertEquals("35,000,000", getValue().displayTitleOf(Double.valueOf(35000000.0)));
+        assertEquals("35,000,000", getValue().displayTitleOf(Double.valueOf(35000000.0), (Localization) null));
     }
 
     @Test

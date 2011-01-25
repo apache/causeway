@@ -16,26 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.runtime.userprofile;
 
-
-package org.apache.isis.core.progmodel.facets.object.regex;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.Localization;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
+public class UserLocalization implements Localization {
 
-public class TitleFacetFormattedByRegex extends TitleFacetAbstract {
+    private final TimeZone timeZone;
+    private final Locale locale;
 
-    private final RegExFacet regexFacet;
-
-    public TitleFacetFormattedByRegex(final RegExFacet regexFacet) {
-        super(regexFacet.getFacetHolder());
-        this.regexFacet = regexFacet;
+    public UserLocalization(Locale locale, TimeZone timeZone) {
+        this.locale = locale == null ? Locale.getDefault() : locale;
+        this.timeZone = timeZone == null ? TimeZone.getDefault() : timeZone;
     }
 
-    public String title(final ObjectAdapter object, Localization localization) {
-        return regexFacet.format(object.titleString());
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public TimeZone getTimeZone() {
+        return timeZone;
     }
 
 }
+

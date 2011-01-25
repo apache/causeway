@@ -36,14 +36,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
+import org.apache.log4j.Logger;
 
 
 public class FileAuthorizor extends AuthorizorAbstract {
@@ -76,9 +76,9 @@ public class FileAuthorizor extends AuthorizorAbstract {
         // read from config
     	this.resourceStreamSource = getConfiguration().getResourceStreamSource();
         
-        this.whiteListResourceName = getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
+        whiteListResourceName = getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
         Assert.assertTrue(whiteListResourceName.length() > 0);
-        this.whiteListInputResource = resourceStreamSource.readResource(whiteListResourceName);
+        whiteListInputResource = resourceStreamSource.readResource(whiteListResourceName);
         
         this.learn = getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
         if (whiteListInputResource == null) {
@@ -137,7 +137,9 @@ public class FileAuthorizor extends AuthorizorAbstract {
             return;
         }
         final StringTokenizer tokens = new StringTokenizer(line.trim(), ":", false);
-        Assert.assertTrue(tokens.countTokens() == 2);
+        if (tokens.countTokens() != 2) {
+            throw new IsisConfigurationException("Invalid line: " + line);
+        }
         final String token1 = tokens.nextToken();
         final String token2 = tokens.nextToken();
         final Identifier identifier = memberFromString(token1.trim());

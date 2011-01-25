@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -57,7 +58,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
 		return false;
 	}
 
-    public String title(final ObjectAdapter owningAdapter) {
+    public String title(final ObjectAdapter owningAdapter, Localization localization) {
         try {
 			return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
 		} catch (RuntimeException ex) {

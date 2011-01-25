@@ -21,6 +21,7 @@
 package org.apache.isis.core.progmodel.facets.value.string;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -69,14 +70,14 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     }
 
     @Override
-    public String titleString(final Object object) {
+    public String titleString(final Object object, Localization localization) {
         final String string = (String) (object == null ? "" : object);
         return string;
     }
 
     @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object);
+        return titleString(object, null);
     }
 
     // //////////////////////////////////////////////////////////////////

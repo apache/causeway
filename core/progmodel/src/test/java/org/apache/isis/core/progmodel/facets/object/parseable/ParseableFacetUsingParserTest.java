@@ -20,6 +20,7 @@ package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import java.util.IllegalFormatWidthException;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -91,7 +92,7 @@ public class ParseableFacetUsingParserTest {
                 return 0;
             }
 
-            public String displayTitleOf(String object) {
+            public String displayTitleOf(String object, Localization localization) {
                 return null;
             }
 

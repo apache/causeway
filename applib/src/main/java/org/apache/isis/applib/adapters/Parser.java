@@ -88,8 +88,9 @@ public interface Parser<T> {
 
     /**
      * The title of the object.
+     * @param localization TODO
      */
-    String displayTitleOf(T object);
+    String displayTitleOf(T object, Localization localization);
 
     /**
      * The title of the object using a mask.

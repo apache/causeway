@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -78,7 +79,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Test
     public void testTitleOf() {
         final String EXPECTED = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date(0));
-        assertEquals(EXPECTED, getValue().displayTitleOf(date));
+        assertEquals(EXPECTED, getValue().displayTitleOf(date, (Localization) null));
     }
 
     @Test

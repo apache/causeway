@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -73,7 +74,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("132,199", getValue().displayTitleOf(bigInt));
+        assertEquals("132,199", getValue().displayTitleOf(bigInt, (Localization) null));
     }
 
     @Test

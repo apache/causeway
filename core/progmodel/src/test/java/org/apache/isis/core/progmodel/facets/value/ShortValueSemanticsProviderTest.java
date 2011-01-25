@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -68,12 +69,12 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testTitleOfForPositiveValue() {
-        assertEquals("32", value.displayTitleOf(short1));
+        assertEquals("32", value.displayTitleOf(short1, (Localization) null));
     }
 
     @Test
     public void testTitleOfForLargestNegativeValue() {
-        assertEquals("-128", value.displayTitleOf(Short.valueOf((short) -128)));
+        assertEquals("-128", value.displayTitleOf(Short.valueOf((short) -128), (Localization) null));
     }
 
     @Test

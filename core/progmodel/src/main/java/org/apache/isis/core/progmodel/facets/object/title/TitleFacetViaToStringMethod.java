@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -56,7 +57,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
 		return false;
 	}
 
-    public String title(final ObjectAdapter object) {
+    public String title(final ObjectAdapter object, Localization localization) {
         return object.getObject().toString();
     }
 

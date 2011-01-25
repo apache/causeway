@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -73,7 +74,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testTitleOf() throws Exception {
-        assertEquals("102", value.displayTitleOf(byteObj));
+        assertEquals("102", value.displayTitleOf(byteObj, (Localization) null));
     }
 
     @Test

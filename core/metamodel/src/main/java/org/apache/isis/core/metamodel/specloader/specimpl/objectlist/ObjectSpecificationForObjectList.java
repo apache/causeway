@@ -23,6 +23,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -132,7 +133,7 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
     ///////////////////////////////////////////////////////
 
     @Override
-    public String getTitle(final ObjectAdapter object) {
+    public String getTitle(final ObjectAdapter object, Localization localization) {
         return ((ObjectList) object.getObject()).titleString();
     }
 

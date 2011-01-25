@@ -74,7 +74,7 @@ public abstract class AbstractTextParsableContent extends AbstractContent {
         
         TitleFacet titleFacet = propertyOrParam.getFacet(TitleFacet.class);
         if (titleFacet != null) {
-            return titleFacet.title(propertyOrParamValue);
+            return titleFacet.title(propertyOrParamValue, null);
         } else {
             return propertyOrParamValue.titleString();
         }

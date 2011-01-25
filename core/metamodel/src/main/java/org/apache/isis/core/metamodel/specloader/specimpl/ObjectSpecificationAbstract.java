@@ -31,6 +31,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.internal.Maps;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -362,9 +363,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
     
     @Override
-    public String getTitle(final ObjectAdapter object) {
+    public String getTitle(final ObjectAdapter object, Localization localization) {
         if (titleFacet != null) {
-            final String titleString = titleFacet.title(object);
+            final String titleString = titleFacet.title(object, localization);
             if (titleString != null && !titleString.equals("")) {
                 return titleString;
             }

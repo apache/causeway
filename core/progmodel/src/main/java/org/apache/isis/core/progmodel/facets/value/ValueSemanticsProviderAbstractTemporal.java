@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import com.google.inject.internal.Maps;
 
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -267,12 +268,20 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String titleString(final Object value) {
+    public String titleString(final Object value, Localization localization) {
         if (value == null) {
             return null;
         }
         final Date date = dateValue(value);
-        return titleString(format, date);
+        DateFormat f = format;
+        if (localization != null) {
+            f = format(localization);
+        }
+        return titleString(f, date);
+    }
+
+    protected DateFormat format(Localization localization) {
+        return format;
     }
 
     @Override

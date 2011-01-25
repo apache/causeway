@@ -39,7 +39,7 @@ import org.apache.isis.applib.fixtures.UserProfileFixture;
  */
 public interface Perspective {
 
-    void addToServices(Class<?> serviceClass);
+    Object addToServices(Class<?> serviceClass);
 
     void removeFromServices(Class<?> serviceClass);
 

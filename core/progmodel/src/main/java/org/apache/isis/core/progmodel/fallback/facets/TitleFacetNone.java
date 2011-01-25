@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.progmodel.fallback.facets;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -31,7 +32,7 @@ public class TitleFacetNone extends TitleFacetAbstract {
         super(holder);
     }
 
-    public String title(final ObjectAdapter object) {
+    public String title(final ObjectAdapter object, Localization localization) {
         return null;
     }
 

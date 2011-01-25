@@ -27,6 +27,7 @@ import java.text.ParseException;
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -102,7 +103,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String titleString(final Object value, Localization localization) {
         return titleString(format, value);
     }
 

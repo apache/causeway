@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -282,7 +283,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return "";
         } else {
             final ObjectSpecification specification = getSpecification();
-            String title = specification.getTitle(this);
+            Localization localization = IsisContext.getUserProfile().getLocalization();
+            String title = specification.getTitle(this, localization);
             if (title == null) {
                 if (resolveState.isGhost()) {
                     if (LOG.isInfoEnabled()) {

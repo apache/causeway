@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -66,17 +67,17 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testTitleOf() {
-        assertEquals("#3366FF", value.displayTitleOf(color));
+        assertEquals("#3366FF", value.displayTitleOf(color, (Localization) null));
     }
 
     @Test
     public void testTitleOfBlack() {
-        assertEquals("Black", value.displayTitleOf(new Color(0)));
+        assertEquals("Black", value.displayTitleOf(new Color(0), (Localization) null));
     }
 
     @Test
     public void testTitleOfWhite() {
-        assertEquals("White", value.displayTitleOf(new Color(0xffffff)));
+        assertEquals("White", value.displayTitleOf(new Color(0xffffff), (Localization) null));
     }
     
     @Test

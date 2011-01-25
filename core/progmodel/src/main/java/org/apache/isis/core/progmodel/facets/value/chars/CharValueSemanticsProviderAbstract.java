@@ -22,6 +22,7 @@ package org.apache.isis.core.progmodel.facets.value.chars;
 
 import java.text.DecimalFormat;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -64,7 +65,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String titleString(final Object value, Localization localization) {
         return value == null ? "" : value.toString();
     }
 

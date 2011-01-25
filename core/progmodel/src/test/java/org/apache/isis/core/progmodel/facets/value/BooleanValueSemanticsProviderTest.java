@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -83,12 +84,12 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("True", value.displayTitleOf(booleanObj));
+        assertEquals("True", value.displayTitleOf(booleanObj, (Localization) null));
     }
 
     @Test
     public void testTitleWhenNotSet() throws Exception {
-        assertEquals("", value.titleString(null));
+        assertEquals("", value.titleString(null, null));
     }
 
     @Test

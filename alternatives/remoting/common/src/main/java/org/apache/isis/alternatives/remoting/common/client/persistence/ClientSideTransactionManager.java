@@ -150,7 +150,7 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
             } else {
                 final ObjectAdapter failedObject = transactionManagement.reload(oid);
                 throw new ConcurrencyException("Object automatically reloaded: "
-                        + failedObject.getSpecification().getTitle(failedObject), e);
+                        + failedObject.getSpecification().getTitle(failedObject, null), e);
             }
         }
 

@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -88,7 +89,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testTitleOf() {
-        assertEquals("10%", adapter.displayTitleOf(percentage));
+        assertEquals("10%", adapter.displayTitleOf(percentage, (Localization) null));
     }
 
     @Test

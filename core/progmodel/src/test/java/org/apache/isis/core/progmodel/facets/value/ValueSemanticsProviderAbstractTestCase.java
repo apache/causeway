@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -176,7 +177,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOfForNullObject() {
-        assertEquals("", valueSemanticsProvider.displayTitleOf(null));
+        assertEquals("", valueSemanticsProvider.displayTitleOf(null, (Localization) null));
     }
     
     

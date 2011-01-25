@@ -140,8 +140,8 @@ class PerspectiveImpl implements Perspective {
 	}
 
 	@Override
-    public void addToServices(Class<?> cls) {
-		entry.addToServices(cls);
+    public Object addToServices(Class<?> cls) {
+		return entry.addToServices(cls);
 	}
 	@Override
 	public void removeFromServices(Class<?> cls) {

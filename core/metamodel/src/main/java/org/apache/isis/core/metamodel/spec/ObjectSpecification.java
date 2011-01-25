@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.google.common.base.Function;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -156,7 +157,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Corresponds to the {@link TitleFacet#value()) value} of {@link TitleFacet}; 
      * is not necessarily immutable. 
      */
-    String getTitle(ObjectAdapter adapter);
+    String getTitle(ObjectAdapter adapter, Localization localization);
 
     /**
      * Returns the name of an icon to use for the specified object.

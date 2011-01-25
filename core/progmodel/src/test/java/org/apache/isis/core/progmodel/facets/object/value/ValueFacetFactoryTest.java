@@ -22,6 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.value;
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -202,7 +203,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object) {
+        public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object, Localization localization) {
             return null;
         }
 
@@ -422,7 +423,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object) {
+        public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object, Localization localization) {
             return null;
         }
 
@@ -471,7 +472,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object) {
+        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object, Localization localization) {
             return null;
         }
 

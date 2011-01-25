@@ -112,8 +112,8 @@ public class StandaloneAdapter implements ObjectAdapter {
         if (specification.isCollection()) {
             return "A collection of " + (" " + specification.getPluralName()).toLowerCase();
         } 
-        
-        String title = specification.getTitle(this);
+        // TODO do we want to localize titles  for embedded work?
+        String title = specification.getTitle(this, null);
         if (title != null) {
         	return title;
         }

@@ -79,7 +79,7 @@ public class TitleFacetViaMethodTest  {
 
     @Test
     public void testTitleThrowsException() {
-    	String title = facet.title(mockOwningAdapter);
+    	String title = facet.title(mockOwningAdapter, null);
     	assertThat(title, is(nullValue()));
     }
 

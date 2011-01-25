@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -66,7 +67,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
 
     @Test
     public void testTitleString() {
-        assertEquals("32", value.displayTitleOf(integer));
+        assertEquals("32", value.displayTitleOf(integer, (Localization) null));
     }
 
     @Test

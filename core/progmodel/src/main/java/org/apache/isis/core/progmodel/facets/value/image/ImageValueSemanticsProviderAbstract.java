@@ -26,6 +26,7 @@ import java.awt.image.ImageObserver;
 import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -277,7 +278,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     public void setMask(final String mask) {}
 
     @Override
-    public String titleString(final Object value) {
+    public String titleString(final Object value, Localization localization) {
         return "image";
     }
 

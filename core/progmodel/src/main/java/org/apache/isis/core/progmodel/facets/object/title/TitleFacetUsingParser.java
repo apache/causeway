@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.title;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -46,7 +47,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     }
 
     @Override
-    public String title(final ObjectAdapter adapter) {
+    public String title(final ObjectAdapter adapter, Localization localization) {
         if (adapter == null) {
             return null;
         }
@@ -55,7 +56,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
             return null;
         }
     	getDependencyInjector().injectDependenciesInto(parser);
-        return parser.displayTitleOf(object);
+        return parser.displayTitleOf(object, localization);
     }
 
     public String title(final ObjectAdapter adapter, String usingMask) {

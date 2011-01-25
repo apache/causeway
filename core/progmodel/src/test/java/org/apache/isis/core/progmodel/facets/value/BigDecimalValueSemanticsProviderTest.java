@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -73,7 +74,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testTitleOf() {
-        assertEquals("34,132.199", value.displayTitleOf(bigDecimal));
+        assertEquals("34,132.199", value.displayTitleOf(bigDecimal, (Localization) null));
     }
 
     @Test

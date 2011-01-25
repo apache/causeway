@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
@@ -182,11 +183,11 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     @Override
-    public String displayTitleOf(final Object object) {
+    public String displayTitleOf(final Object object, Localization localization) {
         if (object == null) {
             return "";
         }
-        return titleString(object);
+        return titleString(object, localization);
     }
 
     @Override
@@ -198,11 +199,11 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     /**
-     * Defaults to {@link #displayTitleOf(Object)}.
+     * Defaults to {@link #displayTitleOf(Object, Localization)}.
      */
     @Override
     public String parseableTitleOf(final Object existing) {
-        return displayTitleOf(existing);
+        return displayTitleOf(existing, (Localization) null);
     }
 
     protected String titleString(final Format formatter, final Object object) {
@@ -212,7 +213,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     /**
      * Return a string representation of aforesaid object.
      */
-    protected abstract String titleString(Object object);
+    protected abstract String titleString(Object object, Localization localization);
 
     public abstract String titleStringWithMask(final Object value, final String usingMask);
 

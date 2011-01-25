@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.mask;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -36,14 +37,14 @@ public class TitleFacetBasedOnMask extends TitleFacetAbstract {
         this.underlyingTitleFacet = underlyingTitleFacet;
     }
 
-    public String title(final ObjectAdapter object) {
+    public String title(final ObjectAdapter object, Localization localization) {
         final String mask = maskFacet.value();
         TitleFacetUsingParser titleFacetUsingParser = (TitleFacetUsingParser) underlyingTitleFacet.getUnderlyingFacet();
         if (titleFacetUsingParser != null) {
             final String titleString = titleFacetUsingParser.title(object, mask);
             return titleString;
         } else {
-           return underlyingTitleFacet.title(object);
+           return underlyingTitleFacet.title(object, localization);
         }
     }
 

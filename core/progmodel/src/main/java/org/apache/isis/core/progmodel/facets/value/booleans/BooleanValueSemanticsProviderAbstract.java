@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -67,13 +68,13 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String titleString(final Object value, Localization localization) {
         return value == null ? "" : isSet(value) ? "True" : "False";
     }
     
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
+        return titleString(value, null);
     }
 
     // //////////////////////////////////////////////////////////////////

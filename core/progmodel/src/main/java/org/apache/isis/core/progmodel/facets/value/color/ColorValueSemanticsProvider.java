@@ -23,6 +23,7 @@ package org.apache.isis.core.progmodel.facets.value.color;
 import java.text.DecimalFormat;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -79,7 +80,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public String titleString(final Object object) {
+    public String titleString(final Object object, Localization localization) {
         final Color color = (Color) object;
         return color.title();
     }
