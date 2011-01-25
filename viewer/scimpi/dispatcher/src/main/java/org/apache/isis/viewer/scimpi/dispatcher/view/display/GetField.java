@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.text.DecimalFormat;
@@ -25,6 +24,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
@@ -50,10 +50,12 @@ public class GetField extends AbstractElementProcessor {
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
-        if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
-            throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
+        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        if (field.isVisible(session, object).isVetoed()) {
+            throw new ForbiddenException("Field '" + fieldName + "' in " + object.getSpecification().getFullIdentifier()
+                    + " is not visible for " + session.getUserName() + " " + session.getRoles());
         }
-        
+
         String pattern = request.getOptionalProperty("decimal-format");
         Format format = null;
         if (pattern != null) {
@@ -63,11 +65,11 @@ public class GetField extends AbstractElementProcessor {
         if (pattern != null) {
             format = new SimpleDateFormat(pattern);
         }
-        
+
         String name = request.getOptionalProperty(RESULT_NAME, fieldName);
         String scopeName = request.getOptionalProperty(SCOPE);
         Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
-        
+
         process(request, object, field, format, name, scope);
     }
 
@@ -77,11 +79,11 @@ public class GetField extends AbstractElementProcessor {
             DateValueFacet facet = fieldReference.getSpecification().getFacet(DateValueFacet.class);
             Date date = facet.dateValue(fieldReference);
             String value = format.format(date);
-            request.appendDebug("    " + object + " -> " + value); 
+            request.appendDebug("    " + object + " -> " + value);
             request.getContext().addVariable(name, value, scope);
         } else {
             String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, scope);
-            request.appendDebug("    " + object + " -> " + source); 
+            request.appendDebug("    " + object + " -> " + source);
             request.getContext().addVariable(name, source, scope);
         }
     }
@@ -91,4 +93,3 @@ public class GetField extends AbstractElementProcessor {
     }
 
 }
-

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -157,6 +158,21 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
             Class<?> cls = forClass(request);
             boolean hasType = cls == null || cls.isAssignableFrom(object.getObject().getClass()); 
             processTags(hasType, request);
+            return;
+        }
+
+        String hasRole = request.getOptionalProperty("has-role");
+        if (hasRole != null) {
+            AuthenticationSession session = IsisContext.getSession().getAuthenticationSession();
+            List<String> roles = session.getRoles();
+            boolean hasMatchingRole = false;
+            for (String role : roles) {
+                if (role.equals(hasRole.trim())) {
+                    hasMatchingRole = true;
+                    break;
+                }
+            }
+            processTags(hasMatchingRole, request);
             return;
         }
         

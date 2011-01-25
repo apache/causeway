@@ -20,6 +20,9 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -38,6 +41,11 @@ public class Diagnostics extends AbstractElementProcessor {
             request.appendHtml("URI:  " + context.getUri());
             request.appendHtml("\n");
             request.appendHtml("File: " + context.fullFilePath(context.getResourceFile()));
+            request.appendHtml("\n");
+            
+            AuthenticationSession session = IsisContext.getAuthenticationSession();
+            request.appendHtml("Session:  " + session.getUserName() + " " + session.getRoles());
+            
             if (!isExcludeVariables) {
                 request.appendHtml("\n\n");
                 request.appendHtml("<a class=\"option\" target=\"debug\" href=\"debug.app\">Object</a>");

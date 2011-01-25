@@ -97,19 +97,21 @@ public class Selector extends AbstractElementProcessor {
         }
     }
         
-    private String showSelectionList(Request request,  ObjectAdapter collection, String type) {
+    private String showSelectionList(Request request, ObjectAdapter collection, String type) {
             String field = request.getRequiredProperty(FIELD);
             CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
             
-            if (facet.size(collection) == 1) {
+            boolean allowNotSet = true;
+            
+            if (facet.size(collection) == 1 && !allowNotSet) {
                 return onlyItem(request, field, collection, facet);
             } else if (type.equals("radio")) {
-                return radioButtonList(request, field, collection, facet);
+                return radioButtonList(request, field, allowNotSet, collection, facet);
             } else if (type.equals("list")) {
                 String size = request.getOptionalProperty("size", "5");
-                return dropdownList(request, field, collection, size, facet);
+                return dropdownList(request, field, allowNotSet, collection, size, facet);
             } else if (type.equals("dropdown")) {
-                return dropdownList(request, field, collection, null, facet);
+                return dropdownList(request, field, allowNotSet, collection, null, facet);
             } else {
                 throw new UnknownTypeException(type);
             }
@@ -127,10 +129,14 @@ public class Selector extends AbstractElementProcessor {
         return buffer.toString();
     }
 
-    private String radioButtonList(Request request, String field, ObjectAdapter collection, CollectionFacet facet) {
+    private String radioButtonList(Request request, String field, boolean allowNotSet, ObjectAdapter collection, CollectionFacet facet) {
         RequestContext context = request.getContext();
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         StringBuffer buffer = new StringBuffer();
+        if (allowNotSet) {
+            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"null\">" + "[not set]"
+                    + "</input><br/>\n");
+        }
         while (iterator.hasNext()) {
             ObjectAdapter element = iterator.next();
             String elementId = context.mapObject(element, Scope.INTERACTION);
@@ -143,12 +149,15 @@ public class Selector extends AbstractElementProcessor {
         return buffer.toString();
     }
 
-    private String dropdownList(Request request, String field, ObjectAdapter collection, String size, CollectionFacet facet) {
+    private String dropdownList(Request request, String field, boolean allowNotSet, ObjectAdapter collection, String size, CollectionFacet facet) {
         RequestContext context = request.getContext();
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         StringBuffer buffer = new StringBuffer();
         size = size == null ? "" : " size =\"" + size + "\"";
         buffer.append("<select name=\"" + field + "\"" + size + " >\n");
+        if (allowNotSet) {
+            buffer.append("  <option value=\"null\">" + "[not set]" + "</option>\n");
+        }
         while (iterator.hasNext()) {
             ObjectAdapter element = iterator.next();
             String elementId = context.mapObject(element, Scope.INTERACTION);

@@ -21,23 +21,22 @@
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 
+
 public class UserlessSession extends AuthenticationSessionAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public UserlessSession() {
-		super("__web_default", "");
-	}
+    public UserlessSession() {
+        super("__web_default", Arrays.asList(new String[] { "not-logged-in" }), "");
+    }
 
-	public UserlessSession(DataInputExtended input) throws IOException {
-		super(input);
-	}
+    public UserlessSession(DataInputExtended input) throws IOException {
+        super(input);
+    }
 
-	
 }
-
-

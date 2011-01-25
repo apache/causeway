@@ -47,9 +47,10 @@ public class ServletRequestContext extends RequestContext {
     private ServletContext servletContext;
 
     public void append(DebugView view) {
+        /*
         view.divider("System");
-     //   Runtime.getRuntime().
-
+        Runtime.getRuntime().
+		*/
         view.divider("Request");
         view.appendRow("Auth type", request.getAuthType());
         view.appendRow("Character encoding", request.getCharacterEncoding());
@@ -222,14 +223,14 @@ public class ServletRequestContext extends RequestContext {
         }
     }
     
-    public void setStatus(int status) {
-        /*
+    public void raiseError(int status) {
+        
         try {
             getResponse().sendError(status);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        */
+        
         getResponse().setStatus(status);
     }
     

@@ -20,6 +20,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,13 +33,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -63,8 +59,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.logon.LogoutAction;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.HtmlFileParser;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.ProcessorLookup;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.processor.TagProcessingException;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 
 public class Dispatcher {
@@ -82,12 +84,11 @@ public class Dispatcher {
     private HtmlFileParser parser = new HtmlFileParser(processors);
 
     public void process(RequestContext context, String servletPath) {
-
+        LOG.info("processing request " + servletPath);
         try {
             AuthenticationSession session = UserManager.startRequest(context);
             LOG.debug("exsiting session: " + session);
-            LOG.info("processing request " + servletPath);
-
+            
             IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
             context.setRequestPath(servletPath);
             context.startRequest();
@@ -107,14 +108,17 @@ public class Dispatcher {
             if (transactionManager.getTransaction().getState().canCommit()) {
                 IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
             }
+            
+            context.endRequest();
+            UserManager.endRequest(context.getSession());
+
         } catch (Throwable e) {
-           LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             
             DebugString error = new DebugString();
-            
             List<String> messages =  IsisContext.getMessageBroker().getMessages();
             for (String message : messages) {
-                context.getWriter().append("<div class=\"message\">message: " + message + "</div>");
+                context.getWriter().append("<div class=\"messaEge\">message: " + message + "</div>");
                 error.appendln("message", message);
             }
             messages =  IsisContext.getMessageBroker().getWarnings();
@@ -124,6 +128,7 @@ public class Dispatcher {
             }
 
             generateErrorPage(e, context, error);
+             
             PersistenceSession checkSession = IsisContext.getPersistenceSession();
             IsisTransactionManager transactionManager = checkSession.getTransactionManager();
             if (transactionManager.getTransaction().getState().canAbort()) {
@@ -133,20 +138,88 @@ public class Dispatcher {
             String message = "failed while processing " + servletPath;
             LOG.error(message + "\n" + error + "\n" + message, e);
 
-        } finally {
-            try {
-                context.endRequest();
-            } catch (Exception e) {
-                LOG.error("endRequest call failed", e);
-            }
+            
             try {
                 UserManager.endRequest(context.getSession());
-            } catch (Exception e) {
-                LOG.error("endRequest call failed", e);
+            } catch (Exception e1) {
+                LOG.error("endRequest call failed", e1);
+            }
+
+            Throwable ex;
+            if (e instanceof TagProcessingException) {
+                ex = e.getCause();
+            } else {
+                ex = e;
+            }
+            if (ex instanceof ForbiddenException) {
+                context.raiseError(403);
+            } else if (ex instanceof ScimpiNotFoundException) {
+                context.raiseError(404);
+            } else {
+                context.raiseError(500);    
             }
         }
     }
 
+
+    int nextId = 1000;
+    
+    private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        writeErrorContent(requestContext, exception, error, new PrintWriter(out), false);
+        
+        PrintWriter writer;
+        try {
+            String ref = Long.toString(System.currentTimeMillis(), 36).toUpperCase();
+            requestContext.addVariable("_error-ref", ref, Scope.INTERACTION);
+            String directory = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
+            writer = new PrintWriter(new File(directory, "error_" + ref + ".html"));
+            writeErrorContent(requestContext, exception, error, writer, true);
+        } catch (FileNotFoundException e) {
+            LOG.error("Failed to archive error page", e);
+        }
+    
+        String replace = "\\$\\{";
+        String withReplacement = "\\$&#x7B;";
+        requestContext.addVariable("_error-message", exception.getMessage().replaceAll(replace, withReplacement), Scope.INTERACTION);
+        requestContext.addVariable("_error-details", out.toString().replaceAll(replace, withReplacement), Scope.INTERACTION);
+        requestContext.clearTransientVariables();
+    }
+
+
+    public void writeErrorContent(
+            RequestContext requestContext,
+            Throwable exception,
+            DebugString error,
+            PrintWriter writer,
+            boolean includeHeader) {
+        DebugView errorView = new DebugView(writer, error);
+        if (includeHeader) {
+            errorView.header();
+        }
+        errorView.startTable();
+
+        errorView.divider("User");
+        errorView.appendRow("Session", requestContext.getSession());
+        errorView.appendRow("Name", requestContext.getSession().getUserName());
+        errorView.appendRow("Roles", requestContext.getSession().getRoles());
+
+        try {
+            errorView.exception(exception);
+            requestContext.append(errorView);
+        } catch (RuntimeException e) {
+            errorView.exception(e);
+        }
+        errorView.divider("Processing"); 
+        errorView.appendDebugTrace(requestContext.getDebugTrace()); 
+        errorView.endTable();
+        if (includeHeader) {
+            errorView.footer();
+        }
+        writer.close();
+    }
+
+    
     public void addParameter(String name, String value) {
         parameters.put(name, value);
     }
@@ -311,29 +384,6 @@ public class Dispatcher {
      * String name = (String) parameterNames.nextElement(); if (!name.equals("view")) {
      * context.addVariable(name, context.getParameter(name), Scope.REQUEST); } }
      */
-    }
-
-    private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error) {
-        requestContext.setStatus(500);
-        requestContext.setContentType("text/html");
-
-        PrintWriter writer = requestContext.getWriter();
-        DebugView errorView = new DebugView(writer, error);
-        errorView.header();
-        errorView.startTable();
-        try {
-            errorView.exception(exception);
-            requestContext.append(errorView);
-        } catch (RuntimeException e) {
-            errorView.exception(e);
-        }
-        errorView.divider("Processing"); 
-        errorView.appendDebugTrace(requestContext.getDebugTrace()); 
-        errorView.endTable();
-        errorView.footer();
-        writer.close();
-        
-        requestContext.clearTransientVariables();
     }
 
     public void init(String dir) {

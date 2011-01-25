@@ -29,10 +29,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class ThrowException extends AbstractElementProcessor {
 
     public void process(Request request) {
-        if (request.getContext().getDebug() == RequestContext.Debug.ON) {
-            String message = request.getOptionalProperty("message", "Exception throw for testing purposes");
-            throw new IsisException(message);
-        }
+		String message = request.getOptionalProperty("message", "Exception throw for testing purposes");
+        throw new IsisException(message);
     }
 
     public String getName() {

@@ -20,6 +20,9 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.context.IsisContext;
+
 /**
  * Indicates that request could not complete as it could not access (for security reasons) some of the content.
  */
@@ -29,7 +32,7 @@ public class ForbiddenException extends ScimpiException {
     public ForbiddenException() {}
 
     public ForbiddenException(String message) {
-        super(message);
+        super(appendUsers(message));
     }
 
     public ForbiddenException(Throwable cause) {
@@ -37,7 +40,12 @@ public class ForbiddenException extends ScimpiException {
     }
 
     public ForbiddenException(String message, Throwable cause) {
-        super(message, cause);
+        super(appendUsers(message), cause);
+    }
+    
+    private static String appendUsers(String message) {
+        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        return  message + " " + session.getUserName() + " " + session.getRoles();
     }
 
 }

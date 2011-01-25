@@ -346,6 +346,7 @@ public abstract class RequestContext {
     }
 
     public String replaceVariables(String value, boolean ensureExists) {
+        LOG.debug("replacing" + value);
         int start = value.indexOf("${");
         if (start == -1) {
             return value;
@@ -656,7 +657,7 @@ public abstract class RequestContext {
 
     public abstract String getUri();
 
-    public void setStatus(int status) {}
+    public void raiseError(int status) {}
 
     public void setContentType(String string) {}
 

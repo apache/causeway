@@ -70,6 +70,8 @@ public class DebugAction implements Action {
         String action = context.getParameter("action");
         if ("i18n".equals(action)) {
             i18n(context, null);            
+        } else if ("authorization".equals(action)) {
+            authorization(context, null);            
         } else {
             DebugView view = new DebugView(context.getWriter(), new DebugString());
             view.header();
@@ -77,6 +79,7 @@ public class DebugAction implements Action {
             view.appendln("<a href=\"debug.app?action=system\">System</a>");
             view.appendln(" | <a href=\"debug.app?action=specifications\">List specifications</a>");
             view.appendln(" | <a href=\"debug.app?action=i18n\">I18N File</a>");
+            view.appendln(" | <a href=\"debug.app?action=authorization\">Authorization File</a>");
             view.appendln(" | <a href=\"debug.app?action=context\">Context</a>");
             view.appendln(" | <a href=\"debug.app?action=dispatcher\">Dispatcher</a>");
             view.appendln("</div>");
@@ -148,6 +151,38 @@ public class DebugAction implements Action {
                 context.getWriter().append("#" + name + ".action." + action.getId() + ".name" + "=\n");
                 context.getWriter().append("#" + name + ".action." + action.getId() + ".description" + "=\n");
                 context.getWriter().append("#" + name + ".action." + action.getId() + ".help" + "=\n");
+            }
+            context.getWriter().append("\n");
+        }
+    }
+
+    private void authorization(RequestContext context, DebugView view) {
+        Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+        final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications);
+        Collections.sort(specs, new Comparator<ObjectSpecification>() {
+            public int compare(ObjectSpecification o1, ObjectSpecification o2) {
+                return o1.getShortIdentifier().compareTo(o2.getShortIdentifier());
+            }
+        });
+        Function<ObjectSpecification, String> className = ObjectSpecification.FUNCTION_FULLY_QUALIFIED_CLASS_NAME;
+        final List<String> fullIdentifierList = Lists.newArrayList(Collections2.transform(specs, className));
+        for (String fullIdentifier : fullIdentifierList) {
+            ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
+            if (spec.getAssociations().size() == 0 && spec.getObjectActionsAll().size() == 0) {
+                continue;
+            }
+            String name = spec.getIdentifier().toClassIdentityString();
+            context.getWriter().append("# " + spec.getShortIdentifier() +"\n");
+            context.getWriter().append("" + name + ":roles\n");
+            for (ObjectAssociation assoc : spec.getAssociations()) {
+                context.getWriter().append("#" + name + "#" + assoc.getId() + ":roles\n");
+             //   context.getWriter().append("#" + name + ".property." + assoc.getId() + ".description" + "=\n");
+              //  context.getWriter().append("#" + name + ".property." + assoc.getId() + ".help" + "=\n");
+            }
+            for (ObjectAction action : spec.getObjectActionsAll()) {
+                context.getWriter().append("#" + name + "#" + action.getId() + "():roles\n");
+             //   context.getWriter().append("#" + name + ".action." + action.getId() + ".description" + "=\n");
+            //    context.getWriter().append("#" + name + ".action." + action.getId() + ".help" + "=\n");
             }
             context.getWriter().append("\n");
         }

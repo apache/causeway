@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
@@ -25,6 +24,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -34,7 +34,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 
 public class RunAction extends AbstractElementProcessor {
-    
+
     @Override
     public void process(Request request) {
         RequestContext context = request.getContext();
@@ -52,11 +52,21 @@ public class RunAction extends AbstractElementProcessor {
         request.setBlockContent(parameterBlock);
         request.processUtilCloseTag();
         ObjectAdapter[] parameters = parameterBlock.getParameters(request);
-        
+
         if (!MethodsUtils.isVisibleAndUsable(object, action)) {
-            throw new ScimpiException("Action is not visible/enabled: " + action.getName());
+            throw new ScimpiException("Action '" + action.getId() + "' is not visible/enabled in "
+                    + action.getOnType().getFullIdentifier() + ", for " + IsisContext.getSession().getAuthenticationSession().getRoles());
+            /* TODO remove if the above is correct
+            if (action.isContributed()) {
+                throw new ScimpiException("Action '" + action.getId() + "' is not visible/enabled in "
+                        + action.getOnType().getFullIdentifier() + ", for " + IsisContext.getSession().getAuthenticationSession().getRoles());
+            } else {
+                throw new ScimpiException("Action '" + action.getId() + "' is not visible/enabled in "
+                        + object.getSpecification().getFullIdentifier() + ", for " + IsisContext.getSession().getAuthenticationSession().getRoles());
+            }
+            */
         }
-        
+
         // swap null parameter of the object's type to run a contributed method
         if (action.isContributed()) {
             final List<ObjectActionParameter> parameterSpecs = action.getParameters();
@@ -67,7 +77,7 @@ public class RunAction extends AbstractElementProcessor {
                 }
             }
         }
-        
+
         Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
         MethodsUtils.runMethod(context, action, object, parameters, variableName, scope);
         request.popBlockContent();
@@ -79,4 +89,3 @@ public class RunAction extends AbstractElementProcessor {
     }
 
 }
-

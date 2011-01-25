@@ -167,7 +167,7 @@ public class InputForm {
             String selectedSegment = field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
             str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
         }
-        if (field.getType()  == InputField.TEXT) {
+        if (field.getType() == InputField.TEXT) {
             str.append("    <option value=\"-OTHER-\">Other:</option>\n");
         }
         str.append("  </select>");

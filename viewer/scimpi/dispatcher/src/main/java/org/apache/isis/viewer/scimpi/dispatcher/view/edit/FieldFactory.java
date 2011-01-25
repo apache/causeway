@@ -75,7 +75,7 @@ public class FieldFactory {
             } else if (spec.getFullIdentifier().endsWith(".Password")) {
                 field.setType(InputField.PASSWORD);
             } else {
-                field.setType(InputField.TEXT);
+                field.setType(InputField.TEXT); 
             }
 
         } else {

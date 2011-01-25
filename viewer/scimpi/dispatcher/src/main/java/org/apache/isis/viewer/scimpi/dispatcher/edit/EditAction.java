@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -57,6 +58,12 @@ public class EditAction implements Action {
             String resultName = context.getParameter(RESULT_NAME);
             resultName = resultName == null ? RequestContext.RESULT : resultName;
             String override = context.getParameter(RESULT_OVERRIDE);
+            
+            Locale locale = Locale.getDefault();
+            String localeString = context.getParameter("locale");
+            if (localeString != null) {
+                locale = new Locale(localeString);
+            }
             
             ObjectAdapter adapter = context.getMappedObject(objectId);
             List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);

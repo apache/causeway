@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -42,22 +41,23 @@ public class TableCell extends AbstractElementProcessor {
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
-        if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
-            throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
-        }
         request.appendHtml("<td" + className + ">");
-        ObjectAdapter fieldReference = field.get(object);
-        String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
-        String name = request.getOptionalProperty(RESULT_NAME, fieldName);
-        request.getContext().addVariable(name, source, Scope.REQUEST);
-        
-        request.pushNewBuffer();
-        request.processUtilCloseTag();
-        String buffer = request.popBuffer();
-        if (buffer.trim().length() == 0) {
-            request.appendHtml( fieldReference == null ? "" : fieldReference.titleString());
+        if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+            ObjectAdapter fieldReference = field.get(object);
+            String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
+            String name = request.getOptionalProperty(RESULT_NAME, fieldName);
+            request.getContext().addVariable(name, source, Scope.REQUEST);
+            
+            request.pushNewBuffer();
+            request.processUtilCloseTag();
+            String buffer = request.popBuffer();
+            if (buffer.trim().length() == 0) {
+                request.appendHtml( fieldReference == null ? "" : fieldReference.titleString());
+            } else {
+                request.appendHtml(buffer);
+            }
         } else {
-            request.appendHtml(buffer);
+            request.skipUntilClose();
         }
         request.appendHtml("</td>");
     }

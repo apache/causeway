@@ -21,6 +21,8 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -59,6 +61,13 @@ public class EditObject extends AbstractElementProcessor {
         String scope = request.getOptionalProperty(SCOPE);
         String className = request.getOptionalProperty(CLASS, "edit");
         String id = request.getOptionalProperty(ID);
+/*        
+        String localeId = request.getOptionalProperty("locale");
+        String timeZoneId = request.getOptionalProperty("timezone");
+        
+ */
+        Locale locale = null; // new Locale(localeId);
+        TimeZone timeZone = null; //TimeZone.getTimeZone(timeZoneId);
 
         final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
         String actualObjectId = context.mapObject(object, Scope.INTERACTION);
@@ -84,7 +93,7 @@ public class EditObject extends AbstractElementProcessor {
         FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
         initializeFields(context, object, formFields, entryState, !hideNonEditableFields);
         setDefaults(context, object, formFields, entryState);
-        copyFieldContent(context, object, formFields);
+        copyFieldContent(context, object, formFields, locale, timeZone);
         overrideWithHtml(context, containedBlock, formFields);
         if (entryState != null && entryState.isForForm(actualObjectId)) {
             copyEntryState(context, object, formFields, entryState);
@@ -197,7 +206,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields) {
+    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields, Locale locale, TimeZone TimeZone) {
         for (int i = 0; i < formFields.length; i++) {
             String fieldName = formFields[i].getName();
             ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
@@ -206,12 +215,12 @@ public class EditObject extends AbstractElementProcessor {
                 IsisContext.getPersistenceSession().resolveField(object, field);
                 ObjectAdapter fieldValue = field.get(object);
                 if (inputField.isEditable()) {
-                    String value = getValue(context, fieldValue);
+                    String value = getValue(context, fieldValue, locale, TimeZone);
                     if (!value.equals("") || inputField.getValue() == null) {
                         inputField.setValue(value);
                     }
                 } else {
-                    String entry = getValue(context, fieldValue);
+                    String entry = getValue(context, fieldValue, locale, TimeZone);
                     inputField.setHtml(entry);
                     inputField.setType(InputField.HTML);
 
@@ -305,13 +314,25 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private String getValue(RequestContext context, ObjectAdapter field) {
+    private String getValue(RequestContext context, ObjectAdapter field, Locale locale, TimeZone timeZone) {
         if (field == null) {
             return "";
         }
-        if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
+        ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
+        if (facet == null) {
             return context.mapObject(field, Scope.INTERACTION);
         } else {
+            /*
+            if ( field.getObject() instanceof DateTime) {
+                Date date = ((DateTime) field.getObject()).dateValue();
+                
+                DateFormat format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, locale);
+                format.setTimeZone(timeZone);
+                
+                return format.format(date);
+            } else {
+            }
+            */
             return field.titleString();
         }
     }
