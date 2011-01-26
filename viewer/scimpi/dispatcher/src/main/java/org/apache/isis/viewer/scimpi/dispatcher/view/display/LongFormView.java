@@ -34,7 +34,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 public class LongFormView extends AbstractFormView {
 
     @Override
-    protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject) {
+    protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject, boolean showIcon) {
         if (field.isOneToManyAssociation()) {
             IsisContext.getPersistenceSession().resolveField(object, field);
             ObjectAdapter collection = field.get(object);
@@ -45,7 +45,7 @@ public class LongFormView extends AbstractFormView {
             String summary = "Table of elements in " + field.getName();
             TableView.write(request, summary, object, field, collection, fields, isFieldEditable);
         } else {
-            FieldValue.write(request, object, field, linkedObject, null, true, 0);
+            FieldValue.write(request, object, field, linkedObject, null, showIcon, 0);
         }
     }
 

@@ -47,7 +47,7 @@ public class ActionButton extends AbstractElementProcessor {
         String scope = request.getOptionalProperty(SCOPE);
         String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        String idName = request.getOptionalProperty(ID);
+        String idName = request.getOptionalProperty(ID, methodName);
         String className = request.getOptionalProperty(CLASS);
 
         ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
@@ -121,7 +121,7 @@ public class ActionButton extends AbstractElementProcessor {
          */
 
         String idSegment = idName == null ? "" : ("id=\"" + idName + "\" ");
-        String classSegment = "class=\"" + (className == null ? "button" : className) + "\"";
+        String classSegment = "class=\"" + (className == null ? "action in-line" : className) + "\"";
         request.appendHtml("\n<form " + idSegment + classSegment + " action=\"action.app\" method=\"post\">\n");
         if (objectId == null) {
             request.appendHtml("  <input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + 

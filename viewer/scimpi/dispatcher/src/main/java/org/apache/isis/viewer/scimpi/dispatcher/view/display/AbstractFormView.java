@@ -47,7 +47,8 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         String classString = " class=\"" + cls + "\"";
         String title = request.getOptionalProperty(FORM_TITLE);
         String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
-        String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);;
+        String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
+        boolean showIcons = request.isRequested(SHOW_ICON, true);
 
         LinkedFieldsBlock tag = new LinkedFieldsBlock();
         request.setBlockContent(tag);
@@ -67,7 +68,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
                 }
             }
     
-            write(request, object, fields, linkFields, classString, title, oddRowClass, evenRowClass);
+            write(request, object, fields, linkFields, classString, title, oddRowClass, evenRowClass, showIcons);
         }
         request.popBlockContent();
     }
@@ -76,7 +77,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             Request request,
             ObjectAdapter object,
             List<ObjectAssociation> fields,
-            LinkedObject[] linkFields, String classString, String title, String oddRowClass, String evenRowClass) {
+            LinkedObject[] linkFields, String classString, String title, String oddRowClass, String evenRowClass, boolean showIcons) {
         request.appendHtml("<div" + classString + ">");
         if (title != null) {
             request.appendHtml("<div class=\"title\">" + title+ "</div>");
@@ -101,15 +102,15 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             }
             request.appendHtml("<div " + cls + description + "><span class=\"label\">" + field.getName() + ":</span>");
             LinkedObject linkedObject = linkFields[i];
-            addField(request, object, field, linkedObject);
+            addField(request, object, field, linkedObject, showIcons);
             HelpLink.append(request, field.getDescription(), field.getHelp());
             request.appendHtml("</div>");
         }
         request.appendHtml("</div>");
     }
 
-    protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject) {
-        FieldValue.write(request, object, field, linkedObject, "value", true, 0);
+    protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject, boolean showIcons) {
+        FieldValue.write(request, object, field, linkedObject, "value", showIcons, 0);
     }
 
     protected boolean ignoreField(ObjectAssociation objectField) {

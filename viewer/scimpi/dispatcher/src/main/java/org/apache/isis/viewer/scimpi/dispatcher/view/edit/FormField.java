@@ -27,7 +27,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class FormField extends AbstractElementProcessor {
 
     public void process(Request request) {
-        EditFieldBlock block = (EditFieldBlock) request.getBlockContent();
+        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
         String field = request.getRequiredProperty(FIELD);
         if (block.isVisible(field)) {
             request.pushNewBuffer();

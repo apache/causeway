@@ -27,7 +27,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class FormEntry extends AbstractElementProcessor {
 
     public void process(Request request) {
-        EditFieldBlock block = (EditFieldBlock) request.getBlockContent();
+        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
         String field = request.getRequiredProperty(FIELD);
         String value = request.getRequiredProperty(VALUE);
         boolean isHidden =  request.isRequested(HIDDEN, true);

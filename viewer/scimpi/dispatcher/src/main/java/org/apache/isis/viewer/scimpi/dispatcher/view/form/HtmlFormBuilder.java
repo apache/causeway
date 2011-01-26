@@ -26,19 +26,19 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.Errors;
 
 
-public class InputForm {
+public class HtmlFormBuilder {
 
     public static void createForm(
             Request request,
             String action,
-            String buttonTitle,
+            HiddenInputField[] hiddenFields,
             InputField[] fields,
-            HiddenInputField[] hiddenFields, 
+            String className, 
+            String id,
             String formTitle,
             String description,
             String helpReference,
-            String className,
-            String id) {
+            String buttonTitle) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
         request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");

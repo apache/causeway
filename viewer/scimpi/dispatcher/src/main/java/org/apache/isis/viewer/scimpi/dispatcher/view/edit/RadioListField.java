@@ -33,7 +33,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class RadioListField extends AbstractElementProcessor {
 
     public void process(Request request) {
-        EditFieldBlock block = (EditFieldBlock) request.getBlockContent();
+        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
         String field = request.getRequiredProperty(FIELD);
         if (block.isVisible(field)) {
             String id = request.getRequiredProperty(COLLECTION);

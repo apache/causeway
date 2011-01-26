@@ -30,13 +30,13 @@ public class HiddenField extends AbstractElementProcessor {
 
     public void process(Request request) {
         BlockContent blockContent = request.getBlockContent();
-        if (!(blockContent instanceof EditFieldBlock)) {
+        if (!(blockContent instanceof FormFieldBlock)) {
             throw new TagOrderException(request);
         }
 
         String field = request.getOptionalProperty("name");
         String value = request.getRequiredProperty("value");
-        EditFieldBlock block = (EditFieldBlock) blockContent;
+        FormFieldBlock block = (FormFieldBlock) blockContent;
         block.value(field, value);
         block.exclude(field);
     }

@@ -26,7 +26,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.ActionAction;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -34,11 +36,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
-import org.apache.isis.viewer.scimpi.dispatcher.view.edit.EditFieldBlock;
 import org.apache.isis.viewer.scimpi.dispatcher.view.edit.FieldFactory;
+import org.apache.isis.viewer.scimpi.dispatcher.view.edit.FormFieldBlock;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
+import org.apache.isis.viewer.scimpi.dispatcher.view.form.HtmlFormBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
-import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputForm;
 
 
 public class ActionForm extends AbstractElementProcessor {
@@ -56,9 +58,9 @@ public class ActionForm extends AbstractElementProcessor {
         parameters.resultName = request.getOptionalProperty(RESULT_NAME);
         parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         parameters.scope = request.getOptionalProperty(SCOPE);
-        parameters.className = request.getOptionalProperty(CLASS, "action");
+        parameters.className = request.getOptionalProperty(CLASS, "action full");
         parameters.showMessage = request.isRequested("show-message", false);
-        parameters.id = request.getOptionalProperty(ID);
+        parameters.id = request.getOptionalProperty(ID, parameters.methodName);
         createForm(request, parameters);
     }
     
@@ -70,13 +72,13 @@ public class ActionForm extends AbstractElementProcessor {
         RequestContext context = request.getContext();
         ObjectAdapter object = MethodsUtils.findObject(context, parameterObject.objectId);
         String version = request.getContext().mapVersion(object);
-        ObjectAction action = MethodsUtils.findAction(object, parameterObject.methodName);
+        final ObjectAction action = MethodsUtils.findAction(object, parameterObject.methodName);
         // TODO how do we distinguish between overloaded methods?
 
-        /*
+        // REVIEW Is this useful?
         if (action.getParameterCount() == 0) {
             throw new ScimpiException("Action form can only be used for actions with parameters");
-        }*/
+        }
         if (parameterObject.showMessage && MethodsUtils.isVisible(object, action)) {
             String notUsable = MethodsUtils.isUsable(object, action);
             if (notUsable != null) {
@@ -113,7 +115,13 @@ public class ActionForm extends AbstractElementProcessor {
                         .getContext().getVariable(RequestContext.RESULT)) };
 
         // TODO when the block contains a selector tag it doesn't disable it if the field cannot be edited!!!
-        EditFieldBlock containedBlock = new EditFieldBlock();
+        FormFieldBlock containedBlock = new FormFieldBlock() {
+            public boolean isNullable(String name) {
+                int index = Integer.parseInt(name.substring(5)) - 1;
+                ObjectActionParameter param = action.getParameters().get(index);
+                return param.isOptional();
+            }
+        };
         request.setBlockContent(containedBlock);
         if (!withoutProcessing) {
             request.processUtilCloseTag();
@@ -139,8 +147,8 @@ public class ActionForm extends AbstractElementProcessor {
             formTitle = parameterObject.formTitle;
         }
 
-        InputForm.createForm(request, ActionAction.ACTION + ".app", parameterObject.buttonTitle, formFields, hiddenFields,
-                formTitle, action.getDescription(), action.getHelp(), parameterObject.className, parameterObject.id);
+        HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className,
+                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), parameterObject.buttonTitle);
 
         request.popBlockContent();
     }
@@ -162,71 +170,8 @@ public class ActionForm extends AbstractElementProcessor {
             
             ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];
             FieldFactory.initializeField(context, object, param, optionsForParameter, !param.isOptional(), true, field);
-            
-            
-/*            
-            field.setLabel(param.getName());
-            field.setDescription(param.getDescription());
-            field.setRequired(!param.isOptional());
-
-            if (param.getSpecification().getFacet(ParseableFacet.class) != null) {
-                final int maxLength = param.getFacet(MaxLengthFacet.class).value();
-                field.setMaxLength(maxLength);
-
-                TypicalLengthFacet typicalLengthFacet = param.getFacet(TypicalLengthFacet.class);
-                if (typicalLengthFacet.isDerived() && maxLength > 0) {
-                    field.setWidth(maxLength);
-                } else {
-                    field.setWidth(typicalLengthFacet.value());
-                }
-
-                MultiLineFacet multiLineFacet = param.getFacet(MultiLineFacet.class);
-                field.setHeight(multiLineFacet.numberOfLines());
-                field.setWrapped(!multiLineFacet.preventWrapping());
-
-                // TODO figure out a better way to determine if boolean or a password
-                ObjectSpecification spec = param.getSpecification();
-                if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                        || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class.getName()))) {
-                    field.setType(InputField.CHECKBOX);
-                } else if (spec.getFullName().endsWith(".Password")) {
-                    field.setType(InputField.PASSWORD);
-                } else {
-                    field.setType(InputField.TEXT);
-                }
-
-            } else {
-                field.setType(InputField.REFERENCE);
-            }
-
-            ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];
-            if (optionsForParameter != null) {
-                int noOptions = optionsForParameter.length;
-                String[] optionValues = new String[noOptions];
-                String[] optionTitles = new String[noOptions];
-                for (int j = 0; j < noOptions; j++) {
-                    optionValues[j] = getValue(context, optionsForParameter[j]);
-                    optionTitles[j] = optionsForParameter[j].titleString();
-                }
-                fields[i].setOptions(optionTitles, optionValues);
-            }
- */
         }
     }
-/*
-    private static String getValue(RequestContext context, ObjectAdapter field) {
-        if (field == null) {
-            return "";
-        }
-        if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
-            return context.mapObject(field, Scope.INTERACTION);
-        } else {
-            return field.titleString();
-        }
-    }
-*/
-    
-    
     
     /**
      * Sets up the fields with their initial values
@@ -255,17 +200,11 @@ public class ActionForm extends AbstractElementProcessor {
                     String value = context.mapObject(defaultValue, Scope.INTERACTION);
                     field.setValue(value);
                     field.setHtml(html);
-                    /*
-                     * } else { html = "<em>none specified</em>"; value = null;
-                     * field.setType(InputField.HTML);
-                     */}
-
+                }
             } else {
                 field.setValue(title);
             }
-
         }
-
     }
 
     private static void copyEntryState(
@@ -290,14 +229,13 @@ public class ActionForm extends AbstractElementProcessor {
         }
     }
 
-    private static void overrideWithHtml(RequestContext context, EditFieldBlock containedBlock, InputField[] formFields) {
+    private static void overrideWithHtml(RequestContext context, FormFieldBlock containedBlock, InputField[] formFields) {
         for (int i = 0; i < formFields.length; i++) {
             String id = ActionAction.parameterName(i);
             if (containedBlock.hasContent(id)) {
                 String content = containedBlock.getContent(id);
                 if (content != null) {
                     formFields[i].setHtml(content);
-                    //formFields[i].setValue(null);
                     formFields[i].setType(InputField.HTML);
                 }
             }

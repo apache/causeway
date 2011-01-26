@@ -21,8 +21,6 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,8 +38,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
+import org.apache.isis.viewer.scimpi.dispatcher.view.form.HtmlFormBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
-import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputForm;
 
 
 public class EditObject extends AbstractElementProcessor {
@@ -59,21 +57,16 @@ public class EditObject extends AbstractElementProcessor {
         String variable = request.getOptionalProperty(RESULT_NAME);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         String scope = request.getOptionalProperty(SCOPE);
-        String className = request.getOptionalProperty(CLASS, "edit");
+        String className = request.getOptionalProperty(CLASS, "edit full");
         String id = request.getOptionalProperty(ID);
-/*        
-        String localeId = request.getOptionalProperty("locale");
-        String timeZoneId = request.getOptionalProperty("timezone");
-        
- */
-        Locale locale = null; // new Locale(localeId);
-        TimeZone timeZone = null; //TimeZone.getTimeZone(timeZoneId);
 
         final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
         String actualObjectId = context.mapObject(object, Scope.INTERACTION);
         String version = context.mapVersion(object);
 
-        EditFieldBlock containedBlock = new EditFieldBlock() {
+        final FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
+
+        FormFieldBlock containedBlock = new FormFieldBlock() {
             @Override
             public boolean isVisible(String name) {
                 ObjectAssociation fld = object.getSpecification().getAssociation(name);
@@ -81,19 +74,38 @@ public class EditObject extends AbstractElementProcessor {
                 boolean isUseable = fld.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
                 return isVisible && isUseable;
             }
+            
+            public ObjectAdapter getCurrent(String name) {
+                ObjectAdapter value = null;
+                if (entryState != null) {
+                    FieldEditState field2 = entryState.getField(name);
+                    value = field2.getValue();
+                }
+                if (value == null) {
+                    ObjectAssociation fld = object.getSpecification().getAssociation(name);
+                    value = fld.get(object);
+                }
+                return value;
+            }
+            
+            public boolean isNullable(String name) {
+                ObjectAssociation fld = object.getSpecification().getAssociation(name);
+                return !fld.isMandatory();
+            }
         };
+        
         request.setBlockContent(containedBlock);
         request.processUtilCloseTag();
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> fields = object.getSpecification().getAssociations(
-                ObjectAssociationFilters.dynamicallyVisible(session, object));
-        fields = containedBlock.includedFields(fields);
 
+        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        fields = containedBlock.includedFields(fields);
         InputField[] formFields = createFields(fields);
-        FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
+        
         initializeFields(context, object, formFields, entryState, !hideNonEditableFields);
         setDefaults(context, object, formFields, entryState);
-        copyFieldContent(context, object, formFields, locale, timeZone);
+        
+        copyFieldContent(context, object, formFields);
         overrideWithHtml(context, containedBlock, formFields);
         if (entryState != null && entryState.isForForm(actualObjectId)) {
             copyEntryState(context, object, formFields, entryState);
@@ -108,7 +120,7 @@ public class EditObject extends AbstractElementProcessor {
                 resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride),
                 scope == null ? null : new HiddenInputField(SCOPE, scope) };
 
-        InputForm.createForm(request, EditAction.ACTION + ".app", buttonTitle, formFields, hiddenFields, formTitle, null, null, className, id);
+        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFields, formFields, className, id, formTitle, null, null, buttonTitle);
         request.popBlockContent();
     }
 
@@ -149,64 +161,13 @@ public class EditObject extends AbstractElementProcessor {
                     formField.setDescription(usable.getReason());
                 }
                 formField.setEditable(isEditable);
-
-            
-            /*
-                int type;
-
-                ObjectSpecification spec = field.getSpecification();
-                if (spec.getFacet(PasswordValueFacet.class) != null) {
-                    type = InputField.PASSWORD;
-
-                } else if (spec.getFacet(BooleanValueFacet.class) != null) {
-                    type = InputField.CHECKBOX;
-
-                } else if (spec.getFacet(ParseableFacet.class) != null) {
-                    type = InputField.TEXT;
-
-                    MaxLengthFacet maxLengthFacet = field.getFacet(MaxLengthFacet.class);
-                    final int maxLength = maxLengthFacet.value();
-                    formField.setMaxLength(maxLength);
-
-                    TypicalLengthFacet typicalLengthFacet = field.getFacet(TypicalLengthFacet.class);
-                    if (typicalLengthFacet.isDerived() && maxLength > 0) {
-                        formField.setWidth(maxLength);
-                    } else {
-                        formField.setWidth(typicalLengthFacet.value());
-                    }
-
-                    MultiLineFacet multiLineFacet = field.getFacet(MultiLineFacet.class);
-                    formField.setHeight(multiLineFacet.numberOfLines());
-                    formField.setWrapped(!multiLineFacet.preventWrapping());
-
-                } else {
-                    type = InputField.REFERENCE;
-                }
-
-                formField.setType(type);
-                formField.setHidden(false);
-                formField.setRequired(field.isMandatory());
-                formField.setDescription(field.getDescription());
-                formField.setLabel(field.getName());
-
-                Consent usable = field.isUsable(session, object);
-                boolean isEditable = true;
-                isEditable = isEditable && usable.isAllowed();
-                if (usable.isVetoed()) {
-                    formField.setDescription(usable.getReason());
-                }
-                formField.setEditable(isEditable);
-            */
-
-            
-            
             } else {
                 formFields[i].setHidden(true);
             }
         }
     }
 
-    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields, Locale locale, TimeZone TimeZone) {
+    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields) {
         for (int i = 0; i < formFields.length; i++) {
             String fieldName = formFields[i].getName();
             ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
@@ -215,12 +176,12 @@ public class EditObject extends AbstractElementProcessor {
                 IsisContext.getPersistenceSession().resolveField(object, field);
                 ObjectAdapter fieldValue = field.get(object);
                 if (inputField.isEditable()) {
-                    String value = getValue(context, fieldValue, locale, TimeZone);
+                    String value = getValue(context, fieldValue);
                     if (!value.equals("") || inputField.getValue() == null) {
                         inputField.setValue(value);
                     }
                 } else {
-                    String entry = getValue(context, fieldValue, locale, TimeZone);
+                    String entry = getValue(context, fieldValue);
                     inputField.setHtml(entry);
                     inputField.setType(InputField.HTML);
 
@@ -239,27 +200,7 @@ public class EditObject extends AbstractElementProcessor {
             }
         }
     }
-/*
-    private void setupOptions(RequestContext context, ObjectAdapter object, InputField[] formFields) {
-        for (int i = 0; i < formFields.length; i++) {
-            String fieldId = formFields[i].getName();
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
-            InputField formField = formFields[i];
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() && formField.isEditable()) {
-                ObjectAdapter[] options = field.getChoices(object);
-                if (options != null) {
-                    String[] optionValues = new String[options.length];
-                    String[] optionTitles = new String[options.length];
-                    for (int j = 0; j < options.length; j++) {
-                        optionValues[j] = getValue(context, options[j]);
-                        optionTitles[j] = options[j].titleString();
-                    }
-                    formField.setOptions(optionTitles, optionValues);
-                }
-            }
-        }
-    }
-*/
+
     private void setDefaults(RequestContext context, ObjectAdapter object, InputField[] formFields, FormState entryState) {
         for (int i = 0; i < formFields.length; i++) {
             String fieldId = formFields[i].getName();
@@ -285,7 +226,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void overrideWithHtml(RequestContext context, EditFieldBlock containedBlock, InputField[] formFields) {
+    private void overrideWithHtml(RequestContext context, FormFieldBlock containedBlock, InputField[] formFields) {
         for (int i = 0; i < formFields.length; i++) {
             String fieldId = formFields[i].getName();
             if (containedBlock.hasContent(fieldId)) {
@@ -314,7 +255,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private String getValue(RequestContext context, ObjectAdapter field, Locale locale, TimeZone timeZone) {
+    private String getValue(RequestContext context, ObjectAdapter field) {
         if (field == null) {
             return "";
         }
@@ -322,17 +263,6 @@ public class EditObject extends AbstractElementProcessor {
         if (facet == null) {
             return context.mapObject(field, Scope.INTERACTION);
         } else {
-            /*
-            if ( field.getObject() instanceof DateTime) {
-                Date date = ((DateTime) field.getObject()).dateValue();
-                
-                DateFormat format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, locale);
-                format.setTimeZone(timeZone);
-                
-                return format.format(date);
-            } else {
-            }
-            */
             return field.titleString();
         }
     }

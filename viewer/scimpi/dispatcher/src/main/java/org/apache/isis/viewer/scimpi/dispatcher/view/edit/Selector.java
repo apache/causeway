@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import java.util.Iterator;
@@ -38,7 +37,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.action.CreateFormParameter;
 public class Selector extends AbstractElementProcessor {
 
     public void process(Request request) {
-        EditFieldBlock block = (EditFieldBlock) request.getBlockContent();
+        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
         String field = request.getRequiredProperty(FIELD);
         if (block.isVisible(field)) {
             processElement(request, block, field);
@@ -46,11 +45,11 @@ public class Selector extends AbstractElementProcessor {
         request.skipUntilClose();
     }
 
-    private void processElement(Request request, EditFieldBlock block, String field) {
+    private void processElement(Request request, FormFieldBlock block, String field) {
         String type = request.getOptionalProperty(TYPE, "dropdown");
         if (!request.isPropertySpecified(METHOD) && request.isPropertySpecified(COLLECTION)) {
             String id = request.getRequiredProperty(COLLECTION, Request.NO_VARIABLE_CHECKING);
-            String selector = showSelectionList(request, id, type);
+            String selector = showSelectionList(request, id, block.getCurrent(field), block.isNullable(field), type);
             block.replaceContent(field, selector);
         } else {
             String objectId = request.getOptionalProperty(OBJECT);
@@ -59,13 +58,13 @@ public class Selector extends AbstractElementProcessor {
             ObjectAction action = MethodsUtils.findAction(object, methodName);
             if (action.getParameterCount() == 0) {
                 ObjectAdapter collection = action.execute(object, new ObjectAdapter[0]);
-                String selector = showSelectionList(request, collection, type);
+                String selector = showSelectionList(request, collection, block.getCurrent(field), block.isNullable(field), type);
                 block.replaceContent(field, selector);
             } else {
                 String id = "selector_options";
                 String id2 = (String) request.getContext().getVariable(id);
-                String selector = showSelectionList(request, id2, type);
-    
+                String selector = showSelectionList(request, id2, block.getCurrent(field), block.isNullable(field), type);
+
                 CreateFormParameter parameters = new CreateFormParameter();
                 parameters.objectId = objectId;
                 parameters.methodName = methodName;
@@ -73,7 +72,7 @@ public class Selector extends AbstractElementProcessor {
                 parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
                 parameters.className = request.getOptionalProperty(CLASS, "selector");
                 parameters.id = request.getOptionalProperty(ID);
-    
+
                 parameters.resultName = id;
                 parameters.forwardResultTo = request.getContext().getResourceFile();
                 parameters.forwardVoidTo = "error";
@@ -82,39 +81,37 @@ public class Selector extends AbstractElementProcessor {
                 request.pushNewBuffer();
                 ActionForm.createForm(request, parameters);
                 block.replaceContent(field, selector);
-    
+
                 request.appendHtml(request.popBuffer());
             }
         }
     }
 
-    private String showSelectionList(Request request, String collectionId, String type) {
+    private String showSelectionList(Request request, String collectionId, ObjectAdapter selectedItem, boolean allowNotSet, String type) {
         if (collectionId != null && !collectionId.equals("")) {
             ObjectAdapter collection = request.getContext().getMappedObjectOrResult(collectionId);
-            return showSelectionList(request, collection, type);
-       } else {
+            return showSelectionList(request, collection, selectedItem, allowNotSet, type);
+        } else {
             return null;
         }
     }
+
+    private String showSelectionList(Request request, ObjectAdapter collection, ObjectAdapter selectedItem, boolean allowNotSet, String type) {
+        String field = request.getRequiredProperty(FIELD);
+        CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
         
-    private String showSelectionList(Request request, ObjectAdapter collection, String type) {
-            String field = request.getRequiredProperty(FIELD);
-            CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
-            
-            boolean allowNotSet = true;
-            
-            if (facet.size(collection) == 1 && !allowNotSet) {
-                return onlyItem(request, field, collection, facet);
-            } else if (type.equals("radio")) {
-                return radioButtonList(request, field, allowNotSet, collection, facet);
-            } else if (type.equals("list")) {
-                String size = request.getOptionalProperty("size", "5");
-                return dropdownList(request, field, allowNotSet, collection, size, facet);
-            } else if (type.equals("dropdown")) {
-                return dropdownList(request, field, allowNotSet, collection, null, facet);
-            } else {
-                throw new UnknownTypeException(type);
-            }
+        if (facet.size(collection) == 1 && !allowNotSet) {
+            return onlyItem(request, field, collection, facet);
+        } else if (type.equals("radio")) {
+            return radioButtonList(request, field, allowNotSet, collection, selectedItem, facet);
+        } else if (type.equals("list")) {
+            String size = request.getOptionalProperty("size", "5");
+            return dropdownList(request, field, allowNotSet, collection, selectedItem, size, facet);
+        } else if (type.equals("dropdown")) {
+            return dropdownList(request, field, allowNotSet, collection, selectedItem, null, facet);
+        } else {
+            throw new UnknownTypeException(type);
+        }
     }
 
     private String onlyItem(Request request, String field, ObjectAdapter collection, CollectionFacet facet) {
@@ -123,25 +120,30 @@ public class Selector extends AbstractElementProcessor {
         StringBuffer buffer = new StringBuffer();
         ObjectAdapter element = iterator.next();
         String elementId = context.mapObject(element, Scope.INTERACTION);
-        buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element)
-                + "\" alt=\"" + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
+        buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element) + "\" alt=\""
+                + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
         buffer.append("<input type=\"hidden\" name=\"" + field + "\" value=\"" + elementId + "\" />\n");
         return buffer.toString();
     }
 
-    private String radioButtonList(Request request, String field, boolean allowNotSet, ObjectAdapter collection, CollectionFacet facet) {
+    private String radioButtonList(
+            Request request,
+            String field,
+            boolean allowNotSet,
+            ObjectAdapter collection,
+            ObjectAdapter selectedItem,
+            CollectionFacet facet) {
         RequestContext context = request.getContext();
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         StringBuffer buffer = new StringBuffer();
         if (allowNotSet) {
-            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"null\">" + "[not set]"
-                    + "</input><br/>\n");
+            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"null\">" + "[not set]" + "</input><br/>\n");
         }
         while (iterator.hasNext()) {
             ObjectAdapter element = iterator.next();
             String elementId = context.mapObject(element, Scope.INTERACTION);
             String title = element.titleString();
-            String checked = "";
+            String checked = element == selectedItem ? "checked=\"checked\"" : "";
             buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + ">" + title
                     + "</input><br/>\n");
         }
@@ -149,7 +151,14 @@ public class Selector extends AbstractElementProcessor {
         return buffer.toString();
     }
 
-    private String dropdownList(Request request, String field, boolean allowNotSet, ObjectAdapter collection, String size, CollectionFacet facet) {
+    private String dropdownList(
+            Request request,
+            String field,
+            boolean allowNotSet,
+            ObjectAdapter collection,
+            ObjectAdapter selectedItem,
+            String size,
+            CollectionFacet facet) {
         RequestContext context = request.getContext();
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         StringBuffer buffer = new StringBuffer();
@@ -162,7 +171,7 @@ public class Selector extends AbstractElementProcessor {
             ObjectAdapter element = iterator.next();
             String elementId = context.mapObject(element, Scope.INTERACTION);
             String title = element.titleString();
-            String checked = "";
+            String checked = element == selectedItem ? "selected=\"selected\"" : "";
             buffer.append("  <option value=\"" + elementId + "\"" + checked + ">" + title + "</option>\n");
         }
         buffer.append("</select>\n");
@@ -174,4 +183,3 @@ public class Selector extends AbstractElementProcessor {
     }
 
 }
-

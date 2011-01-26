@@ -23,10 +23,11 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
-public class EditFieldBlock extends InclusionList {
+public class FormFieldBlock extends InclusionList {
     private Map<String, String> content = new HashMap<String, String>();
     private Map<String, String> values = new HashMap<String, String>();
 
@@ -44,6 +45,14 @@ public class EditFieldBlock extends InclusionList {
 
     public boolean isVisible(String name) {
         return true;
+    }
+    
+    public boolean isNullable(String name) {
+        return true;
+    }
+    
+    public ObjectAdapter getCurrent(String name) {
+        return null;
     }
 
     public void value(String field, String value) {
