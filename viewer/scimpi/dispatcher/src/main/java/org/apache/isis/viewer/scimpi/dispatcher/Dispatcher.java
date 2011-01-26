@@ -181,7 +181,8 @@ public class Dispatcher {
     
         String replace = "\\$\\{";
         String withReplacement = "\\$&#x7B;";
-        requestContext.addVariable("_error-message", exception.getMessage().replaceAll(replace, withReplacement), Scope.INTERACTION);
+        String message = exception.getMessage();
+        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.INTERACTION);
         requestContext.addVariable("_error-details", out.toString().replaceAll(replace, withReplacement), Scope.INTERACTION);
         requestContext.clearTransientVariables();
     }
