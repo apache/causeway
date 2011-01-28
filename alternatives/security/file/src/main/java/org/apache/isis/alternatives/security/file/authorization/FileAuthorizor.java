@@ -46,7 +46,7 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 import org.apache.log4j.Logger;
 
 
-public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
+public class FileAuthorizor extends AuthorizorAbstract {
 
     private static final Logger LOG = Logger.getLogger(FileAuthorizor.class);
 
@@ -81,8 +81,6 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
         
         findResources();
-        
-//        BeanServer.getInstance().register("FileAuthorizor", this);
     }
 
 
