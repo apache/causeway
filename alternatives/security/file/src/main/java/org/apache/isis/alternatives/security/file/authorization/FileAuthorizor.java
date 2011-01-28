@@ -82,7 +82,7 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         
         findResources();
         
-        BeanServer.getInstance().register("FileAuthorizor", this);
+//        BeanServer.getInstance().register("FileAuthorizor", this);
     }
 
 
