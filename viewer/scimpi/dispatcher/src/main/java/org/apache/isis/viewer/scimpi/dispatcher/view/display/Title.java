@@ -41,7 +41,7 @@ public class Title extends AbstractElementProcessor {
         if (fieldName != null) {
             ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
-                throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
+                throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
             object = field.get(object);
         }

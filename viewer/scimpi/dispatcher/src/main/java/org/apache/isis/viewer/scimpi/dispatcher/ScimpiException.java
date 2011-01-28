@@ -37,6 +37,10 @@ public class ScimpiException extends RuntimeException {
         super(message, cause);
     }
 
+    public String getHtmlMessage() {
+        return getMessage();
+    }
+
 }
 
 

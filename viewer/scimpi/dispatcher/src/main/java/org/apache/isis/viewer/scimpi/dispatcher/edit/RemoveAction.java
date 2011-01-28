@@ -57,7 +57,7 @@ public class RemoveAction implements Action {
                 throw new ScimpiException("No field " + fieldName + " in " + parent.getSpecification().getFullIdentifier());
             }
             if (field.isVisible(IsisContext.getAuthenticationSession(), parent).isVetoed()) {
-                throw new ForbiddenException("Field " + fieldName + " in " + parent + " is not visible");
+                throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
 
             ((OneToManyAssociation) field).removeElement(parent, row);       

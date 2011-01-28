@@ -21,8 +21,10 @@
 package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 
 
 public class DebugView {
@@ -61,15 +63,19 @@ public class DebugView {
 
     public void exception(Throwable e) {
         divider("Exception");
-        String message = e.getMessage();
+        String message = e instanceof  ScimpiException ? ((ScimpiException) e).getHtmlMessage() : e.getMessage();
         if (message != null) {
             writer.println("<tr><td class=\"error\" colspan=\"2\" >" + message + "<td></tr>");
-            debug.appendln(message);
         }
         causingException(e);
         writer.println("<tr><td class=\"code\" colspan=\"2\" >");
         e.printStackTrace(writer);
         writer.println("<td></tr>");
+        
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        debug.appendln(stringWriter.toString());
     }
 
     private void causingException(Throwable throwable) {

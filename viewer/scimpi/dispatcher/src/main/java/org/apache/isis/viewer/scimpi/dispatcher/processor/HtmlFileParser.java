@@ -77,7 +77,7 @@ public class HtmlFileParser {
         Node node = null;
         try {
             Stack<Snippet> tags = allTags;
-            String lineNumbers = "0";
+            String lineNumbers = "1";
             String template = null;
             tags.push(new HtmlSnippet(lineNumbers, filePath));
 
@@ -114,7 +114,7 @@ public class HtmlFileParser {
                         if (context.isDebug()) { 
                             context.getWriter().println("<!-- " +  "import file " + importFile + " -->"); 
                         } 
-                        importFile = context.replaceVariables(importFile, true);
+                        importFile = context.replaceVariables(importFile);
                         parseHtmlFile(loadPath, importFile, context, tags, tagsForPreviousTemplate);
                     }
 
@@ -126,7 +126,7 @@ public class HtmlFileParser {
                             throw new ScimpiException("Template tag can only be used once within a file");
                         }
                         template = tagNode.getAttribute("file");
-                        template = context.replaceVariables(template, true);
+                        template = context.replaceVariables(template);
                         if (context.isDebug()) { 
                             context.getWriter().println("<!-- " +  "apply template " + template + " -->"); 
                         } 

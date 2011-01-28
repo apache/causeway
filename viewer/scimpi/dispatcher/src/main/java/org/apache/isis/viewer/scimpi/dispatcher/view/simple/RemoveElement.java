@@ -78,7 +78,7 @@ public class RemoveElement extends AbstractElementProcessor {
             throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
-            throw new ForbiddenException("Field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier() + " is not visible");
+            throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         IsisContext.getPersistenceSession().resolveField(adapter, field);
 

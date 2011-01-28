@@ -22,7 +22,6 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 

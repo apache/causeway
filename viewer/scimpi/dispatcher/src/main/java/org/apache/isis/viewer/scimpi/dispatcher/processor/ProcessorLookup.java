@@ -38,6 +38,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.collection.Collection;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Debug;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Diagnostics;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Members;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.PrintAuthorizationClause;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Specification;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.ThrowException;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.AddMessage;
@@ -152,6 +153,7 @@ public class ProcessorLookup {
         addElementProcessor(new PageTitle());
         addElementProcessor(new Parameter());
         addElementProcessor(new ParameterName());
+        addElementProcessor(new PrintAuthorizationClause());
         addElementProcessor(new RadioListField());
         addElementProcessor(new RemoveElement());
         addElementProcessor(new RunAction());

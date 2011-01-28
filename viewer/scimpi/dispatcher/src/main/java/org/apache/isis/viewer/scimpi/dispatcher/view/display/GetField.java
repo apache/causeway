@@ -52,8 +52,7 @@ public class GetField extends AbstractElementProcessor {
         }
         AuthenticationSession session = IsisContext.getAuthenticationSession();
         if (field.isVisible(session, object).isVetoed()) {
-            throw new ForbiddenException("Field '" + fieldName + "' in " + object.getSpecification().getFullIdentifier()
-                    + " is not visible for " + session.getUserName() + " " + session.getRoles());
+            throw new ForbiddenException(field, ForbiddenException.VISIBLE); 
         }
 
         String pattern = request.getOptionalProperty("decimal-format");

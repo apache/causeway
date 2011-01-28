@@ -56,6 +56,11 @@ public class Logon extends AbstractElementProcessor {
    
         InputField nameField = new InputField("username");
         nameField.setType(InputField.TEXT);
+        String width = request.getOptionalProperty("width");
+        if (width != null) {
+            int w = Integer.valueOf(width).intValue();
+            nameField.setWidth(w);
+        }
         nameField.setLabel("User Name");
    
         InputField passwordField = new InputField("password");
@@ -66,7 +71,7 @@ public class Logon extends AbstractElementProcessor {
    
         String formTitle = request.getOptionalProperty(FORM_TITLE);
         String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
-        String className = request.getOptionalProperty(CLASS, "login");
+        String className = request.getOptionalProperty(CLASS, "action login full");
         String  id = request.getOptionalProperty(ID);
         HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields, className, id, formTitle, null, null, loginButtonTitle);
     }

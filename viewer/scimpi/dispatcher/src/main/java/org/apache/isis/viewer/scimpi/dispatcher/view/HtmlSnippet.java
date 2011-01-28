@@ -45,7 +45,7 @@ public class HtmlSnippet implements Snippet {
     }
     
     public String errorAt() {
-        return "Error while processing '<pre>" + html + "</pre>' element at " + path + ":" + lineNumbers;
+        return path + ":" + lineNumbers;
     }
 }
 

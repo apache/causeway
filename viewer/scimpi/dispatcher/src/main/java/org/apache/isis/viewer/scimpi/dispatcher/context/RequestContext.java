@@ -204,6 +204,14 @@ public abstract class RequestContext {
     // Debug
     // ////////////////////////////
     public void append(DebugView view) {
+        view.divider("User");
+        AuthenticationSession session = getSession();
+        view.appendRow("Session", session);
+        if (session != null) {
+            view.appendRow("Name", session.getUserName());
+            view.appendRow("Roles", session.getRoles());
+        }
+
         view.divider("context");
         view.appendRow("Parent request path", requestedParentPath);
         view.appendRow("Requested file", requestedFile);
@@ -330,7 +338,7 @@ public abstract class RequestContext {
         if (value == null) {
             return null;
         } else {
-            return replaceVariables(value, true);
+            return replaceVariables(value);
         }
     }
 
@@ -345,8 +353,7 @@ public abstract class RequestContext {
         return null;
     }
 
-    public String replaceVariables(String value, boolean ensureExists) {
-        LOG.debug("replacing" + value);
+    public String replaceVariables(String value) {
         int start = value.indexOf("${");
         if (start == -1) {
             return value;
@@ -359,25 +366,43 @@ public abstract class RequestContext {
             }
             String name = value.substring(start + 2, end);
             if (name != null) {
-                Object replacementValue = getParameter(name);
-                if (replacementValue == null) {
-                    replacementValue = getVariable(name);
-                }
-                if (replacementValue == null) {
-                    replacementValue = getBuiltIn(name);
-                }
-                if (replacementValue == null) {
-                    // REVIEW should we have a special tag that shows that a variable must exist?
-                    if (ensureExists) {
-                        throw new PropertyException("No value for the variable " + value.substring(start, end + 1));
-                    } else {
-                        replacementValue = "";
+                int pos = name.indexOf(":");
+                String variableName = pos == -1 ? name : name.substring(0, pos);
+                String qualifier = pos == -1 ? "none" : name.substring(pos); 
+                Object replacementValue;
+                boolean embed = qualifier.indexOf("embed") > -1;
+                if (embed) {
+                    replacementValue = "${" + variableName + "}";
+                } else {
+                    replacementValue = getParameter(variableName);
+                    if (replacementValue == null) {
+                        replacementValue = getVariable(variableName);
+                    }
+                    if (replacementValue == null) {
+                        replacementValue = getBuiltIn(variableName);
+                    }
+                    
+                    if (replacementValue == null) {
+                        boolean ensureExists = qualifier.indexOf("optional") == -1;
+                        if (ensureExists) {
+                            throw new PropertyException("No value for the variable " + value.substring(start, end + 1));
+                        } else {
+                            replacementValue = "";
+                        }
                     }
                 }
-                value = value.substring(0, start) + replacementValue + value.substring(end + 1);
-                return replaceVariables(value, ensureExists);
+                boolean repeat = qualifier.indexOf("repeat") > -1;
+                if (repeat) {
+                    value = value.substring(0, start) + replacementValue + value.substring(end + 1);
+                    return replaceVariables(value);
+                } else {                
+                    String remainder = replaceVariables(value.substring(end + 1));
+                    value = value.substring(0, start) + replacementValue + remainder;
+                    return value;
+                }
+                
             } else {
-                throw new PropertyException("No value for " + name);
+                throw new PropertyException("No variable name speceified");
             }
         }
     }
@@ -477,7 +502,12 @@ public abstract class RequestContext {
     }
 
     public String getParameter(String name) {
-        return (String) getVariable(name);
+        Object variable = getVariable(name);
+        if (variable instanceof String || variable == null) {
+            return (String) variable;
+        } else {
+            return variable.toString();
+        }
     }
     
     public Iterator<Entry<String, Object>> interactionParameters() {

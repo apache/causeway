@@ -75,7 +75,7 @@ public class Request implements PageWriter {
             index++;
             Snippet snippet = snippets.get(index);
             if (snippet instanceof HtmlSnippet) {
-                append(snippet);
+                append((HtmlSnippet) snippet);
             } else {
                 SwfTag tag = (SwfTag) snippet;
                 String name = tag.getName();
@@ -85,17 +85,21 @@ public class Request implements PageWriter {
         }
     }
 
-    private void append(Snippet snippet) {
+    private void append(HtmlSnippet snippet) {
+        String html = snippet.getHtml();
         try {
-            String html = snippet.getHtml();
-            if (((HtmlSnippet) snippet).isContainsVariable()) {
-                html = context.replaceVariables(html, true);
+            if (snippet.isContainsVariable()) {
+                html = context.replaceVariables(html);
             }
             appendHtml(html);
         } catch (TagProcessingException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw new TagProcessingException(snippet.errorAt(), e);
+            String replace = "<";
+            String withReplacement = "&lt;";
+            html = html.replaceAll(replace, withReplacement);
+
+            throw new TagProcessingException("Error while processing html block at " + snippet.errorAt() + " - " + e.getMessage(), html, e);
         }
     }
 
@@ -109,13 +113,13 @@ public class Request implements PageWriter {
             LOG.debug("processing " + processor.getName() + " " + tag);
             appendDebug("\n" + tag.debug()); 
             if (tag.getType() == SwfTag.END) { 
-                throw new TagProcessingException(tag.errorAt() + " - end tag mistaken for a start tag"); 
+                throw new TagProcessingException(tag.errorAt() + " - end tag mistaken for a start tag", tag.toString()); 
             } 
             processor.process(this);
         } catch (TagProcessingException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw new TagProcessingException( "Error while processing " + tag.getName().toLowerCase() + " element at " + tag.errorAt(), e); 
+            throw new TagProcessingException( "Error while processing " + tag.getName().toLowerCase() + " element at " + tag.errorAt() + " - " + e.getMessage(), tag.toString(), e); 
         }
     }
 
@@ -128,7 +132,7 @@ public class Request implements PageWriter {
             index++;
             Snippet snippet = snippets.get(index);
             if (snippet instanceof HtmlSnippet) {
-                append(snippet);
+                append((HtmlSnippet)snippet);
             } else {
                 SwfTag nextTag = (SwfTag) snippet;
                 if (tag.getName().equals(nextTag.getName())) {
@@ -138,7 +142,8 @@ public class Request implements PageWriter {
                 }
                 String name = nextTag.getName();
                 if (nextTag.getType() == SwfTag.END && !tag.getName().equals(name)) { 
-                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found " + tag.getName().toLowerCase() + " tag at " + nextTag.errorAt()); 
+                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found " + tag.getName().toLowerCase() +
+                            " tag at " + nextTag.errorAt(), tag.toString()); 
                 } 
                 ElementProcessor processor = processors.getFor(name);
                 process(nextTag, processor);

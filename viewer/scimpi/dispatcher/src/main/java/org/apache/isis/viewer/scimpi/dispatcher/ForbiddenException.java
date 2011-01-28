@@ -17,17 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
+import java.util.List;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.runtime.context.IsisContext;
 
+
 /**
- * Indicates that request could not complete as it could not access (for security reasons) some of the content.
+ * Indicates that request could not complete as it could not access (for security reasons) some of the
+ * content.
  */
 public class ForbiddenException extends ScimpiException {
     private static final long serialVersionUID = 1L;
+    public static final boolean VISIBLE_AND_USABLE = true;
+    public static final boolean VISIBLE = false;
+
+    private Identifier identifier;
+    private AuthenticationSession session;
 
     public ForbiddenException() {}
 
@@ -42,12 +52,30 @@ public class ForbiddenException extends ScimpiException {
     public ForbiddenException(String message, Throwable cause) {
         super(appendUsers(message), cause);
     }
-    
-    private static String appendUsers(String message) {
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        return  message + " " + session.getUserName() + " " + session.getRoles();
+
+    public ForbiddenException(IdentifiedHolder target, boolean isVisibleAndUsabable) {
+        this(target.getIdentifier(), IsisContext.getAuthenticationSession(), isVisibleAndUsabable);
     }
 
+    public ForbiddenException(Identifier identifier, AuthenticationSession session, boolean isVisibleAndUsabable) {
+        super((identifier.getType() == Identifier.Type.PROPERTY_OR_COLLECTION ? "Field" : "Action") + " "
+                + identifier.getMemberName() + "' in " + identifier.getClassNaturalName() + " is not "
+                + (isVisibleAndUsabable ? "visible/usable " : "visible") + " for " + session.getUserName() + " "
+                + session.getRoles());
+        this.identifier = identifier;
+        this.session = session;
+    }
+
+    private static String appendUsers(String message) {
+        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        return message + " " + session.getUserName() + " " + session.getRoles();
+    }
+
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    public List<String> getRoles() {
+        return session.getRoles();
+    }
 }
-
-

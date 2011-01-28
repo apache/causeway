@@ -121,10 +121,9 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
             if (fld == null) {
                 processTags(true, request);
             } else {
-                    CollectionFacet facet = fld.getSpecification().getFacet(CollectionFacet.class);
-                    boolean isEmpty = facet != null &&   facet.size(fld) == 0;
-                    // boolean isEmpty = fld == null || (fld instanceof CollectionAdapter && ((CollectionAdapter) fld).size() == 0);
-                    processTags(isEmpty, request);
+                CollectionFacet facet = fld.getSpecification().getFacet(CollectionFacet.class);
+                boolean isEmpty = facet != null &&   facet.size(fld) == 0;
+                processTags(isEmpty, request);
             }
             return;
         }

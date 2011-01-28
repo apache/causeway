@@ -23,9 +23,9 @@ package org.apache.isis.viewer.scimpi.dispatcher.action;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.htmlparser.Attribute;
 import org.htmlparser.nodes.TagNode;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
 
 public class Attributes {
@@ -41,7 +41,13 @@ public class Attributes {
 
     public boolean isPropertySet(String name) {
         String attribute = tagNode.getAttribute(name);
-        return attribute != null && !context.replaceVariables(attribute, false).equals("");
+        int end = attribute.length() - 1;
+        int pos = attribute.indexOf(':');
+        end = pos == -1 ? end : pos; 
+        String variabelName = attribute.substring(2, end);
+        Object value = context.getVariable(variabelName);
+        return value != null;
+//        return attribute != null && !context.replaceVariables(attribute).equals("");
     }
 
     public boolean isPropertySpecified(String name) {
@@ -55,7 +61,7 @@ public class Attributes {
 
     public String getOptionalProperty(String name, String defaultValue, boolean ensureVariablesExists) {
         String attribute = tagNode.getAttribute(name);
-        return attribute == null ? defaultValue : context.replaceVariables(attribute, ensureVariablesExists);
+        return attribute == null ? defaultValue : context.replaceVariables(attribute);
     }
 
     public String getRequiredProperty(String name, boolean ensureVariablesExists) {
@@ -65,7 +71,7 @@ public class Attributes {
         } else if (attribute.equals("")) {
             throw new RequiredPropertyException("Property not set: " + name);
        } else {
-           return context.replaceVariables(attribute, ensureVariablesExists);
+           return context.replaceVariables(attribute);
         }
     }
     

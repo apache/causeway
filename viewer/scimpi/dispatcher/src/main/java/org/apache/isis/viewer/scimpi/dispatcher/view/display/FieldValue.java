@@ -46,7 +46,7 @@ public class FieldValue extends AbstractElementProcessor {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
-            throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
+            throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         boolean isIconShowing = request.isRequested(SHOW_ICON, true);
         String truncateTo = request.getOptionalProperty(TRUNCATE, "0");

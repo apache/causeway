@@ -51,7 +51,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
                 throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
             }
             if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
-                throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
+                throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
             IsisContext.getPersistenceSession().resolveField(adapter, field);
             adapter = field.get(adapter);

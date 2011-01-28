@@ -24,9 +24,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
+import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -54,17 +53,7 @@ public class RunAction extends AbstractElementProcessor {
         ObjectAdapter[] parameters = parameterBlock.getParameters(request);
 
         if (!MethodsUtils.isVisibleAndUsable(object, action)) {
-            throw new ScimpiException("Action '" + action.getId() + "' is not visible/enabled in "
-                    + action.getOnType().getFullIdentifier() + ", for " + IsisContext.getSession().getAuthenticationSession().getRoles());
-            /* TODO remove if the above is correct
-            if (action.isContributed()) {
-                throw new ScimpiException("Action '" + action.getId() + "' is not visible/enabled in "
-                        + action.getOnType().getFullIdentifier() + ", for " + IsisContext.getSession().getAuthenticationSession().getRoles());
-            } else {
-                throw new ScimpiException("Action '" + action.getId() + "' is not visible/enabled in "
-                        + object.getSpecification().getFullIdentifier() + ", for " + IsisContext.getSession().getAuthenticationSession().getRoles());
-            }
-            */
+            throw new ForbiddenException(action, ForbiddenException.VISIBLE_AND_USABLE);
         }
 
         // swap null parameter of the object's type to run a contributed method

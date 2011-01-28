@@ -24,23 +24,39 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 
 public class TagProcessingException extends ScimpiException {
     private static final long serialVersionUID = 1L;
+    private String context;
 
     public TagProcessingException() {
         super();
     }
 
-    public TagProcessingException(String message, Throwable cause) {
+    public TagProcessingException(String message, String context, Throwable cause) {
         super(message, cause);
+        this.context = context;
     }
 
-    public TagProcessingException(String message) {
+    public TagProcessingException(String message, String context) {
         super(message);
+        this.context = context;
     }
 
     public TagProcessingException(Throwable cause) {
         super(cause);
     }
 
+    public String getContext() {
+        return context;
+    }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage() + "\n" + getContext();
+    }
+
+    @Override
+    public String getHtmlMessage() {
+        return super.getMessage() + "<pre>" + getContext() + "</pre>";
+    }
 }
 
 

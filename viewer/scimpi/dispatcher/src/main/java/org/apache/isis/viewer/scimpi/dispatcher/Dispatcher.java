@@ -113,12 +113,12 @@ public class Dispatcher {
             UserManager.endRequest(context.getSession());
 
         } catch (Throwable e) {
-            LOG.error(e.getMessage(), e);
+            LOG.debug(e.getMessage(), e);
             
             DebugString error = new DebugString();
             List<String> messages =  IsisContext.getMessageBroker().getMessages();
             for (String message : messages) {
-                context.getWriter().append("<div class=\"messaEge\">message: " + message + "</div>");
+                context.getWriter().append("<div class=\"message\">message: " + message + "</div>");
                 error.appendln("message", message);
             }
             messages =  IsisContext.getMessageBroker().getWarnings();
@@ -136,7 +136,7 @@ public class Dispatcher {
             }
             
             String message = "failed while processing " + servletPath;
-            LOG.error(message + "\n" + error + "\n" + message, e);
+            LOG.error(message + "\n" + error + "\n" + message);
 
             
             try {
@@ -152,6 +152,9 @@ public class Dispatcher {
                 ex = e;
             }
             if (ex instanceof ForbiddenException) {
+                context.addVariable("_security_error", ex.getMessage(), Scope.REQUEST); 
+                context.addVariable("_security_identifier", ((ForbiddenException) ex).getIdentifier(), Scope.REQUEST);
+                context.addVariable("_security_roles", ((ForbiddenException) ex).getRoles(), Scope.REQUEST);
                 context.raiseError(403);
             } else if (ex instanceof ScimpiNotFoundException) {
                 context.raiseError(404);
@@ -174,16 +177,16 @@ public class Dispatcher {
             requestContext.addVariable("_error-ref", ref, Scope.INTERACTION);
             String directory = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
             writer = new PrintWriter(new File(directory, "error_" + ref + ".html"));
-            writeErrorContent(requestContext, exception, error, writer, true);
+            writeErrorContent(requestContext, exception, new DebugString(), writer, true);
         } catch (FileNotFoundException e) {
             LOG.error("Failed to archive error page", e);
         }
     
-        String replace = "\\$\\{";
-        String withReplacement = "\\$&#x7B;";
+        String replace = "";
+        String withReplacement = "";
         String message = exception.getMessage();
-        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.INTERACTION);
-        requestContext.addVariable("_error-details", out.toString().replaceAll(replace, withReplacement), Scope.INTERACTION);
+        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.REQUEST);
+        requestContext.addVariable("_error-details", out.toString().replaceAll(replace, withReplacement), Scope.REQUEST);
         requestContext.clearTransientVariables();
     }
 
@@ -199,12 +202,7 @@ public class Dispatcher {
             errorView.header();
         }
         errorView.startTable();
-
-        errorView.divider("User");
-        errorView.appendRow("Session", requestContext.getSession());
-        errorView.appendRow("Name", requestContext.getSession().getUserName());
-        errorView.appendRow("Roles", requestContext.getSession().getRoles());
-
+        
         try {
             errorView.exception(exception);
             requestContext.append(errorView);

@@ -40,7 +40,7 @@ public class FieldLabel extends AbstractElementProcessor {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
-            throw new ForbiddenException("Field " + fieldName + " in " + object.getSpecification().getFullIdentifier() + " is not visible");
+            throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         String delimiter = request.getOptionalProperty("delimiter");
         if (delimiter == null) {
