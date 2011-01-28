@@ -52,7 +52,7 @@ public class Identifier implements Comparable<Identifier> {
                 return identifier.toClassAndNameIdentityString();
             }
         },
-        CLASS_MEMBERNAME_PARMS {
+        CLASS_MEMBERNAME_PARAMETERS {
             @Override
             public String toIdentityString(final Identifier identifier) {
                 return identifier.toFullIdentityString();
@@ -64,7 +64,7 @@ public class Identifier implements Comparable<Identifier> {
                 return identifier.toNameIdentityString();
             }
         },
-        PARMS_ONLY {
+        PARAMETERS_ONLY {
             @Override
             public String toIdentityString(final Identifier identifier) {
                 return identifier.toParmsIdentityString();
@@ -75,9 +75,9 @@ public class Identifier implements Comparable<Identifier> {
 
     public static Depth CLASS = Depth.CLASS;
     public static Depth CLASS_MEMBERNAME = Depth.CLASS_MEMBERNAME;
-    public static Depth CLASS_MEMBERNAME_PARMS = Depth.CLASS_MEMBERNAME_PARMS;
+    public static Depth CLASS_MEMBERNAME_PARAMETERS = Depth.CLASS_MEMBERNAME_PARAMETERS;
     public static Depth MEMBERNAME_ONLY = Depth.MEMBERNAME_ONLY;
-    public static Depth PARMS_ONLY = Depth.PARMS_ONLY;
+    public static Depth PARAMETERS_ONLY = Depth.PARAMETERS_ONLY;
 
     // ///////////////////////////////////////////////////////////////////////////
     // Factory methods
@@ -162,7 +162,9 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public String getClassNaturalName() {
-        return NameUtils.naturalName(getClassName());
+        String className = getClassName();
+        String isolatedName = className.substring(className.lastIndexOf('.') + 1);
+        return NameUtils.naturalName(isolatedName);
     }
 
     public String getMemberName() {

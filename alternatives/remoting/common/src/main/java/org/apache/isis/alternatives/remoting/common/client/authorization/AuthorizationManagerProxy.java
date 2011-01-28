@@ -70,7 +70,7 @@ public class AuthorizationManagerProxy extends AuthorizationManagerAbstract {
     public boolean isUsable(final AuthenticationSession session, ObjectAdapter target, final Identifier identifier) {
 		final IdentityData targetData = encoderDecoder.encodeIdentityData(target);
 
-        final String idString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARMS);
+        final String idString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
 		if (!usabilityCache.containsKey(idString)) {
 			AuthorizationResponse response = serverFacade.authorizeUsability(new AuthorizationRequestUsability(session, targetData, idString));
 			final Boolean authorized = isAuthorized(response);
@@ -82,7 +82,7 @@ public class AuthorizationManagerProxy extends AuthorizationManagerAbstract {
     public boolean isVisible(final AuthenticationSession session, ObjectAdapter target, final Identifier identifier) {
 		final IdentityData targetData = encoderDecoder.encodeIdentityData(target);
 
-		final String idString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARMS);
+		final String idString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
 		if (!visibilityCache.containsKey(idString)) {
 		    AuthorizationRequestVisibility request = new AuthorizationRequestVisibility(session, targetData, idString);
 			final AuthorizationResponse response = serverFacade.authorizeVisibility(request);

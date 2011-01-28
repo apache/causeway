@@ -133,7 +133,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
             throws NamingException {
         final String cls = member.toIdentityString(Identifier.CLASS);
         final String name = member.toIdentityString(Identifier.MEMBERNAME_ONLY);
-        final String parms = member.toIdentityString(Identifier.PARMS_ONLY);
+        final String parms = member.toIdentityString(Identifier.PARAMETERS_ONLY);
 
         final Object[] args = new Object[] { role, cls, name, parms };
         final SearchControls controls = new SearchControls();
@@ -243,7 +243,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         final String cls = member.toIdentityString(Identifier.CLASS);
         final String name = member.toIdentityString(Identifier.MEMBERNAME_ONLY);
         // have to escape any commas in parms string or ldap parser is not happy
-        final String parms = member.toIdentityString(Identifier.PARMS_ONLY).replace(",", "\\,");
+        final String parms = member.toIdentityString(Identifier.PARAMETERS_ONLY).replace(",", "\\,");
         if (parms.length() == 0) {
             return;
         }

@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
     private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);
-    private final Properties p = new Properties();
+    private final Properties properties = new Properties();
 	private final ResourceStreamSource resourceStreamSource;
     
     //////////////////////////////////////////////////
@@ -79,7 +79,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         final Enumeration e = properties.propertyNames();
         while (e.hasMoreElements()) {
             final String name = (String) e.nextElement();
-            p.put(name, properties.getProperty(name));
+            this.properties.put(name, properties.getProperty(name));
         }
     }
 
@@ -90,10 +90,10 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         if (key == null) {
             return;
         }
-        if (p.containsKey(key)) {
-            LOG.info("replacing " + key + "=" + p.get(key) + " with " + value);
+        if (properties.containsKey(key)) {
+            LOG.info("replacing " + key + "=" + properties.get(key) + " with " + value);
         }
-        p.put(key, value);
+        properties.put(key, value);
     }
 
     @Override
@@ -106,12 +106,12 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         }
         final int prefixLength = startsWith.length();
 
-        final Enumeration e = p.keys();
+        final Enumeration e = properties.keys();
         while (e.hasMoreElements()) {
             final String key = (String) e.nextElement();
             if (key.startsWith(startsWith)) {
                 final String modifiedKey = key.substring(prefixLength);
-                subset.p.put(modifiedKey, p.get(key));
+                subset.properties.put(modifiedKey, properties.get(key));
             }
         }
         return subset;
@@ -194,12 +194,14 @@ public class IsisConfigurationDefault implements IsisConfiguration {
 
     @Override
     public void debugData(final DebugString str) {
-        final Enumeration names = p.propertyNames();
+        str.appendln("Resource Stream Source", resourceStreamSource);
+        str.appendln();
+        final Enumeration names = properties.propertyNames();
         while (names.hasMoreElements()) {
             final String name = (String) names.nextElement();
             str.append(name, 55);
             str.append(" = ");
-            str.appendln(p.getProperty(name));
+            str.appendln(properties.getProperty(name));
         }
     }
 
@@ -293,12 +295,12 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         final int prefixLength = "".length();
 
         final Properties pp = new Properties();
-        final Enumeration e = p.keys();
+        final Enumeration e = properties.keys();
         while (e.hasMoreElements()) {
             final String key = (String) e.nextElement();
             if (key.startsWith(withPrefix)) {
                 final String modifiedKey = key.substring(prefixLength);
-                pp.put(modifiedKey, p.get(key));
+                pp.put(modifiedKey, properties.get(key));
             }
         }
         final IsisConfigurationDefault isisConfigurationDefault = new IsisConfigurationDefault(resourceStreamSource);
@@ -315,7 +317,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         if (key.indexOf("..") >= 0) {
             throw new IsisException("property names should not have '..' within them: " + name);
         }
-        String property = p.getProperty(key, defaultValue);
+        String property = properties.getProperty(key, defaultValue);
         property = property != null ? property.trim() : null;
         LOG.debug("property: '" + key + "' =  '" + property + "'");
         return property;
@@ -338,17 +340,17 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     @Override
     public boolean hasProperty(final String name) {
         final String key = referedToAs(name);
-        return p.containsKey(key);
+        return properties.containsKey(key);
     }
 
     @Override
     public boolean isEmpty() {
-        return p.isEmpty();
+        return properties.isEmpty();
     }
 
     @Override
     public Iterator<String> iterator() {
-        return p.stringPropertyNames().iterator();
+        return properties.stringPropertyNames().iterator();
     }
 
     /**
@@ -361,12 +363,12 @@ public class IsisConfigurationDefault implements IsisConfiguration {
 
     @Override
     public int size() {
-        return p.size();
+        return properties.size();
     }
 
     @Override
     public String toString() {
-        return "ConfigurationParameters [properties=" + p + "]";
+        return "ConfigurationParameters [properties=" + properties + "]";
     }
 
     
