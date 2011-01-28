@@ -116,22 +116,24 @@ public class Dispatcher {
             LOG.debug(e.getMessage(), e);
             
             DebugString error = new DebugString();
-            List<String> messages =  IsisContext.getMessageBroker().getMessages();
-            for (String message : messages) {
-                context.getWriter().append("<div class=\"message\">message: " + message + "</div>");
-                error.appendln("message", message);
+            if (IsisContext.getCurrentTransaction() != null) {
+                List<String> messages =  IsisContext.getMessageBroker().getMessages();
+                for (String message : messages) {
+                    context.getWriter().append("<div class=\"message\">message: " + message + "</div>");
+                    error.appendln("message", message);
+                }
+                messages =  IsisContext.getMessageBroker().getWarnings();
+                for (String message : messages) {
+                    context.getWriter().append("<div class=\"message\">warning: " + message + "</div>");
+                    error.appendln("warning", message);
+                }
             }
-            messages =  IsisContext.getMessageBroker().getWarnings();
-            for (String message : messages) {
-                context.getWriter().append("<div class=\"message\">warning: " + message + "</div>");
-                error.appendln("warning", message);
-            }
-
+            
             generateErrorPage(e, context, error);
              
             PersistenceSession checkSession = IsisContext.getPersistenceSession();
             IsisTransactionManager transactionManager = checkSession.getTransactionManager();
-            if (transactionManager.getTransaction().getState().canAbort()) {
+            if (transactionManager.getTransaction() != null && transactionManager.getTransaction().getState().canAbort()) {
                 transactionManager.abortTransaction();
             }
             
