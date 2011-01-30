@@ -27,7 +27,9 @@ ObjectStore Implementations
 
  * {{{./sql/index.html}SQL object store}}
  
-  The <sql> object store module provides the ability to persist domain objects into an RDBMS. It has no external dependencies, using simply JDBC.
+  The <sql> object store module provides the ability to persist domain objects into an RDBMS. It has no explicit external dependencies, using simply JDBC. 
+
+  You will have to add appropriate drivers to support connecting to the database server of your choosing.
  
  * {{{./nosql/index.html}SQL object store}}
 
