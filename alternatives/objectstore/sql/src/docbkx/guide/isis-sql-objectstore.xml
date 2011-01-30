@@ -16,28 +16,27 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"file:${resourceDir}/resources/docbook-xml-4.5/docbookx.dtd" >
-
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"file:&resourceDir;/resources/docbook-xml-4.5/docbookx.dtd" >
 -->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
+
     <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Robert</firstname>
+
         <surname>Matthews</surname>
       </author>
+
       <author>
         <firstname>Kevin</firstname>
+
         <surname>Meyer</surname>
       </author>
     </authorgroup>
@@ -60,18 +59,18 @@
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores.  Apache 
-    Isis is hosted at the 
-    <ulink url="http://incubator.apache.org/isis">Apache Foundation</ulink>,
-    and is licensed under <ulink
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para>This guide is written for programmers who want to use the 
+    <para>This guide is written for programmers who want to use the
     <emphasis>SQL Object Store</emphasis> to persist domain objects running
-    within the <emphasis>Apache Isis</emphasis> framework.  Specifically, it
+    within the <emphasis>Apache Isis</emphasis> framework. Specifically, it
     covers how to write repository implementations, how to configure the
-    object store, and how to deploy your applications using the object store.</para>
+    object store, and how to deploy your applications using the object
+    store.</para>
   </preface>
 
   <!-- main content -->
@@ -80,27 +79,50 @@
     <title>Introduction</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>What's it all about?</para>
     </abstract>
 
     <sect1>
-      <title>***</title>
+      <title>SQL Object Store</title>
 
-      <para><emphasis>*** yada yada</emphasis></para>
+      <para><emphasis>The SQL object store provides a simple persistance
+      engine that can persist your Isis session and objects to many JDBC
+      supported database servers.</emphasis></para>
+
+      <para>The list of tested servers is provided in section <xref
+      linkend="ch.supported.dbs" />, below. </para>
     </sect1>
   </chapter>
 
-  <chapter>
-    <title>***</title>
+  <chapter id="ch.supported.dbs">
+    <title>Supported Database Servers</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>Which SQL database servers have been used?</para>
     </abstract>
 
     <sect1>
-      <title>***</title>
+      <title>Tested</title>
 
-      <para><emphasis>*** yada yada</emphasis></para>
+      <para>The following database servers are tested in the object store
+      integration tests:<itemizedlist>
+          <listitem>
+            <para>HSQLDB ()</para>
+          </listitem>
+
+          <listitem>
+            <para>Postgresql (tested on 8.3.12-ubuntu9.04)</para>
+          </listitem>
+
+          <listitem>
+            <para>MySQL (tested on 5.1.31-1ubuntu2)</para>
+          </listitem>
+
+          <listitem>
+            <para>Microsoft SQL Server 2008 (Only from 2008 is DATE and TIME
+            supported)</para>
+          </listitem>
+        </itemizedlist></para>
     </sect1>
   </chapter>
 
