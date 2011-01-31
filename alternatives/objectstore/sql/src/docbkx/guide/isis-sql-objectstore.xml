@@ -73,24 +73,28 @@
     store.</para>
   </preface>
 
-  <!-- main content -->
+  <!--main content -->
 
   <chapter id="chp.Intro">
-    <title>Introduction</title>
+    <title>Operation</title>
 
     <abstract>
       <para>What's it all about?</para>
     </abstract>
 
+    <!--content: Outline how classes are introspected, how properties are auto-mapped to SQL types, how to override the default mappers in the properties file.-->
+
     <sect1>
-      <title>SQL Object Store</title>
+      <title>Mappers</title>
 
-      <para><emphasis>The SQL object store provides a simple persistance
-      engine that can persist your Isis session and objects to many JDBC
-      supported database servers.</emphasis></para>
+      <para>For persistance, classes are introspected and all properties
+      recursively introspected to value types. Thus, if a property stores a
+      reference to a class, that class's properties are introspected,
+      etc.</para>
 
-      <para>The list of tested servers is provided in section <xref
-      linkend="ch.supported.dbs" />, below. </para>
+      <para>By default, the value types are mapped onto SQL data types, as
+      determined by the mappers. Default mappers are provided by
+      AutoMapperFactory.</para>
     </sect1>
   </chapter>
 
@@ -102,6 +106,8 @@
     </abstract>
 
     <sect1>
+      <!--content: List of database servers tested.-->
+
       <title>Tested</title>
 
       <para>The following database servers are tested in the object store
@@ -124,6 +130,29 @@
           </listitem>
         </itemizedlist></para>
     </sect1>
+
+    <sect1>
+      <title>Tested values</title>
+
+      <para>The following value types have been tested (stored and
+      retrieved):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>standard types: integer (INT?), real (blah?), string (VAR CHAR
+          (65)?)</para>
+        </listitem>
+
+        <listitem>
+          <para>date - <code>org.apache.isis.applib.value.date</code> and
+          <code>java.sql.date</code> (DATE)</para>
+        </listitem>
+
+        <listitem>
+          <para>blah</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
   </chapter>
 
   <appendix>
@@ -137,6 +166,10 @@
       <title>***</title>
 
       <para>*** yada yada</para>
+
+      <para>Last editted: Kevin, 31/01/2011.</para>
+
+      <!--dd/mm/yyyy-->
     </sect1>
   </appendix>
 </book>
