@@ -1,0 +1,29 @@
+SQL Persistor Properties
+
+* ALPHA
+
+A summary of properties and their function, as found by searching through the sql-persistor sources.
+
+
+Class
+org.nakedobjects.plugins.sql.objectstore.ObjectMappingLookup#init()
+Property
+Base:	nakedobjects.persistence.sql
+prefix:	"base".mapper	(nakedobjects.persistence.sql.mapper)
+values:	
+
+So:
+Example 1:
+
+nakedobjects.persistence.sql.mapper.tom=auto
+means, for class "tom", use automapper specified by "nakedobjects.persistence.sql.automapper.default", 
+e.g.
+nakedobjects.persistence.sql.automapper.defaulttable=zzz	Specify table name for mapping. Else table name is 
+nakedobjects.persistence.sql.automapper.defaultdb-ids=true/false	Database creates IDs
+nakedobjects.persistence.sql.automapper.defaultall-fields=true/false	Map all fields, or only specified fields (unsupported, must be true).
+
+Example 2:
+nakedobjects.persistence.sql.mapper.tom=auto.tom
+nakedobjects.persistence.sql.automapper.tom.
+
+
