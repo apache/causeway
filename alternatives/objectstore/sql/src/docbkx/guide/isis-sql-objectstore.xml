@@ -113,7 +113,7 @@
       <para>The following database servers are tested in the object store
       integration tests:<itemizedlist>
           <listitem>
-            <para>HSQLDB ()</para>
+            <para>HSQLDB (tested against 1.8.0.10)</para>
           </listitem>
 
           <listitem>
@@ -139,37 +139,145 @@
 
       <itemizedlist>
         <listitem>
-          <para>standard types: integer (INT?), real (blah?), string (VAR CHAR
-          (65)?)</para>
+          <para>standard values: integer, short, long (INT), float, double
+          (FLOAT), char (CHAR(2)).</para>
         </listitem>
 
         <listitem>
-          <para>date - <code>org.apache.isis.applib.value.date</code> and
-          <code>java.sql.date</code> (DATE)</para>
+          <para>standard classes: Money ([does not work]), Percentage (FLOAT),
+          Password (VARCHAR(12)), Color (INT), String (VARCHAR (65)).</para>
+        </listitem>
+
+        <listitem>
+          <para>Special value mappers:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><code>org.apache.isis.applib.value.date</code> and
+              <code>java.sql.date</code> (DATE, via
+              <code>org.apache.isis.alternatives.objectstore.sql.jdbc.JdbcDateMapper</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>blah Time, DateTime, java.sql.Time, java.util.Date,
+              java.sql.Timestamp blah</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
 
         <listitem>
           <para>blah</para>
         </listitem>
       </itemizedlist>
+
+      <para>Default automapper is installed by
+      <code>org.apache.isis.alternatives.objectstore.sql.FieldMappingFactoryInstaller</code>
+      ..</para>
+
+      <para></para>
     </sect1>
   </chapter>
 
   <appendix>
-    <title>***</title>
+    <title>Correspondence</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>Who said what, when?</para>
     </abstract>
 
     <sect1 id="sec.module-ui">
-      <title>***</title>
+      <title>Email</title>
 
-      <para>*** yada yada</para>
+      <para></para>
 
-      <para>Last editted: Kevin, 31/01/2011.</para>
+      <sect2>
+        <title>2011/02/01, Response by Dan Haywood</title>
 
-      <!--dd/mm/yyyy-->
+        <para><remark>At the moment I'm just putting down whatever comes into
+        my head, with a view of later editting it into a coherent document,
+        but obviously there are questions of level of detail, etc. For
+        example, should I really bother with describing what persistance is,
+        and how the domain classes are introspected?! </remark></para>
+
+        <para>I don't think so, no.</para>
+
+        <para>That said, if you do find yourself writing "introductory"
+        material like this, we can always move it. The place for such stuff
+        should probably be the "core" documentation
+        (core/src/docbkx/guide/isis-core.xml), which is what I'm chipping away
+        at myself.</para>
+
+        <para><remark>Yes to: what SQL data types are used by default, yes to:
+        how to override the automappers and provide your own mapper, yes to:
+        how collections and parent/child relatonships are handled, etc.
+        </remark></para>
+
+        <para>It'd be worth showing examples of all the different types of
+        mappings supported, as well as those that are not supported.</para>
+
+        <para>For example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Id generation - how is that supported?</para>
+          </listitem>
+
+          <listitem>
+            <para>optimistic locking - how supported?</para>
+          </listitem>
+
+          <listitem>
+            <para>one&lt;-&gt;many</para>
+          </listitem>
+
+          <listitem>
+            <para>one&lt;-many</para>
+          </listitem>
+
+          <listitem>
+            <para>one-&gt;many</para>
+          </listitem>
+
+          <listitem>
+            <para>two one&lt;-&gt;many relationships between same types A and
+            B (if I recall, this isn't supported?)</para>
+          </listitem>
+
+          <listitem>
+            <para>many&lt;-&gt;many</para>
+          </listitem>
+
+          <listitem>
+            <para>many-&gt;many - subtype relationships (roll-up, roll-down,
+            table per subtype)</para>
+          </listitem>
+
+          <listitem>
+            <para>polymorphic relationships to interfaces</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>You could also peruse some of the Hibernate ORM docs for
+        examples of mappings there; that might prompt you to consider some
+        additional scenarios.</para>
+
+        <para><remark>What else?</remark></para>
+
+        <para>Obviously, any additional entries required in isis.properties to
+        enable the SQL object store. In addition, as background it'd be worth
+        explaining about the different subcomponents used by the object store:
+        the OidGenerator, PersistAlgorithm, TransactionManager Also, I know
+        that the JPA object store has to configure a different
+        ClassSubstitutor/ObjectFactory, because it leaves the ORM to perform
+        cglib proxying. I don't think you have any similar restrictions, but
+        it might be worth saying so.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Edit History</title>
+
+      <para>Last editted: Kevin, 31/01/2011.<!--dd/mm/yyyy--></para>
     </sect1>
   </appendix>
 </book>
