@@ -28,6 +28,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 
 
@@ -35,12 +36,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 public class LogonAction implements Action {
 
     public void process(RequestContext context) throws IOException {
-        String password = context.getParameter("password");
         String username = context.getParameter("username");
+        String password = context.getParameter("password");
         AuthenticationSession session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
 
         String view;
         if (session == null) {
+            context.addVariable("login-failure", "Failed to login. Check the username and ensure that your password was entered correctly", Scope.INTERACTION);
             view = context.getParameter("error");
         } else {
             context.setSession(session);

@@ -163,11 +163,16 @@ public class HtmlFormBuilder {
         String[] options = field.getOptionsText();
         String[] ids = field.getOptionValues();
         int length = options.length;
+        boolean offerOther = false;
         for (int i = 0; i < length; i++) {
             String selectedSegment = field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
-            str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
+            if (field.getType() == InputField.TEXT &&  options[i].equals("__other")) {
+                offerOther = true;
+            } else {
+                str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
+            }
         }
-        if (field.getType() == InputField.TEXT) {
+        if (offerOther) {
             str.append("    <option value=\"-OTHER-\">Other:</option>\n");
         }
         str.append("  </select>");

@@ -134,6 +134,9 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             IsisContext.getPersistenceSession().resolveField(object, objectField);
             ObjectAdapter fld = objectField.get(object);
+            if (fld == null) {
+                throw new ScimpiException("No object for field-set " + field);
+            }
             Object fieldValue = fld.getObject();
             if (fieldValue instanceof Boolean) {
                 processTags(((Boolean) fieldValue).booleanValue(), request);
@@ -155,7 +158,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         if (type != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             Class<?> cls = forClass(request);
-            boolean hasType = cls == null || cls.isAssignableFrom(object.getObject().getClass()); 
+            boolean hasType = object != null && (cls == null || cls.isAssignableFrom(object.getObject().getClass())); 
             processTags(hasType, request);
             return;
         }

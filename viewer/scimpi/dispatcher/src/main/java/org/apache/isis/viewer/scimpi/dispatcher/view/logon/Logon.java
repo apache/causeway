@@ -47,6 +47,11 @@ public class Logon extends AbstractElementProcessor {
     }
 
     public static void loginForm(Request request, String view) {
+        Object message = request.getContext().getVariable("login-failure");
+        if (message != null) {
+            request.appendHtml("<p class=\"login-failure\">" + message + "</p>");
+        }
+        
         String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
         List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField(ERRORS, error));
