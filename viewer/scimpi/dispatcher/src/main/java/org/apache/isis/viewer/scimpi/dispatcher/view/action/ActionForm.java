@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.ActionAction;
@@ -53,7 +52,8 @@ public class ActionForm extends AbstractElementProcessor {
         parameters.forwardResultTo = request.getOptionalProperty(VIEW);
         parameters.forwardVoidTo = request.getOptionalProperty(VOID);
         parameters.forwardErrorTo = request.getOptionalProperty(ERRORS);
-        parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE, "OK");
+        parameters.showIcon = request.isRequested(SHOW_ICON, true);
+        parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
         parameters.resultName = request.getOptionalProperty(RESULT_NAME);
         parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
@@ -134,7 +134,7 @@ public class ActionForm extends AbstractElementProcessor {
         containedBlock.hideExcludedParameters(formFields);
         containedBlock.setUpValues(formFields);
         initializeFields(context, object, action, formFields);
-        setDefaults(context, object, action, formFields, entryState);
+        setDefaults(context, object, action, formFields, entryState, parameterObject.showIcon);
         if (entryState != null && entryState.isForForm(objectId + ":" + parameterObject.methodName)) {
             copyEntryState(context, object, action, formFields, entryState);
         }
@@ -147,8 +147,15 @@ public class ActionForm extends AbstractElementProcessor {
             formTitle = parameterObject.formTitle;
         }
 
+        String buttonTitle = parameterObject.buttonTitle;
+        if (buttonTitle == null) {
+            buttonTitle = action.getName();
+        } else if( buttonTitle.equals("")) {
+            buttonTitle = "Ok";
+        }
+        
         HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className,
-                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), parameterObject.buttonTitle);
+                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle);
 
         request.popBlockContent();
     }
@@ -162,26 +169,35 @@ public class ActionForm extends AbstractElementProcessor {
         return fields;
     }
 
-    private static void initializeFields(RequestContext context, ObjectAdapter object, ObjectAction action, InputField[] fields) {
+    private static void initializeFields(
+            RequestContext context,
+            ObjectAdapter object,
+            ObjectAction action,
+            InputField[] fields) {
         List<ObjectActionParameter> parameters = action.getParameters();
         for (int i = 0; i < fields.length; i++) {
             InputField field = fields[i];
             ObjectActionParameter param = parameters.get(i);
-            
-            ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];
-            FieldFactory.initializeField(context, object, param, optionsForParameter, !param.isOptional(), true, field);
+            if (action.isContributed() && i == 0) {
+                fields[i].setHidden(true);
+            } else {
+                ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];
+                FieldFactory.initializeField(context, object, param, optionsForParameter, !param.isOptional(), field);
+            }
         }
     }
     
     /**
      * Sets up the fields with their initial values
+     * @param showIcon 
      */
     private static void setDefaults(
             RequestContext context,
             ObjectAdapter object,
             ObjectAction action,
             InputField[] fields,
-            FormState entryState) {
+            FormState entryState, 
+            boolean showIcon) {
         ObjectAdapter[] defaultValues = action.getDefaults(object);
         if (defaultValues == null) {
             return;
@@ -195,8 +211,9 @@ public class ActionForm extends AbstractElementProcessor {
             if (field.getType() == InputField.REFERENCE) {
                 ObjectSpecification objectSpecification = action.getParameters().get(i).getSpecification();
                 if (defaultValue != null) {
-                    String html = "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
-                            + objectSpecification.getShortIdentifier() + "\"/>" + title;
+                    String imageSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
+                                                + objectSpecification.getShortIdentifier() + "\"/>" : "";
+                    String html = imageSegment + title;
                     String value = context.mapObject(defaultValue, Scope.INTERACTION);
                     field.setValue(value);
                     field.setHtml(html);

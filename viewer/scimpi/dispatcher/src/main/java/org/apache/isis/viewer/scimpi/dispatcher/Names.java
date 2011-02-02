@@ -39,6 +39,7 @@ public interface Names {
     static final String HEADING = "heading";
     static final String ICON_CLASS = "icon";
     static final String HIDDEN = "hidden";
+    static final String HIDE_UNEDITABLE = "hide-uneditable";
     static final String HEADER_LEVEL = "header";
     static final String ID = "id";
     static final String LINK = "link";

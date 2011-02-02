@@ -51,8 +51,9 @@ public class EditObject extends AbstractElementProcessor {
         String objectId = request.getOptionalProperty(OBJECT);
         String forwardEditedTo = request.getOptionalProperty(VIEW);
         String forwardErrorTo = request.getOptionalProperty(ERRORS);
-        boolean hideNonEditableFields = request.isRequested("hide-uneditable", false);
-        String buttonTitle = request.getOptionalProperty(BUTTON_TITLE, "Save");
+        boolean hideNonEditableFields = request.isRequested(HIDE_UNEDITABLE, false);
+        boolean showIcon = request.isRequested(SHOW_ICON, true);
+        String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String formTitle = request.getOptionalProperty(FORM_TITLE);
         String variable = request.getOptionalProperty(RESULT_NAME);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
@@ -66,10 +67,11 @@ public class EditObject extends AbstractElementProcessor {
 
         final FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
 
+        final ObjectSpecification specification = object.getSpecification();
         FormFieldBlock containedBlock = new FormFieldBlock() {
             @Override
             public boolean isVisible(String name) {
-                ObjectAssociation fld = object.getSpecification().getAssociation(name);
+                ObjectAssociation fld = specification.getAssociation(name);
                 boolean isVisible = fld.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
                 boolean isUseable = fld.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
                 return isVisible && isUseable;
@@ -82,14 +84,14 @@ public class EditObject extends AbstractElementProcessor {
                     value = field2.getValue();
                 }
                 if (value == null) {
-                    ObjectAssociation fld = object.getSpecification().getAssociation(name);
+                    ObjectAssociation fld = specification.getAssociation(name);
                     value = fld.get(object);
                 }
                 return value;
             }
             
             public boolean isNullable(String name) {
-                ObjectAssociation fld = object.getSpecification().getAssociation(name);
+                ObjectAssociation fld = specification.getAssociation(name);
                 return !fld.isMandatory();
             }
         };
@@ -98,14 +100,14 @@ public class EditObject extends AbstractElementProcessor {
         request.processUtilCloseTag();
 
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        List<ObjectAssociation> fields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
         fields = containedBlock.includedFields(fields);
         InputField[] formFields = createFields(fields);
         
         initializeFields(context, object, formFields, entryState, !hideNonEditableFields);
-        setDefaults(context, object, formFields, entryState);
+        setDefaults(context, object, formFields, entryState, showIcon);
         
-        copyFieldContent(context, object, formFields);
+        copyFieldContent(context, object, formFields, showIcon);
         overrideWithHtml(context, containedBlock, formFields);
         if (entryState != null && entryState.isForForm(actualObjectId)) {
             copyEntryState(context, object, formFields, entryState);
@@ -120,6 +122,17 @@ public class EditObject extends AbstractElementProcessor {
                 resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride),
                 scope == null ? null : new HiddenInputField(SCOPE, scope) };
 
+
+        if (formTitle == null) {
+            formTitle = specification.getSingularName();
+        }
+
+        if (buttonTitle == null) {
+            buttonTitle = "Save " + specification.getSingularName();
+        } else if( buttonTitle.equals("")) {
+            buttonTitle = "Save";
+        }
+        
         HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFields, formFields, className, id, formTitle, null, null, buttonTitle);
         request.popBlockContent();
     }
@@ -152,7 +165,7 @@ public class EditObject extends AbstractElementProcessor {
             AuthenticationSession session = IsisContext.getAuthenticationSession();
             if (field.isVisible(session, object).isAllowed() && (includeUnusableFields || field.isUsable(session, object).isAllowed())) {
                 ObjectAdapter[] options = field.getChoices(object);
-                FieldFactory.initializeField(context, object, field, options, field.isMandatory(), includeUnusableFields, formField);
+                FieldFactory.initializeField(context, object, field, options, field.isMandatory(), formField);
                 
                 Consent usable = field.isUsable(session, object);
                 boolean isEditable = true;
@@ -167,7 +180,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields) {
+    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields, boolean showIcon) {
         for (int i = 0; i < formFields.length; i++) {
             String fieldName = formFields[i].getName();
             ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
@@ -189,8 +202,9 @@ public class EditObject extends AbstractElementProcessor {
 
                 if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
                     if (fieldValue != null) {
-                        String entry = "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification())
-                                + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" + fieldValue.titleString();
+                        String iconSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification())
+                                                        + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" : "";
+                        String entry = iconSegment + fieldValue.titleString();
                         inputField.setHtml(entry);
                     } else {
                         String entry = "<em>none specified</em>";
@@ -201,7 +215,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void setDefaults(RequestContext context, ObjectAdapter object, InputField[] formFields, FormState entryState) {
+    private void setDefaults(RequestContext context, ObjectAdapter object, InputField[] formFields, FormState entryState, boolean showIcon) {
         for (int i = 0; i < formFields.length; i++) {
             String fieldId = formFields[i].getName();
             ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
@@ -216,8 +230,9 @@ public class EditObject extends AbstractElementProcessor {
             } else if (field.isOneToOneAssociation()) {
                 ObjectSpecification objectSpecification = field.getSpecification();
                 if (defaultValue != null) {
-                    String html = "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
-                            + objectSpecification.getShortIdentifier() + "\"/>" + title;
+                    String iconSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
+                                                + objectSpecification.getShortIdentifier() + "\"/>" : "";
+                    String html = iconSegment + title;
                     formFields[i].setHtml(html);
                     String value = defaultValue == null ? null : context.mapObject(defaultValue, Scope.INTERACTION);
                     formFields[i].setValue(value);

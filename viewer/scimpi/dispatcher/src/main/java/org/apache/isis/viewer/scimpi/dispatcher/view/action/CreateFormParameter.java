@@ -36,5 +36,6 @@ public class CreateFormParameter {
     public String id;
     public String resultOverride;
     public boolean showMessage;
+    public boolean showIcon;
 }
 

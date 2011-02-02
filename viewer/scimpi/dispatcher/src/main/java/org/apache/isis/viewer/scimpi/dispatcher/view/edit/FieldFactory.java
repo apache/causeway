@@ -41,7 +41,6 @@ public class FieldFactory {
         ObjectFeature param,
         ObjectAdapter[] optionsForParameter,
         boolean isRequired,
-        boolean includeUnusableFields,
         InputField field) {
 
         field.setLabel(param.getName());
@@ -51,7 +50,7 @@ public class FieldFactory {
         }
         field.setRequired(isRequired);
         field.setHidden(false);
-
+        
         if (param.getSpecification().getFacet(ParseableFacet.class) != null) {
             final int maxLength = param.getFacet(MaxLengthFacet.class).value();
             field.setMaxLength(maxLength);

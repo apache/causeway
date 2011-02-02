@@ -67,7 +67,14 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
                     linkFields[i] = isObject && isNotParseable ? new LinkedObject(linkAllView) : null;
                 }
             }
-    
+            
+            if (title == null) {
+                title = object.getSpecification().getSingularName();
+            } else if( title.equals("")) {
+                title = null;
+            }
+            
+
             write(request, object, fields, linkFields, classString, title, oddRowClass, evenRowClass, showIcons);
         }
         request.popBlockContent();
