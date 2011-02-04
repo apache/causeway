@@ -43,10 +43,11 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
+import org.apache.isis.core.runtime.system.JmxBeanServer;
 import org.apache.log4j.Logger;
 
 
-public class FileAuthorizor extends AuthorizorAbstract {
+public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
 
     private static final Logger LOG = Logger.getLogger(FileAuthorizor.class);
 
@@ -81,6 +82,9 @@ public class FileAuthorizor extends AuthorizorAbstract {
         blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
         
         findResources();
+        
+                
+        JmxBeanServer.getInstance().register("FileAuthorizor", this);
     }
 
 
