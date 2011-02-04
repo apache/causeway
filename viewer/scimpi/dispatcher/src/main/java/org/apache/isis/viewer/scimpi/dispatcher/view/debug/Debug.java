@@ -45,6 +45,7 @@ public class Debug extends AbstractElementProcessor {
     public void process(Request request) {
         String type = request.getOptionalProperty("type");
         String value = request.getOptionalProperty("value");
+        boolean alwaysShow = request.isRequested("force", false);
         if (type != null) {
             if (type.equals("system")) {
                 DebuggableWithTitle[] debug = IsisContext.debugSystem();
@@ -90,7 +91,7 @@ public class Debug extends AbstractElementProcessor {
 
         }
 
-        if (request.getContext().getDebug() == RequestContext.Debug.ON) {
+        if (alwaysShow || request.getContext().getDebug() == RequestContext.Debug.ON) {
 
             RequestContext context = request.getContext();
             

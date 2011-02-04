@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
+import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
@@ -78,7 +79,12 @@ public class Logon extends AbstractElementProcessor {
         String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
         String className = request.getOptionalProperty(CLASS, "action login full");
         String  id = request.getOptionalProperty(ID);
-        HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields, className, id, formTitle, null, null, loginButtonTitle);
+        
+        FormState entryState = (FormState) request.getContext().getVariable(ENTRY_FIELDS);
+
+        
+        HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields,
+                className, id, formTitle, null, null, loginButtonTitle, entryState == null ? null : entryState.getError());
     }
 
     public String getName() {

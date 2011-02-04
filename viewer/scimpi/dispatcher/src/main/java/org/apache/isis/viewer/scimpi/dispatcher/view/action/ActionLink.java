@@ -45,8 +45,11 @@ public class ActionLink extends AbstractElementProcessor {
         String scope = request.getOptionalProperty(SCOPE);
         String scopeSegment = scope == null ? "" : "&amp;" + SCOPE + "=" + scope;
         String confirm = request.getOptionalProperty(CONFIRM);
+        String completionMessage = request.getOptionalProperty(MESSAGE);
+        
         // TODO need a mechanism for globally dealing with encoding; then use the new encode method
         String confirmSegment = confirm == null ? "" : "&amp;" + CONFIRM + "=" + URLEncoder.encode(confirm);
+        String messageSegment = completionMessage == null ? "" : "&amp;" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
 
         RequestContext context = request.getContext();
         ObjectAdapter object = MethodsUtils.findObject(context, objectId);
@@ -60,7 +63,7 @@ public class ActionLink extends AbstractElementProcessor {
         String text = request.popBuffer();
 
         if (MethodsUtils.isVisibleAndUsable(object, action)) {
-            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, scopeSegment, confirmSegment,
+            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, scopeSegment, confirmSegment, messageSegment,
                     context, action, parameterBlock, text);
         }
         request.popBlockContent();
@@ -76,6 +79,7 @@ public class ActionLink extends AbstractElementProcessor {
             String resultNameSegment,
             String scopeSegment,
             String confirmSegment,
+            String messageSegment,
             RequestContext context,
             ObjectAction action,
             ActionContent parameterBlock,
@@ -93,7 +97,7 @@ public class ActionLink extends AbstractElementProcessor {
         String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
         String forwardVoidSegment = "&amp;" + VOID + "=" + voidView;
         request.appendHtml("<a href=\"action.app?" + OBJECT + "=" + objectId + "&amp;" + VERSION + "=" + version + "&amp;" + METHOD + "=" + method
-                + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + interactionParamters + "\">");
+                + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");
         HelpLink.append(request, action.getDescription(), action.getHelp());

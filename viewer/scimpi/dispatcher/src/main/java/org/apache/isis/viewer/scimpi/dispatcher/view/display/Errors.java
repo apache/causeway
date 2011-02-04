@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
@@ -30,17 +31,24 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class Errors extends AbstractElementProcessor {
 
     public void process(Request request) {
+        throw new ScimpiException();
+        /*
         String cls = request.getOptionalProperty(CLASS);       
-        append(request, cls);
+        append(request, cls);*/
     }
 
     public static void append(Request request, String cls) {
+        throw new ScimpiException();
+        /*
         StringBuffer buffer = new StringBuffer();
         write(cls, buffer, request);
         request.appendHtml(buffer.toString());
+        */
     }
 
     public static void write(String cls, StringBuffer buffer, Request request) {
+        throw new ScimpiException();
+        /*
         if (cls == null) {
             cls = "errors";
         }
@@ -48,6 +56,7 @@ public class Errors extends AbstractElementProcessor {
         if (errors != null) {
             buffer.append("<div class=\"" + cls + "\">" + errors + "</div>");
         }
+        */
     }
 
     public String getName() {

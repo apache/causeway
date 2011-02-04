@@ -125,7 +125,7 @@ public class ProcessorLookup {
         addElementProcessor(new EditLink());
         addElementProcessor(new EditObject());
         addElementProcessor(new ElementType());
-        addElementProcessor(new Errors());
+ //       addElementProcessor(new Errors());
         addElementProcessor(new ExcludeField());
         addElementProcessor(new Feedback());
         addElementProcessor(new FieldLabel());

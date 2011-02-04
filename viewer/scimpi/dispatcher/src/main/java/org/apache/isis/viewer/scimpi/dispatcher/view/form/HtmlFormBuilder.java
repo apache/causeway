@@ -38,7 +38,8 @@ public class HtmlFormBuilder {
             String formTitle,
             String description,
             String helpReference,
-            String buttonTitle) {
+            String buttonTitle,
+            String errors) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
         request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
@@ -74,7 +75,14 @@ public class HtmlFormBuilder {
             }
         }
 
-        Errors.append(request, null);
+        // Errors.append(request, null);
+        
+      //  Object errors = request.getContext().getVariable(RequestContext.ERROR);
+        String cls = "errors";
+        if (errors != null) {
+            request.appendHtml("<div class=\"" + cls + "\">" + errors + "</div>");
+        }
+        
         
         request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" />\n");
         HelpLink.append(request, description, helpReference);

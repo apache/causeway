@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -62,6 +63,7 @@ public class ActionAction implements Action {
         String methodName = context.getParameter(METHOD);
         String override = context.getParameter(RESULT_OVERRIDE);
         String resultName = context.getParameter(RESULT_NAME);
+        String message = context.getParameter(MESSAGE);
         resultName = resultName == null ? RequestContext.RESULT : resultName;
         
         FormState entryState = null;
@@ -93,7 +95,8 @@ public class ActionAction implements Action {
                 String view = context.getParameter(ERRORS);
                 context.setRequestPath(view, Dispatcher.ACTION);
 
-            } else    */         if (entryState.isValid()) {
+            } else    */         
+            if (entryState.isValid()) {
                 boolean hasResult = invokeMethod(context, resultName, object, action, entryState);
                 String view = context.getParameter(hasResult ? VIEW : VOID);
                 
@@ -109,6 +112,10 @@ public class ActionAction implements Action {
                     }
                 }
                 context.setRequestPath(view);
+                if (message != null) {
+                    MessageBroker messageBroker = IsisContext.getMessageBroker();
+                    messageBroker.addMessage(message);
+                }
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
                 }                
@@ -123,12 +130,17 @@ public class ActionAction implements Action {
                     context.addVariable(resultName, override, Scope.REQUEST);
                 }   
                 final String error = entryState.getError();
+                /*
                 if (error != null) {
                     context.addVariable(RequestContext.ERROR, error, Scope.REQUEST);
                 }
+                */
                 
                 String view = context.getParameter(ERRORS);
                 context.setRequestPath(view, Dispatcher.ACTION);
+                
+                MessageBroker messageBroker = IsisContext.getMessageBroker();
+                messageBroker.addMessage(error);
             }
 
         } catch (ConcurrencyException e) {
@@ -209,6 +221,7 @@ public class ActionAction implements Action {
             
             if (!parameters2.get(i).isOptional() && newEntry.equals("")) {
                 consent = new Veto(parameters2.get(i).getName() + " required");
+                formState.setError("Not all fields have been set");
 
             } else  if (parameters2.get(i).getSpecification().getFacet(ParseableFacet.class) != null) {
                 try {
@@ -216,11 +229,13 @@ public class ActionAction implements Action {
                     String message = parameters2.get(i).isValid(object, newEntry); 
                     if (message != null) { 
                         consent = new Veto(message); 
+                        formState.setError("Not all fields are valid");
                     } 
                     ObjectAdapter entry = facet.parseTextEntry(null, newEntry);
                     fieldState.setValue(entry);
                 } catch (TextEntryParseException e) {
                     consent = new Veto(e.getMessage());
+                    formState.setError("Not all fields are valid");
                 }
             } else {
                 fieldState.setValue(newEntry == null ? null : context.getMappedObject(newEntry));

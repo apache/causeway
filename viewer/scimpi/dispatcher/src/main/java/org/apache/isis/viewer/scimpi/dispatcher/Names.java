@@ -44,6 +44,7 @@ public interface Names {
     static final String ID = "id";
     static final String LINK = "link";
     static final String METHOD = "method";
+    static final String MESSAGE = "message";
     static final String NAME = "name";
     static final String ODD_ROW_CLASS = "odd-row";
     static final String OBJECT = "object";
@@ -59,6 +60,7 @@ public interface Names {
     static final String SHOW_SELECT = "select";
     static final String SHOW_EDIT = "edit";
     static final String SHOW_DELETE = "delete";
+    static final String SHOW_MESSAGE = "show-message";
     static final String TRUNCATE = "truncate";
     static final String TYPE = "type";
     static final String VIEW = "view";

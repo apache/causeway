@@ -60,6 +60,8 @@ public class EditObject extends AbstractElementProcessor {
         String scope = request.getOptionalProperty(SCOPE);
         String className = request.getOptionalProperty(CLASS, "edit full");
         String id = request.getOptionalProperty(ID);
+        String completionMessage = request.getOptionalProperty(MESSAGE);
+
 
         final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
         String actualObjectId = context.mapObject(object, Scope.INTERACTION);
@@ -109,14 +111,17 @@ public class EditObject extends AbstractElementProcessor {
         
         copyFieldContent(context, object, formFields, showIcon);
         overrideWithHtml(context, containedBlock, formFields);
+        String errors = null;
         if (entryState != null && entryState.isForForm(actualObjectId)) {
             copyEntryState(context, object, formFields, entryState);
+            errors = entryState.getError(); 
         }
 
         String errorView = context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
         HiddenInputField[] hiddenFields = new HiddenInputField[] { 
                 new HiddenInputField(OBJECT, actualObjectId),
                 new HiddenInputField(VERSION, version),
+                completionMessage == null ? null : new HiddenInputField(MESSAGE, completionMessage),
                 forwardEditedTo == null ? null : new HiddenInputField(VIEW, context.fullFilePath(forwardEditedTo)),
                 new HiddenInputField(ERRORS, errorView), variable == null ? null : new HiddenInputField(RESULT_NAME, variable),
                 resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride),
@@ -133,7 +138,7 @@ public class EditObject extends AbstractElementProcessor {
             buttonTitle = "Save";
         }
         
-        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFields, formFields, className, id, formTitle, null, null, buttonTitle);
+        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFields, formFields, className, id, formTitle, null, null, buttonTitle, errors);
         request.popBlockContent();
     }
 

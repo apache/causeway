@@ -224,13 +224,11 @@ public class ServletRequestContext extends RequestContext {
     }
     
     public void raiseError(int status) {
-        
         try {
             getResponse().sendError(status);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        
         getResponse().setStatus(status);
     }
     

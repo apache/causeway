@@ -20,7 +20,6 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -33,6 +32,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
+import org.apache.log4j.Logger;
 
 public class ActionButton extends AbstractElementProcessor {
     private static final Logger LOG = Logger.getLogger(ActionButton.class);
@@ -49,7 +49,8 @@ public class ActionButton extends AbstractElementProcessor {
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         String idName = request.getOptionalProperty(ID, methodName);
         String className = request.getOptionalProperty(CLASS);
-
+        String completionMessage = request.getOptionalProperty(MESSAGE);
+        
         ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
         String version = request.getContext().mapVersion(object);
         ObjectAction action = MethodsUtils.findAction(object, methodName);
@@ -76,7 +77,7 @@ public class ActionButton extends AbstractElementProcessor {
         
         if (MethodsUtils.isVisibleAndUsable(object, action) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
-            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, resultOverride, idName, className);
+            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
         }
         request.popBlockContent();
     }
@@ -94,6 +95,7 @@ public class ActionButton extends AbstractElementProcessor {
             String variable,
             String scope,
             String buttonTitle, 
+            String completionMessage,
             String resultOverride,
             String idName,
             String className) {
@@ -153,6 +155,9 @@ public class ActionButton extends AbstractElementProcessor {
         }
         if (resultOverride != null) {
             request.appendHtml("  <input type=\"hidden\" name=\"" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />\n");            
+        }
+        if (completionMessage != null) {
+            request.appendHtml("  <input type=\"hidden\" name=\"" + MESSAGE + "\" value=\"" + completionMessage + "\" />\n");                        
         }
 
         for (int i = 0; i < parameters.length; i++) {

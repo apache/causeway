@@ -59,7 +59,8 @@ public class ActionForm extends AbstractElementProcessor {
         parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         parameters.scope = request.getOptionalProperty(SCOPE);
         parameters.className = request.getOptionalProperty(CLASS, "action full");
-        parameters.showMessage = request.isRequested("show-message", false);
+        parameters.showMessage = request.isRequested(SHOW_MESSAGE, false);
+        parameters.completionMessage = request.getOptionalProperty(MESSAGE);
         parameters.id = request.getOptionalProperty(ID, parameters.methodName);
         createForm(request, parameters);
     }
@@ -108,6 +109,7 @@ public class ActionForm extends AbstractElementProcessor {
                         .fullFilePath(parameterObject.forwardResultTo)),
                 new HiddenInputField(VOID, voidView),
                 new HiddenInputField(ERRORS, errorView),
+                parameterObject.completionMessage == null ? null : new HiddenInputField(MESSAGE, parameterObject.completionMessage),
                 parameterObject.scope == null ? null : new HiddenInputField(SCOPE, parameterObject.scope),
                 parameterObject.resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, parameterObject.resultOverride),
                 parameterObject.resultName == null ? null : new HiddenInputField(RESULT_NAME, parameterObject.resultName),
@@ -135,8 +137,10 @@ public class ActionForm extends AbstractElementProcessor {
         containedBlock.setUpValues(formFields);
         initializeFields(context, object, action, formFields);
         setDefaults(context, object, action, formFields, entryState, parameterObject.showIcon);
+        String errors = null;
         if (entryState != null && entryState.isForForm(objectId + ":" + parameterObject.methodName)) {
             copyEntryState(context, object, action, formFields, entryState);
+            errors = entryState.getError(); 
         }
         overrideWithHtml(context, containedBlock, formFields);
 
@@ -154,8 +158,9 @@ public class ActionForm extends AbstractElementProcessor {
             buttonTitle = "Ok";
         }
         
+            
         HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className,
-                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle);
+                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle, errors);
 
         request.popBlockContent();
     }
@@ -179,6 +184,8 @@ public class ActionForm extends AbstractElementProcessor {
             InputField field = fields[i];
             ObjectActionParameter param = parameters.get(i);
             if (action.isContributed() && i == 0) {
+                //fields[i].setValue(context.mapObject(object, Scope.INTERACTION));
+                fields[i].setType(InputField.REFERENCE);
                 fields[i].setHidden(true);
             } else {
                 ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];

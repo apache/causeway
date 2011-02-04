@@ -112,14 +112,18 @@ public class Attributes {
         if (flag == null) {
             return defaultValue;
         } else {
-            String value = " " + flag.toLowerCase().trim() + " ";
-            if (TRUE.indexOf(value) >= 0) {
-                return true;
-            } else if  (FALSE.indexOf(value) >= 0) {
-                return false;
-            } else {
-                throw new PropertyException("Attribute " + name + " has illegal value " + flag);
-            }
+            return isTrue(flag);
+        }
+    }
+
+    public static boolean isTrue(String flag) {
+        String value = " " + flag.toLowerCase().trim() + " ";
+        if (TRUE.indexOf(value) >= 0) {
+            return true;
+        } else if  (FALSE.indexOf(value) >= 0) {
+            return false;
+        } else {
+            throw new PropertyException("Illegal flag value: " + flag);
         }
     }
 

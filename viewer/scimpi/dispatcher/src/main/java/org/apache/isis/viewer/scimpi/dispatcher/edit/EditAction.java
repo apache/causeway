@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -57,6 +58,7 @@ public class EditAction implements Action {
             String resultName = context.getParameter(RESULT_NAME);
             resultName = resultName == null ? RequestContext.RESULT : resultName;
             String override = context.getParameter(RESULT_OVERRIDE);
+            String message = context.getParameter(MESSAGE);
             
             ObjectAdapter adapter = context.getMappedObject(objectId);
             List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
@@ -87,7 +89,6 @@ public class EditAction implements Action {
                 }
 
                 String view = context.getParameter(VIEW);
-         //       context.clearVariables(Scope.REQUEST);
 
                 String id = context.mapObject(adapter, Scope.REQUEST);
                 context.addVariable(resultName, id, Scope.REQUEST);
@@ -103,6 +104,15 @@ public class EditAction implements Action {
                     view = view.substring(0, questionMark);
                 }
                 context.setRequestPath(view);
+                if (message == null) {
+                    message = "Saved changes to " + adapter.getSpecification().getSingularName();
+                } else if (message.equals("")) {
+                    message = null;
+                }
+                if (message != null) {
+                    MessageBroker messageBroker = IsisContext.getMessageBroker();
+                    messageBroker.addMessage(message);
+                }
 
             } else {
                 String view = context.getParameter(ERRORS);
