@@ -196,6 +196,11 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         
         addFactory(PropertyValidateDefaultFacetFactory.class);
 
+        // enum support
+        addFactory(EnumFacetFactory.class);
+        addFactory(ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
+        addFactory(PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
+        
         // properties
         addFactory(PropertyAccessorFacetFactory.class);
         addFactory(PropertySetAndClearFacetFactory.class);
@@ -364,11 +369,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(TimeValueTypeFacetFactory.class);
         addFactory(ImageValueTypeFacetFactory.class);        
         addFactory(JavaAwtImageValueTypeFacetFactory.class);
-
-        // enum support
-        addFactory(EnumFacetFactory.class);
-        addFactory(ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
-        addFactory(PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
 
         // written to not trample over TypeOf if already installed
         addFactory(CollectionFacetFactory.class);
