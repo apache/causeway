@@ -43,7 +43,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Specification;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.ThrowException;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.AddMessage;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.AddWarning;
-import org.apache.isis.viewer.scimpi.dispatcher.view.display.Errors;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.Feedback;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.FieldLabel;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.FieldValue;

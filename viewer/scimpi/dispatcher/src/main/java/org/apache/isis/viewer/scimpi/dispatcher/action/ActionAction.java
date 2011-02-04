@@ -140,7 +140,7 @@ public class ActionAction implements Action {
                 context.setRequestPath(view, Dispatcher.ACTION);
                 
                 MessageBroker messageBroker = IsisContext.getMessageBroker();
-                messageBroker.addMessage(error);
+                messageBroker.addWarning(error);
             }
 
         } catch (ConcurrencyException e) {

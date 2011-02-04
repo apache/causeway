@@ -124,6 +124,9 @@ public class EditAction implements Action {
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
                 }   
+                
+                MessageBroker messageBroker = IsisContext.getMessageBroker();
+                messageBroker.addWarning(entryState.getError());
             }
 
         } catch (RuntimeException e) {
@@ -169,6 +172,7 @@ public class EditAction implements Action {
             Consent consent = null;
             if (field.isMandatory() && newEntry.equals("")) {
                 consent = new Veto(field.getName() + " required");
+                formState.setError("Not all fields have been set");
 
             } else if (field.getSpecification().containsFacet(ParseableFacet.class)) {
                 try {
@@ -179,6 +183,7 @@ public class EditAction implements Action {
                     fieldState.setValue(originalValue);
                 } catch (TextEntryParseException e) {
                     consent = new Veto(e.getMessage());
+                    formState.setError("Not all fields have been entered correctly");
                 }
 
             } else {
@@ -192,6 +197,7 @@ public class EditAction implements Action {
             }
             if (consent.isVetoed()) {
                 fieldState.setError(consent.getReason());
+                formState.setError("Not all fields have been entered correctly");
             }
         }
 

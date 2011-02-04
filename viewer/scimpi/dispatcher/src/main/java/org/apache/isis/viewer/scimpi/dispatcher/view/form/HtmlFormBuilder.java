@@ -23,7 +23,6 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
-import org.apache.isis.viewer.scimpi.dispatcher.view.display.Errors;
 
 
 public class HtmlFormBuilder {
@@ -51,6 +50,10 @@ public class HtmlFormBuilder {
         // TODO reinstate fieldsets when we can specify them
         //request.appendHtml("<fieldset>\n");
 
+        String cls = "errors";
+        if (errors != null) {
+            request.appendHtml("<div class=\"" + cls + "\">" + errors + "</div>");
+        }
         for (int i = 0; i < hiddenFields.length; i++) {
             HiddenInputField hiddenField = hiddenFields[i];
             if (hiddenField == null) {
@@ -74,15 +77,6 @@ public class HtmlFormBuilder {
                         + errorSegment + helpSegment + "</div>\n");
             }
         }
-
-        // Errors.append(request, null);
-        
-      //  Object errors = request.getContext().getVariable(RequestContext.ERROR);
-        String cls = "errors";
-        if (errors != null) {
-            request.appendHtml("<div class=\"" + cls + "\">" + errors + "</div>");
-        }
-        
         
         request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" />\n");
         HelpLink.append(request, description, helpReference);
