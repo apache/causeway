@@ -55,6 +55,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.display.SelectedObject;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.ShortFormView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableCell;
+import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableEmpty;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableHeader;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableRow;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableView;
@@ -124,7 +125,6 @@ public class ProcessorLookup {
         addElementProcessor(new EditLink());
         addElementProcessor(new EditObject());
         addElementProcessor(new ElementType());
- //       addElementProcessor(new Errors());
         addElementProcessor(new ExcludeField());
         addElementProcessor(new Feedback());
         addElementProcessor(new FieldLabel());
@@ -165,6 +165,7 @@ public class ProcessorLookup {
         addElementProcessor(new TableCell());
         addElementProcessor(new TableView());
         addElementProcessor(new TableBuilder());
+        addElementProcessor(new TableEmpty());
         addElementProcessor(new TableRow());
         addElementProcessor(new TableHeader());
         addElementProcessor(new TemplateTag()); 

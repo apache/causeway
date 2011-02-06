@@ -20,11 +20,22 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
 
 public class TableBlock implements BlockContent {
+    
+    private ObjectAdapter collection;
+
+    public void setCollection(ObjectAdapter collection) {
+        this.collection = collection;
+    }
+    
+    public ObjectAdapter getCollection() {
+        return collection;
+    }
 
     private RepeatMarker marker;
 

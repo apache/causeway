@@ -80,7 +80,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
 
         List<ObjectAssociation> allFields = elementSpec.getAssociations(
                 ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
-        TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields);
+        TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
         write(request, collection, summary, rowBuilder, rowClasses);
 
     }
@@ -93,7 +93,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             final Request request,
             RequestContext context,
             final String parent,
-            final List<ObjectAssociation> allFields);
+            final List<ObjectAssociation> allFields, ObjectAdapter collection);
 
     public static void write(Request request, ObjectAdapter collection, String summary, TableContentWriter rowBuilder, String[] rowClasses) {
         RequestContext context = request.getContext();

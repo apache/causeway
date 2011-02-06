@@ -56,7 +56,9 @@ public class FieldLabel extends AbstractElementProcessor {
     }
 
     public static void write(Request content, ObjectAssociation field, String delimiter) {
-        content.appendHtml("<span class=\"label\" title=\"" + field.getDescription() + "\">");
+        String description = field.getDescription();
+        String titleSegment = description == null || description.equals("") ? null :  ("title=\"" + description + "\"");
+        content.appendHtml("<span class=\"label\"" + titleSegment + ">");
         content.appendHtml(field.getName());
         if (delimiter != null) {
             content.appendHtml("<span class=\"delimiter\">" + delimiter + "</span>");            

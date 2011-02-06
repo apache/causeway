@@ -52,7 +52,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         addNormal(new TestVariableExists(), "variable-exists");
         addNegated(new TestVariableExists(), "variable-missing");
         addNormal(new TestVariableTrue(), "variable-true");
-        addNegated(new TestVariableTrue(), "variable-true");
+        addNegated(new TestVariableTrue(), "variable-false");
         
         addNormal(new TestObjectPersistent(), "object-persistent");
         addNegated(new TestObjectPersistent(), "object-transient");

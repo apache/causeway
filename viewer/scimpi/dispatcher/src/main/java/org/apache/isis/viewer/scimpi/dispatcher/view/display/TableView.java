@@ -193,7 +193,7 @@ public class TableView extends AbstractTableView {
             final Request request,
             RequestContext context,
             final String parent,
-            final List<ObjectAssociation> allFields) {
+            final List<ObjectAssociation> allFields, ObjectAdapter collection) {
         final String fieldName = request.getOptionalProperty(FIELD);
         return rowBuilder(request, context, parent, fieldName, allFields);
     }

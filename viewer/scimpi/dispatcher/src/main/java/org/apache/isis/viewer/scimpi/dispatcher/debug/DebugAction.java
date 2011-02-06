@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -332,16 +333,39 @@ public class DebugAction implements Action {
     }
     
     private void listSpecifications(DebugView view) {
+        List<ObjectSpecification> fullIdentifierList = new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
+        Collections.sort(fullIdentifierList, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
+        view.divider("Specifications");
+        for (ObjectSpecification spec : fullIdentifierList) {
+            String name = spec.getSingularName();
+            view.appendRow(name, specificationLink(spec));
+        }
+
+        
+        
+/*                new Comparator<ObjectSpecification>() {
+            public int compare(ObjectSpecification o1, ObjectSpecification o2) {
+                return o1.getSingularName().compareTo(o2.getSingularName());
+            }});
+        
+/*        
         Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
-        final List<String> fullIdentifierList = Lists.newArrayList(
-            Collections2.transform(allSpecifications, ObjectSpecification.FUNCTION_FULLY_QUALIFIED_CLASS_NAME));
-        Collections.sort(fullIdentifierList);
+        Collection<String> list = Collections2.transform(allSpecifications, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
+        final List<String> fullIdentifierList = Lists.newArrayList(list);
+        /*
+        Collections.sort(fullIdentifierList, new Comparator<ObjectSpecification>() {
+            public int compare(ObjectSpecification o1, ObjectSpecification o2) {
+                return o1.getSingularName().compareTo(o2.getSingularName());
+            }});
+            */
+        /*
         view.divider("Specifications");
         for (String fullIdentifier : fullIdentifierList) {
             ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
             String name = spec.getSingularName();
             view.appendRow(name, specificationLink(spec));
         }
+        */
     }
 
     protected SpecificationLoader getSpecificationLoader() {

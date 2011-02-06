@@ -38,11 +38,13 @@ public class TableBuilder extends AbstractTableView {
             final Request request,
             RequestContext context,
             final String parent,
-            List<ObjectAssociation> allFields) {
+            List<ObjectAssociation> allFields, 
+            ObjectAdapter collection) {
 
         final String variable = request.getOptionalProperty(ELEMENT_NAME, ELEMENT);
 
         final TableBlock block = new TableBlock();
+        block.setCollection(collection);
         request.setBlockContent(block);
         request.pushNewBuffer();
         request.processUtilCloseTag();

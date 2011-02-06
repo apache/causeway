@@ -26,10 +26,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -451,11 +455,20 @@ public class Dispatcher {
 
     public void debug(DebugView view) {
         view.divider("Actions");
-        Iterator<String> names = new TreeSet(actions.keySet()).iterator();
+        Set<String> keySet = actions.keySet();
+        ArrayList<String> list = new ArrayList<String>(keySet);
+        Collections.sort(list);
+        for (String name : list) {
+            view.appendRow(name, actions.get(name));            
+        }
+        /*
+        new ArrayList<E>(actions.keySet().iterator())
+        Iterator<String> names = Collections.sort().iterator();
         while (names.hasNext()) {
             String name = names.next();
             view.appendRow(name, actions.get(name));
         }
+        */
         Iterator<Action> iterator = actions.values().iterator();
         while (iterator.hasNext()) {
             iterator.next().debug(view);
