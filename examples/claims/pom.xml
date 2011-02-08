@@ -3,11 +3,12 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.apache.isis.support</groupId>
-    <artifactId>prototype</artifactId>
+    <groupId>org.apache.isis.examples.apps</groupId>
+    <artifactId>claims</artifactId>
     <version>0.1.0-incubating-SNAPSHOT</version>
 
-    <name>Prototype App</name>
+    <name>Example Claims</name>
+    <description>Example of a claims submitting application</description>
 
     <packaging>pom</packaging>
 
@@ -124,31 +125,31 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-dom</artifactId>
+                <artifactId>claims-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-domsvc</artifactId>
+                <artifactId>claims-domsvc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-fixture</artifactId>
+                <artifactId>claims-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-quickrun</artifactId>
+                <artifactId>claims-quickrun</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-objstore-dflt</artifactId>
+                <artifactId>claims-objstore-dflt</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -193,23 +194,6 @@
                 <artifactId>tests-unit</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <!-- Isis Wicket Viewer: view API extensions -->
-            <!-- <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-gmap2-applib</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-gmap2-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-googlecharts-applib</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-googlecharts-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-calendarviews-applib</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-calendarviews-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-cooldatasoftmenu-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> -->
 
 
         </dependencies>

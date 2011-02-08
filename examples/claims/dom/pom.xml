@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-    	<groupId>org.apache.isis.support</groupId>
-    	<artifactId>prototype</artifactId>
+    	<groupId>org.apache.isis.examples.apps</groupId>
+    	<artifactId>claims</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>prototype-dom</artifactId>
-	<name>Prototype DOM</name>
+	<artifactId>claims-dom</artifactId>
+	<name>Example Claims App DOM</name>
 
 	<dependencies>
 		<dependency>
@@ -21,23 +21,6 @@
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-applib</artifactId>
 		</dependency>
-		
-        <!-- 
-		<dependency>
-			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-			<artifactId>view-calendarviews-applib</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-			<artifactId>view-gmap2-applib</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-			<artifactId>view-googlecharts-applib</artifactId>
-		</dependency>
-        -->        
 		
 	</dependencies>
 </project>

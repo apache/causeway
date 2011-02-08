@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-    	<groupId>org.apache.isis.support</groupId>
-    	<artifactId>prototype</artifactId>
+    	<groupId>org.apache.isis.examples.apps</groupId>
+    	<artifactId>claims</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>prototype-quickrun</artifactId>
-	<name>Prototype Quick Run</name>
+	<artifactId>claims-quickrun</artifactId>
+	<name>Example Claims App Quick Run</name>
 
 	<properties>
 		<jetty.version>6.1.4</jetty.version>
@@ -19,7 +19,7 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-fixture</artifactId>
+			<artifactId>claims-fixture</artifactId>
 		</dependency>
 
 		<!-- isis core -->

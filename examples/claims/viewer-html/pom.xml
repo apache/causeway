@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <groupId>org.apache.isis.examples.apps</groupId>
+        <artifactId>claims</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-viewer-html</artifactId>
-	<name>Prototype HTML Viewer</name>
+	<artifactId>claims-viewer-html</artifactId>
+	<name>Example Claims App HTML Viewer</name>
 	
 	<packaging>war</packaging>
 
@@ -27,12 +27,12 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>prototype-dom</artifactId>
+            <artifactId>claims-dom</artifactId>
         </dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>prototype-fixture</artifactId>
+            <artifactId>claims-fixture</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

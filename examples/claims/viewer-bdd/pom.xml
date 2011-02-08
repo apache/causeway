@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <groupId>org.apache.isis.examples.apps</groupId>
+        <artifactId>claims</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-viewer-bdd</artifactId>
+	<artifactId>claims-viewer-bdd</artifactId>
 
-	<name>Prototype: BDD (Concordion) Tests</name>
+	<name>Example Claims App: BDD (Concordion) Tests</name>
 
     <build>
 		<plugins>

@@ -47,9 +47,7 @@
         <module>orders</module>
         <module>library</module>
         <module>ecs</module>
-<!--
         <module>claims</module>
--->
         <module>expenses</module>
         <module>shopping-cart</module>
         <module>metamodel-examples/namefile</module>

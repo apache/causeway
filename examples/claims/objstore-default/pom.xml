@@ -3,20 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <groupId>org.apache.isis.examples.apps</groupId>
+        <artifactId>claims</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-objstore-dflt</artifactId>
-	<name>Prototype Repositories (for ObjectStore Default)</name>
+	<artifactId>claims-objstore-dflt</artifactId>
+	<name>Example Claims App Repositories (for ObjectStore Default)</name>
 
 	<dependencies>
 	
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-dom</artifactId>
+			<artifactId>claims-dom</artifactId>
 		</dependency>
 		
 	</dependencies>
