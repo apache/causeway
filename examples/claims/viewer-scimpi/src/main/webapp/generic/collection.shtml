@@ -1,0 +1,7 @@
+<swf:page-title><swf:element-type /> Listing</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+<swf:table link="_generic.shtml" />
+ 
+
