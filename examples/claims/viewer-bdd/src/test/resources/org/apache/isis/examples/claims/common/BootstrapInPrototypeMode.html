@@ -1,0 +1,42 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion"
+	xmlns:isis="http://isis.apache.org/2010/concordion">
+<link href="../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+<p>
+The system:
+</p>
+<ul>
+<li>
+<p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)">
+<span concordion:assertTrue="#result">bootstrapped</span> from
+config directory <span concordion:set="#configDir">../quickrun/config</span>
+and running in <span concordion:set="#deploymentType">prototype</span>
+mode,
+</p>
+</li>
+<li>
+<p>with services: </p>
+<table concordion:execute="#result=aliasService(#aliasAs, #className)">
+	<tr>
+		<th concordion:set="#className">Class Name</th>
+		<th concordion:set="#aliasAs">aliasAs</th>
+		<th concordion:assertTrue="#result"/>
+	</tr>
+	<tr>
+		<td>org.apache.isis.example.claims.objstore.dflt.claim.ClaimRepositoryDefault</td>
+		<td>claims</td>
+		<td>ok</td>
+	</tr>
+	<tr>
+		<td>org.apache.isis.example.claims.objstore.dflt.employee.EmployeeRepositoryDefault</td>
+		<td>employees</td>
+		<td>ok</td>
+	</tr>
+</table>
+</li>
+</ul>
+
+</body>
+
+</html>
