@@ -21,7 +21,7 @@
 			<param-name>applicationClassName</param-name>
 			<param-value>org.apache.isis.viewer.wicket.viewer.IsisWicketApplication</param-value>
 			<!--
-			<param-value>org.apache.isis.support.prototype.viewer.wicket.app.ClaimsApplication</param-value>
+			<param-value>viewer.wicket.app.ToDoApplication</param-value>
 			-->
 		</init-param>
 	</filter>
