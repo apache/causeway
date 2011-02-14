@@ -134,9 +134,9 @@
       </abstract>
 
       <para>This part of the guide discusses the principles and patterns of
-      the framework, understanding how an Isis application works, getting
-      started with the quickapp archetype, the process of developing Isis
-      applications, and tips for developing with an
+      the framework, understanding how an <emphasis>Isis</emphasis>
+      application works, getting started with the quickapp archetype, the
+      process of developing Isis applications, and tips for developing with an
       <acronym>IDE.</acronym></para>
     </partintro>
 
@@ -194,14 +194,16 @@
           </listitem>
 
           <listitem>
-            <para>how to deploy an Isis application</para>
+            <para>how to deploy an <emphasis>Isis</emphasis>
+            application</para>
           </listitem>
         </itemizedlist>
 
         <para>Reading through this guide should give you a good understanding
         as to how <emphasis>Isis</emphasis> fits together and how it can be
-        extended. You'll also understand the wider "world view" for Isis, in
-        terms of its principles, and its flexibility.</para>
+        extended. You'll also understand the wider "world view" for
+        <emphasis>Isis</emphasis>, in terms of its principles, and its
+        flexibility.</para>
       </sect1>
 
       <sect1>
@@ -219,16 +221,17 @@
 
           <para>For this, you should read the applib (application library)
           documentation, which focuses on the specifics of the programming
-          conventions of (what we call the) default programming model, in
+          conventions of (what we call the) default programming model; in
           other words what code you should actually write.</para>
 
-          <para>You'll find that this guide (the core documentation) does not
-          cover the default programming model in the same sort of depth.
-          Rather, it explains why we have an applib in the first place, and
-          more generally covers the main principles and patterns of writing
-          any Apache Isis application (including the fact that there you can
-          customize your own programming model if you wish). It also goes in
-          depth into the architecture and design of the framework.</para>
+          <para>You'll find that <emphasis>this</emphasis> guide (the core
+          documentation) does not cover the default programming model in the
+          same sort of depth. Rather, it explains why we have an applib in the
+          first place, and more generally covers the main principles and
+          patterns of writing any <emphasis>Apache Isis</emphasis> application
+          (including the fact that there you can customize your own
+          programming model if you wish). It also goes in depth into the
+          architecture and design of the framework.</para>
 
           <para>Put another way: the applib covers the "what", whereas this
           guide covers more of the "why" along with the underlying
@@ -257,8 +260,8 @@
           <title>Advanced Deployment Options</title>
 
           <para>Any application must be deployed, though the details of the
-          deployment will depend upon which implementations of the code APIs
-          are in use.</para>
+          deployment will depend upon which implementations of the code
+          <acronym>API</acronym>s are in use.</para>
 
           <para>This guide describes the deployment options that are available
           through using the default implementations of the core module
@@ -269,7 +272,7 @@
           implementation requires the bundling up of different client vs
           server deployments. Similarly, a viewer for a mobile phone (there
           isn't one at the time of writing but there could be in the future)
-          would require packaging in a certain way. Or, </para>
+          would require packaging in a certain way.</para>
         </sect2>
       </sect1>
 
@@ -292,8 +295,9 @@
         each of the core modules, and part 4 describes the configuration and
         capabilities of the default implementations. You'll find both of these
         parts are good reference material<footnote>
-            <para>They are perhaps more targetted at Isis' own contributors
-            rather than Isis users, so feel free to skim read if you
+            <para>They are perhaps more targetted at
+            <emphasis>Isis</emphasis>' own contributors rather than
+            <emphasis>Isis</emphasis> users, so feel free to skim read if you
             wish.</para>
           </footnote>, and from there you'll be in a position to evaluate
         alternative implementations.</para>
@@ -316,12 +320,12 @@
         basis of <emphasis>Apache Isis</emphasis>.</para>
       </abstract>
 
-      <para>The headline feature that distinguishes Apache Isis from other
-      frameworks is its ability to generate a user interface (at runtime)
-      directly from the domain model. However, there's much more to
-      <emphasis>Apache Isis</emphasis> than this. This chapter provides an
-      overview of the main principles and patterns that are the basis of the
-      framework.</para>
+      <para>The headline feature that distinguishes <emphasis>Apache
+      Isis</emphasis> from other frameworks is its ability to generate a user
+      interface (at runtime) directly from the domain model. However, there's
+      much more to <emphasis>Apache Isis</emphasis> than this. This chapter
+      provides an overview of the main principles and patterns that are the
+      basis of the framework.</para>
 
       <sect1>
         <title>Principles</title>
@@ -362,55 +366,148 @@
           the non-technical domain experts without also writing application
           layer and user interface code. What often happens is that the
           technical team can be reluctant to take evolve the domain model once
-          this is done, because it will break not only the domain layer but
-          also the hand-crafted layers in front.</para>
+          this is done, because a modification to the domain layer also
+          requires modifications to the hand-crafted layers in front.</para>
 
           <para><emphasis>Isis</emphasis>' ability automatically generated an
-          user interface means avoids this problem. Not only does the user
-          interface make it easy for the domain experts to identify the domain
-          concepts, it also means that the technical team will more readily
-          refine the domain because they had to invest less to get to the
-          point where they get useful feedback.</para>
+          user interface avoids this problem. Not only does the user interface
+          make it easy for the domain experts to identify the domain concepts,
+          it also means that the technical team will more readily refine the
+          domain because they had to invest less to get to the point where
+          they get useful feedback.</para>
         </sect2>
 
         <sect2>
           <title>Rapid Application Development</title>
 
-          <para>Time-to-market </para>
+          <para><emphasis>Isis</emphasis> is targetted towards building
+          enterprise applications, and in a commercial setting time-to-market
+          considerations are always important. Not only does more speedier
+          development of an application reduce costs, it also reduces the risk
+          of building an application that is out-of-date with respect to
+          business requirements having changed while it was being
+          built.<footnote>
+              <para>Of course, adopting agile development practices is another
+              way to avoid the "changed business requirements" problem; but
+              not every organization has adopted agile (or adopted agile
+              successfully).</para>
+            </footnote></para>
 
-          <para></para>
+          <para>Why is it faster to develop an application using
+          <emphasis>Isis</emphasis>? Well, the most obvious reason is that
+          <emphasis>Isis</emphasis> will generate an object-oriented user
+          interface directly from the domain model. It's important to unlike
+          frameworks such as <ulink
+          url="http://rubyonrails.org/">Ruby-on-Rails</ulink>, <ulink
+          url="http://grails.org/">Grails</ulink> and <ulink
+          url="http://www.springsource.org/roo">Spring Roo</ulink>, this isn't
+          code generation or scaffolding; instead the generation of the
+          <acronym>UI</acronym> is performed dynamically at runtime. This is
+          significant: although a scaffolding approach can undoubtedly get you
+          up and running very quickly, once generated that code must be
+          maintained and kept in sync with the domain model as it
+          evolves.</para>
 
-          <para></para>
-
-          <para>technology concerns. There </para>
-
-          <para></para>
-
-          <para>Metamodel.</para>
-
-          <para></para>
-
-          <para>Similar ROI that might get from an ORM.</para>
-
-          <para></para>
-
-          <para></para>
-
-          <note>
-            <para>TODO: discuss</para>
-          </note>
-
-          <para>feedback loop</para>
-
-          <para>requirements traceability</para>
-
-          <para></para>
+          <para>One way of thinking about <emphasis>Isis</emphasis> is as an
+          analogue to an <acronym>ORM</acronym> such as <ulink
+          url="http://hibernate.org/">Hibernate</ulink>. Most organizations
+          that are using an <acronym>RDBMS</acronym> as their persistence
+          layer have adopted the use of <acronym>ORM</acronym>s; the
+          return-on-investment as compared to hand-crafting
+          <acronym>JDBC</acronym> makes it pretty much a no-brainer. However,
+          whereas an <acronym>ORM</acronym> builds a metamodel of the domain
+          model and uses the metamodel to automatically map the domain objects
+          to the persistence layer, <emphasis>Isis</emphasis> likewise builds
+          up its metamodel which is used to map the domain objects to the
+          presentation layer.</para>
         </sect2>
 
         <sect2>
           <title>Problem Solver, not Process Follower</title>
 
+          <para>One of the most common ways these days to build business
+          applications is to work user-story by user-story.<footnote>
+              <para>You may use slightly different terminology: use cases,
+              user journey, scenario; but the idea is the same.</para>
+            </footnote></para>
+
+          <para>Only the functionality needed to support the given user-story
+          is implemented; design decisions are deferred as long as possible,
+          in order to learn as much as possible prior to the point where the
+          decision must be made.<footnote>
+              <para>The war-cry here is: "YAGNI - you ain't gonna need it!"
+              This helps the developer avoid gold-plating. Deferring design
+              decisions is also related to the idea of <ulink
+              url="http://www.infoq.com/articles/real-options-enhance-agility">Real
+              Options</ulink>.</para>
+            </footnote></para>
+
+          <para>So far so good. However, stories necessarily talk about the
+          what the system <emphasis>does</emphasis> from the standpoint of a
+          single user, and can often end up being implemented as scripted
+          workflows that take said user through a very narrow process that
+          accomplishes a single task. Such an implementation might seem
+          sufficient for the developer, but that's quite possibly because they
+          are themselves only learning about the domain as they implement the
+          story. An expert user of the system will have a deep understanding
+          of the domain, and for such a user these scripted workflows are
+          likely to prove unnecessarily limiting.</para>
+
+          <para>Rather than considering only the behaviour of the system, we
+          should also consider what owns those behaviours/responsibilities,
+          that is, the domain entities. In other words, we don't just consider
+          verbs, we also consider the nouns. From this perspective, a user
+          story merely represents one possible way of interacting with the
+          entities, but there may be many other equally valid ways
+          also.</para>
+
+          <para>If we understand this, then we see that building a more
+          flexible system by recognizing the domain entities as at least as
+          important as the user stories allows those entities to be used as
+          building blocks upon which user stories are built. The domain
+          entities are responsible for ensuring that their state remains
+          valid, and they provide mechanisms to allow their state (and that of
+          their collaborators) to be changed.</para>
+
+          <para>Systems built using <emphasis>Apache Isis</emphasis> follow
+          this ethos: the</para>
+
           <para></para>
+
+          <para></para>
+
+          <para>requires a deeper understanding not only of the "what the
+          system does", but also "what the system is". In other words,</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>the entities that make up the domain, as well as</para>
+
+          <para>, and so finding one way to</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>it's easy to user stories to end up being implemented as
+          scripted workflows</para>
+
+          <para>there is a cost to</para>
+
+          <para></para>
+
+          <para>on a user story incrementally add functionality to support a
+          user story .<footnote>
+              <para>This is pretty much mandated if using agile development
+              practices, of course.</para>
+            </footnote></para>
+
+          <para>This approach undoubtedly has advantages, both in terms of
+          obtaining a good velocity</para>
 
           <para></para>
 
@@ -489,6 +586,10 @@
           <para></para>
 
           <para>framework, domain services, dependency injection</para>
+
+          <para></para>
+
+          <para>specifies an architecture (though can be embedded)</para>
 
           <para></para>
 
@@ -3440,6 +3541,27 @@ tsmith:pass</programlisting>
 
     <chapter>
       <title>Configuration</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>If you have a look at Installer#getConfigurationResources(),
+      you'll see that the javadoc explains how which property files we look
+      for to build up the configuration; each component's Installer adds its
+      own set of property files. The implementaiton of this,
+      InstallerAbstract, will indicate that the configurations xxx.properties
+      and xxx_yyy.properties should be searched, where "xxx" is the installer
+      type (eg "persistor") and "yyy" is the name of the implementation (eg
+      "sql").</para>
+
+      <para>Note that the type comes from the subclass of Installer for that
+      module; in the case of a persistor, it'll implement
+      PersistenceMechanismInstaller, where PersistenceMechanismInstaller.TYPE
+      = "persistor". This "type" is also used to look for the key; and is done
+      </para>
 
       <para></para>
 
