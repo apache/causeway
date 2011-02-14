@@ -121,11 +121,12 @@ public abstract class IsisSystemAbstract implements IsisSystem {
             splashLoader.init();
             showSplash(splashLoader);
 
+            sessionFactory = doCreateSessionFactory(deploymentType);
+            
             // temporarily make a configuration available
             // REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
             IsisContext.setConfiguration(getConfiguration());
 
-            sessionFactory = doCreateSessionFactory(deploymentType);
 
             initContext(sessionFactory);
             sessionFactory.init();
