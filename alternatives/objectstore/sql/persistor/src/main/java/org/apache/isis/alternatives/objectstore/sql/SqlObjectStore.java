@@ -49,7 +49,7 @@ public final class SqlObjectStore implements ObjectStore {
 	private static final String TABLE_NAME = "no_services";
 	private static final String ID_COLUMN = "id";
 	private static final String PRIMARYKEY_COLUMN = "pk_id";
-	public static final String BASE_NAME = "isis.persistence.sql";
+	public static final String BASE_NAME = "isis.persistor.sql";
 	private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
 	private DatabaseConnectorPool connectionPool;
 	private ObjectMappingLookup objectMappingLookup;

@@ -47,7 +47,6 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -251,9 +250,9 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		}
 		/**/
 		factory.save(sqlDataClass);
-
+		
 		// For in-memory only!
-		if (getProperties().getProperty("isis.persistence") == "in-memory") {
+		if (getProperties().getProperty("isis.persistor") == "in-memory") {
 			getSingletonInstance().setState(1);
 		}
 
@@ -434,7 +433,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	public void testSingleReferenceLazy() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
 		SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
-		if (getProperties().getProperty("isis.persistence") != "in-memory") {
+		if (getProperties().getProperty("isis.persistor") != "in-memory") {
 			assertEquals(null, a.text); // must check direct value, as
 			// framework can auto-resolve, if you use getText()
 		}
@@ -480,7 +479,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	public void testSimpleClassTwoReferenceLazy() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
 		List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
-		if (getProperties().getProperty("isis.persistence") != "in-memory") {
+		if (getProperties().getProperty("isis.persistor") != "in-memory") {
 			for (SimpleClass simpleClass : collection) {
 				SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
 				assertEquals(null, a.text); // must check direct value, as

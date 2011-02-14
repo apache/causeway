@@ -82,7 +82,33 @@
       <para>What's it all about?</para>
     </abstract>
 
-    <!--content: Outline how classes are introspected, how properties are auto-mapped to SQL types, how to override the default mappers in the properties file.-->
+    <sect1>
+      <title>Setup</title>
+
+      <sect2>
+        <title>Properties</title>
+
+        <para>The SQL objectstore is setup via the
+        <code>isis.properties</code> file. The required variables are given
+        below:</para>
+
+        <blockquote>
+          <para><property>isis.persistor.sql.jdbc.driver=org.hsqldb.jdbcDriver</property></para>
+
+          <para><property>isis.persistor.sql.jdbc.connection=jdbc:hsqldb:file:hsql-db/tests</property></para>
+
+          <para><property>isis.persistor.sql.jdbc.user=sa</property></para>
+
+          <para><property>isis.persistor.sql.jdbc.password=</property></para>
+        </blockquote>
+
+        <para>The driver property must contain the name of the jdbc driver
+        class that provides access to your SQL server. Known examples are
+        given below in <xref linkend="sec.servers.tested" />.</para>
+
+        <para></para>
+      </sect2>
+    </sect1>
 
     <sect1>
       <title>Mappers</title>
@@ -96,6 +122,12 @@
       determined by the mappers. Default mappers are provided by
       AutoMapperFactory.</para>
     </sect1>
+
+    <sect1>
+      <title></title>
+
+      <para></para>
+    </sect1>
   </chapter>
 
   <chapter id="ch.supported.dbs">
@@ -108,7 +140,7 @@
     <sect1>
       <!--content: List of database servers tested.-->
 
-      <title>Tested</title>
+      <title id="sec.servers.tested">Tested</title>
 
       <para>The following database servers are tested in the object store
       integration tests:<itemizedlist>
@@ -129,6 +161,26 @@
             supported)</para>
           </listitem>
         </itemizedlist></para>
+
+      <sect2>
+        <title>HSQLDB</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Postgresql</title>
+
+        <para><blockquote>
+            <para><property>isis.persistor.sql.jdbc.driver=org.hsqldb.jdbcDriver</property></para>
+
+            <para><property>isis.persistor.sql.jdbc.connection=jdbc:hsqldb:file:hsql-db/tests</property></para>
+
+            <para><property>isis.persistor.sql.jdbc.user=sa</property></para>
+
+            <para><property>isis.persistor.sql.jdbc.password=</property></para>
+          </blockquote></para>
+      </sect2>
     </sect1>
 
     <sect1>

@@ -28,6 +28,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
+import org.apache.isis.alternatives.objectstore.sql.SqlObjectStore;
 import org.apache.isis.alternatives.objectstore.sql.SqlPersistorInstaller;
 import org.apache.isis.alternatives.objectstore.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
@@ -100,8 +101,8 @@ public class TestProxySystemIII {
 
         ((ObjectReflectorDefault) mockSpecificationLoader).setRuntimeContext(new RuntimeContextFromSession());
 
-        if (configuration.getString("isis.persistence.sql.jdbc.driver") == null){
-        	if (configuration.getString("isis.persistence") == "in-memory"){
+        if (configuration.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver") == null){
+        	if (configuration.getString("isis.persistor") == "in-memory"){
                 /*InMemoryPersistenceMechanismInstaller*/ //persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         		persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         	} else {

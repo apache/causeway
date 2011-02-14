@@ -34,9 +34,11 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.isis.alternatives.objectstore.sql.SqlObjectStore;
 import org.apache.isis.alternatives.objectstore.sql.testsystem.SqlDataClassFactory;
 import org.apache.isis.alternatives.objectstore.sql.testsystem.TestProxySystemIII;
 import org.apache.isis.alternatives.objectstore.sql.testsystem.dataclasses.SimpleClass;
+import org.apache.isis.alternatives.objectstore.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.alternatives.objectstore.sql.testsystem.dataclasses.SqlDataClass;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 
@@ -75,7 +77,7 @@ public class SqlIntegrationTestSingleton {
 	public void initNOF(Properties properties) throws  SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		IsisConfigurationDefault configuration = new IsisConfigurationDefault();
 		configuration.add(properties);
-        persistorName = configuration.getString("isis.persistence");
+        persistorName = configuration.getString("isis.persistor");
         
 		resetPersistorState(configuration);
 
@@ -95,7 +97,7 @@ public class SqlIntegrationTestSingleton {
     
 	@SuppressWarnings("unchecked")
 	private void resetPersistorState(IsisConfigurationDefault IsisConfigurationDefault) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
-		String jdbcClassName = IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.driver");
+		String jdbcClassName = IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver");
 		if (jdbcClassName == null){
 			c = null;
 			s = null;
@@ -107,9 +109,9 @@ public class SqlIntegrationTestSingleton {
 		
         // jdbc - connect to DB and drop tables.
     	c = DriverManager.getConnection(
-	    		IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.connection"),
-                IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.user"), 
-                IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.password"));
+	    		IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.connection"),
+                IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.user"), 
+                IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
 		s = c.createStatement();
 			
 	    dropTable("no_services");
@@ -134,6 +136,13 @@ public class SqlIntegrationTestSingleton {
 				}
 				return;
 			}
+            if (tableName == "simpleclasstwo"){
+                List<SimpleClassTwo> list = sqlDataClassFactory.allSimpleClassTwos();
+                for (SimpleClassTwo sqlClass : list) {
+                    sqlDataClassFactory.delete(sqlClass);
+                }
+                return;
+            }
 			return;
 		}
 		/**/

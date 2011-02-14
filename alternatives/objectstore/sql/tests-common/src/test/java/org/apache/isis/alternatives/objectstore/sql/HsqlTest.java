@@ -35,12 +35,12 @@ public class HsqlTest extends SqlIntegrationTestCommon {
 	@Override
 	public Properties getProperties(){
 		Properties properties = super.getProperties();
-		if (properties == null){
+		if (properties == null){ // Only used if properties file does not exist.
 			properties = new Properties();
-			properties.put("isis.persistence.sql.jdbc.driver", "org.hsqldb.jdbcDriver");
-			properties.put("isis.persistence.sql.jdbc.connection", "jdbc:hsqldb:file:hsql-db/tests");
-			properties.put("isis.persistence.sql.jdbc.user", "sa");
-			properties.put("isis.persistence.sql.jdbc.password", "");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.hsqldb.jdbcDriver");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:hsqldb:file:hsql-db/tests");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user","sa");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
 			properties.put("isis.logging.objectstore","on");
 		}
 		
@@ -57,6 +57,17 @@ public class HsqlTest extends SqlIntegrationTestCommon {
 		return "SHUTDOWN;";
 	}
 	
+    public String getPersonTableName() {
+        return "SQLDATACLASS";
+    }
+
+    public String getSimpleClassTableName() {
+        return "SIMPLECLASS";
+    }
+
+    public String getSimpleClassTwoTableName() {
+        return "SIMPLECLASSTWO";
+    }
 	
 }
 

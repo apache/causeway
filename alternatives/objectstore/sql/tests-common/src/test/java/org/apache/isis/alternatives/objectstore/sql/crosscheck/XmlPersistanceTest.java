@@ -27,21 +27,46 @@ import java.util.Properties;
 
 import org.apache.isis.alternatives.objectstore.sql.common.SqlIntegrationTestCommon;
 
+import java.io.*;
 
 
 
-public class InMemoryPersistanceTest extends SqlIntegrationTestCommon {
+
+public class XmlPersistanceTest extends SqlIntegrationTestCommon {
+
+	  public static void deleteFiles( String directory, FilenameFilter extension ) {
+		    File dir = new File(directory);
+
+		    String[] list = dir.list(extension);
+		    File file;
+		    if (list.length == 0) return;
+
+		    for (int i = 0; i < list.length; i++) {
+		      file = new File(directory, list[i]);
+		      file.delete();
+		    }
+	  }
+	
+	public void initialiseTests() {
+		// Delete all XML files.
+		deleteFiles("xml/objects", new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File arg0, String arg1) {
+				return arg1.endsWith(".xml");
+			}
+		});
+	}
 	
 	@Override
 	public Properties getProperties(){
 		Properties properties = new Properties();
-		properties.put("isis.persistence", "in-memory");
+		properties.put("isis.persistor", "xml");
 		properties.put("isis.logging.objectstore","on");
 		return properties;
 	}
-	
 	public  String getPropertiesFilename(){
-		return "inmemory.properties";
+		return "xml.properties";
 	}
 	@Override
 	public String getSqlTeardownString(){

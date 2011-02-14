@@ -38,10 +38,10 @@ public class MySqlTest extends SqlIntegrationTestCommon {
 		Properties properties = super.getProperties();
 		if (properties == null){
 			properties = new Properties();
-			properties.put("isis.persistence.sql.jdbc.driver", "com.mysql.jdbc.Driver");
-			properties.put("isis.persistence.sql.jdbc.connection", "jdbc:mysql://abacus/noftest");
-			properties.put("isis.persistence.sql.jdbc.user", "nof");
-			properties.put("isis.persistence.sql.jdbc.password", "");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "com.mysql.jdbc.Driver");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:mysql://abacus/noftest");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
+			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.jdbc.password", "");
 		}
 		return properties;
 	}
