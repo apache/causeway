@@ -9,22 +9,12 @@
 
 <div id="banner">
 	<div class="logo"><img src="images/logo.png"/></div>
-	<div class="title">Claims App</div>
+	<div class="title">To-Do App</div>
 </div>
 
 <div id="content">
 	<div id="side">
-		<ul>
-      	    <li><swf:action-link 
-      	    		object="service:claimants"
-      	    		method="allEmployees">All claimants</swf:action-link></li>
-            <li><swf:action-link 
-            		object="service:claims" 
-            		method="allClaims">All claims</swf:action-link></li>
-      	    <li><swf:action-link 
-      	    		object="service:claimants"
-      	    		method="newEmployee">New employee</swf:action-link></li>
-		</ul>
+        <swf:services />
 	</div>
 	<div id="main">
         <swf:feedback />
