@@ -19,7 +19,6 @@
 
 package objstore.dflt.todo;
 
-import java.util.Arrays;
 import java.util.List;
 
 import dom.todo.ToDoItem;
@@ -33,7 +32,7 @@ public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository impl
     // {{ Id, iconName
     @Override
     public String getId() {
-        return "ToDo";
+        return "toDoItems";
     }
 
     public String iconName() {
@@ -61,11 +60,7 @@ public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository impl
         persist(toDoItem);
         return toDoItem;
     }
-    public List<String> choices0NewToDo() {
-        return Arrays.asList("Home", "Work", "Hobby");
-    }
     // }}
 
-    
 
 }
