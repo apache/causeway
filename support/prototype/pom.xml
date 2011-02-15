@@ -93,7 +93,8 @@
         <module>viewer-wicket</module>
         <module>viewer-restful</module>
         <module>viewer-scimpi</module>
-        <module>viewer-bdd</module>
+        <module>tests-junit</module>
+        <module>tests-bdd</module>
     </modules>
 
     <dependencyManagement>
@@ -154,67 +155,47 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>viewer-dnd</artifactId>
+                <artifactId>prototype-viewer-dnd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>viewer-html</artifactId>
+                <artifactId>prototype-viewer-html</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>viewer-scimpi</artifactId>
+                <artifactId>prototype-viewer-scimpi</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>viewer-wicket</artifactId>
+                <artifactId>prototype-viewer-wicket</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>viewer-restful</artifactId>
+                <artifactId>prototype-viewer-restful</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>tests-bdd</artifactId>
+                <artifactId>prototype-tests-bdd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>tests-unit</artifactId>
+                <artifactId>tests-junit</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <!-- Isis Wicket Viewer: view API extensions -->
-            <!-- <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-gmap2-applib</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-gmap2-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-googlecharts-applib</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-googlecharts-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-calendarviews-applib</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-calendarviews-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> <dependency> <groupId>net.sf.isiscontrib.viewer.wicket</groupId> 
-                <artifactId>view-cooldatasoftmenu-view</artifactId> <version>0.1.0-incubating-SNAPSHOT</version> 
-                </dependency> -->
-
 
         </dependencies>
     </dependencyManagement>
-
-
 
 </project>
