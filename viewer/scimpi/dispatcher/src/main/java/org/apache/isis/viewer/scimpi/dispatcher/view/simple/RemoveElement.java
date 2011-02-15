@@ -51,7 +51,7 @@ public class RemoveElement extends AbstractElementProcessor {
         String objectId = object != null ? object : (String) context.getVariable(RequestContext.RESULT);
         ObjectAdapter adapter = MethodsUtils.findObject(context, objectId);
 
-        String element = request.getOptionalProperty(ELEMENT);
+        String element = request.getOptionalProperty(ELEMENT, (String) context.getVariable(ELEMENT));
         ObjectAdapter elementId = MethodsUtils.findObject(context, element);
         
         String fieldName = request.getRequiredProperty(FIELD);
