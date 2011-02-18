@@ -4,17 +4,17 @@
 
     <parent>
         <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <artifactId>quickstart</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-fixture</artifactId>
-	<name>Prototype Fixtures</name>
+	<artifactId>quickstart-fixture</artifactId>
+	<name>Quickstart Fixtures</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-objstore-dflt</artifactId>
+			<artifactId>quickstart-objstore-dflt</artifactId>
 		</dependency>
 	</dependencies>
 

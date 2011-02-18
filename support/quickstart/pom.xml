@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.isis.support</groupId>
-    <artifactId>prototype</artifactId>
+    <artifactId>quickstart</artifactId>
     <version>0.1.0-incubating-SNAPSHOT</version>
 
-    <name>Prototype App</name>
+    <name>Quickstart App</name>
 
     <packaging>pom</packaging>
 
@@ -125,67 +125,67 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-dom</artifactId>
+                <artifactId>quickstart-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-domsvc</artifactId>
+                <artifactId>quickstart-domsvc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-fixture</artifactId>
+                <artifactId>quickstart-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-quickrun</artifactId>
+                <artifactId>quickstart-quickrun</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-objstore-dflt</artifactId>
+                <artifactId>quickstart-objstore-dflt</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-viewer-dnd</artifactId>
+                <artifactId>quickstart-viewer-dnd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-viewer-html</artifactId>
+                <artifactId>quickstart-viewer-html</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-viewer-scimpi</artifactId>
+                <artifactId>quickstart-viewer-scimpi</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-viewer-wicket</artifactId>
+                <artifactId>quickstart-viewer-wicket</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-viewer-restful</artifactId>
+                <artifactId>quickstart-viewer-restful</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>prototype-tests-bdd</artifactId>
+                <artifactId>quickstart-tests-bdd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

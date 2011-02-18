@@ -4,13 +4,13 @@
 
     <parent>
         <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <artifactId>quickstart</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-tests-bdd</artifactId>
+	<artifactId>quickstart-tests-bdd</artifactId>
 
-	<name>Prototype: BDD (Concordion) Tests</name>
+	<name>Quickstart BDD (Concordion) Tests</name>
 
     <build>
 		<plugins>
@@ -33,7 +33,7 @@
 		<!-- this project's dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.support</groupId>
-            <artifactId>prototype-quickrun</artifactId>
+            <artifactId>quickstart-quickrun</artifactId>
             <version>0.1.0-incubating-SNAPSHOT</version>
         </dependency>
 

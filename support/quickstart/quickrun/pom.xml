@@ -4,12 +4,12 @@
 
 	<parent>
     	<groupId>org.apache.isis.support</groupId>
-    	<artifactId>prototype</artifactId>
+    	<artifactId>quickstart</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>prototype-quickrun</artifactId>
-	<name>Prototype Quick Run</name>
+	<artifactId>quickstart-quickrun</artifactId>
+	<name>Quickstart Quick Run</name>
 
 	<properties>
 		<jetty.version>6.1.4</jetty.version>
@@ -19,7 +19,7 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-fixture</artifactId>
+			<artifactId>quickstart-fixture</artifactId>
 		</dependency>
 
 		<!-- isis core -->

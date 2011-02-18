@@ -4,12 +4,12 @@
 
     <parent>
         <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <artifactId>quickstart</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-viewer-html</artifactId>
-	<name>Prototype HTML Viewer</name>
+	<artifactId>quickstart-viewer-html</artifactId>
+	<name>Quickstart HTML Viewer</name>
 	
 	<packaging>war</packaging>
 
@@ -27,12 +27,12 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>prototype-dom</artifactId>
+            <artifactId>quickstart-dom</artifactId>
         </dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>prototype-fixture</artifactId>
+            <artifactId>quickstart-fixture</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

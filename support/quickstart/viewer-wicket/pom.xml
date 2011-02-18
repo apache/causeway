@@ -4,12 +4,12 @@
 
     <parent>
         <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <artifactId>quickstart</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<name>Prototype Wicket Viewer</name>
-	<artifactId>prototype-viewer-wicket</artifactId>
+	<name>Quickstart Wicket Viewer</name>
+	<artifactId>quickstart-viewer-wicket</artifactId>
 
 	<properties>
 		<jetty.version>6.1.4</jetty.version>
@@ -45,12 +45,12 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-dom</artifactId>
+			<artifactId>quickstart-dom</artifactId>
 		</dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>prototype-fixture</artifactId>
+            <artifactId>quickstart-fixture</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

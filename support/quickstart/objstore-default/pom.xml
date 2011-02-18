@@ -4,19 +4,19 @@
 
     <parent>
         <groupId>org.apache.isis.support</groupId>
-        <artifactId>prototype</artifactId>
+        <artifactId>quickstart</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>prototype-objstore-dflt</artifactId>
-	<name>Prototype Repositories (for ObjectStore Default)</name>
+	<artifactId>quickstart-objstore-dflt</artifactId>
+	<name>Quickstart Repositories (for ObjectStore Default)</name>
 
 	<dependencies>
 	
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-dom</artifactId>
+			<artifactId>quickstart-dom</artifactId>
 		</dependency>
 		
 	</dependencies>
