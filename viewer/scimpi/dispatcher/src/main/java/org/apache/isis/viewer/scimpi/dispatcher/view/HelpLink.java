@@ -18,20 +18,37 @@
  */
 package org.apache.isis.viewer.scimpi.dispatcher.view;
 
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class HelpLink {
+
+    private static String site;
+    private static String suffix;
 
     public static void append(Request request, String description, String helpReference) {
         request.appendHtml(createHelpSegment(description, helpReference));
     }
 
     public static String createHelpSegment(String description, String helpReference) {
+        if (site == null) {
+            site = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-site", "/help/");
+        }
+        if (suffix == null) {   
+            suffix = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-suffix", "shtml");
+            if (suffix == null || suffix.equals("")) {
+                suffix = "";
+            } else {
+                suffix = "." + suffix;
+            }
+        }
+        
         if (helpReference == null || helpReference.equals("No help available")) {
             return "";
         } else {
             String elementClass = "help-link";
-            String link = "help/" + helpReference + ".shtml";
+            String link = site + helpReference + suffix;
             String linkText = "Help";
             String target = "scimpi-help";
             return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\"" + description + "\">" + linkText + "</a>";

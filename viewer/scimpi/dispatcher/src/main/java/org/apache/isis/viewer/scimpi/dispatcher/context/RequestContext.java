@@ -23,8 +23,11 @@ package org.apache.isis.viewer.scimpi.dispatcher.context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
@@ -35,7 +38,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -171,11 +176,27 @@ public abstract class RequestContext {
             id = RESULT;
         }
 
-        ObjectAdapter mappedObject = objectMapping.mappedObject(id);
-        if (mappedObject instanceof ObjectAdapter) {
-            IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) mappedObject);
+        String[] idParts = id.split("@");
+        if (idParts.length == 2) {
+            ObjectAdapter mappedObject = objectMapping.mappedObject(id);
+            if (mappedObject instanceof ObjectAdapter) {
+                IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) mappedObject);
+            }
+            return mappedObject;
+        } else {
+            ObjectAdapter parentObject = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
+            if (parentObject instanceof ObjectAdapter) {
+                IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) parentObject);
+            }
+            ObjectAssociation association = parentObject.getSpecification().getAssociation(idParts[2]);
+            ObjectAdapter aggregatedAdapter = association.get(parentObject);
+            if (idParts.length == 4) {
+                CollectionFacet collectionFacet = aggregatedAdapter.getSpecification().getFacet(CollectionFacet.class);
+                List<ObjectAdapter> collection = new ArrayList<ObjectAdapter>(collectionFacet.collection(aggregatedAdapter));
+                aggregatedAdapter = collection.get(Integer.valueOf(idParts[3]));  //collectionFacet.firstElement(aggregatedAdapter);
+            }
+            return aggregatedAdapter;
         }
-        return mappedObject;
     }
 
     public boolean isValid() {

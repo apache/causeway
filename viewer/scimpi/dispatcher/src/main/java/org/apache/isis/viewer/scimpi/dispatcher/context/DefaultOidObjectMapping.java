@@ -124,7 +124,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             String id = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
             LOG.debug("encoded " + oid + " as " + id + " ~ " + encodedOid);
             if (isTransient) {
-                TransientObjectMapping mapping = new TransientObjectMapping((ObjectAdapter) object);
+                TransientObjectMapping mapping = new TransientObjectMapping((ObjectAdapter) inObject);
                 if (scope == Scope.REQUEST) {
                     requestTransients.put(id, mapping);
                 } else if (scope ==Scope.INTERACTION || scope == Scope.SESSION) {
