@@ -22,6 +22,7 @@ package org.apache.isis.alternatives.objectstore.sql;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import org.apache.isis.alternatives.objectstore.sql.jdbc.JdbcConnector;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
@@ -83,7 +84,7 @@ public class VersionMapping {
 
         sql.append(",");
         sql.append(lastActivityDateColumn);
-        sql.append(" datetime");
+        sql.append(" "+JdbcConnector.timeStampType());
 
         return sql.toString();
     }

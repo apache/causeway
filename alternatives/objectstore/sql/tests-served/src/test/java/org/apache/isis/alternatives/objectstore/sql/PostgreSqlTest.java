@@ -41,6 +41,9 @@ public class PostgreSqlTest extends SqlIntegrationTestCommon {
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:postgresql://abacus/noftest");
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
+			
+            properties.put(SqlObjectStore.BASE_NAME + ".datatypes.timestamp", "TIMESTAMP");
+            properties.put(SqlObjectStore.BASE_NAME + ".datetime", "TIMESTAMP");            
 		}
 		return properties;
 	}

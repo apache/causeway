@@ -71,7 +71,7 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
 	@Override
 	public String columnType() {
-		return "TIME";
+        return JdbcConnector.TYPE_TIME;
 	}
 
 }

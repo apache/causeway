@@ -76,13 +76,14 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 	}
 
 	public void open() {
+        String BASE = SqlObjectStore.BASE_NAME + ".jdbc.";
+        IsisConfiguration params = IsisContext.getConfiguration().getProperties(BASE);
+        
 		try {
-			IsisConfiguration params = IsisContext.getConfiguration();
-			String BASE = SqlObjectStore.BASE_NAME + ".jdbc.";
-			String driver = params.getString(BASE + "driver");
-			String url = params.getString(BASE + "connection");
-			String user = params.getString(BASE + "user");
-			String password = params.getString(BASE + "password");
+			String driver = params.getString(BASE+"driver");
+			String url = params.getString(BASE+"connection");
+			String user = params.getString(BASE+"user");
+			String password = params.getString(BASE+"password");
 
 			if (connection != null) {
 				throw new SqlObjectStoreException(
@@ -119,6 +120,10 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 			throw new SqlObjectStoreException("Could not find database driver",
 					e);
 		}
+		
+        String BASE_DATATYPE = SqlObjectStore.BASE_NAME+".datatypes.";
+        IsisConfiguration dataTypes = IsisContext.getConfiguration().getProperties(BASE_DATATYPE);
+		populateSqlDataTypes(dataTypes, BASE_DATATYPE);
 	}
 
 	/*
@@ -165,7 +170,24 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 	 * ObjectAdapterRuntimeException(e); } }
 	 */
 
-	@Override
+    //static String TYPE_BOOLEAN;
+	static String TYPE_TIMESTAMP;
+	static String TYPE_DATETIME;
+    static String TYPE_DATE;
+    static String TYPE_TIME;
+	
+	private void populateSqlDataTypes(IsisConfiguration dataTypes, String baseName) {
+	    //TYPE_BOOLEAN = dataTypes.getString("boolean" , "CHAR(1)");
+	    TYPE_TIMESTAMP = dataTypes.getString(baseName+"timestamp" , "DATETIME");
+	    TYPE_DATETIME = dataTypes.getString(baseName+"datetime" , "DATETIME");
+        TYPE_DATE = dataTypes.getString(baseName+"date" , "DATE");
+        TYPE_TIME = dataTypes.getString(baseName+"time" , "TIME");
+    }
+	public static String timeStampType(){
+	    return TYPE_TIMESTAMP;
+	}
+
+    @Override
 	public Results select(final String sql) {
 		LOG.debug("SQL: " + sql);
 		PreparedStatement statement;
@@ -344,8 +366,6 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 			debug.appendln("Driver Version", metaData.getDriverMajorVersion()
 					+ "." + metaData.getDriverMinorVersion());
 			debug.appendln("Keywords", metaData.getSQLKeywords());
-			debug.appendln("Date/Time functions",
-					metaData.getTimeDateFunctions());
 			debug.appendln("Date/Time functions",
 					metaData.getTimeDateFunctions());
 			debug.appendln("Mixed case identifiers",

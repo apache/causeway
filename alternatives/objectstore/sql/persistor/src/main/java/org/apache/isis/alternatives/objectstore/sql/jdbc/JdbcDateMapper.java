@@ -79,7 +79,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
     }
 
     public String columnType() {
-        return "DATE";
+        return JdbcConnector.TYPE_DATE;
     }
 
 }
