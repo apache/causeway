@@ -48,5 +48,18 @@ public class PostgreSqlTest extends SqlIntegrationTestCommon {
 	public  String getPropertiesFilename(){
 		return "postgresql.properties";
 	}	
+	
+    public String getPersonTableName() {
+        return "isis_sqldataclass";
+    }
+
+    public String getSimpleClassTableName() {
+        return "isis_simpleclass";
+    }
+
+    public String getSimpleClassTwoTableName() {
+        return "isis_simpleclasstwo";
+    }
+	
 }
 

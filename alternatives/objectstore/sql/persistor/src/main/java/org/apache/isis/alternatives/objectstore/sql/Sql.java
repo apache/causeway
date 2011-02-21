@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.sql;
-
 
 /**
  * SQL functions, commands, names that are database dependent
  */
 public class Sql {
-    private Sql() {}
+    private Sql() {
+    }
 
     private static SqlMetaData metadata;
 
-    //public static String timestamp = "CURRENT_TIMESTAMP";
+    // public static String timestamp = "CURRENT_TIMESTAMP";
 
     public static void setMetaData(SqlMetaData metadata) {
         Sql.metadata = metadata;
@@ -39,7 +38,8 @@ public class Sql {
         if (encodedString == null || encodedString.equals("NULL")) {
             return "NULL";
         }
-        StringBuffer buffer = new StringBuffer("'");
+        // StringBuffer buffer = new StringBuffer("'");
+        StringBuffer buffer = new StringBuffer(metadata.getQuoteString());
         for (int i = 0; i < encodedString.length(); i++) {
             char c = encodedString.charAt(i);
             if (c == '\'') {
@@ -50,30 +50,21 @@ public class Sql {
                 buffer.append(c);
             }
         }
-        buffer.append("'");
+        // buffer.append("'");
+        buffer.append(metadata.getQuoteString());
         String string = buffer.toString();
         return string;
     }
 
     public static String sqlName(String name) {
-//        TODO need to deal with non-ascii (ie unicode characters) 
+        // TODO need to deal with non-ascii (ie unicode characters)
         return name.replace(' ', '_').toLowerCase();
-        
+
         /*
-        int length = name.length();
-        StringBuffer convertedName = new StringBuffer(length);
-        for (int i = 0; i < length; i++) {
-            char ch = name.charAt(i);
-            if (ch == ' ') {
-                i++;
-                //ch = name.charAt(i);
-                //Character.toUpperCase(ch);
-                ch = '_';
-            }
-            convertedName.append(ch);
-        }
-        return convertedName.toString();
-        */
+         * int length = name.length(); StringBuffer convertedName = new StringBuffer(length); for (int i = 0; i <
+         * length; i++) { char ch = name.charAt(i); if (ch == ' ') { i++; //ch = name.charAt(i);
+         * //Character.toUpperCase(ch); ch = '_'; } convertedName.append(ch); } return convertedName.toString();
+         */
     }
 
     public static String sqlFieldName(String name) {
@@ -83,7 +74,7 @@ public class Sql {
         for (int i = 0; i < length; i++) {
             char ch = name.charAt(i);
             if (Character.isUpperCase(ch)) {
-                if (lastWasLowerCase ) {
+                if (lastWasLowerCase) {
                     convertedName.append('_');
                 }
                 lastWasLowerCase = false;
@@ -95,8 +86,12 @@ public class Sql {
         return sqlName(convertedName.toString());
     }
 
-
     public static String identifier(String name) {
+        // return metadata.quoteIdentifier(name);
+        return tableIdentifier(name);
+    }
+
+    public static String tableIdentifier(String name) {
         if (metadata.isStoresMixedCaseIdentifiers()) {
             return name;
         } else if (metadata.isStoresLowerCaseIdentifiers()) {
@@ -107,5 +102,5 @@ public class Sql {
             throw new SqlObjectStoreException("No case preference set up: " + name);
         }
     }
-    
+
 }

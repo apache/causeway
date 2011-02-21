@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.sql.jdbc;
 
 import java.sql.DatabaseMetaData;
@@ -25,43 +24,63 @@ import java.sql.SQLException;
 
 import org.apache.isis.alternatives.objectstore.sql.SqlMetaData;
 
-
 public class JdbcSqlMetaData implements SqlMetaData {
 
-    private String keywords;
-    private String timeDateFunctions;
-    private boolean storesLowerCaseIdentifiers;
-    private boolean storesMixedCaseIdentifiers;
-    private boolean storesUpperCaseIdentifiers;
+    private final boolean hasQuoteString;
+    private final String quoteString;
+    private final String keywords;
+    private final String timeDateFunctions;
+    private final boolean storesLowerCaseIdentifiers;
+    private final boolean storesMixedCaseIdentifiers;
+    private final boolean storesUpperCaseIdentifiers;
 
     public JdbcSqlMetaData(DatabaseMetaData metaData) throws SQLException {
         keywords = metaData.getSQLKeywords();
         timeDateFunctions = metaData.getTimeDateFunctions();
+        quoteString = metaData.getIdentifierQuoteString();
+        hasQuoteString = (quoteString != " ");
         storesLowerCaseIdentifiers = metaData.storesLowerCaseIdentifiers();
         storesMixedCaseIdentifiers = metaData.storesMixedCaseIdentifiers();
         storesUpperCaseIdentifiers = metaData.storesUpperCaseIdentifiers();
 
     }
 
+    @Override
     public String getKeywords() {
         return keywords;
     }
 
+    @Override
     public String getTimeDateFunctions() {
         return timeDateFunctions;
     }
 
+    @Override
+    public String getQuoteString() {
+        return quoteString;
+    }
+
+    @Override
     public boolean isStoresLowerCaseIdentifiers() {
         return storesLowerCaseIdentifiers;
     }
 
+    @Override
     public boolean isStoresMixedCaseIdentifiers() {
         return storesMixedCaseIdentifiers;
     }
 
+    @Override
     public boolean isStoresUpperCaseIdentifiers() {
         return storesUpperCaseIdentifiers;
     }
 
+    @Override
+    public String quoteIdentifier(String identifier) {
+        if (hasQuoteString) {
+            return quoteString + identifier + quoteString;
+        } else {
+            return identifier;
+        }
+    }
 }
-

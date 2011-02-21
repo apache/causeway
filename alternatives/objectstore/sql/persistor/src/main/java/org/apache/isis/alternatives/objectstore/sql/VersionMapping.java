@@ -26,84 +26,79 @@ import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public class VersionMapping {
-	private String lastActivityDateColumn;
-	private String lastActivityUserColumn;
-	private String versionColumn;
+    private String lastActivityDateColumn;
+    private String lastActivityUserColumn;
+    private String versionColumn;
 
-	public void init() {
-		lastActivityDateColumn = Sql.identifier("MODIFIED_ON");
-		lastActivityUserColumn = Sql.identifier("MODIFIED_BY");
-		versionColumn = Sql.identifier("VERSION");
-	}
+    public void init() {
+        lastActivityDateColumn = Sql.identifier("MODIFIED_ON");
+        lastActivityUserColumn = Sql.identifier("MODIFIED_BY");
+        versionColumn = Sql.identifier("VERSION");
+    }
 
-	public String insertColumns() {
-		return versionColumn + ", " + lastActivityUserColumn + ", "
-				+ lastActivityDateColumn;
-	}
+    public String insertColumns() {
+        return versionColumn + ", " + lastActivityUserColumn + ", " + lastActivityDateColumn;
+    }
 
-	// TODO:KAM: here
-	public String insertValues(DatabaseConnector connector,
-			SerialNumberVersion version) {
-		connector.addToQueryValues(version.getSequence());
-		String user = version.getUser();
-		if (user == ""){
-			user = "unknown";
-		}
-		connector.addToQueryValues(user);
-		connector.addToQueryValues(new Timestamp(new Date().getTime()));
-		return "?,?,?";
-	}
+    public String insertValues(DatabaseConnector connector, SerialNumberVersion version) {
+        connector.addToQueryValues(version.getSequence());
+        String user = version.getUser();
+        if (user == "") {
+            user = "unknown";
+        }
+        connector.addToQueryValues(user);
+        connector.addToQueryValues(new Timestamp(new Date().getTime()));
+        return "?,?,?";
+    }
 
-	public String whereClause(DatabaseConnector connector,
-			SerialNumberVersion version) {
-		connector.addToQueryValues(version.getSequence());
-		return versionColumn + " = ?";
-	}
+    public String whereClause(DatabaseConnector connector, SerialNumberVersion version) {
+        connector.addToQueryValues(version.getSequence());
+        return versionColumn + " = ?";
+    }
 
-	public String updateAssigment(DatabaseConnector connector, long nextSequence) {
-		connector.addToQueryValues(nextSequence);
-		return versionColumn + " = ?";
-	}
+    public String updateAssigment(DatabaseConnector connector, long nextSequence) {
+        connector.addToQueryValues(nextSequence);
+        return versionColumn + " = ?";
+    }
 
-	public String appendSelectColumns() {
-		StringBuffer sql = new StringBuffer();
-		sql.append(versionColumn);
-		sql.append(",");
-		sql.append(lastActivityUserColumn);
-		sql.append(",");
-		sql.append(lastActivityDateColumn);
-		return sql.toString();
-	}
+    public String appendSelectColumns() {
+        StringBuffer sql = new StringBuffer();
+        sql.append(versionColumn);
+        sql.append(",");
+        sql.append(lastActivityUserColumn);
+        sql.append(",");
+        sql.append(lastActivityDateColumn);
+        return sql.toString();
+    }
 
-	public String appendColumnDefinitions() {
-		StringBuffer sql = new StringBuffer();
+    public String appendColumnDefinitions() {
+        StringBuffer sql = new StringBuffer();
 
-		sql.append(versionColumn);
-		sql.append(" bigint");
+        sql.append(versionColumn);
+        sql.append(" bigint");
 
-		sql.append(",");
-		sql.append(lastActivityUserColumn);
-		sql.append(" varchar(32)");
+        sql.append(",");
+        sql.append(lastActivityUserColumn);
+        sql.append(" varchar(32)");
 
-		sql.append(",");
-		sql.append(lastActivityDateColumn);
-		sql.append(" timestamp");
+        sql.append(",");
+        sql.append(lastActivityDateColumn);
+        sql.append(" datetime");
 
-		return sql.toString();
-	}
+        return sql.toString();
+    }
 
-	public Object appendUpdateValues(DatabaseConnector connector,
-			long versionSequence) {
-		connector.addToQueryValues(versionSequence);
-		return versionColumn + "= ?";
-	}
+    public Object appendUpdateValues(DatabaseConnector connector, long versionSequence) {
+        connector.addToQueryValues(versionSequence);
+        return versionColumn + "= ?";
+    }
 
-	public Version getLock(Results rs) {
-		long number = rs.getLong(versionColumn);
-		String user = rs.getString(lastActivityUserColumn);
-		Date time = rs.getDate(lastActivityDateColumn);
-		Version version = new SerialNumberVersion(number, user, time);
-		return version;
-	}
+    public Version getLock(Results rs) {
+        long number = rs.getLong(versionColumn);
+        String user = rs.getString(lastActivityUserColumn);
+        Date time = rs.getDate(lastActivityDateColumn);
+        Version version = new SerialNumberVersion(number, user, time);
+        return version;
+    }
 
 }

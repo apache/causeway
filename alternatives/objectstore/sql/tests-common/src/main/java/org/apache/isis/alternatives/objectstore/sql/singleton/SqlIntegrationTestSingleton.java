@@ -114,7 +114,7 @@ public class SqlIntegrationTestSingleton {
                 IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
 		s = c.createStatement();
 			
-	    dropTable("no_services");
+	    dropTable(SqlObjectStore.getTableName());
 	}
 	private void dropTable(String tableName) {
 		if (s == null){
@@ -122,21 +122,21 @@ public class SqlIntegrationTestSingleton {
 				// Delete the xml files..
 			}
 			
-			if (tableName == "sqldataclass"){
+			if (tableName.equalsIgnoreCase("sqldataclass")){
 				List<SqlDataClass> list = sqlDataClassFactory.allDataClasses();
 				for (SqlDataClass sqlDataClass : list) {
 					sqlDataClassFactory.delete(sqlDataClass);
 				}
 				return;
 			}
-			if (tableName == "simpleclass"){
+			if (tableName.equalsIgnoreCase("simpleclass")){
 				List<SimpleClass> list = sqlDataClassFactory.allSimpleClasses();
 				for (SimpleClass sqlClass : list) {
 					sqlDataClassFactory.delete(sqlClass);
 				}
 				return;
 			}
-            if (tableName == "simpleclasstwo"){
+            if (tableName.equalsIgnoreCase("simpleclasstwo")){
                 List<SimpleClassTwo> list = sqlDataClassFactory.allSimpleClassTwos();
                 for (SimpleClassTwo sqlClass : list) {
                     sqlDataClassFactory.delete(sqlClass);

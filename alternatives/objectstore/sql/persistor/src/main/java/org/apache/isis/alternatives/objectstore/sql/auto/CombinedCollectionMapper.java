@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.sql.auto;
 
 import java.util.ArrayList;
@@ -48,65 +47,68 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     private final ObjectAssociation field;
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
-    private ObjectReferenceMapping foreignKeyMapping;
+    private final ObjectReferenceMapping foreignKeyMapping;
     private String foreignKeyName;
     private String columnName;
-    private ObjectMapping originalMapping;
+    private final ObjectMapping originalMapping;
     private final ObjectMappingLookup objectMapperLookup2;
 
-	public CombinedCollectionMapper(
-            ObjectAssociation objectAssociation,
-            String parameterBase,
-            FieldMappingLookup lookup, 
-            ObjectMappingLookup objectMapperLookup) {
+    public CombinedCollectionMapper(ObjectAssociation objectAssociation, String parameterBase,
+        FieldMappingLookup lookup, ObjectMappingLookup objectMapperLookup) {
         super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
         this.field = objectAssociation;
-		
+
         objectMapperLookup2 = objectMapperLookup;
-        
+
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
 
         originalMapping = objectMapperLookup.getMapping(objectAssociation.getSpecification(), null);
-        
+
         setColumnName(determineColumnName(objectAssociation));
-    	foreignKeyName = Sql.sqlName("fk_" + getColumnName());
-        
+        foreignKeyName = Sql.sqlName("fk_" + getColumnName());
+
         foreignKeyName = Sql.identifier(foreignKeyName);
-        foreignKeyMapping = lookup.createMapping(columnName, objectAssociation.getSpecification()); 
+        foreignKeyMapping = lookup.createMapping(columnName, objectAssociation.getSpecification());
     }
 
-	protected String determineColumnName(ObjectAssociation objectAssociation){
-    	return  objectAssociation.getSpecification().getShortIdentifier();
-	}
-	
+    protected String determineColumnName(ObjectAssociation objectAssociation) {
+        return objectAssociation.getSpecification().getShortIdentifier();
+    }
+
     public String getColumnName() {
-		return columnName;
-	}
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
-	}
-    
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    @Override
     public boolean needsTables(DatabaseConnector connection) {
         return !connection.hasColumn(table, foreignKeyName);
     }
 
+    @Override
     public void startup(DatabaseConnector connector, FieldMappingLookup lookup) {
         originalMapping.startup(connector, objectMapperLookup2);
         super.startup(connector, lookup);
     }
-    
+
+    @Override
     public void createTables(DatabaseConnector connection) {
         StringBuffer sql = new StringBuffer();
         sql.append("alter table ");
         sql.append(table);
-        sql.append(" add column ");
-        foreignKeyMapping.appendColumnDefinitions(sql); 
+        // TODO MSSQL chokes: sql.append(" add column ");
+        sql.append(" add ");
+        foreignKeyMapping.appendColumnDefinitions(sql);
         connection.update(sql.toString());
     }
 
+    @Override
     public void loadInternalCollection(DatabaseConnector connector, ObjectAdapter parent) {
-        ObjectAdapter collection = (ObjectAdapter) field.get(parent);
+        ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
             PersistorUtil.start(collection, ResolveState.RESOLVING);
@@ -114,23 +116,23 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             StringBuffer sql = new StringBuffer();
             sql.append("select ");
             idMapping.appendColumnNames(sql);
-            
+
             sql.append(", ");
             String columnList = columnList();
-            if (columnList.length() > 0){
-            	sql.append(columnList);
-            	sql.append(", ");
+            if (columnList.length() > 0) {
+                sql.append(columnList);
+                sql.append(", ");
             }
             sql.append(versionMapping.appendSelectColumns());
             sql.append(" from ");
             sql.append(table);
             sql.append(" where ");
             foreignKeyMapping.appendUpdateValues(connector, sql, parent);
-            
+
             Results rs = connector.select(sql.toString());
             List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
             while (rs.next()) {
-                Oid oid = idMapping.recreateOid(rs,  specification);
+                Oid oid = idMapping.recreateOid(rs, specification);
                 ObjectAdapter element = getAdapter(specification, oid);
                 loadFields(element, rs);
                 LOG.debug("  element  " + element.getOid());
@@ -143,11 +145,10 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         }
     }
 
-    
     protected void loadFields(final ObjectAdapter object, final Results rs) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
-            for (FieldMapping mapping  : fieldMappings) {
+            for (FieldMapping mapping : fieldMappings) {
                 mapping.initializeField(object, rs);
             }
             object.setOptimisticLock(versionMapping.getLock(rs));
@@ -155,10 +156,11 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         }
     }
 
+    @Override
     public void saveInternalCollection(DatabaseConnector connector, ObjectAdapter parent) {
         ObjectAdapter collection = field.get(parent);
         LOG.debug("Saving internal collection " + collection);
-        
+
         StringBuffer sql = new StringBuffer();
         sql.append("update ");
         sql.append(table);
@@ -166,13 +168,13 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         sql.append(foreignKeyName);
         sql.append(" = NULL where ");
         foreignKeyMapping.appendUpdateValues(connector, sql, parent);
-        connector.update(sql.toString()); 
-         
+        connector.update(sql.toString());
+
         sql = new StringBuffer();
         sql.append("update ");
         sql.append(table);
         sql.append(" set ");
-        
+
         CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
         for (ObjectAdapter element : collectionFacet.iterable(collection)) {
             StringBuffer update = new StringBuffer(sql);
@@ -182,7 +184,8 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             connector.insert(update.toString());
         }
     }
-    
+
+    @Override
     public void debugData(DebugString debug) {
         debug.appendln(field.getName(), "collection");
         debug.indent();
@@ -195,5 +198,3 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
 }
-
-

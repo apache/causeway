@@ -30,7 +30,7 @@ import org.apache.isis.alternatives.objectstore.sql.SqlOid.State;
 public class SqlOidTest extends TestCase {
 
     /*
-     * Test method for 'org.apache.isis.persistence.sql.SqlOid.hashCode()'
+     * Test method for 'org.apache.isis.alternatives.objectstore.sql.SqlOid.hashCode()'
      */
     public void testHashCode() {
         SqlOid oid1 = new SqlOid("className", new IntegerPrimaryKey(13), State.TRANSIENT);
@@ -40,7 +40,7 @@ public class SqlOidTest extends TestCase {
     }
 
     /*
-     * Test method for 'org.apache.isis.persistence.sql.SqlOid.copyFrom(Oid)'
+     * Test method for 'org.apache.isis.alternatives.objectstore.sql.SqlOid.copyFrom(Oid)'
      */
     public void testCopyFrom() {
 

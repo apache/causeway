@@ -72,7 +72,9 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
     }
     
     public String columnType() {
-    	return "TIMESTAMP";
+        // TODO MS-SQLServer chokes:
+        // return "TIMESTAMP";
+        return "DATETIME";
     }
 
 }

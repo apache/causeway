@@ -58,15 +58,15 @@ public class HsqlTest extends SqlIntegrationTestCommon {
 	}
 	
     public String getPersonTableName() {
-        return "SQLDATACLASS";
+        return "ISIS_SQLDATACLASS";
     }
 
     public String getSimpleClassTableName() {
-        return "SIMPLECLASS";
+        return "ISIS_SIMPLECLASS";
     }
 
     public String getSimpleClassTwoTableName() {
-        return "SIMPLECLASSTWO";
+        return "ISIS_SIMPLECLASSTWO";
     }
 	
 }

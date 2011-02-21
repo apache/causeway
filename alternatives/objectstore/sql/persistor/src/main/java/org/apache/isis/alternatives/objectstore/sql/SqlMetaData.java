@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.sql;
 
 public interface SqlMetaData {
@@ -30,5 +29,8 @@ public interface SqlMetaData {
     boolean isStoresMixedCaseIdentifiers();
 
     boolean isStoresUpperCaseIdentifiers();
-}
 
+    String getQuoteString();
+
+    String quoteIdentifier(String identifier);
+}

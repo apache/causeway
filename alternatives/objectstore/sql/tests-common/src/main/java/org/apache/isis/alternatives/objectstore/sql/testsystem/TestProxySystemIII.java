@@ -103,7 +103,6 @@ public class TestProxySystemIII {
 
         if (configuration.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver") == null){
         	if (configuration.getString("isis.persistor") == "in-memory"){
-                /*InMemoryPersistenceMechanismInstaller*/ //persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         		persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         	} else {
         		persistenceMechanismInstaller = new XmlPersistenceMechanismInstaller();
