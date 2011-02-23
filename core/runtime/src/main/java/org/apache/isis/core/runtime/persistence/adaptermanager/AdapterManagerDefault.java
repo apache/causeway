@@ -208,6 +208,21 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         return map(createOrRecreateRootAdapter(pojo));
     }
 
+    public ObjectAdapter adapterForAggregatedObject(Object pojo, ObjectAdapter parent) {
+        final Oid aggregatedOid = new AggregatedOid(parent.getOid(), "*NEW*");
+        ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
+/*
+        // we copy over the type onto the adapter itself
+        // [not sure why this is really needed, surely we have enough info in the adapter
+        // to look this up on the fly?]
+        final TypeOfFacet facet = identifiedHolder.getFacet(TypeOfFacet.class);
+        aggregatedAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
+*/
+        // same locking as parent
+        aggregatedAdapter.setOptimisticLock(parent.getVersion());
+        return aggregatedAdapter;
+    }
+
     @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
 

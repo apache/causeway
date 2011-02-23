@@ -39,6 +39,10 @@ public interface DomainObjectServices extends Injectable {
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
 
+    ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent);
+
+    
+
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      * 
@@ -127,8 +131,6 @@ public interface DomainObjectServices extends Injectable {
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     List<String> getPropertyNames();
-
-
 
 
 }

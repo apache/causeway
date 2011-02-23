@@ -1,4 +1,4 @@
-package org.apache.isis.core.runtime.system;
+package org.apache.isis.core.commons.config;
 
 import java.lang.management.ManagementFactory;
 

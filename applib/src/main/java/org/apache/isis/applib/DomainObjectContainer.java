@@ -90,6 +90,8 @@ public interface DomainObjectContainer {
      */
     <T> T newTransientInstance(Class<T> ofType);
 
+    <T> T newAggregatedInstance(Object parent, Class<T> ofType);
+    
     /**
      * Returns a new instance of the specified class that will have been persisted.
      */

@@ -20,14 +20,16 @@
 
 package org.apache.isis.alternatives.objectstore.nosql;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.log4j.Logger;
 
 
 public class NoSqlOidGenerator extends OidGeneratorAbstract {

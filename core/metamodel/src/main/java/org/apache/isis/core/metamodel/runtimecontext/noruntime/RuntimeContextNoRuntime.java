@@ -196,6 +196,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException(
                 "Not supported by this implementation of RuntimeContext");
             }
+
+            public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
         };
         querySubmitter = new QuerySubmitterAbstract() {
             

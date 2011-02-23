@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -82,6 +83,15 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         final ObjectAdapter adapter = doCreateTransientInstance(spec);
         return (T) adapter.getObject();
     }
+    
+    public <T> T newAggregatedInstance(Object parent, Class<T> ofClass) {
+        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
+        if (!spec.isAggregated()) {
+            throw new IsisException(); // TODO proper type
+        }
+        final ObjectAdapter adapter = doCreateAggregatedInstance(spec, parent);
+        return (T) adapter.getObject();
+    }
 
     /**
      * Returns a new instance of the specified class that will have been persisted.
@@ -110,6 +120,11 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
         return getDomainObjectServices().createTransientInstance(spec);
+    }
+    
+    private ObjectAdapter doCreateAggregatedInstance(ObjectSpecification spec, Object parent) {
+        ObjectAdapter parentAdapter = getAdapterMap().getAdapterFor(parent);
+        return getDomainObjectServices().createAggregatedInstance(spec, parentAdapter);
     }
 
     @Override

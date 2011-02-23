@@ -36,12 +36,17 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
@@ -50,6 +55,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
@@ -150,6 +156,21 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
                 return getPersistenceSession().createInstance(spec);
             }
+            
+            public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
+                AggregatedOid oid = new AggregatedOid(parent.getOid(), "*UNKNOWN*");
+                
+                ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, spec);
+                if (adapter.getResolveState().isGhost()) {
+                    ResolveState resolveState = ResolveState.RESOLVING;
+                    adapter.changeState(resolveState);
+                    adapter.changeState(resolveState.getEndState());
+                }
+                
+                return adapter;
+                
+                // return getPersistenceSession().createAggregatedInstance(spec,parent);
+            };
 
             @Override
             public void resolve(Object parent) {

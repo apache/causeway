@@ -38,6 +38,11 @@ public abstract class AbstractContainedObject {
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
     }
+    
+    @Hidden
+    protected <T> T newAggregatedInstance(final Class<T> ofType) {
+        return getContainer().newAggregatedInstance(this, ofType);
+    }
 
     // }}
 
