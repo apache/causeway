@@ -101,9 +101,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return !classes.isEmpty();
         }
 
-        /**
-         * @return
-         */
         public List<ObjectSpecification> toList() {
             return Collections.unmodifiableList(classes);
         }
@@ -131,20 +128,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final boolean isAbstract;
 
     private ObjectSpecification superclassSpec;
-
-    /**
-     * Expect to be populated using {@link #setSingularName(String)}, but has default name as well.
-     */
-    private String singularName = "(no name)";
-    /**
-     * Expect to be populated using {@link #setPluralName(String)} but has default name as well.
-     */
-    private String pluralName = "(no name)";
-    /**
-     * Expect to be populated using {@link #setDescribedAs(String)} but has default name as well.
-     */
-    private String describedAs = "(no description)";
-    private String help = null; /* help is typically a reference (eg a URL) and so should not default to a textual value if not set up */ 
 
     private Persistability persistability = Persistability.USER_PERSISTABLE;
 
@@ -312,18 +295,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
 
-        NamedFacet namedFacet = getFacet(NamedFacet.class);
-        singularName = namedFacet.value();
-
-        PluralFacet pluralFacet = getFacet(PluralFacet.class);
-        pluralName = pluralFacet.value();
-
-        final DescribedAsFacet describedAsFacet = getFacet(DescribedAsFacet.class);
-        describedAs = describedAsFacet.value();
-        
-        final HelpFacet helpFacet = getFacet(HelpFacet.class);
-        help = helpFacet == null ? null : helpFacet.value();
-
         Persistability persistability = determinePersistability();
         this.persistability = persistability;
     }
@@ -429,23 +400,38 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // Name, Description, Persistability
     // //////////////////////////////////////////////////////////////////////
 
+    /**
+     * Expect to be populated using {@link #setSingularName(String)}, but has default name as well.
+     */
     @Override
     public String getSingularName() {
-        return singularName;
+        NamedFacet namedFacet = getFacet(NamedFacet.class);
+        return namedFacet.value();
     }
 
+    /**
+     * Expect to be populated using {@link #setPluralName(String)} but has default name as well.
+     */
     @Override
     public String getPluralName() {
-        return pluralName;
+        PluralFacet pluralFacet = getFacet(PluralFacet.class);
+        return pluralFacet.value();
     }
 
+    /**
+     * Expect to be populated using {@link #setDescribedAs(String)} but has default name as well.
+     */
     @Override
     public String getDescription() {
+        final DescribedAsFacet describedAsFacet = getFacet(DescribedAsFacet.class);
+        String describedAs = describedAsFacet.value();
         return describedAs == null ? "" : describedAs;
     }
     
+    /* help is typically a reference (eg a URL) and so should not default to a textual value if not set up */ 
     public String getHelp() {
-        return help;
+        final HelpFacet helpFacet = getFacet(HelpFacet.class);
+        return helpFacet == null ? null : helpFacet.value();
     }
 
     @Override
