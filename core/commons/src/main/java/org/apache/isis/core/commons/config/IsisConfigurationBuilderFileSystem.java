@@ -49,7 +49,7 @@ public class IsisConfigurationBuilderFileSystem extends IsisConfigurationBuilder
     }
 
     public IsisConfigurationBuilderFileSystem() {
-        super(new ResourceStreamSourceFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
+        super(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
     }
 
 }

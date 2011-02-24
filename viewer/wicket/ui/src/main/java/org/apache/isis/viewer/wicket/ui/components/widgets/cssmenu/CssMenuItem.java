@@ -26,17 +26,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory.LinkAndLabel;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -48,6 +37,18 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
 import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory.LinkAndLabel;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class CssMenuItem implements Serializable {
 
@@ -236,6 +237,7 @@ public class CssMenuItem implements Serializable {
 			Components.permanentlyHide(markupContainer, ID_MENU_LINK);
 			// ... and show label, along with disabled reason
 			label.add(new AttributeModifier("title", true, Model.of(this.getDisabledReason())));
+			label.add(new AttributeModifier("class", true, Model.of("disabled")));
 			markupContainer.add(label);
 			
 			return label;

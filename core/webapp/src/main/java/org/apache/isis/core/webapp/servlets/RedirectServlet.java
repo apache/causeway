@@ -17,16 +17,30 @@
  *  under the License.
  */
 
+package org.apache.isis.core.webapp.servlets;
 
-package css;
+import java.io.IOException;
 
-import org.apache.wicket.ResourceReference;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * This is a bit of a hack, but this empty class allows Wicket to pick them up 
- * application-level CSS as {@link ResourceReference}s.
- */
-public final class Css {
+public class RedirectServlet extends HttpServlet {
 
-	private Css(){}
+    private static final long serialVersionUID = 1L;
+    private String redirectTo;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        redirectTo = config.getInitParameter("redirectTo");
+    }
+
+    @Override
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
+        IOException {
+        response.sendRedirect(redirectTo);
+    }
+
 }

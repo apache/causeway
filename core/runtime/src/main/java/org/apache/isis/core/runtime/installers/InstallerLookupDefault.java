@@ -31,9 +31,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -46,6 +50,7 @@ import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.runtime.IsisInstallerRegistry;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.about.ComponentDetails;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -60,9 +65,6 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
 
 
 /**
@@ -83,9 +85,11 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     private static final Logger LOG = Logger.getLogger(InstallerLookupDefault.class);
 
-    public final String INSTALLER_REGISTRY_FILE = "installer-registry.properties";
+    public final static String INSTALLER_REGISTRY_FILE = "installer-registry.properties";
 
     private final List<Installer> installerList = new ArrayList<Installer>();
+    
+    @SuppressWarnings("unused")
     private final Class<?> cls;
 
     /**
@@ -108,7 +112,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     }
 
     private void loadInstallers() {
-        final InputStream in = getInstallerRegistryStream(INSTALLER_REGISTRY_FILE, cls);
+        final InputStream in = getInstallerRegistryStream(INSTALLER_REGISTRY_FILE);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try {
             String line;
@@ -149,6 +153,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     /**
      * This method (and only this method) may be called prior to {@link #init() initialization}.
      */
+    @Override
     public Installer[] getInstallers(final Class<?> cls) {
         final List<Installer> list = new ArrayList<Installer>();
         for (final Installer comp : installerList) {
@@ -156,13 +161,14 @@ public class InstallerLookupDefault implements InstallerLookup {
                 list.add(comp);
             }
         }
-        return (Installer[]) list.toArray(new Installer[list.size()]);
+        return list.toArray(new Installer[list.size()]);
     }
 
     // ////////////////////////////////////////////////////////
     // init, shutdown
     // ////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
         ensureDependenciesInjected();
     }
@@ -171,6 +177,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         Ensure.ensureThatState(isisConfigurationBuilder, is(not(nullValue())));
     }
 
+    @Override
     public void shutdown() {
     // nothing to do.
     }
@@ -179,26 +186,31 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Type-safe Lookups
     // ////////////////////////////////////////////////////////
 
+    @Override
     public AuthenticationManagerInstaller authenticationManagerInstaller(String requested, final DeploymentType deploymentType) {
         return getInstaller(AuthenticationManagerInstaller.class, requested, SystemConstants.AUTHENTICATION_INSTALLER_KEY, 
                deploymentType.isExploring() ? SystemConstants.AUTHENTICATION_EXPLORATION_DEFAULT : SystemConstants.AUTHENTICATION_DEFAULT );
     }
 
+    @Override
     public AuthorizationManagerInstaller authorizationManagerInstaller(String requested, final DeploymentType deploymentType) {
         return getInstaller(AuthorizationManagerInstaller.class, requested, SystemConstants.AUTHORIZATION_INSTALLER_KEY,
                 !deploymentType.isProduction() ? SystemConstants.AUTHORIZATION_NON_PRODUCTION_DEFAULT : SystemConstants.AUTHORIZATION_DEFAULT);
     }
 
+    @Override
     public FixturesInstaller fixturesInstaller(String requested) {
         return getInstaller(FixturesInstaller.class, requested, SystemConstants.FIXTURES_INSTALLER_KEY,
                 SystemConstants.FIXTURES_INSTALLER_DEFAULT);
     }
 
+    @Override
     public TemplateImageLoaderInstaller templateImageLoaderInstaller(String requested) {
         return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY,
                 SystemConstants.IMAGE_LOADER_DEFAULT);
     }
 
+    @Override
     public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
         String persistorDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT
                 : SystemConstants.OBJECT_PERSISTOR_PRODUCTION_DEFAULT;
@@ -206,6 +218,7 @@ public class InstallerLookupDefault implements InstallerLookup {
                 persistorDefault);
     }
 
+    @Override
     public UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(String requested, DeploymentType deploymentType) {
         String profileStoreDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT
                 : SystemConstants.USER_PROFILE_STORE_PRODUCTION_DEFAULT;
@@ -213,11 +226,13 @@ public class InstallerLookupDefault implements InstallerLookup {
                 profileStoreDefault);
     }
 
+    @Override
     public ObjectReflectorInstaller reflectorInstaller(final String requested) {
         return getInstaller(ObjectReflectorInstaller.class, requested, SystemConstants.REFLECTOR_KEY,
                 SystemConstants.REFLECTOR_DEFAULT);
     }
 
+    @Override
     public EmbeddedWebServerInstaller embeddedWebServerInstaller(final String requested) {
         return getInstaller(EmbeddedWebServerInstaller.class, requested, SystemConstants.WEBSERVER_KEY,
                 SystemConstants.WEBSERVER_DEFAULT);
@@ -242,11 +257,13 @@ public class InstallerLookupDefault implements InstallerLookup {
      * -specific configuration files, this lookup also merges in any
      * {@link ClientConnectionInstaller#getRemoteProperties() remote properties} available.
      */
+    @Override
     public ClientConnectionInstaller clientConnectionInstaller(final String requested) {
         return getInstaller(ClientConnectionInstaller.class, requested, SystemConstants.CLIENT_CONNECTION_KEY,
                 SystemConstants.CLIENT_CONNECTION_DEFAULT);
     }
 
+    @Override
     public IsisViewerInstaller viewerInstaller(final String name, final String defaultName) {
         String viewer;
         if (name == null) {
@@ -260,6 +277,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         return getInstaller(IsisViewerInstaller.class, viewer);
     }
 
+    @Override
     public IsisViewerInstaller viewerInstaller(final String name) {
         final IsisViewerInstaller installer = getInstaller(IsisViewerInstaller.class, name);
         if (installer == null) {
@@ -268,6 +286,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         return installer;
     }
 
+    @Override
     public ServicesInstaller servicesInstaller(final String requestedImplementationName) {
         return getInstaller(ServicesInstaller.class, requestedImplementationName, SystemConstants.SERVICES_INSTALLER_KEY,
                 SystemConstants.SERVICES_INSTALLER_DEFAULT);
@@ -277,6 +296,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Generic Lookups
     // ////////////////////////////////////////////////////////
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends Installer> T getInstaller(final Class<T> cls, final String implName) {
         Assert.assertNotNull("No name specified", implName);
@@ -290,6 +310,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         return (T) getInstaller(implName);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public Installer getInstaller(final String implClassName) {
         try {
@@ -306,6 +327,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends Installer> T getInstaller(final Class<T> installerCls) {
         try {
@@ -351,8 +373,8 @@ public class InstallerLookupDefault implements InstallerLookup {
         }
     }
 
-    private InputStream getInstallerRegistryStream(final String componentFile, Class<?> cls) {
-        final InputStream in = cls.getResourceAsStream("/" + componentFile);
+    private InputStream getInstallerRegistryStream(final String componentFile) {
+        final InputStream in = IsisInstallerRegistry.getPropertiesAsStream();
         if (in == null) {
             throw new IsisException("No resource found: " + componentFile);
         }
@@ -363,6 +385,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Configuration
     // ////////////////////////////////////////////////////////
 
+    @Override
     public IsisConfiguration getConfiguration() {
         return isisConfigurationBuilder.getConfiguration();
     }
@@ -373,6 +396,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         }
     }
 
+    @Override
     public <T> T injectDependenciesInto(T candidate) {
         injectInto(candidate);
         return candidate;
@@ -382,6 +406,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Injectable
     // ////////////////////////////////////////////////////////////////////
 
+    @Override
     public void injectInto(Object candidate) {
         if (InstallerLookupAware.class.isAssignableFrom(candidate.getClass())) {
             InstallerLookupAware cast = InstallerLookupAware.class.cast(candidate);
@@ -394,10 +419,12 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Dependencies (injected)
     // ////////////////////////////////////////////////////////
 
+    @Override
     public IsisConfigurationBuilder getConfigurationBuilder() {
         return isisConfigurationBuilder;
     }
 
+    @Override
     @Inject
     public void setConfigurationBuilder(final IsisConfigurationBuilder configurationLoader) {
         this.isisConfigurationBuilder = configurationLoader;

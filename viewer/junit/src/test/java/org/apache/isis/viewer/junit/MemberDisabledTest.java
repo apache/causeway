@@ -40,7 +40,7 @@ public class MemberDisabledTest extends AbstractTest {
     public void whenValueDisabledForValueThenThrowsException() {
         custJsDO.disableFirstName = "cannot alter";
         try {
-            custJsVO.setFirstName("Dick");
+            custJsWO.setFirstName("Dick");
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
@@ -53,7 +53,7 @@ public class MemberDisabledTest extends AbstractTest {
     public void whenValueDisabledForNullThenThrowsException() {
         custJsDO.disableFirstName = "cannot alter";
         try {
-            custJsVO.setFirstName(null);
+            custJsWO.setFirstName(null);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
@@ -66,7 +66,7 @@ public class MemberDisabledTest extends AbstractTest {
     public void whenAssociationDisabledForReferenceThenThrowsException() {
         custJsDO.disableCountryOfBirth = "cannot alter";
         try {
-            custJsVO.setCountryOfBirth(countryUsaDO);
+            custJsWO.setCountryOfBirth(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
@@ -79,7 +79,7 @@ public class MemberDisabledTest extends AbstractTest {
     public void whenAssociationDisabledForNullThenThrowsException() {
         custJsDO.disableCountryOfBirth = "cannot alter";
         try {
-            custJsVO.setCountryOfBirth(null);
+            custJsWO.setCountryOfBirth(null);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
@@ -90,10 +90,10 @@ public class MemberDisabledTest extends AbstractTest {
 
     @Test
     public void whenCollectionDisabledThenAddToThrowsException() {
-        List<Order> orders = custJsVO.getOrders();
+        List<Order> orders = custJsWO.getOrders();
 		final Order order = orders.get(0);
         try {
-            custJsVO.addToMoreOrders(order);
+            custJsWO.addToMoreOrders(order);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetAnnotation.class));
@@ -107,7 +107,7 @@ public class MemberDisabledTest extends AbstractTest {
         custJsDO.addToVisitedCountries(countryUsaDO);
         custJsDO.disableVisitedCountries = "cannot alter";
         try {
-            custJsVO.removeFromVisitedCountries(countryUsaDO);
+            custJsWO.removeFromVisitedCountries(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
@@ -120,7 +120,7 @@ public class MemberDisabledTest extends AbstractTest {
     public void whenActionDisabledThenThrowsException() {
         custJsDO.disablePlaceOrder = "cannot invoke";
         try {
-            custJsVO.placeOrder(product355DO, 3);
+            custJsWO.placeOrder(product355DO, 3);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));

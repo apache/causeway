@@ -44,7 +44,7 @@
             <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
-            <item name="Hudson CI" href="https://hudson.apache.org/hudson/job/Isis-trunk-windows" />
+            <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
         </menu>
 
         <menu name="The Naked Objects Pattern">
@@ -114,6 +114,15 @@
 				<item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
     			<item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
 			</item>
+            <item name="Presentation Materials (please reuse)">
+                <item name="Introducing Apache Isis">
+                    <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
+                    <item name="PPT (Microsoft)" href="./presentations/IntroducingApacheIsis.ppt" />
+                    <item name="ODP (OpenDocument)" href="./presentations/IntroducingApacheIsis.odp" />
+                    <item name="PDF slides" href="./presentations/IntroducingApacheIsis-slides.pdf" />
+                    <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
+                </item>
+            </item>
 		</menu>
 
 

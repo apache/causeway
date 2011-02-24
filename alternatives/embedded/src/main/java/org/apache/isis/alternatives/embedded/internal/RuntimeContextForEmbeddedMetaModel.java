@@ -168,6 +168,12 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	            return adapterMap.adapterFor(domainObject);
 	        }
 
+            @Override
+            public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
+                throw new UnsupportedOperationException(
+                    "Not yet supported by this implementation of RuntimeContext");
+            }
+
 	        @Override
 	        public void resolve(Object parent) {
 	            context.resolve(parent);

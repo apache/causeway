@@ -39,7 +39,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenValueHiddenImperativelyForValueThenModifyThrowsException() {
         custJsDO.hideFirstName = true;
         try {
-            custJsVO.setFirstName("Dick");
+            custJsWO.setFirstName("Dick");
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -51,7 +51,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenValueHiddenImperativelyForNullThenModifyThrowsException() {
         custJsDO.hideFirstName = true;
         try {
-            custJsVO.setFirstName("Dick");
+            custJsWO.setFirstName("Dick");
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -63,7 +63,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenValueHiddenImperativelyThenReadThrowsException() {
         custJsDO.hideFirstName = true;
         try {
-            custJsVO.getFirstName();
+            custJsWO.getFirstName();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -75,7 +75,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenAssociationHiddenImperativelyForValueThenModifyThrowsException() {
         custJsDO.hideCountryOfBirth = true;
         try {
-            custJsVO.setCountryOfBirth(countryUsaDO);
+            custJsWO.setCountryOfBirth(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -88,7 +88,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenAssociationHiddenImperativelyForNullThenModifyThrowsException() {
         custJsDO.hideCountryOfBirth = true;
         try {
-            custJsVO.setCountryOfBirth(null);
+            custJsWO.setCountryOfBirth(null);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -100,7 +100,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenAssociationHiddenImperativelyThenReadThrowsException() {
         custJsDO.hideCountryOfBirth = true;
         try {
-            custJsVO.getCountryOfBirth();
+            custJsWO.getCountryOfBirth();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -112,7 +112,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenIfCollectionHiddenImperativelyThenAddToThrowsException() {
         custJsDO.hideVisitedCountries = true;
         try {
-            custJsVO.addToVisitedCountries(countryGbrDO);
+            custJsWO.addToVisitedCountries(countryGbrDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -125,7 +125,7 @@ public class MemberHiddenTest extends AbstractTest {
         custJsDO.hideVisitedCountries = true;
         custJsDO.addToVisitedCountries(countryGbrDO);
         try {
-            custJsVO.removeFromVisitedCountries(countryGbrDO);
+            custJsWO.removeFromVisitedCountries(countryGbrDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -138,7 +138,7 @@ public class MemberHiddenTest extends AbstractTest {
         custJsDO.hideVisitedCountries = true;
         custJsDO.addToVisitedCountries(countryGbrDO);
         try {
-            custJsVO.getVisitedCountries();
+            custJsWO.getVisitedCountries();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -150,7 +150,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenActionHiddenImperativelyThenThrowsException() {
         custJsDO.hidePlaceOrder = true;
         try {
-            custJsVO.placeOrder(product355DO, 3);
+            custJsWO.placeOrder(product355DO, 3);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForContextFacetViaMethod.class));
@@ -161,7 +161,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenValueHiddenDeclarativelyForValueThenModifyThrowsException() {
         try {
-            custJsVO.setAlwaysHiddenValue("Dick");
+            custJsWO.setAlwaysHiddenValue("Dick");
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -172,7 +172,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenValueHiddenDeclarativelyForNullThenModifyThrowsException() {
         try {
-            custJsVO.setAlwaysHiddenValue(null);
+            custJsWO.setAlwaysHiddenValue(null);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -183,7 +183,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenValueHiddenDeclarativelyThenReadThrowsException() {
         try {
-            custJsVO.getAlwaysHiddenValue();
+            custJsWO.getAlwaysHiddenValue();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -196,7 +196,7 @@ public class MemberHiddenTest extends AbstractTest {
         final Country[] values = new Country[] { countryUsaDO, null };
         for (final Country value : values) {
             try {
-                custJsVO.setAlwaysHiddenAssociation(value);
+                custJsWO.setAlwaysHiddenAssociation(value);
                 fail("Should have thrown exception");
             } catch (final HiddenException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -208,7 +208,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenAssociationHiddenDeclarativelyThenReadThrowsException() {
         try {
-            custJsVO.getAlwaysHiddenAssociation();
+            custJsWO.getAlwaysHiddenAssociation();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -219,7 +219,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenCollectionHiddenDeclarativelyThenAddToThrowsException() {
         try {
-            custJsVO.addToAlwaysHiddenCollection(countryUsaDO);
+            custJsWO.addToAlwaysHiddenCollection(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -231,7 +231,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenCollectionHiddenDeclarativelyThenRemoveFromThrowsException() {
         custJsDO.removeFromAlwaysHiddenCollection(countryUsaDO);
         try {
-            custJsVO.removeFromAlwaysHiddenCollection(countryUsaDO);
+            custJsWO.removeFromAlwaysHiddenCollection(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -242,7 +242,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenCollectionHiddenDeclarativelyThenReadThrowsException() {
         try {
-            custJsVO.getAlwaysHiddenCollection();
+            custJsWO.getAlwaysHiddenCollection();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -253,7 +253,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenActionHiddenDeclarativelyThenThrowsException() {
         try {
-            custJsVO.alwaysHiddenAction();
+            custJsWO.alwaysHiddenAction();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
@@ -267,7 +267,7 @@ public class MemberHiddenTest extends AbstractTest {
         final String[] values = new String[] { "Dick", null };
         for (final String value : values) {
             try {
-                custJsVO.setSessionHiddenValue(value);
+                custJsWO.setSessionHiddenValue(value);
                 fail("Should have thrown exception");
             } catch (final HiddenException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -279,7 +279,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenValueHiddenNotAuthorizedThenReadThrowsException() {
         try {
-            custJsVO.getSessionHiddenValue();
+            custJsWO.getSessionHiddenValue();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -292,7 +292,7 @@ public class MemberHiddenTest extends AbstractTest {
         final Country[] values = new Country[] { countryUsaDO, null };
         for (final Country value : values) {
             try {
-                custJsVO.setSessionHiddenAssociation(value);
+                custJsWO.setSessionHiddenAssociation(value);
                 fail("Should have thrown exception");
             } catch (final HiddenException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -304,7 +304,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenAssociationHiddenNotAuthorizedThenReadThrowsException() {
         try {
-            custJsVO.getSessionHiddenAssociation();
+            custJsWO.getSessionHiddenAssociation();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -315,7 +315,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenCollectionHiddenNotAuthorizedThenAddToThrowsException() {
         try {
-            custJsVO.addToSessionHiddenCollection(countryUsaDO);
+            custJsWO.addToSessionHiddenCollection(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -327,7 +327,7 @@ public class MemberHiddenTest extends AbstractTest {
     public void whenCollectionHiddenNotAuthorizedThenRemoveFromThrowsException() {
         custJsDO.addToSessionHiddenCollection(countryUsaDO);
         try {
-            custJsVO.removeFromSessionHiddenCollection(countryUsaDO);
+            custJsWO.removeFromSessionHiddenCollection(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -338,7 +338,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenCollectionHiddenNotAuthorizedThenReadThrowsException() {
         try {
-            custJsVO.getSessionHiddenCollection();
+            custJsWO.getSessionHiddenCollection();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));
@@ -349,7 +349,7 @@ public class MemberHiddenTest extends AbstractTest {
     @Test
     public void whenActionHiddenNotAuthorizedThenThrowsException() {
         try {
-            custJsVO.sessionHiddenAction();
+            custJsWO.sessionHiddenAction();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(HideForSessionFacetViaMethod.class));

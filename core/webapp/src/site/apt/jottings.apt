@@ -21,4 +21,23 @@ Jottings
  
   This page is to capture any random jottings relating to this module prior 
   to being moved into formal documentation. 
+
+Support for viewer config files 
+
+  The "Installer" architecture will automatically load configFiles, following 
+  the convention "xxx_yyy.properties".  When run from org.apache.isis.Isis or
+  org.apache.isis.WebServer, a "viewer installer" is also specified, meaning
+  that a config file for this viewer is also loaded (eg viewer_html.properties).
+  However, while IsisWebAppBootstrapper uses the installer architecture for
+  "back-end" components (security, persistor etc), it is not used for the viewers.
+  
+  Therefore, the IsisWebAppBootstrapper will load additional config files for
+  viewers if required, by searching for the "isis.viewers" context-param.
+  
+  For example:
+
+     <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>restful</param-value>
+     </context-param>
  

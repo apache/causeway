@@ -20,16 +20,19 @@
 
 package org.apache.isis.viewer.junit;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.junit.Test;
 
-
-public class TitleTest extends AbstractTest {
-
-    @Test
-    public void shouldAppendToDocumentor() {
-        assertThat(custJsWO.title(), equalTo("Richard Pawson"));
-    }
+/**
+ * The location of the <tt>config</tt> directory, relative to the base.
+ */
+@Target(ElementType.TYPE)
+@Inherited
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ConfigDir {
+    String value();
 }

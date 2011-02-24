@@ -47,5 +47,4 @@ public abstract class AdapterMapDelegator extends AdapterMapAbstract {
     public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
         return underlying.adapterFor(pojo, ownerAdapter, identifiedHolder);
     }
-
 }

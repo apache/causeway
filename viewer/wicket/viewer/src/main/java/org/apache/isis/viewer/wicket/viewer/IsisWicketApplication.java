@@ -22,12 +22,39 @@ package org.apache.isis.viewer.wicket.viewer;
 
 import java.util.ServiceLoader;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.Response;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.util.convert.ConverterLocator;
+
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.runner.IsisModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.webapp.ResourceStreamSourceServletContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -48,29 +75,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebS
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
-import org.apache.wicket.Application;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.Response;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.guice.GuiceComponentInjector;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.util.convert.ConverterLocator;
-
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
-import css.Css;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and bootstrapping
@@ -173,13 +177,15 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 		
         DeploymentType deploymentType = determineDeploymentType();
         
-        final IsisModule isisModule = new IsisModule(deploymentType);
+        IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+        
+        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
 		
         initWicketComponentInjection(injector);
 	}
-	
+
    
     private DeploymentType determineDeploymentType() {
         if (getConfigurationType().equalsIgnoreCase(WICKET_CONFIGURATION_TYPE_DEVELOPMENT)) {
@@ -187,6 +193,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         } else {
             return new WicketServer();
         }
+    }
+
+    private IsisConfigurationBuilder createConfigBuilder() {
+        final ResourceStreamSource rssServletContext = new ResourceStreamSourceServletContext(getServletContext());
+        final ResourceStreamSource rssTcl = new ResourceStreamSourceContextLoaderClassPath();
+        final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
+        IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
+        return isisConfigurationBuilder;
     }
 
 
@@ -265,13 +279,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * does mean that the header is not first in the list, so can override other page-level CSS.  However, it still comes after
      * any component-level CSS, so is not ideal.
      */
+    @Override
     public void renderApplicationCss(HtmlHeaderContainer container) {
         final String cssUrl = getApplicationCssUrl();
         if (cssUrl == null) {
             return;
         }
         final IHeaderResponse headerResponse = container.getHeaderResponse();
-        headerResponse.renderCSSReference(new ResourceReference(Css.class, cssUrl));
+        headerResponse.renderCSSReference(cssUrl);
     }
 
 
@@ -282,7 +297,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 	/**
 	 * The {@link ComponentFactoryRegistry} created in {@link #newComponentFactoryRegistry()}.
 	 */
-	public final ComponentFactoryRegistry getComponentFactoryRegistry() {
+	@Override
+    public final ComponentFactoryRegistry getComponentFactoryRegistry() {
 		return componentFactoryRegistry;
 	}
 	
@@ -297,14 +313,16 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 	 * <p>
 	 * Non-final only for testing purposes; should not typically be overridden.
 	 */
-	public PageClassRegistry getPageClassRegistry() {
+	@Override
+    public PageClassRegistry getPageClassRegistry() {
 		return pageClassRegistry;
 	}
 	
 	/**
 	 * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
 	 */
-	public Class<? extends Page> getHomePage() {
+	@Override
+    public Class<? extends Page> getHomePage() {
 		return getPageClassRegistry().getPageClass(PageType.HOME);
 	}
 	
@@ -321,7 +339,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 	// Images
 	///////////////////////////////////////////////////
 
-	public ImageCache getImageCache() {
+	@Override
+    public ImageCache getImageCache() {
 		return imageCache;
 	}
 
@@ -329,7 +348,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // Authentication Session
     ///////////////////////////////////////////////////
 
-	public AuthenticationSession getAuthenticationSession() {
+	@Override
+    public AuthenticationSession getAuthenticationSession() {
 	    return IsisContext.getAuthenticationSession();
 	}
 

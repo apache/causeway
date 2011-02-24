@@ -47,7 +47,7 @@ public class MemberInvalidTest extends AbstractTest {
             custJsDO.validateFirstNameExpectedArg = value;
             custJsDO.validateFirstName = "bad first name";
             try {
-                custJsVO.setFirstName(value);
+                custJsWO.setFirstName(value);
                 fail("Should have thrown exception");
             } catch (final InvalidException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(PropertyValidateFacetViaMethod.class));
@@ -63,7 +63,7 @@ public class MemberInvalidTest extends AbstractTest {
         final Country[] values = new Country[] { countryUsaDO, null };
         for (final Country value : values) {
             try {
-                custJsVO.setCountryOfBirth(value);
+                custJsWO.setCountryOfBirth(value);
                 fail("Should have thrown exception");
             } catch (final InvalidException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(PropertyValidateFacetViaMethod.class));
@@ -77,7 +77,7 @@ public class MemberInvalidTest extends AbstractTest {
     public void whenCollectionInvalidImperativelyThenAddToThrowsException() {
         custJsDO.validateAddToVisitedCountries = "bad country";
         try {
-            custJsVO.addToVisitedCountries(countryGbrDO);
+            custJsWO.addToVisitedCountries(countryGbrDO);
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(CollectionValidateAddToFacetViaMethod.class));
@@ -91,7 +91,7 @@ public class MemberInvalidTest extends AbstractTest {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.validateRemoveFromVisitedCountries = "bad country";
         try {
-            custJsVO.removeFromVisitedCountries(countryGbrDO);
+            custJsWO.removeFromVisitedCountries(countryGbrDO);
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(CollectionValidateRemoveFromFacetViaMethod.class));
@@ -104,7 +104,7 @@ public class MemberInvalidTest extends AbstractTest {
     public void whenActionInvalidImperativelyThenThrowsException() {
         custJsDO.validatePlaceOrder = "can't place order";
         try {
-            custJsVO.placeOrder(product355DO, 3);
+            custJsWO.placeOrder(product355DO, 3);
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(ActionValidationFacetViaMethod.class));
@@ -115,18 +115,18 @@ public class MemberInvalidTest extends AbstractTest {
 
     @Test
     public void whenValueCanSetNullOnOptionalField() {
-        custJsVO.setOptionalValue(null);
+        custJsWO.setOptionalValue(null);
     }
 
     @Test
     public void whenAssociationCanSetNullOnOptionalField() {
-        custJsVO.setOptionalAssociation(null);
+        custJsWO.setOptionalAssociation(null);
     }
 
     @Test
     public void whenValueInvalidMandatoryThenThrowsException() {
         try {
-            custJsVO.setMandatoryValue(null);
+            custJsWO.setMandatoryValue(null);
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(MandatoryFacetDefault.class));
@@ -137,7 +137,7 @@ public class MemberInvalidTest extends AbstractTest {
     @Test
     public void whenAssociationInvalidMandatoryThenThrowsException() {
         try {
-            custJsVO.setMandatoryAssociation(null);
+            custJsWO.setMandatoryAssociation(null);
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(MandatoryFacetDefault.class));
@@ -149,7 +149,7 @@ public class MemberInvalidTest extends AbstractTest {
     @Test
     public void whenInvalidMaxLengthThenThrowsException() {
         try {
-            custJsVO.setMaxLengthField("This is far too long");
+            custJsWO.setMaxLengthField("This is far too long");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(MaxLengthFacetAnnotationForProperty.class));
@@ -161,7 +161,7 @@ public class MemberInvalidTest extends AbstractTest {
     @Test
     public void whenInvalidRegExCaseSensitiveThenThrowsException() {
         try {
-            custJsVO.setRegExCaseSensitiveField("abCfoobar");
+            custJsWO.setRegExCaseSensitiveField("abCfoobar");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Reg Ex Case Sensitive Field"));
@@ -170,14 +170,14 @@ public class MemberInvalidTest extends AbstractTest {
 
     @Test
     public void whenCanSetValidRegExCaseSensitive() {
-        custJsVO.setRegExCaseInsensitiveField("abcfoobar");
+        custJsWO.setRegExCaseInsensitiveField("abcfoobar");
 
     }
 
     @Test
     public void whenInvalidRegExCaseInsensitiveThenThrowsException() {
         try {
-            custJsVO.setRegExCaseInsensitiveField("abXfoobar");
+            custJsWO.setRegExCaseInsensitiveField("abXfoobar");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetAnnotationForProperty.class));
@@ -187,7 +187,7 @@ public class MemberInvalidTest extends AbstractTest {
 
     @Test
     public void whenCanSetValidRegExCaseInsensitive() {
-        custJsVO.setRegExCaseInsensitiveField("AbCfoobar");
+        custJsWO.setRegExCaseInsensitiveField("AbCfoobar");
     }
 
 }

@@ -450,8 +450,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private Object underlying(final Object arg) {
-        if (arg instanceof WrapperObject<?>) {
-            final WrapperObject<?> argViewObject = (WrapperObject<?>) arg;
+        if (arg instanceof WrapperObject) {
+            final WrapperObject argViewObject = (WrapperObject) arg;
             return argViewObject.wrapped();
         } else {
             return arg;

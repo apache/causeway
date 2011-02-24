@@ -28,6 +28,7 @@ import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.core.runtime.web.WebAppSpecification;
 import org.apache.isis.core.webapp.IsisSessionFilter;
 import org.apache.isis.core.webapp.StaticContentFilter;
+import org.apache.isis.core.webapp.servlets.RedirectServlet;
 import org.apache.isis.core.webapp.servlets.ResourceServlet;
 import org.apache.isis.viewer.html.servlet.ControllerServlet;
 import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
@@ -50,6 +51,7 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
 	
 	private static final String LOGON_PAGE = HtmlServletConstants.LOGON_APP_PAGE;
 	private static final String LOGON_PAGE_MAPPED = "/"+LOGON_PAGE;
+	private static final String ROOT_PAGE_MAPPED = "/";
 	
 	private static final String[] STATIC_CONTENT = new String[]{"*.gif", "*.png", "*.jpg", "*.css"};
 	private static final String DYNAMIC_CONTENT = "*.app";
@@ -63,9 +65,12 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
 	@Override
     public IsisViewer doCreateViewer() {
         return new EmbeddedWebViewer() {
+            @Override
             public WebAppSpecification getWebAppSpecification() {
 
                 WebAppSpecification webAppSpec = new WebAppSpecification();
+   
+                webAppSpec.addContextParams("isis.viewers", "html");
                 
                 webAppSpec.addFilterSpecification(
                 		IsisSessionFilter.class, 
@@ -74,9 +79,17 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
                 webAppSpec.addServletSpecification(LogonServlet.class, LOGON_PAGE_MAPPED);
                 webAppSpec.addServletSpecification(ControllerServlet.class, DYNAMIC_CONTENT);
                 
-                webAppSpec.addFilterSpecification(StaticContentFilter.class, STATIC_CONTENT);
+                webAppSpec.addFilterSpecification(StaticContentFilter.class, 
+                        MapUtils.asMap("CacheTime", "86400"),
+                        STATIC_CONTENT);
                 webAppSpec.addServletSpecification(ResourceServlet.class, STATIC_CONTENT );
-                
+
+                // this is slightly different from the web.xml in the archetype, and doesn't
+                // redirect from '/', only from '/xxx' (ie need to type something after the '/')  
+                webAppSpec.addServletSpecification(
+                        RedirectServlet.class, 
+                        MapUtils.asMap("redirectTo", LOGON_PAGE),
+                        "/" );
 
                 final String resourceBaseDir = getConfiguration().getString(HtmlViewerConstants.VIEWER_HTML_RESOURCE_BASE_KEY);
                 if (resourceBaseDir != null) {
@@ -86,8 +99,7 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
                 webAppSpec.addResourcePath("./src/main/webapp");
                 webAppSpec.addResourcePath("./web");
                 webAppSpec.addResourcePath(".");
-                webAppSpec.addWelcomeFile(LOGON_PAGE);
-                
+
 				webAppSpec.setLogHint("open a web browser and browse to logon.app to connect");
 
                 return webAppSpec;

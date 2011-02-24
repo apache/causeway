@@ -27,23 +27,23 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
-import org.junit.Test;
 
 
 public class ViewObjectTest extends AbstractTest {
 
-    @SuppressWarnings("unchecked")
-    private WrapperObject<Customer> asViewObject() {
-        return (WrapperObject<Customer>) custJsVO;
+    private WrapperObject asWrapperObject() {
+        return (WrapperObject) custJsWO;
     }
 
 	@Test
     public void canCastViewsToViewObject() {
         @SuppressWarnings("unused")
-        final WrapperObject<Customer> custRpVOAsViewObject = asViewObject();
+        final WrapperObject custRpVOAsViewObject = asWrapperObject();
     }
 
     @Test
@@ -78,7 +78,7 @@ public class ViewObjectTest extends AbstractTest {
     public void collectionInstanceOfViewObjectShouldReturnTrueWhenDealingWithView() {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.addToVisitedCountries(countryUsaDO);
-        final List<Country> visitedCountries = custJsVO.getVisitedCountries();
+        final List<Country> visitedCountries = custJsWO.getVisitedCountries();
         assertThat(visitedCountries instanceof WrapperObject, is(true));
     }
 
@@ -86,7 +86,7 @@ public class ViewObjectTest extends AbstractTest {
     public void containsOnViewedCollectionShouldIntercept() {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.addToVisitedCountries(countryUsaDO);
-        final List<Country> visitedCountries = custJsVO.getVisitedCountries();
+        final List<Country> visitedCountries = custJsWO.getVisitedCountries();
         assertThat(visitedCountries.contains(countryGbrDO), is(true));
     }
 

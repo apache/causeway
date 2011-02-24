@@ -26,32 +26,32 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.junit.Test;
+
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
-import org.junit.Test;
 
 public class SaveObjectsTest extends AbstractTest {
 
-	@SuppressWarnings("unchecked")
-	private WrapperObject<Customer> asViewObject(final Customer proxiedNewCustomer) {
-		return (WrapperObject<Customer>) proxiedNewCustomer;
+	private WrapperObject asWrapperObject(final Customer proxiedNewCustomer) {
+		return (WrapperObject) proxiedNewCustomer;
 	}
 
 	@Test
 	public void invokingSaveThroughProxyMakesTransientObjectPersistent() {
 		final Customer newCustomer = getDomainObjectContainer().newTransientInstance(Customer.class);
 		assertThat(getDomainObjectContainer().isPersistent(newCustomer),is(false));
-		final Customer newCustomerViewObject = getWrapperFactory().wrap(newCustomer);
-		newCustomerViewObject.setCustomerNumber(123);
-		newCustomerViewObject.setLastName("Smith");
-		newCustomerViewObject.setMandatoryAssociation(countryGbrDO);
-		newCustomerViewObject.setMandatoryValue("foo");
-		newCustomerViewObject.setMaxLengthField("abc");
-		newCustomerViewObject.setRegExCaseInsensitiveField("ABCd");
-		newCustomerViewObject.setRegExCaseSensitiveField("abcd");
-		final WrapperObject<Customer> proxyNewCustomer = asViewObject(newCustomerViewObject);
+		final Customer newCustomerVO = getWrapperFactory().wrap(newCustomer);
+		newCustomerVO.setCustomerNumber(123);
+		newCustomerVO.setLastName("Smith");
+		newCustomerVO.setMandatoryAssociation(countryGbrDO);
+		newCustomerVO.setMandatoryValue("foo");
+		newCustomerVO.setMaxLengthField("abc");
+		newCustomerVO.setRegExCaseInsensitiveField("ABCd");
+		newCustomerVO.setRegExCaseSensitiveField("abcd");
+		final WrapperObject proxyNewCustomer = asWrapperObject(newCustomerVO);
 		proxyNewCustomer.save();
 		assertThat(getDomainObjectContainer().isPersistent(newCustomer),
 				is(true));
@@ -70,8 +70,8 @@ public class SaveObjectsTest extends AbstractTest {
 
 		assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
 
-		final WrapperObject<Customer> proxyNewCustomer = asViewObject(custJsVO);
-		proxyNewCustomer.save();
+		final WrapperObject newCustomerWO = asWrapperObject(custJsWO);
+		newCustomerWO.save();
 
 		assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
 	}
@@ -89,14 +89,14 @@ public class SaveObjectsTest extends AbstractTest {
 		newCustomer.setRegExCaseInsensitiveField("ABCd");
 		newCustomer.setRegExCaseSensitiveField("abcd");
 
-		final Customer newCustomerViewObject = getWrapperFactory().wrap(newCustomer);
+		final Customer newCustomerWO = getWrapperFactory().wrap(newCustomer);
 		newCustomer.validate = "No shakes";
 
-		final WrapperObject<Customer> proxyNewCustomer = asViewObject(newCustomerViewObject);
+		final WrapperObject newCustomerWrapper = asWrapperObject(newCustomerWO);
 		try {
 			assertThat(getDomainObjectContainer().isPersistent(newCustomer),
 					is(false));
-			proxyNewCustomer.save();
+			newCustomerWrapper.save();
 			fail("An InvalidImperativelyException should have been thrown");
 		} catch (final InvalidException ex) {
 

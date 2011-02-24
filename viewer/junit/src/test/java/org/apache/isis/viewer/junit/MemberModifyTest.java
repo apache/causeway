@@ -39,45 +39,45 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void valueModifiedToNonNull() {
-        custJsVO.setFirstName("Dick");
+        custJsWO.setFirstName("Dick");
 
-        assertThat(custJsVO.getFirstName(), equalTo("Dick"));
+        assertThat(custJsWO.getFirstName(), equalTo("Dick"));
     }
 
     @Test
     public void valueModifiedToNull() {
-        custJsVO.setFirstName(null);
+        custJsWO.setFirstName(null);
 
-        assertThat(custJsVO.getFirstName(), nullValue());
+        assertThat(custJsWO.getFirstName(), nullValue());
     }
 
     @Test
     public void whenValueModifyCalledRatherThanSetForNonNull() {
-        custJsVO.setFirstName("Dick");
+        custJsWO.setFirstName("Dick");
         assertThat(custJsDO.modifyFirstNameCalled, is(true));
     }
 
     @Test
     public void whenValueClearCalledRatherThanSetForNull() {
-        custJsVO.setFirstName(null);
+        custJsWO.setFirstName(null);
         assertThat(custJsDO.clearFirstNameCalled, is(true));
     }
 
     @Test
     public void whenAssociationModifyCalledRatherThanSetForNonNull() {
-        custJsVO.setCountryOfBirth(countryUsaDO);
+        custJsWO.setCountryOfBirth(countryUsaDO);
         assertThat(custJsDO.modifyCountryOfBirthCalled, is(true));
     }
 
     @Test
     public void whenAssociationClearCalledRatherThanSetForNull() {
-        custJsVO.setCountryOfBirth(null);
+        custJsWO.setCountryOfBirth(null);
         assertThat(custJsDO.clearCountryOfBirthCalled, is(true));
     }
 
     @Test
     public void cannotUseAddDirectlyOnCollections() {
-        final List<Country> visitedCountries = custJsVO.getVisitedCountries();
+        final List<Country> visitedCountries = custJsWO.getVisitedCountries();
         try {
             visitedCountries.add(countryGbrDO);
             fail("UnsupportedOperationException should have been thrown.");
@@ -88,7 +88,7 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void cannotUseRemoveDirectlyOnCollections() {
-        final List<Country> visitedCountries = custJsVO.getVisitedCountries();
+        final List<Country> visitedCountries = custJsWO.getVisitedCountries();
         try {
             visitedCountries.remove(countryGbrDO);
             fail("UnsupportedOperationException should have been thrown.");
@@ -99,7 +99,7 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void cannotUseClearDirectlyOnCollections() {
-        final List<Country> visitedCountries = custJsVO.getVisitedCountries();
+        final List<Country> visitedCountries = custJsWO.getVisitedCountries();
         try {
             visitedCountries.clear();
             fail("UnsupportedOperationException should have been thrown.");
@@ -111,7 +111,7 @@ public class MemberModifyTest extends AbstractTest {
     @Test
     public void sttemptingToAddNullObjectIntoCollectionThrowsException() {
         try {
-            custJsVO.addToVisitedCountries(null);
+            custJsWO.addToVisitedCountries(null);
             fail("Exception should have been raised.");
         } catch (final IllegalArgumentException ex) {
             // expected
@@ -122,32 +122,32 @@ public class MemberModifyTest extends AbstractTest {
     public void removingNonExistentRemoveObjectFromCollectionDoesNothing() {
         assertThat(custJsDO.getVisitedCountries().contains(countryGbrDO), is(false));
 
-        custJsVO.removeFromVisitedCountries(countryGbrDO);
+        custJsWO.removeFromVisitedCountries(countryGbrDO);
         // no exception raised.
     }
 
     @Test
     public void canInvokeAction() {
-        final int sizeBefore = custJsVO.getOrders().size();
-        final Order orderBefore = custJsVO.getLastOrder();
-        custJsVO.placeOrder(product355DO, 3);
-        final Order orderAfter = custJsVO.getLastOrder();
+        final int sizeBefore = custJsWO.getOrders().size();
+        final Order orderBefore = custJsWO.getLastOrder();
+        custJsWO.placeOrder(product355DO, 3);
+        final Order orderAfter = custJsWO.getLastOrder();
 
-        final int sizeAfter = custJsVO.getOrders().size();
+        final int sizeAfter = custJsWO.getOrders().size();
         assertThat(sizeAfter, is(sizeBefore + 1));
         assertThat(orderAfter, is(not(orderBefore)));
     }
 
     @Test
     public void canInvokeActionIfOptionalValueParameterAndNullArgumentProvided() {
-        custJsVO.actionWithOptionalValueParameter(null);
+        custJsWO.actionWithOptionalValueParameter(null);
         assertThat(custJsDO.actionWithOptionalValueParameterArgument, nullValue());
     }
 
     @Test
     public void cannotInvokeActionIfMandatoryValueParameterAndNullArgumentProvided() {
         try {
-            custJsVO.actionWithMandatoryValueParameter(null);
+            custJsWO.actionWithMandatoryValueParameter(null);
             fail("InvalidMandatoryException should have been thrown");
         } catch (final InvalidException ex) {
             assertThat(custJsDO.actionWithMandatoryValueParameterArgument, equalTo(Long.MAX_VALUE)); // ie
@@ -156,14 +156,14 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void canInvokeActionIfOptionalReferenceParameterAndNullArgumentProvided() {
-        custJsVO.actionWithOptionalReferenceParameter(null);
+        custJsWO.actionWithOptionalReferenceParameter(null);
         assertThat(custJsDO.actionWithOptionalReferenceParameterArgument, nullValue());
     }
 
     @Test
     public void cannotInvokeActionIfMandatoryReferenceParameterAndNullArgumentProvided() {
         try {
-            custJsVO.actionWithMandatoryReferenceParameter(null);
+            custJsWO.actionWithMandatoryReferenceParameter(null);
             fail("InvalidMandatoryException should have been thrown");
         } catch (final InvalidException ex) {
             assertThat(custJsDO.actionWithMandatoryReferenceParameterArgument, not(nullValue()));
@@ -172,14 +172,14 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void canInvokeActionIfOptionalStringParameterAndEmptyStringProvidedAsArgument() {
-        custJsVO.actionWithOptionalStringParameter("");
+        custJsWO.actionWithOptionalStringParameter("");
         assertThat(custJsDO.actionWithOptionalStringParameterArgument, equalTo(""));
     }
 
     @Test
     public void cannotInvokeActionIfMandatoryStringParameterAndEmptyStringProvidedAsArgument() {
         try {
-            custJsVO.actionWithMandatoryStringParameter("");
+            custJsWO.actionWithMandatoryStringParameter("");
             fail("InvalidMandatoryException should have been thrown");
         } catch (final InvalidException ex) {
             assertThat(custJsDO.actionWithMandatoryStringParameterArgument, equalTo("original value")); // ie
@@ -188,14 +188,14 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void canInvokeActionIfParameterMatchRegularExpression() {
-        custJsVO.actionWithRegExStringParameter("6789");
+        custJsWO.actionWithRegExStringParameter("6789");
         assertThat(custJsDO.actionWithRegExStringParameterArgument, equalTo("6789"));
     }
 
     @Test
     public void cannotInvokeActionIfParameterDoesNotMatchRegularExpression() {
         try {
-            custJsVO.actionWithRegExStringParameter("abcd"); // doesn't match [0-9]{4}
+            custJsWO.actionWithRegExStringParameter("abcd"); // doesn't match [0-9]{4}
             fail("InvalidRegExException should have been thrown");
         } catch (final InvalidException ex) {
             assertThat(custJsDO.actionWithRegExStringParameterArgument, equalTo("1234")); // ie unchanged
@@ -204,14 +204,14 @@ public class MemberModifyTest extends AbstractTest {
 
     @Test
     public void canInvokeActionIfParameterNoLongerMaximumLength() {
-        custJsVO.actionWithMaxLengthStringParameter("abcd");
+        custJsWO.actionWithMaxLengthStringParameter("abcd");
         assertThat(custJsDO.actionWithMaxLengthStringParameterArgument, equalTo("abcd"));
     }
 
     @Test
     public void cannotInvokeActionIfParameterExceedsMaximumLength() {
         try {
-            custJsVO.actionWithMaxLengthStringParameter("abcde");
+            custJsWO.actionWithMaxLengthStringParameter("abcde");
             fail("InvalidMaxLengthException should have been thrown");
         } catch (final InvalidException ex) {
             assertThat(custJsDO.actionWithMaxLengthStringParameterArgument, equalTo("1234")); // ie unchanged

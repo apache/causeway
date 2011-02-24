@@ -29,20 +29,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.commons.lang.Resources;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 
-/**
- * 
- * @author Dan Haywood
- * 
- */
 public class ResourceServlet extends HttpServlet {
 
+    private static final Logger LOG = Logger.getLogger(ResourceServlet.class);
     private static final long serialVersionUID = 1L;
-    private final Logger LOG = Logger.getLogger(ResourceServlet.class);
 
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)

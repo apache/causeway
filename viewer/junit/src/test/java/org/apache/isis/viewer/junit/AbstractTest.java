@@ -44,7 +44,7 @@ import org.junit.runner.RunWith;
 public abstract class AbstractTest {
 
     protected Customer custJsDO;
-    protected Customer custJsVO;
+    protected Customer custJsWO;
 
     protected Product product355DO;
     protected Product product355VO;
@@ -78,7 +78,7 @@ public abstract class AbstractTest {
         countryAusDO = countryRepository.findByCode("AUS");
 
         custJsDO = customerRepository.findByName("Pawson");
-        custJsVO = wrapperFactory.wrap(custJsDO);
+        custJsWO = wrapperFactory.wrap(custJsDO);
     }
 
     @After

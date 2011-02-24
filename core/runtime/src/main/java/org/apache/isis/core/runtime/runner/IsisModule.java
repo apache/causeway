@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsiSsystemUsingInstallersFactory;
+import org.apache.isis.core.runtime.system.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.IsisSystemFactory;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
@@ -151,7 +151,7 @@ public class IsisModule extends AbstractModule {
     @Inject
     @Singleton
     private IsisSystemFactory provideIsisSystemFactory(final InstallerLookup installerLookup) {
-        IsiSsystemUsingInstallersFactory systemFactory = new IsiSsystemUsingInstallersFactory(installerLookup);
+        IsisSystemThatUsesInstallersFactory systemFactory = new IsisSystemThatUsesInstallersFactory(installerLookup);
         systemFactory.init();
         return systemFactory;
     }

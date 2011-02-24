@@ -28,14 +28,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ResourceStreamSourceFileSystem extends ResourceStreamSourceAbstract {
-	
+
+    /**
+     * Factory method to guard against nulls
+     */
+    public static ResourceStreamSource create(String directory2) {
+        return directory2!=null?new ResourceStreamSourceFileSystem(directory2):null;
+    }
+
 	private String directory;
 
 	public ResourceStreamSourceFileSystem(String directory) {
 		this.directory = directory;
 	}
 
-	protected InputStream doReadResource(String resourcePath) throws FileNotFoundException {
+	@Override
+    protected InputStream doReadResource(String resourcePath) throws FileNotFoundException {
 		File file = new File(directory, resourcePath);
 		return new FileInputStream(file);
 	}
@@ -50,8 +58,10 @@ public class ResourceStreamSourceFileSystem extends ResourceStreamSourceAbstract
 		}
 	}
 	
-	public String getName() {
+	@Override
+    public String getName() {
 		return "file system (directory '" + directory + "')";
 	}
+
 
 }

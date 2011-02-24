@@ -42,11 +42,8 @@ import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
@@ -55,7 +52,6 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
@@ -157,6 +153,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return getPersistenceSession().createInstance(spec);
             }
             
+            @Override
             public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
                 AggregatedOid oid = new AggregatedOid(parent.getOid(), "*UNKNOWN*");
                 
@@ -166,10 +163,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                     adapter.changeState(resolveState);
                     adapter.changeState(resolveState.getEndState());
                 }
-                
                 return adapter;
-                
-                // return getPersistenceSession().createAggregatedInstance(spec,parent);
+
             };
 
             @Override

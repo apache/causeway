@@ -1422,30 +1422,11 @@
     Viewer</emphasis>, with the <acronym>HTML</acronym> of each
     <classname>Component</classname> using <acronym>CSS</acronym> classes for
     the styling. But you can override the default styling by supplying an
-    application-level <acronym>CSS</acronym> file, in the classpath (eg under
-    <filename>src/main/resources</filename>).</para>
+    application-level <acronym>CSS</acronym> file.</para>
 
-    <para>For example, if you want to bind to
-    <filename>src/main/resources/myapp.css</filename>, then subclass
-    <classname>IsisWicketApplication</classname> and override the
-    <methodname>newIsisWicketModule()</methodname> method:</para>
-
-    <programlisting>public class MyApplication extends IsisWicketApplication {
-  ...
-  protected Module newIsisWicketModule() {
-    return Modules.override(super.newIsisWicketModule()).with(
-      new AbstractModule() {
-        @Override
-        protected void configure() {
-          bindConstant().annotatedWith(ApplicationCssUrl.class).to("myapp.css");
-        }
-      }
-    );
-  }
-}</programlisting>
-
-    <para>Your custom application should then be registered in web.xml, as
-    described in <xref linkend="sec.CustomizingTheStartup" />.</para>
+    <para>By default this file should be called
+    <filename>application.css</filename> and should reside within
+    <filename>WEB-INF</filename> directory.</para>
 
     <para>There are two levels at which we can override the default styling,
     either generically or specific to a particular domain. Let's look at
@@ -1554,6 +1535,38 @@
       <para>This is a slightly trite example, but demonstrates the
       point.</para>
     </sect1>
+
+    <sect1>
+      <title>Changing the location/name of the application CSS file</title>
+
+      <para>As already mentioned, the default for the application
+      <acronym>CSS</acronym> file is in
+      <filename>WEB-INF/application.css</filename>. If for any reason you want
+      to change this, you can do so by subclassing
+      <classname>IsisWicketApplication</classname> and overriding the
+      <methodname>newIsisWicketModule()</methodname> method.</para>
+
+      <para>For example, to use <filename>css/myapp.css</filename> (under
+      <filename>WEB-INF</filename>) you would write:</para>
+
+      <programlisting>public class MyApplication extends IsisWicketApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
+      new AbstractModule() {
+        @Override
+        protected void configure() {
+          bindConstant().annotatedWith(ApplicationCssUrl.class).to("css/myapp.css");
+        }
+      }
+    );
+  }
+}</programlisting>
+
+      <para>Your custom application should then be registered in
+      <filename>web.xml</filename>, as described in <xref
+      linkend="sec.CustomizingTheStartup" />.</para>
+    </sect1>
   </chapter>
 
   <chapter>
@@ -1634,7 +1647,7 @@
 
       <para></para>
 
-      <para>There is further discussion on </para>
+      <para>There is further discussion on</para>
     </sect1>
 
     <sect1>

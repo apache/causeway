@@ -28,9 +28,12 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
@@ -40,9 +43,6 @@ import org.apache.isis.core.runtime.runner.IsisModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 
 /**
@@ -75,6 +75,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     // Initialization
     // /////////////////////////////////////////////////////
 
+    @Override
     public void contextInitialized(final ServletContextEvent servletContextEvent) {
         try {
         ServletContext servletContext = servletContextEvent.getServletContext();
@@ -96,6 +97,9 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         addConfigurationResourcesForWebApps(isisConfigurationBuilder);
         addConfigurationResourcesForDeploymentType(isisConfigurationBuilder,
                 deploymentType);
+        addConfigurationResourcesForViewers(isisConfigurationBuilder,
+            servletContext);
+        
         isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
         isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
@@ -185,10 +189,31 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         }
     }
 
+    private void addConfigurationResourcesForViewers(
+        final IsisConfigurationBuilder configurationLoader,
+        final ServletContext servletContext) {
+        addConfigurationResourcesForContextParam(configurationLoader, servletContext, "isis.viewers");
+        addConfigurationResourcesForContextParam(configurationLoader, servletContext, "isis.viewer");
+    }
+
+    private void addConfigurationResourcesForContextParam(final IsisConfigurationBuilder configurationLoader,
+        final ServletContext servletContext, final String name) {
+        final String viewers = servletContext.getInitParameter(name);
+        if(viewers==null) {
+            return;
+        }
+        for (String viewer : viewers.split(",")) {
+            configurationLoader.addConfigurationResource("viewer_" + viewer + ".properties",
+                NotFoundPolicy.CONTINUE);
+        }
+    }
+
+
     // /////////////////////////////////////////////////////
     // Destroy
     // /////////////////////////////////////////////////////
 
+    @Override
     public void contextDestroyed(final ServletContextEvent ev) {
         LOG.info("server shutting down");
         ServletContext servletContext = ev.getServletContext();

@@ -54,9 +54,9 @@
 	color: #A66144;
 	background-color: #C4D9EA;
 	text-decoration:none;
-	-moz-border-radius: 6px;
+/*	-moz-border-radius: 6px; 
 	-webkit-border-radius: 6px;
-	border-radius: 6px;
+	border-radius: 6px; */
 	}
 	
 .menuh a:hover, .menuh p:hover 						/* menu on mouse-over  */
@@ -76,9 +76,9 @@
 	background-image: url(navdown_secondarydark.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	-moz-border-radius: 6px;
+/*	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	border-radius: 6px;
+	border-radius: 6px; */
 	}
 
 .menuh a.top-parent:hover, .menuh p.top-parent:hover  /* attaches down-arrow to all top-parents */
@@ -153,6 +153,9 @@ span.menuh li li li li:hover ul
 
 
 
+li.cssSubMenuItem p.disabled {
+	color: gray;
+}
 
 
 /** TODO: tidy up this gunk, was experimenting in inlining; it may not be needed */

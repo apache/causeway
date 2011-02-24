@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 /**
  * Implemented by all objects that have been viewed as per {@link WrapperFactory#wrap(Object)}.
  */
-public interface WrapperObject<T> {
+public interface WrapperObject {
 
     /**
      * Programmatic equivalent of invoking save for a transient object (that is, like hitting the <i>save</i> button

@@ -31,7 +31,7 @@ public class DefaultAndChoicesTest extends AbstractTest {
 
     @Test
     public void defaults() {
-        final Object[] defaultPlaceOrder = custJsVO.defaultPlaceOrder();
+        final Object[] defaultPlaceOrder = custJsWO.defaultPlaceOrder();
         assertThat(defaultPlaceOrder.length, is(2));
     }
 

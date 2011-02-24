@@ -30,7 +30,7 @@ import com.google.inject.Inject;
  * Implementation of {@link IsisSystemFactory} that uses {@link InstallerLookup} to convert the names
  * of components into actual component instances.
  */
-public class IsiSsystemUsingInstallersFactory implements IsisSystemFactory {
+public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
 
     private final InstallerLookup installerLookup;
 
@@ -39,7 +39,7 @@ public class IsiSsystemUsingInstallersFactory implements IsisSystemFactory {
     // //////////////////////////////////////////////////////////
 
     @Inject
-    public IsiSsystemUsingInstallersFactory(final InstallerLookup installerLookup) {
+    public IsisSystemThatUsesInstallersFactory(final InstallerLookup installerLookup) {
         this.installerLookup = installerLookup;
     }
 

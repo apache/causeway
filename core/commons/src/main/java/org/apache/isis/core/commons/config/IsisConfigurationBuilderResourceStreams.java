@@ -88,7 +88,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     // ////////////////////////////////////////////////////////////
 
     public IsisConfigurationBuilderResourceStreams() {
-        this(new ResourceStreamSourceFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
+        this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
     }
 
     public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource resourceStreamSource) {
@@ -99,6 +99,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource... resourceStreamSources) {
         ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
         for (ResourceStreamSource rss : resourceStreamSources) {
+            if(rss==null) {continue;}
             composite.addResourceStreamSource(rss);
         }
         this.resourceStreamSource = composite;

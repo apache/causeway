@@ -22,7 +22,7 @@ package org.apache.isis.alternatives.security.file.authentication;
 
 public class FileAuthenticationConstants {
 	
-	public static final String PASSWORDS_FILE = "passwords";
+	public static final String PASSWORDS_FILE = "security_file.passwords";
 
 	private FileAuthenticationConstants() {}
 

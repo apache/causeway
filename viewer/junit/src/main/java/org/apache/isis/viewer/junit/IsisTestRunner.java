@@ -28,25 +28,23 @@ import org.jmock.Mockery;
 import org.junit.internal.runners.InitializationError;
 import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.internal.runners.MethodRoadie;
+import org.junit.internal.runners.TestClass;
 import org.junit.internal.runners.TestMethod;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
-import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.Splash;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.junit.internal.IsisSystemUsingInstallersWithinJunit;
@@ -71,12 +69,23 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         mockeryField = findFieldAndMakeAccessible(testClass, Mockery.class);
     }
 
+    private static String getConfigDir(Class<?> javaClass) {
+        final ConfigDir fixturesAnnotation = javaClass.getAnnotation(ConfigDir.class);
+        if (fixturesAnnotation != null) {
+            return fixturesAnnotation.value();
+        }
+        return null;
+    }
+
     @Override
     protected void invokeTestMethod(final Method method, final RunNotifier notifier) {
 
+        final TestClass testClass = getTestClass();
+        final String configDirIfAny = getConfigDir(testClass.getJavaClass());
+
     	final Description description = methodDescription(method);
     	
-        IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault();
+        IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault(configDirIfAny);
         isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, ""+true); // switch off splash
         
         InstallerLookupDefault installerLookup = new InstallerLookupDefault(getClass());
@@ -91,7 +100,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
 
             // TODO: replace with regular IsisSystem and remove this subclass.
             system = new IsisSystemUsingInstallersWithinJunit(
-                    deploymentType, installerLookup, getTestClass());
+                    deploymentType, installerLookup, testClass);
 
             system.init();
             

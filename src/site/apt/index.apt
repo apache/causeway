@@ -64,6 +64,20 @@ Where to Start?
   <Apache Isis>.  To keep things manageable, we've tried to scope information 
   closest to where it's relevant.  To help guide you through the
   framework, we've also prepared a {{{./where-to-start.html}where to start}}.
+  If you want to drill into detail, you can either follow the links in the menu
+  on the left, and/or you can click on the map to the modules.  
+
+Promoting Apache Isis
+
+  If you've spent some time playing with Isis and would like to promote it 
+  within your organization (at a Brown Bag lunch, say) then we have some 
+  presentation material for you to use.  The material includes speaker notes 
+  and is available as a {{{./presentations/IntroducingApacheIsis.pptx}PPTX}} 
+  and {{{./presentations/IntroducingApacheIsis.ppt}PPT}} (Microsoft), an  
+  {{{./presentations/IntroducingApacheIsis.odp}ODP}} (OpenDocument) and also 
+  as a PDF ({{{./presentations/IntroducingApacheIsis-slides.pdf}slides}} and  
+  {{{./presentations/IntroducingApacheIsis-notes.pdf}notes}}).  Feel free to 
+  edit them to your needs.
 
 Disclaimer
   

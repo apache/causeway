@@ -35,31 +35,31 @@ public class MemberReadTest extends AbstractTest {
 
     @Test
     public void value() {
-        assertThat(custJsVO.getFirstName(), equalTo("Richard"));
+        assertThat(custJsWO.getFirstName(), equalTo("Richard"));
     }
 
     @Test
     public void valueWhenNull() {
         custJsDO.setFirstName(null);
-        assertThat(custJsVO.getFirstName(), nullValue());
+        assertThat(custJsWO.getFirstName(), nullValue());
     }
 
     @Test
     public void association() {
-        assertThat(custJsVO.getCountryOfBirth(), equalTo(countryGbrDO));
+        assertThat(custJsWO.getCountryOfBirth(), equalTo(countryGbrDO));
     }
 
     @Test
     public void associationWhenNull() {
         custJsDO.setCountryOfBirth(null);
-        assertThat(custJsVO.getCountryOfBirth(), nullValue());
+        assertThat(custJsWO.getCountryOfBirth(), nullValue());
     }
 
     @Test
     public void collectionContainsWhenDoesAndDoesNot() {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.addToVisitedCountries(countryUsaDO);
-        final List<Country> visitedCountries = custJsVO.getVisitedCountries();
+        final List<Country> visitedCountries = custJsWO.getVisitedCountries();
         assertThat(visitedCountries.contains(countryGbrDO), is(true));
         assertThat(visitedCountries.contains(countryUsaDO), is(true));
         assertThat(visitedCountries.contains(countryAusDO), is(false));
@@ -67,7 +67,7 @@ public class MemberReadTest extends AbstractTest {
 
     @Test
     public void collectionSizeWhenEmpty() {
-        assertThat(custJsVO.getVisitedCountries().size(), is(0));
+        assertThat(custJsWO.getVisitedCountries().size(), is(0));
     }
 
     @Test
@@ -75,12 +75,12 @@ public class MemberReadTest extends AbstractTest {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.addToVisitedCountries(countryUsaDO);
 
-        assertThat(custJsVO.getVisitedCountries().size(), is(2));
+        assertThat(custJsWO.getVisitedCountries().size(), is(2));
     }
 
     @Test
     public void isEmptySizeWhenEmpty() {
-        assertThat(custJsVO.getVisitedCountries().isEmpty(), is(true));
+        assertThat(custJsWO.getVisitedCountries().isEmpty(), is(true));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class MemberReadTest extends AbstractTest {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.addToVisitedCountries(countryUsaDO);
 
-        assertThat(custJsVO.getVisitedCountries().isEmpty(), is(false));
+        assertThat(custJsWO.getVisitedCountries().isEmpty(), is(false));
     }
 
 }
