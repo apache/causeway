@@ -13,6 +13,11 @@
         <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>scimpi</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.apache.isis.viewer.scimpi.servlet.DispatcherServlet</servlet-class>

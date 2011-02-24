@@ -10,6 +10,8 @@
 
 	<name>Quickstart Wicket Viewer</name>
 	<artifactId>quickstart-viewer-wicket</artifactId>
+    
+    <packaging>war</packaging>
 
 	<properties>
 		<jetty.version>6.1.4</jetty.version>
@@ -51,8 +53,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart-fixture</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
 
 		<!-- Wicket Viewer -->
