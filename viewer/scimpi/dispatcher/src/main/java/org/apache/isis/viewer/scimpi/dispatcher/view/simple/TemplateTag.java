@@ -29,7 +29,8 @@ public class TemplateTag implements ElementProcessor {
     }
 
     public void process(Request request) {
-        request.appendHtml("<!--  apply template " + request.getOptionalProperty("file") + " -->");
+        // REVIEW this make IE8 render poorly as the browser doesn't think a DOCTYPE is provided, causing it to run in quirk mode 
+//        request.appendHtml("<!--  zz apply template " + request.getOptionalProperty("file") + " -->");
     }
 
 }
