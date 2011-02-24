@@ -19,6 +19,10 @@
 
 package org.apache.isis.example.claims.junit;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.example.claims.dom.claim.ClaimRepository;
 import org.apache.isis.example.claims.dom.employee.Employee;
@@ -30,9 +34,6 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
 @Services({ @Service(ClaimRepositoryDefault.class), @Service(EmployeeRepositoryDefault.class) })
@@ -72,7 +73,7 @@ public abstract class AbstractTest {
     @SuppressWarnings("unchecked")
     protected <T> T unwrapped(T obj) {
         if (obj instanceof WrapperObject) {
-            WrapperObject<?> wrapperObject = (WrapperObject<?>) obj;
+            WrapperObject wrapperObject = (WrapperObject) obj;
             return (T) wrapperObject.wrapped();
         }
         return obj;

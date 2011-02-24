@@ -32,8 +32,8 @@
 
 		<!-- this project's dependencies -->
 		<dependency>
-			<groupId>org.apache.isis.support</groupId>
-            <artifactId>prototype-quickrun</artifactId>
+			<groupId>org.apache.isis.examples.apps</groupId>
+            <artifactId>claims-quickrun</artifactId>
             <version>0.1.0-incubating-SNAPSHOT</version>
         </dependency>
 
