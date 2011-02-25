@@ -28,7 +28,6 @@ import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.core.runtime.web.WebAppSpecification;
 import org.apache.isis.core.webapp.IsisSessionFilter;
 import org.apache.isis.core.webapp.StaticContentFilter;
-import org.apache.isis.core.webapp.servlets.RedirectServlet;
 import org.apache.isis.core.webapp.servlets.ResourceServlet;
 import org.apache.isis.viewer.html.servlet.ControllerServlet;
 import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
@@ -83,13 +82,6 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
                         MapUtils.asMap("CacheTime", "86400"),
                         STATIC_CONTENT);
                 webAppSpec.addServletSpecification(ResourceServlet.class, STATIC_CONTENT );
-
-                // this is slightly different from the web.xml in the archetype, and doesn't
-                // redirect from '/', only from '/xxx' (ie need to type something after the '/')  
-                webAppSpec.addServletSpecification(
-                        RedirectServlet.class, 
-                        MapUtils.asMap("redirectTo", LOGON_PAGE),
-                        "/" );
 
                 final String resourceBaseDir = getConfiguration().getString(HtmlViewerConstants.VIEWER_HTML_RESOURCE_BASE_KEY);
                 if (resourceBaseDir != null) {
