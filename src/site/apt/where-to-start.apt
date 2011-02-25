@@ -17,12 +17,35 @@
 
 
 
-Where's to Start?
+Where to Start?
 
-  There's quite a lot to <Apache Isis>, with lots of optional components.  To 
-  keep things manageable, all Isis documentation about these components is 
-  scoped closest along with that component.  That means that 
-  any given documentation is likely to have just the information you 
+  There's quite a lot to <Apache Isis>, with lots of optional components.  
+  But you can get up and working quickly just by running our quickstart
+  archetype:
+
++------------------------------------------------------------
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.support \
+    -D archetypeArtifactId=quickstart-archetype \
+    -D archetypeCatalog=https://repository.apache.org/content/groups/snapshots-group
+
++------------------------------------------------------------
+
+  The {{{./quickstart-app.html}quickstart app}} page has an overview 
+  of the generated application and how to run it.
+
+  Note: <currently the archetype is only available from the Apache snapshot
+  repository; hence the need to specify the archetypeCatalog property.  When 
+  we get our first release out, the archetype will be available in the 
+  Maven central repo and this property will not be required>.
+
+Documentation
+
+  Over and above running the archetype, you'll probably want to read some 
+  documentation to figure out what Isis offers.  To keep things manageable, 
+  all Isis documentation about these components is scoped closest along with 
+  that component.  That means that any given documentation is likely to have 
+  just the information you 
   require to use or configure that component (it also makes it easier for us
   to maintain those documents).
   
@@ -46,27 +69,13 @@ Where's to Start?
   
 What Else is There?  
   
-  Isis comes with a couple of Maven archetypes to help you get started quickly: 
-  
-  * the {{{./support/archetypes/demo/index.html}demo}} archetype
-  
-    is a multi-module archetype that creates a small but complete demo <Apache Isis> application (<<<Customer>>>,
-    <<<Order>>>, <<<OrderItem>>>, <<<Product>>>).  It has child modules for all of the main 
-    components, giving you a good idea of how they are meant to work in practice.
-   
-  * the {{{./support/archetypes/isis-app/index.html}isis-app}} archetype
-  
-    is almost identical to the <demo> archetype, but has a very minimal domain model.
-    The idea is that you use this archetype to create your project, then delete (or ignore) the child modules that
-    you don't care about.
-
-  []
-  
-  You might also be interested in the {{{./support/domain/index.html}domain}} library, which 
-  provides off-the-shelf domain services and value types integrations for you to reuse.  
-
-  Finally, to speed up your coding we provide some templates and other help for IDEs; check out
-  the {{{./ide-support.html}IDE support}} page.  
+  To speed up your coding we provide some templates and other help for IDEs; 
+  check out the {{{./ide-support.html}IDE support}} page.  
     
+  In the future, we also hope to provide a selection of off-the-shelf domain 
+  services and value types integrations for you to reuse; these will be hosted
+  within the {{{./support/domain/index.html}domain}} library. (Until then, why 
+  not contribute some of your own ? ;-).
+
    
   []

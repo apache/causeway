@@ -1,0 +1,312 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+QuickStart App
+
+  We recommend that you use the quickstart app to get up and running quickly.
+  You can generate this just by running the quickstart archetype:
+
++------------------------------------------------------------
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.support \
+    -D archetypeArtifactId=quickstart-archetype \
+    -D archetypeCatalog=https://repository.apache.org/content/groups/snapshots-group
++------------------------------------------------------------
+
+  Note: <currently the archetype is only available from the Apache snapshot
+  repository; hence the need to specify the archetypeCatalog property.>
+
+  You'll prompted for some properties:
+  
+  * enter a groupId
+  
+    * eg com.mycompany.mygroup
+    
+  * enter an artifactId
+  
+    * eg myapp
+    
+  * enter a version
+  
+    * eg 1.0-SNAPSHOT
+    
+    * can generally leave as default
+    
+    []
+    
+  * enter a package
+  
+    * eg com.mycompany.mygroup
+    
+    * can generally leave as default
+    
+  * Confirm the entry
+    
+  []
+  
+  The archetype generation process will then run; it only takes a few seconds.
+
+  Switch into the root directory of your newly generated app:
++------------------------------------------------------------
+cd myapp   
++------------------------------------------------------------
+  
+  Where 'myapp' is the artifactId entered above.
+
+
+App Structure
+  
+  The generated app is a very simple application consisting of a single domain 
+  object for tracking to-do items.  The intention is not to showcase all of
+  Isis capabilities; rather it is to allow you to very easily modify the
+  generated application (eg rename "ToDoItem" to "Customer") without having 
+  to waste time deleting lots of generated code.
+  
+*----------------------+---------------------------------------------------------+
+| Module               | Description                                             |
+*----------------------+---------------------------------------------------------+
+| myapp                | The parent (aggregator) module                          |
+*----------------------+---------------------------------------------------------+
+| myapp-dom            | The domain object model, consisting of ToDoItem and     |
+|                      | ToDoItemRepository interface.                           |
+*----------------------+---------------------------------------------------------+
+| myapp-fixture        | Domain object fixtures used for initializing the system |
+|                      | when being demo'ed or for unit testing.                 |
+*----------------------+---------------------------------------------------------+
+| myapp-objstore-dflt  | Implementation of ToDoItemRepository, for the default   |
+|                      | (in-memory) object store.                               |
+*----------------------+---------------------------------------------------------+
+| myapp-quickrun       | Run the application during development/prototyping      |
+|                      | using either the                                        |
+|                      | {{{./viewer/dnd/index.html}drag-n-drop viewer}} or      |
+|                      | using the {{{./viewer/html/index.html}HTML viewer}}.    |
+*----------------------+---------------------------------------------------------+
+| myapp-tests-bdd      | Run domain object tests using Isis'                     |
+|                      | {{{./viewer/bdd/concordion/index.html}integration}}     |
+|                      | with the {{{http://concordion.org}Concordion}} BDD      |
+|                      | framework.                                              |
+*----------------------+---------------------------------------------------------+
+| myapp-tests-junit    | Run domain object tests using Isis'                     |
+|                      | {{{./viewer/junit/index.html}custom test runner}}       |
+|                      | for {{{http://junit.org}JUnit}} runner                  |
+*----------------------+---------------------------------------------------------+
+| myapp-viewer-html    | Run as a webapp (from web.xml) using the                |
+|                      | {{{./viewer/html/index.html}HTML viewer}}               |
+*----------------------+---------------------------------------------------------+
+| myapp-viewer-restful | Run as a webapp (from web.xml) using the                |
+|                      | {{{./viewer/restful/index.html}RESTful viewer}}         |
+*----------------------+---------------------------------------------------------+
+| myapp-viewer-scimpi  | Run as a webapp (from web.xml) using the                |
+|                      | {{{./viewer/scimpi/index.html}Scimpi viewer}}           |
+*----------------------+---------------------------------------------------------+
+| myapp-viewer-wicket  | Run as a webapp (from web.xml) using the                |
+|                      | {{{./viewer/wicket/index.html}Wicket viewer}}           |
+*----------------------+---------------------------------------------------------+
+
+  A typical application will likely only use one or maybe two of the viewers.
+  If that's the case, you can simply delete the modules that you don't require.  
+  
+  The most significant omission from the generated application is that it is
+  configured only to support the default in-memory object store.  What this
+  means is that any changes you make to objects will not be persisted between
+  runs.  Isis does provide several 
+  {{{./alternatives/objectstore/index.html}alternative object store}}
+  implementations which you are free to start configuring for yourself as
+  you gain more experience.  
+
+Compiling the App
+
+  Start off by using maven to compile the app:
+  
++------------------------------------------------------------
+mvn clean install
++------------------------------------------------------------
+  
+  All being well, the application should compile.  This may take a little
+  while for the first time as modules are brought down from the remote
+  repo.  
+
+Import into an IDE
+
+  You can use any IDE that supports Maven; the Isis developers tend to use
+  Eclipse but NetBeans and IntelliJ are equally as good. 
+
+  In Eclipse, use File > Import > Maven > Existing Maven Project, and navigate
+  to the root (myapp) directory.
+
+Exploring the App
+
+  As already noted, the application consists of a very simple domain model
+  consisting for a task manager app, consisting of a single domain object,
+  ToDoItem, and a single repository, ToDoItemRepository.
+  
+  * open up ToDoItem and ToDoItemRepository (in the dom module)
+  
+  * open up ToDoItemsFixture (in the fixture module)
+  
+    This is used to initialize the in-memory object store between runs.
+    
+  * open up ToDoItemRepositoryDefault (in the objstore-dflt module)
+  
+    This is an implementation of the repository that delegates to the in-memory 
+    object store
+    
+  * open up the isis.properties file, used to bootstrap Isis.
+  
+    You'll find this file either in config/ directory (for the quickrun module)
+    or in the WEB-INF directory (for the webapp viewers).
+    
+    The two most important items in this file are the isis.services key and the 
+    isis.fixtures keys; the former points to the repository(s) implementation, 
+    the latter to the fixture(s) data.
+
+  []
+    
+Running the app using the DnD viewer (quickrun module)
+
+  To run the application using the {{{./viewer/dnd/index.html}DnD viewer}}, go 
+  to the quickrun/ide/eclipse/launch directory and then use
+  Run As > quickstart_quickrun_dnd.launch.
+  
+  Note: <the archetype currently does not provide an out-of-the-box launch
+  configuration for other IDEs.  However, if you open the Eclipse .launch file 
+  you'll see that all we are doing is running org.apache.isis.Isis with some 
+  command line arguments, so hopefully this is easy enough to reproduce in
+  other IDEs>. 
+
+Running the app using the HTML viewer (quickrun / viewer-html modules)
+
+  The application can also be run using the {{{./viewer/html/index.html}HTML viewer}},
+  which provides a basic, non-customizable web view.  This can be run either:
+  
+  * from the quickrun module's ide/eclipse/launch directory, using 
+    Run As > quickstart_quickrun_html.launch.
+    
+    Then browse to {{{http://localhost:8080/logon.app}http://localhost:8080/logon.app}}
+    
+  * from the viewer-html module, using the configured web.xml.  The app can
+    then be run using any of the following:
+  
+    * using viewer-html/ide/eclipse/launch/quickstart-viewer-html.launch.  Note
+      that this isn't the same as the quickrun module's, because it invokes
+      a different class (org.apache.isis.WebServer rather than 
+      org.apache.isis.Isis).
+    
+    * mvn jetty:run 
+    
+    * using your IDE's webmodule support (eg Eclipse's WTP support lets the 
+      application be run using Run As > Run On Server)
+      
+    []
+  
+    Then browse to {{{http://localhost:8080/myapp-quickviewer-html}http://localhost:8080/myapp-quickviewer-html}}
+    (where 'myapp' is the artifactId that you entered when generating the app).
+
+Running the app using the Scimpi viewer (viewer-scimpi module)
+
+  The application can also be run using the {{{./viewer/scimpi/index.html}Scimpi viewer}}.
+  This exposes the domain model as a webapp.  Like all Isis viewers, a default
+  view is provided but each object's view can be customized using a set of tags
+  if required.  
+
+  The Scimpi viewer is run from the viewer-scimpi module, using the configured 
+  web.xml.  As for the other webapps, it can be run using the Eclipse .launch 
+  file, using jetty:run or using your IDE's webmodule support (eg Eclipse WTP).
+    
+  When started, browse to {{{http://localhost:8080/myapp-quickviewer-scimpi}http://localhost:8080/myapp-quickviewer-scimpi}}
+  (where 'myapp' is the artifactId that you entered when generating the app).
+
+Running the app using the Wicket viewer (viewer-wicket module)
+
+  The application can also be run using the {{{./viewer/wicket/index.html}Wicket viewer}}.
+  This exposes the domain model as a webapp, using 
+  {{{http://wicket.apache.org}Apache Wicket}} as the enabling web framework.  
+  Like all Isis viewers, a default view is provided, but each object's view can
+  be customized using custom Wicket components if required.  
+
+  The Wicket viewer is run from the viewer-wicket module, using the configured 
+  web.xml.  As for the other webapps, it can be run using the Eclipse .launch 
+  file, using jetty:run or using your IDE's webmodule support (eg Eclipse WTP).
+    
+  When started, browse to http://localhost:8080/myapp-quickviewer-wicket (where 
+  'myapp' is the artifactId that you entered when generating the app).
+  
+Running the app using the RESTful viewer (quickrun / viewer-restful modules)
+
+  The application can also be run using the {{{./viewer/restful/index.html}RESTful viewer}}.
+  This exposes the domain model as a set of resources, in XHTML format.  This
+  means that the RESTful resources can be consumed directly by a browser as
+  well as by a custom RESTful client.
+
+  The RESTful viewer can be run either:
+  
+  * from the quickrun module's ide/eclipse/launch directory, using 
+    Run As > quickstart_quickrun_html.launch.
+    
+    Then browse to {{{http://localhost:8080/}http://localhost:8080/}}
+    
+  * from the viewer-restful module, using the configured web.xml.  
+  
+    As for the other webapps, it can be run using the Eclipse .launch file,
+    using jetty:run or using your IDE's webmodule support (eg Eclipse WTP).
+    
+    Then browse to {{{http://localhost:8080/myapp-quickviewer-restful}http://localhost:8080/myapp-quickviewer-restful}} (where 
+    'myapp' is the artifactId that you entered when generating the app).
+    
+    []
+  
+  []
+  
+  Note: <only firefox is currently supported as a RESTful client.  HTTP PUTs
+  and DELETEs are supported using a small amount of Javascript>.
+  
+
+Running the domain object tests under JUnit (tests-junit module)
+
+  Isis provides the means to test domain object logic using a 
+  {{{./viewer/junit/index.html}custom runner}} for {{{http://junit.org}JUnit}}.
+  
+  The tests are in the tests-junit module and can be run using your IDE's
+  JUnit support.  Alternatively, use 'mvn test'.
+  
+
+Running the domain object tests under Concordion (tests-bdd module)
+
+  Isis provides the means to test domain object logic using an 
+  {{{./viewer/bdd/index.html}integration}} with the
+  {{{http://concordion.org}Concordion}} BDD framework.
+  
+  Concordion tests are written as XHTML; the Concordion framework then uses
+  annotations within the XHTML to call into (what Concordion calls) "fixture" 
+  code, written in Java.  The tests can be found in 
+  src/test/resources/viewer/bdd/stories (in the tests-bdd module).   
+  
+  Normally the developer would need to write the fixtures called by Concordion.  
+  The Isis integration however provides these fixtures already, so using
+  BDD testing in Concordion/Isis amounts to annotating the XHTML to call the
+  pre-defined fixtures (eg to invoke an action or check the value of a 
+  property). 
+  
+  Concordion itself integrates with JUnit, so the tests are run just by
+  using your IDE's JUnit support.  Alternatively, use 'mvn test'.
+  
+  Once the tests have run output for the tests will be generated in 
+  /tmp/concordion/viewer/bdd/stories.  These will be marked up versions of the 
+  the original scenarios.
+    

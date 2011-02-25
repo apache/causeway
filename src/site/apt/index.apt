@@ -19,7 +19,8 @@ Welcome to Apache Isis
 
  <Apache Isis> is a full-stack open source application development framework, 
  designed to let you rapidly develop domain-driven business enterprise 
- applications.
+ applications.  It's built with Maven and has a 
+ {{{./where-to-start.html}quickstart archetype}} to get you going quickly.
 
  The framework is designed around two patterns:
  
