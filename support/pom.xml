@@ -24,9 +24,11 @@
         <pdf.outputName>isis-support-guide</pdf.outputName>
     </properties>
 
+<!--
     <modules>
-        <module>archetypes</module>
+        <module>quickstart-archetype</module>
     </modules>
+-->
 
     <reporting>
         <plugins>
