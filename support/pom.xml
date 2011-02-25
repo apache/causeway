@@ -24,11 +24,9 @@
         <pdf.outputName>isis-support-guide</pdf.outputName>
     </properties>
 
-<!--
     <modules>
         <module>quickstart-archetype</module>
     </modules>
--->
 
     <reporting>
         <plugins>

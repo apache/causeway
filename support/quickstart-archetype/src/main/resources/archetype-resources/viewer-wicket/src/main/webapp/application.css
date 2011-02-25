@@ -1,0 +1,12 @@
+#header {
+    background: url('images/banner.png') no-repeat scroll left center transparent;
+}
+div.entitySummary > label.entityTitle {
+	color: maroon;
+	font-size: xx-large;
+	font-weight: bolder;
+}
+.ToDoItem-description .scalarName {
+  color: maroon;
+  font-weight: bolder;
+}

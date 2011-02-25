@@ -1,0 +1,72 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+    xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>Restful Claims</display-name>
+
+    <listener>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>restful</param-value>
+    </context-param>
+
+	<context-param>
+		<param-name>javax.ws.rs.Application</param-name>
+		<param-value>org.apache.isis.viewer.restful.viewer.RestfulApplication</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>IsisSessionFilter</filter-name>
+		<filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
+        <init-param>
+            <!-- trusted client, so no authentication required -->
+            <param-name>authenticationSessionLookupStrategy</param-name>
+            <param-value>org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
+        </init-param>
+	</filter>
+
+    <filter-mapping>
+    	<filter-name>IsisSessionFilter</filter-name>
+    	<url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
+    
+    <servlet>
+        <servlet-name>RestEasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Resource</servlet-name>
+        <servlet-class>org.apache.isis.core.webapp.servlets.ResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RestEasy</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+
+</web-app>

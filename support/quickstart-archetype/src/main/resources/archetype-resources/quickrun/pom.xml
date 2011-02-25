@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+    	<groupId>${groupId}</groupId>
+    	<artifactId>${rootArtifactId}</artifactId>
+		<version>${version}</version>
+	</parent>
+
+	<artifactId>${artifactId}</artifactId>
+	<name>Quickstart Quick Run</name>
+
+	<properties>
+		<jetty.version>6.1.4</jetty.version>
+	</properties>
+
+	<dependencies>
+		<!-- other modules in this project -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>${rootArtifactId}-fixture</artifactId>
+		</dependency>
+
+		<!-- isis core -->
+        <dependency>
+			<groupId>org.apache.isis.core</groupId>
+            <artifactId>webserver</artifactId>
+        </dependency>
+
+        <!-- isis defaults -->
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>profilestore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        
+        <!-- isis viewers -->
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>restful-viewer</artifactId>
+        </dependency>
+
+        <!-- isis alternatives -->
+		<dependency>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
+		</dependency>
+
+        <!-- JUnit Viewer dependencies -->
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>junit</artifactId>
+            <version>0.1.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        
+		<!--  JETTY DEPENDENCIES FOR TESTING  -->
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-management</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+</project>

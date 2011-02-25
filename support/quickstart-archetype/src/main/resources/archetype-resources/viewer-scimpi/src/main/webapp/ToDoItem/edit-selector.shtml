@@ -1,0 +1,10 @@
+<swf:page-title>Edit <swf:title icon="no" /></swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>Edit <swf:title /></h2>
+<swf:edit>
+	<swf:selector field="claimant" object="service:claimants" method="findEmployees" title="Employees..."/>
+	<swf:selector field="approver" object="service:claimants" method="findEmployees" title="Employees..."/>
+</swf:edit>
+
+

@@ -1,0 +1,263 @@
+2011-02-10 08:31:40,674 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.security.file.authentication.FileAuthenticationManagerInstaller
+2011-02-10 08:31:40,677 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.security.file.authorization.FileAuthorizationManagerInstaller
+2011-02-10 08:31:40,679 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.security.ldap.authorization.LdapAuthorizationManagerInstaller
+2011-02-10 08:31:40,680 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.security.ldap.authentication.LdapAuthenticationManagerInstaller
+2011-02-10 08:31:40,682 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.transport.sockets.client.EncodingOverSocketsProxyInstaller
+2011-02-10 08:31:40,683 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.transport.sockets.server.EncodingOverSocketsViewerInstaller
+2011-02-10 08:31:40,685 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.transport.sockets.client.SerializingOverSocketsProxyInstaller
+2011-02-10 08:31:40,686 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.transport.sockets.server.SerializingOverSocketsViewerInstaller
+2011-02-10 08:31:40,687 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.marshalling.xstream.client.XStreamOverSocketsProxyDecoratorInstaller
+2011-02-10 08:31:40,689 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.marshalling.xstream.server.XStreamOverSocketsViewerInstaller
+2011-02-10 08:31:40,690 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.transport.http.client.EncodingOverHttpProxyInstaller
+2011-02-10 08:31:40,692 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.remoting.transport.http.server.EncodingOverHttpRemotingViewerInstaller
+2011-02-10 08:31:40,699 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.objectstore.sql.SqlPersistorInstaller
+2011-02-10 08:31:40,701 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.objectstore.nosql.mongo.MongoPersistorMechanismInstaller
+2011-02-10 08:31:40,703 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.objectstore.nosql.file.FileServerPersistorMechanismInstaller
+2011-02-10 08:31:40,706 [InstallerLookupDefault main       INFO ]  component installer not found; it will not be available: org.apache.isis.alternatives.profilestore.xml.XmlUserProfileStoreLoaderInstaller
+2011-02-10 08:31:41,031 [IsisConfigurationBuilderResourceStreams main       INFO ]  added isis.deploymentType=EXPLORATION
+2011-02-10 08:31:41,031 [IsisConfigurationBuilderResourceStreams main       INFO ]  added isis.viewer=dnd
+2011-02-10 08:31:41,045 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,046 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,047 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,048 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,048 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,049 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,050 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,050 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,051 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,052 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,052 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,053 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,054 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,054 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,055 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,056 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,057 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,058 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,058 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,059 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,059 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,061 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,062 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,062 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,063 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,064 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,065 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,066 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,066 [IsisSystemAbstract   main       INFO ]  initialising Isis System
+2011-02-10 08:31:41,066 [IsisSystemAbstract   main       INFO ]  working directory: D:\SVN\ai\isis\trunk\support\prototype\quickrun\.
+2011-02-10 08:31:41,066 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,067 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,068 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,069 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,070 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,070 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,071 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,072 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,073 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,074 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,074 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:41,075 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,075 [IsisSystemAbstract   main       INFO ]  resource stream source: [file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,080 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,080 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,084 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,085 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,085 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,086 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,087 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,088 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,089 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,089 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,090 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:41,091 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,092 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,092 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,105 [TemplateImageLoaderAwt main       INFO ]  images to be loaded from images/
+2011-02-10 08:31:41,219 [TemplateImageLoaderAwt main       INFO ]  image loaded from resources: file:/D:/SVN/ai/isis/trunk/core/runtime/target/classes/images/splash-logo.png
+2011-02-10 08:31:41,283 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,283 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,284 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,285 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,286 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,287 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,288 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,288 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,289 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,290 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,291 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:41,292 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,293 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,293 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,294 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor.properties' not found, but not needed
+2011-02-10 08:31:41,295 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,305 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,305 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,306 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,307 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,308 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,308 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,309 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,310 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,311 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,311 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,312 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:41,313 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,313 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,314 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,315 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor.properties' not found, but not needed
+2011-02-10 08:31:41,316 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,316 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,317 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,317 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,318 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,319 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,320 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,321 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,321 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,324 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,325 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,326 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,327 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,328 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:41,329 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,329 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,330 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,331 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor.properties' not found, but not needed
+2011-02-10 08:31:41,332 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,332 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,333 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,334 [IsisConfigurationBuilderResourceStreams main       INFO ]  'reflector.properties' not found, but not needed
+2011-02-10 08:31:41,335 [IsisConfigurationBuilderResourceStreams main       INFO ]  'reflector_java.properties' not found, but not needed
+2011-02-10 08:31:41,335 [IsisConfigurationBuilderResourceStreams main       INFO ]  'facet-decorator.properties' not found, but not needed
+2011-02-10 08:31:41,336 [IsisConfigurationBuilderResourceStreams main       INFO ]  'facet-decorator_transaction.properties' not found, but not needed
+2011-02-10 08:31:41,494 [ServicesFromConfiguration main       INFO ]  installing org.apache.isis.core.runtime.persistence.services.config.ServicesFromConfiguration
+2011-02-10 08:31:41,494 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:41,494 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:41,495 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:41,496 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:41,496 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:41,497 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:41,498 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:41,498 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:41,499 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:41,500 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,500 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:41,501 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,502 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,502 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,503 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor.properties' not found, but not needed
+2011-02-10 08:31:41,504 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor_in-memory.properties' not found, but not needed
+2011-02-10 08:31:41,504 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:41,505 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:41,506 [IsisConfigurationBuilderResourceStreams main       INFO ]  'reflector.properties' not found, but not needed
+2011-02-10 08:31:41,506 [IsisConfigurationBuilderResourceStreams main       INFO ]  'reflector_java.properties' not found, but not needed
+2011-02-10 08:31:41,507 [IsisConfigurationBuilderResourceStreams main       INFO ]  'facet-decorator.properties' not found, but not needed
+2011-02-10 08:31:41,508 [IsisConfigurationBuilderResourceStreams main       INFO ]  'facet-decorator_transaction.properties' not found, but not needed
+2011-02-10 08:31:41,508 [IsisConfigurationBuilderResourceStreams main       INFO ]  'services-installer.properties' not found, but not needed
+2011-02-10 08:31:41,509 [IsisConfigurationBuilderResourceStreams main       INFO ]  'services-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:41,509 [ServicesFromConfiguration main       INFO ]  creating service todo.ToDoItemRepositoryDefault
+2011-02-10 08:31:41,536 [TemplateImageLoaderAwt main       INFO ]  images to be loaded from images/
+2011-02-10 08:31:41,680 [FacetedMethodsBuilder main       INFO ]  introspecting objstore.dflt.todo.ToDoItemRepositoryDefault
+2011-02-10 08:31:41,745 [FacetedMethodsBuilder main       INFO ]  introspecting org.apache.isis.applib.AbstractFactoryAndRepository
+2011-02-10 08:31:41,747 [FacetedMethodsBuilder main       INFO ]  introspecting org.apache.isis.applib.AbstractService
+2011-02-10 08:31:41,748 [FacetedMethodsBuilder main       INFO ]  introspecting org.apache.isis.applib.AbstractContainedObject
+2011-02-10 08:31:41,748 [FacetedMethodsBuilder main       INFO ]  introspecting java.lang.Object
+2011-02-10 08:31:41,758 [FacetedMethodsBuilder main       INFO ]  introspecting java.lang.String
+2011-02-10 08:31:41,811 [FacetedMethodsBuilder main       INFO ]  introspecting dom.todo.ToDoItemRepository
+2011-02-10 08:31:41,813 [FacetedMethodsBuilder main       INFO ]  introspecting java.util.List
+2011-02-10 08:31:41,818 [FacetedMethodsBuilder main       INFO ]  introspecting dom.todo.ToDoItem
+2011-02-10 08:31:41,823 [FacetedMethodsBuilder main       INFO ]  introspecting org.apache.isis.applib.AbstractDomainObject
+2011-02-10 08:31:41,824 [FacetedMethodsBuilder main       INFO ]  introspecting boolean
+2011-02-10 08:31:41,902 [FacetedMethodsBuilder main       INFO ]  introspecting void
+2011-02-10 08:31:41,988 [PersistenceMechanismInstallerAbstract main       INFO ]  installing org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller
+2011-02-10 08:31:42,011 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:42,022 [InMemoryObjectStore  main       INFO ]  creating memory object store
+2011-02-10 08:31:42,032 [UserProfile          main       INFO ]  creating exploration UserProfile for initialisation
+2011-02-10 08:31:42,048 [ObjectStoreTransactionManager main       INFO ]  startTransaction: level 0->1 (no transaction in progress or was previously completed; transaction created)
+2011-02-10 08:31:42,069 [ObjectStoreTransactionManager main       INFO ]  endTransaction: level 1->0
+2011-02-10 08:31:42,069 [ObjectStoreTransactionManager main       INFO ]  endTransaction: committing
+2011-02-10 08:31:42,070 [IsisTransactionAbstract main       INFO ]  commit transaction ObjectStoreTransaction@60c0c8b5[state=IN_PROGRESS,commands=0]
+2011-02-10 08:31:42,070 [FixturesFromConfiguration main       INFO ]    adding fixture fixture.LogonAsSvenFixture
+2011-02-10 08:31:42,072 [FixturesFromConfiguration main       INFO ]    adding fixture fixture.todo.ToDoItemsFixture
+2011-02-10 08:31:42,075 [FixturesInstallerDelegate main       INFO ]  installing fixture: LogonFixture [user: sven, roles: []]
+2011-02-10 08:31:42,076 [ObjectStoreTransactionManager main       INFO ]  startTransaction: level 0->1 (no transaction in progress or was previously completed; transaction created)
+2011-02-10 08:31:42,076 [FixturesInstallerDelegate main       WARN ]  Already specified logon fixture, using latest provided
+2011-02-10 08:31:42,076 [ObjectStoreTransactionManager main       INFO ]  endTransaction: level 1->0
+2011-02-10 08:31:42,076 [ObjectStoreTransactionManager main       INFO ]  endTransaction: committing
+2011-02-10 08:31:42,076 [IsisTransactionAbstract main       INFO ]  commit transaction ObjectStoreTransaction@62fa5ff3[state=IN_PROGRESS,commands=0]
+2011-02-10 08:31:42,076 [FixturesInstallerDelegate main       INFO ]  fixture installed
+2011-02-10 08:31:42,077 [FixturesInstallerDelegate main       INFO ]  installing fixture: fixture.todo.ToDoItemsFixture@23b17d49
+2011-02-10 08:31:42,077 [ObjectStoreTransactionManager main       INFO ]  startTransaction: level 0->1 (no transaction in progress or was previously completed; transaction created)
+2011-02-10 08:31:42,237 [FacetedMethodsBuilder main       INFO ]  introspecting java.lang.Boolean
+2011-02-10 08:31:42,254 [DefaultPersistAlgorithm main       INFO ]  make persistent PojoAdapter@689e8c34[T~~~:TOID#-8000000000000000,specification=ToDoItem,version=null,pojo-toString=dom.todo.ToDoItem$$EnhancerByCGLIB$$3ed02fe4@2a869113,pojo-hash=#2a869113]
+2011-02-10 08:31:42,259 [DefaultPersistAlgorithm main       INFO ]  make persistent PojoAdapter@4d16318b[T~~~:TOID#7FFFFFFFFFFFFFFF,specification=ToDoItem,version=null,pojo-toString=dom.todo.ToDoItem$$EnhancerByCGLIB$$3ed02fe4@8429c19,pojo-hash=#8429c19]
+2011-02-10 08:31:42,261 [DefaultPersistAlgorithm main       INFO ]  make persistent PojoAdapter@5898bbf6[T~~~:TOID#7FFFFFFFFFFFFFFE,specification=ToDoItem,version=null,pojo-toString=dom.todo.ToDoItem$$EnhancerByCGLIB$$3ed02fe4@5b5a5cf,pojo-hash=#5b5a5cf]
+2011-02-10 08:31:42,263 [DefaultPersistAlgorithm main       INFO ]  make persistent PojoAdapter@7b6ee3ec[T~~~:TOID#7FFFFFFFFFFFFFFD,specification=ToDoItem,version=null,pojo-toString=dom.todo.ToDoItem$$EnhancerByCGLIB$$3ed02fe4@178c4a7f,pojo-hash=#178c4a7f]
+2011-02-10 08:31:42,264 [DefaultPersistAlgorithm main       INFO ]  make persistent PojoAdapter@1f47e668[T~~~:TOID#7FFFFFFFFFFFFFFC,specification=ToDoItem,version=null,pojo-toString=dom.todo.ToDoItem$$EnhancerByCGLIB$$3ed02fe4@52c4c57,pojo-hash=#52c4c57]
+2011-02-10 08:31:42,264 [ObjectStoreTransactionManager main       INFO ]  endTransaction: level 1->0
+2011-02-10 08:31:42,264 [ObjectStoreTransactionManager main       INFO ]  endTransaction: committing
+2011-02-10 08:31:42,264 [IsisTransactionAbstract main       INFO ]  commit transaction ObjectStoreTransaction@1ebafdff[state=IN_PROGRESS,commands=5]
+2011-02-10 08:31:42,264 [InMemoryObjectStore  main       INFO ]  execute commands
+2011-02-10 08:31:42,269 [InMemoryObjectStore  main       INFO ]  end execution
+2011-02-10 08:31:42,269 [FixturesInstallerDelegate main       INFO ]  fixture installed
+2011-02-10 08:31:42,269 [PersistenceSessionAbstract main       INFO ]  closing PersistenceSessionObjectStore@1816daa9[objectStore=In-Memory Object Store,persistAlgorithm=Simple Bottom Up Persistence Walker]
+2011-02-10 08:31:42,278 [IsisConfigurationDefault main       INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:42,278 [IsisConfigurationBuilderResourceStreams main       INFO ]  'isis.properties' FOUND
+2011-02-10 08:31:42,279 [IsisConfigurationBuilderResourceStreams main       INFO ]  'web.properties' not found, but not needed
+2011-02-10 08:31:42,279 [IsisConfigurationBuilderResourceStreams main       INFO ]  'exploration.properties' not found, but not needed
+2011-02-10 08:31:42,280 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication.properties' not found, but not needed
+2011-02-10 08:31:42,281 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authentication_noop.properties' not found, but not needed
+2011-02-10 08:31:42,281 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization.properties' not found, but not needed
+2011-02-10 08:31:42,282 [IsisConfigurationBuilderResourceStreams main       INFO ]  'authorization_noop.properties' not found, but not needed
+2011-02-10 08:31:42,282 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store.properties' not found, but not needed
+2011-02-10 08:31:42,283 [IsisConfigurationBuilderResourceStreams main       INFO ]  'user-profile-store_in-memory.properties' not found, but not needed
+2011-02-10 08:31:42,284 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer.properties' not found, but not needed
+2011-02-10 08:31:42,284 [IsisConfigurationBuilderResourceStreams main       INFO ]  'fixtures-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:42,285 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:42,286 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:42,286 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor.properties' not found, but not needed
+2011-02-10 08:31:42,287 [IsisConfigurationBuilderResourceStreams main       INFO ]  'persistor_in-memory.properties' not found, but not needed
+2011-02-10 08:31:42,287 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader.properties' not found, but not needed
+2011-02-10 08:31:42,288 [IsisConfigurationBuilderResourceStreams main       INFO ]  'template-image-loader_awt.properties' not found, but not needed
+2011-02-10 08:31:42,289 [IsisConfigurationBuilderResourceStreams main       INFO ]  'reflector.properties' not found, but not needed
+2011-02-10 08:31:42,290 [IsisConfigurationBuilderResourceStreams main       INFO ]  'reflector_java.properties' not found, but not needed
+2011-02-10 08:31:42,291 [IsisConfigurationBuilderResourceStreams main       INFO ]  'facet-decorator.properties' not found, but not needed
+2011-02-10 08:31:42,291 [IsisConfigurationBuilderResourceStreams main       INFO ]  'facet-decorator_transaction.properties' not found, but not needed
+2011-02-10 08:31:42,292 [IsisConfigurationBuilderResourceStreams main       INFO ]  'services-installer.properties' not found, but not needed
+2011-02-10 08:31:42,293 [IsisConfigurationBuilderResourceStreams main       INFO ]  'services-installer_configuration.properties' not found, but not needed
+2011-02-10 08:31:42,293 [IsisConfigurationBuilderResourceStreams main       INFO ]  'viewer.properties' not found, but not needed
+2011-02-10 08:31:42,294 [IsisConfigurationBuilderResourceStreams main       INFO ]  'viewer_dnd.properties' not found, but not needed
+2011-02-10 08:31:42,319 [PersistenceSessionObjectStore Finalizer  INFO ]  finalizing object manager
+2011-02-10 08:31:42,321 [PojoAdapterHashMap   Finalizer  INFO ]  finalizing hash of pojos
+2011-02-10 08:31:42,360 [TemplateImageLoaderAwt Viewer     INFO ]  image loaded from resources: file:/D:/SVN/ai/isis/trunk/core/runtime/target/classes/images/poweredby-logo.png
+2011-02-10 08:31:42,395 [AwtText              Viewer     INFO ]  font text.title loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=bold,size=12]
+2011-02-10 08:31:42,396 [AwtText              Viewer     INFO ]  font text.title.small loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=bold,size=11]
+2011-02-10 08:31:42,396 [AwtText              Viewer     INFO ]  font text.normal loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=plain,size=11]
+2011-02-10 08:31:42,396 [AwtText              Viewer     INFO ]  font text.control loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=bold,size=11]
+2011-02-10 08:31:42,397 [AwtText              Viewer     INFO ]  font text.status loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=plain,size=11]
+2011-02-10 08:31:42,397 [AwtText              Viewer     INFO ]  font text.icon loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=bold,size=11]
+2011-02-10 08:31:42,397 [AwtText              Viewer     INFO ]  font text.menu loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=plain,size=11]
+2011-02-10 08:31:42,398 [AwtText              Viewer     INFO ]  font text.label.mandatory loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=plain,size=10]
+2011-02-10 08:31:42,398 [AwtText              Viewer     INFO ]  font text.label.disabled loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=plain,size=10]
+2011-02-10 08:31:42,398 [AwtText              Viewer     INFO ]  font text.label loaded as java.awt.Font[family=SansSerif,name=SansSerif,style=plain,size=10]
+2011-02-10 08:31:42,408 [PersistenceMechanismInstallerAbstract Viewer     INFO ]  installing org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller
+2011-02-10 08:31:42,408 [IsisConfigurationDefault Viewer     INFO ]  from :[file system (directory 'config'), file system (directory 'src/main/webapp/WEB-INF'), context loader classpath]
+2011-02-10 08:31:42,408 [InMemoryObjectStore  Viewer     INFO ]  creating memory object store
+2011-02-10 08:31:42,409 [UserProfile          Viewer     INFO ]  creating exploration UserProfile for sven
+2011-02-10 08:31:42,410 [ObjectStoreTransactionManager Viewer     INFO ]  startTransaction: level 0->1 (no transaction in progress or was previously completed; transaction created)
+2011-02-10 08:31:42,410 [ObjectStoreTransactionManager Viewer     INFO ]  endTransaction: level 1->0
+2011-02-10 08:31:42,410 [ObjectStoreTransactionManager Viewer     INFO ]  endTransaction: committing
+2011-02-10 08:31:42,410 [IsisTransactionAbstract Viewer     INFO ]  commit transaction ObjectStoreTransaction@751abd68[state=IN_PROGRESS,commands=0]
+2011-02-10 08:31:42,631 [TemplateImageLoaderAwt AWT-EventQueue-0 INFO ]  image loaded from resources: file:/D:/SVN/ai/isis/trunk/support/prototype/dom/target/classes/images/ToDoItem.gif
+2011-02-10 08:31:46,046 [ObjectStoreTransactionManager nof-background INFO ]  startTransaction: level 0->1 (no transaction in progress or was previously completed; transaction created)
+2011-02-10 08:31:46,053 [PersistenceSessionAbstract nof-background INFO ]  createPersistenceQueryFor: dom.todo.ToDoItem (all instances)
+2011-02-10 08:31:46,059 [PersistenceSessionObjectStore nof-background INFO ]  getInstances matching PersistenceQueryFindAllInstances[spec=ToDoItem]
+2011-02-10 08:31:46,074 [FacetedMethodsBuilder nof-background INFO ]  introspecting java.util.ArrayList
+2011-02-10 08:31:46,077 [FacetedMethodsBuilder nof-background INFO ]  introspecting java.util.AbstractList
+2011-02-10 08:31:46,080 [FacetedMethodsBuilder nof-background INFO ]  introspecting java.util.AbstractCollection
+2011-02-10 08:31:46,085 [ObjectStoreTransactionManager nof-background INFO ]  endTransaction: level 1->0
+2011-02-10 08:31:46,085 [ObjectStoreTransactionManager nof-background INFO ]  endTransaction: committing
+2011-02-10 08:31:46,085 [IsisTransactionAbstract nof-background INFO ]  commit transaction ObjectStoreTransaction@3f406eb6[state=IN_PROGRESS,commands=0]
+2011-02-10 08:31:46,121 [TemplateImageLoaderAwt AWT-EventQueue-0 INFO ]  image loaded from resources: file:/D:/SVN/ai/isis/trunk/viewer/dnd/target/classes/images/busy.png
+2011-02-10 08:31:53,248 [DndViewer            AWT-EventQueue-0 INFO ]  user quit
