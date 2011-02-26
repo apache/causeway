@@ -17,9 +17,19 @@
         <siteBaseDir>../../..</siteBaseDir>
 		<relativeUrl>alternatives/security/file/</relativeUrl>
 
-        <docbkx.title>Apache Isis File Security</docbkx.title>
-        <docbkx.outputName>isis-file-security</docbkx.outputName>
+        <docbkxGuideTitle>Apache Isis File Security</docbkxGuideTitle>
+        <docbkxGuideName>isis-file-security</docbkxGuideName>
 	</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

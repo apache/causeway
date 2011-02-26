@@ -21,8 +21,9 @@
         <siteBaseDir>../../..</siteBaseDir>
 		<relativeUrl>alternatives/progmodel/wrapper/</relativeUrl>
 
-        <docbkx.title>Apache Isis Wrapper Programming Model</docbkx.title>
-        <docbkx.outputName>isis-wrapper</docbkx.outputName>
+        <docbkxGuideTitle>Apache Isis Wrapper Programming Model</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Validating inter-domain object interactions</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-wrapper</docbkxGuideName>
     </properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

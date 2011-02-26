@@ -24,4 +24,7 @@ SQL ObjectStore
  
 Alternatives
 
- A more sophisticated but also more complex alternative is the {{{../jpa/index.html}JPA}} object store.
+ A more sophisticated but also more complex alternative has been implemented
+ using JPA.  However, this is currently not part of Isis because it has a
+ dependency on Hibernate (not compatible with the Apache license).  One
+ option under consideration is to port JPA object store to use OpenJPA. 

@@ -17,9 +17,19 @@
         <siteBaseDir>../../..</siteBaseDir>
 		<relativeUrl>alternatives/security/ldap/</relativeUrl>
 
-        <docbkx.title>Apache Isis LDAP Security</docbkx.title>
-        <docbkx.outputName>isis-ldap-security</docbkx.outputName>
+        <docbkxGuideTitle>Apache Isis LDAP Security</docbkxGuideTitle>
+        <docbkxGuideName>isis-ldap-security</docbkxGuideName>
 	</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

@@ -31,7 +31,7 @@ ObjectStore Implementations
 
   You will have to add appropriate drivers to support connecting to the database server of your choosing.
  
- * {{{./nosql/index.html}SQL object store}}
+ * {{{./nosql/index.html}NoSQL object store}}
 
   The <nosql> object store module ...
 

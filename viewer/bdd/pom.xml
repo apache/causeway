@@ -20,8 +20,7 @@
 		<relativeUrl>viewer/bdd/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis BDD Testing Guide</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Concordion Integration with Apache Isis</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-bdd-viewer</docbkxGuideName>
+        <docbkxGuideName>isis-bdd-integration</docbkxGuideName>
     </properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

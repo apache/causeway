@@ -19,8 +19,8 @@
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>alternatives/remoting/</relativeUrl>
 
-        <docbkx.title>Apache Isis Remoting Guide</docbkx.title>
-        <docbkx.outputName>isis-remoting</docbkx.outputName>
+        <docbkxGuideTitle>Apache Isis Remoting Guide</docbkxGuideTitle>
+        <docbkxGuideName>isis-remoting</docbkxGuideName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
