@@ -25,9 +25,9 @@ Where to Start?
 
 +------------------------------------------------------------
 mvn archetype:generate  \
+    -D archetypeCatalog=https://incubator.apache.org/isis \
     -D archetypeGroupId=org.apache.isis.support \
-    -D archetypeArtifactId=quickstart-archetype \
-    -D archetypeCatalog=https://repository.apache.org/content/groups/snapshots-group
+    -D archetypeArtifactId=quickstart-archetype
 
 +------------------------------------------------------------
 
@@ -35,9 +35,9 @@ mvn archetype:generate  \
   of the generated application and how to run it.
 
   Note: <currently the archetype is only available from the Apache snapshot
-  repository; hence the need to specify the archetypeCatalog property.  When 
-  we get our first release out, the archetype will be available in the 
-  Maven central repo and this property will not be required>.
+  repository; hence the need to specify the archetypeCatalog property to pick
+  it up.  When we get our first release out, the archetype will be available 
+  in the Maven central repo and this property will not be required>.
 
 Documentation
 
@@ -66,6 +66,8 @@ Documentation
   {{{./alternative}alternative}} implementations.  The alternative implementations tend to be
   more sophisticated and offer more in the way of customization.  In either case, you'll find 
   the information you need in the user guides for each of the components.
+  
+  The documentation for all of the components is listed {{{./documentation.html}here}}.
   
 What Else is There?  
   

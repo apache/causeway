@@ -24,13 +24,15 @@ QuickStart App
 
 +------------------------------------------------------------
 mvn archetype:generate  \
+    -D archetypeCatalog=https://incubator.apache.org/isis \
     -D archetypeGroupId=org.apache.isis.support \
-    -D archetypeArtifactId=quickstart-archetype \
-    -D archetypeCatalog=https://repository.apache.org/content/groups/snapshots-group
+    -D archetypeArtifactId=quickstart-archetype
+
 +------------------------------------------------------------
 
   Note: <currently the archetype is only available from the Apache snapshot
-  repository; hence the need to specify the archetypeCatalog property.>
+  repository; hence the need to specify the archetypeCatalog property to pick 
+  it up.>
 
   You'll prompted for some properties:
   
@@ -63,18 +65,19 @@ mvn archetype:generate  \
   The archetype generation process will then run; it only takes a few seconds.
 
   Switch into the root directory of your newly generated app:
+
 +------------------------------------------------------------
 cd myapp   
 +------------------------------------------------------------
   
-  Where 'myapp' is the artifactId entered above.
+  where 'myapp' is the artifactId entered above.
 
 
 App Structure
   
   The generated app is a very simple application consisting of a single domain 
   object for tracking to-do items.  The intention is not to showcase all of
-  Isis capabilities; rather it is to allow you to very easily modify the
+  Isis' capabilities; rather it is to allow you to very easily modify the
   generated application (eg rename "ToDoItem" to "Customer") without having 
   to waste time deleting lots of generated code.
   
@@ -93,9 +96,10 @@ App Structure
 |                      | (in-memory) object store.                               |
 *----------------------+---------------------------------------------------------+
 | myapp-quickrun       | Run the application during development/prototyping      |
-|                      | using either the                                        |
-|                      | {{{./viewer/dnd/index.html}drag-n-drop viewer}} or      |
-|                      | using the {{{./viewer/html/index.html}HTML viewer}}.    |
+|                      | using any of the                                        |
+|                      | {{{./viewer/dnd/index.html}drag-n-drop viewer}},  the   |
+|                      | {{{./viewer/html/index.html}HTML viewer}} or the        |
+|                      | {{{./viewer/restful/index.html}RESTful viewer}}.        |
 *----------------------+---------------------------------------------------------+
 | myapp-tests-bdd      | Run domain object tests using Isis'                     |
 |                      | {{{./viewer/bdd/concordion/index.html}integration}}     |

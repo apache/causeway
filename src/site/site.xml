@@ -17,7 +17,7 @@
 
 		<menu name="Apache Isis">
 			<item name="Home" href="index.html" />
-			<item name="QuickStart" href="where-to-start.html" />
+			<item name="Quick start" href="where-to-start.html" />
 			<item name="Who we are" href="who-we-are.html" />
 			<item name="Roadmap" href="roadmap.html" />
 			<item name="License" href="license.html" />
@@ -27,6 +27,7 @@
 
 		<menu name="Getting Started">
 			<item name="Downloads" href="downloads.html" />
+            <item name="Documentation" href="documentation.html" />
             <item name="IDE Support" href="ide-support.html"/>
             <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
 		</menu>
@@ -41,7 +42,9 @@
                 <item name="Subscribe"
                     href="mailto:isis-dev-subscribe@incubator.apache.org" />
             </item>
+            <!-- 
             <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
+            -->
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
             <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
