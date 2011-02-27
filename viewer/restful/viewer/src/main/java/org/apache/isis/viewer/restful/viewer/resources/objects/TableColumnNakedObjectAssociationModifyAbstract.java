@@ -56,23 +56,26 @@ public abstract class TableColumnNakedObjectAssociationModifyAbstract<T extends 
     private Element form(final T association) {
         final String associationId = association.getId();
         final String formName = getFormNamePrefix() + associationId;
-        final Element form = xhtmlRenderer.form(formName, getHtmlClassAttribute());
-
+        final Element form = xhtmlRenderer.form(formName, getHtmlClassAttribute());        
+        form.addAttribute(new Attribute("class", associationId));
+        
         final String inputFieldName = "proposedValue";
         if (inputField) {
             final Element inputValue = new Element("input");
             inputValue.addAttribute(new Attribute("type", "value"));
-            inputValue.addAttribute(new Attribute("name", inputFieldName));
+            inputValue.addAttribute(new Attribute("name", inputFieldName));            
             form.appendChild(inputValue);
         }
 
         final Element inputButton = new Element("input");
         inputButton.addAttribute(new Attribute("type", "button"));
-        inputButton.addAttribute(new Attribute("value", getFormButtonLabel()));
+        inputButton.addAttribute(new Attribute("value", getFormButtonLabel()));        
         final String servletContextName = getContextPath();
         final String url = MessageFormat.format("{0}/object/{1}", servletContextName, getOidStr());
         inputButton.addAttribute(new Attribute("onclick", invokeJavascript(url, associationId, inputFieldName)));
+        
         form.appendChild(inputButton);
+        form.addAttribute(new Attribute("action", url));
 
         return form;
     }

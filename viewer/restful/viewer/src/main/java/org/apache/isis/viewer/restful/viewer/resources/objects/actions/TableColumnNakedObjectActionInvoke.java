@@ -45,7 +45,7 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
 
         final Element form = xhtmlRenderer.form(formName, HtmlClass.ACTION);
         form.addAttribute(new Attribute("method", "POST"));
-        form.addAttribute(new Attribute("action", uri));
+        form.addAttribute(new Attribute("action", uri));        
 
         renderInputFieldsForParameters(parameters, form);
 
@@ -60,12 +60,13 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
             final String inputFieldName = INPUT_FIELD_NAME_PREFIX + i;
 
             final Element inputLabel = new Element("p");
-            inputLabel.appendChild(parameter.getName());
+            inputLabel.appendChild(parameter.getName());           
             form.appendChild(inputLabel);
 
             final Element inputValue = new Element("input");
             inputValue.addAttribute(new Attribute("type", "value"));
             inputValue.addAttribute(new Attribute("name", inputFieldName));
+            inputValue.addAttribute(new Attribute("class", parameter.getName()));
             form.appendChild(inputValue);
         }
     }

@@ -28,12 +28,15 @@ public final class HtmlClass {
     public static final String ROLE = "nof-role";
 
     public static final String TITLE = "nof-title";
+    public static final String OBJECT = "nof-object";
     public static final String OID = "nof-oid";
     public static final String ACTION_RESULT = "nof-action-result";
 
     public static final String VISIBLE = "nof-visible";
     public static final String USABLE = "nof-usable";
     public static final String VALID = "nof-valid";
+    
+    public static final String OBJECT_SPECS = "nof-object-specs";
 
     private HtmlClass() {}
 

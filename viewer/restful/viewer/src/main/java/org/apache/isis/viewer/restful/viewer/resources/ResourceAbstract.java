@@ -141,7 +141,11 @@ public abstract class ResourceAbstract {
         div.appendChild(ul);
 		return div;
 	}
-    
+	
+	protected Element div(final String htmlClassAttribute){
+		return xhtmlRenderer.div(htmlClassAttribute);
+	}
+	
     protected Element asDivTableFacets(final FacetHolder facetHolder, final String pathPrefix) {
         final Element div = xhtmlRenderer.div_p("Facets", HtmlClass.FACETS);
         final List<Facet> rows = ListUtils.toList(facetHolder.getFacets(FacetFilters.ANY));
@@ -187,6 +191,7 @@ public abstract class ResourceAbstract {
         final String oidStr = getOidStr(nakedObject);
 
         final Element div = new Element("div");
+        div.addAttribute(new Attribute("class", HtmlClass.OBJECT_SPECS));
         final Element table = new Element("table");
         table.addAttribute(new Attribute("border", "1"));
         div.appendChild(table);

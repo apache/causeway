@@ -82,22 +82,30 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
+        
+        // object div
+        final Element objectDiv = div(HtmlClass.OBJECT);
+        xhtml.appendToBody(objectDiv);
 
         // title & Oid
-        final Element div = asDivTableObjectDetails(nakedObject);
-        xhtml.appendToBody(div);
+        final Element objectSpecsDiv = asDivTableObjectDetails(nakedObject);
+        xhtml.appendToDiv(objectDiv, objectSpecsDiv);
+        //xhtml.appendToBody(div);
 
         // properties (in line table)
         final Element propertiesTableEl = asDivTableProperties(getSession(), nakedObject);
-        xhtml.appendToBody(propertiesTableEl);
+        xhtml.appendToDiv(objectDiv, propertiesTableEl);
+        //xhtml.appendToBody(propertiesTableEl);
 
         // collections
         final Element collectionsDivEl = asDivTableCollections(getSession(), nakedObject);
-        xhtml.appendToBody(collectionsDivEl);
+        xhtml.appendToDiv(objectDiv, collectionsDivEl);
+        //xhtml.appendToBody(collectionsDivEl);
 
         // actions
         final Element actionsDivEl = asDivTableActions(getSession(), nakedObject);
-        xhtml.appendToBody(actionsDivEl);
+        xhtml.appendToDiv(objectDiv, actionsDivEl);
+        //xhtml.appendToBody(actionsDivEl);
 
         return xhtml.toXML();
     }

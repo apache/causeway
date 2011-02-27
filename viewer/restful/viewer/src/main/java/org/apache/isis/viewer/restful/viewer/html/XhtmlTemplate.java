@@ -73,7 +73,14 @@ public class XhtmlTemplate {
         }
         return this;
     }
-
+    
+    public Element appendToDiv(final Element div, final Element... elements){
+    	for (final Element element: elements){
+    		div.appendChild(element);
+    	}
+    	return div;
+    }
+    
 	public Document getDocument() {
 		Document document = new Document(html);
 		return document;
