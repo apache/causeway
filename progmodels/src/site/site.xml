@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+
+	<body>
+		<breadcrumbs>
+			<item name="ProgModels" href="index.html"/>
+		</breadcrumbs>
+
+		<menu name="Programming Models">
+			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
+		</menu>
+
+        <menu name="Programming Modules" ref="modules"/>
+
+        <menu name="Maven Reports" ref="reports" />
+	</body>
+</project>

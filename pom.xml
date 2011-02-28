@@ -1272,6 +1272,8 @@
             <modules>
                 <module>applib</module>
                 <module>core</module>
+                <module>progmodels</module>
+                <module>security</module>
                 <module>runtimes</module>
                 <module>defaults</module>
                 <module>alternatives</module>
@@ -1293,6 +1295,8 @@
                 <module>site-skin</module>
                 <module>applib</module>
                 <module>core</module>
+                <module>progmodels</module>
+                <module>security</module>
                 <module>runtimes</module>
                 <module>defaults</module>
                 <module>alternatives</module>
@@ -1339,6 +1343,30 @@
             </activation>
             <modules>
                 <module>core</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>modules-progmodels</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>progmodels</value>
+                </property>
+            </activation>
+            <modules>
+                <module>progmodels</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>modules-security</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>security</value>
+                </property>
+            </activation>
+            <modules>
+                <module>security</module>
             </modules>
         </profile>
         <profile>
