@@ -4,31 +4,33 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
+		<artifactId>runtimes</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>runtimes</artifactId>
+	<groupId>org.apache.isis.runtimes</groupId>
+	<artifactId>dflt</artifactId>
 
-	<name>Isis Runtimes</name>
+	<name>Isis Default Runtime</name>
 
 	<description>
-		Runtime implementations.
+		Default runtime implementation.
 	</description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>runtimes/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>runtimes/dflt/</relativeUrl>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
+<!--
 	<modules>
-		<module>dflt</module>
-		<module>embedded</module>
+		<module>runtime</module>
 	</modules>
+-->
 
 	<reporting>
 		<plugins>
