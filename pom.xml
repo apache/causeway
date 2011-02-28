@@ -72,13 +72,6 @@
         <docbkxGuideName>isis-contributors-guide</docbkxGuideName>    
         
 
-        <!-- used by maven-pdf-plugin for site PDFs; override as required -->
-        <pdf.title>Apache Isis</pdf.title>
-        <pdf.outputName>apache-isis</pdf.outputName>
-
-        <!-- used by maven-pdf-plugin for site PDFS; do not change -->
-        <pdf.author>Apache Isis Contributors</pdf.author>
-
         <!-- should not need to be modified -->
         <trunkBaseDir>${project.build.directory}/${siteBaseDir}/..</trunkBaseDir>
         <checkstyle.configLocation>${trunkBaseDir}/src/site/resources/codequality/checkstyle.xml</checkstyle.configLocation>
@@ -491,40 +484,6 @@
                     <!-- goal:war binds to phase:package -->
                 </plugin>
 
-                <!-- PDF (from site docs) -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-pdf-plugin</artifactId>
-                    <version>1.1</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.doxia</groupId>
-                            <artifactId>doxia-module-docbook-simple</artifactId>
-                            <version>1.1.3</version>
-                        </dependency>
-                    </dependencies>
-                    <!-- goal:pdf has no binding; explicitly bind to phase:site -->
-                    <executions>
-                        <execution>
-                            <id>pdf</id>
-                            <phase>site</phase>
-                            <goals>
-                                <goal>pdf</goal>
-                            </goals>
-                            <configuration>
-                                <!-- arrange for output to be with other 
-                                    reports generated in site phase -->
-                                <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
-                                <includeReports>false</includeReports>
-                                <!-- REVIEW: want to set to 'false', but 
-                                    causes trunk, trunk/core to fail fatally (as opposed to failing silently 
-                                    otherwise...) -->
-                                <aggregate>true</aggregate>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-
                 <!-- PDF from DocBook (configured to build user guide and 
                     developers guide): docbkx hosted at http://docbkx-tools.sourceforge.net/docbkx-maven-plugin -->
                 <plugin>
@@ -767,10 +726,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pdf-plugin</artifactId>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1317,6 +1272,7 @@
             <modules>
                 <module>applib</module>
                 <module>core</module>
+                <module>runtimes</module>
                 <module>defaults</module>
                 <module>alternatives</module>
                 <module>viewer</module>
@@ -1337,6 +1293,7 @@
                 <module>site-skin</module>
                 <module>applib</module>
                 <module>core</module>
+                <module>runtimes</module>
                 <module>defaults</module>
                 <module>alternatives</module>
                 <module>viewer</module>
@@ -1382,6 +1339,18 @@
             </activation>
             <modules>
                 <module>core</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>modules-runtimes</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>runtimes</value>
+                </property>
+            </activation>
+            <modules>
+                <module>runtimes</module>
             </modules>
         </profile>
         <profile>
