@@ -17,20 +17,25 @@
 
 		<menu name="Apache Isis">
 			<item name="Home" href="index.html" />
-			<item name="Quick start" href="where-to-start.html" />
 			<item name="Who we are" href="who-we-are.html" />
-			<item name="Roadmap" href="roadmap.html" />
 			<item name="License" href="license.html" />
 		</menu>
 		
-		<menu name="Project Info" ref="reports"/>
-
 		<menu name="Getting Started">
+            <item name="Quick start" href="where-to-start.html" />
 			<item name="Downloads" href="downloads.html" />
             <item name="Documentation" href="documentation.html" />
+            <item name="Screencasts" href="screencasts.html"/>
             <item name="IDE Support" href="ide-support.html"/>
             <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
 		</menu>
+
+        <menu name="The Naked Objects Pattern">
+            <item name="An Introduction" href="naked-objects-pattern.html" />
+            <item name="OOUIs" href="oouis.html" />
+            <item name="Benefits" href="naked-objects-pattern-benefits.html" />
+            <item name="Case Study" href="naked-objects-case-study.html" />
+        </menu>
 
 		<menu name="Community and Help">
 			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
@@ -48,14 +53,10 @@
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
             <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
+            <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
 
-        <menu name="The Naked Objects Pattern">
-            <item name="An Introduction" href="naked-objects-pattern.html" />
-            <item name="OOUIs" href="oouis.html" />
-            <item name="Benefits" href="naked-objects-pattern-benefits.html" />
-            <item name="Case Study" href="naked-objects-case-study.html" />
-        </menu>
+        <menu name="Project Info" ref="reports"/>
 
 		<!-- This 'global' menu is inherited -->
 		<menu name="Isis Modules" inherit="bottom" href="core/index.html">
@@ -126,6 +127,7 @@
                     <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
                 </item>
             </item>
+            <item name="Isis Roadmap" href="roadmap.html" />
 		</menu>
 
 

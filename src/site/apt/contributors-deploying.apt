@@ -19,11 +19,12 @@
 
 Deploying Apache Isis
 
-  These notes are for Apache Isis contributors with responsibility for deploying [[NAME]] (either the code artifact via <<<mvn deploy>>> or the site via <<<mvn site-deploy>>>).
+  These notes are for Isis contributors with responsibility for 
+  deploying Isis (either the code artifact via <<<mvn deploy>>> or the site via <<<mvn site-deploy>>>).
   
   NOTE: plan is to move this content into the DocBook "contributors' guide"
 
-Software
+Prereqs
 
   The instructions given here assume you are running on a UNIX type machine.
   If you instead use Windows, then we recommend that you install
@@ -61,5 +62,15 @@ chere -i
    
 Process
 
-  For now, we'll just refer to the {{{http://incubator.apache.org/bval/cwiki/release-process.html}write-up put together by Donald Woods}}.
+  For now, we'll just refer to the wiki documentation:
+  
+  * {{{https://cwiki.apache.org/confluence/display/ISIS/ManualDeployProcessForSnapshots}Manual deploy process for snapshots}}
+  
+  * {{{https://cwiki.apache.org/confluence/display/ISIS/ManualDeployProcessForSite}Manual deploy process for sites}}
+  
+  []
+  
+  The {{{https://cwiki.apache.org/confluence/display/ISIS/Index}Isis wiki}} 
+  also documents a number of other processes.  These will be formalized 
+  into documentation when they are proven and stable.
   

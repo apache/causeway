@@ -20,16 +20,37 @@
  Downloads
  -----
 
-Downloads
+Snapshot Release
 
-  We are currently still working towards v0.1 of Apache Isis.  When released, Isis will be available through the Maven central repo.
+  We are currently still working towards v0.1 of Apache Isis. When v0.1 is 
+  released, Isis will be available through the Maven central repo.
   
-  In the meantime, we invite you to check out the source from Subversion and build it yourself:
+  However, we are releasing snapshots through the 
+  {{{https://repository.apache.org/index.html#view-repositories;snapshots-group~browsestorage/}Apache Snapshot repository}}.  
+  We also have a quickstart app to get up and running quickly, also uploaded
+  to the snapshot repo.  You can generate a running app using:
+
++------------------------------------------------------------
+mvn archetype:generate  \
+    -D archetypeCatalog=http://incubator.apache.org/isis \
+    -D archetypeGroupId=org.apache.isis.support \
+    -D archetypeArtifactId=quickstart-archetype
+
++------------------------------------------------------------
+
+  The {{{./quickstart-app.html}quickstart app}} page has an overview 
+  of the generated application and how to run it.
+  
+Building Isis yourself
+  
+  We also invite you to check out the source from Subversion and build it 
+  yourself:
   
 ----
 svn co https://svn.apache.org/repos/asf/incubator/isis/trunk .
 mvn clean install
 ----
 
-  See the contributors pages (at the bottom of the left hand menu) for more details. 
+  See the contributors pages (at the bottom of the left hand menu) for more 
+  details. 
   
