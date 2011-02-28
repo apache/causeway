@@ -37,6 +37,8 @@
             <item name="Case Study" href="naked-objects-case-study.html" />
         </menu>
 
+        <menu name="Project Info" ref="reports"/>
+
 		<menu name="Community and Help">
 			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
             <item name="Mailing List">
@@ -55,8 +57,6 @@
             <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
             <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
-
-        <menu name="Project Info" ref="reports"/>
 
 		<!-- This 'global' menu is inherited -->
 		<menu name="Isis Modules" inherit="bottom" href="core/index.html">

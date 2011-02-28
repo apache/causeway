@@ -18,9 +18,6 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>alternatives/profilestore/</relativeUrl>
-
-        <pdf.title>Apache Isis Alternative ProfileStores</pdf.title>
-        <pdf.outputName>apache-isis-alternatives-profilestores</pdf.outputName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

@@ -16,9 +16,6 @@
 	<properties>
         <siteBaseDir>..</siteBaseDir>
 		<relativeUrl>viewer/</relativeUrl>
-        
-    	<pdf.title>Apache Isis Viewers</pdf.title>
-    	<pdf.outputName>apache-isis-viewers</pdf.outputName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

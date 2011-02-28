@@ -3,26 +3,26 @@
 
     <parent>
 		<groupId>org.apache.isis</groupId>
-        <artifactId>alternatives</artifactId>
+        <artifactId>runtimes</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.alternatives</groupId>
+	<groupId>org.apache.isis.runtimes</groupId>
 	<artifactId>embedded</artifactId>
     <version>0.1.0-incubating-SNAPSHOT</version>
 
-	<name>Embedded Deployment</name>
+	<name>Embedded Runtime</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>alternatives/embedded/</relativeUrl>
+		<relativeUrl>runtimes/embedded/</relativeUrl>
 
         <wrapper-progmodel.version>0.1.0-incubating-SNAPSHOT</wrapper-progmodel.version>
         <identity-bytecode.version>0.1.0-incubating-SNAPSHOT</identity-bytecode.version>
 
-        <docbkxGuideTitle>Apache Isis Embedded Deployment</docbkxGuideTitle>
+        <docbkxGuideTitle>Apache Isis Embedded Runtime</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-embedded-deployment</docbkxGuideName>
+        <docbkxGuideName>isis-embedded-runtime</docbkxGuideName>
 	</properties>
 
     <build>

@@ -18,9 +18,6 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>alternatives/progmodel/</relativeUrl>
-
-    	<pdf.title>Alternative Programming Models</pdf.title>
-    	<pdf.outputName>alternative-progmodels</pdf.outputName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

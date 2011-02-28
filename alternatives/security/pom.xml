@@ -18,9 +18,6 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>alternatives/security/</relativeUrl>
-
-    	<pdf.title>Alternative Security Implementations</pdf.title>
-    	<pdf.outputName>apache-isis-alternatives-security</pdf.outputName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

@@ -56,7 +56,7 @@
         <isis.alternatives-security-ldap.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-security-ldap.version>
         <isis.alternatives-security-file.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-security-file.version>
 
-        <isis.alternatives-embedded.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-embedded.version>
+        <isis.runtimes-embedded.version>0.1.0-incubating-SNAPSHOT</isis.runtimes-embedded.version>
     </properties>
 
     <build>
@@ -351,11 +351,11 @@
                 <version>${isis.alternatives-remoting-marshalling-xstream.version}</version>
             </dependency>
 
-            <!-- alternatives: embedded -->
+            <!-- runtimes: embedded -->
             <dependency>
-                <groupId>org.apache.isis.alternatives</groupId>
+                <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>embedded</artifactId>
-                <version>${isis.alternatives-embedded.version}</version>
+                <version>${isis.runtimes-embedded.version}</version>
             </dependency>
 
         </dependencies>

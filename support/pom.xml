@@ -19,9 +19,6 @@
 
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>support/</relativeUrl>
-        
-        <pdf.title>Isis Support Guide</pdf.title>
-        <pdf.outputName>isis-support-guide</pdf.outputName>
     </properties>
 
     <modules>
