@@ -25,11 +25,10 @@
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
-<!--
 	<modules>
 		<module>dflt</module>
+		<module>xml</module>
 	</modules>
--->
 
 	<reporting>
 		<plugins>
@@ -69,9 +68,32 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-		</dependencies>
-	</dependencyManagement>
 
+            <dependency>
+                <groupId>org.apache.isis.profilestores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.profilestores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.profilestores</groupId>
+                <artifactId>xml</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.profilestores</groupId>
+                <artifactId>xml</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
 

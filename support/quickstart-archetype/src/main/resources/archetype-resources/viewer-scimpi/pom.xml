@@ -52,8 +52,8 @@
             <artifactId>objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>profilestore</artifactId>
+            <groupId>org.apache.isis.profilestores</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
@@ -74,7 +74,7 @@
             <artifactId>xml</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.alternatives.profilestore</groupId>
+            <groupId>org.apache.isis.profilestores</groupId>
             <artifactId>xml</artifactId>
         </dependency>
         

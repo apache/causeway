@@ -69,9 +69,45 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-		</dependencies>
-	</dependencyManagement>
 
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>wrapper</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>wrapper</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>groovy</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>groovy</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
 
 </project>
 

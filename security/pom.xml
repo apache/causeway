@@ -69,6 +69,44 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>file</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>file</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>ldap</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>ldap</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

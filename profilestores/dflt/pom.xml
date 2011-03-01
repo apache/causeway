@@ -3,17 +3,17 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>defaults</artifactId>
+		<artifactId>profilestores</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.defaults</groupId>
-	<artifactId>profilestore</artifactId>
+	<groupId>org.apache.isis.profilestores</groupId>
+	<artifactId>dflt</artifactId>
 	<name>Default ProfileStore (In-Memory)</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>defaults/profilestore/</relativeUrl>
+		<relativeUrl>profilestores/dflt/</relativeUrl>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

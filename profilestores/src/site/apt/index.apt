@@ -27,4 +27,17 @@ Profile Stores
   viewer implementations, eg to store user preferences, bookmarks or 
   view configurations.
 
+  The implementations available are:
+
+  * {{{./dflt/index.html}Default profile store}}
+
+   The <dflt> (default) profile store stores profiles only in memory, so they
+   are not persisted between sessions.  It is design for testing and 
+   prototyping only.
+
+  * {{{./xml/index.html}XML profile store}}
+
+   The <xml> profile store provides a simple way to persist user profiles to file storage. The format of this file is a proprietary XML schema.
+
   []
+

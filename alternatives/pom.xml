@@ -27,10 +27,7 @@
 
 	<modules>
 		<module>bytecode</module>
-		<module>security</module>
 		<module>objectstore</module>
-		<module>profilestore</module>
-		<module>progmodel</module>
 		<module>remoting</module>
 	</modules>
 

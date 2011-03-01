@@ -42,7 +42,7 @@
         <isis.alternatives-objectstore-sql.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-sql.version>
         <isis.alternatives-objectstore-nosql.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-nosql.version>
 
-        <isis.alternatives-profilestore-xml.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-profilestore-xml.version>
+        <isis.profilestores-xml.version>0.1.0-incubating-SNAPSHOT</isis.profilestores-xml.version>
 
         <!-- used for javassist, identity -->
         <isis.alternatives-bytecode.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-bytecode.version>
@@ -132,8 +132,8 @@
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.defaults</groupId>
-                <artifactId>profilestore</artifactId>
+                <groupId>org.apache.isis.profilestores</groupId>
+                <artifactId>dflt</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
@@ -278,9 +278,9 @@
 
             <!-- alternatives: profilestore: xml -->
             <dependency>
-                <groupId>org.apache.isis.alternatives.profilestore</groupId>
+                <groupId>org.apache.isis.profilestores</groupId>
                 <artifactId>xml</artifactId>
-                <version>${isis.alternatives-profilestore-xml.version}</version>
+                <version>${isis.profilestores-xml.version}</version>
             </dependency>
 
             <!-- alternatives: progmodel: wrapper -->

@@ -36,7 +36,21 @@ Runtimes
 
   []
 
-  The 'dflt' (default) runtime implementation (as inherited originally
+  The implementations available are:
+
+  * {{{./dflt/index.html}Default runtime}}
+
+  The <dflt> (default) runtime implementation (as inherited originally
   from Naked Objects Framework) provides all of these services.  Other
   implementations may provide a subset of these (eg the 'embedded' runtime),
   or provide all of these features but using different technologies.
+
+  * {{{./embedded/index.html}Embedded runtime}}
+
+  The <embedded> runtime allows just the metamodel to be embedded into an
+  application.  It is an enabling module for the wrapper progmodel and
+  the JUnit test support.  It could also be used in tooling such as a
+  Maven validator plugin.
+
+  []
+

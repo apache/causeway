@@ -2,20 +2,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis.alternatives</groupId>
-		<artifactId>profilestore</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>profilestores</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.alternatives.profilestore</groupId>
+	<groupId>org.apache.isis.profilestores</groupId>
 	<artifactId>xml</artifactId>
 	<version>0.1.0-incubating-SNAPSHOT</version>
 
 	<name>XML ProfileStore</name>
 
 	<properties>
-        <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>alternatives/profilestore/xml/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>profilestores/xml/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis XML ProfileStore</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
