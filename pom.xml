@@ -1273,6 +1273,7 @@
                 <module>applib</module>
                 <module>core</module>
                 <module>progmodels</module>
+                <module>profilestores</module>
                 <module>security</module>
                 <module>runtimes</module>
                 <module>defaults</module>
@@ -1296,6 +1297,7 @@
                 <module>applib</module>
                 <module>core</module>
                 <module>progmodels</module>
+                <module>profilestores</module>
                 <module>security</module>
                 <module>runtimes</module>
                 <module>defaults</module>
@@ -1367,6 +1369,18 @@
             </activation>
             <modules>
                 <module>security</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>modules-profilestores</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>profilestores</value>
+                </property>
+            </activation>
+            <modules>
+                <module>profilestores</module>
             </modules>
         </profile>
         <profile>
