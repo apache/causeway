@@ -31,6 +31,11 @@
         <!-- used for applib, core, and defaults -->
         <isis.version>0.1.0-incubating-SNAPSHOT</isis.version>
 
+        <isis.profilestores-xml.version>0.1.0-incubating-SNAPSHOT</isis.profilestores-xml.version>
+
+        <isis.security-ldap.version>0.1.0-incubating-SNAPSHOT</isis.security-ldap.version>
+        <isis.security-file.version>0.1.0-incubating-SNAPSHOT</isis.security-file.version>
+
         <isis.viewer-dnd.version>0.1.0-incubating-SNAPSHOT</isis.viewer-dnd.version>
         <isis.viewer-html.version>0.1.0-incubating-SNAPSHOT</isis.viewer-html.version>
         <isis.viewer-scimpi.version>0.1.0-incubating-SNAPSHOT</isis.viewer-scimpi.version>
@@ -42,19 +47,15 @@
         <isis.alternatives-objectstore-sql.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-sql.version>
         <isis.alternatives-objectstore-nosql.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-nosql.version>
 
-        <isis.profilestores-xml.version>0.1.0-incubating-SNAPSHOT</isis.profilestores-xml.version>
 
         <!-- used for javassist, identity -->
         <isis.alternatives-bytecode.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-bytecode.version>
 
-        <isis.alternatives-progmodel-groovy.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-progmodel-groovy.version>
-        <isis.alternatives-progmodel-wrapper.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-progmodel-wrapper.version>
+        <isis.progmodel-groovy.version>0.1.0-incubating-SNAPSHOT</isis.progmodel-groovy.version>
+        <isis.progmodel-wrapper.version>0.1.0-incubating-SNAPSHOT</isis.progmodel-wrapper.version>
 
         <!-- used for common, transport-sockets, marshalling-encoding, marshalling-serialize -->
         <isis.alternatives-remoting.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-remoting.version>
-
-        <isis.alternatives-security-ldap.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-security-ldap.version>
-        <isis.alternatives-security-file.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-security-file.version>
 
         <isis.runtimes-embedded.version>0.1.0-incubating-SNAPSHOT</isis.runtimes-embedded.version>
     </properties>
@@ -123,24 +124,77 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.defaults</groupId>
-                <artifactId>progmodel</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.defaults</groupId>
                 <artifactId>objectstore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
+
+            <!-- progmodel: dflt -->
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>dflt</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
+            <!-- progmodel: wrapper -->
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>wrapper</artifactId>
+                <version>${isis.progmodel-wrapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>wrapper-applib</artifactId>
+                <version>${isis.progmodel-wrapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>wrapper-metamodel</artifactId>
+                <version>${isis.progmodel-wrapper.version}</version>
+            </dependency>
+
+            <!-- progmodel: groovy -->
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${isis.progmodel-groovy.version}</version>
+            </dependency>
+
+
+            <!-- profilestores: dflt -->
             <dependency>
                 <groupId>org.apache.isis.profilestores</groupId>
                 <artifactId>dflt</artifactId>
                 <version>${isis.version}</version>
             </dependency>
+            
+            <!-- profilestores: xml -->
             <dependency>
-                <groupId>org.apache.isis.defaults</groupId>
-                <artifactId>security</artifactId>
+                <groupId>org.apache.isis.profilestores</groupId>
+                <artifactId>xml</artifactId>
+                <version>${isis.profilestores-xml.version}</version>
+            </dependency>
+
+            <!-- security: dflt -->
+            <dependency>
+                <groupId>org.apache.isis.security</groupId>
+                <artifactId>dflt</artifactId>
                 <version>${isis.version}</version>
             </dependency>
+
+            <!-- security: ldap -->
+            <dependency>
+                <groupId>org.apache.isis.security</groupId>
+                <artifactId>ldap</artifactId>
+                <version>${isis.security-ldap.version}</version>
+            </dependency>
+
+            <!-- security: file -->
+            <dependency>
+                <groupId>org.apache.isis.security</groupId>
+                <artifactId>file</artifactId>
+                <version>${isis.security-file.version}</version>
+            </dependency>
+
 
             <!-- viewer: dnd -->
             <dependency>
@@ -241,20 +295,6 @@
                 <version>${isis.alternatives-bytecode.version}</version>
             </dependency>
 
-            <!-- alternatives: security: ldap -->
-            <dependency>
-                <groupId>org.apache.isis.alternatives.security</groupId>
-                <artifactId>ldap</artifactId>
-                <version>${isis.alternatives-security-ldap.version}</version>
-            </dependency>
-
-            <!-- alternatives: security: ldap -->
-            <dependency>
-                <groupId>org.apache.isis.alternatives.security</groupId>
-                <artifactId>file</artifactId>
-                <version>${isis.alternatives-security-file.version}</version>
-            </dependency>
-
             <!-- alternatives: objectstore: xml -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.objectstore</groupId>
@@ -274,37 +314,6 @@
                 <groupId>org.apache.isis.alternatives.objectstore</groupId>
                 <artifactId>sql</artifactId>
                 <version>${isis.alternatives-objectstore-sql.version}</version>
-            </dependency>
-
-            <!-- alternatives: profilestore: xml -->
-            <dependency>
-                <groupId>org.apache.isis.profilestores</groupId>
-                <artifactId>xml</artifactId>
-                <version>${isis.profilestores-xml.version}</version>
-            </dependency>
-
-            <!-- alternatives: progmodel: wrapper -->
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>wrapper</artifactId>
-                <version>${isis.alternatives-progmodel-wrapper.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>wrapper-applib</artifactId>
-                <version>${isis.alternatives-progmodel-wrapper.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>wrapper-embedded</artifactId>
-                <version>${isis.alternatives-progmodel-wrapper.version}</version>
-            </dependency>
-
-            <!-- alternatives: progmodel: groovy -->
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>groovy</artifactId>
-                <version>${isis.alternatives-progmodel-groovy.version}</version>
             </dependency>
 
             <!-- alternatives: remoting -->

@@ -24,7 +24,7 @@
 
 	<dependencies>
 		<dependency>
-		<groupId>org.apache.isis.alternatives.progmodel</groupId>
+		<groupId>org.apache.isis.progmodels</groupId>
 			<artifactId>groovy-applib</artifactId>
 		</dependency>
 

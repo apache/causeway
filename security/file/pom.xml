@@ -3,18 +3,33 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>defaults</artifactId>
+		<artifactId>security</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.defaults</groupId>
-	<artifactId>progmodel</artifactId>
-	<name>Default ProgModel (Java)</name>
+	<groupId>org.apache.isis.security</groupId>
+	<artifactId>file</artifactId>
+	<version>0.1.0-incubating-SNAPSHOT</version>
+
+	<name>File Security Implementation</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>defaults/progmodel/</relativeUrl>
+		<relativeUrl>security/file/</relativeUrl>
+
+        <docbkxGuideTitle>Apache Isis File Security</docbkxGuideTitle>
+        <docbkxGuideName>isis-file-security</docbkxGuideName>
 	</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

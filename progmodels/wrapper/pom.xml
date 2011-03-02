@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.alternatives</groupId>
-		<artifactId>progmodel</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>progmodels</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.alternatives.progmodel</groupId>
+	<groupId>org.apache.isis.progmodels</groupId>
 	<artifactId>wrapper</artifactId>
 	<version>0.1.0-incubating-SNAPSHOT</version>
 
@@ -18,8 +18,8 @@
 
 
 	<properties>
-        <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>alternatives/progmodel/wrapper/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>progmodels/wrapper/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Wrapper Programming Model</docbkxGuideTitle>
         <docbkxGuideSubTitle>Validating inter-domain object interactions</docbkxGuideSubTitle>

@@ -41,8 +41,8 @@
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>progmodel</artifactId>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
 
 		<dependency>

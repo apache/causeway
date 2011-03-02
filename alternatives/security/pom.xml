@@ -22,11 +22,6 @@
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
-	<modules>
-		<module>ldap</module>
-		<module>file</module>
-	</modules>
-	
     <reporting>
         <plugins>
             <plugin>

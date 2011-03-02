@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.alternatives</groupId>
-		<artifactId>progmodel</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>progmodels</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.alternatives.progmodel</groupId>
+	<groupId>org.apache.isis.progmodels</groupId>
 	<artifactId>groovy</artifactId>
 	<version>0.1.0-incubating-SNAPSHOT</version>
 
@@ -18,8 +18,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>alternatives/progmodel/groovy/</relativeUrl>
+		<siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>progmodels/groovy/</relativeUrl>
 
 		<groovy.version>1.7.2</groovy.version>
 
@@ -50,12 +50,12 @@
 
 			<!-- Groovy Support -->
 			<dependency>
-				<groupId>org.apache.isis.alternatives.progmodel</groupId>
+				<groupId>org.apache.isis.progmodels</groupId>
 				<artifactId>groovy-applib</artifactId>
 				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.alternatives.progmodel</groupId>
+				<groupId>org.apache.isis.progmodels</groupId>
 				<artifactId>groovy-metamodel</artifactId>
 				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>

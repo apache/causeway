@@ -25,11 +25,11 @@
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
-<!--
 	<modules>
 		<module>dflt</module>
+        <module>file</module>
+        <module>ldap</module>
 	</modules>
--->
 
 	<reporting>
 		<plugins>
@@ -72,36 +72,36 @@
 
 
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>dflt</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>dflt</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
             
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>file</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>file</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>ldap</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>ldap</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>

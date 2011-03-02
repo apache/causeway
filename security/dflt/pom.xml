@@ -1,20 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache.isis.alternatives.progmodel</groupId>
-        <artifactId>wrapper</artifactId>
-        <version>0.1.0-incubating-SNAPSHOT</version>
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>security</artifactId>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>wrapper-metamodel</artifactId>
-
-	<name>Wrapper MetaModel</name>
-
+	<groupId>org.apache.isis.security</groupId>
+	<artifactId>dflt</artifactId>
+	<name>Default Security (No-op)</name>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>alternatives/progmodel/wrapper/metamodel/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>security/dflt/</relativeUrl>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
@@ -33,6 +32,7 @@
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
+                            <report>dependency-management</report>
                             <report>dependencies</report>
                             <report>dependency-convergence</report>
                             <report>plugins</report>
@@ -46,43 +46,14 @@
 
 	<dependencies>
 		<dependency>
-            <groupId>org.apache.isis.alternatives.progmodel</groupId>
-			<artifactId>wrapper-applib</artifactId>
-        </dependency>
-
-		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>metamodel</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
-        </dependency>
+		    <artifactId>runtime</artifactId>
+		</dependency>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>runtime</artifactId>
 		    <type>test-jar</type>
 		    <scope>test</scope>
-        </dependency>
-
-		<dependency>
-		    <groupId>org.apache.isis.defaults</groupId>
-			<artifactId>bytecode</artifactId>
-        </dependency>
-
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-		</dependency>
-
 	</dependencies>
-
 </project>

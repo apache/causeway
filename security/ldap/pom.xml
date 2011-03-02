@@ -2,23 +2,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.alternatives</groupId>
+		<groupId>org.apache.isis</groupId>
 		<artifactId>security</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.alternatives.security</groupId>
-	<artifactId>file</artifactId>
+	<groupId>org.apache.isis.security</groupId>
+	<artifactId>ldap</artifactId>
 	<version>0.1.0-incubating-SNAPSHOT</version>
 
-	<name>File Security Implementation</name>
+	<name>LDAP Security Implementation</name>
 
 	<properties>
-        <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>alternatives/security/file/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>security/ldap/</relativeUrl>
 
-        <docbkxGuideTitle>Apache Isis File Security</docbkxGuideTitle>
-        <docbkxGuideName>isis-file-security</docbkxGuideName>
+        <docbkxGuideTitle>Apache Isis LDAP Security</docbkxGuideTitle>
+        <docbkxGuideName>isis-ldap-security</docbkxGuideName>
 	</properties>
 
     <build>

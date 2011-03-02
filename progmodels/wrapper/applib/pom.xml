@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.alternatives.progmodel</groupId>
+        <groupId>org.apache.isis.progmodels</groupId>
         <artifactId>wrapper</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
@@ -14,8 +14,8 @@
     <packaging>jar</packaging>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>alternatives/progmodel/wrapper/applib/</relativeUrl>
+        <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>progmodels/wrapper/applib/</relativeUrl>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>

@@ -25,11 +25,11 @@
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
-<!--
 	<modules>
 		<module>dflt</module>
+        <module>wrapper</module>
+        <module>groovy</module>
 	</modules>
--->
 
 	<reporting>
 		<plugins>
@@ -53,15 +53,16 @@
 		</plugins>
 	</reporting>
 
+    
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>core</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>core</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>defaults</artifactId>

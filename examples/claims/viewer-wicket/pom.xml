@@ -63,8 +63,8 @@
         
         <!-- Isis defaults -->
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>security</artifactId>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
@@ -79,13 +79,13 @@
             <artifactId>bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>progmodel</artifactId>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
 
-        <!-- Isis alternatives -->        
+        <!-- alternative implementations -->        
         <dependency>
-            <groupId>org.apache.isis.alternatives.security</groupId>
+            <groupId>org.apache.isis.security</groupId>
             <artifactId>file</artifactId>
         </dependency>
         

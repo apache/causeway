@@ -65,7 +65,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>wrapper-metamodel</artifactId>
                 <version>${wrapper-progmodel.version}</version>
             </dependency>
@@ -78,13 +78,13 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.alternatives.progmodel</groupId>
+            <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>wrapper-metamodel</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>security</artifactId>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
 
         <dependency>
@@ -110,13 +110,14 @@
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>objectstore</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.isis.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>progmodel</artifactId>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
 
         <dependency>

@@ -76,7 +76,14 @@
                 <scope>import</scope>
             </dependency>
             
-            <!-- TODO: eventually, would like to remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>security</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
@@ -85,7 +92,6 @@
                 <scope>import</scope>
             </dependency>
             
-            <!-- TODO: eventually, would like to remove this dependency -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>runtimes</artifactId>

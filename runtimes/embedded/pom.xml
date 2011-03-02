@@ -64,8 +64,15 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+
 			<dependency>
-				<groupId>org.apache.isis.alternatives.progmodel</groupId>
+				<groupId>org.apache.isis.progmodels</groupId>
 				<artifactId>wrapper-metamodel</artifactId>
 				<version>${wrapper-progmodel.version}</version>
 	        </dependency>
@@ -83,21 +90,20 @@
 			<artifactId>metamodel</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>progmodel</artifactId>
+		<dependency>
+			<groupId>org.apache.isis.progmodels</groupId>
+			<artifactId>wrapper-metamodel</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.alternatives.progmodel</groupId>
-			<artifactId>wrapper-metamodel</artifactId>
+        <dependency>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.alternatives.bytecode</groupId>
             <artifactId>identity</artifactId>
         </dependency>
-
 	</dependencies>
 
 </project>

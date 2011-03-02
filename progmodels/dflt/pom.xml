@@ -2,34 +2,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.alternatives</groupId>
-		<artifactId>security</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>progmodels</artifactId>
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.alternatives.security</groupId>
-	<artifactId>ldap</artifactId>
-	<version>0.1.0-incubating-SNAPSHOT</version>
-
-	<name>LDAP Security Implementation</name>
+	<groupId>org.apache.isis.progmodels</groupId>
+	<artifactId>dflt</artifactId>
+	<name>Default ProgModel (Java)</name>
 
 	<properties>
-        <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>alternatives/security/ldap/</relativeUrl>
-
-        <docbkxGuideTitle>Apache Isis LDAP Security</docbkxGuideTitle>
-        <docbkxGuideName>isis-ldap-security</docbkxGuideName>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>defaults/progmodel/</relativeUrl>
 	</properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
-            </plugin>
-        </plugins>
-    </build>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

@@ -33,6 +33,15 @@
 	<dependencyManagement>
 		<dependencies>
 
+            <!-- TODO: remove if possible -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>profilestores</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
 			<!-- 3rd party dependencies -->
 
 			<!-- download from http://fitnesse.org/fitnesse.jar?responder=releaseDownload&release=20101101 
@@ -60,7 +69,8 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<dependencies>
+    <dependencies>
+    
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>bdd-common</artifactId>
@@ -75,7 +85,6 @@
 			<groupId>org.fitnesse</groupId>
 			<artifactId>fitlibrary</artifactId>
 		</dependency>
-
 	</dependencies>
 
 </project>

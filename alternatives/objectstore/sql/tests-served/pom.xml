@@ -109,11 +109,15 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+        
+        <!-- TODO: remove this dependency -->
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>progmodel</artifactId>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
+            <version>0.1.0-incubating-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
         	<groupId>org.apache.isis.defaults</groupId>
         	<artifactId>bytecode</artifactId>

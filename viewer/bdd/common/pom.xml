@@ -32,8 +32,8 @@
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>security</artifactId>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
 	    <dependency>
 		    <groupId>com.google.guava</groupId>

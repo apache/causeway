@@ -19,14 +19,25 @@
 
 Security
  
-  The <security> module is a parent for the various implementations of
-  a security modules for the framework.
+ The <security> module is the parent for alternative implementations of the 
+ security APIs defined in the {{{../core/index.html}core}} framework.
 
-  Security modules provide:
+  Security implementations provide authentication and 
+  authorization services.  They do not providing services
+  such as auditing, encryption, non-repudiation or confidentiality.
 
-  * authentication
+ * {{{./dflt/index.html}dflt}}
 
-  * authorization
+   The <dflt> (default) implementation is a no-op service that always
+   authenticates and authorizes.  It is designed for testing and prototyping.
 
-  []
+ * {{{./file/index.html}file}}
 
+   The <file> implementation uses simple flat files to store 
+   user account/password (authentication) and permissions (authorization) data.
+
+ * {{{./ldap/index.html}ldap}}
+
+   The <ldap> implementation provides integration with an LDAP provider.
+
+ []
