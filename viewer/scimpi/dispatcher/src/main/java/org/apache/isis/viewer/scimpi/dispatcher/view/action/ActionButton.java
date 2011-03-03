@@ -49,6 +49,7 @@ public class ActionButton extends AbstractElementProcessor {
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         String idName = request.getOptionalProperty(ID, methodName);
         String className = request.getOptionalProperty(CLASS);
+        boolean showMessage = request.isRequested(SHOW_MESSAGE, false);
         String completionMessage = request.getOptionalProperty(MESSAGE);
         
         ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
@@ -75,10 +76,25 @@ public class ActionButton extends AbstractElementProcessor {
             i++;
         }
         
+        
         if (MethodsUtils.isVisibleAndUsable(object, action) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
             write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
         }
+        
+        if (showMessage) {
+            Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
+            if (usable.isVetoed()) {
+                String notUsable = MethodsUtils.isUsable(object, action);
+    
+                if (notUsable != null) {
+                    request.appendHtml("<div class=\"" + className + "-message\" >" + notUsable + "</div>");
+                }
+            }
+        }
+        
+        
+        
         request.popBlockContent();
     }
 
@@ -102,7 +118,7 @@ public class ActionButton extends AbstractElementProcessor {
         RequestContext context = request.getContext();
 
         buttonTitle = buttonTitle != null ? buttonTitle : action.getName();
-
+        
         if (action.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             LOG.info("action not visible " + action.getName());
             return;

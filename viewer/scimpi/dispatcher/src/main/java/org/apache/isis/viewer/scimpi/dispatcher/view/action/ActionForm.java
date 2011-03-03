@@ -188,6 +188,8 @@ public class ActionForm extends AbstractElementProcessor {
                 fields[i].setType(InputField.REFERENCE);
                 fields[i].setHidden(true);
             } else {
+                
+                fields[i].setHelpReference("xxxhelp");
                 ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];
                 FieldFactory.initializeField(context, object, param, optionsForParameter, !param.isOptional(), field);
             }

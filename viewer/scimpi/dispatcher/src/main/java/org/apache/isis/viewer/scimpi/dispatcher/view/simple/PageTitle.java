@@ -25,7 +25,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class PageTitle extends Variable {
     public void process(Request request) {
-        process(request, "title", null, false, Scope.REQUEST);
+        process(request, "title", null, null, false, Scope.REQUEST);
     }
     
     public String getName() {

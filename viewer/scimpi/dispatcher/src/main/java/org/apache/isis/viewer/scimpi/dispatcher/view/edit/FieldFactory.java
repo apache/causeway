@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacet;
@@ -47,6 +48,10 @@ public class FieldFactory {
         field.setDescription(param.getDescription());
         if (param instanceof ObjectMember) {
             field.setHelpReference(((ObjectMember) param).getHelp());
+        } else {
+            HelpFacet helpFacet = param.getFacet(HelpFacet.class);
+            String value = helpFacet.value();
+            field.setHelpReference(value);
         }
         field.setRequired(isRequired);
         field.setHidden(false);

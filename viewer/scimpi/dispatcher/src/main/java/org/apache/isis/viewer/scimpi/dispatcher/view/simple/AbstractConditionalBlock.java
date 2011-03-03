@@ -534,22 +534,19 @@ class TestFieldSet extends Test {
 
 class TestHasRole extends Test {
     boolean test(Request request, String attributeName, String targetId) {
+        String[] requiredRoles = attributeName.split("\\|");
         AuthenticationSession session = IsisContext.getSession().getAuthenticationSession();
-        List<String> roles = session.getRoles();
-        boolean hasMatchingRole = false;
-        for (String role : roles) {
-            if (role.equals(attributeName.trim())) {
-                hasMatchingRole = true;
-                break;
+        List<String> sessionRoles = session.getRoles();
+        for (String sessionRole : sessionRoles) {
+            for (String requiredRole : requiredRoles) {
+                if (requiredRole.trim().equals(sessionRole)) {
+                    return true;
+                }
             }
         }
-        return hasMatchingRole;
+        return false;
     }
 }
-
-
-
-
 
 class TestSet extends Test {
     boolean test(Request request, String attributeName, String targetId) {
