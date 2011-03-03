@@ -19,17 +19,18 @@
 
 Remoting
  
-   The <remoting> module is the parent of a set of submodules that collectively provide a remoting
-   infrastructure for client/server deployments.
+   The <remoting> module is the parent of a set of submodules that 
+   collectively provide a remoting infrastructure for client/server 
+   deployments using the {{{../index.html}default runtime}}.
  
-   Although categorized as an {{{../alternatives/index.html}alternative}} implementation, it 
-   is slightly different to the others in that it has no corresponding module under
-   {{{../defaults/index.html}defaults}}.  Instead, it provides alternative implementations of 
-   several internal APIs that are defined within the {{{../core/index.html}core}} (specifically,
-   <<<ObjectPersistor>>> and <<<Viewer>>>).  It provides implementations of these APIs in order to 
-   allow two instances of the application to interact across the nework in client/server mode.
+   Remoting works by providing implementations of the <<<ObjectPersistor>>> and 
+   <<<Viewer>>> APIs.  The <<<ObjectPersistor>>> implementation is used by the
+   client (abstracting the persistence to a client/server invocation), while
+   the <<<Viewer>>> is used by the server (abstracting away the originator of
+   the request).
    
-   These implementations also define their own APIs, one being the transport protocol, the other a 
-   marshalling mechanism for network interactions.  The <remoting> component both defines these APIs
+   The remoting implementations also define their own APIs, one being the 
+   transport protocol, the other a marshalling mechanism for network 
+   interactions.  The <remoting> component both defines these APIs
    and provides several implementations.
  

@@ -19,10 +19,20 @@
 
 Default Runtime
  
-  The <dflt> runtime module is a parent for the various modules that
-  make up the default runtime implementation.
+  The default runtime module comprises a set of modules that provide
+  for persistence and entity lifecycle management.  They also provide support 
+  for remoting (by an abstraction over the persistence mechanism) and 
+  incorporate a bytecode enhancement API to enable transparent lazy 
+  loading/unit of work tracking.
+  
+  The modules that make up the default runtime are:
+  
+  * {{{runtime.html}runtime}} module, providing the core functionality
+  
+  * {{{webapp.html}webapp}} module, providing the ability to bootstrap the
+    default runtime within a web application
+
+  * {{{webserver.html}webserver}} module, providing the ability to run
+    Isis webapps under a webserver instance (Jetty)
 
   []
-
-  This implementation was originally inherited from the Naked Objects 
-  Framework.

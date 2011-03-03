@@ -31,26 +31,16 @@ Core Framework
 
   * reusable {{{./progmodel/index.html}programming model}} elements
 
-  * {{{./runtime/index.html}runtime}} instance management and persistence
-
-  * reusable components for {{{./webapp/index.html}webapp}}-based viewers
-  
-  * {{{./webserver/index.html}bootstrapping}} support for webapp-based viewers
-
   []
   
-  Across these modules a number of APIs are defined, each of which have 
-  {{{../defaults/index.html}default}} and 
-  {{{../alternatives/index.html}alternative}} implementations:  
+  Across these modules a number of APIs are defined:  
   
-  * persistence (object store API) ({{{../defaults/objectstore/index.html}default}} and {{{../alternatives/objectstore/index.html}alternatives}})  
+  * persistence / entity lifecycle management ({{{../runtimes/index.html}runtimes}} API)  
 
-  * user preferences (profile store API) ({{{../defaults/profilestore/index.html}default}} and {{{../alternatives/profilestore/index.html}alternatives}})
+  * user preferences ({{{../profilestores/index.html}profile store}} API)
   
-  * bytecode enhancement ({{{../defaults/bytecode/index.html}default}} and {{{../alternatives/bytecode/index.html}alternatives}})
+  * authentication and authorization {{{../security/index.html}security}} API)
    
-  * security (authentication and authorization) ({{{../defaults/security/index.html}default}} and {{{../alternatives/security/index.html}alternatives}})
-   
-  * programming model definition ({{{../defaults/progmodel/index.html}default}} and {{{../alternatives/progmodel/index.html}alternatives}})
+  * programming model definitions ({{{../progmodel/index.html}progmodel}} API)
 
   []

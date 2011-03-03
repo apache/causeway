@@ -17,11 +17,16 @@
 
 
 
-Alternative Bytecode Implementations
+Bytecode Implementations
  
  This module is the parent for a
- number of alternative implementations for the bytecode enhancement API
- as defined in the {{{../../core/index.html}core}} framework:
+ number of implementations for the bytecode enhancement API
+ as defined within the {{{../../dflt/index.html}default runtime}}:
+
+ * {{{./dflt/index.html}Javassist}}
+
+   The <dflt> (default) bytecode module provides an implementation of the bytecode
+   enhancement API using {{{http://cglib.sourceforge.net//}CGLib}}.
 
  * {{{./javassist/index.html}Javassist}}
 
