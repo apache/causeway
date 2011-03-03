@@ -44,9 +44,6 @@
 		<module>commons</module>
 		<module>metamodel</module>
         <module>progmodel</module>
-		<module>runtime</module>
-		<module>webapp</module>
-		<module>webserver</module>
 	</modules>
 
 	<build>
@@ -167,44 +164,6 @@
 				<type>test-jar</type>
 			</dependency>
 
-			<!-- runtime -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>runtime</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>runtime</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-				<type>test-jar</type>
-			</dependency>
-
-			<!-- webapp -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>webapp</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>webapp</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-				<type>test-jar</type>
-			</dependency>
-
-			<!-- webserver -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>webserver</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>webserver</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-				<type>test-jar</type>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

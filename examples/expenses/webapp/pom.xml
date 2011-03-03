@@ -110,18 +110,24 @@
 			<version>${project.version}</version>
         </dependency>
 
-		<!-- Isis Core and Defaults -->
+		<!-- Isis Core and Default Runtime -->
 		<dependency>
-			<groupId>org.apache.isis.defaults</groupId>
-			<artifactId>bytecode</artifactId>
+			<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+			<artifactId>dflt</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+			<artifactId>xml</artifactId>
+		</dependency>
+        
+        
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
@@ -134,11 +140,6 @@
 			<artifactId>html</artifactId>
 		</dependency>
         
-        <!-- Isis Alternatives -->
-		<dependency>
-			<groupId>org.apache.isis.alternatives.objectstore</groupId>
-			<artifactId>xml</artifactId>
-		</dependency>
 	</dependencies>
 
 </project>

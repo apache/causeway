@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.isis.runtimes.dflt</groupId>
+        <artifactId>objectstores</artifactId>
+        <version>0.1.0-incubating-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+    <artifactId>sql</artifactId>
+    <version>0.1.0-incubating-SNAPSHOT</version>
+
+    <name>Default Runtime SQL ObjectStore</name>
+
+    <description>
+    	Provides JDBC-based persistence.
+    </description>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>runtimes/dflt/objectstores/sql/</relativeUrl>
+
+        <docbkxGuideTitle>Apache Isis Default Runtime SQL ObjectStore</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-sql-objectstore</docbkxGuideName>
+    </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin}</version>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependency-management</report>
+                            <report>plugins</report>
+                            <report>modules</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+
+	<profiles>
+		<profile>
+			<id>normal</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>persistor</module>
+				<module>tests-common</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>integration-tests</id>
+			<modules>
+				<module>persistor</module>
+				<module>tests-common</module>
+				<module>tests-served</module>
+			</modules>
+		</profile>
+	</profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>sql-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>sql-tests-common</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>sql-tests-common</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.objectstore</groupId>
+                <artifactId>sql-tests-served</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

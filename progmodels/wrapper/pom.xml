@@ -8,6 +8,7 @@
 		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
+
 	<groupId>org.apache.isis.progmodels</groupId>
 	<artifactId>wrapper</artifactId>
 	<version>0.1.0-incubating-SNAPSHOT</version>
@@ -15,7 +16,6 @@
 	<name>Wrapper ProgModel</name>
 
 	<packaging>pom</packaging>
-
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
@@ -65,15 +65,17 @@
         </plugins>
     </reporting>
 
-	<dependencyManagement>
-		<dependencies>
 
-			<!--  ? TODO: it'd be better to use a scope=import on org.apache.isis:defaults ? -->
-			<dependency>
-				<groupId>org.apache.isis.defaults</groupId>
-				<artifactId>bytecode</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
-			</dependency>
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
 			<!-- wrapper applib -->
 			<dependency>

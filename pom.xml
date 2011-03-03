@@ -1272,12 +1272,10 @@
             <modules>
                 <module>applib</module>
                 <module>core</module>
+                <module>runtimes</module>
                 <module>progmodels</module>
                 <module>profilestores</module>
                 <module>security</module>
-                <module>runtimes</module>
-                <module>defaults</module>
-                <module>alternatives</module>
                 <module>viewer</module>
             </modules>
         </profile>
@@ -1296,12 +1294,10 @@
                 <module>site-skin</module>
                 <module>applib</module>
                 <module>core</module>
+                <module>runtimes</module>
                 <module>progmodels</module>
                 <module>profilestores</module>
                 <module>security</module>
-                <module>runtimes</module>
-                <module>defaults</module>
-                <module>alternatives</module>
                 <module>viewer</module>
                 <module>release</module>
                 <module>support</module>
@@ -1348,6 +1344,18 @@
             </modules>
         </profile>
         <profile>
+            <id>modules-runtimes</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>runtimes</value>
+                </property>
+            </activation>
+            <modules>
+                <module>runtimes</module>
+            </modules>
+        </profile>
+        <profile>
             <id>modules-progmodels</id>
             <activation>
                 <property>
@@ -1384,42 +1392,6 @@
             </modules>
         </profile>
         <profile>
-            <id>modules-runtimes</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>runtimes</value>
-                </property>
-            </activation>
-            <modules>
-                <module>runtimes</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-defaults</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>defaults</value>
-                </property>
-            </activation>
-            <modules>
-                <module>defaults</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-viewer</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>viewer</value>
-                </property>
-            </activation>
-            <modules>
-                <module>viewer</module>
-            </modules>
-        </profile>
-        <profile>
             <id>modules-viewers</id>
             <activation>
                 <property>
@@ -1429,18 +1401,6 @@
             </activation>
             <modules>
                 <module>viewer</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-alternatives</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>alternatives</value>
-                </property>
-            </activation>
-            <modules>
-                <module>alternatives</module>
             </modules>
         </profile>
         <profile>

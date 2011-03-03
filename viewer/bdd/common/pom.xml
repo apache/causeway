@@ -18,14 +18,27 @@
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>objectstore</artifactId>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.profilestores</groupId>

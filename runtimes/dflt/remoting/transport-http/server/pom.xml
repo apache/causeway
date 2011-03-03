@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
+		<artifactId>transport-http</artifactId>
+		<version>0.1.0-incubating-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>transport-http-server</artifactId>
+
+	<name>Default Runtime HTTP Transport (Server-side)</name>
+
+	<properties>
+        <siteBaseDir>../../../../..</siteBaseDir>
+		<relativeUrl>runtimes/dflt/remoting/transport-http/server/</relativeUrl>
+	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin}</version>
+                <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
+                            <report>plugins</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
+			<artifactId>webapp</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
+			<artifactId>common</artifactId>
+		</dependency>
+        <dependency>
+            <!-- required for encoding marshalling -->
+            <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
+            <artifactId>marshalling-encode</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <!-- required for serialize marshalling -->
+            <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
+            <artifactId>marshalling-serialize</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+	        <groupId>javax.servlet</groupId>
+	        <artifactId>servlet-api</artifactId>
+	        <scope>provided</scope>
+        </dependency>
+	</dependencies>
+
+</project>

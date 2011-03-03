@@ -60,8 +60,17 @@
         </plugins>
     </reporting>
 
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
 	            <artifactId>scimpi-dispatcher</artifactId>

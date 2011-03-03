@@ -26,11 +26,14 @@
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
-<!--
 	<modules>
 		<module>runtime</module>
+		<module>webapp</module>
+		<module>webserver</module>
+        <module>bytecode</module>
+        <module>objectstores</module>
+        <module>remoting</module>
 	</modules>
--->
 
 	<reporting>
 		<plugins>
@@ -63,16 +66,125 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>defaults</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-		</dependencies>
-	</dependencyManagement>
 
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>runtime</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>runtime</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>webserver</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>webserver</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>webapp</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>webapp</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <!-- bytecode -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>javassist</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>javassist</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <!-- objectstores -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>xml</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>xml</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>sql</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>sql</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>nosql</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>nosql</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
 </project>
 

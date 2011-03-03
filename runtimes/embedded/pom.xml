@@ -6,6 +6,7 @@
         <artifactId>runtimes</artifactId>
         <version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
+    
 
 	<groupId>org.apache.isis.runtimes</groupId>
 	<artifactId>embedded</artifactId>
@@ -70,17 +71,17 @@
                 <artifactId>dflt</artifactId>
                 <version>0.1.0-incubating-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+            </dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.progmodels</groupId>
 				<artifactId>wrapper-metamodel</artifactId>
 				<version>${wrapper-progmodel.version}</version>
 	        </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.bytecode</groupId>
-                <artifactId>identity</artifactId>
-                <version>${identity-bytecode.version}</version>
-            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -101,7 +102,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.alternatives.bytecode</groupId>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>identity</artifactId>
         </dependency>
 	</dependencies>

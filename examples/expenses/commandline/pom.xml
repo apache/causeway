@@ -74,28 +74,6 @@
 			<version>${project.version}</version>
         </dependency>
 
-		<!-- Isis Core and Defaults -->
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>webserver</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.defaults</groupId>
-			<artifactId>bytecode</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>objectstore</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-
         <!-- Isis Viewers -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
@@ -110,11 +88,54 @@
             <artifactId>scimpi-servlet</artifactId>
         </dependency>
         
-        <!-- Isis Alternatives -->
-		<dependency>
-			<groupId>org.apache.isis.alternatives.objectstore</groupId>
-			<artifactId>xml</artifactId>
-		</dependency>
+        <!-- isis runtime -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <!-- isis profilestore implementations -->
+        <dependency>
+            <groupId>org.apache.isis.profilestores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.profilestores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <!-- isis progmodel -->
+        <dependency>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+
+        <!-- isis security implementations -->        
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>file</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        
+        <!-- to run using WebServer -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webserver</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
 	</dependencies>
 
 </project>

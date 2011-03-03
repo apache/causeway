@@ -22,21 +22,23 @@
 			<artifactId>claims-fixture</artifactId>
 		</dependency>
 
-		<!-- isis core -->
         <dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>webserver</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
 
-        <!-- isis defaults -->
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>bytecode</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>objectstore</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.profilestores</groupId>
             <artifactId>dflt</artifactId>
@@ -63,12 +65,6 @@
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>restful-viewer</artifactId>
         </dependency>
-
-        <!-- isis alternatives -->
-		<dependency>
-			<groupId>org.apache.isis.alternatives.objectstore</groupId>
-			<artifactId>xml</artifactId>
-		</dependency>
 
         <!-- JUnit Viewer dependencies -->
         <dependency>

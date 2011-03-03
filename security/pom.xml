@@ -62,13 +62,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>defaults</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
 
 
             <dependency>

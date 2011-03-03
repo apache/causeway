@@ -30,7 +30,7 @@
 			<artifactId>applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>webapp</artifactId>
 		</dependency>
 

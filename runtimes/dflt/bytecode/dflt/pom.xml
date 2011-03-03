@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.runtimes.dflt</groupId>
+		<artifactId>bytecode</artifactId>
+		<version>0.1.0-incubating-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+	<artifactId>dflt</artifactId>
+	<name>Default Runtime Default Bytecode (CgLib)</name>
+
+	<properties>
+        <siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>runtimes/dflt/bytecode/dflt/</relativeUrl>
+	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin}</version>
+                <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
+                            <report>plugins</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+	<dependencies>
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+		    <type>test-jar</type>
+		    <scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

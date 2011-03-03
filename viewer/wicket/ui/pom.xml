@@ -88,18 +88,6 @@
 			<artifactId>wicket-guice</artifactId>
 		</dependency>
 
-        <!-- 
-		<dependency>
-			<groupId>org.guiceyfruit</groupId>
-			<artifactId>guiceyfruit-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.guiceyfruit</groupId>
-			<artifactId>guiceyfruit-junit4</artifactId>
-			<scope>test</scope>
-		</dependency>
-        -->
-
 
 
 		<!-- LOGGING DEPENDENCIES - LOG4J -->

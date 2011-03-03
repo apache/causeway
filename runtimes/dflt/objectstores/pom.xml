@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.runtimes</groupId>
+		<artifactId>dflt</artifactId>
+		<version>0.1.0-incubating-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.runtimes.dflt</groupId>
+	<artifactId>objectstores</artifactId>
+
+	<name>Default Runtime ObjectStores</name>
+
+	<packaging>pom</packaging>
+
+	<properties>
+        <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>runtimes/dflt/objectstores/</relativeUrl>
+	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+	<modules>
+		<module>dflt</module>
+		<module>xml</module>
+		<module>sql</module>
+		<module>nosql</module>
+		<!-- 
+		<module>jpa</module>
+		-->
+	</modules>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin}</version>
+				<inherited>false</inherited>
+				<reportSets>
+					<reportSet>
+						<inherited>false</inherited>
+						<reports>
+                            <report>plugins</report>
+							<report>modules</report>
+                            <report>summary</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>	
+

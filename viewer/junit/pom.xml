@@ -64,22 +64,42 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                <version>${identity-bytecode.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>wrapper-metamodel</artifactId>
                 <version>${wrapper-progmodel.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.bytecode</groupId>
-                <artifactId>identity</artifactId>
-                <version>${identity-bytecode.version}</version>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>wrapper-metamodel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>identity</artifactId>
         </dependency>
 
         <dependency>
@@ -100,29 +120,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>objectstore</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.isis.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.alternatives.bytecode</groupId>
-            <artifactId>identity</artifactId>
         </dependency>
 
         <dependency>

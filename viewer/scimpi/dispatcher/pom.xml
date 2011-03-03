@@ -44,8 +44,9 @@
     </reporting>
 
 	<dependencies>
+        <!-- TODO: remove this dependency -->
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
 

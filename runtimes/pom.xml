@@ -73,7 +73,7 @@
                 <version>0.1.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>embedded</artifactId>

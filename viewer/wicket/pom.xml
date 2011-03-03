@@ -49,8 +49,16 @@
 		</plugins>
 	</build>
 
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
 			<!-- Apache Isis Wicket Viewer -->
 			<dependency>
@@ -137,13 +145,16 @@
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
+
+            <!-- TODO: remove this dependency -->            
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.runtimes.dflt</groupId>
 				<artifactId>runtime</artifactId>
 				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
+            <!-- TODO: remove this dependency -->            
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.runtimes.dflt</groupId>
 				<artifactId>webapp</artifactId>
 				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>

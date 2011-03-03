@@ -43,13 +43,29 @@
         </plugins>
     </reporting>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.0-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 	<dependencies>
+        <!-- TODO: remove this dependency -->
 		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
 		    <artifactId>runtime</artifactId>
 		</dependency>
+        <!-- TODO: remove this dependency -->
 		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
 		    <artifactId>runtime</artifactId>
 		    <type>test-jar</type>
 		    <scope>test</scope>
