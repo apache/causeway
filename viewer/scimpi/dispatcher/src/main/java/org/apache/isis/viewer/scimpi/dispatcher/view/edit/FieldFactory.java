@@ -110,7 +110,7 @@ public class FieldFactory {
         if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
             return context.mapObject(field, Scope.INTERACTION);
         } else {
-            return field.titleString();
+            return field.getObject().toString();
         }
     }
 }

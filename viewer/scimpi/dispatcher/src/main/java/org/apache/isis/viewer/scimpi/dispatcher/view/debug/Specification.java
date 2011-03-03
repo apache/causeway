@@ -45,7 +45,6 @@ public class Specification extends AbstractElementProcessor {
             List<ObjectAssociation> fields = specification.getAssociations();
             for (int i = 0; i < fields.size(); i++) {
                 request.appendHtml("    " + fields.get(i).getName() + " (" + fields.get(i).getSpecification().getSingularName() + ") \n" );
-                
             }
             
             request.appendHtml("</pre>");
