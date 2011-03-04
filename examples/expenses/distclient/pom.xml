@@ -4,7 +4,7 @@
 	<parent>
 	    <groupId>org.apache.isis.distribution</groupId>
 	    <artifactId>example-expenses</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 
 	<name>Example Expenses Client Distribution</name>

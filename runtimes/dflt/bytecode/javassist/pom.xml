@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>bytecode</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
 	<artifactId>javassist</artifactId>
-	<version>0.1.0-incubating-SNAPSHOT</version>
+	<version>0.1.1-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime Javassist Bytecode Implementation</name>
 

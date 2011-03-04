@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 
     <groupId>net.sf.isis-contrib</groupId>
 	<artifactId>bdd-fitnesse</artifactId>
-    <version>0.1.0-incubating-SNAPSHOT</version>
+    <version>0.1.1-incubating-SNAPSHOT</version>
     
 	<name>FitNesse Integration for Isis</name>
 
@@ -27,7 +27,7 @@
 	<properties>
 		<fitnesse.version>20101101</fitnesse.version>
 		<fitlibrary.version>20091020</fitlibrary.version>
-        <isis.version>0.1.0-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.1.1-incubating-SNAPSHOT</isis.version>
 	</properties>
 
 	<dependencyManagement>
@@ -37,7 +37,7 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>profilestores</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
+                <version>0.1.1-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

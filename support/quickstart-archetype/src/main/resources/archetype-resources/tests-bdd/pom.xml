@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
             <artifactId>bdd-concordion</artifactId>
-            <version>0.1.0-incubating-SNAPSHOT</version>
+            <version>0.1.1-incubating-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>runtimes</artifactId>
@@ -57,7 +57,7 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>core</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
+				<version>0.1.1-incubating-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -65,24 +65,24 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
+                <version>0.1.1-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
+                <version>0.1.1-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>embedded</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
+                <version>0.1.1-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>embedded</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
+                <version>0.1.1-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 

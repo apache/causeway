@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>remoting</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 
     <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 	<artifactId>marshalling-xstream</artifactId>
-	<version>0.1.0-incubating-SNAPSHOT</version>
+	<version>0.1.1-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime XStream Marshalling</name>
 

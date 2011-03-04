@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>remoting</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 	
 	<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 	<artifactId>transport-http</artifactId>
-	<version>0.1.0-incubating-SNAPSHOT</version>
+	<version>0.1.1-incubating-SNAPSHOT</version>
 	
 	<name>Default Runtime HTTP Transport</name>
 	
@@ -55,12 +55,12 @@
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>transport-http-client</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
+				<version>0.1.1-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>transport-http-server</artifactId>
-				<version>0.1.0-incubating-SNAPSHOT</version>
+				<version>0.1.1-incubating-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>security</artifactId>
-		<version>0.1.0-incubating-SNAPSHOT</version>
+		<version>0.1.1-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.security</groupId>
@@ -51,7 +51,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.0-incubating-SNAPSHOT</version>
+                <version>0.1.1-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

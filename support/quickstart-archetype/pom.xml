@@ -11,7 +11,7 @@
 
   <groupId>org.apache.isis.support</groupId>
   <artifactId>quickstart-archetype</artifactId>
-  <version>0.1.0-incubating-SNAPSHOT</version>
+  <version>0.1.1-incubating-SNAPSHOT</version>
   <packaging>maven-archetype</packaging>
 
   <name>quickstart-archetype</name>

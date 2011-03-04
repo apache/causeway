@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.apache.isis.examples.apps</groupId>
     	<artifactId>shoppingcart</artifactId>
-        <version>0.1.0-incubating-SNAPSHOT</version>
+        <version>0.1.1-incubating-SNAPSHOT</version>
     </parent>
 
     <artifactId>shoppingcart-cart</artifactId>
