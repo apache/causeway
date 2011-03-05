@@ -20,9 +20,9 @@
 
 package org.apache.isis.alternatives.objectstore.xml;
 
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class XmlPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 

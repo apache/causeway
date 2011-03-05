@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;

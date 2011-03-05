@@ -1,9 +1,9 @@
 package org.apache.isis.viewer.restful.viewer.embedded;
 
 import org.apache.isis.Isis;
-import org.apache.isis.core.runtime.viewer.IsisViewer;
-import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
-import org.apache.isis.core.runtime.web.WebAppSpecification;
+import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
+import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
 
 /**
  * Convenience implementation of a {@link IsisViewer} providing the ability to configured for the Restful viewer from

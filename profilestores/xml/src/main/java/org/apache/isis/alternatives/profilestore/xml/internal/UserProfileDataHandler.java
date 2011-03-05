@@ -23,11 +23,11 @@ package org.apache.isis.alternatives.profilestore.xml.internal;
 import java.util.List;
 import java.util.Stack;
 
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.persistence.services.ServiceUtil;
-import org.apache.isis.core.runtime.userprofile.Options;
-import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServiceUtil;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfile;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

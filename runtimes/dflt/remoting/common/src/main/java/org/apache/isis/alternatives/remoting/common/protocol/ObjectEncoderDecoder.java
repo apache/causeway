@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
 
 public interface ObjectEncoderDecoder {
 

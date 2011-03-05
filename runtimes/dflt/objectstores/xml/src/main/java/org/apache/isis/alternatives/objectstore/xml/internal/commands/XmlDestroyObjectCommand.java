@@ -22,10 +22,10 @@ package org.apache.isis.alternatives.objectstore.xml.internal.commands;
 
 import org.apache.isis.alternatives.objectstore.xml.internal.data.DataManager;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
 public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand implements DestroyObjectCommand {

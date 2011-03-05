@@ -25,9 +25,9 @@ import org.apache.isis.alternatives.remoting.common.data.query.PersistenceQueryF
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 
 public class PersistenceQueryFindUsingApplibQuerySerializableEncoder extends PersistenceQueryEncoderAbstract {
 

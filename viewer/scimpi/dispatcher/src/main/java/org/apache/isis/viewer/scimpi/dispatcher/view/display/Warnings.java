@@ -22,8 +22,8 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
 
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 

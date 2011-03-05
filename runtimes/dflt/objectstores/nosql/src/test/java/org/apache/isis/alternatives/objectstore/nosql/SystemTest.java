@@ -23,7 +23,7 @@ package org.apache.isis.alternatives.objectstore.nosql;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;

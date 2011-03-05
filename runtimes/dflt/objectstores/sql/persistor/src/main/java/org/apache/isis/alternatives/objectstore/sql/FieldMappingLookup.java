@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.log4j.Logger;
 
 

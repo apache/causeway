@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.model.nof;
 
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 
 public interface PersistenceSessionAccessor {
 

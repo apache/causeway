@@ -20,12 +20,12 @@
 
 package org.apache.isis.defaults.objectstore;
 
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.defaults.objectstore.internal.ObjectStoreInstances;
 import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
 import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjectsDefault;

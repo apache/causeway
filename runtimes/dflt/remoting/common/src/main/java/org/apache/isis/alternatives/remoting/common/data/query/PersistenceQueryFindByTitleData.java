@@ -21,7 +21,7 @@
 package org.apache.isis.alternatives.remoting.common.data.query;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 
 public class PersistenceQueryFindByTitleData extends PersistenceQueryDataAbstract {
 	

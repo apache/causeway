@@ -31,8 +31,8 @@ import org.apache.isis.alternatives.remoting.common.data.common.ReferenceData;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.core.runtime.transaction.messagebroker.MessageList;
-import org.apache.isis.core.runtime.transaction.messagebroker.WarningList;
+import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageList;
+import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.WarningList;
 
 import com.google.inject.internal.Lists;
 

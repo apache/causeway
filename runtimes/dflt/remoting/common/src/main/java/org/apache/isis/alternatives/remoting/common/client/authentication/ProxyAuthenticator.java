@@ -32,11 +32,11 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.SimpleSession;
 
 public final class ProxyAuthenticator extends PasswordRequestAuthenticatorAbstract {
 	

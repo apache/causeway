@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.action;
 
-import org.apache.isis.core.runtime.about.AboutIsis;
+import org.apache.isis.runtimes.dflt.runtime.about.AboutIsis;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;

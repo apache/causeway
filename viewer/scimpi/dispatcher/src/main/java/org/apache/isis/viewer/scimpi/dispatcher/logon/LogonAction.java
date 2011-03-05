@@ -23,7 +23,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.logon;
 import java.io.IOException;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;

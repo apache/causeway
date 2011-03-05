@@ -38,15 +38,15 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
-import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.junit.internal.IsisSystemUsingInstallersWithinJunit;
 
 

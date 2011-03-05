@@ -23,7 +23,7 @@ package org.apache.isis.viewer.html.action.view;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.action.view.util.TableUtil;
 import org.apache.isis.viewer.html.component.Table;
 import org.apache.isis.viewer.html.component.ViewPane;

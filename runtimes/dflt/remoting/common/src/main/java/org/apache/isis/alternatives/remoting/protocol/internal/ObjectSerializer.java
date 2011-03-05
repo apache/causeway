@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.PersistorUtil;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 
 /**
  * Utility class to create Data objects representing a graph of Isis.

@@ -45,13 +45,13 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionHydrator;
-import org.apache.isis.core.runtime.persistence.PersistorUtil;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.core.runtime.persistence.objectstore.PersistenceSessionObjectStore;
-import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionHydrator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class ObjectDeserializer {

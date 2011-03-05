@@ -33,8 +33,8 @@ import org.apache.isis.alternatives.objectstore.nosql.StateReader;
 import org.apache.isis.alternatives.objectstore.nosql.StateWriter;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;

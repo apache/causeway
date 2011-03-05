@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.viewer.basic;
 import junit.framework.TestCase;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.viewer.dnd.view.collection.CollectionSorter;
 import org.apache.isis.viewer.dnd.view.collection.SimpleCollectionSorter;
 import org.apache.isis.viewer.dnd.view.collection.TitleComparator;

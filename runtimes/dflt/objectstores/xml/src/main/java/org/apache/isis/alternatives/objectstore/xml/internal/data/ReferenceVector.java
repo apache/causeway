@@ -23,7 +23,7 @@ package org.apache.isis.alternatives.objectstore.xml.internal.data;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 
 public class ReferenceVector {

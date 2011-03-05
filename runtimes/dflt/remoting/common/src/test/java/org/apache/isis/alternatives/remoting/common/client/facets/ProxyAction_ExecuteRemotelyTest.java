@@ -46,8 +46,8 @@ import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecode
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.testsystem.TestProxySystem;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 
 public class ProxyAction_ExecuteRemotelyTest {
 

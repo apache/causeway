@@ -36,13 +36,13 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.runtime.installers.InstallerLookup;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.runner.IsisModule;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
-import org.apache.isis.core.runtime.system.SystemConstants;
+import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.runtimes.dflt.runtime.logging.IsisLoggingConfigurer;
+import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
+import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 
 /**

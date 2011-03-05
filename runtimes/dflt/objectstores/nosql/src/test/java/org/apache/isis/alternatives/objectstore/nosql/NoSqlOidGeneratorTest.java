@@ -28,7 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlDataDatabase;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlOidGenerator;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import static org.junit.Assert.*;
 

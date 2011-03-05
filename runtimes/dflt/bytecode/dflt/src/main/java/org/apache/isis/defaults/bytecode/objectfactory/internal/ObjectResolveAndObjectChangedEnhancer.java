@@ -36,9 +36,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFace
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
-import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.runtimes.dflt.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
 
 public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjectChangedEnhancerAbstract {
 

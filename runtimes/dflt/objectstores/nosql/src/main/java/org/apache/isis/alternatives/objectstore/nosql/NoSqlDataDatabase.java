@@ -23,7 +23,7 @@ package org.apache.isis.alternatives.objectstore.nosql;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 
 public interface NoSqlDataDatabase {

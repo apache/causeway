@@ -37,11 +37,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.core.runtime.persistence.adaptermanager.ObjectToAdapterTransformer;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.core.runtime.testsystem.TestPojo;
-import org.apache.isis.core.runtime.testsystem.TestProxyOid;
-import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.ObjectToAdapterTransformer;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
 
 
 public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {

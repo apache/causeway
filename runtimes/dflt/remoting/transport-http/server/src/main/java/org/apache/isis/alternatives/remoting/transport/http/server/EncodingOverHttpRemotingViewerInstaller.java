@@ -22,11 +22,11 @@ package org.apache.isis.alternatives.remoting.transport.http.server;
 
 import java.util.List;
 
-import org.apache.isis.core.runtime.Isis;
-import org.apache.isis.core.runtime.viewer.IsisViewer;
-import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
-import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
-import org.apache.isis.core.runtime.web.WebAppSpecification;
+import org.apache.isis.runtimes.dflt.runtime.Isis;
+import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
+import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
+import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
 
 /**
  * Convenience implementation of a {@link IsisViewer} providing the

@@ -23,15 +23,15 @@ package org.apache.isis.alternatives.objectstore.xml;
 import org.apache.isis.alternatives.objectstore.xml.internal.adapter.XmlAdapterManager;
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClock;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
-import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.core.runtime.persistence.oidgenerator.timebased.TimeBasedOidGenerator;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.timebased.TimeBasedOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.log4j.Logger;
 
 

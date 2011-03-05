@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.view.base;
 
 import java.util.Date;
 
-import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.util.Properties;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;

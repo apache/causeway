@@ -20,12 +20,12 @@
 
 package org.apache.isis.core.webserver.internal;
 
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER;
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_EXPLORATION;
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_PROTOTYPE;
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_SERVER;
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_SERVER_EXPLORATION;
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_SERVER_PROTOTYPE;
 
-import org.apache.isis.core.runtime.options.standard.OptionHandlerDeploymentType;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.options.standard.OptionHandlerDeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 
 public class OptionHandlerDeploymentTypeWebServer extends OptionHandlerDeploymentType {

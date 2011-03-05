@@ -21,7 +21,7 @@
 package org.apache.isis.alternatives.remoting.common.data.query;
 
 import org.apache.isis.alternatives.remoting.common.data.Data;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
 
 /**
  * Serializable representation of {@link PersistenceQuery}.

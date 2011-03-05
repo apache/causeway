@@ -21,10 +21,10 @@
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
+import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransaction;
+import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;

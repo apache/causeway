@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class HelpLink {

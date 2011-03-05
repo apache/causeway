@@ -21,7 +21,7 @@
 package org.apache.isis.defaults.security.authorization;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+import org.apache.isis.runtimes.dflt.runtime.authorization.standard.Authorizor;
 
 public class NoopAuthorizor implements Authorizor {
 

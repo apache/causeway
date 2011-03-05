@@ -42,10 +42,10 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.Threads;
-import org.apache.isis.core.runtime.system.IsisSystem;
-import org.apache.isis.core.runtime.system.internal.monitor.HttpServerMonitor;
-import org.apache.isis.core.runtime.system.internal.monitor.SocketServerMonitor;
-import org.apache.isis.core.runtime.viewer.IsisViewerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
+import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.HttpServerMonitor;
+import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.SocketServerMonitor;
+import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract;
 import org.apache.log4j.Logger;
 
 

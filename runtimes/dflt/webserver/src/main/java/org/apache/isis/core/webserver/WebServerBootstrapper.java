@@ -37,8 +37,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.CastUtils;
-import org.apache.isis.core.runtime.runner.IsisBootstrapper;
-import org.apache.isis.core.runtime.runner.IsisRunner;
+import org.apache.isis.runtimes.dflt.runtime.runner.IsisBootstrapper;
+import org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner;
 import org.apache.isis.core.webapp.WebAppConstants;
 
 import com.google.inject.Injector;

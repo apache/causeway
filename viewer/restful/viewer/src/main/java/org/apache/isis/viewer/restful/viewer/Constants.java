@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.restful.viewer;
 
-import org.apache.isis.core.runtime.system.SystemConstants;
+import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 
 public final class Constants {

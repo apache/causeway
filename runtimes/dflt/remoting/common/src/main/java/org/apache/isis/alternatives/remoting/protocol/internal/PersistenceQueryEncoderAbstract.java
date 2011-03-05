@@ -29,8 +29,8 @@ import org.apache.isis.alternatives.remoting.common.protocol.PersistenceQueryEnc
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
 
 public abstract class PersistenceQueryEncoderAbstract implements PersistenceQueryEncoder {
 

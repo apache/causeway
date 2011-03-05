@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
+import org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizorAbstract;
 
 
 public class LdapAuthorizor extends AuthorizorAbstract {

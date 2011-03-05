@@ -22,7 +22,7 @@ package org.apache.isis.alternatives.remoting.common.data.query;
 
 import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 
 /**
  * Serializable representation of {@link PersistenceQueryFindByPattern}.

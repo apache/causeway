@@ -35,8 +35,8 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.apache.isis.core.runtime.fixture.ObjectFixtureFilePersistor;
-import org.apache.isis.core.runtime.fixturesinstaller.FixtureException;
+import org.apache.isis.runtimes.dflt.runtime.fixture.ObjectFixtureFilePersistor;
+import org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.FixtureException;
 import org.apache.isis.core.testsupport.testdomain.Movie;
 import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;

@@ -30,7 +30,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.runtime.fixture.ObjectFixtureService;
+import org.apache.isis.runtimes.dflt.runtime.fixture.ObjectFixtureService;
 import org.apache.isis.core.testsupport.testdomain.Movie;
 import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.core.testsupport.testdomain.Role;

@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;
-import org.apache.isis.core.runtime.system.TestDomainObject;
+import org.apache.isis.runtimes.dflt.runtime.system.TestDomainObject;
 
 
 

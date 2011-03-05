@@ -21,8 +21,8 @@
 package org.apache.isis.alternatives.security.file.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.Authenticator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;

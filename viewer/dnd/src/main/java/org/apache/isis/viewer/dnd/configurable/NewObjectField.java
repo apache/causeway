@@ -21,8 +21,8 @@
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.userprofile.Options;
-import org.apache.isis.core.runtime.userprofile.OptionsAware;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.OptionsAware;
 
 public class NewObjectField implements OptionsAware {
 

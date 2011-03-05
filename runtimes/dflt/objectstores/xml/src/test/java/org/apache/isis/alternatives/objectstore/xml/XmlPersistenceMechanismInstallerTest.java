@@ -22,13 +22,13 @@ package org.apache.isis.alternatives.objectstore.xml;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.system.ContextCategory;
-import org.apache.isis.core.runtime.system.DeploymentCategory;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.Splash;
-import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.ContextCategory;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.Splash;
+import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;

@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 
 /**
  * {@link Serializable} representation of a {@link OneToManyAssociation} (a parented

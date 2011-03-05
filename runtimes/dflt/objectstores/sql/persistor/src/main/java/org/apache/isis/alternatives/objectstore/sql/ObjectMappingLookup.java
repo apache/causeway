@@ -33,8 +33,8 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 
 public class ObjectMappingLookup implements DebuggableWithTitle {

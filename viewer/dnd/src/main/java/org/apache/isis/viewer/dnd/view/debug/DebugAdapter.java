@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.view.debug;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.util.Dump;
+import org.apache.isis.runtimes.dflt.runtime.util.Dump;
 
 
 public class DebugAdapter implements DebuggableWithTitle {

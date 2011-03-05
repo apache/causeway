@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.viewer.bdd.common.Scenario;
 
 public class ShutdownIsis extends AbstractHelper {

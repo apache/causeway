@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.testsystem.TestProxySystem;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 import org.apache.isis.viewer.dnd.view.field.TextParseableFieldImpl;
 
 

@@ -21,7 +21,7 @@
 package org.apache.isis.core.webserver;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerInstaller;
 
 
 public final class WebServerConstants {

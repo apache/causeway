@@ -38,8 +38,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
 import org.apache.isis.defaults.bytecode.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 
 

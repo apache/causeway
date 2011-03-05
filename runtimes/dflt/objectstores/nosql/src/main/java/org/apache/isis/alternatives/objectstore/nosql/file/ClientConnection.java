@@ -33,7 +33,7 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlStoreException;
 import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
-import org.apache.isis.core.runtime.persistence.ConcurrencyException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 
 
 public class ClientConnection {

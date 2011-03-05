@@ -24,13 +24,13 @@ import org.apache.isis.alternatives.objectstore.sql.auto.AutoMapperFactory;
 import org.apache.isis.alternatives.objectstore.sql.jdbc.JdbcConnectorFactory;
 import org.apache.isis.alternatives.objectstore.sql.jdbc.JdbcFieldMappingFactoryInstaller;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
-import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 
 public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {

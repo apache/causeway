@@ -22,8 +22,8 @@ package org.apache.isis.viewer.html.action.misc;
 
 import java.util.StringTokenizer;
 
-import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationAuthenticatorConstants;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.ExplorationAuthenticatorConstants;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.ViewPane;

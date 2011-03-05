@@ -25,8 +25,8 @@ import java.util.Map;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfile;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;
 
 public class InMemoryUserProfileStore implements UserProfileStore, DebuggableWithTitle {
 	

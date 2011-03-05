@@ -28,8 +28,8 @@ import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectDataVect
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.log4j.Logger;
 
 public class XmlDataManagerInstancesTest extends ProxyJunit3TestCase {

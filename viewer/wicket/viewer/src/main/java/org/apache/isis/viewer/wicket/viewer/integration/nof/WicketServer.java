@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.nof;
 
-import org.apache.isis.core.runtime.system.DeploymentCategory;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
  * {@link DeploymentType} for production usage.

@@ -20,9 +20,9 @@
 
 package org.apache.isis.viewer.dnd.viewer.tree;
 
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyContent;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;

@@ -32,7 +32,7 @@ import org.apache.isis.alternatives.objectstore.nosql.SerialKeyCreator;
 import org.apache.isis.alternatives.objectstore.nosql.TrialObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;

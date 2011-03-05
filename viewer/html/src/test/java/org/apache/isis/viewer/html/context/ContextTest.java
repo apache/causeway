@@ -23,9 +23,9 @@ package org.apache.isis.viewer.html.context;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.core.runtime.testsystem.TestProxyCollectionAdapter;
-import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyCollectionAdapter;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.context.Context;
 

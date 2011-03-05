@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.composite;
 
-import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.UserActionSet;

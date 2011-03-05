@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.configurable;
 import java.util.Enumeration;
 
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.configurable.GridListSpecification.ElementFactory;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.util.Properties;

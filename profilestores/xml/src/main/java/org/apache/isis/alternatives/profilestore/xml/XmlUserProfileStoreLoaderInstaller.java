@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
-import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;

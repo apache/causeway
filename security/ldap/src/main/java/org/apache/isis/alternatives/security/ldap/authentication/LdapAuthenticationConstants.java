@@ -21,7 +21,7 @@
 package org.apache.isis.alternatives.security.ldap.authentication;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerInstaller;
 
 public final class LdapAuthenticationConstants {
 	

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.apache.isis.core.runtime.testsystem.TestPojo;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 
 
 public class JavaReflector_ArrayTest extends JavaReflectorTestAbstract {

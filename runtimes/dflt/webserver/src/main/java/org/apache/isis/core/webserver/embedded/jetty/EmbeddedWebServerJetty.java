@@ -40,10 +40,10 @@ import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.servlet.ServletMapping;
 import org.mortbay.jetty.servlet.SessionHandler;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.web.EmbeddedWebServerAbstract;
-import org.apache.isis.core.runtime.web.FilterSpecification;
-import org.apache.isis.core.runtime.web.ServletSpecification;
-import org.apache.isis.core.runtime.web.WebAppSpecification;
+import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.web.FilterSpecification;
+import org.apache.isis.runtimes.dflt.runtime.web.ServletSpecification;
+import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
 import org.apache.isis.core.webserver.WebServerConstants;
 import org.apache.isis.core.webserver.WebServerException;
 

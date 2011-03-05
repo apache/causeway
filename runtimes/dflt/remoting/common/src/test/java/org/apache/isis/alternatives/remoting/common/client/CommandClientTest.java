@@ -37,9 +37,9 @@ import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.facade.proxy.ServerFacadeProxy;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.core.runtime.testsystem.TestProxyOid;
-import org.apache.isis.core.runtime.testsystem.TestProxySession;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySession;
 import org.easymock.MockControl;
 
 

@@ -47,12 +47,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.persistence.ConcurrencyException;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
-import org.apache.isis.core.runtime.testsystem.TestProxyAssociation;
-import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAssociation;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
 
 
 @RunWith(JMock.class)

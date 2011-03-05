@@ -28,8 +28,8 @@ import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlCommandContext;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlDataDatabase;
 import org.apache.isis.alternatives.objectstore.nosql.StateReader;
-import org.apache.isis.core.runtime.persistence.ConcurrencyException;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 
 public class FileServerDb implements NoSqlDataDatabase {

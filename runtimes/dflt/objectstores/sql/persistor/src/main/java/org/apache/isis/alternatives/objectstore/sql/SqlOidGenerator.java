@@ -22,8 +22,8 @@ package org.apache.isis.alternatives.objectstore.sql;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.runtime.persistence.oidgenerator.OidGeneratorAbstract;
-import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
 public class SqlOidGenerator extends OidGeneratorAbstract {

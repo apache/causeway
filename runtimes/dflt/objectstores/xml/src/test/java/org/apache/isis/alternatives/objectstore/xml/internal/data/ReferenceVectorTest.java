@@ -23,7 +23,7 @@ package org.apache.isis.alternatives.objectstore.xml.internal.data;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.junit.Before;
 import org.junit.Test;
 

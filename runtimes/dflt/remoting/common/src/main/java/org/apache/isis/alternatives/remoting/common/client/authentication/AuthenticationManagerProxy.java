@@ -25,7 +25,7 @@ import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandard;
 
 
 public class AuthenticationManagerProxy extends AuthenticationManagerStandard {

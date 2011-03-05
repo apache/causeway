@@ -25,8 +25,8 @@ import org.apache.isis.alternatives.profilestore.xml.internal.XmlFileUtil;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.xml.XmlFile;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfile;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;
 
 import com.google.inject.Inject;
 

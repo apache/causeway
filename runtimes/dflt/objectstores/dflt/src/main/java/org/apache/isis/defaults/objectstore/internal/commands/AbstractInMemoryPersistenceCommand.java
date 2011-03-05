@@ -23,8 +23,8 @@ package org.apache.isis.defaults.objectstore.internal.commands;
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
-import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.defaults.objectstore.internal.ObjectStoreInstances;
 import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
 

@@ -33,7 +33,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationManagerAbstract;
 
 
 public class AuthorizationManagerProxy extends AuthorizationManagerAbstract {

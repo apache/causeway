@@ -23,7 +23,7 @@ package org.apache.isis.defaults.objectstore;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
