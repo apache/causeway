@@ -38,8 +38,8 @@ import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.Monitor;
-import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.core.webapp.auth.AuthenticationSessionLookupStrategyDefault;
+import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.context.Context;

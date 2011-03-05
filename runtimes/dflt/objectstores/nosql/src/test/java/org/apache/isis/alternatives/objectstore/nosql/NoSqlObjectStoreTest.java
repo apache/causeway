@@ -42,7 +42,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

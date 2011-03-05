@@ -37,7 +37,7 @@ import org.apache.isis.alternatives.remoting.transport.ServerConnectionHandler;
 import org.apache.isis.alternatives.remoting.transport.simple.SimpleTransport;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
-import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
+import org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper;
 
 /**
  * Analogous to {@link SocketsViewerAbstract}; both ultimately delegate to {@link ServerConnectionHandler}.

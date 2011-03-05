@@ -47,7 +47,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
 
 /*

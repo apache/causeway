@@ -23,7 +23,7 @@ package org.apache.isis;
 public class WebServer {
 
     public static void main(String[] args) {
-        org.apache.isis.core.webserver.WebServer.main(args);
+        org.apache.isis.runtimes.dflt.webserver.WebServer.main(args);
     }
     
 

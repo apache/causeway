@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
-import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.viewer.dnd.util.Properties;
 
 import static org.junit.Assert.*;

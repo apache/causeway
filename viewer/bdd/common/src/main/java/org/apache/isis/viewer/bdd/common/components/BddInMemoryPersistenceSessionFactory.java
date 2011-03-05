@@ -4,8 +4,8 @@ import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.defaults.objectstore.InMemoryPersistenceSessionFactory;
-import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 
 /**
  * As per {@link InMemoryPersistenceSessionFactory}, but uses the
