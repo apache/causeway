@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 public class LogWriter {
     

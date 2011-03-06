@@ -18,15 +18,15 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 
 
 public class JdbcResults implements Results {

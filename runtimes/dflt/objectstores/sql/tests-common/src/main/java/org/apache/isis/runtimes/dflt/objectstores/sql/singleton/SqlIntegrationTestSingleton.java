@@ -21,7 +21,7 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql.singleton;
+package org.apache.isis.runtimes.dflt.objectstores.sql.singleton;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,12 +34,12 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStore;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.SqlDataClassFactory;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.TestProxySystemIII;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SimpleClass;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SimpleClassTwo;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.TestProxySystemIII;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 
 /**

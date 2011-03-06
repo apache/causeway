@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

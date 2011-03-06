@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.utils;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

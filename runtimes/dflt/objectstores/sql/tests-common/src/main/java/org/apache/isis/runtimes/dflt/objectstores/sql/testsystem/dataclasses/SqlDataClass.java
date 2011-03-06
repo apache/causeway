@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.common.SqlIntegrationTestCommon;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Color;

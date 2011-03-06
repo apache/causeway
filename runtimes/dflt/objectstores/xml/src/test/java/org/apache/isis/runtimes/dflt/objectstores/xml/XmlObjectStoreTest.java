@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,9 +31,9 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock.DefaultClock;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.MockDataManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.services.DummyServiceManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.MockDataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.DummyServiceManager;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;

@@ -18,14 +18,14 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.services.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.services.ServiceManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.commons.xml.XmlFile;

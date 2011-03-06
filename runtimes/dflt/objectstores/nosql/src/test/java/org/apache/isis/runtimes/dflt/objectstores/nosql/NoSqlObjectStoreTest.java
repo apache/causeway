@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +29,11 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.KeyCreator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlObjectStore;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlOidGenerator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.VersionCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlOidGenerator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.VersionCreator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

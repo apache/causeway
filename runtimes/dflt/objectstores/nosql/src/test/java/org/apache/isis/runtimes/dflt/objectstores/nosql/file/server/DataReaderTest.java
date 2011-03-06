@@ -18,15 +18,15 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
-import org.apache.isis.runtimes.dflt.objecstores.nosql.file.server.DataReader;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.file.server.FileServerException;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.file.server.Util;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.DataReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.FileServerException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

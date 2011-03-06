@@ -18,10 +18,10 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateWriter;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 
 
 class FileClientCommandContext implements NoSqlCommandContext {

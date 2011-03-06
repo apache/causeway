@@ -18,19 +18,19 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.mongo;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.KeyCreator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateReader;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateWriter;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;

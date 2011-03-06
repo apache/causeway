@@ -18,9 +18,9 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 

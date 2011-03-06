@@ -18,15 +18,15 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.commands;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.DataManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ObjectData;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

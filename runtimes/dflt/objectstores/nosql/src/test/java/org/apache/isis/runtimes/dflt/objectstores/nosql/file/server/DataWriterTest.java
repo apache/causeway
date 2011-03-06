@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.BufferedReader;
 import java.io.File;

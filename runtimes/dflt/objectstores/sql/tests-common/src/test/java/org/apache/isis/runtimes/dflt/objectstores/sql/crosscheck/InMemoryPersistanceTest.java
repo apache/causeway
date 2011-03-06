@@ -21,11 +21,11 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql.crosscheck;
+package org.apache.isis.runtimes.dflt.objectstores.sql.crosscheck;
 
 import java.util.Properties;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.common.SqlIntegrationTestCommon;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
 
 

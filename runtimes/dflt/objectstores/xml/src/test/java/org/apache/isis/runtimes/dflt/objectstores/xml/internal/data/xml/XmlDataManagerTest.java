@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock.DefaultClock;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ObjectData;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ReferenceVector;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.Role;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.Team;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Role;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Team;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;

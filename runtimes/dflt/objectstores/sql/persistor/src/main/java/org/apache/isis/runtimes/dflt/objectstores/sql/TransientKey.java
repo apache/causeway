@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public class TransientKey implements PrimaryKey {
 	private static final long serialVersionUID = 1L;

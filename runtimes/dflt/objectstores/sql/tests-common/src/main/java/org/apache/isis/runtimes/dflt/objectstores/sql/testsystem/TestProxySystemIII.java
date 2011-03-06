@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.testsystem;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,9 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStore;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlPersistorInstaller;
-import org.apache.isis.runtimes.dflt.objecstores.xml.XmlPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlPersistorInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;

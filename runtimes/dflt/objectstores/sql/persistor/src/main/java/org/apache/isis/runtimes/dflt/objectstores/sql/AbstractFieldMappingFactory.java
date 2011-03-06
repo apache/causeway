@@ -18,9 +18,9 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 
 

@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import static org.junit.Assert.assertTrue;
 
@@ -27,7 +27,7 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 

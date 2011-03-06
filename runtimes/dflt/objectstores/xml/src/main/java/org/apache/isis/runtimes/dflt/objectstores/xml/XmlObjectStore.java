@@ -17,28 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock.Clock;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.commands.XmlCreateObjectCommand;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.commands.XmlDestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.commands.XmlUpdateObjectCommand;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.CollectionData;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.Data;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.DataManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ObjectData;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ObjectDataVector;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ReferenceVector;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.xml.XmlDataManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.xml.XmlFileUtil;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.services.ServiceManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.services.xml.XmlServiceManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlCreateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlDestroyObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlUpdateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.XmlDataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.XmlFileUtil;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml.XmlServiceManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugString;

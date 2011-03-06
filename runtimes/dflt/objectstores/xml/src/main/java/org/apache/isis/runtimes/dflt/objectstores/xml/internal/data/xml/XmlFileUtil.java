@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;

@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;

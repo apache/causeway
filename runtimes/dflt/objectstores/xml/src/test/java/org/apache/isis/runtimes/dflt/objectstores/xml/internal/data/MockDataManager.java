@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.Iterator;
 import java.util.Vector;

@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.adapter;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.adapter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;

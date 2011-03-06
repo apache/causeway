@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.mongo;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.util.Set;
 

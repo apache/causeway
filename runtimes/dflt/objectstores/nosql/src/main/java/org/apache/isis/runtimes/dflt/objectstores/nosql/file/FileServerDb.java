@@ -18,16 +18,16 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 

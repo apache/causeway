@@ -18,12 +18,12 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.mongo;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateWriter;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 
 import com.mongodb.BasicDBObject;

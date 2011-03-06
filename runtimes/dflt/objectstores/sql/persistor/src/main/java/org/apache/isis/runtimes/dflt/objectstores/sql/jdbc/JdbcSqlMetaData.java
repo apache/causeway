@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlMetaData;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlMetaData;
 
 public class JdbcSqlMetaData implements SqlMetaData {
 

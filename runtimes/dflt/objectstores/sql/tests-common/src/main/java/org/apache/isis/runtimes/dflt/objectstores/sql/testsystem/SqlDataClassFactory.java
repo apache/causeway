@@ -20,13 +20,13 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql.testsystem;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem;
 
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SimpleClass;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SimpleClassTwo;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 
 /**

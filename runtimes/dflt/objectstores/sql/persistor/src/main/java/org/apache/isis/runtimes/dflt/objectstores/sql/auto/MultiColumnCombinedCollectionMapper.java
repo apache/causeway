@@ -21,10 +21,10 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql.auto;
+package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objecstores.sql.ObjectMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;

@@ -18,20 +18,20 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Vector;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.CollectionData;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.Data;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.DataManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ObjectData;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ObjectDataVector;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.PersistorException;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.ReferenceVector;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.PersistorException;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.ContentWriter;

@@ -18,14 +18,14 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.Iterator;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock.DefaultClock;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 

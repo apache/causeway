@@ -18,13 +18,13 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.SerialKeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

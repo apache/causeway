@@ -18,16 +18,16 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.jdbc.JdbcGeneralValueMapper;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMappingFactory;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.ObjectReferenceMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.ObjectReferenceMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMappingFactory;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

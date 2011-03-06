@@ -19,7 +19,7 @@
 
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public interface PrimaryKeyMapper {
     PrimaryKey generateKey(Results rs, String column);

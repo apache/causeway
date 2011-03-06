@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.services;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 

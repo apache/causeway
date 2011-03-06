@@ -18,12 +18,12 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.auto;
+package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objecstores.sql.ObjectMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.ObjectMappingFactory;
-import org.apache.isis.runtimes.dflt.objecstores.sql.ObjectMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 
 
 public class AutoMapperFactory implements ObjectMappingFactory {

@@ -20,7 +20,7 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql.common;
+package org.apache.isis.runtimes.dflt.objectstores.sql.common;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,11 +33,11 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.singleton.SqlIntegrationTestSingleton;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.SqlDataClassFactory;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SimpleClass;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SimpleClassTwo;
-import org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;

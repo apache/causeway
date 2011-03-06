@@ -17,14 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objecstores.sql.IdMappingAbstract;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Sql;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStoreException;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.ObjectReferenceMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.IdMappingAbstract;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

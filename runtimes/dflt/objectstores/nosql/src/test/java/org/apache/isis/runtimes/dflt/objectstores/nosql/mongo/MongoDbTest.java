@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.mongo;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -27,9 +27,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 
-import org.apache.isis.runtimes.dflt.objecstores.nosql.ExampleValuePojo;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.SerialKeyCreator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.TrialObjects;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.ExampleValuePojo;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.TrialObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;

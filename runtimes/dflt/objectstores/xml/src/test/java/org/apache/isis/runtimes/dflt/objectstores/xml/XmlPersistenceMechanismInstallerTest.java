@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import static org.junit.Assert.assertTrue;
 

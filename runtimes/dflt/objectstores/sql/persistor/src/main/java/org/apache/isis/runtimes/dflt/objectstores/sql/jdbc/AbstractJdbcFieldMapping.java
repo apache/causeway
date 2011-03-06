@@ -18,12 +18,12 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Sql;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;

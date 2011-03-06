@@ -18,14 +18,14 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.mongo;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.ExampleValuePojo;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.TrialObjects;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.ExampleValuePojo;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.TrialObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

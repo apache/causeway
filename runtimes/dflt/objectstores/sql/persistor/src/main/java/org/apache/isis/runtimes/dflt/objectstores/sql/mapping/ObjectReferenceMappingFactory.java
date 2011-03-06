@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.mapping;
+package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

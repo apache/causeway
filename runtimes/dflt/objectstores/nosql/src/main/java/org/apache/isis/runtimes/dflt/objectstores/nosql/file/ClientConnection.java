@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,8 +31,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.file.server.Util;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 
 

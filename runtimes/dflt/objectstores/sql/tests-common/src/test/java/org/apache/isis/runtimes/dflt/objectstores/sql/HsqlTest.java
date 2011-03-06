@@ -21,11 +21,11 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Properties;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.common.SqlIntegrationTestCommon;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
 
 

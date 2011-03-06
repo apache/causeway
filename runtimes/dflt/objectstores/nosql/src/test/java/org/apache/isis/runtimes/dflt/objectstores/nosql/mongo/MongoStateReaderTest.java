@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.mongo;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

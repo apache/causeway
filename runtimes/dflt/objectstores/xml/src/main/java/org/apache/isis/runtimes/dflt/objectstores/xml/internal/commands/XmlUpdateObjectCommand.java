@@ -18,11 +18,11 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.commands;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.Data;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.data.DataManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;

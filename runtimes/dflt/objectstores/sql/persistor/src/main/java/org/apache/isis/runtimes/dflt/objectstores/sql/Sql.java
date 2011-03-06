@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 /**
  * SQL functions, commands, names that are database dependent

@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -26,11 +26,11 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.KeyCreator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateWriter;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.VersionCreator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.WriteObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.VersionCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.WriteObjectCommand;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;

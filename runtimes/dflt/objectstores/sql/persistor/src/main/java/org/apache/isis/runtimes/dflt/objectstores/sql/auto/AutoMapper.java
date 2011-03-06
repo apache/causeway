@@ -17,21 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.auto;
+package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.Vector;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.CollectionMapper;
-import org.apache.isis.runtimes.dflt.objecstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objecstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objecstores.sql.IdMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.ObjectMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.ObjectMappingLookup;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStoreException;
-import org.apache.isis.runtimes.dflt.objecstores.sql.TitleMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.VersionMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.sql.TitleMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

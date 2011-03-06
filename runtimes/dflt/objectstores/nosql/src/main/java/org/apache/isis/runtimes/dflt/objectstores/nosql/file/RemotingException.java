@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 

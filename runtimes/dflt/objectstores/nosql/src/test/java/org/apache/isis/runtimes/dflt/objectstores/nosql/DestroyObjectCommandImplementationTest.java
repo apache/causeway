@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.Date;
 
@@ -28,10 +28,10 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.DestroyObjectCommandImplementation;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.SerialKeyCreator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.SerialNumberVersionCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.DestroyObjectCommandImplementation;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialNumberVersionCreator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

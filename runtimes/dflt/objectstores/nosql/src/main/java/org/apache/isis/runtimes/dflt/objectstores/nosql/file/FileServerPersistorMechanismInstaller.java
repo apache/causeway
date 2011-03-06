@@ -18,10 +18,10 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlPersistorMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 

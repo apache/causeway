@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.version;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.version;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

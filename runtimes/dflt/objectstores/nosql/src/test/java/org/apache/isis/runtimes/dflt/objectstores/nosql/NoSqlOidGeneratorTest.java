@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -26,8 +26,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlOidGenerator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import static org.junit.Assert.*;

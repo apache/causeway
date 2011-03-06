@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.jdbc.JdbcConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 

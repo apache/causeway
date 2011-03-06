@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +35,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 
 public class FileServer {

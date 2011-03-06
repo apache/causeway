@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.StateReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 
 
 public class JsonStateReader implements StateReader {

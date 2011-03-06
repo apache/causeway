@@ -18,12 +18,12 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.data;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;

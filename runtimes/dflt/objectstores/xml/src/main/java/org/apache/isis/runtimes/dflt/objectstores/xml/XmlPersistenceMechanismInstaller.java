@@ -18,10 +18,10 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml;
+package org.apache.isis.runtimes.dflt.objectstores.xml;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.adapter.XmlAdapterManager;
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock.DefaultClock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.adapter.XmlAdapterManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;

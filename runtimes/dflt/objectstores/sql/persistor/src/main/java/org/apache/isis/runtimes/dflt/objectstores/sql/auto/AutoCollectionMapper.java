@@ -18,20 +18,20 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.auto;
+package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.AbstractMapper;
-import org.apache.isis.runtimes.dflt.objecstores.sql.CollectionMapper;
-import org.apache.isis.runtimes.dflt.objecstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objecstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objecstores.sql.IdMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Sql;
-import org.apache.isis.runtimes.dflt.objecstores.sql.jdbc.JdbcObjectReferenceMapping;
-import org.apache.isis.runtimes.dflt.objecstores.sql.mapping.ObjectReferenceMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;

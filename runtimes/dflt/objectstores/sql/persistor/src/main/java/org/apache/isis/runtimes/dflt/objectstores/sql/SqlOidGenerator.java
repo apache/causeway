@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;

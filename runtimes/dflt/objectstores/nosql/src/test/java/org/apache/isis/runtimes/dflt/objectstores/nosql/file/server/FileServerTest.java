@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import static org.apache.isis.core.commons.lang.StringUtils.lineSeparated;
 import static org.apache.isis.core.commons.matchers.IsisMatchers.existsAndNotEmpty;

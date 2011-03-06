@@ -21,7 +21,7 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objecstores.sql.testsystem.dataclasses;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses;
 
 import org.apache.isis.applib.AbstractDomainObject;
 

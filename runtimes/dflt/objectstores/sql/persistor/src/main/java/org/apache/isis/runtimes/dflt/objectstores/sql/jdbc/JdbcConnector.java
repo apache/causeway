@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -28,11 +28,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objecstores.sql.AbstractDatabaseConnector;
-import org.apache.isis.runtimes.dflt.objecstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlMetaData;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStore;
-import org.apache.isis.runtimes.dflt.objecstores.sql.SqlObjectStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractDatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlMetaData;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;

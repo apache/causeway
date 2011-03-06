@@ -18,13 +18,13 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.version;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.version;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock.Clock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;

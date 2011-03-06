@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,8 +27,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.file.RemotingException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.file.RemotingException;
 import org.apache.log4j.Logger;
 
 public class ServerConnection {

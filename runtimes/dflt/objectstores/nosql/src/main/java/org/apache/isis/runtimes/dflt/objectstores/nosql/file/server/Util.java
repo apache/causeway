@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.nosql.file.server;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -28,7 +28,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objecstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 
 public class Util {

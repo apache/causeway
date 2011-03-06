@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objecstores.xml.internal.clock;
+package org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock;
 
 import static org.junit.Assert.assertTrue;
 
