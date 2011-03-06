@@ -29,7 +29,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.defaults.profilestore.InMemoryUserProfileStoreInstaller;
+import org.apache.isis.profilestores.dflt.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.viewer.bdd.common.components.BddAuthenticationManagerInstaller;
 import org.apache.isis.viewer.bdd.common.components.BddInMemoryPersistenceMechanismInstaller;
 import org.apache.isis.viewer.bdd.common.parsers.DateParser;
