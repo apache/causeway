@@ -30,7 +30,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 
 import org.apache.isis.alternatives.objectstore.sql.SqlObjectStore;
 import org.apache.isis.alternatives.objectstore.sql.SqlPersistorInstaller;
-import org.apache.isis.alternatives.objectstore.xml.XmlPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objecstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
