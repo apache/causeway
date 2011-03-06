@@ -31,6 +31,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
+import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationManager;
@@ -43,7 +44,6 @@ import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
-import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.

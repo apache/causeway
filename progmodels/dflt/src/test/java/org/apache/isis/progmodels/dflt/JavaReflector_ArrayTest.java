@@ -18,63 +18,49 @@
  */
 
 
-package org.apache.isis.defaults.progmodel;
+package org.apache.isis.progmodels.dflt;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;
-import org.apache.isis.runtimes.dflt.runtime.system.TestDomainObject;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 
 
-
-public class JavaReflector_ObjectTest extends JavaReflectorTestAbstract {
+public class JavaReflector_ArrayTest extends JavaReflectorTestAbstract {
 
     @Override
     protected ObjectSpecification loadSpecification(final ObjectReflectorDefault reflector) {
-        return reflector.loadSpecification(TestDomainObject.class);
+        return reflector.loadSpecification(TestPojo[].class);
     }
 
     @Test
     public void testType() throws Exception {
-        Assert.assertTrue(specification.isNotCollection());
+        Assert.assertTrue(specification.isCollection());
     }
 
     @Test
     public void testName() throws Exception {
-        Assert.assertEquals(TestDomainObject.class.getName(), specification.getFullIdentifier());
+        Assert.assertEquals(TestPojo[].class.getName(), specification.getFullIdentifier());
     }
 
     @Test
-    public void testStandardFacets() throws Exception {
-        Assert.assertNotNull(specification.getFacet(NamedFacet.class));
-        Assert.assertNotNull(specification.getFacet(DescribedAsFacet.class));
-        Assert.assertNotNull(specification.getFacet(TitleFacet.class));
-        Assert.assertNotNull(specification.getFacet(PluralFacet.class));
-        Assert.assertNotNull(specification.getFacet(NotPersistableFacet.class));
-        Assert.assertNotNull(specification.getFacet(ObjectValidPropertiesFacet.class));
-    }
-
-    @Test
-    public void testNoCollectionFacet() throws Exception {
+    @Override
+    public void testCollectionFacet() throws Exception {
         final Facet facet = specification.getFacet(CollectionFacet.class);
-        Assert.assertNull(facet);
+        Assert.assertNotNull(facet);
     }
 
     @Test
-    public void testNoTypeOfFacet() throws Exception {
+    @Override
+    public void testTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
-        Assert.assertNull(facet);
+        Assert.assertNotNull(facet);
+        Assert.assertEquals(TestPojo.class, facet.value());
     }
 
 }

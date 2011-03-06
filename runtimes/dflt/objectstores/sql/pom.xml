@@ -71,14 +71,14 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
-				<module>persistor</module>
+				<module>impl</module>
 				<module>tests-common</module>
 			</modules>
 		</profile>
 		<profile>
 			<id>integration-tests</id>
 			<modules>
-				<module>persistor</module>
+				<module>impl</module>
 				<module>tests-common</module>
 				<module>tests-served</module>
 			</modules>

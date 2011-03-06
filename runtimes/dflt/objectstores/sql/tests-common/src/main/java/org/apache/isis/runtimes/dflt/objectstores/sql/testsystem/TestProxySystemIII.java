@@ -28,6 +28,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
+import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlPersistorInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
@@ -48,7 +49,6 @@ import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
-import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.

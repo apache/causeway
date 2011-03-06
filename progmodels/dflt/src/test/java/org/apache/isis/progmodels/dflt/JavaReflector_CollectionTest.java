@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.defaults.progmodel;
+package org.apache.isis.progmodels.dflt;
 
 import java.util.Vector;
 

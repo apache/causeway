@@ -54,10 +54,10 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
-import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
+import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 
 /**

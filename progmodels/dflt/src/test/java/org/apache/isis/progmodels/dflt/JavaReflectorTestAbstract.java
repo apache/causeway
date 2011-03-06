@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.defaults.progmodel;
+package org.apache.isis.progmodels.dflt;
 
 import java.util.Collections;
 import java.util.HashSet;

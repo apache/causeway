@@ -1009,7 +1009,7 @@
               </itemizedlist>
             </listitem>
           </itemizedlist>
-        </sect2>
+        </sect  2>
 
         <sect2>
           <title>Package Naming</title>
@@ -1020,9 +1020,9 @@
               Id and the artifact Id</para>
 
               <para>For example, all packages in the
-              <code>org.apache.isis.alternatives.objectstores:xml</code>
+              <code>org.apache.isis.runtimes.dflt.objectstores:xml</code>
               module should reside in the
-              <package>org.apache.isis.alternatives.objectstores.xml</package>
+              <package>org.apache.isis.runtimes.dflt.objectstores.xml</package>
               package.</para>
             </listitem>
 

@@ -61,7 +61,7 @@ public final class ReflectorConstants {
      */
     public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.facets";
     public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT =
-        "org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5";
+        "org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5";
 
     /**
      * Key used to lookup comma-separated list of {@link FacetFactory}s to include (over and above those specified by

@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.defaults.progmodel;
+package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
