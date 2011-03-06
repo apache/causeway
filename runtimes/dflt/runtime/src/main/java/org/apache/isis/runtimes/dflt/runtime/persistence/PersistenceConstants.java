@@ -50,7 +50,7 @@ public final class PersistenceConstants {
      */
     public static final String OBJECT_FACTORY_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.object-factory";
     public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT =
-        "org.apache.isis.defaults.bytecode.objectfactory.CglibObjectFactory";
+        "org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory";
 
     /**
      * Key used to lookup implementation of {@link ServicesInjector} in {@link IsisConfiguration}.

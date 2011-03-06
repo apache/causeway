@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.apache.isis.alternatives.bytecode.identity.objectfactory.ObjectFactoryBasic;
+import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.alternatives.remoting.common.client.persistence.ClientSideTransactionManager;
 import org.apache.isis.alternatives.remoting.common.client.persistence.PersistenceSessionProxy;
 import org.apache.isis.alternatives.remoting.common.data.Data;

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.isis.alternatives.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
+import org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.alternatives.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
