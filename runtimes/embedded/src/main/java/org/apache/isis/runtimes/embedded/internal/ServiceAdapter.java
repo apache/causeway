@@ -18,31 +18,15 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.claim;
+package org.apache.isis.runtimes.embedded.internal;
 
-import java.util.List;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+public class ServiceAdapter extends StandaloneAdapter {
 
-
-public class ClaimRepositoryImpl implements ClaimRepository {
-
-    public List<Claim> allClaims() {
-    	return null;
-    }
-
-    public List<Claim> findClaims(
-    		String description
-    		) {
-    	return null;
-    }
-
-    public List<Claim> claimsFor(Claimant claimant) {
-    	return null;
-    }
-
-    
-	public Claim newClaim(Claimant claimant) {
-		return null;
-	}
 	
+	public ServiceAdapter(ObjectSpecification spec, Object serviceObject) {
+		super(spec, serviceObject, PersistenceState.PERSISTENT);
+	}
+
 }

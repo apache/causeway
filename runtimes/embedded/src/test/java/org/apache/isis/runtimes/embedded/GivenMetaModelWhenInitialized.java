@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded;
+package org.apache.isis.runtimes.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -30,12 +30,14 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.alternatives.embedded.EmbeddedContext;
-import org.apache.isis.alternatives.embedded.IsisMetaModel;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 
 
 @RunWith(JMock.class)
-public class GivenMetaModelWhenInstantiated {
+public class GivenMetaModelWhenInitialized {
 	
 	private Mockery mockery = new JUnit4Mockery();
 	
@@ -43,46 +45,18 @@ public class GivenMetaModelWhenInstantiated {
 	
 	private IsisMetaModel metaModel;
 	
+	
 	@Before
 	public void setUp() {
 		mockContext = mockery.mock(EmbeddedContext.class);
-		metaModel = new IsisMetaModel(mockContext);
-	}
 
-
-	@Test
-	public void shouldDefaultConfiguration() {
-		assertThat(metaModel.getConfiguration(), is(notNullValue()));
-	}
-
-	@Test
-	public void shouldDefaultClassSubstitutor() {
-		assertThat(metaModel.getClassSubstitutor(), is(notNullValue()));
-	}
-
-	@Test
-	public void shouldDefaultProgrammingModelFacets() {
-		assertThat(metaModel.getProgrammingModelFacets(), is(notNullValue()));
+		metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+		metaModel.init();
 	}
 	
 	@Test
-	public void shouldDefaultCollectionTypeRegistry() {
-		assertThat(metaModel.getCollectionTypeRegistry(), is(notNullValue()));
-	}
-
-	@Test
-	public void shouldDefaultFacetDecorators() {
-		assertThat(metaModel.getFacetDecorators(), is(notNullValue()));
-	}
-
-	@Test
-	public void shouldHaveNoFacetDecorators() {
-		assertThat(metaModel.getFacetDecorators().size(), is(0));
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void shouldNotBeAbleToShutdown() {
-		metaModel.shutdown();
+	public void shouldBeAbleToGetViewer() {
+		assertThat(metaModel.getViewer(), is(notNullValue()));
 	}
 
 }

@@ -18,22 +18,31 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.internal;
+package org.apache.isis.runtimes.embedded.dom.claim;
 
-public enum PersistenceState {
-	TRANSIENT(true,false),
-	PERSISTENT(false,true),
-	STANDALONE(false,false);
-	private boolean trans;
-	private boolean persistent;
-	PersistenceState(boolean trans, boolean persistent) {
-		this.trans = trans;
-		this.persistent = persistent;
+import java.util.List;
+
+
+
+public class ClaimRepositoryImpl implements ClaimRepository {
+
+    public List<Claim> allClaims() {
+    	return null;
+    }
+
+    public List<Claim> findClaims(
+    		String description
+    		) {
+    	return null;
+    }
+
+    public List<Claim> claimsFor(Claimant claimant) {
+    	return null;
+    }
+
+    
+	public Claim newClaim(Claimant claimant) {
+		return null;
 	}
-	public boolean isTransient() {
-		return trans;
-	}
-	public boolean isPersistent() {
-		return persistent;
-	}
+	
 }

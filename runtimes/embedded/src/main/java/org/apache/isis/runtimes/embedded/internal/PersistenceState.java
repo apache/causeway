@@ -18,25 +18,22 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.claim;
+package org.apache.isis.runtimes.embedded.internal;
 
-import java.util.List;
-
-import org.apache.isis.applib.annotation.Named;
-
-
-@Named("Claims")
-public interface ClaimRepository {
-
-    public List<Claim> allClaims();
-
-    public List<Claim> findClaims(
-    		@Named("Description") 
-    		String description
-    		);
-
-    public List<Claim> claimsFor(Claimant claimant);
-
-    
-	public Claim newClaim(Claimant claimant);
+public enum PersistenceState {
+	TRANSIENT(true,false),
+	PERSISTENT(false,true),
+	STANDALONE(false,false);
+	private boolean trans;
+	private boolean persistent;
+	PersistenceState(boolean trans, boolean persistent) {
+		this.trans = trans;
+		this.persistent = persistent;
+	}
+	public boolean isTransient() {
+		return trans;
+	}
+	public boolean isPersistent() {
+		return persistent;
+	}
 }

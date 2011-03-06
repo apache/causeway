@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded;
+package org.apache.isis.runtimes.embedded;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
-import org.apache.isis.alternatives.embedded.internal.RuntimeContextForEmbeddedMetaModel;
+import org.apache.isis.runtimes.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;

@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded;
+package org.apache.isis.runtimes.embedded;
 
 import java.util.TreeSet;
 
@@ -28,10 +28,10 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.alternatives.embedded.EmbeddedContext;
-import org.apache.isis.alternatives.embedded.IsisMetaModel;
-import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 @RunWith(JMock.class)
-public class GivenMetaModelWhenShutdown {
+public class GivenMetaModelWhenInitialize {
 
 	private Mockery mockery = new JUnit4Mockery();
 	
@@ -65,7 +65,6 @@ public class GivenMetaModelWhenShutdown {
 		metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
 	}
 	
-
 	@Test
 	public void shouldSucceedWithoutThrowingAnyExceptions() {
 		metaModel.init();
@@ -114,5 +113,10 @@ public class GivenMetaModelWhenShutdown {
 		metaModel.init();
 	}
 
+	@Test
+	public void shouldPrime() {
+		metaModel.init();
+		
+	}
 
 }

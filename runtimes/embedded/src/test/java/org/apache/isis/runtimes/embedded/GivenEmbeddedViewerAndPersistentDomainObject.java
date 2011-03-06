@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded;
+package org.apache.isis.runtimes.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -36,12 +36,12 @@ import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.alternatives.embedded.EmbeddedContext;
-import org.apache.isis.alternatives.embedded.IsisMetaModel;
-import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.alternatives.embedded.dom.employee.Employee;
-import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
-import org.apache.isis.alternatives.embedded.internal.PersistenceState;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.Employee;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
+import org.apache.isis.runtimes.embedded.internal.PersistenceState;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 

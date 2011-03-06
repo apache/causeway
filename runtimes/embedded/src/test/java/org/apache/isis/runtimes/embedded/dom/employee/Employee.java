@@ -18,10 +18,10 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.employee;
+package org.apache.isis.runtimes.embedded.dom.employee;
 
-import org.apache.isis.alternatives.embedded.dom.claim.Approver;
-import org.apache.isis.alternatives.embedded.dom.claim.Claimant;
+import org.apache.isis.runtimes.embedded.dom.claim.Approver;
+import org.apache.isis.runtimes.embedded.dom.claim.Claimant;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MemberOrder;

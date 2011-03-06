@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.claim;
+package org.apache.isis.runtimes.embedded.dom.claim;
 
 public interface Claimant {
 

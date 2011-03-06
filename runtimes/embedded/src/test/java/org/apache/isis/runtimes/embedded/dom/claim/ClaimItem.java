@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.claim;
+package org.apache.isis.runtimes.embedded.dom.claim;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;

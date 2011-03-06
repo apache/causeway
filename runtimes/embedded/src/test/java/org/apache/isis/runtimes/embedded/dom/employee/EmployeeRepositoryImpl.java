@@ -18,8 +18,18 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.claim;
+package org.apache.isis.runtimes.embedded.dom.employee;
 
-public interface Approver {
-	
+import java.util.List;
+
+
+public class EmployeeRepositoryImpl implements EmployeeRepository {
+
+    public List<Employee> allEmployees() {
+    	return null;
+    }
+
+    public List<Employee> findEmployees(String name) {
+    	return null;
+    }
 }

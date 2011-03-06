@@ -18,13 +18,13 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.internal;
+package org.apache.isis.runtimes.embedded.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.alternatives.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;

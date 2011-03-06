@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded;
+package org.apache.isis.runtimes.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -31,10 +31,10 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.alternatives.embedded.EmbeddedContext;
-import org.apache.isis.alternatives.embedded.IsisMetaModel;
-import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 
 
 @RunWith(JMock.class)

@@ -18,19 +18,25 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.dom.employee;
+package org.apache.isis.runtimes.embedded.dom.claim;
 
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Named;
 
 
-@Named("Employees")
-public interface EmployeeRepository {
+@Named("Claims")
+public interface ClaimRepository {
 
-    public List<Employee> allEmployees();
+    public List<Claim> allClaims();
 
-    public List<Employee> findEmployees(
-    		@Named("Name") 
-    		String name);
+    public List<Claim> findClaims(
+    		@Named("Description") 
+    		String description
+    		);
+
+    public List<Claim> claimsFor(Claimant claimant);
+
+    
+	public Claim newClaim(Claimant claimant);
 }

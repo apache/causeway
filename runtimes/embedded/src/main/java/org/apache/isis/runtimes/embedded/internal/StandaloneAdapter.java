@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.embedded.internal;
+package org.apache.isis.runtimes.embedded.internal;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
