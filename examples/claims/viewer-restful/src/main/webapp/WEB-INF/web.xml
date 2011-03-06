@@ -12,7 +12,7 @@
 
 	<filter>
 		<filter-name>IsisSessionFilter</filter-name>
-		<filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
+		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
         <init-param>
             <!-- trusted client, so no authentication required -->
             <param-name>authenticationSessionLookupStrategy</param-name>
@@ -26,7 +26,7 @@
     </filter-mapping>
 
     <listener>
-        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
+        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
     <listener>
@@ -40,7 +40,7 @@
 
     <servlet>
         <servlet-name>Resource</servlet-name>
-        <servlet-class>org.apache.isis.core.webapp.servlets.ResourceServlet</servlet-class>
+        <servlet-class>org.apache.isis.runtimes.dflt.webapp.servlets.ResourceServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

@@ -7,12 +7,12 @@
 	</welcome-file-list>
 	
     <listener>
-        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
+        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 	
 	<servlet >
 		<servlet-name>dispatcher</servlet-name>
-		<servlet-class>org.apache.isis.core.webapp.servlet.DispatcherServlet</servlet-class>
+		<servlet-class>org.apache.isis.runtimes.dflt.webapp.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 		
