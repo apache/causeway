@@ -11,7 +11,10 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Runtimes" ref="modules"/>
+        <menu name="Runtimes">
+            <item name="Default" href="./dflt/index.html" />
+            <item name="Embedded" href="./embedded/index.html" />
+        </menu>
 
         <menu name="Maven Reports" ref="reports" />
 	</body>

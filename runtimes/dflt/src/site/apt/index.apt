@@ -27,12 +27,22 @@ Default Runtime
   
   The modules that make up the default runtime are:
   
-  * {{{runtime.html}runtime}} module, providing the core functionality
+  * {{{./runtime/index.html}runtime}} module, providing the core functionality
   
-  * {{{webapp.html}webapp}} module, providing the ability to bootstrap the
+  * {{{./objectstores/index.html}objectstores}} module, acting as a parent to
+    various objectstore implementations
+
+  * {{{./bytecode/index.html}bytecode}} module, acting as a parent to
+    various bytecode enhancement implementations (used for transparent lazy
+    loading/unit of work support)
+
+  * {{{./webapp/index.html}webapp}} module, providing the ability to bootstrap the
     default runtime within a web application
 
-  * {{{webserver.html}webserver}} module, providing the ability to run
+  * {{{./webserver/index.html}webserver}} module, providing the ability to run
     Isis webapps under a webserver instance (Jetty)
+
+  * {{{./remoting/index.html}remoting}} module, acting as a parent to the 
+    modules that provide support for client/server deployments
 
   []
