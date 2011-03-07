@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
@@ -58,7 +58,7 @@
     License v2</ulink>.</para>
 
 
-    <para>This guide is ...</para>
+    <para>This guide is written for ...</para>
   </preface>
 
   <!-- main content -->

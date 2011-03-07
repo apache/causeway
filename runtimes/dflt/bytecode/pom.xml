@@ -18,21 +18,7 @@
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
 		<relativeUrl>runtimes/dflt/bytecode/</relativeUrl>
-
-        <docbkxGuideTitle>Apache Isis Default Runtime Bytecode Implementations</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-alternatives-bytecode</docbkxGuideName>
 	</properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
-            </plugin>
-        </plugins>
-    </build>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

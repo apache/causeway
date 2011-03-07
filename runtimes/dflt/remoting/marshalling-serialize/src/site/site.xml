@@ -11,6 +11,16 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
+
+        <menu name="Remoting Modules">
+            <item name="Common" href="../common/index.html" />
+            <item name="Marshalling (encode)" href="../marshalling-encode/index.html" />
+            <item name="Marshalling (serialize)" href="../marshalling-serialize/index.html" />
+            <item name="Marshalling (xstream)" href="../marshalling-xstream/index.html" />
+            <item name="Transport (sockets)" href="../transport-sockets/index.html" />
+            <item name="Transport (http)" href="../transport-http/index.html" />
+        </menu>
+
         <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

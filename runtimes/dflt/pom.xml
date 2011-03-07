@@ -22,7 +22,22 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>runtimes/dflt/</relativeUrl>
-	</properties>
+        
+        <docbkxGuideTitle>Apache Isis Default Runtime</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-default-runtime</docbkxGuideName>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
+
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

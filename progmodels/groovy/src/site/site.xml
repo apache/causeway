@@ -9,8 +9,17 @@
 			<item name="About" href="index.html" />
             <item name="Groovy" href="http://groovy.codehaus.org" />
 		</menu>
+
+        <menu name="Progmodel Modules">
+            <item name="Default (Java)" href="../dflt/index.html" />
+            <item name="Groovy" href="../groovy/index.html" />
+            <item name="Wrapper" href="../wrapper/index.html" />
+        </menu>
 		
-        <menu name="Groovy Modules" ref="modules"/>
+        <menu name="Groovy Modules">
+            <item name="Applib" href="./applib/index.html" />
+            <item name="Metamodel" href="./metamodel/index.html" />
+        </menu>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

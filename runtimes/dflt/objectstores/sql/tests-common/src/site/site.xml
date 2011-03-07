@@ -6,8 +6,14 @@
             <item name="Tests"  href="index.html"/>
         </breadcrumbs>
 
-        <menu name="SQL ObjectStore Tests">
+        <menu name="SQL Objectstore Tests">
             <item name="About" href="index.html" />
+        </menu>
+
+        <menu name="SQL OS Modules">
+            <item name="Implementation" href="../impl/index.html" />
+            <item name="Tests" href="../tests-common/index.html" />
+            <item name="Integration Tests" href="../tests-served/index.html" />
         </menu>
 
         <menu name="Maven Reports" ref="reports" />

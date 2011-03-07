@@ -10,6 +10,14 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
+        <menu name="Wicket Modules">
+            <item name="Applib" href="../applib/index.html" />
+            <item name="Metamodel" href="../metamodel/index.html" />
+            <item name="Model" href="../model/index.html" />
+            <item name="UI Components" href="../ui/index.html" />
+            <item name="Viewer" href="../viewer/index.html" />
+        </menu>
+
 		<menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

@@ -3,15 +3,28 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="BDD Testing" href="index.html"/>
+			<item name="BDD Integration" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="BDD Testing">
+		<menu name="BDD Integration">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
+
+        <menu name="Viewer Modules">
+            <item name="DnD" href="../dnd/index.html" />
+            <item name="HTML" href="../html/index.html" />
+            <item name="Scimpi" href="../scimpi/index.html" />
+            <item name="Wicket" href="../wicket/index.html" />
+            <item name="Restful" href="../restful/index.html" />
+            <item name="JUnit Support" href="../junit/index.html" />
+            <item name="BDD Integration" href="../bdd/index.html" />
+        </menu>
         
-        <menu name="BDD Modules" ref="modules"/>
+        <menu name="BDD Modules">
+            <item name="Common" href="./common/index.html" />
+            <item name="Concordion" href="./concordion/index.html" />
+        </menu>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

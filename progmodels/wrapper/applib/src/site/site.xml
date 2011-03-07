@@ -3,13 +3,18 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="AppLib" href="index.html"/>
+			<item name="Applib" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Wrapper AppLib">
+		<menu name="Wrapper Applib">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
+
+        <menu name="Wrapper Modules">
+            <item name="Applib" href="../applib/index.html" />
+            <item name="Metamodel" href="../metamodel/index.html" />
+        </menu>
 
         <menu name="Maven Reports" ref="reports" />
 	</body>

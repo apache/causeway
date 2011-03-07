@@ -11,7 +11,12 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Core Modules" ref="modules"/>
+        <menu name="Core Modules">
+            <item name="Core Test Support" href="./testsupport/index.html" />
+            <item name="Core Commons" href="./commons/index.html" />
+            <item name="Core MetaModel" href="./metamodel/index.html" />
+            <item name="Core ProgModel" href="./progmodel/index.html" />
+        </menu>
         
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

@@ -11,6 +11,12 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
+        <menu name="Security Modules">
+            <item name="Default (No-op)" href="../dflt/index.html" />
+            <item name="File" href="../file/index.html" />
+            <item name="LDAP" href="../ldap/index.html" />
+        </menu>
+
         <menu name="Documentation">
             <item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
             <item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />

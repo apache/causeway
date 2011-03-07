@@ -95,12 +95,11 @@
       <para>More correctly, this guide actually documents the
       <emphasis>default</emphasis> programming model, targetted for the Java
       programming language, and implemented by the
-      <classname>org.apache.isis.defaults:progmodel</classname> module.
+      <classname>org.apache.isis.progmodels:dflt</classname> module.
       <emphasis>Isis</emphasis> is in fact capable of supporting different
       programming models, either for other JVM-based languages; for example
       the Groovy language is supported in the
-      <classname>org.apache.isis.alternatives.progmodel:groovy</classname>
-      module.</para>
+      <classname>org.apache.isis.progmodels:groovy</classname> module.</para>
     </sect1>
 
     <sect1>
@@ -109,22 +108,20 @@
       <para>This guide assumes that you have at least the outline of a running
       <emphasis>Apache Isis</emphasis> application, for example having run the
       quickstart archetype. If you haven't done this, then please consult the
-      core documentation to learn how.</para>
+      core documentation (or the Isis website) to learn how.</para>
 
-      <para>You should also note that the core documentation also explains the
-      wider landscape of what makes up an <emphasis>Isis</emphasis>
-      application, dealing with such matters as running the app with different
-      components, eg viewers or object stores.</para>
+      <para>This guide provides all the specifics of writing a domain object
+      according to the conventions of the <emphasis>default</emphasis>
+      programming model.</para>
 
-      <para>Indeed, it is also possible for developers to build their own
-      programming model, either as a subset of the default programming model
-      described here, and possibly with additional custom elements. See the
-      core documentation for details on how to write your own programming
-      model.</para>
-
-      <para>However, everything related to the specifics of writing a domain
-      object with the <emphasis>default</emphasis> programming model is
-      here.</para>
+      <para>The core documentation, on the other hand, explains the wider
+      landscape of what makes up an <emphasis>Isis</emphasis> application,
+      dealing with such matters as running the app with different components,
+      eg viewers, security, programming models, profile stores and
+      runtimes/object stores. Included within this is an explanation of how
+      you can build your <emphasis>own</emphasis> programming model (typically
+      as a subset of the default programming model described here, but
+      possibly with additional custom elements).</para>
     </sect1>
 
     <sect1>

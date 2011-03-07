@@ -6,10 +6,15 @@
 			<item name="XML"  href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="XML ProfileStore">
+		<menu name="XML Profile Store">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
+
+        <menu name="Profile Stores">
+            <item name="Default (In-mem)" href="../dflt/index.html" />
+            <item name="XML" href="../xml/index.html" />
+        </menu>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

@@ -6,11 +6,16 @@
 			<item name="Common" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Common">
+		<menu name="BDD Common">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
         
+        <menu name="BDD Modules">
+            <item name="Common" href="../common/index.html" />
+            <item name="Concordion" href="../concordion/index.html" />
+        </menu>
+
 		<menu name="Maven Reports" ref="reports" />
 	</body>
 

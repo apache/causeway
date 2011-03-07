@@ -3,13 +3,20 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Default ObjectStore" href="index.html"/>
+			<item name="Default" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Default ObjectStore">
+		<menu name="Default Objectstore">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
+
+        <menu name="Objectstore Modules">
+            <item name="Default (in-mem)" href="../dflt/index.html" />
+            <item name="XML" href="../xml/index.html" />
+            <item name="SQL" href="../sql/index.html" />
+            <item name="NoSQL" href="../nosql/index.html" />
+        </menu>
         
 		<menu name="Maven Reports" ref="reports"/>
 	</body>

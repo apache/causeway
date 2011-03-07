@@ -11,6 +11,11 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
+        <menu name="HTTP Transport Modules">
+            <item name="Client" href="../client/index.html" />
+            <item name="Server" href="../server/index.html" />
+        </menu>
+
         <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

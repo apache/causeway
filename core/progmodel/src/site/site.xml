@@ -16,9 +16,6 @@
             <item name="Core Commons" href="../commons/index.html" />
             <item name="Core MetaModel" href="../metamodel/index.html" />
             <item name="Core ProgModel" href="../progmodel/index.html" />
-            <item name="Core Runtime" href="../runtime/index.html" />
-            <item name="Core Webapp Components" href="../webapp/index.html" />
-            <item name="Core WebServer" href="../webserver/index.html" />
         </menu>
         
 		<menu name="Maven Reports" ref="reports"/>

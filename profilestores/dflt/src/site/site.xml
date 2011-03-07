@@ -3,13 +3,18 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Default ProfileStore" href="index.html"/>
+			<item name="Default" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Default ProfileStore">
+		<menu name="Default Profile Store">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
+        
+        <menu name="Profile Stores">
+            <item name="Default (In-mem)" href="../dflt/index.html" />
+            <item name="XML" href="../xml/index.html" />
+        </menu>
         
 		<menu name="Maven Reports" ref="reports"/>
 	</body>

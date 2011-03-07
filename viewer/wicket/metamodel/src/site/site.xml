@@ -1,13 +1,21 @@
 <project name="${project.name}">
 	<body>
 		<breadcrumbs>
-			<item name="AppLib" href="index.html"/>
+			<item name="Metamodel" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Wicket AppLib">
+		<menu name="Wicket Metamodel">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
+
+        <menu name="Wicket Modules">
+            <item name="Applib" href="../applib/index.html" />
+            <item name="Metamodel" href="../metamodel/index.html" />
+            <item name="Model" href="../model/index.html" />
+            <item name="UI Components" href="../ui/index.html" />
+            <item name="Viewer" href="../viewer/index.html" />
+        </menu>
 
 		<menu name="Maven Reports" ref="reports" />
 	</body>

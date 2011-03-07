@@ -20,7 +20,11 @@
             <item name="Remoting" href="../remoting/index.html" />
         </menu>
         
-        <menu name="Bytecode Modules" ref="modules"/>
+        <menu name="Bytecode Modules">
+            <item name="Default (cglib)" href="./dflt/index.html" />
+            <item name="Javassist" href="./javassist/index.html" />
+            <item name="Identity" href="./identity/index.html" />
+        </menu>
         
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

@@ -11,7 +11,11 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Security" ref="modules"/>
+        <menu name="Security Modules">
+            <item name="Default (No-op)" href="./dflt/index.html" />
+            <item name="File" href="./file/index.html" />
+            <item name="LDAP" href="./ldap/index.html" />
+        </menu>
 
         <menu name="Maven Reports" ref="reports" />
 	</body>

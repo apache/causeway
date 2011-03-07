@@ -3,7 +3,7 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="ProgModels" href="index.html"/>
+			<item name="Programming Models" href="index.html"/>
 		</breadcrumbs>
 
 		<menu name="Programming Models">
@@ -11,7 +11,11 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Programming Modules" ref="modules"/>
+        <menu name="Progmodel Modules">
+            <item name="Default (Java)" href="./dflt/index.html" />
+            <item name="Groovy" href="./groovy/index.html" />
+            <item name="Wrapper" href="./wrapper/index.html" />
+        </menu>
 
         <menu name="Maven Reports" ref="reports" />
 	</body>
