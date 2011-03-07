@@ -59,9 +59,10 @@
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores. Apache
-    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
-    Foundation</ulink>, and is licensed under <ulink
+    implementations, and supports various viewers and runtimes/object stores.
+    Apache Isis is hosted at the <ulink
+    url="http://incubator.apache.org/isis">Apache Foundation</ulink>, and is
+    licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
@@ -99,7 +100,8 @@
       <emphasis>Isis</emphasis> is in fact capable of supporting different
       programming models, either for other JVM-based languages; for example
       the Groovy language is supported in the
-      <classname>org.apache.isis.progmodels:groovy</classname> module.</para>
+      <classname>org.apache.isis.progmodels:groovy</classname> module. Those
+      other programming models have their own documentation.</para>
     </sect1>
 
     <sect1>
@@ -154,13 +156,13 @@
       annotation <code>@Bounded</code> is an indication that the class is
       intended to have only a small number of instances and that the set does
       not change very often - such as the class <code>Country</code>. This is
-      an indication to any interested framework that the whole set of
-      instances might be offered to the user in a convenient form such as a
-      drop-down list. The programming convention has <emphasis>not</emphasis>
-      been defined as <code>@DropDownList</code> because the user interface
-      might not support drop-down-lists - but it might provide a capability to
-      select from an <code>@Bounded</code> class by typing the initial letters
-      of the desired instance.</para>
+      an indication to a viewer, for example, that the whole set of instances
+      might be offered to the user in a convenient form such as a drop-down
+      list. The programming convention has <emphasis>not</emphasis> been
+      defined as <code>@DropDownList</code> because any equivalent mechanism
+      will suffice: a viewer might not support drop-down-lists but instead
+      might provide a capability to select from an <code>@Bounded</code> class
+      by typing the initial letters of the desired instance.</para>
 
       <para>This part of the guide is a set of chapters that provides how-to's
       for writing domain objects, by which we mean domain entities, value
@@ -171,7 +173,8 @@
       <title>Domain Entities</title>
 
       <abstract>
-        <para>How-to's relating to the object itself</para>
+        <para>How-to's relating to the domain objects, specifically domain
+        entities.</para>
       </abstract>
 
       <para>This chapter contains how-to's for programming conventions that
@@ -180,11 +183,11 @@
       linkend="chp.ValueTypes" />.</para>
 
       <sect1>
-        <title>How to not inherit from framework classes</title>
+        <title>How to not inherit from framework superclasses</title>
 
         <para>It isn't mandatory for domain entities to inherit from any
-        framework superclass; they can be plain-old pojos if required.
-        However, they do at a minimum need to have a
+        framework superclass; they can be plain old java objects (pojos) if
+        required. However, they do at a minimum need to have a
         <classname>org.apache.isis.applib.DomainObjectContainer</classname>
         injected into them (an interface), from which other framework services
         can be accessed.</para>
@@ -196,7 +199,7 @@
         <classname>DomainObjectContainer</classname> and has a number of
         convenience helper methods.</para>
 
-        <para>There is further coverage on
+        <para>There is further coverage of
         <classname>DomainObjectContainer</classname> in <xref
         linkend="sec.LifecycleMethods" /> and also in <xref
         linkend="chp.DomainServices" />.</para>
@@ -258,7 +261,7 @@
         in the images directory, and if this has not been specified, then the
         framework will use its own default image for an icon.</para>
 
-        <para>We strongly recommend that you adopt 'camel case' as the
+        <para>We strongly recommend that you adopt 'pascal case' as the
         convention for icon file names: if you have a class called <classname
         condition="vb"> OrderLine</classname>, then call the icon <filename
         class="directory" moreinfo="none">OrderLine.png</filename>. Actually,
@@ -267,9 +270,8 @@
         and deployment environments are case sensitive, so it is good practice
         to adopt an unambiguous convention.</para>
 
-        <para>You may alternatively choose to specify, manually, which icon to
-        use, by specifying an <literal moreinfo="none">iconName</literal>()
-        method:</para>
+        <para>Alternatively, you can use the <literal
+        moreinfo="none">iconName</literal>() method instead:</para>
 
         <programlisting format="linespecific">public String iconName() {
     return "Person";
@@ -414,6 +416,9 @@ public class ChasingLetter implements PaymentReclaimStrategy {
 public class PaymentMethod {
     ...
 }</programlisting>
+
+        <para>Alternatively, you might want to use a (Java) <code>enum</code>,
+        because these are implicitly bounded.</para>
       </sect1>
 
       <sect1 id="sec.HowToCreateAnObject">
@@ -686,12 +691,12 @@ persist(newCust);</programlisting>
         automatically)</title>
 
         <para>The <classname>DomainObjectContainer</classname> provides the
-        resolve() method in order to lazily resolve the value of a property or
-        a collection. In earlier versions of the framework it was necessary to
-        call this method prior to accessing or mutating any property or
-        collection. This is no longer required because <emphasis>Apache
-        Isis</emphasis> uses bytecode enhancement to automatically call this
-        method.</para>
+        <methodname>resolve()</methodname> method in order to lazily resolve
+        the value of a property or a collection. In earlier versions of the
+        framework it was necessary to call this method prior to accessing or
+        mutating any property or collection. This is no longer required
+        because <emphasis>Apache Isis</emphasis> uses bytecode enhancement to
+        automatically call this method.</para>
 
         <para>While it is possible to disable this bytecode enhancement using
         <filename>isis.properties</filename> file, this is not generally
@@ -820,6 +825,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         (<literal moreinfo="none">Organisation</literal>) property:</para>
 
         <programlisting format="linespecific">public class Customer {
+
     private String firstName;
     public String getFirstName() {
         return firstName;
@@ -827,6 +833,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
 
     private Organisation organisation;
     public Organisation getOrganisation() {
@@ -871,7 +878,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
           <para>For example:</para>
 
           <programlisting format="linespecific">public class Customer() {
-    @DescribedAs("The given name by which this customer is known")
+    @DescribedAs("The customer's given name")
     public String getFirstName() { ... }
     ...
 }</programlisting>
@@ -4084,35 +4091,6 @@ BcpPlan plan = (BcpPlan) work.getTarget();
 plan.getOwner().modifyLeader(peterPlanner);
 </programlisting>
           </warning>
-
-          <sect3>
-            <title>Gotchas</title>
-
-            <para>like this. The fixture code shared the
-            &lt;&lt;&lt;Participant&gt;&gt;&gt; object between the two
-            transactions when coded like this: +---------- Account account =
-            accounts.createAccount("ACME", "Peter Planner",
-            "pplanner@acme.com"); Participant peterPlanner =
-            account.getAdmin(); switchUser("pplanner@acme.com", new
-            String[0]); Work work = plan1.createWork(); BcpPlan plan =
-            (BcpPlan) work.getTarget();
-            plan.getOwner().modifyLeader(peterPlanner); +---------- To resolve
-            the problem you will need to retrieve the object again so it is
-            part of the second transaction. In this example we can change to
-            code to this: +---------- accounts.createAccount("ACME", "Peter
-            Planner", "pplanner@acme.com"); switchUser("pplanner@acme.com",
-            new String[0]); Account account = uniqueMatch(Account.class, "0
-            ACME"); Participant peterPlanner = account.getAdmin(); Work work =
-            plan1.createWork(); BcpPlan plan = (BcpPlan) work.getTarget();
-            plan.getOwner().modifyLeader(peterPlanner); +---------- An
-            alternative is to force this separation by putting the switch call
-            into a separate fixture, as you now have no choice but to look it
-            up. * Deployment limitations of using switch user Switch user will
-            only work in exploration and prototype mode. To make it run on the
-            server (ie using Tomcat) I changed the deployment type by adding
-            the following to the isis.properties file: --------
-            isis.deploymentType=prototype ---------</para>
-          </sect3>
         </sect2>
 
         <sect2>
@@ -4332,15 +4310,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
             <row>
               <entry>addTo</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>removeFrom</entry>
             </row>
@@ -4348,31 +4326,31 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
             <row>
               <entry>choices</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
               <entry>clear</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>modify</entry>
             </row>
@@ -4382,37 +4360,37 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
               <entry>default</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
               <entry>disable</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
@@ -4420,23 +4398,23 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
               <entry>get</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>set</entry>
             </row>
@@ -4446,13 +4424,13 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>(services only)</entry>
             </row>
@@ -4460,7 +4438,7 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
             <row>
               <entry>hide</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
@@ -4468,9 +4446,9 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4478,15 +4456,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4494,15 +4472,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4510,29 +4488,29 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
               <entry>modify</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>clear</entry>
             </row>
@@ -4542,15 +4520,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4558,15 +4536,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4574,15 +4552,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4590,29 +4568,29 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
               <entry>removeFrom</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>addTo</entry>
             </row>
@@ -4620,15 +4598,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
             <row>
               <entry>set</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>get</entry>
             </row>
@@ -4638,15 +4616,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4654,15 +4632,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4670,15 +4648,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4686,15 +4664,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -4706,11 +4684,11 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
               <entry>Y</entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
           </tbody>
         </tgroup>

@@ -53,70 +53,59 @@
             <artifactId>${rootArtifactId}-fixture</artifactId>
         </dependency>
 
-		<!-- Wicket Viewer -->
+        <!-- isis viewer -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-viewer</artifactId>
 		</dependency>
-        
-        <!-- Isis defaults -->
+
+        <!-- isis runtime -->
         <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>objectstore</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>bytecode</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <!-- isis profilestore implementations -->
         <dependency>
             <groupId>org.apache.isis.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.isis.profilestores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <!-- isis progmodel -->
+        <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
 
-        <!-- alternative implementations -->        
+        <!-- isis security implementations -->        
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>file</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
         
         <!-- to run using WebServer -->
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
-        <!-- Isis Wicket views -->
-        <!-- 
-        <dependency>
-            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-            <artifactId>view-gmap2-view</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-            <artifactId>view-googlecharts-view</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-            <artifactId>calendarviews-view</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-            <artifactId>view-cooldatasoftmenu</artifactId>
-        </dependency>
-        -->
         
 	</dependencies>
 
