@@ -30,10 +30,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
+import org.apache.log4j.Logger;
 
 
 public class ClientConnection {
@@ -99,6 +100,9 @@ public class ClientConnection {
         if (status.equals("error")) {
             String message = getResponseData();
             throw new RemotingException(message);
+        } else if (status.equals("not-found")) {
+            String message = getResponseData();
+            throw new ObjectNotFoundException(message);
         } else if (status.equals("concurrency")) {
             String data = getResponseData();
             // TODO create better exceptions (requires way to restore object/version)

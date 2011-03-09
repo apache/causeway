@@ -109,6 +109,12 @@ public class ServerConnection {
         }
     }
 
+    public void notFound(String message) {
+        writer.println("not-found");
+        writer.println(message);
+        writer.flush();
+    }
+
     public void error(String message) {
         writer.println("error");
         writer.println(message);

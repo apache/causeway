@@ -36,6 +36,7 @@ public class LogWriter {
     private int fileIndex;
     
     public void startNewFile() {
+        // TODO don't start new file if old one is empty
         startNewFile = true;
     }
     

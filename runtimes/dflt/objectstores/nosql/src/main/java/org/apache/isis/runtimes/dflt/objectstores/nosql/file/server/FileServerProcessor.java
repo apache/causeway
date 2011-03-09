@@ -158,17 +158,14 @@ public class FileServerProcessor {
             id = connection.getRequest();
             DataReader reader = findInstance(type, id, connection);
             if (reader == null) {
-                connection.error(Util.FILE_NOT_FOUND + " for " + type + " & " + id);
+                connection.notFound(Util.FILE_NOT_FOUND + " for " + type + "/" + id);
             } else {
                 connection.ok();
                 readInstance(reader, connection);
             }
             locks.release(id, getTransactionId());
-        } catch (FileNotFoundException e) {
-            // TODO convert these to responses
-            throw new NoSqlStoreException(e.getMessage(), e);
         } catch (IOException e) {
-            throw new NoSqlStoreException(Util.READ_ERROR + " for " + type + " & " + id, e);
+            throw new NoSqlStoreException(Util.READ_ERROR + " for " + type + "/" + id, e);
         }
     }
 
@@ -179,8 +176,8 @@ public class FileServerProcessor {
         try {
             return new DataReader(type, id);
         } catch (FileNotFoundException e) {
-            // TODO convert these to responses
-            throw new NoSqlStoreException(Util.FILE_NOT_FOUND + " for " + type + " & " + id, e);
+            LOG.error(Util.FILE_NOT_FOUND + " for " + type + "/" + id, e);
+            return null;
         }
     }
     
