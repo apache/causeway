@@ -326,12 +326,12 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(TypeOfAnnotationForCollectionsFacetFactory.class);
         addFactory(TypeOfAnnotationForActionsFacetFactory.class);
         
+        addFactory(TypicalLengthFacetForPropertyDerivedFromTypeFacetFactory.class);
+        addFactory(TypicalLengthFacetForParameterDerivedFromTypeFacetFactory.class);
+        
         addFactory(TypicalLengthAnnotationOnTypeFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnPropertyFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnParameterFacetFactory.class);
-        
-        addFactory(TypicalLengthFacetForPropertyDerivedFromTypeFacetFactory.class);
-        addFactory(TypicalLengthFacetForParameterDerivedFromTypeFacetFactory.class);
 
         // built-in value types for Java language
         addFactory(BooleanPrimitiveValueTypeFacetFactory.class);
