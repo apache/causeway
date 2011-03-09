@@ -282,6 +282,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         if (resolveState.isNew()) {
             return "";
         } else {
+            if (getObject() instanceof String) {
+                return (String) getObject();
+            }
             final ObjectSpecification specification = getSpecification();
             Localization localization = IsisContext.getUserProfile().getLocalization();
             String title = specification.getTitle(this, localization);

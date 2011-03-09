@@ -30,10 +30,12 @@ import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.log4j.Logger;
 
 
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
 
+    private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleMethod.class);
     private final Method method;
 
     public TitleFacetViaTitleMethod(
@@ -62,7 +64,8 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
         try {
 			return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
 		} catch (RuntimeException ex) {
-			return null;
+		    LOG.warn("title failure", ex);
+			return "Failed Title";
 		}
     }
 
