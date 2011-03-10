@@ -108,6 +108,13 @@ public class Request implements PageWriter {
         buffer.append(html);
     }
 
+    public void appendTruncated(String text, int truncateTo) {
+        if (truncateTo > 0 && text.length() > truncateTo) {
+            text = text.substring(0, truncateTo) + "...";
+        }
+        appendHtml(text);
+    } 
+
     private void process(SwfTag tag, ElementProcessor processor) {
         try {
             LOG.debug("processing " + processor.getName() + " " + tag);
@@ -289,6 +296,6 @@ public class Request implements PageWriter {
     
     public void appendDebug(String line) { 
         context.appendDebugTrace(line); 
-    } 
+    }
 }
 
