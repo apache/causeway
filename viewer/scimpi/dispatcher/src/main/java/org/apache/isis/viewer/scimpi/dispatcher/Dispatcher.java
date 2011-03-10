@@ -211,6 +211,7 @@ public class Dispatcher {
             errorView.exception(exception);
             requestContext.append(errorView);
         } catch (RuntimeException e) {
+            errorView.appendln("NOTE - an exception occurred while dumping an exception!");
             errorView.exception(e);
         }
         errorView.divider("Processing"); 
@@ -305,8 +306,7 @@ public class Dispatcher {
         String fileName = file.trim();
         if (fileName.startsWith(GENERIC)) {
             Object result = context.getVariable(RequestContext.RESULT);
-            ObjectAdapter mappedObject = MethodsUtils.findObject(context, (String) result); // context.getMappedObjectOrResult((String)
-            // result);
+            ObjectAdapter mappedObject = MethodsUtils.findObject(context, (String) result);
             if (mappedObject == null) {
                 throw new ScimpiException("No object mapping for " + result);
             }
