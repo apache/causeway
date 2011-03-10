@@ -22,6 +22,7 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
+
 public class HelpLink {
 
     private static String site;
@@ -35,7 +36,7 @@ public class HelpLink {
         if (site == null) {
             site = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-site", "/help/");
         }
-        if (suffix == null) {   
+        if (suffix == null) {
             suffix = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-suffix", "shtml");
             if (suffix == null || suffix.equals("")) {
                 suffix = "";
@@ -43,7 +44,7 @@ public class HelpLink {
                 suffix = "." + suffix;
             }
         }
-        
+
         if (helpReference == null || helpReference.equals("No help available")) {
             return "";
         } else {
@@ -51,7 +52,8 @@ public class HelpLink {
             String link = site + helpReference + suffix;
             String linkText = "Help";
             String target = "scimpi-help";
-            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\"" + description + "\">" + linkText + "</a>";
+            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\"" + description
+                    + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
         }
     }
 

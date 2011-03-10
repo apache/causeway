@@ -114,6 +114,16 @@ public class Dispatcher {
             context.endRequest();
             UserManager.endRequest(context.getSession());
 
+        } catch (ScimpiNotFoundException e) {
+            LOG.info("invalid page request "+ e.getMessage());
+            try {
+                UserManager.endRequest(context.getSession());
+            } catch (Exception e1) {
+                LOG.error("endRequest call failed", e1);
+            }
+            context.addVariable("_error-message", e.getHtmlMessage(), Scope.REQUEST);
+            //context.addVariable("_error-details", e.getHtmlMessage(), Scope.REQUEST);
+            context.raiseError(404);
         } catch (Throwable e) {
             LOG.debug(e.getMessage(), e);
             
@@ -160,8 +170,6 @@ public class Dispatcher {
                 context.addVariable("_security_identifier", ((ForbiddenException) ex).getIdentifier(), Scope.REQUEST);
                 context.addVariable("_security_roles", ((ForbiddenException) ex).getRoles(), Scope.REQUEST);
                 context.raiseError(403);
-            } else if (ex instanceof ScimpiNotFoundException) {
-                context.raiseError(404);
             } else {
                 context.raiseError(500);    
             }
