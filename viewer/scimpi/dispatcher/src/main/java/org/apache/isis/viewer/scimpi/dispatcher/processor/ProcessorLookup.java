@@ -27,6 +27,8 @@ import java.util.TreeSet;
 
 import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
+import org.apache.isis.viewer.scimpi.dispatcher.view.History;
+import org.apache.isis.viewer.scimpi.dispatcher.view.RevisionNumber;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionButton;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionForm;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionLink;
@@ -116,6 +118,7 @@ public class ProcessorLookup {
         addElementProcessor(new AddWarning());  
         addElementProcessor(new BlockDefine());
         addElementProcessor(new BlockUse());
+        addElementProcessor(new History());
         addElementProcessor(new Collection());
         addElementProcessor(new ContentTag()); 
         addElementProcessor(new CountElements());
@@ -155,6 +158,7 @@ public class ProcessorLookup {
         addElementProcessor(new PrintAuthorizationClause());
         addElementProcessor(new RadioListField());
         addElementProcessor(new RemoveElement());
+        addElementProcessor(new RevisionNumber());
         addElementProcessor(new RunAction());
         addElementProcessor(new ScopeTag());
         addElementProcessor(new SelectedObject());
