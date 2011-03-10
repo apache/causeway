@@ -31,6 +31,7 @@ public class LinkedFieldsBlock extends InclusionList {
     private Map<String, LinkedObject> linkedFields = new HashMap<String, LinkedObject>();
 
     public void link(String field, String variable, String scope, String forwardView) {
+        include(field);
         linkedFields.put(field, new LinkedObject(variable, scope, forwardView));
     }
 

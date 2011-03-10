@@ -65,9 +65,9 @@ public class IncludeObject extends AbstractElementProcessor {
     private static void importFile(Request request, String path) { 
     // TODO load in file via HtmlFileParser 
         File file = new File(path); 
+        BufferedReader reader = null; 
         try { 
             if (file.exists()) { 
-                BufferedReader reader; 
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))); 
                 String line; 
                 while ((line = reader.readLine()) != null) { 
@@ -80,7 +80,15 @@ public class IncludeObject extends AbstractElementProcessor {
             throw new RuntimeException(e); 
         } catch (IOException e) { 
             throw new RuntimeException(e); 
-        } 
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     } 
     
     public String getName() {
