@@ -32,4 +32,4 @@ public class PrintAuthorizationClause extends AbstractElementProcessor {
 }
 
 
-// Copyright (c) Naked Objects Group Ltd.
+

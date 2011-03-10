@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,6 +25,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -49,9 +49,9 @@ public class FieldValue extends AbstractElementProcessor {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         boolean isIconShowing = request.isRequested(SHOW_ICON, true);
-        String truncateTo = request.getOptionalProperty(TRUNCATE, "0");
+        int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
 
-        write(request, (ObjectAdapter) object, field, null, className, isIconShowing, Integer.valueOf(truncateTo).intValue());
+        write(request, (ObjectAdapter) object, field, null, className, isIconShowing, truncateTo);
     }
 
     public String getName() {
@@ -64,42 +64,48 @@ public class FieldValue extends AbstractElementProcessor {
             ObjectAssociation field,
             LinkedObject linkedField,
             String className,
-            boolean showIcon, int truncateTo) {
+            boolean showIcon,
+            int truncateTo) {
 
         ObjectAdapter fieldReference = field.get(object);
 
         if (fieldReference != null) {
-            String classSection = "class=\"" + (className == null ? "field" : className)  + "\""; 
-            request.appendHtml("<span " + classSection + ">"); 
+            String classSection = "class=\"" + (className == null ? "field" : className) + "\"";
+            request.appendHtml("<span " + classSection + ">");
             if (field.isOneToOneAssociation()) {
+                try {
                 IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) fieldReference);
+                } catch (ObjectNotFoundException e) {
+                    request.appendHtml(e.getMessage() + "</span>");
+                }
             }
 
             if (!field.getSpecification().containsFacet(ParseableFacet.class) && showIcon) {
                 request.appendHtml("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(fieldReference)
                         + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>");
             }
-            
+
             if (linkedField != null) {
-                String id = request.getContext().mapObject((ObjectAdapter) fieldReference, linkedField.getScope(), Scope.INTERACTION);
-                request.appendHtml("<a href=\"" + linkedField.getForwardView() + "?" + linkedField.getVariable() + "="
-                        + id + request.getContext().encodedInteractionParameters() + "\">");
+                String id = request.getContext().mapObject((ObjectAdapter) fieldReference, linkedField.getScope(),
+                        Scope.INTERACTION);
+                request.appendHtml("<a href=\"" + linkedField.getForwardView() + "?" + linkedField.getVariable() + "=" + id
+                        + request.getContext().encodedInteractionParameters() + "\">");
             }
             String value = fieldReference == null ? "" : fieldReference.titleString();
             if (truncateTo > 0 && value.length() > truncateTo) {
                 value = value.substring(0, truncateTo) + "...";
             }
-            
+
             // TODO figure out a better way to determine if boolean or a password
             ObjectSpecification spec = field.getSpecification();
-            BooleanValueFacet facet =  (BooleanValueFacet) spec.getFacet(BooleanValueFacet.class);
+            BooleanValueFacet facet = (BooleanValueFacet) spec.getFacet(BooleanValueFacet.class);
             if (facet != null) {
                 boolean flag = facet.isSet(fieldReference);
-                String valueSegment =  flag ? " checked=\"checked\"" : "";
+                String valueSegment = flag ? " checked=\"checked\"" : "";
                 String disabled = " disabled=\"disabled\"";
-                value =  "<input type=\"checkbox\"" + valueSegment + disabled + " />";
+                value = "<input type=\"checkbox\"" + valueSegment + disabled + " />";
             }
-            
+
             request.appendHtml(value);
             if (linkedField != null) {
                 request.appendHtml("</a>");
@@ -109,4 +115,3 @@ public class FieldValue extends AbstractElementProcessor {
     }
 
 }
-

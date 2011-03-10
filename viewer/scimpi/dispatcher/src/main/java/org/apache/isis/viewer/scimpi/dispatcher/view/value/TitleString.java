@@ -35,7 +35,8 @@ public class TitleString extends AbstractElementProcessor {
     public void process(Request request) {
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getOptionalProperty(FIELD);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
+       ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         String titleString;
         if (fieldName == null) {
             titleString = object.titleString();
@@ -52,7 +53,7 @@ public class TitleString extends AbstractElementProcessor {
             }
         }
         request.appendDebug("    " + titleString); 
-        request.appendHtml(titleString); 
+        request.appendTruncated(titleString, truncateTo);
     }
 
     public String getName() {

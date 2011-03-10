@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -44,6 +45,7 @@ public class TableView extends AbstractTableView {
         private final String title;
         private final String[] headers;
         private final List<ObjectAssociation> fields;
+        private final boolean showIcons;
         private final boolean showSelectOption;
         private final boolean showDeleteOption;
         private final boolean showEditOption;
@@ -58,6 +60,7 @@ public class TableView extends AbstractTableView {
                 String title,
                 String[] headers,
                 List<ObjectAssociation> fields,
+                boolean showIcons,
                 boolean showSelectOption,
                 boolean showDeleteOption,
                 boolean showEditOption,
@@ -70,6 +73,7 @@ public class TableView extends AbstractTableView {
             this.title = title;
             this.headers = headers;
             this.fields = fields;
+            this.showIcons = showIcons;
             this.showSelectOption = showSelectOption;
             this.showDeleteOption = showDeleteOption;
             this.showEditOption = showEditOption;
@@ -121,9 +125,7 @@ public class TableView extends AbstractTableView {
         public void writeElement(Request request, RequestContext context, ObjectAdapter element) {
             String rowId = context.mapObject(element, Scope.INTERACTION);
             String scope = linkRow == null ? "" : "&amp;" + SCOPE + "=" + linkRow.getScope();
-            String result = ""; // linkRow.getVariable().equals("_result") ? "" : "&amp;" +
-                                // RequestContext.RESULT + "=" + context.mapObject(collection,
-                                // Scope.REQUEST);
+            String result = "";
             result = context.encodedInteractionParameters();
 
             if (fields.size() == 0) {
@@ -142,7 +144,7 @@ public class TableView extends AbstractTableView {
                     request.appendHtml("<td>");
                     ObjectAdapter field = fields.get(i).get(element);
                     if (field != null) {
-                        if (!fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
+                        if (showIcons && !fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                             request.appendHtml("<img class=\"" + "small-icon" + "\" src=\""
                                     + request.getContext().imagePath(field) + "\" alt=\""
                                     + fields.get(i).getSpecification().getShortIdentifier() + "\"/>");
@@ -158,7 +160,11 @@ public class TableView extends AbstractTableView {
                             context.mapObject(fieldObject, RequestContext.scope(linkedFields[i].getScope()));
 
                         }
-                        request.appendHtml(field.titleString());
+                        try {
+                            request.appendHtml(field.titleString());
+                        } catch (ObjectNotFoundException e) {
+                            request.appendHtml(e.getMessage());
+                        }
                         if (linkRow != null || linkedFields[i] != null) {
                             request.appendHtml("</a>");
                         }
@@ -214,6 +220,7 @@ public class TableView extends AbstractTableView {
         final String title = request.getOptionalProperty(FORM_TITLE);
         
         boolean linkFields = request.isRequested("link-fields", true);
+        final boolean showIcons = request.isRequested(SHOW_ICON, true);
         final boolean showSelectOption = request.isRequested(SHOW_SELECT, true);
         final boolean showEditOption = request.isRequested(SHOW_EDIT, true);
         final boolean showDeleteOption = request.isRequested(SHOW_DELETE, true);
@@ -243,7 +250,7 @@ public class TableView extends AbstractTableView {
 
         request.popBlockContent();
         
-        return new SimpleTableBuilder(object, includeHeading, includeFooting, title, headers, fields, showSelectOption, showDeleteOption,
+        return new SimpleTableBuilder(object, includeHeading, includeFooting, title, headers, fields, showIcons, showSelectOption, showDeleteOption,
                 showEditOption, fieldName, linkedFields, linkRow);
     }
 

@@ -34,6 +34,7 @@ public class Title extends AbstractElementProcessor {
     public void process(Request request) {
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getOptionalProperty(FIELD);
+        int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
         boolean isIconShowing = request.isRequested(SHOW_ICON, true);
         String className = request.getOptionalProperty(CLASS);
         className = className == null ? "title-icon" : className;
@@ -53,7 +54,7 @@ public class Title extends AbstractElementProcessor {
                 String iconPath = request.getContext().imagePath(object);
                 request.appendHtml("<img class=\"" + className + "\" src=\"" + iconPath + "\" />");
             }
-            request.appendHtml(object.titleString());
+            request.appendTruncated(object.titleString(), truncateTo);
             request.appendHtml("</span>");
         }
         request.closeEmpty();
