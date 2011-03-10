@@ -23,6 +23,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -61,7 +62,8 @@ public class EditAction implements Action {
             String message = context.getParameter(MESSAGE);
             
             ObjectAdapter adapter = context.getMappedObject(objectId);
-            List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            AuthenticationSession session= IsisContext.getAuthenticationSession();
+            List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
             FormState entryState = validateObject(context, adapter, fields);
             Version adapterVersion = adapter.getVersion();
             Version formVersion = context.getVersion(version);
