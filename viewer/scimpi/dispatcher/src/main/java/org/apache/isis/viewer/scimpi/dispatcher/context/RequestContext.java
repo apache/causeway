@@ -24,15 +24,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -47,6 +44,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.log4j.Logger;
 
 
 public abstract class RequestContext {
