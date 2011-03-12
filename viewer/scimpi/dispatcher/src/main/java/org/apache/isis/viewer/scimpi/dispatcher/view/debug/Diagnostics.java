@@ -22,7 +22,6 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -31,6 +30,10 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class Diagnostics extends AbstractElementProcessor {
 
     public void process(Request request) {
+        if (request.getContext().isDebugDisabled()) {
+            return;
+        }
+        
         boolean isForced = request.isRequested("force");
         boolean isExcludeVariables = request.isRequested("exclude-variables");
         boolean isExcludeProcessing = request.isRequested("exclude-processing");

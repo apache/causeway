@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class PrintAuthorizationClause extends AbstractElementProcessor {
@@ -13,8 +14,13 @@ public class PrintAuthorizationClause extends AbstractElementProcessor {
     }
 
     public void process(Request request) {
-        Identifier identifier = (Identifier) request.getContext().getVariable("_security_identifier");
-        List<String> roles =  (List<String>) request.getContext().getVariable("_security_roles");
+        RequestContext context = request.getContext();
+        if (context.isDebugDisabled()) {
+            return;
+        }
+        
+        Identifier identifier = (Identifier) context.getVariable("_security_identifier");
+        List<String> roles =  (List<String>) context.getVariable("_security_roles");
         StringBuffer roleList = new StringBuffer();
         for (String role : roles) {
             if (roleList.length() > 0) {

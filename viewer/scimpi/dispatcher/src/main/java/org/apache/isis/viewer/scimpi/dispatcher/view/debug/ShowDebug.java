@@ -20,24 +20,22 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
-public class ThrowException extends AbstractElementProcessor {
+public class ShowDebug extends AbstractElementProcessor {
 
     public void process(Request request) {
         if (request.getContext().isDebugDisabled()) {
-            return;
+            request.skipUntilClose();
+        } else {
+            request.processUtilCloseTag();
         }
-        
-		String message = request.getOptionalProperty("message", "Exception throw for testing purposes");
-        throw new IsisException(message);
     }
 
     public String getName() {
-        return "debug-exception";
+        return "show-debug";
     }
 
 }

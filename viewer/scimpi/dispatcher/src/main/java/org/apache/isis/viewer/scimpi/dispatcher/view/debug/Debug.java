@@ -43,6 +43,10 @@ public class Debug extends AbstractElementProcessor {
 
     @Override
     public void process(Request request) {
+        if (request.getContext().isDebugDisabled()) {
+            return;
+        }
+        
         String type = request.getOptionalProperty("type");
         String value = request.getOptionalProperty("value");
         boolean alwaysShow = request.isRequested("force", false);

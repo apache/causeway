@@ -27,10 +27,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -48,7 +44,12 @@ import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.util.Dump;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
+import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 
 public class DebugAction implements Action {
@@ -68,6 +69,10 @@ public class DebugAction implements Action {
 
     @Override
     public void process(RequestContext context) throws IOException {
+        if (context.isDebugDisabled()) {
+            throw new ForbiddenException("Can't access debug action when debug is disabled");
+        }
+        
         String action = context.getParameter("action");
         if ("i18n".equals(action)) {
             i18n(context, null);            

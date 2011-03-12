@@ -38,9 +38,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.action.RunAction;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.Services;
 import org.apache.isis.viewer.scimpi.dispatcher.view.collection.Collection;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Debug;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugAccessCheck;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Diagnostics;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Members;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.PrintAuthorizationClause;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.ShowDebug;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Specification;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.ThrowException;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.AddMessage;
@@ -124,6 +126,7 @@ public class ProcessorLookup {
         addElementProcessor(new CountElements());
         addElementProcessor(new Diagnostics());
         addElementProcessor(new Debug());
+        addElementProcessor(new DebugAccessCheck());
         addElementProcessor(new DefaultValue()); 
         addElementProcessor(new EditLink());
         addElementProcessor(new EditObject());
@@ -165,6 +168,7 @@ public class ProcessorLookup {
         addElementProcessor(new Selector());
         addElementProcessor(new Services());
         addElementProcessor(new ShortFormView());
+        addElementProcessor(new ShowDebug());
         addElementProcessor(new Specification());
         addElementProcessor(new TableCell());
         addElementProcessor(new TableView());

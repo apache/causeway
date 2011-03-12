@@ -43,6 +43,10 @@ public class Members extends AbstractElementProcessor {
 
     @Override
     public void process(Request request) {
+        if (request.getContext().isDebugDisabled()) {
+            return;
+        }
+        
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getOptionalProperty(FIELD);
         request.appendHtml("<pre class=\"debug\">");

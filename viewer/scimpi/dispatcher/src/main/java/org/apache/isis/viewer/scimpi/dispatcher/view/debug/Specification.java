@@ -34,12 +34,17 @@ public class Specification extends AbstractElementProcessor {
 
     @Override
     public void process(Request request) {
-        if (request.isRequested("always") || request.getContext().getDebug() == RequestContext.Debug.ON) {
+        RequestContext context = request.getContext();
+        if (context.isDebugDisabled()) {
+            return;
+        }
+        
+        if (request.isRequested("always") || context.getDebug() == RequestContext.Debug.ON) {
             request.appendHtml("<div class=\"debug\">");
             request.appendHtml("<pre>");
             
             String id = request.getOptionalProperty("object");
-            ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = context.getMappedObjectOrResult(id);
             ObjectSpecification specification = object.getSpecification();
             request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
             List<ObjectAssociation> fields = specification.getAssociations();

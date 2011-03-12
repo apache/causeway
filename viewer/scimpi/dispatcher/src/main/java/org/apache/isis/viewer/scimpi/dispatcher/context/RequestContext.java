@@ -58,6 +58,10 @@ public abstract class RequestContext {
         ON, OFF, PAGE
     }
 
+    private enum DebugLevel {
+        OFF, ON, SYSADMIN_ONLY
+    }
+    
     public static Scope scope(String scopeName) {
         String name = scopeName.toUpperCase();
         if (name.equals(Scope.GLOBAL.toString())) {
@@ -84,7 +88,8 @@ public abstract class RequestContext {
     public static final String ERROR = "_error";
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
-    private static final Scope[] SCOPES = new Scope[] { Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL }; 
+    private static final Scope[] SCOPES = new Scope[] { Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
+    private static DebugLevel debugLevel = null;
 
     private ObjectMapping objectMapping;
     private VersionMapping versionMapping;
@@ -709,6 +714,21 @@ public abstract class RequestContext {
     public void raiseError(int status) {}
 
     public void setContentType(String string) {}
+
+    
+    public boolean isDebugDisabled() {
+        if (debugLevel == null) {
+            String property = System.getProperties().getProperty("debug");
+            if (property != null) {
+                debugLevel = DebugLevel.valueOf(property);
+            }
+            if (debugLevel == null) {
+                debugLevel = DebugLevel.OFF;
+            }
+        }
+        boolean allowDebug = debugLevel == DebugLevel.ON || (debugLevel == DebugLevel.SYSADMIN_ONLY && getSession().getRoles().contains("sysadmin"));
+        return !allowDebug;
+    }
 
     public boolean isDebug() { 
         return getDebug() == Debug.ON; 

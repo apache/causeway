@@ -35,40 +35,30 @@ public class ForbiddenException extends ScimpiException {
     private static final long serialVersionUID = 1L;
     public static final boolean VISIBLE_AND_USABLE = true;
     public static final boolean VISIBLE = false;
-
-    private Identifier identifier;
-    private AuthenticationSession session;
-
-    public ForbiddenException() {}
+    private final Identifier identifier;
+    private final AuthenticationSession session;
 
     public ForbiddenException(String message) {
-        super(appendUsers(message));
+        this(IsisContext.getAuthenticationSession(), message);
     }
 
-    public ForbiddenException(Throwable cause) {
-        super(cause);
-    }
-
-    public ForbiddenException(String message, Throwable cause) {
-        super(appendUsers(message), cause);
+    private ForbiddenException(AuthenticationSession session, String message) {
+        super(message + " for " + session.getUserName() + " " + session.getRoles());
+        this.session = session;
+        identifier = null;
     }
 
     public ForbiddenException(IdentifiedHolder target, boolean isVisibleAndUsabable) {
         this(target.getIdentifier(), IsisContext.getAuthenticationSession(), isVisibleAndUsabable);
     }
 
-    public ForbiddenException(Identifier identifier, AuthenticationSession session, boolean isVisibleAndUsabable) {
+    private ForbiddenException(Identifier identifier, AuthenticationSession session, boolean isVisibleAndUsabable) {
         super((identifier.getType() == Identifier.Type.PROPERTY_OR_COLLECTION ? "Field" : "Action") + " '"
                 + identifier.getMemberName() + "' in " + identifier.getClassNaturalName() + " is not "
                 + (isVisibleAndUsabable ? "visible/usable " : "visible") + " for " + session.getUserName() + " "
                 + session.getRoles());
         this.identifier = identifier;
         this.session = session;
-    }
-
-    private static String appendUsers(String message) {
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        return message + " " + session.getUserName() + " " + session.getRoles();
     }
 
     public Identifier getIdentifier() {
