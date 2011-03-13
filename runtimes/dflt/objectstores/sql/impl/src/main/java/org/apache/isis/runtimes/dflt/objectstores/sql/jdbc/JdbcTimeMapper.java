@@ -19,13 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
@@ -40,21 +39,6 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 		super(field);
 	}
 
-	// TODO:KAM:here XY
-	@Override
-	public String valueAsDBString(final ObjectAdapter value,
-			DatabaseConnector connector) {
-        connector.addToQueryValues(preparedStatementObject(value));
-		return "?";
-		/*
-		 * EncodableFacet encodeableFacet =
-		 * value.getSpecification().getFacet(EncodableFacet.class); String
-		 * encodedString = encodeableFacet.toEncodedString(value); String minute
-		 * = encodedString.substring(2, 4); String hour =
-		 * encodedString.substring(0, 2); String encodedWithAdaptions = hour +
-		 * ":" + minute + ":00"; return "'" + encodedWithAdaptions + "'";
-		 */
-	}
     @Override
 	protected Object preparedStatementObject(ObjectAdapter value){
         Time asDate = (Time) value.getObject();

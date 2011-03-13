@@ -43,8 +43,6 @@ public class IdMappingAbstract {
 		sql.append(column);
 		connector.addToQueryValues(primaryKeyAsObject(oid));
 		sql.append(" = ?");
-		// String id = primaryKey(oid);
-		// sql.append(id);
 	}
 
 	public void appendCreateColumnDefinitions(StringBuffer sql) {

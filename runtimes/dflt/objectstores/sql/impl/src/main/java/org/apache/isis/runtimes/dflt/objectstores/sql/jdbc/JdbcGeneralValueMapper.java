@@ -19,9 +19,6 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
@@ -29,6 +26,8 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 
@@ -54,45 +53,11 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 	}
 
 	// TODO:KAM: here X
-	@Override
-	public String valueAsDBString(final ObjectAdapter value,
-			DatabaseConnector connector) {
-		if (value == null) {
-			return "null";
-		} else {
-			Object valueObject = value.getObject();
-			if (valueObject == null){
-				return "null";
-			}
-			
-			valueObject = preparedStatementObject(value);
-			if (valueObject != null){
-                connector.addToQueryValues(valueObject);
-			} else {
-				if (columnType().contains("CHAR")){
-					EncodableFacet facet = value.getSpecification().getFacet(
-							EncodableFacet.class);
-					String encodedString = facet.toEncodedString(value);
-					connector.addToQueryValues(encodedString);
-				} else {
-					connector.addToQueryValues(valueObject);
-				}
-			}
-			/*
-			 * EncodableFacet facet =
-			 * value.getSpecification().getFacet(EncodableFacet.class); String
-			 * encodedString = facet.toEncodedString(value);
-			 * 
-			 * if (this.columnType().startsWith("VARCHAR")){ return
-			 * Sql.escapeAndQuoteValue(encodedString); } else { return
-			 * encodedString; }
-			 */
-		}
-		return "?";
-
-	}
 	
+	@Override
     protected Object preparedStatementObject(ObjectAdapter value){
+        if (value == null) return null;
+        
         Object o = value.getObject();
         
         if (o instanceof Money) {
@@ -106,7 +71,14 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
         } else if (o instanceof String) {
             return o;
         } else {
-            return null;
+            if (columnType().contains("CHAR")){
+                EncodableFacet facet = value.getSpecification().getFacet(
+                        EncodableFacet.class);
+                String encodedString = facet.toEncodedString(value);
+                return encodedString;
+            } else {
+                return o;
+            }
         }
     }
 	

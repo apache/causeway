@@ -54,7 +54,8 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         if (fieldValue == null) {
             sql.append("NULL");
         } else {
-        	sql.append(valueAsDBString(fieldValue, connector));
+        	sql.append("?");
+        	connector.addToQueryValues(preparedStatementObject(fieldValue));
         }
     }
 
@@ -70,7 +71,8 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         sql.append(Sql.sqlFieldName(field.getId()));
         sql.append(condition);
         ObjectAdapter fieldValue = field.get(object);
-        sql.append(valueAsDBString(fieldValue, connector));
+        sql.append("?");
+        connector.addToQueryValues(preparedStatementObject(fieldValue));
     }
     
     public void initializeField(ObjectAdapter object, Results rs) {
@@ -92,8 +94,6 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
 
     protected abstract String columnType();
 
-    //TODO: replace valueAsDBString with preparedStatementObject
-    protected abstract String valueAsDBString(ObjectAdapter value, DatabaseConnector connector);
     protected abstract Object preparedStatementObject(ObjectAdapter value);
 
     protected abstract ObjectAdapter setFromDBColumn(String encodeValue, ObjectAssociation field);
