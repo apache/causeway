@@ -30,6 +30,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
+import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
+import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 
 
 // TODO this should work like EditAction so that logon page is repopulated
@@ -42,19 +44,33 @@ public class LogonAction implements Action {
 
         String view;
         if (session == null) {
-            context.addVariable("login-failure", "Failed to login. Check the username and ensure that your password was entered correctly", Scope.INTERACTION);
+            FormState formState = new FormState();
+            formState.setError("Failed to login. Check the username and ensure that your password was entered correctly");
+            FieldEditState fieldState = formState.createField("username", username);
+            if (username.length() == 0) {
+                fieldState.setError("User Name required");
+            }
+            fieldState = formState.createField("password", password);
+            if (password.length() == 0) {
+                fieldState.setError("Password required");
+            }
+            if (username.length() == 0 || password.length() == 0) {
+                formState.setError("Both the user name and password must be entered");
+            }
+            context.addVariable(ENTRY_FIELDS, formState, Scope.REQUEST);
+            
             view = context.getParameter("error");
+            context.setRequestPath("/" + view, Dispatcher.ACTION);
         } else {
             context.setSession(session);
-//            UserManager.logonUser(session);
             context.startHttpSession();
             view = context.getParameter("view");
             if (view == null) {
                 // REVIEW this is duplicated in Logon.java
                 view = "start." + Dispatcher.EXTENSION;
             }
+            context.redirectTo(view);
         }
-        context.redirectTo(view);
     }
 
     public String getName() {

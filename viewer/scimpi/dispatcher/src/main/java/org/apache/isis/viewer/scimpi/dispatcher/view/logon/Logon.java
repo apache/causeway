@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
+import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
@@ -48,31 +49,23 @@ public class Logon extends AbstractElementProcessor {
     }
 
     public static void loginForm(Request request, String view) {
-        Object message = request.getContext().getVariable("login-failure");
-        if (message != null) {
-            request.appendHtml("<p class=\"login-failure\">" + message + "</p>");
-        }
-        
+    //    String message = (String) request.getContext().getVariable("login-failure");
+           
         String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
         List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField(ERRORS, error));
         if (view != null) {
             hiddenFields.add(new HiddenInputField(VIEW, view));
         }
-   
-        InputField nameField = new InputField("username");
-        nameField.setType(InputField.TEXT);
+
+        FormState entryState = (FormState) request.getContext().getVariable(ENTRY_FIELDS);
+        InputField nameField = createdField("username", "User Name", InputField.TEXT, entryState);
         String width = request.getOptionalProperty("width");
         if (width != null) {
             int w = Integer.valueOf(width).intValue();
             nameField.setWidth(w);
         }
-        nameField.setLabel("User Name");
-   
-        InputField passwordField = new InputField("password");
-        passwordField.setType(InputField.PASSWORD);
-        passwordField.setLabel("Password");
-   
+        InputField passwordField = createdField("password", "Password", InputField.PASSWORD, entryState); 
         InputField[] fields = new InputField[] { nameField, passwordField, };
    
         String formTitle = request.getOptionalProperty(FORM_TITLE);
@@ -80,11 +73,22 @@ public class Logon extends AbstractElementProcessor {
         String className = request.getOptionalProperty(CLASS, "action login full");
         String  id = request.getOptionalProperty(ID);
         
-        FormState entryState = (FormState) request.getContext().getVariable(ENTRY_FIELDS);
-
-        
         HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields,
                 className, id, formTitle, null, null, loginButtonTitle, entryState == null ? null : entryState.getError());
+    }
+
+    protected static InputField createdField(String fieldName, String fieldLabel, int type, FormState entryState) {
+        InputField nameField = new InputField(fieldName);
+        nameField.setType(type);
+        nameField.setLabel(fieldLabel);
+        if (entryState != null) {
+            FieldEditState fieldState = entryState.getField(fieldName);
+            String entry = fieldState == null ? "" : fieldState.getEntry();
+            nameField.setValue(entry);
+            String error =  fieldState == null ? "" : fieldState.getError();
+            nameField.setErrorText(error);
+        }
+        return nameField;
     }
 
     public String getName() {

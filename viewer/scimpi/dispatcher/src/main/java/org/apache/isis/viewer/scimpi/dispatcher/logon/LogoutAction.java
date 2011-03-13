@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.logon;
 
 import java.io.IOException;
@@ -29,6 +28,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 
+
 public class LogoutAction implements Action {
 
     public String getName() {
@@ -36,7 +36,7 @@ public class LogoutAction implements Action {
     }
 
     public void init() {}
-    
+
     public void process(RequestContext context) throws IOException {
         AuthenticationSession session = context.getSession();
         if (session != null) {
@@ -44,17 +44,14 @@ public class LogoutAction implements Action {
             UserManager.logoffUser(session);
             context.endHttpSession();
         }
-        
+
         String view = context.getParameter("view");
         if (view == null) {
-            //view = context.getUrlBase() + context.getContextPath();
             view = context.getContextPath();
         }
         context.redirectTo(view);
     }
-    
+
     public void debug(DebugView view) {}
-    
+
 }
-
-
