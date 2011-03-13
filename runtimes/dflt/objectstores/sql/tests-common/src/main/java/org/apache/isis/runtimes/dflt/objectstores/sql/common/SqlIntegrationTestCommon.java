@@ -304,9 +304,9 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	public void testDate() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
 		Logger.getRootLogger().log(Level.INFO, sqlDataClass.getDate());
-		//assertTrue(applibDate.toString() + " is not equal to "
-		//		+ sqlDataClass.getDate().toString(),
-		//		applibDate.isEqualTo(sqlDataClass.getDate()));
+		assertTrue(applibDate.toString() + " is not equal to "
+				+ sqlDataClass.getDate().toString(),
+				applibDate.isEqualTo(sqlDataClass.getDate()));
 	}
 
 	/**
@@ -317,9 +317,9 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	public void testSqlDate() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
 		Logger.getRootLogger().log(Level.INFO, sqlDataClass.getSqlDate());
-		//assertTrue("SQL date " + sqlDate.toString() + " is not equal to "
-		//		+ sqlDataClass.getSqlDate().toString(),
-		//		sqlDate.compareTo(sqlDataClass.getSqlDate()) == 0);
+		assertTrue("SQL date " + sqlDate.toString() + " is not equal to "
+				+ sqlDataClass.getSqlDate().toString(),
+				sqlDate.compareTo(sqlDataClass.getSqlDate()) == 0);
 	}
 
 	/**
