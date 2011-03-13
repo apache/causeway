@@ -100,7 +100,6 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         StringBuffer sql = new StringBuffer();
         sql.append("alter table ");
         sql.append(table);
-        // TODO MSSQL chokes: sql.append(" add column ");
         sql.append(" add ");
         foreignKeyMapping.appendColumnDefinitions(sql);
         connection.update(sql.toString());

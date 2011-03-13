@@ -37,13 +37,13 @@ public class PostgreSqlTest extends SqlIntegrationTestCommon {
 		Properties properties = super.getProperties();
 		if (properties == null){
 			properties = new Properties();
+			// Only used if src/test/config/postgresql.properties does not exist.
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.postgresql.Driver");
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:postgresql://abacus/noftest");
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
 			
-            properties.put(SqlObjectStore.BASE_NAME + ".datatypes.timestamp", "TIMESTAMP");
-            properties.put(SqlObjectStore.BASE_NAME + ".datetime", "TIMESTAMP");            
+            //properties.put(SqlObjectStore.BASE_NAME + ".datatypes.timestamp", "TIMESTAMP");
 		}
 		return properties;
 	}

@@ -19,13 +19,13 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
 
@@ -43,9 +43,7 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
     // TODO:KAM:here XYZ
     @Override
     public String valueAsDBString(final ObjectAdapter value, DatabaseConnector connector) {
-        TimeStamp asDate = (TimeStamp) value.getObject();
-        java.sql.Timestamp xxx = new java.sql.Timestamp(asDate.longValue());
-        connector.addToQueryValues(xxx);
+        connector.addToQueryValues(preparedStatementObject(value));
         return "?";
         /*
          * EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class); String
@@ -57,6 +55,13 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
          * millisecond; return "'" + encodedWithAdaptions + "'";
          */
     }
+    @Override
+    protected Object preparedStatementObject(ObjectAdapter value){
+        TimeStamp asDate = (TimeStamp) value.getObject();
+        java.sql.Timestamp timeStamp = new java.sql.Timestamp(asDate.longValue());
+        return timeStamp;
+    }
+    
 
     @Override
     public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field) {

@@ -43,9 +43,7 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
 
     //TODO:KAM:here XYZ
     public String valueAsDBString(final ObjectAdapter value, DatabaseConnector connector) {
-    	DateTime asDate = (DateTime) value.getObject();
-    	java.sql.Timestamp xxx = new java.sql.Timestamp(asDate.longValue());
-    	connector.addToQueryValues(xxx);
+        connector.addToQueryValues(preparedStatementObject(value));
     	return "?";
     	/*
         EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
@@ -59,6 +57,13 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
         return "'" + encodedWithAdaptions + "'";
         */
     }
+    @Override
+    protected Object preparedStatementObject(ObjectAdapter value){
+        DateTime asDate = (DateTime) value.getObject();
+        java.sql.Timestamp dateTime = new java.sql.Timestamp(asDate.longValue());
+        return dateTime;
+    }
+    
 
     public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field)             {
         // convert date to yyyymmddhhmm

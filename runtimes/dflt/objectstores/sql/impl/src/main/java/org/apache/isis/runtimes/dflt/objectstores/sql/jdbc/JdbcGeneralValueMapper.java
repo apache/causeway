@@ -60,20 +60,14 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 		if (value == null) {
 			return "null";
 		} else {
-			Object o = value.getObject();
-			if (o == null){
+			Object valueObject = value.getObject();
+			if (valueObject == null){
 				return "null";
 			}
-			if (o instanceof Money) {
-				connector.addToQueryValues(((Money) o).floatValue());
-			} else if (o instanceof Percentage) {
-				connector.addToQueryValues(((Percentage) o).floatValue());
-			} else if (o instanceof Password) {
-				connector.addToQueryValues(((Password) o).getPassword());
-			} else if (o instanceof Color) {
-				connector.addToQueryValues(((Color) o).intValue());
-			} else if (o instanceof String) {
-				connector.addToQueryValues(o);
+			
+			valueObject = preparedStatementObject(value);
+			if (valueObject != null){
+                connector.addToQueryValues(valueObject);
 			} else {
 				if (columnType().contains("CHAR")){
 					EncodableFacet facet = value.getSpecification().getFacet(
@@ -81,7 +75,7 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 					String encodedString = facet.toEncodedString(value);
 					connector.addToQueryValues(encodedString);
 				} else {
-					connector.addToQueryValues(o);
+					connector.addToQueryValues(valueObject);
 				}
 			}
 			/*
@@ -97,6 +91,25 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 		return "?";
 
 	}
+	
+    protected Object preparedStatementObject(ObjectAdapter value){
+        Object o = value.getObject();
+        
+        if (o instanceof Money) {
+            return ((Money) o).floatValue();
+        } else if (o instanceof Percentage) {
+            return ((Percentage) o).floatValue();
+        } else if (o instanceof Password) {
+            return ((Password) o).getPassword();
+        } else if (o instanceof Color) {
+            return ((Color) o).intValue();
+        } else if (o instanceof String) {
+            return o;
+        } else {
+            return null;
+        }
+    }
+	
 
 	@Override
 	public ObjectAdapter setFromDBColumn(final String encodeValue,

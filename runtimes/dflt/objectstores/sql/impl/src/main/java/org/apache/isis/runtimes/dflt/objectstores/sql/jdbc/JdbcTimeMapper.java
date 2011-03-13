@@ -44,9 +44,7 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 	@Override
 	public String valueAsDBString(final ObjectAdapter value,
 			DatabaseConnector connector) {
-		Time asDate = (Time) value.getObject();
-		java.sql.Time xxx = java.sql.Time.valueOf(asDate.toString() + ":00");
-		connector.addToQueryValues(xxx);
+        connector.addToQueryValues(preparedStatementObject(value));
 		return "?";
 		/*
 		 * EncodableFacet encodeableFacet =
@@ -56,6 +54,12 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 		 * encodedString.substring(0, 2); String encodedWithAdaptions = hour +
 		 * ":" + minute + ":00"; return "'" + encodedWithAdaptions + "'";
 		 */
+	}
+    @Override
+	protected Object preparedStatementObject(ObjectAdapter value){
+        Time asDate = (Time) value.getObject();
+        java.sql.Time time = java.sql.Time.valueOf(asDate.toString() + ":00");
+        return time;
 	}
 
 	@Override

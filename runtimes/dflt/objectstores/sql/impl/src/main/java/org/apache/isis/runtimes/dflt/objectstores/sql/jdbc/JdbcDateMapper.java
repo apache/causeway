@@ -43,15 +43,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
     //TODO:KAM:here XYZ
     public String valueAsDBString(final ObjectAdapter value, DatabaseConnector connector) {
-    	java.sql.Date xxx; 
-    	if (value.getObject() instanceof java.sql.Date){
-    		xxx = (java.sql.Date) value.getObject();
-    	}else {// if (value instanceof Date){
-    		Date asDate = (Date) value.getObject();
-        	xxx = new java.sql.Date(asDate.dateValue().getTime());
-    	} 
-    	//java.sql.Date xxx = java.sql.Date.valueOf(asDate.toString());
-    	connector.addToQueryValues(xxx);
+    	connector.addToQueryValues(preparedStatementObject(value));
     	return "?";
     	/*
         EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
@@ -63,6 +55,19 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         return "'" + encodedWithAdaptions + "'";
         */
     }
+    
+    @Override
+    protected Object preparedStatementObject(ObjectAdapter value){
+        java.sql.Date date; 
+        if (value.getObject() instanceof java.sql.Date){
+            date = (java.sql.Date) value.getObject();
+        }else {// if (value instanceof Date){
+            Date asDate = (Date) value.getObject();
+            date = new java.sql.Date(asDate.dateValue().getTime());
+        }
+        return date;
+    }
+    
 
     public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field) {
         String valueString;

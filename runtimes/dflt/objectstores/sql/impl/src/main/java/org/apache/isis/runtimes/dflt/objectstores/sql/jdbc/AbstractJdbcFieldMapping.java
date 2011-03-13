@@ -92,7 +92,9 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
 
     protected abstract String columnType();
 
+    //TODO: replace valueAsDBString with preparedStatementObject
     protected abstract String valueAsDBString(ObjectAdapter value, DatabaseConnector connector);
+    protected abstract Object preparedStatementObject(ObjectAdapter value);
 
     protected abstract ObjectAdapter setFromDBColumn(String encodeValue, ObjectAssociation field);
 

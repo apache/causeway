@@ -158,8 +158,15 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     static String TYPE_DATE;
     static String TYPE_TIME;
 
-    private void populateSqlDataTypes(final IsisConfiguration dataTypes, final String baseName) {
-        // TYPE_BOOLEAN = dataTypes.getString("boolean" , "CHAR(1)");
+    /**
+     * Default SQL data types used to define the fields in the database. By providing this method, we allow the user an
+     * opportunity to override these types by specifying alternatives in sql.properties (or which ever). 
+     * For example, Postgresql does not know about DATETIME, but can use TIMESTAMP instead.
+     *  
+     * @param dataTypes
+     * @param baseName
+     */
+    private static void populateSqlDataTypes(final IsisConfiguration dataTypes, final String baseName) {
         TYPE_TIMESTAMP = dataTypes.getString(baseName + "timestamp", "DATETIME");
         TYPE_DATETIME = dataTypes.getString(baseName + "datetime", "DATETIME");
         TYPE_DATE = dataTypes.getString(baseName + "date", "DATE");
