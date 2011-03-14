@@ -159,6 +159,10 @@ public class EditAction implements Action {
                 continue;
             }
             
+            if( newEntry.equals("-OTHER-")) {
+                newEntry = context.getParameter(fieldId + "-other");
+            }
+
             if (newEntry == null) {
                 // TODO duplicated in EditObject; line 97
                 ObjectSpecification spec = field.getSpecification();
