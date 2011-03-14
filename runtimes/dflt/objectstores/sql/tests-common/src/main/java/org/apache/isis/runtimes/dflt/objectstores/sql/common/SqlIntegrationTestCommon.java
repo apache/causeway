@@ -28,16 +28,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
@@ -47,6 +44,11 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
+import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -64,21 +66,41 @@ import org.apache.log4j.Logger;
  * 
  */
 public abstract class SqlIntegrationTestCommon extends TestCase {
-	// Helper values
-	@SuppressWarnings("deprecation")
-	private static final java.sql.Date sqlDate = new java.sql.Date(
-			java.sql.Date.UTC(110, 03, 10, 0, 0, 0));
+    private static final Logger LOG = Logger.getLogger(SqlIntegrationTestCommon.class);
+    
+    
+    private static final TimeZone UTC_TIME_ZONE;
+    // Helper values
+    private static final java.sql.Date sqlDate;// = java.sql.Date.valueOf("2010-03-05");
+    
+    static {
+        TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
+        if (timeZone == null) {
+            timeZone = TimeZone.getTimeZone("UTC");
+        }
+        UTC_TIME_ZONE = timeZone;
+        
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(UTC_TIME_ZONE);
+        cal.set(2011, 4-1, 8, 0, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        
+        sqlDate = new java.sql.Date(cal.getTimeInMillis());
+    }
+	
 	private static final Date applibDate = new Date(2010, 3, 5);
-	// private static final Money money = new Money(99.99, "GBP");
-	private static final DateTime dateTime = new DateTime(2010, 3, 5, 22, 23);
+	private static final DateTime dateTime = new DateTime(2010, 3, 5, 1, 23);
 	private static final TimeStamp timeStamp = new TimeStamp(
 			dateTime.longValue());
 	private static final Time time = new Time(14, 56);
+	
 	private static final Color color = Color.BLACK;
 	private static final Image image = new Image(new int[][] { { 1, 2, 3 },
 			{ 4, 5, 6 }, { 7, 8, 9 } });
 	private static final Password password = new Password("password");
 	private static final Percentage percentage = new Percentage(42);
+    // private static final Money money = new Money(99.99, "GBP");
+	
 	// Collection mapper tests
 	private static final List<String> stringList1 = Arrays.asList("Baking",
 			"Bakery", "Canned", "Dairy");
@@ -303,10 +325,20 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	 */
 	public void testDate() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-		Logger.getRootLogger().log(Level.INFO, sqlDataClass.getDate());
-		assertTrue(applibDate.toString() + " is not equal to "
-				+ sqlDataClass.getDate().toString(),
-				applibDate.isEqualTo(sqlDataClass.getDate()));
+		
+        LOG.log(Level.INFO, "Test: testDate()");
+        
+        LOG.log(Level.INFO, "sqlDataClass.getDate() as String: "+sqlDataClass.getDate());
+        LOG.log(Level.INFO, "applibDate.dateValue() as String: "+applibDate);
+        
+        LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: "+sqlDataClass.getDate().dateValue().getTime());
+        LOG.log(Level.INFO, "applibDate.dateValue() as Long: "+applibDate.dateValue().getTime());
+        
+        if (!applibDate.isEqualTo(sqlDataClass.getDate())){
+            fail(applibDate.toString() + " is not equal to "
+                + sqlDataClass.getDate().toString());
+        }
+		
 	}
 
 	/**
@@ -316,12 +348,46 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	 */
 	public void testSqlDate() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-		Logger.getRootLogger().log(Level.INFO, sqlDataClass.getSqlDate());
-		assertTrue("SQL date " + sqlDate.toString() + " is not equal to "
-				+ sqlDataClass.getSqlDate().toString(),
-				sqlDate.compareTo(sqlDataClass.getSqlDate()) == 0);
+		
+		LOG.log(Level.INFO, "Test: testSqlDate()");
+		LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:"+sqlDataClass.getSqlDate());
+        LOG.log(Level.INFO, "sqlDate.toString() as String:"+sqlDate);
+		
+        LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:"+sqlDataClass.getSqlDate().getTime());
+		LOG.log(Level.INFO, "sqlDate.getTime() as Long:"+sqlDate.getTime());
+        
+        if (sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0){
+            fail("SQL date " + sqlDate.toString() + " is not equal to "
+                + sqlDataClass.getSqlDate().toString());
+        }
+		
 	}
 
+    public void testDateTimezoneIssue() {
+        /*
+         * At the moment, applib Date and java.sql.Date are restored from ValueSemanticsProviderAbstractTemporal with
+         * an explicit hourly offset that comes from the timezone. I.e. in South Africa, with TZ +2h00, they have an
+         * implicit time of 02h00 (2AM). This can potentially seriously screw up GMT-X dates, which, I suspect, will
+         * actually be set to the dat BEFORE.
+         * 
+         * This test is a simple test to confirm that date/time before and after checks work as expected.   
+         *  
+         */
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        
+        DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010, 3, 5, 1, 23);
+        Date date = sqlDataClass.getDate(); // new Date(2010, 3, 5);
+        java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
+
+        /**/
+        //assertTrue("dateTime's value ("+dateTime.dateValue()+
+        //    ") should be after java.sql.date's ("+ date +")", dateTime.dateValue().after(sqlDate));
+
+        //assertTrue("dateTime's value ("+dateTime.dateValue()+
+        //    ") should be after date's ("+ date +")", dateTime.dateValue().after(date.dateValue()));
+        /**/
+    }
+	
 	/**
 	 * Test {@link Money} type.
 	 */
@@ -338,9 +404,19 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	 */
 	public void testDateTime() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-		assertTrue("DateTime " + dateTime.toString() + " is not equal to "
-				+ sqlDataClass.getDateTime().toString(),
-				dateTime.equals(sqlDataClass.getDateTime()));
+		
+		
+        LOG.log(Level.INFO, "Test: testDateTime()");
+        LOG.log(Level.INFO, "sqlDataClass.getDateTime() as String:"+sqlDataClass.getDateTime());
+        LOG.log(Level.INFO, "dateTime.toString() as String:"+dateTime);
+        
+        LOG.log(Level.INFO, "sqlDataClass.getDateTime().getTime() as Long:"+sqlDataClass.getDateTime().longValue());
+        LOG.log(Level.INFO, "dateTime.getTime() as Long:"+dateTime.longValue());
+		
+        if (!dateTime.equals(sqlDataClass.getDateTime())){
+            fail("DateTime " + dateTime.toString() + " is not equal to "
+                + sqlDataClass.getDateTime().toString());
+        }
 	}
 
 	/**

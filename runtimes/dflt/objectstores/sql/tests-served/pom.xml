@@ -72,12 +72,6 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
                 <artifactId>sql-tests-common</artifactId>
 				<version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>sql-tests-common</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
 
             <!-- Required to support the XML cross-test -->
 			<!--
