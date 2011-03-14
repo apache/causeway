@@ -201,7 +201,7 @@ public class ActionAction implements Action {
             String fieldName = parameterName(i);
             String newEntry = context.getParameter(fieldName);
             
-            if( newEntry.equals("-OTHER-")) {
+            if(newEntry != null && newEntry.equals("-OTHER-")) {
                 newEntry = context.getParameter(fieldName + "-other");
             }
             

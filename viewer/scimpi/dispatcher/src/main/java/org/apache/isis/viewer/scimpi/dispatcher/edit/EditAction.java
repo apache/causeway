@@ -159,7 +159,7 @@ public class EditAction implements Action {
                 continue;
             }
             
-            if( newEntry.equals("-OTHER-")) {
+            if (newEntry != null && newEntry.equals("-OTHER-")) {
                 newEntry = context.getParameter(fieldId + "-other");
             }
 
