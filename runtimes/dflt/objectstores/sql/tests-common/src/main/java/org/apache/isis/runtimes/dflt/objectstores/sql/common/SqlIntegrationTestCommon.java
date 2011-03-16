@@ -335,8 +335,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         LOG.log(Level.INFO, "applibDate.dateValue() as Long: "+applibDate.dateValue().getTime());
         
         if (!applibDate.isEqualTo(sqlDataClass.getDate())){
-            fail(applibDate.toString() + " is not equal to "
-                + sqlDataClass.getDate().toString());
+            fail("Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
+                + sqlDataClass.getDate().toString()+". Check log for more info.");
         }
 		
 	}
@@ -355,10 +355,10 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		
         LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:"+sqlDataClass.getSqlDate().getTime());
 		LOG.log(Level.INFO, "sqlDate.getTime() as Long:"+sqlDate.getTime());
-        
+		
         if (sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0){
-            fail("SQL date " + sqlDate.toString() + " is not equal to "
-                + sqlDataClass.getSqlDate().toString());
+            fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got "
+                + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
         }
 		
 	}
@@ -373,19 +373,19 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
          * This test is a simple test to confirm that date/time before and after checks work as expected.   
          *  
          */
+        /*
         SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
         
         DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010, 3, 5, 1, 23);
         Date date = sqlDataClass.getDate(); // new Date(2010, 3, 5);
         java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
 
-        /**/
         //assertTrue("dateTime's value ("+dateTime.dateValue()+
         //    ") should be after java.sql.date's ("+ date +")", dateTime.dateValue().after(sqlDate));
 
         //assertTrue("dateTime's value ("+dateTime.dateValue()+
         //    ") should be after date's ("+ date +")", dateTime.dateValue().after(date.dateValue()));
-        /**/
+        */
     }
 	
 	/**
