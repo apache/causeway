@@ -49,7 +49,7 @@ public class Logon extends AbstractElementProcessor {
     }
 
     public static void loginForm(Request request, String view) {
-    //    String message = (String) request.getContext().getVariable("login-failure");
+    //    String message = (String) request.getContext().examplegetVariable("login-failure");
            
         String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
         List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();

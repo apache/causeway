@@ -95,11 +95,16 @@ public class Dispatcher {
             context.setRequestPath(servletPath);
             context.startRequest();
             
+            String loginName = IsisContext.getAuthenticationSession().getUserName();
+            boolean userLoggedIn = loginName != null && !loginName.equals("__web_default");
+            // TODO determine if app can run methods unauthorized
+            boolean allowActions = userLoggedIn;
+
             // TODO review how session should start 
             // if (!newSession || servletPath.endsWith(context.getContextPath() + "/logon.app")) {
             // sessions should not start of with an action
             
-            processActions(context, servletPath);
+            processActions(context, allowActions, servletPath);
             IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
             if (transactionManager.getTransaction().getState().canFlush()) {
                 transactionManager.flushTransaction();
@@ -114,6 +119,8 @@ public class Dispatcher {
             context.endRequest();
             UserManager.endRequest(context.getSession());
 
+            context.isInternalRequest();
+            
         } catch (ScimpiNotFoundException e) {
             LOG.info("invalid page request "+ e.getMessage());
             try {
@@ -126,6 +133,7 @@ public class Dispatcher {
             context.raiseError(404);
         } catch (Throwable e) {
             LOG.debug(e.getMessage(), e);
+            LOG.info("testing");
             
             DebugString error = new DebugString();
             if (IsisContext.getCurrentTransaction() != null) {
@@ -177,8 +185,6 @@ public class Dispatcher {
     }
 
 
-    int nextId = 1000;
-    
     private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         writeErrorContent(requestContext, exception, error, new PrintWriter(out), false);
@@ -240,8 +246,16 @@ public class Dispatcher {
         return parameters.get(name);
     }
 
-    private void processActions(RequestContext context, String actionName) throws IOException {
+    private void processActions(RequestContext context, boolean allowAction, String actionName) throws IOException {
         if (actionName.endsWith(COMMAND_ROOT)) {
+            // TODO do the same thing (redirect to login page) if the action is not-authorized and the user is
+            // not logged in; if they are logged in then it is a security violation.
+            if (!allowAction && !actionName.endsWith(context.getContextPath() + "/logon.app")) {
+                IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
+                context.setRequestPath("/login.shtml");
+                return;
+            }
+            
             int pos = actionName.lastIndexOf('/');
             Action action = actions.get(actionName.substring(pos, actionName.length() - COMMAND_ROOT.length()));
             if (action == null) {
@@ -252,7 +266,7 @@ public class Dispatcher {
             action.process(context);
             String fowardTo = context.forwardTo();
             if (fowardTo != null) {
-                processActions(context, fowardTo);
+                processActions(context, true, fowardTo);
             }
         }
     }

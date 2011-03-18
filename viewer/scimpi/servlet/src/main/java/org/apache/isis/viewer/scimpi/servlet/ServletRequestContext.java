@@ -250,6 +250,10 @@ public class ServletRequestContext extends RequestContext {
         return request.getContextPath();
     }
     
+    public String getHeader(String name) {
+        return request.getHeader(name);
+    }
+    
     public String getQueryString() {
         return request.getQueryString();
     }

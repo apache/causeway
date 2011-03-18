@@ -202,6 +202,11 @@ public abstract class RequestContext {
         }
     }
 
+    public boolean isInternalRequest() {
+        String referrer = getHeader("Referer"); // Note spelling mistake is intentional
+        return referrer != null && referrer.contains("localhost");  // TODO need to look for actual domain
+    }
+    
     public boolean isValid() {
         return true;
     }
@@ -690,6 +695,8 @@ public abstract class RequestContext {
     public abstract String getContextPath();
 
     public abstract String getUrlBase();
+
+    public abstract String getHeader(String name);
 
     public abstract String getQueryString();
 
