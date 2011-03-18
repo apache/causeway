@@ -162,8 +162,6 @@ public class FileServerTest {
         server.process(connection);
 
         String string = out.toString();
-        //assertThat(string, startsWith("error")); // REVIEW: the code doesn't seem to do this
-        //assertThat(string, containsString("File not found for org.domain.Class & 2020")); // REVIEW: the code doesn't seem to do this
         assertThat(string, startsWith("not-found"));
         assertThat(string, containsString("File not found for org.domain.Class/2020"));
     }
