@@ -9,8 +9,12 @@ import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 
+import org.apache.log4j.Logger;
+
 
 public class JmxBeanServer {
+
+    private static final Logger LOG = Logger.getLogger(JmxBeanServer.class);
 
     private static JmxBeanServer instance;
     private final MBeanServer server;
@@ -22,6 +26,7 @@ public class JmxBeanServer {
     
     public static JmxBeanServer getInstance() {
         if (instance == null) {
+            LOG.info("JMX bean server created");
             instance = new JmxBeanServer();
         }
         return instance;
@@ -31,6 +36,7 @@ public class JmxBeanServer {
         try {
             ObjectName objectName = new ObjectName("Isis:name=" + name);
             server.registerMBean(object, objectName);
+            LOG.info(name + " JMX mbean registered: " + object);
         } catch (MalformedObjectNameException e) {
             throw new RuntimeException(e);
         } catch (NullPointerException e) {
