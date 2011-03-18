@@ -22,12 +22,15 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
+
     <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Dan</firstname>
+
         <surname>Haywood</surname>
       </author>
     </authorgroup>
@@ -50,13 +53,11 @@
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores.  Apache 
-    Isis is hosted at the 
-    <ulink url="http://incubator.apache.org/isis">Apache Foundation</ulink>,
-    and is licensed under <ulink
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
-
 
     <para>This guide is written for ...</para>
   </preface>
@@ -74,6 +75,70 @@
       <title>***</title>
 
       <para><emphasis>*** yada yada</emphasis></para>
+
+      <para>The guide is divided into *** parts:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>*** Introduction</para>
+
+          <para>This part of the guide discusses the principles and patterns
+          of the default runtime.</para>
+        </listitem>
+
+        <listitem>
+          <para>*** Architecture</para>
+
+          <para>This part of the guide discusses some of the main architecture
+          elements of the default runtimes design, distinguishing and
+          explaining the reason for the applib, the core modules, the viewers,
+          the default implementations of the main APIs exposed by the core,
+          and the alternative implementations of those APIs.</para>
+        </listitem>
+
+        <listitem>
+          <para>APIs</para>
+
+          <para>This part of the guide goes the (sub-)<acronym>API</acronym>s
+          that the runtime exposes</para>
+        </listitem>
+
+        <listitem>
+          <para>Default Implementations</para>
+
+          <para>This part of the guide outlines the default implementations of
+          the (sub-)<acronym>API</acronym>s.</para>
+        </listitem>
+
+        <listitem>
+          <para>Objectstore Deployments</para>
+
+          <para>This part of the guide describes how to configure the default
+          runtime to run with an objectstore.</para>
+        </listitem>
+
+        <listitem>
+          <para>Client/Server Deployment</para>
+
+          <para>This part of the guide describes how to configure the default
+          runtime to instead run in client/server mode.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
+
+      <para>***</para>
+
+      <para>This guide describes the deployment options that are available
+      through using the default implementations of the core module
+      <acronym>API</acronym>s, for the most common viewers
+      (<acronym>DnD</acronym> and <acronym>HTML</acronym>). Other viewers
+      and/or alternative module implementations may require or offer different
+      deployment options. For example, the remoting alternative implementation
+      requires the bundling up of different client vs server deployments.
+      Similarly, a viewer for a mobile phone (there isn't one at the time of
+      writing but there could be in the future) would require packaging in a
+      certain way.</para>
     </sect1>
   </chapter>
 

@@ -33,7 +33,7 @@
 		<dependency.locations.enabled>false</dependency.locations.enabled>
         
 		<docbkxGuideTitle>Apache Isis Core</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Design, APIs and Customization</docbkxGuideSubTitle>
+        <docbkxGuideSubTitle>Architecture, APIs and Customization</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-core</docbkxGuideName>	
     </properties>
 

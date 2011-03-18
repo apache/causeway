@@ -47,6 +47,10 @@
     <!-- mvn site-deploy -D modules=standard -D deploy=local -D site=full 
         -o -->
 
+    <!-- 3. deploying snapshot -->
+    <!-- mvn -D modules=standard -D deploy=snapshot deploy -->
+
+
     <inceptionYear>2010</inceptionYear>
 
     <scm>
