@@ -23,6 +23,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -206,10 +207,6 @@ public abstract class RequestContext {
         String referrer = getHeader("Referer"); // Note spelling mistake is intentional
         return referrer != null && referrer.contains("localhost");  // TODO need to look for actual domain
     }
-    
-    public boolean isValid() {
-        return true;
-    }
 
     // //////////////////////////////////////////////////////////////////
     // Version
@@ -347,6 +344,9 @@ public abstract class RequestContext {
 
     public void addVariable(String name, Object value, Scope scope) {
         name = name != null ? name : RESULT;
+        if (scope == Scope.SESSION && !(value instanceof Serializable)) {
+            throw new ScimpiException("SESSION scoped variable (" + name + ") must be serializable: " + value);
+        }
         removeExistingVariable(name);
         variables.get(scope).put(name, value);
     }
@@ -704,6 +704,8 @@ public abstract class RequestContext {
 
     public abstract String clearSession();
 
+    public abstract boolean isAborted();
+    
     public void setSession(AuthenticationSession session) {
         this.session = session;
     }
@@ -721,6 +723,15 @@ public abstract class RequestContext {
     public void raiseError(int status) {}
 
     public void setContentType(String string) {}
+
+    public void setSessionData(Map<String, Object> hashMap) {
+        variables.put(Scope.SESSION, hashMap);
+        setSession((AuthenticationSession) getVariable("_auth_session"));
+    }
+    
+    public Map<String, Object> getSessionData() {
+        return variables.get(Scope.SESSION);
+    }
 
     
     public boolean isDebugDisabled() {

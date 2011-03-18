@@ -82,7 +82,7 @@ public class DebugView {
         Throwable cause = throwable.getCause();
         if (cause != null && cause != throwable) {
             writer.println("<tr><td colspan=\"2\" >" + cause.getMessage() + "<td></tr>");
-            debug.append(cause.getMessage());
+            debug.appendln(cause.getMessage());
             causingException(cause);
         }
     }

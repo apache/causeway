@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.servlet;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,17 +53,14 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO: NOF's AuthenticationSession now has its own #getAttribute() and #setAttribute() methods,
-        // so an alternative is to bind this info onto the AuthSession.
-        // The core/webapp will (hopefully) evolve to define a standard approach here...
         try {
-            ServletRequestContext context = null;
+            ServletRequestContext context = new ServletRequestContext();
             HttpSession httpSession = request.getSession(false);
             if (httpSession != null) {
-                context = (ServletRequestContext) httpSession.getAttribute("scimpi-context");
-            }
-            if (context == null || !context.isValid()) {
-                context = new ServletRequestContext();
+                HashMap<String, Object> data = (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
+                if (data != null) {
+                    context.setSessionData(data);
+                }
             }
             context.startRequest(request, response, getServletContext());
             dispatcher.process(context, request.getServletPath());
@@ -70,7 +68,6 @@ public class DispatcherServlet extends HttpServlet {
             LOG.error("servlet exception", e);
             throw e;
         }
-
     }
 
     @Override

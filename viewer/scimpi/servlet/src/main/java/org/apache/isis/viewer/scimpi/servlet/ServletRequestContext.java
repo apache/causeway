@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -45,6 +46,7 @@ public class ServletRequestContext extends RequestContext {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ServletContext servletContext;
+    private boolean isAborted;
 
     public void append(DebugView view) {
         /*
@@ -202,8 +204,10 @@ public class ServletRequestContext extends RequestContext {
     }
     
     public void startHttpSession() {
+        addVariable("_auth_session", getSession(), Scope.SESSION);
         HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("scimpi-context", this);
+        Map<String, Object> sessionData = getSessionData();
+        httpSession.setAttribute("scimpi-context", sessionData);
     }
 
     protected String getSessionId() {
@@ -217,6 +221,7 @@ public class ServletRequestContext extends RequestContext {
     
     public void redirectTo(String view) {
         try {
+            isAborted = true;
             getResponse().sendRedirect(view);
         } catch (IOException e) {
             throw new DispatchException(e);
@@ -225,11 +230,16 @@ public class ServletRequestContext extends RequestContext {
     
     public void raiseError(int status) {
         try {
+            isAborted = true;
             getResponse().sendError(status);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         getResponse().setStatus(status);
+    }
+    
+    public boolean isAborted() {
+        return isAborted;
     }
     
     public void setContentType(String string) {

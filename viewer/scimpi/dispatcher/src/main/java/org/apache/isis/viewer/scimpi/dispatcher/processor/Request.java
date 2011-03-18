@@ -81,6 +81,9 @@ public class Request implements PageWriter {
                 String name = tag.getName();
                 ElementProcessor processor = processors.getFor(name);
                 process(tag, processor);
+                if (context.isAborted()) {
+                    return;
+                }
             }
         }
     }
@@ -201,7 +204,6 @@ public class Request implements PageWriter {
             }
         }
         throw new ScimpiException("Empty tag not closed");
-
     }
 
     public void pushNewBuffer() {
