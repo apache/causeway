@@ -51,6 +51,7 @@
     <!-- mvn -D modules=standard -D deploy=snapshot deploy -->
 
     <!-- 4. deploying archetype as snapshot -->
+    <!-- mvn -D modules=release -D deploy=snapshot deploy -->
     <!-- mvn -D modules=support -D deploy=snapshot deploy -->
 
 
