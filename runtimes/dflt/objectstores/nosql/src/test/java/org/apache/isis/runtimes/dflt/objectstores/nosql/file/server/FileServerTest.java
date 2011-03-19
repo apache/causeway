@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -166,6 +167,13 @@ public class FileServerTest {
         assertThat(string, containsString("File not found for org.domain.Class/2020"));
     }
 
+
+    @Test
+    public void testTheTests() throws Exception {
+        File dir = new File("target/test/org.domain.Class");
+        assertTrue(dir.exists());
+    }
+    
     @Test
     public void read() throws Exception {
         File file1 = new File("target/test/org.domain.Class", "2025.data");
