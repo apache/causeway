@@ -105,8 +105,8 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             if (oid instanceof AggregatedOid) {
                 AggregatedOid aoid = (AggregatedOid) oid;
                 Oid parentOid = aoid.getParentOid();
-                String fieldName = aoid.getFieldName();
-                int element = aoid.getElement();
+               String fieldName = aoid.getFieldName();
+                int element = -1; // aoid.getElement();
                 
                 object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);
                 encodedOid = Long.toHexString(((SerialOid) parentOid).getSerialNo()) + "@" + fieldName + (element == -1 ? "" : "@" + element);
@@ -168,8 +168,9 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                }
                if (split.length > 2) {
                    SerialOid parentOid = SerialOid.createPersistent(Long.parseLong(oidData, 16));
-                   int element = (split.length == 3) ? -1 : Integer.valueOf(split[3]);
-                   oid = new AggregatedOid(parentOid, split[2], element);
+                  // int element = (split.length == 3) ? -1 : Integer.valueOf(split[3]);
+                   //oid = new AggregatedOid(parentOid, split[2], element);
+                   oid = new AggregatedOid(parentOid, split[2]);
                    IsisContext.getPersistenceSession().loadObject(parentOid, spec);
                    loadObject = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid); 
                } else if (oidType.isAssignableFrom(SerialOid.class)) {

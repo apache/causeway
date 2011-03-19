@@ -24,10 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
@@ -35,6 +33,7 @@ import java.util.TreeSet;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -192,12 +191,28 @@ public abstract class RequestContext {
             if (parentObject instanceof ObjectAdapter) {
                 IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) parentObject);
             }
-            ObjectAssociation association = parentObject.getSpecification().getAssociation(idParts[2]);
-            ObjectAdapter aggregatedAdapter = association.get(parentObject);
-            if (idParts.length == 4) {
-                CollectionFacet collectionFacet = aggregatedAdapter.getSpecification().getFacet(CollectionFacet.class);
-                List<ObjectAdapter> collection = new ArrayList<ObjectAdapter>(collectionFacet.collection(aggregatedAdapter));
-                aggregatedAdapter = collection.get(Integer.valueOf(idParts[3]));  //collectionFacet.firstElement(aggregatedAdapter);
+
+            AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
+
+            ObjectAdapter aggregatedAdapter = null;
+            outer: for (ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
+                if (association.getSpecification().isAggregated()) {
+                    if (association.isOneToManyAssociation()) {
+                        ObjectAdapter coll = association.get(parentObject);
+                        CollectionFacet facet = coll.getSpecification().getFacet(CollectionFacet.class);
+                        for (ObjectAdapter element : facet.iterable(coll)) {
+                            if (element.getOid().equals(aggregatedOid)) {
+                                aggregatedAdapter = element;
+                                break outer;
+                            }
+                        }
+                    } else {
+                        if (association.get(parentObject).getOid().equals(aggregatedOid)) {
+                            aggregatedAdapter = association.get(parentObject);
+                            break;
+                        }
+                    }
+                }
             }
             return aggregatedAdapter;
         }
