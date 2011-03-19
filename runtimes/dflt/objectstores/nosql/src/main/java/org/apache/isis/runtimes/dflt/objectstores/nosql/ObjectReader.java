@@ -108,10 +108,11 @@ class ObjectReader {
     }
     
     private void readAggregate(StateReader reader, KeyCreator keyCreator, OneToOneAssociation association, ObjectAdapter object) {
-       String id = association.getId();
+      String id = association.getId();
        StateReader aggregateReader = reader.readAggregate(id);
        if (aggregateReader != null) {
-           AggregatedOid oid = new AggregatedOid(object.getOid(), id);
+           String id2 = aggregateReader.readId();
+           AggregatedOid oid = new AggregatedOid(object.getOid(), id2);
            ObjectAdapter fieldObject = restoreAggregatedObject(aggregateReader, oid, keyCreator);
            association.initAssociation(object, fieldObject);
        } else {
@@ -123,10 +124,12 @@ class ObjectReader {
            String objectType = aggregateReader.readObjectType();
            ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(objectType);
            ObjectAdapter fieldObject = getAdapter(specification, oid);
-           ResolveState resolveState = ResolveState.RESOLVING;
-           fieldObject.changeState(resolveState);
-           readFields(aggregateReader, fieldObject, keyCreator);
-           fieldObject.changeState(resolveState.getEndState());
+           if (fieldObject.getResolveState().isGhost()) {
+               ResolveState resolveState = ResolveState.RESOLVING;
+               fieldObject.changeState(resolveState);
+               readFields(aggregateReader, fieldObject, keyCreator);
+               fieldObject.changeState(resolveState.getEndState());
+           }
         return fieldObject;
     }
 
@@ -161,11 +164,12 @@ class ObjectReader {
         CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         if (association.getSpecification().isAggregated()) {
             List<StateReader> readers = reader.readCollection(association.getId());
-            String id = association.getId();
+       //     String id = association.getId();
             ObjectAdapter[] elements = new ObjectAdapter[readers.size()];
             int i = 0;
             for (StateReader elementReader : readers) {
-                AggregatedOid oid = new AggregatedOid(object.getOid(), id, i);
+                String id = elementReader.readId();
+                AggregatedOid oid = new AggregatedOid(object.getOid(), id);
                 elements[i++] = restoreAggregatedObject(elementReader, oid, keyCreator);
             }
             facet.init(collection, elements);

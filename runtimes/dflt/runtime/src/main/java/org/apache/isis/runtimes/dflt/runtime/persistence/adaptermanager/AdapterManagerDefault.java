@@ -209,7 +209,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     public ObjectAdapter adapterForAggregatedObject(Object pojo, ObjectAdapter parent) {
-        final Oid aggregatedOid = new AggregatedOid(parent.getOid(), "*NEW*");
+ //       final Oid aggregatedOid = new AggregatedOid(parent.getOid(), "*NEW*");
+        final Oid aggregatedOid = new AggregatedOid(parent.getOid(), "+" + (Math.random() * 1000000));
         ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
 /*
         // we copy over the type onto the adapter itself

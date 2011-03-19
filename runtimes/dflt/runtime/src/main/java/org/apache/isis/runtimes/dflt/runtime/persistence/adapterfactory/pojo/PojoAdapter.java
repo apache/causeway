@@ -159,7 +159,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         // in the process of transitioning to ghost
         Assert.assertTrue("oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(), validToChangeTo);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG.isTraceEnabled()) {
             String oidString;
             if (oid == null) {
                 oidString = "";
@@ -167,7 +167,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 // don't call toString() in case in process of transitioning to ghost
                 oidString = "for " + this.getOid() + " ";
             }
-            LOG.debug(oidString + "changing resolved state to " + newState.name());
+            LOG.trace(oidString + "changing resolved state to " + newState.name());
         }
         resolveState = newState;
     }

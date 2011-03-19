@@ -176,7 +176,7 @@ public class NoSqlObjectStore implements ObjectStore {
     @Override
     public void resolveField(ObjectAdapter object, ObjectAssociation field) {
         ObjectAdapter fieldValue = field.get(object);
-        if (fieldValue != null) {
+        if (fieldValue != null && !fieldValue.getResolveState().isResolved() && !fieldValue.getSpecification().isAggregated()) {
             resolveImmediately(fieldValue);
         }
     }

@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -105,6 +106,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
         } else {
             String specName = field.getSpecification().getFullIdentifier();
             StateWriter aggregateWriter = writer.addAggregate(association.getId());
+            aggregateWriter.writeId(((AggregatedOid) field.getOid()).getFieldName());
             writeFields(aggregateWriter, specName, field);
         }
     }
@@ -143,6 +145,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
             List<StateWriter> elements = new ArrayList<StateWriter>();
             for (ObjectAdapter element : collectionFacet.iterable(collection)) {
                StateWriter elementWriter = writer.createElementWriter();
+               elementWriter.writeId(((AggregatedOid) element.getOid()).getFieldName());
                writeFields(elementWriter, element.getSpecification().getFullIdentifier(), element);
                elements.add(elementWriter);
             }

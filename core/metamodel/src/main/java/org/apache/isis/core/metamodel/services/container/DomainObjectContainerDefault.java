@@ -80,14 +80,22 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
-        final ObjectAdapter adapter = doCreateTransientInstance(spec);
-        return (T) adapter.getObject();
+        // TODO check aggregation is supported
+        if (spec.isAggregated()) {
+            return newAggregatedInstance(this, ofClass);
+        } else {
+            final ObjectAdapter adapter = doCreateTransientInstance(spec);
+            return (T) adapter.getObject();
+        }
     }
     
+    @Override
+    @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(Object parent, Class<T> ofClass) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
+        // TODO check aggregation is supported
         if (!spec.isAggregated()) {
-            throw new IsisException(); // TODO proper type
+            throw new IsisException("Cannot instantiate an object unless it is marked as Aggregated using the newAggregatedInstance method"); // TODO proper type
         }
         final ObjectAdapter adapter = doCreateAggregatedInstance(spec, parent);
         return (T) adapter.getObject();
@@ -210,6 +218,10 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     public void persist(final Object transientObject) {
         final ObjectAdapter adapter = getAdapterMap().getAdapterFor(transientObject);
+        // TODO check aggregation is supported
+        if (adapter.isAggregated()) {
+            return;
+        }
         if (isPersistent(transientObject)) {
             throw new PersistFailedException("Object already persistent: " + adapter);
         }

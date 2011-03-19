@@ -155,16 +155,16 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             
             @Override
             public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
-                AggregatedOid oid = new AggregatedOid(parent.getOid(), "*UNKNOWN*");
+                
+                AggregatedOid oid = new AggregatedOid(parent.getOid(), "A" + Math.round(Math.random() * 10000));
                 
                 ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, spec);
                 if (adapter.getResolveState().isGhost()) {
-                    ResolveState resolveState = ResolveState.RESOLVING;
-                    adapter.changeState(resolveState);
-                    adapter.changeState(resolveState.getEndState());
+                    adapter.changeState(ResolveState.RESOLVING);
                 }
+                adapter.changeState(ResolveState.RESOLVED);
+                    
                 return adapter;
-
             };
 
             @Override

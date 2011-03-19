@@ -38,8 +38,8 @@ public class PersistorUtil {
     // //////////////////////////////////////////////////////////////////
 
     public static void start(final ObjectAdapter object, final ResolveState state) {
-    	if (LOG.isDebugEnabled()) {
-    		LOG.debug("start " + object + " as " + state.name());
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("start " + object + " as " + state.name());
     	}
         object.changeState(state);
     }
@@ -51,8 +51,8 @@ public class PersistorUtil {
     public static void end(final ObjectAdapter object) {
         final ResolveState endState = object.getResolveState().getEndState();
         Assert.assertNotNull("end state required", endState);
-        if (LOG.isDebugEnabled()) {
-        	LOG.debug("end " + object + " as " + endState.name());
+        if (LOG.isTraceEnabled()) {
+        	LOG.trace("end " + object + " as " + endState.name());
         }
         object.changeState(endState);
     }

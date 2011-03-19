@@ -32,9 +32,6 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 
 /**
  * Used as the {@link Oid} for collections, values and <tt>@Aggregated</tt> types.
- * 
- * <p>
- * The Hibernate Object Store has custom handling for collections.
  */
 public class AggregatedOid implements Oid, Serializable {
 
@@ -57,12 +54,12 @@ public class AggregatedOid implements Oid, Serializable {
     ///////////////////////////////////////////////////////////
     // Constructor, Encodeable
     ///////////////////////////////////////////////////////////
-
     public AggregatedOid(final Oid oid, final String id) {
         this(oid, id, -1);
     }
     
-    public AggregatedOid(final Oid oid, final String id, final int element) {
+    //public
+    private AggregatedOid(final Oid oid, final String id, final int element) {
         Assert.assertNotNull("Field required", id);
         this.parentOid = oid;
         this.fieldName = id;
@@ -71,10 +68,10 @@ public class AggregatedOid implements Oid, Serializable {
     }
 
     public AggregatedOid(final Oid oid, final Identifier identifier) {
-        this(oid,  
-        	ensureNotNull(identifier, "Field required").getMemberName());
+        this(oid, ensureNotNull(identifier, "Field required").getMemberName());
     }
-
+    /*
+*/
     public AggregatedOid(DataInputExtended input) throws IOException {
     	this.parentOid = input.readEncodable(Oid.class);
     	this.fieldName = input.readUTF();
@@ -99,15 +96,15 @@ public class AggregatedOid implements Oid, Serializable {
     public Oid getParentOid() {
         return parentOid;
     }
-
     public String getFieldName() {
         return fieldName;
     }
     
+    /*
     public int getElement() {
         return element;
     }
-
+*/
     
     ///////////////////////////////////////////////////////////
     // makePersistent

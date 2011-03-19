@@ -20,18 +20,10 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
@@ -63,6 +55,13 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServiceUtil;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
+import org.apache.log4j.Logger;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 
 public abstract class PersistenceSessionAbstract implements PersistenceSession {

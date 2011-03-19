@@ -41,7 +41,12 @@ public abstract class AbstractContainedObject {
     
     @Hidden
     protected <T> T newAggregatedInstance(final Class<T> ofType) {
-        return getContainer().newAggregatedInstance(this, ofType);
+        return newAggregatedInstance(this, ofType);
+    }
+    
+    @Hidden
+    protected <T> T newAggregatedInstance(final Object parent, final Class<T> ofType) {
+        return getContainer().newAggregatedInstance(parent, ofType);
     }
 
     // }}

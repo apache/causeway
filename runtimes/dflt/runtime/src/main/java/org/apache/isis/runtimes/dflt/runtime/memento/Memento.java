@@ -87,10 +87,7 @@ public class Memento implements Serializable {
         final Data[] collData = new Data[facet.size(object)];
         int i = 0;
         for (ObjectAdapter ref : facet.iterable(object)) {
-            String resolveStateName = ref.getResolveState().name();
-            String specName = ref.getSpecification().getFullIdentifier();
-            Oid oid = ref.getOid();
-            collData[i++] = new Data(oid, resolveStateName, specName);
+            collData[i++] = createReferenceData(ref);
         }
         String elementTypeSpecName = object.getSpecification().getFullIdentifier();
         return new CollectionData(object.getOid(), object.getResolveState(), elementTypeSpecName, collData);
@@ -144,7 +141,7 @@ public class Memento implements Serializable {
             return createStandaloneData(ref);
         }
 
-        if (refOid.isTransient() && !transientObjects.contains(refOid)) {
+        if ((ref.getSpecification().isAggregated() || refOid.isTransient()) && !transientObjects.contains(refOid)) {    
             transientObjects.add(refOid);
             return createObjectData(ref);
         }
@@ -216,11 +213,11 @@ public class Memento implements Serializable {
         }
 
         ObjectAdapter ref;
-        if (oid.isTransient()) {
+        if (oid.isTransient() && !spec.isAggregated()) {
             ref = getHydrator().recreateAdapter(oid, spec);
         } else {
             ref = getHydrator().recreateAdapter(oid, spec);
-            ResolveState resolveState = ResolveState.GHOST;
+            ResolveState resolveState = spec.isAggregated() ? ResolveState.TRANSIENT : ResolveState.GHOST;
             if (ref.getResolveState().isValidToChangeTo(resolveState)) {
                 ref.changeState(resolveState);
             }

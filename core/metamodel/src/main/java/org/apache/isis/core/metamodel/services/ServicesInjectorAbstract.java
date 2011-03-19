@@ -153,9 +153,6 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
                 methods[j].setAccessible(true);
                 
                 invokeSetMethod(methods[j], object, service);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("injected service " + service + " into " + new ToString(object));
-                }
             }
         }
     }
