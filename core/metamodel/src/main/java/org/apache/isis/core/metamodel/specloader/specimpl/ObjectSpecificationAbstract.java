@@ -902,6 +902,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public Object createObject(CreationMode creationMode) {
         throw new UnsupportedOperationException(getFullIdentifier());
     }
+    
+    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+        throw new UnsupportedOperationException(getFullIdentifier());
+    }
 
     // //////////////////////////////////////////////////////////////////////
     // toString

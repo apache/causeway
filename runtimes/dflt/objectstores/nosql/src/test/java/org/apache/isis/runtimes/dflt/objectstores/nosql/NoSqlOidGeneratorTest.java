@@ -47,7 +47,7 @@ public class NoSqlOidGeneratorTest {
         context = new Mockery();
         db = context.mock(NoSqlDataDatabase.class);
         context.checking(new Expectations() {{
-            one(db).nextSerialNumberBatch(4);
+            one(db).nextSerialNumberBatch("_id", 4);
            will(returnValue(1L));
         }});
         oidGenerator = new NoSqlOidGenerator(db, -999, 4);
@@ -90,7 +90,7 @@ public class NoSqlOidGeneratorTest {
         assertEquals(4, oid.getSerialNo());
         
         context.checking(new Expectations() {{
-            one(db).nextSerialNumberBatch(4);
+            one(db).nextSerialNumberBatch("_id", 4);
             will(returnValue(5L));        
         }});
         oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(null));

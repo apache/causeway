@@ -325,6 +325,11 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
+    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
     public boolean isHidden() {
         return false;
     }

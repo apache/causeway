@@ -106,10 +106,12 @@ public class FileServerDb implements NoSqlDataDatabase {
 
     public void write(List<PersistenceCommand> commands) {
         ClientConnection connection = getConnection();
+        PersistenceCommand currentCommand = null;
         try {
             connection.request('W', "");
             NoSqlCommandContext context = new FileClientCommandContext(connection);
             for (PersistenceCommand command : commands) {
+                currentCommand  = command;
                 command.execute(context);
             }
             connection.validateRequest();
@@ -117,7 +119,7 @@ public class FileServerDb implements NoSqlDataDatabase {
         } catch (ConcurrencyException e) {
             throw e;
         } catch (RuntimeException e) {
-            LOG.error("aborting write", e);
+            LOG.error("aborting write, command: " + currentCommand, e);
             abortConnection(connection);
             throw e;
         }
@@ -144,11 +146,11 @@ public class FileServerDb implements NoSqlDataDatabase {
         return flag;
     }
 
-    public long nextSerialNumberBatch(int batchSize) {
+    public long nextSerialNumberBatch(String name, int batchSize) {
         ClientConnection connection = getConnection();
         long serialNumber;
         try {
-            connection.request('N', Integer.toString(batchSize));
+            connection.request('N', name + " " + Integer.toString(batchSize));
             connection.validateRequest();
             serialNumber = connection.getResponseAsLong();
         } catch (RuntimeException e) {

@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
@@ -42,6 +43,11 @@ public interface OidGenerator extends DebuggableWithTitle, SessionScopedComponen
      */
     Oid createTransientOid(Object pojo);
 
+    /**
+     * Creates a new sub-ID for the specified object for use in an {@link AggregatedOid}.
+     */
+    String createAggregateId(Object pojo);
+    
     /**
      * Convert the {@link Oid} from {@link Oid#isTransient() transient} to
      * persistent, storing the previous {@link Oid} as {@link Oid#getPrevious()}
@@ -69,5 +75,5 @@ public interface OidGenerator extends DebuggableWithTitle, SessionScopedComponen
      * means that we can get a more user-friendly string representation of the {@link Oid}.
      */
     OidStringifier getOidStringifier();
-    
+
 }

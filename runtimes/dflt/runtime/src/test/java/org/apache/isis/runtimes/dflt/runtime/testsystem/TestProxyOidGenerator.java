@@ -47,6 +47,10 @@ public class TestProxyOidGenerator extends OidGeneratorAbstract {
     	testProxyOid.setNewId(persistentId++);
         testProxyOid.makePersistent();
     }
+    
+    public String createAggregateId(Object pojo) {
+        return "";
+    }
 
     public void debugData(final DebugString debug) {}
 

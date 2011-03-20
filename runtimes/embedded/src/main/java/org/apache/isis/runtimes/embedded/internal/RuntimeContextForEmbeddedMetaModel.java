@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.runtimes.embedded.EmbeddedContext;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -55,6 +54,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
 
 /**
  * Acts as a bridge between the {@link RuntimeContext} (as used internally
@@ -63,7 +63,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
  */
 public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract implements ApplicationScopedComponent {
 
-	private final EmbeddedContext context;
 	private final List<Object> services;
 	private List<ObjectAdapter> serviceAdapters;
 	private ServicesInjector servicesInjector;
@@ -80,7 +79,6 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	public RuntimeContextForEmbeddedMetaModel(
 			final EmbeddedContext context, 
 			final List<Object> services) {
-		this.context = context;
 		this.services = services;
 		this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
 		    @Override
@@ -111,6 +109,11 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	        public ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
 	            return adapterFor(domainObject);
 	        }
+            
+	        @Override
+            public ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent) {
+                return adapterFor(domainObject);
+            };
 
 	        @Override
 	        public ObjectAdapter getAdapterFor(Object domainObject) {

@@ -435,6 +435,15 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public Object createObject(CreationMode creationMode) {
+        return createObject(null, creationMode);
+    }
+      
+    @Override
+    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+        return createObject(parent, creationMode);
+    }
+
+    private Object createObject(ObjectAdapter parent, CreationMode creationMode) {
         if (getCorrespondingClass().isArray()) {
             return Array.newInstance(getCorrespondingClass().getComponentType(), 0);
         }
@@ -443,7 +452,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             Object object = getObjectInstantiator().instantiate(getCorrespondingClass());
 
             if (creationMode == CreationMode.INITIALIZE) {
-                final ObjectAdapter adapter = getAdapterMap().adapterFor(object);
+                final ObjectAdapter adapter;
+                if (parent == null) {
+                    adapter = getAdapterMap().adapterFor(object);
+                } else {
+                    adapter = getAdapterMap().adapterForAggregated(object, parent);
+                }
 
                 // initialize new object
                 final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();

@@ -152,8 +152,8 @@ public class Util {
         return new File(serviceDirectory , name + ".id");
     }
 
-    public static File serialNumberFile() {
-        return new File(dataDirectory , "serialnumbers.data");
+    public static File serialNumberFile(String name) {
+        return new File(dataDirectory , "serialnumbers" + name.trim() + ".data");
     }
 
     static File logFile(int id) {

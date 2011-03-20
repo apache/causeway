@@ -24,17 +24,15 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.log4j.Logger;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -92,7 +90,7 @@ public class MongoDb implements NoSqlDataDatabase {
         return db.getCollectionNames().size() > 0;
     }
     
-    public long nextSerialNumberBatch(int batchSize) {
+    public long nextSerialNumberBatch(String name, int batchSize) {
         throw new NotYetImplementedException();
     }
     

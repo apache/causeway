@@ -143,8 +143,4 @@ public interface PersistenceSession extends
      */
     void setSpecificationLoader(SpecificationLoader specificationLoader);
 
-
-
-
-
 }

@@ -164,6 +164,11 @@ public class PersistenceSessionLogger extends Logger implements PersistenceSessi
         return underlying.createInstance(specification);
     }
 
+    public ObjectAdapter createAggregatedInstance(ObjectSpecification specification, ObjectAdapter parent) {
+        log("create aggregated instance " + specification + " as part of " + parent);
+        return underlying.createAggregatedInstance(specification, parent);
+    }
+
     public ObjectAdapter recreateAdapter(final Oid oid, final ObjectSpecification specification) {
         log("recreate instance " + oid + " " + specification);
         return underlying.recreateAdapter(oid, specification);

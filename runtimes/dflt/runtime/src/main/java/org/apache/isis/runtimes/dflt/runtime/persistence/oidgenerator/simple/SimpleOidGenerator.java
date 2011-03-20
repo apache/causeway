@@ -20,17 +20,15 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
-
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
+import static org.hamcrest.CoreMatchers.is;
 
 
 /**
@@ -59,6 +57,7 @@ public class SimpleOidGenerator extends OidGeneratorAbstract {
 	
     private long persistentSerialNumber;
     private long transientSerialNumber;
+    private long aggregatedId; 
 
     
     ////////////////////////////////////////////////////////////////
@@ -115,6 +114,9 @@ public class SimpleOidGenerator extends OidGeneratorAbstract {
         serialOid.makePersistent(); 
     }
 
+    public String createAggregateId(Object pojo) {
+        return Long.toHexString(aggregatedId++);
+    }
 
 
     ////////////////////////////////////////////////////////////////

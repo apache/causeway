@@ -49,7 +49,7 @@ public class SerialNumberVersionCreator implements VersionCreator {
     }
     
     public Version nextVersion(Version version) {
-            long sequence = ((SerialNumberVersion) version).getSequence() + 1;
+        long sequence = ((SerialNumberVersion) version).getSequence() + 1;
         String user = version.getUser();
         return new SerialNumberVersion(sequence, user, new Date());
     }

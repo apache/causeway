@@ -56,6 +56,15 @@ public interface AdapterMap extends Injectable {
      */
     ObjectAdapter adapterFor(Object domainObject);
 
+    /**
+     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a
+     * aggregated {@link ObjectAdapter adapter} for the supplied domain object, depending on
+     * its {@link ObjectSpecification}.
+     * 
+     * <p>
+     * Provided by the <tt>AdapterManager</tt> when used by framework.
+     */
+    ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent);
 
     /**
      * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a

@@ -36,12 +36,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
@@ -102,6 +100,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public ObjectAdapter adapterFor(Object pojo) {
                 return getRuntimeAdapterManager().adapterFor(pojo);
             }
+            
+            @Override
+            public ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent) {
+                return getRuntimeAdapterManager().adapterForAggregated(domainObject, parent);
+            };
 
             @Override
             public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
@@ -155,16 +158,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             
             @Override
             public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
-                
-                AggregatedOid oid = new AggregatedOid(parent.getOid(), "A" + Math.round(Math.random() * 10000));
-                
-                ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, spec);
-                if (adapter.getResolveState().isGhost()) {
-                    adapter.changeState(ResolveState.RESOLVING);
-                }
-                adapter.changeState(ResolveState.RESOLVED);
-                    
-                return adapter;
+                return getPersistenceSession().createAggregatedInstance(spec, parent);
             };
 
             @Override

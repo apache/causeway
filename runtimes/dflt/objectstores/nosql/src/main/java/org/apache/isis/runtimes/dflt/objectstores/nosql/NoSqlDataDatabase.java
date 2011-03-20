@@ -44,7 +44,7 @@ public interface NoSqlDataDatabase {
 
     Iterator<StateReader> instancesOf(String specificationName);
 
-    long nextSerialNumberBatch(int batchSize);
+    long nextSerialNumberBatch(String string, int batchSize);
 
     void write(List<PersistenceCommand> commands);
 }

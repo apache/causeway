@@ -143,7 +143,7 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         throw new NotYetImplementedException();
     }
 
-    public ObjectAdapter adapterFor(Object pojo, Oid oid) {
+    public ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent) {
         throw new NotYetImplementedException();
     }
 

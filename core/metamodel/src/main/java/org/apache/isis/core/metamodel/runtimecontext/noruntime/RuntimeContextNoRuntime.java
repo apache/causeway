@@ -75,149 +75,131 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
             @Override
             public AuthenticationSession getAuthenticationSession() {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
         adapterMap = new AdapterMapAbstract() {
-            
+
             @Override
             public ObjectAdapter getAdapterFor(Object pojo) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
+            @Override
+            public ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
             @Override
             public ObjectAdapter adapterFor(Object domainObject) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
         objectInstantiator = new ObjectInstantiatorAbstract() {
             
             @Override
             public Object instantiate(Class<?> cls) throws ObjectInstantiationException {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
         objectDirtier = new ObjectDirtierAbstract() {
-            
+
             @Override
             public void objectChanged(Object object) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void objectChanged(ObjectAdapter adapter) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
         objectPersistor = new ObjectPersistorAbstract() {
-            
+
             @Override
             public void remove(ObjectAdapter adapter) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void makePersistent(ObjectAdapter adapter) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
         domainObjectServices = new DomainObjectServicesAbstract() {
-            
+
             @Override
             public void warnUser(String message) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void resolve(Object parent, Object field) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void resolve(Object parent) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void raiseError(String message) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void informUser(String message) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public List<String> getPropertyNames() {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public String getProperty(String name) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public boolean flush() {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void commit() {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
             public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
         querySubmitter = new QuerySubmitterAbstract() {
-            
+
             @Override
             public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query) {
-                throw new UnsupportedOperationException(
-                "Not supported by this implementation of RuntimeContext");
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
-	}
-
+    }
 
 	/////////////////////////////////////////////
 	// Components
@@ -268,13 +250,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 	// allInstances, allMatching*
 	/////////////////////////////////////////////
 
-	public List<ObjectAdapter> allInstances(ObjectSpecification noSpec) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
+    public List<ObjectAdapter> allInstances(ObjectSpecification noSpec) {
+        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
 
-	
-	/////////////////////////////////////////////
+    // ///////////////////////////////////////////
 	// getServices, injectDependenciesInto
 	/////////////////////////////////////////////
 

@@ -317,7 +317,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * Create a root or standalone {@link ObjectAdapter adapter}.
      * 
      * <p>
-     * The returned object will be initialied (had the relevant callback lifecycle methods 
+     * The returned object will be initialised (had the relevant callback lifecycle methods 
      * invoked).
      * 
      * <p>
@@ -332,6 +332,17 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         return getAdapterManager().adapterFor(pojo);
     }
 
+    public ObjectAdapter createAggregatedInstance(ObjectSpecification specification, ObjectAdapter parent) {
+        LOG.debug("creating aggregated instance of " + specification);
+        final Object pojo = specification.createAggregatedObject(parent, CreationMode.INITIALIZE);
+        ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+        if (adapter.getResolveState().isGhost()) {
+            adapter.changeState(ResolveState.RESOLVING);
+        }
+        adapter.changeState(ResolveState.RESOLVED);
+        return adapter;
+    }
+    
     @Override
     public ObjectAdapter recreateAdapter(final Oid oid, final ObjectSpecification specification) {
         final ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);

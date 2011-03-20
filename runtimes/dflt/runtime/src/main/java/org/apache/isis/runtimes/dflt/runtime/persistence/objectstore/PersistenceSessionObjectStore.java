@@ -345,7 +345,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     @Override
     public void objectChanged(final ObjectAdapter adapter) {
 
-        if (adapter.isTransient() || adapter.isAggregated()) {
+        if (adapter.isTransient() || (adapter.isAggregated() && adapter.getAggregateRoot().isTransient())) {
             addObjectChangedForPresentationLayer(adapter);
             return;
         }

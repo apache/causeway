@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -185,7 +184,7 @@ public class NoSqlObjectStore implements ObjectStore {
     public void resolveImmediately(ObjectAdapter object) {
         Oid oid= object.getOid();;
         if (oid instanceof AggregatedOid) {
-            throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " + object);
+//            throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " + object);
         } else {
             String specificationName = object.getSpecification().getFullIdentifier();
             String key = keyCreator.key(oid);

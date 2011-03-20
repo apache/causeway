@@ -373,6 +373,11 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
             throw new IsisException(e);
         }
     }
+    
+    @Override
+    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+        return createObject(creationMode);
+    }
 
     public void setupPersistable(final Persistability persistable) {
         this.persistable = persistable;

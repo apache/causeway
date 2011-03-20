@@ -72,6 +72,15 @@ public class TrialObjects {
                     return factory.createAdapter(pojo, null);
                 }
             }
+
+            @Override
+            public ObjectAdapter adapterForAggregated(Object pojo, ObjectAdapter parent) {
+                if (adapters.get(pojo) != null) {
+                    return adapters.get(pojo);
+                } else {
+                    return factory.createAdapter(pojo, null);
+                }
+            }
             
             @Override
             public ObjectAdapter adapterFor(Object pattern) {

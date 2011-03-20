@@ -106,6 +106,10 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
         String className = object.getClass().getName();
         return SqlOid.createTransient(className, ids.nextTransientId());
     }
+    
+    public String createAggregateId(Object pojo) {
+        throw new SqlObjectStoreException("Aggregated objects are not supported in this store");
+    }
 
     @Override
     public void convertTransientToPersistentOid(final Oid oid) {

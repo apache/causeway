@@ -322,10 +322,11 @@ public class FileServerProcessor {
     private void nextSerialBatch(ServerConnection connection) throws IOException {
         // TODO lock file first
 
+        String name = connection.getRequest();
         int batchSize = connection.getRequestAsInt();
 
         long nextId;
-        File file = Util.serialNumberFile();
+        File file = Util.serialNumberFile(name);
         if (!file.exists()) {
             nextId = 1;
             LOG.info("Initial ID batch created at " + nextId);
