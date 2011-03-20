@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -169,9 +170,17 @@ public class FileServerTest {
 
 
     @Test
-    public void testTheTests() throws Exception {
+    public void aTestTheTests() throws Exception {
         File dir = new File("target/test/org.domain.Class");
         assertTrue(dir.exists());
+        
+        File file1 = new File("target/test/org.domain.Class", "2025.data");
+        assertTrue(file1.getParentFile().exists());
+        
+        FileWriter fileWriter = new FileWriter(file1);
+        assertNotNull(fileWriter);
+        fileWriter.write("data");
+        fileWriter.close();
     }
     
     @Test
