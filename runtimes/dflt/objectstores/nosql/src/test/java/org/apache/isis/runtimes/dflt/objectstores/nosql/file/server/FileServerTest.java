@@ -198,7 +198,7 @@ public class FileServerTest {
 
 
     @Test
-    public void read() throws Exception {
+    public void LookReadRenamed() throws Exception {
         File file1 = new File("target/test/org.domain.Class", "2025.data");
         FileWriter fileWriter = new FileWriter(file1);
         fileWriter.write("type 1025 1\n{data1}");
