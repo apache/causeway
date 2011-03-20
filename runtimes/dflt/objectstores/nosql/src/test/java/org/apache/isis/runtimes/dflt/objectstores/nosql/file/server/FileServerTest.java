@@ -182,7 +182,21 @@ public class FileServerTest {
         fileWriter.write("data");
         fileWriter.close();
     }
-    
+
+    @Test
+    public void copyOfReadTest() throws Exception {
+        File file1 = new File("target/test/org.domain.Class", "2025.data");
+        FileWriter fileWriter = new FileWriter(file1);
+        fileWriter.write("type 1025 1\n{data1}");
+        fileWriter.close();
+
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025"), out);
+        server.process(connection);
+        
+        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));
+    }
+
+
     @Test
     public void read() throws Exception {
         File file1 = new File("target/test/org.domain.Class", "2025.data");
