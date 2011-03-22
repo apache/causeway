@@ -20,10 +20,9 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
-import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
 public interface ObjectMapping {
@@ -37,12 +36,12 @@ public interface ObjectMapping {
 
     void unmapObject(ObjectAdapter object, Scope scope);
 
-    void appendMappings(Request content);
+    void appendMappings(DebugBuilder content);
 
     ObjectAdapter mappedObject(String id);
 
     String mapObject(ObjectAdapter obj, Scope scope);
 
-    void append(DebugView view);
+    void append(DebugBuilder debug);
 
 }

@@ -39,7 +39,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.DispatchException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
 
 
 public class ServletRequestContext extends RequestContext {
@@ -48,72 +48,72 @@ public class ServletRequestContext extends RequestContext {
     private ServletContext servletContext;
     private boolean isAborted;
 
-    public void append(DebugView view) {
+    public void append(DebugWriter view) {
         /*
         view.divider("System");
         Runtime.getRuntime().
 		*/
-        view.divider("Request");
-        view.appendRow("Auth type", request.getAuthType());
-        view.appendRow("Character encoding", request.getCharacterEncoding());
-        view.appendRow("Class", request.getClass());
-        view.appendRow("Content type", request.getContentType());
-        view.appendRow("Context path", getContextPath());
-        view.appendRow("Locale", request.getLocale());
-        view.appendRow("Method", request.getMethod());
-        view.appendRow("Path info", request.getPathInfo());
-        view.appendRow("Path translated", request.getPathTranslated());
-        view.appendRow("Protocol", request.getProtocol());
-        view.appendRow("Query string", request.getQueryString());
-        view.appendRow("Remote host", request.getRemoteHost());
-        view.appendRow("Remote user", request.getRemoteUser());
-        view.appendRow("Real path", servletContext.getRealPath("/"));
-        view.appendRow("Scheme", request.getScheme());
-        view.appendRow("Server name", request.getServerName());
-        view.appendRow("Servlet path", request.getServletPath());
-        view.appendRow("Session", request.getSession());
-        view.appendRow("Session ID", request.getRequestedSessionId());
-        view.appendRow("URI", request.getRequestURI());
-        view.appendRow("URL", request.getRequestURL());
-        view.appendRow("User principle", request.getUserPrincipal());
+        view.appendTitle("Request");
+        view.appendln("Auth type", request.getAuthType());
+        view.appendln("Character encoding", request.getCharacterEncoding());
+        view.appendln("Class", request.getClass());
+        view.appendln("Content type", request.getContentType());
+        view.appendln("Context path", getContextPath());
+        view.appendln("Locale", request.getLocale());
+        view.appendln("Method", request.getMethod());
+        view.appendln("Path info", request.getPathInfo());
+        view.appendln("Path translated", request.getPathTranslated());
+        view.appendln("Protocol", request.getProtocol());
+        view.appendln("Query string", request.getQueryString());
+        view.appendln("Remote host", request.getRemoteHost());
+        view.appendln("Remote user", request.getRemoteUser());
+        view.appendln("Real path", servletContext.getRealPath("/"));
+        view.appendln("Scheme", request.getScheme());
+        view.appendln("Server name", request.getServerName());
+        view.appendln("Servlet path", request.getServletPath());
+        view.appendln("Session", request.getSession());
+        view.appendln("Session ID", request.getRequestedSessionId());
+        view.appendln("URI", request.getRequestURI());
+        view.appendln("URL", request.getRequestURL());
+        view.appendln("User principle", request.getUserPrincipal());
 
-        view.divider("Cookies");
+        view.appendTitle("Cookies");
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {
-            view.appendRow(cookies[i].getName(), cookies[i].getValue());
+            view.appendln(cookies[i].getName(), cookies[i].getValue());
         }
 
         Enumeration attributeNames = request.getAttributeNames();
         if (attributeNames.hasMoreElements()) {
-            view.divider("Attributes");
+            view.appendTitle("Attributes");
             while (attributeNames.hasMoreElements()) {
                 String name = (String) attributeNames.nextElement();
-                view.appendRow(name, request.getAttribute(name));
+                view.appendln(name, request.getAttribute(name));
             }
         }
 
-        view.divider("Headers");
+        view.appendTitle("Headers");
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String name = (String) headerNames.nextElement();
-            view.appendRow(name, request.getHeader(name));
+            view.appendln(name, request.getHeader(name));
         }
 
-        view.divider("Parameters");
+        view.appendTitle("Parameters");
         Enumeration parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String name = (String) parameterNames.nextElement();
-            view.appendRow(name, request.getParameter(name));
+            view.appendln(name, request.getParameter(name));
         }
 
-        view.divider("Servlet Context");
+        view.appendTitle("Servlet Context");
         ServletContext context = getServletContext();
-        view.appendRow("Name", context.getServletContextName());
-        view.appendRow("Server Info", context.getServerInfo());
-        view.appendRow("Version", context.getMajorVersion() + "." + context.getMinorVersion());
-        view.appendRow("Attributes", getAttributes(context));
-        view.appendRow("Init parameters", getParameters(context));
-        view.appendRow("Real path", context.getRealPath("/"));
+        view.appendln("Name", context.getServletContextName());
+        view.appendln("Server Info", context.getServerInfo());
+        view.appendln("Version", context.getMajorVersion() + "." + context.getMinorVersion());
+        view.appendln("Attributes", getAttributes(context));
+        view.appendln("Init parameters", getParameters(context));
+        view.appendln("Real path", context.getRealPath("/"));
 
         super.append(view);
     }

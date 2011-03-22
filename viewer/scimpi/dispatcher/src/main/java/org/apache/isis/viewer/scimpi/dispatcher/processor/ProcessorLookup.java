@@ -25,8 +25,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.History;
 import org.apache.isis.viewer.scimpi.dispatcher.view.RevisionNumber;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionButton;
@@ -37,8 +37,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.action.Parameter;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.RunAction;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.Services;
 import org.apache.isis.viewer.scimpi.dispatcher.view.collection.Collection;
-import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Debug;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugAccessCheck;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebuggerLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Diagnostics;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Members;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.PrintAuthorizationClause;
@@ -126,8 +126,8 @@ public class ProcessorLookup {
         addElementProcessor(new ContentTag()); 
         addElementProcessor(new CountElements());
         addElementProcessor(new Diagnostics());
-        addElementProcessor(new Debug());
         addElementProcessor(new DebugAccessCheck());
+        addElementProcessor(new DebuggerLink());
         addElementProcessor(new DefaultValue()); 
         addElementProcessor(new EditLink());
         addElementProcessor(new EditObject());
@@ -203,12 +203,12 @@ public class ProcessorLookup {
         swfElementProcessors.put("SWF:" + action.getName().toUpperCase(), action);
     }
 
-    public void debug(DebugView view) {
-        view.divider("Recognised tags");
+    public void debug(DebugBuilder debug) {
+        debug.appendTitle("Recognised tags");
         Iterator<String> it2 = new TreeSet<String>(swfElementProcessors.keySet()).iterator();
         while (it2.hasNext()) {
             String name = it2.next();
-            view.appendRow(name.toLowerCase(), swfElementProcessors.get(name));
+            debug.appendln(name.toLowerCase(), swfElementProcessors.get(name));
         }
     }
 

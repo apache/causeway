@@ -37,7 +37,9 @@ import java.util.Stack;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugTee;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -53,7 +55,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Debug;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugAction;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.RemoveAction;
 import org.apache.isis.viewer.scimpi.dispatcher.logon.LogonAction;
@@ -87,105 +89,128 @@ public class Dispatcher {
 
     public void process(RequestContext context, String servletPath) {
         LOG.info("processing request " + servletPath);
+        AuthenticationSession session = UserManager.startRequest(context);
+        LOG.debug("exsiting session: " + session);
+        
+        IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
+        context.setRequestPath(servletPath);
+        context.startRequest();
+                
         try {
-            AuthenticationSession session = UserManager.startRequest(context);
-            LOG.debug("exsiting session: " + session);
-            
-            IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
-            context.setRequestPath(servletPath);
-            context.startRequest();
-            
-            String loginName = IsisContext.getAuthenticationSession().getUserName();
-            boolean userLoggedIn = loginName != null && !loginName.equals("__web_default");
-            // TODO determine if app can run methods unauthorized
-            boolean allowActions = userLoggedIn;
-
-            // TODO review how session should start 
-            // if (!newSession || servletPath.endsWith(context.getContextPath() + "/logon.app")) {
-            // sessions should not start of with an action
-            
-            processActions(context, allowActions, servletPath);
-            IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
-            if (transactionManager.getTransaction().getState().canFlush()) {
-                transactionManager.flushTransaction();
-            }
-            processView(context);
-            // Note - the session will have changed since the earlier call if a user has logged in or out in the action processing above.
-            transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
-            if (transactionManager.getTransaction().getState().canCommit()) {
-                IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
-            }
-            
-            context.endRequest();
-            UserManager.endRequest(context.getSession());
-
-            context.isInternalRequest();
-            
+            processActions(context, false, servletPath);
+            processTheView(context);
         } catch (ScimpiNotFoundException e) {
-            LOG.info("invalid page request "+ e.getMessage());
-            try {
-                UserManager.endRequest(context.getSession());
-            } catch (Exception e1) {
-                LOG.error("endRequest call failed", e1);
+            if (context.isInternalRequest()) {
+                LOG.error("invalid page request (from within application): "+ e.getMessage());
+            } else {
+                LOG.info("invalid page request (from outside application): "+ e.getMessage());
             }
-            context.addVariable("_error-message", e.getHtmlMessage(), Scope.REQUEST);
-            //context.addVariable("_error-details", e.getHtmlMessage(), Scope.REQUEST);
-            context.raiseError(404);
+            
+            try {
+                // TODO pick this up from configuration
+                // context.raiseError(404);
+                //context.setRequestPath("/error/notfound_404.shtml");
+                IsisContext.getMessageBroker().addWarning("Failed to find page....");
+                context.setRequestPath("/index.shtml");
+                processTheView(context);
+            } catch (IOException e1) {
+                throw new ScimpiException(e);
+            }
+            
+        } catch (NotLoggedInException e) {
+            IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
+            context.setRequestPath("/login.shtml");
+            try {
+                processTheView(context);
+            } catch (IOException e1) {
+                throw new ScimpiException(e);
+            }
+            
         } catch (Throwable e) {
             LOG.debug(e.getMessage(), e);
             LOG.info("testing");
             
             DebugString error = new DebugString();
-            if (IsisContext.getCurrentTransaction() != null) {
-                List<String> messages =  IsisContext.getMessageBroker().getMessages();
-                for (String message : messages) {
-                    context.getWriter().append("<div class=\"message\">message: " + message + "</div>");
-                    error.appendln("message", message);
-                }
-                messages =  IsisContext.getMessageBroker().getWarnings();
-                for (String message : messages) {
-                    context.getWriter().append("<div class=\"message\">warning: " + message + "</div>");
-                    error.appendln("warning", message);
-                }
-            }
-            
             generateErrorPage(e, context, error);
+            String message = "failed while processing " + servletPath;
+            LOG.error(message + "\n" + error + "\n" + message);
              
             PersistenceSession checkSession = IsisContext.getPersistenceSession();
             IsisTransactionManager transactionManager = checkSession.getTransactionManager();
             if (transactionManager.getTransaction() != null && transactionManager.getTransaction().getState().canAbort()) {
                 transactionManager.abortTransaction();
+                transactionManager.startTransaction();
             }
-            
-            String message = "failed while processing " + servletPath;
-            LOG.error(message + "\n" + error + "\n" + message);
 
-            
+            Throwable ex = e instanceof TagProcessingException ? e.getCause() : e;
+            if (ex instanceof ForbiddenException) {
+                context.addVariable("_security_error", ex.getMessage(), Scope.REQUEST); 
+                context.addVariable("_security_identifier", ((ForbiddenException) ex).getIdentifier(), Scope.REQUEST);
+                context.addVariable("_security_roles", ((ForbiddenException) ex).getRoles(), Scope.REQUEST);
+
+                // TODO allow these values to be got configuration
+                // context.raiseError(403);
+                // context.setRequestPath("/error/security_403.shtml");
+                IsisContext.getMessageBroker().addWarning("You did not have the right permissions to perform this.....");
+                context.setRequestPath("/index.shtml");
+                try {
+                    processTheView(context);
+                } catch (IOException e1) {
+                    throw new ScimpiException(e);
+                }
+            } else {
+                // TODO allow these values to be got configuration
+                // context.raiseError(500);    
+                context.setRequestPath("/error/server_500.shtml");
+                //IsisContext.getMessageBroker().addWarning("There was a error while processing this request....");
+                //context.setRequestPath("/index.shtml");
+                try {
+                    processTheView(context);
+                } catch (IOException e1) {
+                    throw new ScimpiException(e);
+                }
+            }
+        } finally {
             try {
                 UserManager.endRequest(context.getSession());
             } catch (Exception e1) {
                 LOG.error("endRequest call failed", e1);
             }
-
-            Throwable ex;
-            if (e instanceof TagProcessingException) {
-                ex = e.getCause();
-            } else {
-                ex = e;
-            }
-            if (ex instanceof ForbiddenException) {
-                context.addVariable("_security_error", ex.getMessage(), Scope.REQUEST); 
-                context.addVariable("_security_identifier", ((ForbiddenException) ex).getIdentifier(), Scope.REQUEST);
-                context.addVariable("_security_roles", ((ForbiddenException) ex).getRoles(), Scope.REQUEST);
-                context.raiseError(403);
-            } else {
-                context.raiseError(500);    
-            }
         }
     }
 
 
+    protected void processTheView(RequestContext context) throws IOException {
+        IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        if (transactionManager.getTransaction().getState().canFlush()) {
+            transactionManager.flushTransaction();
+        }
+        processView(context);
+        // Note - the session will have changed since the earlier call if a user has logged in or out in the action processing above.
+        transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        if (transactionManager.getTransaction().getState().canCommit()) {
+            IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
+        }
+        
+        context.endRequest();
+        UserManager.endRequest(context.getSession());
+    }
+
+
     private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error) {
+        if (IsisContext.getCurrentTransaction() != null) {
+            List<String> messages =  IsisContext.getMessageBroker().getMessages();
+            for (String message : messages) {
+                requestContext.getWriter().append("<div class=\"message\">message: " + message + "</div>");
+                error.appendln("message", message);
+            }
+            messages =  IsisContext.getMessageBroker().getWarnings();
+            for (String message : messages) {
+                requestContext.getWriter().append("<div class=\"message\">warning: " + message + "</div>");
+                error.appendln("warning", message);
+            }
+        }
+        
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         writeErrorContent(requestContext, exception, error, new PrintWriter(out), false);
         
@@ -215,25 +240,17 @@ public class Dispatcher {
             DebugString error,
             PrintWriter writer,
             boolean includeHeader) {
-        DebugView errorView = new DebugView(writer, error);
-        if (includeHeader) {
-            errorView.header();
-        }
-        errorView.startTable();
-        
+        DebugBuilder errorView = new DebugTee(error, new DebugWriter(writer, includeHeader));
         try {
-            errorView.exception(exception);
+            errorView.appendException(exception);
             requestContext.append(errorView);
         } catch (RuntimeException e) {
             errorView.appendln("NOTE - an exception occurred while dumping an exception!");
-            errorView.exception(e);
+            errorView.appendException(e);
         }
-        errorView.divider("Processing"); 
-        errorView.appendDebugTrace(requestContext.getDebugTrace()); 
-        errorView.endTable();
-        if (includeHeader) {
-            errorView.footer();
-        }
+        errorView.appendTitle("Processing"); 
+        errorView.appendln(requestContext.getDebugTrace()); 
+        errorView.close();
         writer.close();
     }
 
@@ -246,16 +263,8 @@ public class Dispatcher {
         return parameters.get(name);
     }
 
-    private void processActions(RequestContext context, boolean allowAction, String actionName) throws IOException {
+    private void processActions(RequestContext context, boolean userLoggedIn, String actionName) throws IOException {
         if (actionName.endsWith(COMMAND_ROOT)) {
-            // TODO do the same thing (redirect to login page) if the action is not-authorized and the user is
-            // not logged in; if they are logged in then it is a security violation.
-            if (!allowAction && !actionName.endsWith(context.getContextPath() + "/logon.app")) {
-                IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
-                context.setRequestPath("/login.shtml");
-                return;
-            }
-            
             int pos = actionName.lastIndexOf('/');
             Action action = actions.get(actionName.substring(pos, actionName.length() - COMMAND_ROOT.length()));
             if (action == null) {
@@ -302,12 +311,11 @@ public class Dispatcher {
             throw e;
         }
         String page = request.popBuffer();
-        context.getWriter().write(page);
+        PrintWriter writer = context.getWriter();
+        writer.write(page);
         if (context.getDebug() == Debug.PAGE) {
-            DebugView view = new DebugView(context.getWriter(), new DebugString());
-            view.startTable();
+            DebugWriter view = new DebugWriter(writer, false);
             context.append(view);
-            view.endTable();
         }
     }
 
@@ -413,6 +421,8 @@ public class Dispatcher {
 
     public void init(String dir) {
         addAction(new ActionAction());
+        
+        // TODO remove
         addAction(new DebugAction(this));
         addAction(new EditAction());
         addAction(new RemoveAction());
@@ -430,6 +440,7 @@ public class Dispatcher {
         }
 
         processors.init();
+        processors.addElementProcessor(new org.apache.isis.viewer.scimpi.dispatcher.view.debug.Debug(this));
     }
 
     private void loadConfigFile(File file) {
@@ -473,13 +484,13 @@ public class Dispatcher {
         action.init();
     }
 
-    public void debug(DebugView view) {
-        view.divider("Actions");
+    public void debug(DebugBuilder debug) {
+        debug.appendTitle("Actions");
         Set<String> keySet = actions.keySet();
         ArrayList<String> list = new ArrayList<String>(keySet);
         Collections.sort(list);
         for (String name : list) {
-            view.appendRow(name, actions.get(name));            
+            debug.appendln(name, actions.get(name));            
         }
         /*
         new ArrayList<E>(actions.keySet().iterator())
@@ -491,10 +502,10 @@ public class Dispatcher {
         */
         Iterator<Action> iterator = actions.values().iterator();
         while (iterator.hasNext()) {
-            iterator.next().debug(view);
+            iterator.next().debug(debug);
         }
 
-        processors.debug(view);
+        processors.debug(debug);
     }
 }
 

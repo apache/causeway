@@ -1,5 +1,6 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class History extends AbstractElementProcessor {
         String link;
     }
 
-    static class Crumbs {
+    static class Crumbs implements Serializable {
+        private static final long serialVersionUID = 1L;
         private static final int MAXIMUM_SIZE = 10;
         private List<Crumb> crumbs = new ArrayList<Crumb>();
 

@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugHtmlString;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -33,30 +34,33 @@ public class Diagnostics extends AbstractElementProcessor {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
-        
+
+        String type = request.getOptionalProperty(TYPE, "page");
         boolean isForced = request.isRequested("force");
-        boolean isExcludeVariables = request.isRequested("exclude-variables");
-        boolean isExcludeProcessing = request.isRequested("exclude-processing");
-        if (isForced || request.getContext().getDebug() == RequestContext.Debug.ON) {
-            RequestContext context = request.getContext();
+        if (isForced || request.getContext().showDebugData()) {
             request.appendHtml("<div class=\"debug\">");
-            request.appendHtml("<pre>");  
-            request.appendHtml("URI:  " + context.getUri());
-            request.appendHtml("\n");
-            request.appendHtml("File: " + context.fullFilePath(context.getResourceFile()));
-            request.appendHtml("\n");
-            
-            AuthenticationSession session = IsisContext.getAuthenticationSession();
-            request.appendHtml("Session:  " + session.getUserName() + " " + session.getRoles());
-            
-            if (!isExcludeVariables) {
-                request.appendHtml("\n\n");
-                request.appendHtml("<a class=\"option\" target=\"debug\" href=\"debug.app\">Object</a>");
-                context.append(request, "variables");
-            }
-            if (!isExcludeProcessing) {
-                request.appendHtml("\n\n"); 
+            request.appendHtml("<pre>");
+            if ("page".equals(type)) {
+                RequestContext context = request.getContext();
+                request.appendHtml("URI:  " + context.getUri());
+                request.appendHtml("\n");
+                request.appendHtml("File: " + context.fullFilePath(context.getResourceFile()));
+                String result = (String) request.getContext().getVariable(RequestContext.RESULT);
+                if (result != null) {
+                    request.appendHtml("\n");
+                    request.appendHtml("Object: " + result);
+                }
+            } else  if ("session".equals(type)) {
+                AuthenticationSession session = IsisContext.getAuthenticationSession();
+                request.appendHtml("Session:  " + session.getUserName() + " " + session.getRoles());
+            } else  if ("variables".equals(type)) {
+                RequestContext context = request.getContext();
+                DebugHtmlString debug = new DebugHtmlString();
+                context.append(debug, "variables");
+            } else  if ("processing".equals(type)) {
                 request.appendHtml(request.getContext().getDebugTrace());      
+            } else {
+                request.appendHtml("<i>No such type " + type + "</i>");
             }
             request.appendHtml("</pre>");
             request.appendHtml("</div>");

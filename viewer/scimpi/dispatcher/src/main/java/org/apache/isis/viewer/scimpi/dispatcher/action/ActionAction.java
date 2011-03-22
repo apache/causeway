@@ -23,6 +23,8 @@ package org.apache.isis.viewer.scimpi.dispatcher.action;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -36,9 +38,10 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
+import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
+import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
@@ -72,6 +75,11 @@ public class ActionAction implements Action {
             // FIXME need to find method based on the set of parameters. otherwise overloaded method may be incorrectly selected.
             ObjectAction action = MethodsUtils.findAction(object, methodName);
             entryState = validateParameters(context, action, object);
+
+            AuthenticationSession session = context.getSession();
+            if (session == null && action.isUsable(new UserlessSession(), object).isVetoed()) {
+                throw new NotLoggedInException();
+            }
             
             object.checkLock(context.getVersion(version));
        /*     
@@ -264,6 +272,6 @@ public class ActionAction implements Action {
     public void init() {}
 
     @Override
-    public void debug(DebugView view) {}
+    public void debug(DebugBuilder debug) {}
 }
 

@@ -167,7 +167,7 @@ public class HtmlFormBuilder {
         int length = options.length;
         boolean offerOther = false;
         for (int i = 0; i < length; i++) {
-            String selectedSegment = field.getValue() == null || options[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
+            String selectedSegment = field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
             if (field.getType() == InputField.TEXT &&  options[i].equals("__other")) {
                 offerOther = true;
             } else {

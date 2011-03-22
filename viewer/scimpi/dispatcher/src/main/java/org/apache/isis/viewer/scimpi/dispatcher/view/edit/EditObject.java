@@ -20,6 +20,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -29,6 +30,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.progmodel.facets.object.choices.enums.EnumFacet;
+import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -100,7 +103,7 @@ public class EditObject extends AbstractElementProcessor {
         
         request.setBlockContent(containedBlock);
         request.processUtilCloseTag();
-
+        
         AuthenticationSession session = IsisContext.getAuthenticationSession();
         List<ObjectAssociation> fields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
         fields = containedBlock.includedFields(fields);
@@ -118,14 +121,40 @@ public class EditObject extends AbstractElementProcessor {
         }
 
         String errorView = context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
-        HiddenInputField[] hiddenFields = new HiddenInputField[] { 
-                new HiddenInputField(OBJECT, actualObjectId),
-                new HiddenInputField(VERSION, version),
-                completionMessage == null ? null : new HiddenInputField(MESSAGE, completionMessage),
-                forwardEditedTo == null ? null : new HiddenInputField(VIEW, context.fullFilePath(forwardEditedTo)),
-                new HiddenInputField(ERRORS, errorView), variable == null ? null : new HiddenInputField(RESULT_NAME, variable),
-                resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride),
-                scope == null ? null : new HiddenInputField(SCOPE, scope) };
+        List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
+        hiddenFields.add(new HiddenInputField(OBJECT, actualObjectId));
+        hiddenFields.add(new HiddenInputField(VERSION, version));
+        hiddenFields.add(completionMessage == null ? null : new HiddenInputField(MESSAGE, completionMessage));
+        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField(VIEW, context.fullFilePath(forwardEditedTo)));
+        hiddenFields.add(new HiddenInputField(ERRORS, errorView));
+        hiddenFields.add(variable == null ? null : new HiddenInputField(RESULT_NAME, variable));
+        hiddenFields.add(resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride));
+        hiddenFields.add(scope == null ? null : new HiddenInputField(SCOPE, scope));
+
+        if (object.isTransient()) {
+            // restore transient details
+            List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
+            for (int i = 0; i < fields2.size(); i++) {
+                ObjectAssociation field = fields2.get(i);
+                if (!fields.contains(field)) {
+                    String fieldId = field.getId();
+                    String value = getValue(context, field.get(object)); 
+                    hiddenFields.add(new HiddenInputField(fieldId, value));
+                }
+            }
+        } else {
+            // ensure all booleans are included so the pass back TRUE if set. 
+            List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
+            for (int i = 0; i < fields2.size(); i++) {
+                ObjectAssociation field = fields2.get(i);
+                if (!fields.contains(field) && field.getSpecification().containsFacet(BooleanValueFacet.class)) {
+                    String fieldId = field.getId();
+                    String value = getValue(context, field.get(object)); 
+                    hiddenFields.add(new HiddenInputField(fieldId, value));
+                }
+            }
+            
+        }
 
 
         if (formTitle == null) {
@@ -138,7 +167,8 @@ public class EditObject extends AbstractElementProcessor {
             buttonTitle = "Save";
         }
         
-        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFields, formFields, className, id, formTitle, null, null, buttonTitle, errors);
+        HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
+        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id, formTitle, null, null, buttonTitle, errors);
         request.popBlockContent();
     }
 
@@ -168,19 +198,18 @@ public class EditObject extends AbstractElementProcessor {
             InputField formField = formFields[i];
             
             AuthenticationSession session = IsisContext.getAuthenticationSession();
-            if (field.isVisible(session, object).isAllowed() && (includeUnusableFields || field.isUsable(session, object).isAllowed())) {
-                ObjectAdapter[] options = field.getChoices(object);
-                FieldFactory.initializeField(context, object, field, options, field.isMandatory(), formField);
-                
-                Consent usable = field.isUsable(session, object);
-                boolean isEditable = true;
-                isEditable = isEditable && usable.isAllowed();
-                if (usable.isVetoed()) {
-                    formField.setDescription(usable.getReason());
-                }
-                formField.setEditable(isEditable);
-            } else {
-                formFields[i].setHidden(true);
+            Consent usable = field.isUsable(session, object);
+            ObjectAdapter[] options = field.getChoices(object);
+            FieldFactory.initializeField(context, object, field, options, field.isMandatory(), formField);
+            
+            boolean isEditable =  usable.isAllowed();
+            if (!isEditable) {
+                formField.setDescription(usable.getReason());
+            }
+            formField.setEditable(isEditable);
+            boolean notVisible = field.isVisible(session, object).isVetoed() || (!includeUnusableFields && usable.isAllowed());
+            if (notVisible) {
+                formField.setHidden(true);
             }
         }
     }
@@ -279,8 +308,10 @@ public class EditObject extends AbstractElementProcessor {
         if (field == null) {
             return "";
         }
-        ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
-        if (facet == null) {
+        ObjectSpecification specification = field.getSpecification();
+        if (specification.containsFacet(EnumFacet.class)) {
+            return String.valueOf(field.getObject());
+        } else if (specification.getFacet(ParseableFacet.class) == null) {
             return context.mapObject(field, Scope.INTERACTION);
         } else {
             return field.titleString();

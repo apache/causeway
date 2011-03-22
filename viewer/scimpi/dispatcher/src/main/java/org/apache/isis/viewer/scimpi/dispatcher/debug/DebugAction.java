@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,6 +47,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -65,7 +67,7 @@ public class DebugAction implements Action {
     }
 
     @Override
-    public void debug(DebugView view) {}
+    public void debug(DebugBuilder debug) {}
 
     @Override
     public void process(RequestContext context) throws IOException {
@@ -74,13 +76,21 @@ public class DebugAction implements Action {
         }
         
         String action = context.getParameter("action");
-        if ("i18n".equals(action)) {
+        if ("list-i18n".equals(action)) {
             i18n(context, null);            
-        } else if ("authorization".equals(action)) {
-            authorization(context, null);            
+        } else if ("list-authorization".equals(action)) {
+            authorization(context, null);      
+        } else if (context.getParameter("mode") != null) {            
+            boolean isDebugOn = context.getParameter("mode").equals("debug");
+            context.addVariable("debug", isDebugOn, Scope.SESSION);
+            // TODO need to use configuration to find path
+            context.setRequestPath("/debug/debug.shtml");
         } else {
-            DebugView view = new DebugView(context.getWriter(), new DebugString());
-            view.header();
+            
+            
+            
+            // TODO remove - replaced by Debug tag
+            DebugWriter view = new DebugWriter(context.getWriter(), true);
             view.appendln("<div class=\"links\">");
             view.appendln("<a href=\"debug.app?action=system\">System</a>");
             view.appendln(" | <a href=\"debug.app?action=specifications\">List specifications</a>");
@@ -89,12 +99,11 @@ public class DebugAction implements Action {
             view.appendln(" | <a href=\"debug.app?action=context\">Context</a>");
             view.appendln(" | <a href=\"debug.app?action=dispatcher\">Dispatcher</a>");
             view.appendln("</div>");
-            view.startTable();
             
             if ("specifications".equals(action)) {
                 listSpecifications(view);
             } else   if ("specification".equals(action)) {
-                specification(context, view);            
+          //      specification(context, view);            
             } else   if ("object".equals(action)) {
                 object(context, view);            
             } else   if ("system".equals(action)) {
@@ -104,34 +113,32 @@ public class DebugAction implements Action {
             } else   if ("dispatcher".equals(action)) {
                 dispatcher.debug(view);
             }
-            
-            view.endTable();
-            view.footer();
+
             context.clearRequestedPath();
         }
     }
 
-    private void object(RequestContext context, DebugView view) {
+    private void object(RequestContext context, DebugWriter view) {
         ObjectAdapter object = context.getMappedObjectOrResult(context.getParameter("object"));
         DebugString str = new DebugString();
         Dump.adapter(object, str);
         Dump.graph(object, str, IsisContext.getAuthenticationSession());
-        view.divider(object.getSpecification().getFullIdentifier());
-        view.appendRow("<pre class=\"debug\">" + str + "</pre>");
+        view.appendTitle(object.getSpecification().getFullIdentifier());
+        view.appendln("<pre class=\"debug\">" + str + "</pre>");
     }
 
-    private void system(RequestContext context, DebugView view) {
+    private void system(RequestContext context, DebugWriter view) {
         DebuggableWithTitle[] debug = IsisContext.debugSystem();
-        view.divider("System");
+        view.appendTitle("System");
         for (int i = 0; i < debug.length; i++) {
             DebugString str = new DebugString();
             debug[i].debugData(str);
-            view.divider(debug[i].debugTitle());
-            view.appendRow("<pre class=\"debug\">" + str + "</pre>");
+            view.appendTitle(debug[i].debugTitle());
+            view.appendln("<pre class=\"debug\">" + str + "</pre>");
         }
     }
 
-    private void i18n(RequestContext context, DebugView view) {
+    private void i18n(RequestContext context, DebugWriter view) {
         Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications);
         Collections.sort(specs, new Comparator<ObjectSpecification>() {
@@ -162,7 +169,7 @@ public class DebugAction implements Action {
         }
     }
 
-    private void authorization(RequestContext context, DebugView view) {
+    private void authorization(RequestContext context, DebugWriter view) {
         Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications);
         Collections.sort(specs, new Comparator<ObjectSpecification>() {
@@ -194,156 +201,13 @@ public class DebugAction implements Action {
         }
     }
 
-    private void specification(RequestContext context, DebugView view) {
-        String name = context.getParameter("name");
-        ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
-        DebugString str = new DebugString();
-        Dump.specification(spec, str);
-        view.divider(spec.getFullIdentifier());
-        view.appendRow("Hash code", "#" + Integer.toHexString(spec.hashCode()));
-        view.appendRow("ID", spec.getIdentifier());
-        view.appendRow("Full name", spec.getFullIdentifier());
-        view.appendRow("Short name", spec.getShortIdentifier());
-        view.appendRow("Singular name", spec.getSingularName());
-        view.appendRow("Plural name", spec.getPluralName());
-        view.appendRow("Description", spec.getDescription());
-
-        view.appendRow("Type", "?");
-        view.appendRow("Value/aggregated", String.valueOf(!spec.isValueOrIsAggregated()));
-
-        
-        view.appendRow("Parent specification", specificationLink(spec.superclass()));
-        specificationClasses(view, "Child specifications",  spec.subclasses());
-        specificationClasses(view, "Implemented interfaces", spec.interfaces());
-        speficationFacets(view, spec);
-        
-        
-        List<ObjectAssociation> fields = spec.getAssociations();
-        specificationMembers(view, "Fields", fields);
-        List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER);
-        specificationMembers(view, "User Actions", userActions);
-        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION));
-        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE));
-        specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG));
-
-        
-        for (int i = 0; i < fields.size(); i++) {
-            ObjectAssociation field = fields.get(i);
-            view.divider("<span id=\"" + field.getId() + "\"><em>Field:</em> " + field.getId() + "</span>");
-            view.appendRow("ID", field.getIdentifier());
-            view.appendRow("Short ID", field.getId());
-            view.appendRow("Name", field.getName());
-            view.appendRow("Specification", specificationLink(field.getSpecification()));
-
-            view.appendRow("Type",  field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation() ? "Object" : "Unknown");
-            view.appendRow("Flags", (field.isAlwaysHidden() ? "": "Visible ") + (field.isNotPersisted() ? "Not Persisted": " ")
-                    + (field.isMandatory() ? "Mandatory " : ""));
-
-            speficationFacets(view, field);
-        }
-        
-        for (int i = 0; i < userActions.size(); i++) {
-            final ObjectAction action = userActions.get(i);
-            view.divider("<span id=\"" + action.getId() + "\"><em>Action:</em> " + action.getId() + "</span>");
-            view.appendRow("ID", action.getIdentifier());
-            view.appendRow("Short ID", action.getId());
-            view.appendRow("Name", action.getName());
-            view.appendRow("Specification", specificationLink(action.getSpecification()));
-
-            view.appendRow("Target", action.getTarget());
-            view.appendRow("On type", specificationLink(action.getOnType()));
-
-            ObjectSpecification returnType = action.getReturnType();
-            view.appendRow("Returns", returnType == null ? "VOID" : specificationLink(returnType));
-            
-            speficationFacets(view, action);
-
-            List<ObjectActionParameter> parameters = action.getParameters();
-            StringBuffer buffer = new StringBuffer();
-            if (parameters.size() == 0) {
-                buffer.append("none");
-            } else {
-                List<ObjectActionParameter> p = action.getParameters();
-                for (int j = 0; j < parameters.size(); j++) {
-                    buffer.append(p.get(j).getName());
-                    buffer.append(" (");
-                    buffer.append(specificationLink(parameters.get(j).getSpecification()));
-                    buffer.append(")<br>");
-                    Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
-                    for (int k = 0; k < parameterFacets.length; k++) {
-                        buffer.append("&nbsp;&nbsp;" + p.get(j).getFacet(parameterFacets[k]).toString() + "<br>");
-                    }
-                }
-            }
-            view.appendRow("Parameters", buffer.toString());
-        }
-        
-        /*
-        
-        view.divider(spec.getFullName());
-        view.appendRow("<pre class=\"debug\">" + str + "</pre>");
-        */
-    }
-
-    private void specificationMembers(DebugView view, String label, List<? extends ObjectMember> members) {
-        StringBuffer buffer = new StringBuffer();
-        if (members.size() == 0) {
-            buffer.append("none");
-        } else {
-            for (int i = 0; i < members.size(); i++) {
-                buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + members.get(i).getId() + "</a><br>");
-            }
-        }
-        view.appendRow(label, buffer.toString());
-    }
-
-    private void speficationFacets(DebugView view, FacetHolder facetHolder) {
-        Facet[] facets = facetHolder.getFacets(new Filter<Facet>() {
-            @Override
-            public boolean accept(Facet facet) {
-                return true;
-            }
-        });
-        StringBuffer buffer = new StringBuffer();
-        if (facets == null || facets.length == 0) {
-            buffer.append("none");
-        } else {
-            for (int i = 0; i < facets.length; i++) {
-                String facetType = facets[i].facetType().getName();
-                buffer.append("<span class=\"facet-type\">" + facetType .substring(facetType.lastIndexOf('.') + 1)  + "</span>:  " + facets[i] + "<br>");
-            }
-        }
-        view.appendRow("Facets", buffer.toString());
-    }
-
-    private void specificationClasses(DebugView view, String label, List<ObjectSpecification> subclasses) {
-        StringBuffer buffer = new StringBuffer();
-        if (subclasses.size() == 0) {
-            buffer.append("none");
-        } else {
-            for (int i = 0; i < subclasses.size(); i++) {
-                buffer.append(specificationLink(subclasses.get(i)) + "<br>");
-            }
-        }
-        view.appendRow(label, buffer.toString());
-    }
-
-    private String specificationLink(ObjectSpecification specification) {
-        if (specification == null) {
-            return "none";
-        } else {
-            String name = specification.getFullIdentifier();
-            return "<a href=\"debug.app?action=specification&name=" + name + "\">" + name + "</a>";
-        }
-    }
-    
-    private void listSpecifications(DebugView view) {
+    private void listSpecifications(DebugWriter view) {
         List<ObjectSpecification> fullIdentifierList = new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
         Collections.sort(fullIdentifierList, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
-        view.divider("Specifications");
+        view.appendTitle("Specifications");
         for (ObjectSpecification spec : fullIdentifierList) {
             String name = spec.getSingularName();
-            view.appendRow(name, specificationLink(spec));
+      //      view.appendln(name, specificationLink(spec));
         }
 
         

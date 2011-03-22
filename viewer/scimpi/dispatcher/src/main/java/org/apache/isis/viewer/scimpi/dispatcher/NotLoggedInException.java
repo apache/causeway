@@ -17,24 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
-import java.io.IOException;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
-public interface Action extends Names {
+/**
+ * Indicates that request could not complete as a user was not logged in.
+ */
+public class NotLoggedInException extends ScimpiException {
+    private static final long serialVersionUID = 1L;
 
-    void process(RequestContext context) throws IOException;
-
-    String getName();
-
-    void init();
-
-    void debug(DebugBuilder debug);
+    public NotLoggedInException() {
+    }
 
 }
-
-

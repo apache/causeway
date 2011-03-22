@@ -22,16 +22,18 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
+import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 
 /**
  * Remove an element from a collection. 
@@ -44,6 +46,11 @@ public class RemoveAction implements Action {
     }
 
     public void process(RequestContext context) throws IOException {
+        AuthenticationSession session = context.getSession();
+        if (session == null) {
+            throw new NotLoggedInException();
+        }
+        
         String parentId = context.getParameter(OBJECT);
         String rowId = context.getParameter(ELEMENT);
 
@@ -99,6 +106,6 @@ public class RemoveAction implements Action {
 
     public void init() {}
 
-    public void debug(DebugView view) {}
+    public void debug(DebugBuilder debug) {}
 }
 

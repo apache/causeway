@@ -23,13 +23,13 @@ package org.apache.isis.viewer.scimpi.dispatcher.logon;
 import java.io.IOException;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 
@@ -79,6 +79,6 @@ public class LogonAction implements Action {
 
     public void init() {}
 
-    public void debug(DebugView view) {}
+    public void debug(DebugBuilder debug) {}
 }
 

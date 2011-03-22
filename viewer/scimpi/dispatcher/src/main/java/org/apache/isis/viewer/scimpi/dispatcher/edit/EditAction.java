@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -38,9 +39,9 @@ import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
+import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 
 
 public class EditAction implements Action {
@@ -53,6 +54,11 @@ public class EditAction implements Action {
 
     @Override
     public void process(RequestContext context) throws IOException {
+        AuthenticationSession session = context.getSession();
+        if (session == null) {
+            throw new NotLoggedInException();
+        }
+        
         try {
             String objectId = context.getParameter(OBJECT);
             String version = context.getParameter(VERSION);
@@ -62,7 +68,47 @@ public class EditAction implements Action {
             String message = context.getParameter(MESSAGE);
             
             ObjectAdapter adapter = context.getMappedObject(objectId);
-            AuthenticationSession session= IsisContext.getAuthenticationSession();
+            
+            if (adapter.isTransient()) {
+                //restore object state first
+                List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+                for (int i = 0; i < fields.size(); i++) {
+                    ObjectAssociation field = fields.get(i);
+                    String fieldId = field.getId();
+                    String newEntry = context.getParameter(fieldId);
+                    if (fields.get(i).isOneToManyAssociation()) {
+                        continue;
+                    }
+                    if (newEntry != null && newEntry.equals("-OTHER-")) {
+                        newEntry = context.getParameter(fieldId + "-other");
+                    }
+                    if (newEntry == null) {
+                        // TODO duplicated in EditObject; line 97
+                        ObjectSpecification spec = field.getSpecification();
+                        if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
+                                        || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+                            newEntry = FALSE;
+                        } else {
+                           continue;
+                        }
+                    }
+                    
+                    ObjectAdapter originalValue = null; // fields.get(i).get(adapter);
+                    if (fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
+                        ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
+                        ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
+                        ((OneToOneAssociation) fields.get(i)).setAssociation(adapter, newValue);
+                    } else {
+                        ObjectAdapter associate = context.getMappedObject(newEntry);
+                        if (associate != null) {
+                            IsisContext.getPersistenceSession().resolveImmediately(associate);
+                        }
+                        ((OneToOneAssociation) fields.get(i)).setAssociation(adapter, associate);
+                    }
+                }
+
+            }
+            
             List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
             FormState entryState = validateObject(context, adapter, fields);
             Version adapterVersion = adapter.getVersion();
@@ -245,6 +291,6 @@ public class EditAction implements Action {
     public void init() {}
 
     @Override
-    public void debug(DebugView view) {}
+    public void debug(DebugBuilder debug) {}
 }
 

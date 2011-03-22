@@ -26,10 +26,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
-import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
 public class IndirectObjectMapping implements ObjectMapping {
@@ -50,7 +49,6 @@ public class IndirectObjectMapping implements ObjectMapping {
 
     public void endSession() {
         scopedMappings.get(Scope.SESSION).clear();
-//        scopedMappings.get(Scope.INTERACTION).clear();
         nextId = 0;
     }
 
@@ -58,7 +56,6 @@ public class IndirectObjectMapping implements ObjectMapping {
         reloadIdentityMap(Scope.GLOBAL);
         reloadIdentityMap(Scope.SESSION);
         reloadIdentityMap(Scope.INTERACTION);
-   //     reloadIdentityMap(Scope.REQUEST);
         
         Map<String, Mapping> map = scopedMappings.get(Scope.INTERACTION);
         scopedMappings.put(Scope.REQUEST, map);
@@ -84,29 +81,29 @@ public class IndirectObjectMapping implements ObjectMapping {
         scopedMappings.get(scope).remove(id);
     }
 
-    public void appendMappings(Request content) {
-        appendMappings(content, scopedMappings.get(Scope.INTERACTION));
+    public void appendMappings(DebugBuilder debug) {
+        appendMappings(debug, scopedMappings.get(Scope.INTERACTION));
     }
 
-    private void appendMappings(Request content, Map<String, Mapping> map) {
+    private void appendMappings(DebugBuilder debug, Map<String, Mapping> map) {
         Iterator<String> names = map.keySet().iterator();
         while (names.hasNext()) {
             String id = names.next();
             ObjectAdapter object = mappedObject(id);
-            content.appendHtml(id + " -> " + object + "\n");
+            debug.appendln(id, object);
         }
     }
 
-    private void appendMappings(DebugView view, Scope scope) {
-        view.divider("Objects for " + scope);
+    private void appendMappings(DebugBuilder debug, Scope scope) {
+        debug.appendTitle("Objects for " + scope);
         Map<String, Mapping> map = scopedMappings.get(scope);
         Iterator<String> ids = new TreeSet(map.keySet()).iterator();
         if (!ids.hasNext()) {
-            view.appendRow("None", "");
+            debug.appendln("None", "");
         }
         while (ids.hasNext()) {
             String key = ids.next();
-            view.appendRow(key, map.get(key).debug());
+            debug.appendln(key, map.get(key).debug());
         }
     }
 
@@ -175,13 +172,13 @@ public class IndirectObjectMapping implements ObjectMapping {
         return null;
     }
 
-    public void append(DebugView view) {
-        view.appendRow("Next ID", nextId);
+    public void append(DebugBuilder debug) {
+        debug.appendln("Next ID", nextId);
 
-        appendMappings(view, Scope.GLOBAL);
-        appendMappings(view, Scope.SESSION);
-        appendMappings(view, Scope.INTERACTION);
-        appendMappings(view, Scope.REQUEST);
+        appendMappings(debug, Scope.GLOBAL);
+        appendMappings(debug, Scope.SESSION);
+        appendMappings(debug, Scope.INTERACTION);
+        appendMappings(debug, Scope.REQUEST);
     }
 
 }

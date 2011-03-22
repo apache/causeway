@@ -17,24 +17,28 @@
  *  under the License.
  */
 
+package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
-package org.apache.isis.viewer.scimpi.dispatcher;
+import java.io.PrintWriter;
 
-import java.io.IOException;
+import org.apache.isis.core.commons.debug.DebugHtmlStringAbstract;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
-public interface Action extends Names {
+public class DebugWriter extends DebugHtmlStringAbstract {
 
-    void process(RequestContext context) throws IOException;
+    private final PrintWriter writer;
 
-    String getName();
+    public DebugWriter(PrintWriter writer, boolean createPage) {
+        super(createPage);
+        this.writer = writer;
+        header();
+    }
 
-    void init();
+    protected void appendHtml(String html) {
+        writer.println(html);
+    }
 
-    void debug(DebugBuilder debug);
-
+    protected void doClose() {
+        footer();
+    }
 }
-
-

@@ -27,14 +27,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
-import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
 public class HibernateOidObjectMapping implements ObjectMapping {
@@ -82,18 +81,18 @@ public class HibernateOidObjectMapping implements ObjectMapping {
     
     private final Map<String, TransientObjectMapping> transients = new HashMap<String, TransientObjectMapping>();
 
-    public void append(DebugView view) {
+    public void append(DebugBuilder debug) {
         Iterator<String> ids = new HashSet(transients.keySet()).iterator();
         if (ids.hasNext()) {
-            view.divider("Transient objects");
+            debug.appendTitle("Transient objects");
             while (ids.hasNext()) {
                 String key = ids.next();
-                view.appendRow(key, transients.get(key).debug());
+                debug.appendln(key, transients.get(key).debug());
             }
         }
     }
 
-    public void appendMappings(Request request) {}
+    public void appendMappings(DebugBuilder request) {}
 
     public void clear(Scope scope) {
         Iterator<TransientObjectMapping> mapping = transients.values().iterator();

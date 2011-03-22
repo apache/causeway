@@ -29,8 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -38,12 +37,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
-import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.log4j.Logger;
 
 
 public class DefaultOidObjectMapping implements ObjectMapping {
@@ -52,23 +51,23 @@ public class DefaultOidObjectMapping implements ObjectMapping {
     private final Map<String, TransientObjectMapping> sessionTransients = new HashMap<String, TransientObjectMapping>();
     private Class<? extends Oid> oidType;
 
-    public void append(DebugView view) {
-        append(view, requestTransients, "request");
-        append(view, sessionTransients, "session");
+    public void append(DebugBuilder debug) {
+        append(debug, requestTransients, "request");
+        append(debug, sessionTransients, "session");
     }
 
-    protected void append(DebugView view, Map<String, TransientObjectMapping> transients, String type) {
+    protected void append(DebugBuilder debug, Map<String, TransientObjectMapping> transients, String type) {
         Iterator<String> ids = new HashSet(transients.keySet()).iterator();
         if (ids.hasNext()) {
-            view.divider("Transient objects (" + type + ")");
+            debug.appendTitle("Transient objects (" + type + ")");
             while (ids.hasNext()) {
                 String key = ids.next();
-                view.appendRow(key, transients.get(key).debug());
+                debug.appendln(key, transients.get(key).debug());
             }
         }
     }
 
-    public void appendMappings(Request request) {}
+    public void appendMappings(DebugBuilder request) {}
 
     public void clear(Scope scope) {
         requestTransients.clear();
@@ -109,9 +108,9 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 int element = -1; // aoid.getElement();
                 
                 object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);
-                encodedOid = Long.toHexString(((SerialOid) parentOid).getSerialNo()) + "@" + fieldName + (element == -1 ? "" : "@" + element);
+                encodedOid = Long.toString(((SerialOid) parentOid).getSerialNo(), 16) + "@" + fieldName + (element == -1 ? "" : "@" + element);
             } else  if (oid instanceof SerialOid) {
-                encodedOid = Long.toHexString(((SerialOid) oid).getSerialNo());
+                encodedOid = Long.toString(((SerialOid) oid).getSerialNo(), 16);
             } else {
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 DataOutputExtended outputStream = new DataOutputStreamExtended(output);
@@ -147,7 +146,14 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 mapping = requestTransients.get(id);
             }
             if (mapping == null) {
-                return null;
+                String[] split = id.split("@");
+                ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
+                Object pojo = spec.createObject(CreationMode.NO_INITIALIZE);
+                String oidData = split[1];
+                SerialOid oid = SerialOid.createTransient(Long.valueOf(oidData, 16).longValue());
+                return IsisContext.getPersistenceSession().recreateAdapter(oid, pojo);
+                
+//                return null;
             }
             ObjectAdapter mappedTransientObject = mapping.getObject();
             LOG.debug("retrieved " + mappedTransientObject.getOid() + " for " + id);

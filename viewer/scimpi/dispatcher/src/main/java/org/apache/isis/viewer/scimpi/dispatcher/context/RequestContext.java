@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -42,8 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
-import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.log4j.Logger;
 
 
@@ -244,70 +243,64 @@ public abstract class RequestContext {
     // ////////////////////////////
     // Debug
     // ////////////////////////////
-    public void append(DebugView view) {
-        view.divider("User");
+    public void append(DebugBuilder view) {
+        view.appendTitle("User");
         AuthenticationSession session = getSession();
-        view.appendRow("Session", session);
+        view.appendln("Session", session);
         if (session != null) {
-            view.appendRow("Name", session.getUserName());
-            view.appendRow("Roles", session.getRoles());
+            view.appendln("Name", session.getUserName());
+            view.appendln("Roles", session.getRoles());
         }
 
-        view.divider("context");
-        view.appendRow("Parent request path", requestedParentPath);
-        view.appendRow("Requested file", requestedFile);
-        view.appendRow("Parent resource path", resourceParentPath);
-        view.appendRow("Resource file", resourceFile);
+        view.appendTitle("context");
+        view.appendln("Parent request path", requestedParentPath);
+        view.appendln("Requested file", requestedFile);
+        view.appendln("Parent resource path", resourceParentPath);
+        view.appendln("Resource file", resourceFile);
 
         append(view, Scope.GLOBAL);
         append(view, Scope.SESSION);
         append(view, Scope.INTERACTION);
         append(view, Scope.REQUEST);
-        view.endTable();
+        view.endSection();
 
-        view.startTable();
+        view.startSection("Object Mapping");
         objectMapping.append(view);
     }
 
-    private void append(DebugView view, Scope scope) {
+    private void append(DebugBuilder view, Scope scope) {
         Map<String, Object> map = variables.get(scope);
         Iterator<String> keys = new TreeSet(map.keySet()).iterator();
         if (keys.hasNext()) {
-            view.divider(scope + " scoped variables");
+            view.appendTitle(scope + " scoped variables");
             while (keys.hasNext()) {
                 String key = keys.next();
                 Object object = map.get(key);
                 String mappedTo = "";
-                /*
-                if (object instanceof String) {
-                    ObjectAdapter mappedObject = mappedObject((String) object);
-                    mappedTo = mappedObject == null ? "" : " - " + mappedObject.toString();
-                }
-                */
-                view.appendRow(key, object + mappedTo);
+                view.appendln(key, object + mappedTo);
             }
         }
     }
 
-    public void append(Request content, String list) {
+    public void append(DebugBuilder content, String list) {
         if (list.equals("variables")) {
             appendVariables(content, Scope.GLOBAL);
-            content.appendHtml("\n");
+            content.blankLine();
             appendVariables(content, Scope.SESSION);
-            content.appendHtml("\n");
+            content.blankLine();
             appendVariables(content, Scope.INTERACTION);
-            content.appendHtml("\n");
+            content.blankLine();
             appendVariables(content, Scope.REQUEST);
         } else if (list.equals("mappings")) {
             objectMapping.appendMappings(content);
         }
     }
 
-    private void appendVariables(Request content, Scope scope) {
+    private void appendVariables(DebugBuilder content, Scope scope) {
         Map<String, Object> map = variables.get(scope);
         Iterator<String> names = new TreeSet(map.keySet()).iterator();
         if (names.hasNext()) {
-            content.appendHtml(scope.toString() + "\n");
+            content.appendTitle(scope.toString());
             while (names.hasNext()) {
                 String name = names.next();
                 try {
@@ -319,10 +312,9 @@ public abstract class RequestContext {
                             details = mappedObject.toString();
                         }
                     }
-                    content.appendHtml(name + " -> " + object + "  " + details + "\n");
+                    content.appendln(name, object + "  " + details);
                 } catch (Exception e) {
-                    content.appendHtml(name + " -> " + map.get(name) + "\n");
-                    //content.appendHtml(e.printStackTrace())
+                    content.appendln(name, map.get(name));
                 }
             }
         }
@@ -729,10 +721,6 @@ public abstract class RequestContext {
         return session;
     }
 
-    public Debug getDebug() {
-        return debug;
-    }
-
     public abstract String getUri();
 
     public void raiseError(int status) {}
@@ -749,6 +737,13 @@ public abstract class RequestContext {
     }
 
     
+    
+    
+   
+    public Debug getDebug() {
+        return debug;
+    }
+
     public boolean isDebugDisabled() {
         if (debugLevel == null) {
             String property = System.getProperties().getProperty("debug");
@@ -766,6 +761,14 @@ public abstract class RequestContext {
     public boolean isDebug() { 
         return getDebug() == Debug.ON; 
     }
+
+    public boolean showDebugData() {
+     //   getDebug() == RequestContext.Debug.ON
+        
+        Object variable = getVariable("debug");
+        return variable != null && ((Boolean) variable).booleanValue();
+    }
+
     
     public String getDebugTrace() { 
         return debugTrace.toString().replace('<', '[').replace('>', ']'); 
