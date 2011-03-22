@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Size;
@@ -38,7 +38,7 @@ public class Identifier extends AbstractViewDecorator {
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.append("Identifier");
     }
 

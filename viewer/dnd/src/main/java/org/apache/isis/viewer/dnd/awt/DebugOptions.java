@@ -23,8 +23,8 @@ package org.apache.isis.viewer.dnd.awt;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.SystemPrinter;
@@ -95,7 +95,7 @@ public class DebugOptions implements MenuOptions {
                 final InfoDebugFrame f = new InfoDebugFrame();
                 DebuggableWithTitle info = new DebuggableWithTitle() {
 
-                    public void debugData(DebugString debug) {
+                    public void debugData(DebugBuilder debug) {
                         ByteArrayOutputStream out2 = new ByteArrayOutputStream();
                         PrintStream out = new PrintStream(out2);
                         new SystemPrinter(out).printDiagnostics();

@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -64,7 +64,7 @@ public abstract class ResizeBorder extends AbstractBorder {
     }
 
     @Override
-    protected void debugDetails(final DebugString debug) {
+    protected void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
         debug.appendln("width", width == 0 ? "no change" : Integer.toString(width));
         debug.appendln("height ", height == 0 ? "no change" : Integer.toString(height));

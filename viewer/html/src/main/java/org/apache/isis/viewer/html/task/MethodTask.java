@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.task;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -111,7 +111,7 @@ public final class MethodTask extends Task {
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendln("action: " + action);
         super.debug(debug);
     }

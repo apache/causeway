@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.log4j.Logger;
 
 
@@ -96,7 +96,7 @@ public class DatabaseConnectorPool {
         connectorPool.removeAllElements();
     }
 
-    public void debug(DebugString debug) {
+    public void debug(DebugBuilder debug) {
         DatabaseConnector connection = acquire();
         connection.debug(debug);
         release(connection);

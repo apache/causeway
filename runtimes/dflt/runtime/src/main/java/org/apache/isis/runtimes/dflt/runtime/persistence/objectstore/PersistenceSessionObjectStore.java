@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -576,7 +576,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         super.debugData(debug);
 
         debug.appendTitle("Persistor");

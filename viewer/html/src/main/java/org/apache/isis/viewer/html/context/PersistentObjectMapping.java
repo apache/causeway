@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.context;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -45,7 +45,7 @@ public class PersistentObjectMapping implements ObjectMapping {
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendln(specification.getFullIdentifier());
         if (version != null) {
             debug.appendln(version.toString());

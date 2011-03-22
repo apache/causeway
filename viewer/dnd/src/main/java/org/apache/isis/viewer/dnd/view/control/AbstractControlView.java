@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.view.control;
 
 import java.awt.event.KeyEvent;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -95,9 +95,9 @@ public abstract class AbstractControlView implements View {
 
     public void contentMenuOptions(final UserActionSet menuOptions) {}
 
-    public void debug(final DebugString debug) {}
+    public void debug(final DebugBuilder debug) {}
 
-    public void debugStructure(final DebugString b) {}
+    public void debugStructure(final DebugBuilder b) {}
 
     public void dispose() {}
 

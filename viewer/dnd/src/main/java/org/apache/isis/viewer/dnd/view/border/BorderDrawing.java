@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
@@ -29,7 +29,7 @@ import org.apache.isis.viewer.dnd.view.ViewState;
 
 public interface BorderDrawing {
 
-    public abstract void debugDetails(final DebugString debug);
+    public abstract void debugDetails(final DebugBuilder debug);
 
     public abstract void layoutControls(final Size size, View[] controls);
 

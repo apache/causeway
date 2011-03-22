@@ -25,7 +25,7 @@ import java.net.SocketException;
 
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
 import org.apache.isis.runtimes.dflt.remoting.transport.ServerConnectionHandler;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.log4j.Logger;
 
 public class Worker implements Runnable {
@@ -122,7 +122,7 @@ public class Worker implements Runnable {
     // Debug
     ///////////////////////////////////////////////////////
     
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
     	serverDelegate.debug(debug);
     }
 

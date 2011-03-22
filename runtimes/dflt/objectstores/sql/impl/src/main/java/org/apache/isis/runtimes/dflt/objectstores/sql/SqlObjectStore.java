@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -143,7 +144,7 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("initialised", isInitialized);
         debug.appendln("connection pool", connectionPool);
         debug.appendln("Database:");
@@ -293,7 +294,7 @@ public final class SqlObjectStore implements ObjectStore {
     public void open() {
         Sql.setMetaData(connectionPool.acquire().getMetaData());
 
-        DebugString debug = new DebugString();
+        DebugBuilder debug = new DebugString();
         connectionPool.debug(debug);
         LOG.info("Database: " + debug);
 

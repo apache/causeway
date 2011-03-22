@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.crumb;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.html.request.ForwardRequest;
@@ -39,7 +39,7 @@ public class ObjectCrumb implements Crumb {
         isService = object.getSpecification().isService();
     }
 
-    public void debug(final DebugString string) {
+    public void debug(final DebugBuilder string) {
         string.appendln("Object Crumb");
         string.appendln("object", objectId);
         string.appendln("title", title);

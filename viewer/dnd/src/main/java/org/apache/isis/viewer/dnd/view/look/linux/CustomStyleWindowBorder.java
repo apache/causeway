@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.dnd.view.look.linux;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -47,7 +47,7 @@ public class CustomStyleWindowBorder implements BorderDrawing {
     int top = LINE_THICKNESS + titlebarHeight;
     int bottom = LINE_THICKNESS;
 
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("titlebar ", top - titlebarHeight);
     }
 

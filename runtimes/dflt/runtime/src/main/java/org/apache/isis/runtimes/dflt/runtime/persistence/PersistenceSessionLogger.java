@@ -23,8 +23,8 @@ package org.apache.isis.runtimes.dflt.runtime.persistence;
 import java.util.List;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -70,7 +70,7 @@ public class PersistenceSessionLogger extends Logger implements PersistenceSessi
 		return underlying.findInstances(criteria);
 	}
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         underlying.debugData(debug);
     }
 

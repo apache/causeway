@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.list;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -60,7 +60,7 @@ public class InternalCollectionBorder extends AbstractBorder {
     }
 
     @Override
-    protected void debugDetails(final DebugString debug) {
+    protected void debugDetails(final DebugBuilder debug) {
         debug.append("InternalCollectionBorder ");
     }
 

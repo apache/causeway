@@ -23,8 +23,8 @@ package org.apache.isis.profilestores.dflt;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfile;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;
 
@@ -44,7 +44,7 @@ public class InMemoryUserProfileStore implements UserProfileStore, DebuggableWit
         profiles.put(name, userProfile);
     }
 
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         for (String name : profiles.keySet()) {
             debug.appendln(name, profiles.get(name));
         }

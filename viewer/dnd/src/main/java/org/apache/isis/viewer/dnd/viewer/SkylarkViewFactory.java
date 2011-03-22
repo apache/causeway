@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -123,7 +123,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         return createView;
     }
 
-    public void debugData(final DebugString sb) {
+    public void debugData(final DebugBuilder sb) {
         sb.append("RootsViews\n");
         Enumeration fields = rootViews.elements();
         while (fields.hasMoreElements()) {

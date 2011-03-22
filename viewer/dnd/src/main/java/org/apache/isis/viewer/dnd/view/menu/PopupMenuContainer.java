@@ -24,7 +24,7 @@ import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
@@ -65,7 +65,7 @@ public class PopupMenuContainer extends AbstractView {
 
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         super.debug(debug);
         debug.appendTitle("Submenu");
         debug.append(submenu);

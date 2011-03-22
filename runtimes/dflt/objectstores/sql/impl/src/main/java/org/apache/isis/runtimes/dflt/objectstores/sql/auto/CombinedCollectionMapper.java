@@ -33,7 +33,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -185,7 +185,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
     @Override
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         debug.appendln(field.getName(), "collection");
         debug.indent();
         debug.appendln("Foreign key name", foreignKeyName);

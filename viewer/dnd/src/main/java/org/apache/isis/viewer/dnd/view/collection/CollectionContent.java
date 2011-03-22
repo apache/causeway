@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.view.collection;
 
 import java.util.Enumeration;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -35,7 +35,7 @@ public interface CollectionContent extends Content {
 
     Enumeration allElements();
 
-    void debugDetails(final DebugString debug);
+    void debugDetails(final DebugBuilder debug);
 
     ObjectAdapter[] elements();
 

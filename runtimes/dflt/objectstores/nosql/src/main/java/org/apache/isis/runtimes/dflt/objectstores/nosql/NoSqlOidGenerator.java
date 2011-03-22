@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -78,7 +78,7 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
             return nextId++;
         }
         
-        public void debugData(DebugString debug) {
+        public void debugData(DebugBuilder debug) {
             debug.appendln("id", nextId);
             debug.appendln("sub-id", nextSubId);
             debug.appendln("transient id", transientNumber);
@@ -124,7 +124,7 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln(this.toString());
         debug.indent();
         ids.debugData(debug);

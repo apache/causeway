@@ -24,20 +24,20 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.StringTokenizer;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 
 
 public class DebugCanvasAbsolute implements Canvas {
-    private final DebugString buffer;
+    private final DebugBuilder buffer;
     private final int level;
     private int offsetX;
     private int offsetY;
 
-    public DebugCanvasAbsolute(final DebugString buffer, final Bounds bounds) {
+    public DebugCanvasAbsolute(final DebugBuilder buffer, final Bounds bounds) {
         this(buffer, 0, bounds.getX(), bounds.getY());
     }
 
-    private DebugCanvasAbsolute(final DebugString buffer, final int level, final int x, final int y) {
+    private DebugCanvasAbsolute(final DebugBuilder buffer, final int level, final int x, final int y) {
         this.level = level;
         this.buffer = buffer;
         offsetX = x;

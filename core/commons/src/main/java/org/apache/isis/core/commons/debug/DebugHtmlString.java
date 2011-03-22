@@ -16,29 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.commons.debug;
 
+public class DebugHtmlString extends DebugHtmlStringAbstract {
 
-package org.apache.isis.viewer.dnd.view.debug;
-
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.viewer.dnd.drawing.Bounds;
-import org.apache.isis.viewer.dnd.drawing.DebugCanvas;
-import org.apache.isis.viewer.dnd.view.View;
-
-
-public class DebugDrawing implements DebuggableWithTitle {
-    private final View view;
-
-    public DebugDrawing(final View display) {
-        this.view = display;
+    StringBuffer debug = new StringBuffer();
+    
+    public DebugHtmlString() {
+        super(false);
+    }
+    
+    public DebugHtmlString(boolean createPage) {
+        super(createPage);
+        header();
     }
 
-    public void debugData(final DebugBuilder debug) {
-        view.draw(new DebugCanvas(debug, new Bounds(view.getBounds())));
+    @Override
+    public void doClose() {
+        footer();
     }
 
-    public String debugTitle() {
-        return "Drawing";
+    @Override
+    protected void appendHtml(String html) {
+        debug.append(html);
+        debug.append("\n");
+    }
+
+    @Override
+    public String toString() {
+        return debug.toString();
     }
 }

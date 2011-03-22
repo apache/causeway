@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.IdentityMap;
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
@@ -156,7 +156,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // Debugging
     // ///////////////////////////////////////////////////////////////////////////
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         int count = 0;
         for (final Object pojo : adapterByPojoMap.keySet()) {
             final ObjectAdapter object = adapterByPojoMap.get(pojo);

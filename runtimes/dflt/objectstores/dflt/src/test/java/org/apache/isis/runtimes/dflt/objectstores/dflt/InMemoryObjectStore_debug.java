@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import java.util.Collections;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -46,13 +47,13 @@ public class InMemoryObjectStore_debug extends ProxyJunit3TestCase {
         store.execute(Collections.<PersistenceCommand>singletonList(command));
 
         store.debugTitle();
-        final DebugString debug = new DebugString();
+        final DebugBuilder debug = new DebugString();
         store.debugData(debug);
     }
 
     public void testEmpty() throws Exception {
         store.debugTitle();
-        final DebugString debug = new DebugString();
+        final DebugBuilder debug = new DebugString();
         store.debugData(debug);
     }
 }

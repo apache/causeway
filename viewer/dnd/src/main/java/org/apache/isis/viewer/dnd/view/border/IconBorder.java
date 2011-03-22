@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -84,7 +84,7 @@ public class IconBorder extends AbstractBorder {
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
         debug.appendln("titlebar", top - titlebarHeight);
     }

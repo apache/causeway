@@ -29,7 +29,7 @@ import java.util.Iterator;
 import junit.framework.AssertionFailedError;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
@@ -155,7 +155,7 @@ public class TestProxyConfiguration implements IsisConfiguration {
 	}
 
     @Override
-    public void debugData(final DebugString debug) {}
+    public void debugData(final DebugBuilder debug) {}
 
     @Override
     public String debugTitle() {

@@ -20,7 +20,7 @@
 package org.apache.isis.runtimes.dflt.runtime.context;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
 
@@ -117,7 +117,7 @@ public class IsisContextPipe extends IsisContextMultiUser {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         super.debugData(debug);
         debug.appendln("Server thread", server);
     }

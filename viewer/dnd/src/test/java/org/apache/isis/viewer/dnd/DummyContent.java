@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -41,7 +41,7 @@ public class DummyContent implements Content {
         return Veto.DEFAULT;
     }
 
-    public void debugDetails(final DebugString debug) {}
+    public void debugDetails(final DebugBuilder debug) {}
 
     public ObjectAdapter drop(final Content sourceContent) {
         return null;

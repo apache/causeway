@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
@@ -63,9 +63,9 @@ public interface View extends Cloneable, OptionsAware {
      */
     void contentMenuOptions(UserActionSet menuOptions);
 
-    void debug(DebugString debug);
+    void debug(DebugBuilder debug);
 
-    void debugStructure(DebugString debug);
+    void debugStructure(DebugBuilder debug);
 
     /**
      * Called when a view is no longer needed and its resources can be disposed of. Dissociates this view from

@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.message;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.ThrowableUtils;
@@ -93,7 +93,7 @@ public class ExceptionMessageContent implements MessageContent {
 
     public void contentMenuOptions(final UserActionSet options) {}
 
-    public void debugDetails(final DebugString debug) {}
+    public void debugDetails(final DebugBuilder debug) {}
 
     public ObjectAdapter drop(final Content sourceContent) {
         return null;

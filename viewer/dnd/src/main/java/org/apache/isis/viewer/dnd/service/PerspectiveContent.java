@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.service;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -38,7 +38,7 @@ public class PerspectiveContent extends AbstractContent {
         this.perspective = perspective;
     }
 
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("perspective", perspective);
     }
 

@@ -24,7 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -188,7 +188,7 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         return "Test Proxy Identity Map";
     }
 
-    public void debugData(final DebugString debug) {}
+    public void debugData(final DebugBuilder debug) {}
 
 
     

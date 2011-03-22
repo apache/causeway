@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -160,7 +160,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     @Override
-    protected void debugDetails(final DebugString debug) {
+    protected void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
         debug.append("\n           Top header: " + (topHeader == null ? "none" : topHeader.toString()));
         debug.append("\n           Left header: " + (leftHeader == null ? "none" : leftHeader.toString()));

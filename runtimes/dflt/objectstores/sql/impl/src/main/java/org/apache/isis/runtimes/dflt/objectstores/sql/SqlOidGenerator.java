@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
@@ -83,7 +83,7 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
             }
         }
 
-        public void debugData(DebugString debug) {
+        public void debugData(DebugBuilder debug) {
             debug.appendln("id", lastId);
             debug.appendln("transient id", transientNumber);
         }
@@ -123,7 +123,7 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln(this.toString());
         debug.indent();
         ids.debugData(debug);

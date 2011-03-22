@@ -24,8 +24,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 
 
 public class Options implements DebuggableWithTitle {
@@ -43,7 +43,7 @@ public class Options implements DebuggableWithTitle {
         properties.putAll(options.properties);
     }
 
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         Enumeration<Object> keys = properties.keys();
         while (keys.hasMoreElements()) {
             String name = (String) keys.nextElement();

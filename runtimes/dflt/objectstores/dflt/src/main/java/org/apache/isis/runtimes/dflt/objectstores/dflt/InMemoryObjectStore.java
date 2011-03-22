@@ -27,8 +27,8 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -399,7 +399,7 @@ public class InMemoryObjectStore implements ObjectStore {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Domain Objects");
         for(final ObjectSpecification spec: persistedObjects.specifications()) {
             debug.appendln(spec.getFullIdentifier());

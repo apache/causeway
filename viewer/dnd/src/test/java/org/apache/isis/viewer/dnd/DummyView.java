@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd;
 
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -105,11 +105,11 @@ public class DummyView implements View {
         throw new NotYetImplementedException();
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         throw new NotYetImplementedException();
     }
 
-    public void debugStructure(final DebugString b) {
+    public void debugStructure(final DebugBuilder b) {
         throw new NotYetImplementedException();
     }
 

@@ -23,7 +23,7 @@ package org.apache.isis.core.progmodel.facets;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -103,7 +103,7 @@ public class ProgrammableReflector implements ObjectReflector {
 	}
 
     @Override
-    public void debugData(DebugString debug) {}
+    public void debugData(DebugBuilder debug) {}
 
     @Override
     public String debugTitle() {

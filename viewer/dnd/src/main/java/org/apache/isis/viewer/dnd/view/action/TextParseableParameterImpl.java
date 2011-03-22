@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
@@ -57,7 +57,7 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         object = adapter;
     }
 
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("name", parameter.getName());
         debug.appendln("required", isRequired());
         debug.appendln("object", object);

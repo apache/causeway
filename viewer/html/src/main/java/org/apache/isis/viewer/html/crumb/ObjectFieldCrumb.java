@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.crumb;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.html.request.Request;
@@ -34,7 +34,7 @@ public class ObjectFieldCrumb implements Crumb {
         this.fieldName = fieldName;
     }
 
-    public void debug(final DebugString string) {
+    public void debug(final DebugBuilder string) {
         string.appendln("Object Field Crumb");
         string.appendln("field name", fieldName);
     }

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 
@@ -52,7 +52,7 @@ public class TestProxyOidGenerator extends OidGeneratorAbstract {
         return "";
     }
 
-    public void debugData(final DebugString debug) {}
+    public void debugData(final DebugBuilder debug) {}
 
     public String debugTitle() {
         return null;

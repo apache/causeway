@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -90,7 +90,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         field.debugDetails(debug);
         debug.appendln("collection", collection);
         super.debugDetails(debug);

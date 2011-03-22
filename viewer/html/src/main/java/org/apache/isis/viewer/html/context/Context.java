@@ -33,7 +33,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -106,7 +106,7 @@ public class Context {
         crumbs.push(new TaskCrumb(task));
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.startSection("Web Session Context");
         debug.appendAsHexln("hash", hashCode());
         debug.appendln("session", session);
@@ -156,7 +156,7 @@ public class Context {
         debug.endSection();
     }
 
-    private void debugMap(final DebugString debug, final Map map) {
+    private void debugMap(final DebugBuilder debug, final Map map) {
         final Iterator names = map.keySet().iterator();
         while (names.hasNext()) {
             final String name = (String) names.next();

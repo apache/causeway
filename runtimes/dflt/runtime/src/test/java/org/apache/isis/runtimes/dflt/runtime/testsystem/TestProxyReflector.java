@@ -26,7 +26,7 @@ import java.util.Map;
 
 import com.google.inject.internal.Maps;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -65,7 +65,7 @@ public class TestProxyReflector implements ObjectReflector {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         final Collection<ObjectSpecification> list = allSpecifications();
         for (ObjectSpecification objectSpecification : list) {
             debug.appendln(objectSpecification.getFullIdentifier());

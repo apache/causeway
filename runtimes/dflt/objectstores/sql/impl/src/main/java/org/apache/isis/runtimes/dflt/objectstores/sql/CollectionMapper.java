@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
@@ -34,5 +34,5 @@ public interface CollectionMapper {
 
     boolean needsTables(DatabaseConnector connection);
 
-    public void debugData(DebugString debug);
+    public void debugData(DebugBuilder debug);
 }

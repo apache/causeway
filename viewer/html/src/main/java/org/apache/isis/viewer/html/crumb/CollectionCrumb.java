@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.crumb;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.html.request.ForwardRequest;
@@ -37,7 +37,7 @@ public class CollectionCrumb implements Crumb {
         title = collection.titleString();
     }
 
-    public void debug(final DebugString string) {
+    public void debug(final DebugBuilder string) {
         string.appendln("Collection Crumb");
         string.appendln("object", collectionId);
         string.appendln("title", title);

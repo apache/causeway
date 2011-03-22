@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
@@ -72,7 +72,7 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
         }
     }
 
-    public void debugData(final DebugString buf) {
+    public void debugData(final DebugBuilder buf) {
         final Enumeration<ObjectAdapter> f = viewListByAdapter.keys();
 
         while (f.hasMoreElements()) {

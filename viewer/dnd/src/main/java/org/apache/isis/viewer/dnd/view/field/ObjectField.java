@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -35,7 +35,7 @@ final class ObjectField {
         this.field = field;
     }
 
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("field", getObjectAssociation());
         debug.appendln("name", getName());
         debug.appendln("specification", getSpecification());

@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.table;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -84,7 +84,7 @@ public class TableRowBorder extends AbstractBorder {
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("RowBorder " + left + " pixels");
         debug.appendln("Axis", axis);
     }

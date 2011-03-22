@@ -39,6 +39,7 @@ import java.util.StringTokenizer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
+import org.apache.isis.core.commons.config.JmxBeanServer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -46,7 +47,7 @@ import org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizorAb
 import org.apache.log4j.Logger;
 
 
-public class FileAuthorizor extends AuthorizorAbstract  {
+public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
 
     private static final Logger LOG = Logger.getLogger(FileAuthorizor.class);
 
@@ -118,6 +119,8 @@ public class FileAuthorizor extends AuthorizorAbstract  {
         if (blackListInputResource != null) {
             cacheAuthorizationDetails(blackListMap, blackListInputResource);
         }
+        
+        JmxBeanServer.getInstance().register("file-authorizer", this);
     }
 
     public void reload() {

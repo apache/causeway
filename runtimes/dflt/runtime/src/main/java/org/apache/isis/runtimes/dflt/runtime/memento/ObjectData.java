@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
@@ -140,7 +140,7 @@ class ObjectData extends Data {
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         super.debug(debug);
         for (String key: fields.keySet()) {
             final Object value = fields.get(key);

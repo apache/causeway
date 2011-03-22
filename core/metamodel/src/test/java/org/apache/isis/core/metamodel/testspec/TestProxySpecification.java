@@ -30,7 +30,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -100,7 +100,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
         return super.clone();
     }
 
-    public void debugData(final DebugString debug) {}
+    public void debugData(final DebugBuilder debug) {}
 
     public String debugInterface() {
         return null;

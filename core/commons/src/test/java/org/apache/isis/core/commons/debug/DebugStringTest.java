@@ -65,5 +65,28 @@ public class DebugStringTest extends TestCase {
         str.blankLine();
         assertEquals("fred\n\n", str.toString());
     }
+
+    public void testSection() {
+        str.startSection("Section A");
+        str.appendln("text 1");
+        str.appendln("text 2");
+        str.endSection();
+        str.startSection("Section B");
+        assertEquals("\n1. Section A\n" +
+        		"------------\n" +
+                "   text 1\n" +
+                "   text 2\n\n\n" +
+        		"2. Section B\n" +
+        		"------------\n", str.toString());
+    }
+
+    public void testTitle() {
+        str.appendTitle("New Section");
+        str.appendln("text");
+        assertEquals("\nNew Section\n" +
+                "-----------\n" +
+                "text\n", str.toString());
+    }
+    
 }
 

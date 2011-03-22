@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.crumb;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
@@ -38,7 +38,7 @@ public class TaskCrumb implements Crumb {
         return task;
     }
 
-    public void debug(final DebugString string) {
+    public void debug(final DebugBuilder string) {
         string.appendln("Task Crumb");
         string.appendln("task", task);
 

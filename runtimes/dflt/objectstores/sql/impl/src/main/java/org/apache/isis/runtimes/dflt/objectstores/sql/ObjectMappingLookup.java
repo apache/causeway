@@ -26,8 +26,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -130,7 +130,7 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
     }
 
     @Override
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         debug.appendln("field mapping lookup", fieldMappingLookup);
         debug.appendln("object mapping factory", objectMappingFactory);
         debug.appendTitle("Mappings");

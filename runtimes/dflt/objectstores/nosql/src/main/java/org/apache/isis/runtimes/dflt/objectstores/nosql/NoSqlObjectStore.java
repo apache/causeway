@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -194,7 +194,7 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         // TODO show details
     }
 

@@ -24,7 +24,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
@@ -133,7 +133,7 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         super.debug(debug);
         debug.appendln("text", textContent);
     }

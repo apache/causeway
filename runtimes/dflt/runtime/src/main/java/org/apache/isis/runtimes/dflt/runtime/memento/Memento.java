@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -371,7 +371,7 @@ public class Memento implements Serializable {
         return "[" + (state == null ? null : state.getClassName() + "/" + state.getOid() + state) + "]";
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         if (state != null) {
             state.debug(debug);
         }

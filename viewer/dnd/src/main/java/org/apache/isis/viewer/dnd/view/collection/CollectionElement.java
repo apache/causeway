@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.collection;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -62,7 +62,7 @@ public class CollectionElement extends AbstractObjectContent {
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("element", adapter);
     }
 

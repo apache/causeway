@@ -22,8 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.context;
 
 import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
@@ -118,19 +118,19 @@ public class IsisContextStatic extends IsisContext {
         return "Static Context";
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendAsHexln("hash", hashCode());
         session.debugState(debug);
     }
 
-    public void debugAll(final DebugString debug) {
+    public void debugAll(final DebugBuilder debug) {
         debug(debug);
         debug.appendln();
 
         debug(debug, getPersistenceSession());
     }
 
-    private void debug(final DebugString debug, final Object object) {
+    private void debug(final DebugBuilder debug, final Object object) {
         if (object instanceof DebuggableWithTitle) {
             final DebuggableWithTitle d = (DebuggableWithTitle) object;
             debug.appendTitle(d.debugTitle());

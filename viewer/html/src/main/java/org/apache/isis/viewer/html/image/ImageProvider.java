@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.image;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ImageProvider {
 
-    public void debug(final DebugString debug);
+    public void debug(final DebugBuilder debug);
     
     /**
      * For an object, the icon name from the object is return if it is not null, otherwise the specification

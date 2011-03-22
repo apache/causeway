@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.configurable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
@@ -42,7 +42,7 @@ public class Panel {
 
         public void layout(Size maximumSize);
 
-        public void debug(DebugString debug);
+        public void debug(DebugBuilder debug);
     }
 
     private static class ViewContent implements Content {
@@ -68,7 +68,7 @@ public class Panel {
             view.setSize(size);
         }
 
-        public void debug(DebugString debug) {
+        public void debug(DebugBuilder debug) {
             debug.appendln(view.toString());
         }
     }
@@ -96,7 +96,7 @@ public class Panel {
         public void setSize(Size size) {
         }
         
-        public void debug(DebugString debug) {
+        public void debug(DebugBuilder debug) {
             panel.debug(debug);
         }
     }
@@ -104,7 +104,7 @@ public class Panel {
     private List<Content> contents = new ArrayList<Content>();
     private Orientation orientation;
     
-    public void debug(DebugString debug) {
+    public void debug(DebugBuilder debug) {
         debug.appendln("orientation", orientation);
         debug.appendln("size", getRequiredSize(Size.createMax()));
         debug.indent();

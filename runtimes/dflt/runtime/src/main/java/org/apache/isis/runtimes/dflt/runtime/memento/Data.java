@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.memento;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
@@ -85,7 +85,7 @@ class Data implements Encodable, Serializable {
 		return resolveState;
 	}
 
-	public void debug(final DebugString debug) {
+	public void debug(final DebugBuilder debug) {
 		debug.appendln(className);
 		debug.appendln(oid != null ? oid.toString() : "null");
 		debug.appendln(resolveState);

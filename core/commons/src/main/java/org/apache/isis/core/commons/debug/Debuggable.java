@@ -28,6 +28,6 @@ public interface Debuggable {
     /**
      * Debug details describing the object being investigated
      */
-    void debugData(DebugString debug);
+    void debugData(DebugBuilder debug);
 
 }

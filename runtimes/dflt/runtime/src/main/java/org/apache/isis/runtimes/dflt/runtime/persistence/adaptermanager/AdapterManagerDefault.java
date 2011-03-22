@@ -29,8 +29,8 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -828,7 +828,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendTitle(pojoAdapterMap.debugTitle());
         pojoAdapterMap.debugData(debug);
         debug.appendln();

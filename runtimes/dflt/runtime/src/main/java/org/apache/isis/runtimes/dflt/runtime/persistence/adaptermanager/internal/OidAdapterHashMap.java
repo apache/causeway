@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -132,7 +132,7 @@ public class OidAdapterHashMap implements OidAdapterMap {
         return "Identity adapter map";
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         int count = 1;
         for(final Oid oid: this) {
             final ObjectAdapter adapter = getAdapter(oid);

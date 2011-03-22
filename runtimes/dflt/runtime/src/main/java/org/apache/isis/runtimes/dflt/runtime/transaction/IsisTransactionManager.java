@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.transaction;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
 
@@ -98,7 +98,7 @@ public interface IsisTransactionManager extends SessionScopedComponent, Injectab
     // Debugging
     //////////////////////////////////////////////////////////////////////
 
-    void debugData(DebugString debug);
+    void debugData(DebugBuilder debug);
 
 
 

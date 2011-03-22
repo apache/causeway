@@ -31,7 +31,7 @@ import java.util.Vector;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
@@ -208,7 +208,7 @@ public class ObjectStoreInstances {
     // Debugging
     /////////////////////////////////////////////////////////
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.indent();
         if (getObjectInstances().size() == 0) {
             debug.appendln("no instances");

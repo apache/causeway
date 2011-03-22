@@ -36,8 +36,8 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
@@ -521,7 +521,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(final DebugString str) {
+    public void debugData(final DebugBuilder str) {
         facetDecoratorSet.debugData(str);
         str.appendln();
 

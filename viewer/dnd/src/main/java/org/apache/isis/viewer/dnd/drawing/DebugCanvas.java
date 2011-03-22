@@ -20,18 +20,18 @@
 
 package org.apache.isis.viewer.dnd.drawing;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 
 
 public class DebugCanvas implements Canvas {
-    private final DebugString buffer;
+    private final DebugBuilder buffer;
     private final int level;
 
-    public DebugCanvas(final DebugString buffer, final Bounds bounds) {
+    public DebugCanvas(final DebugBuilder buffer, final Bounds bounds) {
         this(buffer, 0);
     }
 
-    private DebugCanvas(final DebugString buffer, final int level) {
+    private DebugCanvas(final DebugBuilder buffer, final int level) {
         this.level = level;
         this.buffer = buffer;
     }

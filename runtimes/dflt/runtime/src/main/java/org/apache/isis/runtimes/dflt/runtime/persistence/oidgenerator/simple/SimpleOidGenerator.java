@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
@@ -144,7 +144,7 @@ public class SimpleOidGenerator extends OidGeneratorAbstract {
     ////////////////////////////////////////////////////////////////
     
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("Persistent", persistentSerialNumber);
         debug.appendln("Transient", transientSerialNumber);
     }

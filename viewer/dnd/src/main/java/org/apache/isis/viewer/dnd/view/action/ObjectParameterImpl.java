@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -85,7 +85,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         setObject(null);
     }
 
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("name", getParameterName());
         debug.appendln("required", isRequired());
         debug.appendln("object", adapter);

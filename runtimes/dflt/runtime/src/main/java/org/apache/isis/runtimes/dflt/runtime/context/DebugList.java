@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
@@ -35,7 +36,7 @@ public class DebugList {
     public DebugList(final String name) {
         l.add(new DebuggableWithTitle() {
             @Override
-            public void debugData(DebugString debug) {
+            public void debugData(DebugBuilder debug) {
                 debug.append(summary.toString());
             }
 

@@ -21,7 +21,7 @@
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerDefault;
@@ -241,7 +241,7 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     // debugging
     ////////////////////////////////////////////////////////
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("Transaction", getTransaction());
     }
 

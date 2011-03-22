@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.form;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -112,7 +112,7 @@ public class ExpandableViewBorder extends AbstractBorder {
     }
 
     @Override
-    protected void debugDetails(DebugString debug) {
+    protected void debugDetails(DebugBuilder debug) {
         super.debugDetails(debug);
         debug.appendln("open spec", openViewSpecification);
         debug.appendln("closed spec", closedViewSpecification);

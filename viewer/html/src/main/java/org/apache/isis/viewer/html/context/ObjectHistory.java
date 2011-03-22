@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -49,7 +49,7 @@ public class ObjectHistory {
         }
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         for (int i = history.size() - 1; i >= 0; i--) {
             final HistoryEntry object = history.get(i);
             debug.appendln(object.toString());

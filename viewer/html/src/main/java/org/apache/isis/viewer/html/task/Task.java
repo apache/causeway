@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.task;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
@@ -129,7 +129,7 @@ public abstract class Task {
 
     public void checkInstances(final Context context, final ObjectAdapter[] objects) {}
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.indent();
         debug.appendln("name", name);
         debug.appendln("number of steps ", numberOfSteps());

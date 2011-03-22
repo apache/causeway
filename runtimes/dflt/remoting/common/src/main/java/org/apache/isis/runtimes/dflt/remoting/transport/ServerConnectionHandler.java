@@ -28,8 +28,8 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.Monitor;
@@ -165,7 +165,7 @@ public class ServerConnectionHandler {
     // Debug
     // /////////////////////////////////////////////////////
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendln("context Id", debugContextId);
         debug.appendln("authSession", debugAuthSession);
         debug.appendln("request", debugRequest);
@@ -179,7 +179,7 @@ public class ServerConnectionHandler {
         }
     }
 
-    private void debugSessionInfo(final DebugString debug) {
+    private void debugSessionInfo(final DebugBuilder debug) {
         try {
             if (debugSessionInfo != null) {
                 for (DebuggableWithTitle info : debugSessionInfo) {

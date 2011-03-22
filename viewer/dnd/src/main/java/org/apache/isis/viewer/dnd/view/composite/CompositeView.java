@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.view.composite;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -84,7 +84,7 @@ public abstract class CompositeView extends ObjectView {
     }
 
     @Override
-    public void debugStructure(final DebugString b) {
+    public void debugStructure(final DebugBuilder b) {
         b.appendln("Built", (buildInvalid ? "invalid, " : "") + buildCount + " builds");
         b.appendln("Laid out", (layoutInvalid ? "invalid, " : "") + layoutCount + " layouts");
         super.debugStructure(b);

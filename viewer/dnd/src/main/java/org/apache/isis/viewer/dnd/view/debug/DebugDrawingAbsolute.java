@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.DebugCanvasAbsolute;
 import org.apache.isis.viewer.dnd.view.View;
@@ -34,7 +34,7 @@ public class DebugDrawingAbsolute implements DebuggableWithTitle {
         this.view = display;
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         view.draw(new DebugCanvasAbsolute(debug, new Bounds(view.getAbsoluteLocation(), view.getSize())));
     }
 

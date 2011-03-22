@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.content;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +47,7 @@ public class NullContent implements Content {
 
     public void contentMenuOptions(final UserActionSet options) {}
 
-    public void debugDetails(final DebugString debug) {}
+    public void debugDetails(final DebugBuilder debug) {}
 
     public ObjectAdapter drop(final Content sourceContent) {
         return null;

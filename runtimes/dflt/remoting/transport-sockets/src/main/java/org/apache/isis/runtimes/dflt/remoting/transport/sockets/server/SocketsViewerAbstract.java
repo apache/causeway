@@ -38,8 +38,8 @@ import org.apache.isis.runtimes.dflt.remoting.transport.ProfilingOutputStream;
 import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.SocketTransportConstants;
 import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.Worker;
 import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.WorkerPool;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.Threads;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
@@ -218,7 +218,7 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     // debugging
     // ////////////////////////////////////////////////////////////////
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("Listener on", socket.toString());
         debug.appendln("Workers", workerPool);
         workerPool.debug(debug);

@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.look.line;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -40,7 +40,7 @@ public class LineStyleWindowBorder implements BorderDrawing {
     private int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE
             .getTextHeight());
 
-    public void debugDetails(DebugString debug) {}
+    public void debugDetails(DebugBuilder debug) {}
 
     public void draw(Canvas canvas, Size s, boolean hasFocus, ViewState state, View[] controls, String title) {
         final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit

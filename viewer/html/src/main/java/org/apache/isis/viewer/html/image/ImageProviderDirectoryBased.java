@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +47,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
         unknownImageFile = imageFile(UNKNOWN_IMAGE);
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendTitle("Image Lookup");
         debug.indent();
         final Iterator keys = images.keySet().iterator();

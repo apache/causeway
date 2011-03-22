@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.util.Dump;
@@ -40,7 +40,7 @@ public class DebugView implements DebuggableWithTitle {
         this.view = display;
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.append(view.getView());
         debug.blankLine();
         debug.blankLine();
@@ -101,21 +101,21 @@ public class DebugView implements DebuggableWithTitle {
         return "Debug: " + view + view == null ? "" : ("/" + view.getContent());
     }
 
-    public void dumpGraph(final ObjectAdapter object, final DebugString info) {
+    public void dumpGraph(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
             info.appendTitle("GRAPH");
             Dump.graph(object, info, IsisContext.getAuthenticationSession());
         }
     }
 
-    public void dumpObject(final ObjectAdapter object, final DebugString info) {
+    public void dumpObject(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
             info.appendTitle("OBJECT");
             Dump.adapter(object, info);
         }
     }
 
-    private void dumpSpecification(final ObjectAdapter object, final DebugString info) {
+    private void dumpSpecification(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
             info.appendTitle("SPECIFICATION");
             Dump.specification(object, info);

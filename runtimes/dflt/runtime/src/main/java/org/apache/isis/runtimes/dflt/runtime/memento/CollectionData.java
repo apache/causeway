@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import java.io.IOException;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
@@ -58,7 +58,7 @@ class CollectionData extends Data {
 	}
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         super.debug(debug);
         for (int i = 0; i < elements.length; i++) {
             debug.appendln("" + i + 1, elements[i]);

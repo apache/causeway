@@ -24,7 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 
-public class DebugString {
+public class DebugString implements DebugBuilder {
     
     private static final int COLUMN_SPACING = 25;
     private static final int INDENT_WIDTH = 3;
@@ -44,10 +44,12 @@ public class DebugString {
     private final StringBuffer string = new StringBuffer();
     private boolean newLine = true;
 
+    
     /**
      * Append the specified number within a space (number of spaces) specified by the width. E.g. "15 " where
      * number is 15 and width is 4.
      */
+    @Override
     public void append(final int number, final int width) {
         appendIndent();
         final int len = string.length();
@@ -58,6 +60,7 @@ public class DebugString {
     /**
      * Append the specified object by calling it <code>toString()</code> method.
      */
+    @Override
     public void append(final Object object) {
         if (object instanceof DebuggableWithTitle) {
             indent();
@@ -74,6 +77,7 @@ public class DebugString {
      * Append the specified object by calling its <code>toString()</code> method, placing it within specified
      * space.
      */
+    @Override
     public void append(final Object object, final int width) {
         appendIndent();
         final int len = string.length();
@@ -85,6 +89,7 @@ public class DebugString {
      * Append the specified number, displayed in hexadecimal notation, with the specified label, then start a
      * new line.
      */
+    @Override
     public void appendAsHexln(final String label, final long value) {
         appendln(label, "#" + Long.toHexString(value));
     }
@@ -92,7 +97,8 @@ public class DebugString {
     /**
      * Append the message and trace of the specified exception.
      */
-    public void appendException(final Exception e) {
+    @Override
+    public void appendException(final Throwable e) {
         ByteArrayOutputStream baos;
         final PrintStream s = new PrintStream(baos = new ByteArrayOutputStream());
         e.printStackTrace(s);
@@ -106,6 +112,7 @@ public class DebugString {
      * 
      * @see #blankLine()
      */
+    @Override
     public void appendln() {
         string.append('\n');
         newLine = true;
@@ -114,6 +121,7 @@ public class DebugString {
     /**
      * Append the specified text, then start a new line.
      */
+    @Override
     public void appendln(final String text) {
         appendIndent();
         append(text);
@@ -125,6 +133,7 @@ public class DebugString {
      * Append the specified value, displayed as true or false, with the specified label, then start a new
      * line.
      */
+    @Override
     public void appendln(final String label, final boolean value) {
         appendln(label, String.valueOf(value));
     }
@@ -132,6 +141,7 @@ public class DebugString {
     /**
      * Append the specified number with the specified label, then start a new line.
      */
+    @Override
     public void appendln(final String label, final double value) {
         appendln(label, String.valueOf(value));
     }
@@ -140,6 +150,7 @@ public class DebugString {
      * Append the specified number, displayed in hexadecimal notation, with the specified label, then start a
      * new line.
      */
+    @Override
     public void appendln(final String label, final long value) {
         appendln(label, String.valueOf(value));
     }
@@ -147,6 +158,7 @@ public class DebugString {
     /**
      * Append the specified object with the specified label, then start a new line.
      */
+    @Override
     public void appendln(final String label, final Object object) {
         appendIndent();
         string.append(label);
@@ -161,6 +173,7 @@ public class DebugString {
      * Append the elements of the specified array with the specified label. Each element is appended on its
      * own line, and a new line is added after the last element.
      */
+    @Override
     public void appendln(final String label, final Object[] object) {
         if (object.length == 0) {
             appendln(label, "empty array");
@@ -179,19 +192,25 @@ public class DebugString {
      * Append the specified title, then start a new line. A title is shown on two lines with the text on the
      * first line and dashes on the second.
      */
+    @Override
     public void appendTitle(final String title) {
+        appendTitleString(title);
+    }
+
+    private void appendTitleString(final String titleString) {
         appendln();
-        final String titleString = section++ + ". " + title;
         appendln(titleString);
         final String underline = LINE.substring(0, Math.min(MAX_LINE_LENGTH, titleString.length()));
         appendln(underline);
     }
 
+    @Override
     public void startSection(final String title) {
-        appendTitle(title);
+        appendTitleString(section++ + ". " + title);
         indent();
     }
 
+    @Override
     public void endSection() {
         appendln();
         unindent();
@@ -200,6 +219,7 @@ public class DebugString {
     /**
      * Append a blank line only if there are existing lines and the previous line is not blank.
      */
+    @Override
     public void blankLine() {
         final int length = string.length();
         if (length == 0) {
@@ -222,6 +242,7 @@ public class DebugString {
     /**
      * Increase indent used when appending.
      */
+    @Override
     public void indent() {
         indent++;
     }
@@ -255,11 +276,14 @@ public class DebugString {
     /**
      * Decrease indent used when appending.
      */
+    @Override
     public void unindent() {
         if (indent > 0) {
             indent--;
         }
     }
+    
+    public void close() {}
     
     /**
      * Return the <code>String</code> representation of this debug string.

@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.util.Dump;
 
@@ -33,7 +33,7 @@ public class DebugAdapter implements DebuggableWithTitle {
         this.object = object;
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         dumpObject(object, debug);
     }
 
@@ -41,7 +41,7 @@ public class DebugAdapter implements DebuggableWithTitle {
         return "Adapter";
     }
 
-    private void dumpObject(final ObjectAdapter object, final DebugString info) {
+    private void dumpObject(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
             Dump.adapter(object, info);
         }

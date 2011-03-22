@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.inject.internal.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.Debuggable;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -141,7 +141,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         // TODO: reinstate
         // debug.appendln("Identifier", identifier.toString());
     }

@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -56,7 +56,7 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         throw new IsisException("Invalid call");
     }
 
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("action", getActionName());
         debug.appendln("target", getAdapter());
         String parameterSet = "";

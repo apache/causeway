@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.base;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
@@ -82,7 +82,7 @@ public abstract class AbstractViewDecorator implements View {
         wrappedView.contentMenuOptions(menuOptions);
     }
 
-    public final void debug(final DebugString debug) {
+    public final void debug(final DebugBuilder debug) {
         debug.append("Decorator: ");
         debug.indent();
         debugDetails(debug);
@@ -96,12 +96,12 @@ public abstract class AbstractViewDecorator implements View {
         wrappedView.debug(debug);
     }
 
-    protected void debugDetails(final DebugString debug) {
+    protected void debugDetails(final DebugBuilder debug) {
         final String name = getClass().getName();
         debug.appendln(name.substring(name.lastIndexOf('.') + 1));
     }
 
-    public void debugStructure(final DebugString debug) {
+    public void debugStructure(final DebugBuilder debug) {
         wrappedView.debugStructure(debug);
     }
 

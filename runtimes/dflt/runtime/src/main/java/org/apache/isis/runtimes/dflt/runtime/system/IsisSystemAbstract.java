@@ -28,8 +28,8 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.runtimes.dflt.runtime.about.AboutIsis;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
@@ -322,7 +322,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
     // debugging
     // ///////////////////////////////////////////
 
-    private void debug(final DebugString debug, final Object object) {
+    private void debug(final DebugBuilder debug, final Object object) {
         if (object instanceof DebuggableWithTitle) {
             final DebuggableWithTitle d = (DebuggableWithTitle) object;
             debug.appendTitle(d.debugTitle());
@@ -348,7 +348,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
         return null;
     }
 
-    private void debugDisplayContext(final String selector, final DebugString debug) {
+    private void debugDisplayContext(final String selector, final DebugBuilder debug) {
         final IsisSession d = IsisContext.getSession(selector);
         if (d != null) {
             d.debugAll(debug);
@@ -357,7 +357,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
         }
     }
 
-    private void debugListContexts(final DebugString debug) {
+    private void debugListContexts(final DebugBuilder debug) {
         final String[] contextIds = IsisContext.getInstance().allSessionIds();
         for (int i = 0; i < contextIds.length; i++) {
             debug.appendln(contextIds[i]);
@@ -379,7 +379,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
         return combined;
     }
 
-    private void debugOverview(final DebugString debug) {
+    private void debugOverview(final DebugBuilder debug) {
         try {
             debug.appendln(AboutIsis.getFrameworkName());
             debug.appendln(AboutIsis.getFrameworkVersion());

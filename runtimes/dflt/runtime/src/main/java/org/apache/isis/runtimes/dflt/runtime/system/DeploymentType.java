@@ -22,8 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.system;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
@@ -83,7 +83,7 @@ public class DeploymentType {
 	public DebuggableWithTitle getDebug() {
 	    return new DebuggableWithTitle() {
 
-            public void debugData(DebugString debug) {
+            public void debugData(DebugBuilder debug) {
                 debug.appendln("Category", deploymentCategory);
                 debug.appendln("Context", contextCategory);
                 debug.appendln("Default viewer", defaultViewer == null ? "none" : defaultViewer);

@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -166,7 +166,7 @@ public abstract class IsisStoreDelegating implements ObjectStore {
     // debug
     //////////////////////////////////////////////////
 
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         underlying.debugData(debug);
     }
 

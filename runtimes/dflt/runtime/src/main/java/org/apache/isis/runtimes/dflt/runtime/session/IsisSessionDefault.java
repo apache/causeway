@@ -30,6 +30,7 @@ import java.util.Date;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.lang.ToString;
@@ -265,14 +266,14 @@ public class IsisSessionDefault implements IsisSession {
     // //////////////////////////////////////////////////////
 
     @Override
-    public void debugAll(final DebugString debug) {
+    public void debugAll(final DebugBuilder debug) {
         debug.startSection("Isis Context Snapshot");
         debug.appendln(debugSnapshot);
         debug.endSection();
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendAsHexln("hash", hashCode());
         debug.appendln("context id", id);
         debug.appendln("accessed", DATE_FORMAT.format(new Date(getSessionOpenTime())));
@@ -298,7 +299,7 @@ public class IsisSessionDefault implements IsisSession {
         LOG.debug(debugSnapshot);
     }
 
-    private void debug(final DebugString debug, final Object object) {
+    private void debug(final DebugBuilder debug, final Object object) {
         if (object instanceof DebuggableWithTitle) {
             final DebuggableWithTitle d = (DebuggableWithTitle) object;
             debug.startSection(d.debugTitle());
@@ -320,7 +321,7 @@ public class IsisSessionDefault implements IsisSession {
     }
 
     @Override
-    public void debugState(final DebugString debug) {
+    public void debugState(final DebugBuilder debug) {
         debug.appendln("authenticationSession", getAuthenticationSession());
         debug.appendln("persistenceSession", getPersistenceSession());
         debug.appendln("transaction", getCurrentTransaction());

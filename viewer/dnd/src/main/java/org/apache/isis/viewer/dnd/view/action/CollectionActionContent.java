@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -40,7 +40,7 @@ public class CollectionActionContent extends AbstractCollectionContent implement
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("action", getActionName());
         debug.appendln("target", getAdapter());
         String parameterSet = "";

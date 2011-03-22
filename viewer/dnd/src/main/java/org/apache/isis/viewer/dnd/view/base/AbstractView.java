@@ -24,7 +24,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -164,7 +164,7 @@ public abstract class AbstractView implements View {
      * Returns debug details about this view.
      */
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         final String name = getClass().getName();
         debug.appendln("Root: " + name.substring(name.lastIndexOf('.') + 1) + getId());
         debug.indent();
@@ -225,10 +225,10 @@ public abstract class AbstractView implements View {
         debugStructure(debug);
     }
     
-    protected void appendDebug(final DebugString debug) {}
+    protected void appendDebug(final DebugBuilder debug) {}
 
     @Override
-    public void debugStructure(final DebugString b) {
+    public void debugStructure(final DebugBuilder b) {
         b.appendln("Content", getContent() == null ? "none" : getContent());
         b.appendln("Required size ", getRequiredSize(Size.createMax()));
         b.appendln("Bounds", getBounds());

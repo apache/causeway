@@ -22,8 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.userprofile;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
@@ -202,7 +202,7 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     // //////////////////////////////////////////////////////
 
     @Override
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         debug.appendln("Store", store.toString());
         debug.appendln("Mode", mode);
 

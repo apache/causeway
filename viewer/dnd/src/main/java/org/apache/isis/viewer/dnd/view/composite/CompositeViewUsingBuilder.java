@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.composite;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -42,7 +42,7 @@ public class CompositeViewUsingBuilder extends CompositeView {
     }
     
     @Override
-    public void debugStructure(final DebugString debug) {
+    public void debugStructure(final DebugBuilder debug) {
         debug.appendln("Builder", builder);
         debug.appendln("Axes", axes);
         super.debugStructure(debug);
@@ -69,7 +69,7 @@ public class CompositeViewUsingBuilder extends CompositeView {
     }
     
     @Override
-    protected void appendDebug(final DebugString debug) {
+    protected void appendDebug(final DebugBuilder debug) {
         super.appendDebug(debug);
         debug.appendln("Layout", layout);
     }

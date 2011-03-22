@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.util.Dump;
@@ -38,7 +38,7 @@ public class DebugObjectSpecification implements DebuggableWithTitle {
         this.specification = object;
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         if (specification == null) {
             debug.appendln("no specfication");
         } else {

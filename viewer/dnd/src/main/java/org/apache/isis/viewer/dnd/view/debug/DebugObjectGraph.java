@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.util.Dump;
@@ -34,7 +34,7 @@ public class DebugObjectGraph implements DebuggableWithTitle {
         this.object = object;
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         dumpGraph(object, debug);
     }
 
@@ -42,7 +42,7 @@ public class DebugObjectGraph implements DebuggableWithTitle {
         return "Object Graph";
     }
 
-    private void dumpGraph(final ObjectAdapter object, final DebugString info) {
+    private void dumpGraph(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
             Dump.graph(object, info, IsisContext.getAuthenticationSession());
         }

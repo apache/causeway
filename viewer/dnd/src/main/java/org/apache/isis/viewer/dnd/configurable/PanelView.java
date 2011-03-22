@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.configurable;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
@@ -44,7 +44,7 @@ public class PanelView extends CompositeView {
     private Panel panel = new Panel();
     private ViewSpecification initialViewSpecification;;
     
-    public void debug(DebugString debug) {
+    public void debug(DebugBuilder debug) {
         super.debug(debug);
         debug.appendln("Panel");
         debug.indent();

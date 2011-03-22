@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.context;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -38,7 +38,7 @@ public interface ObjectMapping {
 
     void restoreToLoader();
 
-    void debug(DebugString debug);
+    void debug(DebugBuilder debug);
 
     void updateVersion();
 }

@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.session;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
@@ -133,11 +133,11 @@ public interface IsisSession extends SessionScopedComponent {
     // Debugging
     ////////////////////////////////////////////////////////
 
-    public void debugAll(DebugString debug);
+    public void debugAll(DebugBuilder debug);
 
-    public void debug(DebugString debug);
+    public void debug(DebugBuilder debug);
 
-    public void debugState(DebugString debug);
+    public void debugState(DebugBuilder debug);
 
 
 

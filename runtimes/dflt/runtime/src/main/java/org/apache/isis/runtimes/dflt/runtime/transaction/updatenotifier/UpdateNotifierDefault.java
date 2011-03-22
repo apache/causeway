@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -128,7 +128,7 @@ public class UpdateNotifierDefault extends UpdateNotifierAbstract implements Deb
     // Debugging
     ////////////////////////////////////////////////////
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("Changes");
         debugList(debug, changes);
 
@@ -140,7 +140,7 @@ public class UpdateNotifierDefault extends UpdateNotifierAbstract implements Deb
         return "Simple Update Notifier";
     }
 
-    private void debugList(final DebugString debug, final List<ObjectAdapter> list) {
+    private void debugList(final DebugBuilder debug, final List<ObjectAdapter> list) {
         debug.indent();
         if (list.size() == 0) {
             debug.appendln("none");

@@ -23,8 +23,8 @@ package org.apache.isis.runtimes.dflt.runtime.userprofile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
@@ -154,7 +154,7 @@ public class PerspectiveEntry implements DebuggableWithTitle {
     /////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         debug.appendln("Name", getName());
         debug.blankLine();
         debug.appendTitle("Services (Ids)");

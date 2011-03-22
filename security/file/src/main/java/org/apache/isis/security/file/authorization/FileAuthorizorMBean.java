@@ -16,29 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.security.file.authorization;
 
+public interface FileAuthorizorMBean {
 
-package org.apache.isis.viewer.dnd.view.debug;
-
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.viewer.dnd.drawing.Bounds;
-import org.apache.isis.viewer.dnd.drawing.DebugCanvas;
-import org.apache.isis.viewer.dnd.view.View;
-
-
-public class DebugDrawing implements DebuggableWithTitle {
-    private final View view;
-
-    public DebugDrawing(final View display) {
-        this.view = display;
-    }
-
-    public void debugData(final DebugBuilder debug) {
-        view.draw(new DebugCanvas(debug, new Bounds(view.getBounds())));
-    }
-
-    public String debugTitle() {
-        return "Drawing";
-    }
+    void reload();
 }
+

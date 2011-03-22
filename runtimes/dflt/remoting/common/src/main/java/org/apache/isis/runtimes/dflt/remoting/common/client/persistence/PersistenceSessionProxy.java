@@ -46,7 +46,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecod
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -499,7 +499,7 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     //////////////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         super.debugData(debug);
         debug.appendln("Server Facade", serverFacade);
     }

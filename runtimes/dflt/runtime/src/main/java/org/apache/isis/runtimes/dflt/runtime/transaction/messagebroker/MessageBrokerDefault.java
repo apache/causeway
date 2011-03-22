@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringUtils;
 
@@ -98,12 +98,12 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
     // Debugging
     ////////////////////////////////////////////////////
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debugArray(debug, "Messages", messages);
         debugArray(debug, "Warnings", messages);
     }
 
-    private void debugArray(final DebugString debug, final String title, final List<String> vector) {
+    private void debugArray(final DebugBuilder debug, final String title, final List<String> vector) {
         debug.appendln(title);
         debug.indent();
         if (vector.size() == 0) {

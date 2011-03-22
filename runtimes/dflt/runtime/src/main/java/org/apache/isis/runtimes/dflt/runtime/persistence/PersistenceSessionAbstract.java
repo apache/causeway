@@ -28,7 +28,7 @@ import java.util.Map;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -633,7 +633,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendTitle(getClass().getName());
         debug.appendln("container", servicesInjector);
         debug.appendln();

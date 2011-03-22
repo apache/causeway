@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -94,7 +94,7 @@ public abstract class ImageProviderAbstract implements ImageProvider {
         return image((String)null);
     }
 
-    public final void debug(final DebugString debug) {
+    public final void debug(final DebugBuilder debug) {
         debug.appendTitle("Image Lookup");
         debug.indent();
         final Iterator<String> keys = images.keySet().iterator();

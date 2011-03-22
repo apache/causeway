@@ -34,7 +34,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlMetaData;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.log4j.Logger;
 
@@ -333,7 +333,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         try {
             final DatabaseMetaData metaData = connection.getMetaData();
             debug.appendln("Product", metaData.getDatabaseProductName() + "  " + metaData.getDatabaseProductVersion());

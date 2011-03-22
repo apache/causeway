@@ -24,7 +24,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -88,7 +88,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         ((OneToOneAssociation) field).initAssociation(object, restoredValue);
     }
     
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         debug.appendln(field.getId(), columnName + "/" + columnType());
     }
 

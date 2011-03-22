@@ -41,7 +41,7 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml.XmlS
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.XmlFile;
@@ -411,7 +411,7 @@ public class XmlObjectStore implements ObjectStore {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Business Objects");
         debug.appendln(dataManager.getDebugData());
     }

@@ -20,6 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -46,7 +47,7 @@ public class SystemTest {
         ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
         ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
         
-        DebugString debug = new DebugString();
+        DebugBuilder debug = new DebugString();
         IsisContext.getPersistenceSession().debugData(debug);
         IsisContext.getSpecificationLoader().debugData(debug);
         /*

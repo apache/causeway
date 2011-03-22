@@ -32,8 +32,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.TitleMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -381,7 +381,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 	}
 
 	@Override
-	public void debugData(DebugString debug) {
+	public void debugData(DebugBuilder debug) {
 		debug.appendln("ID mapping", idMapping);
 		debug.appendln("ID mapping", versionMapping);
 		debug.appendln("ID mapping", titleMapping);

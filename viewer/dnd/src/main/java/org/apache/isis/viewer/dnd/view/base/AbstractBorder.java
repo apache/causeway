@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.base;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
@@ -160,7 +160,7 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     @Override
-    protected void debugDetails(final DebugString debug) {
+    protected void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
         debug.appendln("border", getTop() + "/" + getBottom() + " " + getLeft() + "/" + getRight() + " (top/bottom left/right)");
         debug.appendln("contents", contentArea());

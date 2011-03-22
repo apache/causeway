@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -182,7 +182,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 	// debugging
 	// ////////////////////////////////////////////////////////////
 
-	public void debugData(final DebugString str) {
+	public void debugData(final DebugBuilder str) {
 		str.appendTitle("Facet decorators");
 		str.indent();
 		Set<Class<? extends Facet>> facetTypes = facetDecoratorByFacetType

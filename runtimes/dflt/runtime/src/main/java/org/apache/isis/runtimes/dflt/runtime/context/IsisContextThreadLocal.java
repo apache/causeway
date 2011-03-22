@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
 import org.apache.log4j.Logger;
@@ -95,7 +95,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     }
 
     @Override
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         super.debugData(debug);
         debug.appendln();
         debug.appendTitle("Threads based Contexts");

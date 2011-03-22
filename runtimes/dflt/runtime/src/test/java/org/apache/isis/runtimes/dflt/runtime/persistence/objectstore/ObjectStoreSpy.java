@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -211,7 +211,7 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
     ///////////////////////////////////////////////////////////////
 
 
-    public void debugData(final DebugString debug) {}
+    public void debugData(final DebugBuilder debug) {}
 
     public String debugTitle() {
         return null;

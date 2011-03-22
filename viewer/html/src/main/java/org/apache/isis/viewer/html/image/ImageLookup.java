@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.image;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -48,7 +48,7 @@ public class ImageLookup {
         }
     }
 
-    public static void debug(final DebugString debug) {
+    public static void debug(final DebugBuilder debug) {
         getInstance().debug(debug);
     }
 

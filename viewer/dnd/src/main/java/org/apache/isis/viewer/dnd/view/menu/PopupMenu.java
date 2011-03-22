@@ -24,7 +24,7 @@ import java.awt.event.KeyEvent;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -118,7 +118,7 @@ public class PopupMenu extends AbstractView {
             return Veto.DEFAULT;
         }
 
-        public void debugDetails(final DebugString debug) {}
+        public void debugDetails(final DebugBuilder debug) {}
 
         public ObjectAdapter drop(final Content sourceContent) {
             return null;

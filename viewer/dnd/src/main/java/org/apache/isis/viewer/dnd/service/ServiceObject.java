@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.service;
 
 import java.util.Arrays;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -58,7 +58,7 @@ public class ServiceObject extends AbstractContent {
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("service", adapter);
     }
 

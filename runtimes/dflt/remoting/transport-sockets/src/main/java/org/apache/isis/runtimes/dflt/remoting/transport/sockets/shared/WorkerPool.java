@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.log4j.Logger;
 
@@ -104,7 +104,7 @@ public class WorkerPool {
         notify();
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendln("available", available);
         debug.appendln();
         debug.appendln();

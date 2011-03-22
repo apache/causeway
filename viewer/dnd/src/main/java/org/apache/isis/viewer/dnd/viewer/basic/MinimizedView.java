@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -187,7 +187,7 @@ public class MinimizedView extends AbstractView {
     }
 
     @Override
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         super.debug(debug);
         debug.appendln("minimized view", minimizedView);
         debug.appendln();

@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
@@ -125,7 +125,7 @@ public class UserProfile implements DebuggableWithTitle {
         entry.save(objects);
     }
 
-    public void debugData(DebugString debug) {
+    public void debugData(DebugBuilder debug) {
         debug.appendTitle("Options");
         debug.indent();
         debug.append(options);

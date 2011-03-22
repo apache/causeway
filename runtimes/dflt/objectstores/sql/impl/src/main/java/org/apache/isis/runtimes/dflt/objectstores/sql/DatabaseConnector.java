@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 
 public interface DatabaseConnector {
     /*
@@ -63,7 +63,7 @@ public interface DatabaseConnector {
 
     void begin();
 
-    void debug(DebugString debug);
+    void debug(DebugBuilder debug);
 
     SqlMetaData getMetaData();
     

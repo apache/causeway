@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -100,7 +100,7 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.append("TreeNodeBorder " + left + " pixels\n");
         debug.append("           titlebar " + (top) + " pixels\n");
         debug.append("           replace with  " + replaceWithSpecification);

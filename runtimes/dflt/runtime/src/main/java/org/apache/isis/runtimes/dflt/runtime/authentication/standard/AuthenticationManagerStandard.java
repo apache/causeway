@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
@@ -203,7 +203,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
         return "Authentication Manager";
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Authenticators");
         debug.indent();
         for (Authenticator authenticator : authenticators) {

@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfigurationException;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -72,7 +72,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
         return decorated.createSaveObjectCommand(object);
     }
 
-    public void debugData(final DebugString debug) {
+    public void debugData(final DebugBuilder debug) {
         decorated.debugData(debug);
     }
 

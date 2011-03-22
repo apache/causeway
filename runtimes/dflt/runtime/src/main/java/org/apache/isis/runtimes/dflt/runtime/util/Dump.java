@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -51,7 +52,7 @@ public final class Dump {
             final ObjectAdapter collection,
             final int level,
             final Vector<ObjectAdapter> ignoreObjects,
-            final DebugString s, AuthenticationSession authenticationSession) {
+            final DebugBuilder s, AuthenticationSession authenticationSession) {
 
         if (ignoreObjects.contains(collection)) {
             s.append("*\n");
@@ -84,14 +85,14 @@ public final class Dump {
         return s.toString();
     }
 
-    public static void graph(final ObjectAdapter object, final DebugString s, AuthenticationSession authenticationSession) {
+    public static void graph(final ObjectAdapter object, final DebugBuilder s, AuthenticationSession authenticationSession) {
         simpleObject(object, s);
         s.appendln();
         s.append(object);
         graph(object, 0, new Vector<ObjectAdapter>(25, 10), s, authenticationSession);
     }
 
-    private static void simpleObject(final ObjectAdapter object, final DebugString s) {
+    private static void simpleObject(final ObjectAdapter object, final DebugBuilder s) {
         s.appendln(object.titleString());
         s.indent();
         final ObjectSpecification objectSpec = object.getSpecification();
@@ -129,7 +130,7 @@ public final class Dump {
     		final ObjectAdapter object, 
     		final int level, 
     		final Vector<ObjectAdapter> ignoreObjects, 
-    		final DebugString info, 
+    		final DebugBuilder info, 
     		final AuthenticationSession authenticationSession) {
         if (level > 3) {
             info.appendln("..."); // only go 3 levels?
@@ -157,7 +158,7 @@ public final class Dump {
         return s.toString();
     }
 
-    private static void graphIndent(final DebugString s, final int level) {
+    private static void graphIndent(final DebugBuilder s, final int level) {
         for (int indent = 0; indent < level; indent++) {
             s.append(DebugUtils.indentString(4) + "|");
         }
@@ -170,7 +171,7 @@ public final class Dump {
         return s.toString();
     }
 
-    public static void adapter(final ObjectAdapter adapter, final DebugString string) {
+    public static void adapter(final ObjectAdapter adapter, final DebugBuilder string) {
         try {
             string.appendln("Adapter", adapter.getClass().getName());
             string.appendln("Class", adapter.getObject() == null ? "none" : adapter.getObject().getClass().getName());
@@ -196,7 +197,7 @@ public final class Dump {
     		final ObjectAdapter object, 
     		final int level, 
     		final Vector<ObjectAdapter> ignoreObjects, 
-    		final DebugString s, 
+    		final DebugBuilder s, 
     		final AuthenticationSession authenticationSession) {
     	ignoreObjects.addElement(object);
 
@@ -241,12 +242,12 @@ public final class Dump {
         return s.toString();
     }
 
-    public static void specification(final ObjectAdapter adapter, final DebugString debug) {
+    public static void specification(final ObjectAdapter adapter, final DebugBuilder debug) {
         final ObjectSpecification specification = adapter.getSpecification();
         specification(specification, debug);
     }
 
-    public static void specification(final ObjectSpecification specification, final DebugString debug) {
+    public static void specification(final ObjectSpecification specification, final DebugBuilder debug) {
         try {
             debug.appendTitle(specification.getClass().getName());
             debug.appendAsHexln("Hash code", specification.hashCode());
@@ -334,7 +335,7 @@ public final class Dump {
         return str.toString();
     }
 
-    private static void specificationActionMethods(final ObjectSpecification specification, final DebugString debug) {
+    private static void specificationActionMethods(final ObjectSpecification specification, final DebugBuilder debug) {
         try {
             final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER);
             final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION);
@@ -346,7 +347,7 @@ public final class Dump {
         }
     }
 
-    private static void specificationServiceMethods(final ObjectSpecification specification, final DebugString debug) {
+    private static void specificationServiceMethods(final ObjectSpecification specification, final DebugBuilder debug) {
         try {
             final List<ObjectAction> userActions = specification.getServiceActionsReturning(ActionType.USER);
             final List<ObjectAction> explActions = specification.getServiceActionsReturning(ActionType.EXPLORATION);
@@ -358,7 +359,7 @@ public final class Dump {
         }
     }
 
-    private static void specificationFields(final ObjectSpecification specification, final DebugString debug) {
+    private static void specificationFields(final ObjectSpecification specification, final DebugBuilder debug) {
         final List<ObjectAssociation> fields = specification.getAssociations();
         debug.appendln("All");
         debug.indent();
@@ -443,7 +444,7 @@ public final class Dump {
             final List<ObjectAction> explActions,
             final List<ObjectAction> prototypeActions,
             final List<ObjectAction> debugActions,
-            final DebugString debug) {
+            final DebugBuilder debug) {
 		if (userActions.size() == 0 && explActions.size() == 0 && prototypeActions.size() == 0 && debugActions.size() == 0) {
             debug.appendln("no actions...");
         } else {
@@ -454,7 +455,7 @@ public final class Dump {
         }
     }
 
-	private static void appendActionDetails(final DebugString debug, String desc,
+	private static void appendActionDetails(final DebugBuilder debug, String desc,
 	        List<ObjectAction> actions) {
 		debug.appendln(desc);
 		debug.indent();
@@ -464,7 +465,7 @@ public final class Dump {
 		debug.unindent();
 	}
 
-    private static void actionDetails(final DebugString debug, final ObjectAction a, final int indent, final int count) {
+    private static void actionDetails(final DebugBuilder debug, final ObjectAction a, final int indent, final int count) {
         debug.appendln((count + 1) + "." + a.getId() + " (" + a.getClass().getName() + ")");
         debug.indent();
         final int newIndent = indent + 4;

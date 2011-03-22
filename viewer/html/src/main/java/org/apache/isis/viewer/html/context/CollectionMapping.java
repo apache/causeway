@@ -23,7 +23,7 @@ package org.apache.isis.viewer.html.context;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -68,7 +68,7 @@ public class CollectionMapping {
         return elementSpecification;
     }
 
-    public void debug(final DebugString debug) {
+    public void debug(final DebugBuilder debug) {
         debug.indent();
         final Enumeration e = list.elements();
         while (e.hasMoreElements()) {

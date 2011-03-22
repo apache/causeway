@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.service;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -49,7 +49,7 @@ public class ServiceBorder extends AbstractBorder {
     }
 
     @Override
-    protected void debugDetails(final DebugString debug) {
+    protected void debugDetails(final DebugBuilder debug) {
         debug.append("ServiceBorder " + top + " pixels");
     }
 

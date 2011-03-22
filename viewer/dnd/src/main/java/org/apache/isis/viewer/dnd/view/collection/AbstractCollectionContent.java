@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.view.collection;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -74,7 +74,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         debug.appendln("order", order);
         debug.appendln("reverse order", reverse);
     }

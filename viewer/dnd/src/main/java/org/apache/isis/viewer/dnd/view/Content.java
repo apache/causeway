@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -41,7 +41,7 @@ public interface Content {
      */
     void contentMenuOptions(UserActionSet options);
 
-    void debugDetails(DebugString debug);
+    void debugDetails(DebugBuilder debug);
 
     /**
      * Implements the response to the dropping of the specified content onto this content.

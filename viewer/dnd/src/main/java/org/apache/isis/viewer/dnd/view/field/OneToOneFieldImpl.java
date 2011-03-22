@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -93,7 +93,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
     }
 
     @Override
-    public void debugDetails(final DebugString debug) {
+    public void debugDetails(final DebugBuilder debug) {
         field.debugDetails(debug);
         debug.appendln("object", adapter);
     }

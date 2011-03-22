@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
@@ -39,7 +39,7 @@ public interface FieldMapping {
 
     void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
-    void debugData(DebugString debug);
+    void debugData(DebugBuilder debug);
 
 
 }

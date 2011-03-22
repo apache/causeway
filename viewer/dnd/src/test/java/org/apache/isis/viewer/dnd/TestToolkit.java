@@ -22,8 +22,8 @@ package org.apache.isis.viewer.dnd;
 
 import java.util.Enumeration;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.viewer.dnd.drawing.Background;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -242,7 +242,7 @@ public class TestToolkit extends Toolkit {
                 return new DummyView();
             }
 
-            public void debugData(DebugString debug) {}
+            public void debugData(DebugBuilder debug) {}
 
             public String debugTitle() {
                 throw new UnexpectedCallException();
