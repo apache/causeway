@@ -393,7 +393,8 @@ class TestVariableExists extends Test {
 
 class TestVariableTrue extends Test {
     boolean test(Request request, String attributeName, String targetId) {
-        Boolean value = (Boolean) request.getContext().getVariable(attributeName);
+        Object variable = request.getContext().getVariable(attributeName);
+        Boolean value = variable instanceof Boolean ? (Boolean) variable : Boolean.valueOf((String) variable);
         return value != null &&  value.booleanValue();
     }
 }

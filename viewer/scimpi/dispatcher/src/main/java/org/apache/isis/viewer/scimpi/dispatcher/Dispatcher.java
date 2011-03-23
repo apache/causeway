@@ -110,7 +110,7 @@ public class Dispatcher {
                 // TODO pick this up from configuration
                 // context.raiseError(404);
                 //context.setRequestPath("/error/notfound_404.shtml");
-                IsisContext.getMessageBroker().addWarning("Failed to find page....");
+                IsisContext.getMessageBroker().addWarning("Failed to find page....");  // TODO complete message
                 context.setRequestPath("/index.shtml");
                 processTheView(context);
             } catch (IOException e1) {
@@ -162,7 +162,7 @@ public class Dispatcher {
                 // TODO allow these values to be got configuration
                 // context.raiseError(500);    
                 context.setRequestPath("/error/server_500.shtml");
-                //IsisContext.getMessageBroker().addWarning("There was a error while processing this request....");
+                //IsisContext.getMessageBroker().addWarning("There was a error while processing this request....");   // TODO include the reference code so it can be looked up
                 //context.setRequestPath("/index.shtml");
                 try {
                     processTheView(context);
@@ -249,7 +249,7 @@ public class Dispatcher {
             errorView.appendException(e);
         }
         errorView.appendTitle("Processing"); 
-        errorView.appendln(requestContext.getDebugTrace()); 
+        errorView.appendln("<pre>" + requestContext.getDebugTrace() + "</pre>"); 
         errorView.close();
         writer.close();
     }
