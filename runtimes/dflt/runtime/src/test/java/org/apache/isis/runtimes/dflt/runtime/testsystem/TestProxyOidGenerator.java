@@ -49,7 +49,7 @@ public class TestProxyOidGenerator extends OidGeneratorAbstract {
     }
     
     public String createAggregateId(Object pojo) {
-        return "";
+        return "8";
     }
 
     public void debugData(final DebugBuilder debug) {}

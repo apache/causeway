@@ -23,7 +23,6 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -37,14 +36,8 @@ public class AggregatedOid implements Oid, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	private static <T> T ensureNotNull(final T oid, String message) {
-		Assert.assertNotNull(message, oid);
-		return oid;
-	}
-
     private final Oid parentOid;
-    private final String fieldName;
-    private final int element;
+    private final String id;
     
     private AggregatedOid previous;
 
@@ -55,34 +48,21 @@ public class AggregatedOid implements Oid, Serializable {
     // Constructor, Encodeable
     ///////////////////////////////////////////////////////////
     public AggregatedOid(final Oid oid, final String id) {
-        this(oid, id, -1);
-    }
-    
-    //public
-    private AggregatedOid(final Oid oid, final String id, final int element) {
-        Assert.assertNotNull("Field required", id);
+        Assert.assertNotNull("ID required", id);
         this.parentOid = oid;
-        this.fieldName = id;
-        this.element = element;
+        this.id = id;
         initialized();
     }
 
-    public AggregatedOid(final Oid oid, final Identifier identifier) {
-        this(oid, ensureNotNull(identifier, "Field required").getMemberName());
-    }
-    /*
-*/
     public AggregatedOid(DataInputExtended input) throws IOException {
     	this.parentOid = input.readEncodable(Oid.class);
-    	this.fieldName = input.readUTF();
-    	this.element = input.readInt();
+    	this.id = input.readUTF();
     	initialized();
     }
     
     public void encode(DataOutputExtended output) throws IOException {
     	output.writeEncodable(parentOid);
-        output.writeUTF(fieldName);
-        output.writeInt(element);
+        output.writeUTF(id);
     }
 
 	private void initialized() {
@@ -96,22 +76,16 @@ public class AggregatedOid implements Oid, Serializable {
     public Oid getParentOid() {
         return parentOid;
     }
-    public String getFieldName() {
-        return fieldName;
+    public String getId() {
+        return id;
     }
-    
-    /*
-    public int getElement() {
-        return element;
-    }
-*/
-    
+        
     ///////////////////////////////////////////////////////////
     // makePersistent
     ///////////////////////////////////////////////////////////
 
     public void makePersistent() {
-        this.previous = new AggregatedOid(this.parentOid, this.fieldName, this.element);
+        this.previous = new AggregatedOid(this.parentOid, this.id);
         cacheState();
     }
     
@@ -163,7 +137,7 @@ public class AggregatedOid implements Oid, Serializable {
     }
     
     public boolean equals(final AggregatedOid other) {
-        return other.parentOid.equals(parentOid) &&  other.fieldName.equals(fieldName) && other.element == element;
+        return other.parentOid.equals(parentOid) &&  other.id.equals(id);
     }
 
     @Override
@@ -175,8 +149,7 @@ public class AggregatedOid implements Oid, Serializable {
 	private void cacheState() {
 		int hashCode = 17;
         hashCode = 37 * hashCode + parentOid.hashCode();
-        hashCode = 37 * hashCode + fieldName.hashCode();
-        hashCode = 37 * hashCode + element;
+        hashCode = 37 * hashCode + id.hashCode();
         cachedHashCode = hashCode;
 	}
 
@@ -187,7 +160,7 @@ public class AggregatedOid implements Oid, Serializable {
 
     @Override
     public String toString() {
-        return "AOID[" + parentOid + "," + fieldName + (element == -1 ? "" : "," + element) + "]";
+        return "AOID[" + parentOid + "," + id + "]";
     }
 
 

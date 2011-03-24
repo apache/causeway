@@ -23,7 +23,6 @@ import java.lang.reflect.Modifier;
 
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactoryAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactoryAbstract.Mode;
 
 public class TestObjectFactory extends ObjectFactoryAbstract {
 

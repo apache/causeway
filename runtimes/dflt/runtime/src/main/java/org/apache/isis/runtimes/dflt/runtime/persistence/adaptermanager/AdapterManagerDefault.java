@@ -32,6 +32,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -209,20 +210,13 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     public ObjectAdapter adapterForAggregated(Object pojo, ObjectAdapter parent) {
-        
         final ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter != null) {
             return adapter;
         }
-
-        
-        
         String id = getOidGenerator().createAggregateId(pojo);
         final Oid aggregatedOid = new AggregatedOid(parent.getOid(), id);
-         AggregateAdapters aggregatedAdapter = createOrRecreateRootAdapter(pojo, aggregatedOid);
-
-        // same locking as parent
-//        aggregatedAdapter.setOptimisticLock(parent.getVersion());
+        AggregateAdapters aggregatedAdapter = createOrRecreateRootAdapter(pojo, aggregatedOid);
         return map(aggregatedAdapter);
     }
 
@@ -372,7 +366,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         Oid rootOid = rootAdapter.getOid();
 
         for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
-            AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getIdentifier());
+            AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getName());
             ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
@@ -520,8 +514,12 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         ensureMapsConsistent(ownerAdapter);
         Assert.assertNotNull(pojo);
 
+        if (!(identifiedHolder instanceof OneToManyAssociation)) {
+            throw new IsisException("only applicable to collections " + pojo + " in " + identifiedHolder);
+        }
+        
         // persistence of aggregated follows the parent
-        final Oid aggregatedOid = new AggregatedOid(ownerAdapter.getOid(), identifier);
+        final Oid aggregatedOid = new AggregatedOid(ownerAdapter.getOid(), identifier.getMemberName());
         ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
 
         // we copy over the type onto the adapter itself

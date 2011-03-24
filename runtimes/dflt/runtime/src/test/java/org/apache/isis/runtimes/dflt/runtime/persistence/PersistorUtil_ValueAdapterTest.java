@@ -43,7 +43,7 @@ public class PersistorUtil_ValueAdapterTest extends ProxyJunit3TestCase {
         field = new TestProxyField("fieldName", system.getSpecification(Object.class));
         FacetUtil.addFacet(new AggregatedFacetAlways(field));
         value = new Object();
-        aggregatedAdapter = getAdapterManager().adapterFor(value, parent, field);
+        aggregatedAdapter = getAdapterManager().adapterForAggregated(value, parent);
     }
 
     public void testOidKnowsParent() throws Exception {
@@ -51,9 +51,9 @@ public class PersistorUtil_ValueAdapterTest extends ProxyJunit3TestCase {
         assertEquals(parent.getOid(), aggregatedOid.getParentOid());
     }
 
-    public void testOidKnowsField() throws Exception {
+    public void testOidHasSubId() throws Exception {
         final AggregatedOid aggregatedOid = (AggregatedOid) aggregatedAdapter.getOid();
-        assertEquals("fieldName", aggregatedOid.getFieldName());
+        assertEquals("8", aggregatedOid.getId());
     }
 
     public void testResolveStateStartsAsGhost() throws Exception {
