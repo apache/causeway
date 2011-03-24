@@ -75,7 +75,7 @@ public class NoSqlObjectStore implements ObjectStore {
             //throw new UnexpectedCallException("Aggregated objects should not be created outside of their owner");
             return null;
         } else {
-            return new WriteObjectCommand(false, keyCreator, versionCreator, object);
+            return new CreateObjectCommandImplementation(keyCreator, versionCreator, object);
         }
     }
 
@@ -92,7 +92,7 @@ public class NoSqlObjectStore implements ObjectStore {
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
         // TODO should this be done at a higher level so it is applicable for all OSes
         final ObjectAdapter rootAdapter = aggregateRootAdapterFor(adapter);
-        return new WriteObjectCommand(true, keyCreator, versionCreator, rootAdapter);
+        return new SaveObjectCommandImplementation(keyCreator, versionCreator, rootAdapter);
     }
 
     /**
