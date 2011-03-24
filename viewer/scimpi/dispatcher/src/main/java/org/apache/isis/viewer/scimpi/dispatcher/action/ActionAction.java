@@ -61,12 +61,12 @@ public class ActionAction implements Action {
      */
     @Override
     public void process(RequestContext context) throws IOException {
-        String objectId = context.getParameter(OBJECT);
-        String version = context.getParameter(VERSION);
-        String methodName = context.getParameter(METHOD);
-        String override = context.getParameter(RESULT_OVERRIDE);
-        String resultName = context.getParameter(RESULT_NAME);
-        String message = context.getParameter(MESSAGE);
+        String objectId = context.getParameter("_" + OBJECT);
+        String version = context.getParameter("_" + VERSION);
+        String methodName = context.getParameter("_" + METHOD);
+        String override = context.getParameter("_" + RESULT_OVERRIDE);
+        String resultName = context.getParameter("_" + RESULT_NAME);
+        String message = context.getParameter("_" + MESSAGE);
         resultName = resultName == null ? RequestContext.RESULT : resultName;
         
         FormState entryState = null;
@@ -106,7 +106,7 @@ public class ActionAction implements Action {
             } else    */         
             if (entryState.isValid()) {
                 boolean hasResult = invokeMethod(context, resultName, object, action, entryState);
-                String view = context.getParameter(hasResult ? VIEW : VOID);
+                String view = context.getParameter(hasResult ? "_" + VIEW : "_" + VOID);
                 
              //   context.clearVariables(Scope.REQUEST);
 
@@ -144,7 +144,7 @@ public class ActionAction implements Action {
                 }
                 */
                 
-                String view = context.getParameter(ERRORS);
+                String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.ACTION);
                 
                 MessageBroker messageBroker = IsisContext.getMessageBroker();
@@ -166,7 +166,7 @@ public class ActionAction implements Action {
                 context.addVariable(RequestContext.ERROR, error, Scope.REQUEST);
             }
             
-            String view = context.getParameter(ERRORS);
+            String view = context.getParameter("_" + ERRORS);
             context.setRequestPath(view, Dispatcher.ACTION);
             
             
@@ -187,7 +187,7 @@ public class ActionAction implements Action {
             FormState entryState) {
 
         ObjectAdapter[] parameters = getParameters(action, entryState);
-        String scopeName = context.getParameter(SCOPE);
+        String scopeName = context.getParameter("_" + SCOPE);
         Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
         return MethodsUtils.runMethod(context, action, object, parameters, variable, scope);
     }

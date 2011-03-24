@@ -60,12 +60,12 @@ public class EditAction implements Action {
         }
         
         try {
-            String objectId = context.getParameter(OBJECT);
-            String version = context.getParameter(VERSION);
-            String resultName = context.getParameter(RESULT_NAME);
+            String objectId = context.getParameter("_" + OBJECT);
+            String version = context.getParameter("_" + VERSION);
+            String resultName = context.getParameter("_" + RESULT_NAME);
             resultName = resultName == null ? RequestContext.RESULT : resultName;
-            String override = context.getParameter(RESULT_OVERRIDE);
-            String message = context.getParameter(MESSAGE);
+            String override = context.getParameter("_" + RESULT_OVERRIDE);
+            String message = context.getParameter("_" + MESSAGE);
             
             ObjectAdapter adapter = context.getMappedObject(objectId);
             
@@ -118,7 +118,7 @@ public class EditAction implements Action {
                 IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getSingularName() + " was edited " +
                 		"by another user (" + adapterVersion.getUser() +  "). Please  make your changes based on their changes.");
 
-                String view = context.getParameter(ERRORS);
+                String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.EDIT);
                 
                 entryState.setForm(objectId);
@@ -136,7 +136,7 @@ public class EditAction implements Action {
                     context.unmapObject(adapter, Scope.REQUEST);
                 }
 
-                String view = context.getParameter(VIEW);
+                String view = context.getParameter("_" + VIEW);
 
                 String id = context.mapObject(adapter, Scope.REQUEST);
                 context.addVariable(resultName, id, Scope.REQUEST);
@@ -163,7 +163,7 @@ public class EditAction implements Action {
                 }
 
             } else {
-                String view = context.getParameter(ERRORS);
+                String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.EDIT);
                 
                 entryState.setForm(objectId);

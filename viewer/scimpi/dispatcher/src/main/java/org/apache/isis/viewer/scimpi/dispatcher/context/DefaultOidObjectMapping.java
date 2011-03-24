@@ -104,7 +104,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             if (oid instanceof AggregatedOid) {
                 AggregatedOid aoid = (AggregatedOid) oid;
                 Oid parentOid = aoid.getParentOid();
-               String fieldName = aoid.getFieldName();
+                String fieldName = aoid.getId();
                 int element = -1; // aoid.getElement();
                 
                 object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);

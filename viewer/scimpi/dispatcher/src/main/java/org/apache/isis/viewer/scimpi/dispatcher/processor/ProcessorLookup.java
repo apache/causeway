@@ -40,6 +40,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.collection.Collection;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugAccessCheck;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebuggerLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Diagnostics;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.LogLevel;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Members;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.PrintAuthorizationClause;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.ShowDebug;
@@ -146,6 +147,7 @@ public class ProcessorLookup {
         addElementProcessor(new IncludeField());
         addElementProcessor(new InitializeFromCookie());
         addElementProcessor(new InitializeFromResult());
+        addElementProcessor(new LogLevel());
         addElementProcessor(new Logon());
         addElementProcessor(new LongFormView());
         addElementProcessor(new LinkField());

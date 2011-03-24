@@ -78,8 +78,10 @@ public class Debug extends AbstractElementProcessor {
                 displayContext(request);
              } else if (type.equals("specifications")) {
                 listSpecifications(request);
-            } else if (type.equals("specification")) {
-                specification(request);
+             } else if (type.equals("specification-for")) {
+                 specificationFor(request);
+             } else if (type.equals("specification")) {
+                 specification(request);
 
                 
                 
@@ -137,10 +139,20 @@ public class Debug extends AbstractElementProcessor {
 
         }
     }
-
+    
+    protected void specificationFor(Request request) {
+        String id = request.getOptionalProperty(VALUE);
+        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        specification(request, object.getSpecification());
+    }
+    
     protected void specification(Request request) {
         String name = request.getOptionalProperty(VALUE);
         ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
+        specification(request, spec);
+    }
+
+    private void specification(Request request, ObjectSpecification spec) {
         request.appendHtml("<h1>Specification - " + spec.getFullIdentifier() + "</h1>");
         DebugBuilder debug = new DebugHtmlString();
         specification(spec, debug);

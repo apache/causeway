@@ -122,14 +122,14 @@ public class EditObject extends AbstractElementProcessor {
 
         String errorView = context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
         List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
-        hiddenFields.add(new HiddenInputField(OBJECT, actualObjectId));
-        hiddenFields.add(new HiddenInputField(VERSION, version));
-        hiddenFields.add(completionMessage == null ? null : new HiddenInputField(MESSAGE, completionMessage));
-        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField(VIEW, context.fullFilePath(forwardEditedTo)));
-        hiddenFields.add(new HiddenInputField(ERRORS, errorView));
-        hiddenFields.add(variable == null ? null : new HiddenInputField(RESULT_NAME, variable));
-        hiddenFields.add(resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride));
-        hiddenFields.add(scope == null ? null : new HiddenInputField(SCOPE, scope));
+        hiddenFields.add(new HiddenInputField("_" + OBJECT, actualObjectId));
+        hiddenFields.add(new HiddenInputField("_" + VERSION, version));
+        hiddenFields.add(completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, completionMessage));
+        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context.fullFilePath(forwardEditedTo)));
+        hiddenFields.add(new HiddenInputField("_" + ERRORS, errorView));
+        hiddenFields.add(variable == null ? null : new HiddenInputField("_" + RESULT_NAME, variable));
+        hiddenFields.add(resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, resultOverride));
+        hiddenFields.add(scope == null ? null : new HiddenInputField("_" + SCOPE, scope));
 
         if (object.isTransient()) {
             // restore transient details
@@ -207,8 +207,10 @@ public class EditObject extends AbstractElementProcessor {
                 formField.setDescription(usable.getReason());
             }
             formField.setEditable(isEditable);
-            boolean notVisible = field.isVisible(session, object).isVetoed() || (!includeUnusableFields && usable.isAllowed());
-            if (notVisible) {
+            boolean hiddenField = field.isVisible(session, object).isVetoed();
+            boolean unusable = usable.isVetoed();
+            boolean hideAsUnusable = unusable && !includeUnusableFields;
+            if (hiddenField || hideAsUnusable) {
                 formField.setHidden(true);
             }
         }

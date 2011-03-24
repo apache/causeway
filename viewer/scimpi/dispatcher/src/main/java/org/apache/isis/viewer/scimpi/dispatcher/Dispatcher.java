@@ -56,6 +56,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Debug;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugAction;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.LogAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.RemoveAction;
 import org.apache.isis.viewer.scimpi.dispatcher.logon.LogonAction;
@@ -428,6 +429,7 @@ public class Dispatcher {
         addAction(new RemoveAction());
         addAction(new LogonAction());
         addAction(new LogoutAction());
+        addAction(new LogAction());
 
         String configFile = getParameter("config");
         if (configFile != null) {

@@ -196,8 +196,12 @@ public abstract class RequestContext {
             ObjectAdapter aggregatedAdapter = null;
             outer: for (ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
                 if (association.getSpecification().isAggregated()) {
+                    ObjectAdapter objectAdapter = association.get(parentObject);
+                    if (objectAdapter == null) {
+                        continue;
+                    }
                     if (association.isOneToManyAssociation()) {
-                        ObjectAdapter coll = association.get(parentObject);
+                        ObjectAdapter coll = objectAdapter;
                         CollectionFacet facet = coll.getSpecification().getFacet(CollectionFacet.class);
                         for (ObjectAdapter element : facet.iterable(coll)) {
                             if (element.getOid().equals(aggregatedOid)) {
@@ -206,8 +210,8 @@ public abstract class RequestContext {
                             }
                         }
                     } else {
-                        if (association.get(parentObject).getOid().equals(aggregatedOid)) {
-                            aggregatedAdapter = association.get(parentObject);
+                        if (objectAdapter.getOid().equals(aggregatedOid)) {
+                            aggregatedAdapter = objectAdapter;
                             break;
                         }
                     }

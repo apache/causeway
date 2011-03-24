@@ -48,8 +48,8 @@ public class ActionLink extends AbstractElementProcessor {
         String completionMessage = request.getOptionalProperty(MESSAGE);
         
         // TODO need a mechanism for globally dealing with encoding; then use the new encode method
-        String confirmSegment = confirm == null ? "" : "&amp;" + CONFIRM + "=" + URLEncoder.encode(confirm);
-        String messageSegment = completionMessage == null ? "" : "&amp;" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
+        String confirmSegment = confirm == null ? "" : "&amp;" + "_" + CONFIRM + "=" + URLEncoder.encode(confirm);
+        String messageSegment = completionMessage == null ? "" : "&amp;" + "_" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
 
         RequestContext context = request.getContext();
         ObjectAdapter object = MethodsUtils.findObject(context, objectId);
@@ -93,10 +93,10 @@ public class ActionLink extends AbstractElementProcessor {
         }
         
         String interactionParamters = context.encodedInteractionParameters();
-        String forwardResultSegment = forwardResultTo == null ? "" :  "&amp;" + VIEW + "=" + context.fullFilePath(forwardResultTo);
+        String forwardResultSegment = forwardResultTo == null ? "" :  "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
         String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
-        String forwardVoidSegment = "&amp;" + VOID + "=" + voidView;
-        request.appendHtml("<a href=\"action.app?" + OBJECT + "=" + objectId + "&amp;" + VERSION + "=" + version + "&amp;" + METHOD + "=" + method
+        String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
+        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version + "&amp;" + "_" + METHOD + "=" + method
                 + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");

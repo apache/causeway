@@ -142,38 +142,38 @@ public class ActionButton extends AbstractElementProcessor {
         String classSegment = "class=\"" + (className == null ? "action in-line" : className) + "\"";
         request.appendHtml("\n<form " + idSegment + classSegment + " action=\"action.app\" method=\"post\">\n");
         if (objectId == null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + 
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + 
                     context.getVariable(RequestContext.RESULT) + "\" />\n");
         } else {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + objectId + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + objectId + "\" />\n");
         }
-        request.appendHtml("  <input type=\"hidden\" name=\"" + VERSION + "\" value=\"" + version + "\" />\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VERSION + "\" value=\"" + version + "\" />\n");
         if (scope != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + SCOPE + "\" value=\"" + scope + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + SCOPE + "\" value=\"" + scope + "\" />\n");
         }
-        request.appendHtml("  <input type=\"hidden\" name=\"" + METHOD + "\" value=\"" + action.getId() + "\" />\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + METHOD + "\" value=\"" + action.getId() + "\" />\n");
         if (forwardResultTo != null) {
             forwardResultTo = context.fullFilePath(forwardResultTo);
-            request.appendHtml("  <input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + forwardResultTo + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VIEW + "\" value=\"" + forwardResultTo + "\" />\n");
         }
         if (forwardErrorTo == null) {
             forwardErrorTo = request.getContext().getResourceFile();
         }
         forwardErrorTo = context.fullFilePath(forwardErrorTo);
-        request.appendHtml("  <input type=\"hidden\" name=\"" + ERRORS + "\" value=\"" + forwardErrorTo + "\" />\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + ERRORS + "\" value=\"" + forwardErrorTo + "\" />\n");
         if (forwardVoidTo == null) {
             forwardVoidTo = request.getContext().getResourceFile();
         }
         forwardVoidTo = context.fullFilePath(forwardVoidTo);
-        request.appendHtml("  <input type=\"hidden\" name=\"" + VOID + "\" value=\"" + forwardVoidTo + "\" />\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VOID + "\" value=\"" + forwardVoidTo + "\" />\n");
         if (variable != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + RESULT_NAME + "\" value=\"" + variable + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + RESULT_NAME + "\" value=\"" + variable + "\" />\n");
         }
         if (resultOverride != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />\n");            
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />\n");            
         }
         if (completionMessage != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + MESSAGE + "\" value=\"" + completionMessage + "\" />\n");                        
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + MESSAGE + "\" value=\"" + completionMessage + "\" />\n");                        
         }
 
         for (int i = 0; i < parameters.length; i++) {

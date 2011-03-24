@@ -102,17 +102,17 @@ public class ActionForm extends AbstractElementProcessor {
         String voidView = context.fullFilePath(parameterObject.forwardVoidTo == null ? context.getResourceFile()
                 : parameterObject.forwardVoidTo);
         HiddenInputField[] hiddenFields = new HiddenInputField[] {
-                new HiddenInputField(OBJECT, objectId),
-                new HiddenInputField(VERSION, version),
-                new HiddenInputField(METHOD, parameterObject.methodName),
-                parameterObject.forwardResultTo == null ? null : new HiddenInputField(VIEW, context
+                new HiddenInputField("_" + OBJECT, objectId),
+                new HiddenInputField("_" + VERSION, version),
+                new HiddenInputField("_" + METHOD, parameterObject.methodName),
+                parameterObject.forwardResultTo == null ? null : new HiddenInputField("_" + VIEW, context
                         .fullFilePath(parameterObject.forwardResultTo)),
-                new HiddenInputField(VOID, voidView),
-                new HiddenInputField(ERRORS, errorView),
-                parameterObject.completionMessage == null ? null : new HiddenInputField(MESSAGE, parameterObject.completionMessage),
-                parameterObject.scope == null ? null : new HiddenInputField(SCOPE, parameterObject.scope),
-                parameterObject.resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, parameterObject.resultOverride),
-                parameterObject.resultName == null ? null : new HiddenInputField(RESULT_NAME, parameterObject.resultName),
+                new HiddenInputField("_" + VOID, voidView),
+                new HiddenInputField("_" + ERRORS, errorView),
+                parameterObject.completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, parameterObject.completionMessage),
+                parameterObject.scope == null ? null : new HiddenInputField("_" + SCOPE, parameterObject.scope),
+                parameterObject.resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, parameterObject.resultOverride),
+                parameterObject.resultName == null ? null : new HiddenInputField("_" + RESULT_NAME, parameterObject.resultName),
                 parameterObject.resultName == null ? null : new HiddenInputField(RequestContext.RESULT, (String) request
                         .getContext().getVariable(RequestContext.RESULT)) };
 
