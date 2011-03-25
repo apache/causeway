@@ -205,28 +205,24 @@ public class Memento implements Serializable {
         if (data instanceof StandaloneData) {
             StandaloneData standaloneData = (StandaloneData) data;
             return standaloneData.getAdapter();
-        }
-
-        final Oid oid = data.getOid();
-        if (oid == null) {
-            return null;
-        }
-
-        ObjectAdapter ref;
-        if (oid.isTransient() && !spec.isAggregated()) {
-            ref = getHydrator().recreateAdapter(oid, spec);
         } else {
+            final Oid oid = data.getOid();
+            if (oid == null) {
+                return null;
+            }
+            ObjectAdapter ref;
             ref = getHydrator().recreateAdapter(oid, spec);
-            ResolveState resolveState = spec.isAggregated() ? ResolveState.TRANSIENT : ResolveState.GHOST;
-            if (ref.getResolveState().isValidToChangeTo(resolveState)) {
-                ref.changeState(resolveState);
-            }
-            // REVIEW is this needed, or is the object set up at this point
             if (data instanceof ObjectData) {
-                updateObject(ref, data, resolveState);
+                if (oid.isTransient() || spec.isAggregated()) {
+                    ResolveState resolveState = spec.isAggregated() ? ResolveState.GHOST : ResolveState.TRANSIENT ;
+                    if (ref.getResolveState().isValidToChangeTo(resolveState)) {
+                        ref.changeState(resolveState);
+                    }
+                    updateObject(ref, data, resolveState);
+                }
             }
+            return ref;
         }
-        return ref;
     }
 
     /**
