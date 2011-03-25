@@ -31,8 +31,7 @@ public interface ObjectMapping {
 
     void reloadIdentityMap();
 
-    // TODO this is only useed to clear REQUEST mappings, so change name and remove parameter to reflect that
-    void clear(Scope scope);
+    void clear();
 
     void unmapObject(ObjectAdapter object, Scope scope);
 
@@ -40,8 +39,14 @@ public interface ObjectMapping {
 
     ObjectAdapter mappedObject(String id);
 
+    ObjectAdapter decodeObject(String substring);
+
     String mapObject(ObjectAdapter obj, Scope scope);
 
+    String encodedObject(ObjectAdapter object);
+
     void append(DebugBuilder debug);
+
+
 
 }

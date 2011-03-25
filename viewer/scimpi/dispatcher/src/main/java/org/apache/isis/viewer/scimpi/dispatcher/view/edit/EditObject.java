@@ -105,9 +105,9 @@ public class EditObject extends AbstractElementProcessor {
         request.processUtilCloseTag();
         
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> fields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
-        fields = containedBlock.includedFields(fields);
-        InputField[] formFields = createFields(fields);
+        List<ObjectAssociation> viewFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        viewFields = containedBlock.includedFields(viewFields);
+        InputField[] formFields = createFields(viewFields);
         
         initializeFields(context, object, formFields, entryState, !hideNonEditableFields);
         setDefaults(context, object, formFields, entryState, showIcon);
@@ -133,13 +133,20 @@ public class EditObject extends AbstractElementProcessor {
 
         if (object.isTransient()) {
             // restore transient details
-            List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
-            for (int i = 0; i < fields2.size(); i++) {
-                ObjectAssociation field = fields2.get(i);
-                if (!fields.contains(field)) {
+            List<ObjectAssociation> objectFields = object.getSpecification().getAssociations();
+            for (int i = 0; i < objectFields.size(); i++) {
+                ObjectAssociation field = objectFields.get(i);
+                ObjectAdapter fieldValue = field.get(object);
+                if (!viewFields.contains(field)) {
                     String fieldId = field.getId();
-                    String value = getValue(context, field.get(object)); 
+                    String value = getValue(context, fieldValue); 
                     hiddenFields.add(new HiddenInputField(fieldId, value));
+                }
+                
+                if (fieldValue != null && fieldValue.isTransient()) {
+                    String fieldId = field.getId();
+                    String data = context.mapObject(fieldValue, Scope.REQUEST);
+                    hiddenFields.add(new HiddenInputField(fieldId, data));
                 }
             }
         } else {
@@ -147,7 +154,7 @@ public class EditObject extends AbstractElementProcessor {
             List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
             for (int i = 0; i < fields2.size(); i++) {
                 ObjectAssociation field = fields2.get(i);
-                if (!fields.contains(field) && field.getSpecification().containsFacet(BooleanValueFacet.class)) {
+                if (!viewFields.contains(field) && field.getSpecification().containsFacet(BooleanValueFacet.class)) {
                     String fieldId = field.getId();
                     String value = getValue(context, field.get(object)); 
                     hiddenFields.add(new HiddenInputField(fieldId, value));
@@ -307,7 +314,7 @@ public class EditObject extends AbstractElementProcessor {
     }
 
     private String getValue(RequestContext context, ObjectAdapter field) {
-        if (field == null) {
+        if (field == null || field.isTransient()) {
             return "";
         }
         ObjectSpecification specification = field.getSpecification();

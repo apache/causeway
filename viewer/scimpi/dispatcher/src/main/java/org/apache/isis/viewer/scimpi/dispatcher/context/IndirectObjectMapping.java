@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
@@ -72,8 +73,8 @@ public class IndirectObjectMapping implements ObjectMapping {
         }
     }
 
-    public void clear(Scope scope) {
-        scopedMappings.get(scope).clear();
+    public void clear() {
+        scopedMappings.get(Scope.REQUEST).clear();
     }
 
     public void unmapObject(ObjectAdapter object, Scope scope) {
@@ -179,6 +180,14 @@ public class IndirectObjectMapping implements ObjectMapping {
         appendMappings(debug, Scope.SESSION);
         appendMappings(debug, Scope.INTERACTION);
         appendMappings(debug, Scope.REQUEST);
+    }
+
+    public ObjectAdapter decodeObject(String substring) {
+        throw new NotYetImplementedException();
+    }
+
+    public String encodedObject(ObjectAdapter object) {
+        throw new NotYetImplementedException();
     }
 
 }

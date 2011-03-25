@@ -163,11 +163,9 @@ public abstract class RequestContext {
     }
 
     public String mapObject(ObjectAdapter object, String scopeName, Scope defaultScope) {
-       // if (!object.getSpecification().containsFacet(EncodeableFacet.class)) {
         Scope scope = scopeName == null ? defaultScope : scope(scopeName);
         LOG.debug("mapping " + object + " " + scope);
         return objectMapping.mapObject(object, scope);
-     //   }
     }
 
     private ObjectAdapter mappedObject(String id) {
@@ -178,6 +176,10 @@ public abstract class RequestContext {
             id = RESULT;
         }
 
+        if (id.startsWith("D")) {
+            return objectMapping.decodeObject(id.substring(1));
+        }
+        
         String[] idParts = id.split("@");
         if (idParts.length == 2) {
             ObjectAdapter mappedObject = objectMapping.mappedObject(id);
@@ -496,7 +498,7 @@ public abstract class RequestContext {
     // //////////////////////////////
     public void endRequest() throws IOException {
         getWriter().close();
-        objectMapping.clear(Scope.REQUEST);
+        objectMapping.clear();
         variables.get(Scope.REQUEST).clear();
         variables.get(Scope.INTERACTION).clear();
     }
@@ -679,10 +681,12 @@ public abstract class RequestContext {
     // //////////////////////////////////////////////////////////////////
 
     public String mapObject(ObjectAdapter object, Scope scope) {
-        if (object.getOid() != null) {
-            return objectMapping.mapObject(object, scope);
-        } else if (object.getResolveState().isValue()) {
+        if (object.getResolveState().isValue()) {
             return object.titleString();
+        } else if (scope == Scope.INTERACTION && object.isTransient()) {
+            return objectMapping.encodedObject(object);
+        } else if (object.getOid() != null) {
+            return objectMapping.mapObject(object, scope);
         } else {
             collection = object;
             return "collection";

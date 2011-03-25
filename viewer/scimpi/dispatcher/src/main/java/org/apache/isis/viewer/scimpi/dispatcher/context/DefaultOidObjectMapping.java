@@ -20,8 +20,11 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -39,6 +43,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -69,7 +74,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 
     public void appendMappings(DebugBuilder request) {}
 
-    public void clear(Scope scope) {
+    public void clear() {
         requestTransients.clear();
         
         List<String> remove = new ArrayList<String>();
@@ -88,6 +93,22 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         sessionTransients.clear();
     }
 
+    public String encodedObject(ObjectAdapter object) {
+         Memento memento = new Memento(object);
+        
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(baos);
+        try {
+            // TODO record the OID for the this object so it can be re-reference without being rewriting the data
+            memento.encodedData(outputImpl);
+            final byte[] byteArray = baos.toByteArray();
+            String data = new String(byteArray);
+            return "D" + mapObject(object, Scope.INTERACTION) + "|" + URLEncoder.encode(data, "UTF-8");
+        } catch (IOException e) {
+            throw new IsisException("Failed to write object", e);
+        }
+    }
+    
     public String mapObject(ObjectAdapter inObject, Scope scope) {
         // TODO need to ensure that transient objects are remapped each time so that any changes are added to
         // session data
@@ -123,6 +144,8 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             String id = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
             LOG.debug("encoded " + oid + " as " + id + " ~ " + encodedOid);
             if (isTransient) {
+                
+                 // TODO if Transient/Interaction then return state; other store state in session an return OID string 
                 TransientObjectMapping mapping = new TransientObjectMapping((ObjectAdapter) inObject);
                 if (scope == Scope.REQUEST) {
                     requestTransients.put(id, mapping);
@@ -138,6 +161,28 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         }
     }
 
+    public ObjectAdapter decodeObject(String data) {
+        byte[] oidBytes;
+        try {
+            int x = data.indexOf('|');
+            String id = data.substring(0, x);
+            String objectData = data.substring(x + 1);
+            String state = URLDecoder.decode(objectData, "UTF-8");
+            
+            ObjectAdapter object = mappedObject(id);
+            Memento memento = new Memento(object);
+            
+            oidBytes = state.getBytes();
+            final ByteArrayInputStream bais = new ByteArrayInputStream(oidBytes);
+            final DataInputStreamExtended inputImpl = new DataInputStreamExtended(bais);
+            memento.restore(inputImpl);
+            memento.recreateObject();
+            return object;
+        } catch (IOException ex) {
+            throw new IsisException("Failed to read object", ex);
+        }
+    }
+    
     public ObjectAdapter mappedObject(String id) {
         char type = id.charAt(0);
         if ((type == 'T')) {
