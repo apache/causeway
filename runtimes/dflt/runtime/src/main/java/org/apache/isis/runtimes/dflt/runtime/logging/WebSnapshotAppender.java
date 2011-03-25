@@ -52,9 +52,9 @@ public class WebSnapshotAppender extends SnapshotAppender {
                 write("&");
             }
             parameter++;
-            write(URLEncoder.encode(name));
+            write(URLEncoder.encode(name, "UTF-8"));
             write("=");
-            write(URLEncoder.encode(value));
+            write(URLEncoder.encode(value, "UTF-8"));
         }
 
         @Override

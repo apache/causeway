@@ -25,13 +25,12 @@ import java.io.Serializable;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-class Data implements Encodable, Serializable {
+public class Data implements Encodable, Serializable {
 	
 	private final static long serialVersionUID = 1L;
 	

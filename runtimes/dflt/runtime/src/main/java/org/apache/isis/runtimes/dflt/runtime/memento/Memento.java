@@ -24,10 +24,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
@@ -50,6 +46,9 @@ import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -94,6 +93,7 @@ public class Memento implements Serializable {
     }
 
     private ObjectData createObjectData(final ObjectAdapter adapter) {
+        transientObjects.add(adapter.getOid());
         final ObjectSpecification cls = adapter.getSpecification();
         final List<ObjectAssociation> fields = cls.getAssociations();
         final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullIdentifier());

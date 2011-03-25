@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 
-class ObjectData extends Data {
+public class ObjectData extends Data {
 	
     private static final long serialVersionUID = 7121411963269613347L;
     private final static Encodable NO_ENTRY = new Null();
@@ -103,7 +103,7 @@ class ObjectData extends Data {
             } else if (value instanceof Null) {
             	// nothing to do; if read back corresponds to NO_ENTRY
             } else {
-                output.writeUTF(As.STRING.name());
+                As.STRING.writeTo(output);
                 output.writeUTF((String) value);
             }
         }

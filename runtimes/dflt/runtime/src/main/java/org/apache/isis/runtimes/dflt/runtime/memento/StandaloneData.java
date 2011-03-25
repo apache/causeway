@@ -125,20 +125,5 @@ public class StandaloneData extends Data {
 			return encodeableFacet.fromEncodedString(objectAsEncodedString);
 		}
 	}
-	/**
-	 * Either this or {@link #getObjectAsSerializable()} will be non-<tt>null</tt>.
-	 * @return
-	 */
-	private String getObjectAsEncodedString() {
-		return objectAsEncodedString;
-	}
-	
-	/**
-	 * Either this or {@link #getObjectAsEncodedString()} will be non-<tt>null</tt>.
-	 * @return
-	 */
-	private Serializable getObjectAsSerializable() {
-		return objectAsSerializable;
-	}
 
 }

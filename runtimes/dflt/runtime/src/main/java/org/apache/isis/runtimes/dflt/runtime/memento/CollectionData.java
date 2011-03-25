@@ -24,13 +24,12 @@ import java.io.IOException;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 
-class CollectionData extends Data {
+public class CollectionData extends Data {
 	
     private final static long serialVersionUID = 1L;
     final Data[] elements;
