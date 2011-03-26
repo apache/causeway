@@ -21,7 +21,7 @@
 package org.apache.isis.security.ldap.authentication;
 
 import org.apache.isis.security.ldap.authentication.LdapAuthenticator;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 
 

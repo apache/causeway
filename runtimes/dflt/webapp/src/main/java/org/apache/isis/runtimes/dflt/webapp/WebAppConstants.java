@@ -20,8 +20,6 @@
 
 package org.apache.isis.runtimes.dflt.webapp;
 
-import javax.servlet.ServletContext;
-
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;

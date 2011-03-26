@@ -19,6 +19,21 @@
 
 Identity Bytecode
  
- The <identity bytecode> module is ...
+ The <identity> bytecode module is a no-op implementation of the bytecode
+ APIs.  It is provided for those object stores that do not need the use of 
+ bytecode enhancement, typically because they hook into the lazy loading 
+ of the underlying ORM.
+
+Alternatives
+
+ * {{{../dflt/index.html}Default}}
  
+   The <dflt> (default) implementation provides transparent lazy-loading/object dirtying
+   using the {{{http://cglib.sourceforge.net/}CGLib}} library.
+
+ * {{{../javassist/index.html}Javassist}}
+
+   The <javassist> implementation is similar to the <dflt> implementation, but using the
+   {{{http://www.jboss.org/javassist}Javassist}} library.
+
  []

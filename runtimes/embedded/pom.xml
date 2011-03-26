@@ -4,13 +4,13 @@
     <parent>
 		<groupId>org.apache.isis</groupId>
         <artifactId>runtimes</artifactId>
-        <version>0.1.1-incubating-SNAPSHOT</version>
+        <version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
     
 
 	<groupId>org.apache.isis.runtimes</groupId>
 	<artifactId>embedded</artifactId>
-    <version>0.1.1-incubating-SNAPSHOT</version>
+    <version>0.1.2-incubating-SNAPSHOT</version>
 
 	<name>Embedded Runtime</name>
 
@@ -18,8 +18,8 @@
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>runtimes/embedded/</relativeUrl>
 
-        <wrapper-progmodel.version>0.1.1-incubating-SNAPSHOT</wrapper-progmodel.version>
-        <identity-bytecode.version>0.1.1-incubating-SNAPSHOT</identity-bytecode.version>
+        <wrapper-progmodel.version>0.1.2-incubating-SNAPSHOT</wrapper-progmodel.version>
+        <identity-bytecode.version>0.1.2-incubating-SNAPSHOT</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis Embedded Runtime</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -69,12 +69,12 @@
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
                 <artifactId>identity</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>
 
 			<dependency>

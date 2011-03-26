@@ -13,7 +13,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>release</artifactId>
-    <version>0.1.1-incubating-SNAPSHOT</version>
+    <version>0.1.2-incubating-SNAPSHOT</version>
     
     <name>Apache Isis Release</name>
 
@@ -29,29 +29,28 @@
 
     <properties>
         <!-- used for applib, core, and default runtime (excluding objectstores/remoting) -->
-        <isis.version>0.1.1-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.1.2-incubating-SNAPSHOT</isis.version>
 
-        <isis.profilestores-xml.version>0.1.1-incubating-SNAPSHOT</isis.profilestores-xml.version>
+        <isis.security-ldap.version>0.1.2-incubating-SNAPSHOT</isis.security-ldap.version>
+        <isis.security-file.version>0.1.2-incubating-SNAPSHOT</isis.security-file.version>
 
-        <isis.security-ldap.version>0.1.1-incubating-SNAPSHOT</isis.security-ldap.version>
-        <isis.security-file.version>0.1.1-incubating-SNAPSHOT</isis.security-file.version>
+        <isis.progmodel-groovy.version>0.1.2-incubating-SNAPSHOT</isis.progmodel-groovy.version>
+        <isis.progmodel-wrapper.version>0.1.2-incubating-SNAPSHOT</isis.progmodel-wrapper.version>
 
-        <isis.progmodel-groovy.version>0.1.1-incubating-SNAPSHOT</isis.progmodel-groovy.version>
-        <isis.progmodel-wrapper.version>0.1.1-incubating-SNAPSHOT</isis.progmodel-wrapper.version>
+        <isis.runtimes-dflt-objectstores-xml.version>0.1.2-incubating-SNAPSHOT</isis.runtimes-dflt-objectstores-xml.version>
+        <isis.runtimes-dflt-objectstores-sql.version>0.1.2-incubating-SNAPSHOT</isis.runtimes-dflt-objectstores-sql.version>
+        <isis.runtimes-dflt-objectstores-nosql.version>0.1.2-incubating-SNAPSHOT</isis.runtimes-dflt-objectstores-nosql.version>
+        <isis.runtimes-dflt-remoting.version>0.1.2-incubating-SNAPSHOT</isis.runtimes-dflt-remoting.version>
+        <isis.runtimes-dflt-profilestores-xml.version>0.1.2-incubating-SNAPSHOT</isis.runtimes-dflt-profilestores-xml.version>
 
-        <isis.runtimes-dflt-objectstores-xml.version>0.1.1-incubating-SNAPSHOT</isis.runtimes-dflt-objectstores-xml.version>
-        <isis.runtimes-dflt-objectstores-sql.version>0.1.1-incubating-SNAPSHOT</isis.runtimes-dflt-objectstores-sql.version>
-        <isis.runtimes-dflt-objectstores-nosql.version>0.1.1-incubating-SNAPSHOT</isis.runtimes-dflt-objectstores-nosql.version>
-        <isis.runtimes-dflt-remoting.version>0.1.1-incubating-SNAPSHOT</isis.runtimes-dflt-remoting.version>
+        <isis.runtimes-embedded.version>0.1.2-incubating-SNAPSHOT</isis.runtimes-embedded.version>
 
-        <isis.runtimes-embedded.version>0.1.1-incubating-SNAPSHOT</isis.runtimes-embedded.version>
-
-        <isis.viewer-dnd.version>0.1.1-incubating-SNAPSHOT</isis.viewer-dnd.version>
-        <isis.viewer-html.version>0.1.1-incubating-SNAPSHOT</isis.viewer-html.version>
-        <isis.viewer-scimpi.version>0.1.1-incubating-SNAPSHOT</isis.viewer-scimpi.version>
-        <isis.viewer-wicket.version>0.1.1-incubating-SNAPSHOT</isis.viewer-wicket.version>
-        <isis.viewer-restful.version>0.1.1-incubating-SNAPSHOT</isis.viewer-restful.version>
-        <isis.viewer-junit.version>0.1.1-incubating-SNAPSHOT</isis.viewer-junit.version>
+        <isis.viewer-dnd.version>0.1.2-incubating-SNAPSHOT</isis.viewer-dnd.version>
+        <isis.viewer-html.version>0.1.2-incubating-SNAPSHOT</isis.viewer-html.version>
+        <isis.viewer-scimpi.version>0.1.2-incubating-SNAPSHOT</isis.viewer-scimpi.version>
+        <isis.viewer-wicket.version>0.1.2-incubating-SNAPSHOT</isis.viewer-wicket.version>
+        <isis.viewer-restful.version>0.1.2-incubating-SNAPSHOT</isis.viewer-restful.version>
+        <isis.viewer-junit.version>0.1.2-incubating-SNAPSHOT</isis.viewer-junit.version>
 
     </properties>
 
@@ -83,6 +82,7 @@
                 <classifier>javadoc</classifier>
                 <version>${isis.version}</version>
             </dependency>
+            
             <!-- core -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -94,7 +94,21 @@
                 <artifactId>metamodel</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>progmodel</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>runtime</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>webapp</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
 
             <!-- progmodels: dflt -->
             <dependency>
@@ -125,20 +139,6 @@
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>groovy</artifactId>
                 <version>${isis.progmodel-groovy.version}</version>
-            </dependency>
-
-            <!-- profilestores: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.profilestores</groupId>
-                <artifactId>dflt</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            
-            <!-- profilestores: xml -->
-            <dependency>
-                <groupId>org.apache.isis.profilestores</groupId>
-                <artifactId>xml</artifactId>
-                <version>${isis.profilestores-xml.version}</version>
             </dependency>
 
             <!-- security: dflt -->
@@ -198,6 +198,20 @@
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>dflt</artifactId>
                 <version>${isis.version}</version>
+            </dependency>
+
+            <!-- runtimes-dflt: profilestores: dflt -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            
+            <!-- runtimes-dflt: profilestores: xml -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+                <artifactId>xml</artifactId>
+                <version>${isis.runtimes-dflt-profilestores-xml.version}</version>
             </dependency>
 
             <!-- runtimes-dflt: objectstores: xml -->

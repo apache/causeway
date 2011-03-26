@@ -21,8 +21,8 @@
 package org.apache.isis.runtimes.dflt.runtime.remoting;
 
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationManagerInstaller;
+import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
+import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller;
 
 

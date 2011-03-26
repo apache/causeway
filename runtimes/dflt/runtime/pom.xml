@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes</groupId>
 		<artifactId>dflt</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt</groupId>
@@ -87,16 +87,23 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>progmodel</artifactId>
-		</dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>progmodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>progmodel</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>runtime</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-lang</groupId>

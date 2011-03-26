@@ -29,9 +29,9 @@ import java.awt.Image;
 import java.awt.Window;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.runtimes.dflt.runtime.about.AboutIsis;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImage;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.about.AboutIsis;
+import org.apache.isis.core.runtime.imageloader.TemplateImage;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.log4j.Logger;
 
 public class SplashWindow extends Window implements Runnable {

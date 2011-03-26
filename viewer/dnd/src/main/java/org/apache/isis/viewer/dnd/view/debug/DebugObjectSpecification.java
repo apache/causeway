@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.util.Dump;
+import org.apache.isis.core.metamodel.util.Dump;
 
 
 public class DebugObjectSpecification implements DebuggableWithTitle {

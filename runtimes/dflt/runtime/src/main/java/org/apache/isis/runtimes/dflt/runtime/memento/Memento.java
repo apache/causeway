@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -63,8 +62,9 @@ public class Memento implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(Memento.class);
 
+    private final List<Oid> transientObjects = Lists.newArrayList();
+    
     private Data state;
-    private final List<Oid> transientObjects = new ArrayList<Oid>();
 
     public Memento(final ObjectAdapter object) {
         state = object == null ? null : createData(object);

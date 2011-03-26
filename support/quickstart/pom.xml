@@ -5,7 +5,7 @@
 
     <groupId>org.apache.isis.support</groupId>
     <artifactId>quickstart</artifactId>
-    <version>0.1.1-incubating-SNAPSHOT</version>
+    <version>0.1.2-incubating-SNAPSHOT</version>
 
     <name>Quickstart App</name>
 
@@ -118,7 +118,7 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>release</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -127,13 +127,13 @@
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>wicket-applib</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>wicket-viewer</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- this project's own modules -->

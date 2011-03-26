@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.config.JmxBeanServer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizorAbstract;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 import org.apache.log4j.Logger;
 
 

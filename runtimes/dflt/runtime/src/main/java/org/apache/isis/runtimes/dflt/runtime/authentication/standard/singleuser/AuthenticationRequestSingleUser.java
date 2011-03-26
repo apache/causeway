@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 
 
 /**

@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransaction;

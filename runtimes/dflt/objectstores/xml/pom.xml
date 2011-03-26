@@ -4,12 +4,12 @@
     <parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>objectstores</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 	<artifactId>xml</artifactId>
-	<version>0.1.1-incubating-SNAPSHOT</version>
+	<version>0.1.2-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime XML ObjectStore</name>
 

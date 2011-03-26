@@ -22,8 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public class AuthenticationManagerNoop implements AuthenticationManager, Noop {
 

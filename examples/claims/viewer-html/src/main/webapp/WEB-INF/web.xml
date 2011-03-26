@@ -15,7 +15,7 @@
 
 	<filter>
 		<filter-name>StaticContentFilter</filter-name>
-		<filter-class>org.apache.isis.runtimes.dflt.webapp.StaticContentFilter</filter-class>
+		<filter-class>org.apache.isis.core.webapp.content.StaticContentFilter</filter-class>
 		<init-param>
 			<param-name>CacheTime</param-name>
 			<param-value>86400</param-value>
@@ -60,7 +60,7 @@
 
     <servlet>
         <servlet-name>Resource</servlet-name>
-        <servlet-class>org.apache.isis.runtimes.dflt.webapp.servlets.ResourceServlet</servlet-class>
+        <servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

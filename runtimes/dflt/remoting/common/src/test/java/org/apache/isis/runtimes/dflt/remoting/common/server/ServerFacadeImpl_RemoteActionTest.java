@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySession;

@@ -19,17 +19,19 @@
 
 Javassist Bytecode Support
  
- The <Javassist Bytecode Support> module enables transparent lazy loading and object dirtying 
- support.
+ The <javassist> bytecode module enables transparent lazy loading and object dirtying 
+ support, using the {{{http://www.jboss.org/javassist}Javassist}} library.
  
-Configuring Javassist
-
- TODO... <<<isis.properties>>>
 
 Alternatives
 
- * As an alternative to Javassist you can use {{{../../defaults/bytecode/index.html}CGLib}}.
+ * {{{../dflt/index.html}CGLib}}
+
+   The <dflt> implementation is similar to the javassist implementation, but uses the
+   {{{../../defaults/bytecode/index.html}CGLib}} library.
  
- * Some object stores do not need the use of this
-   bytecode module, because they hook into the lazy loading of the underlying ORM.  For these,
-   use the {{{../identity/index.html}Identity}} (no-op) implementation.
+ * {{{../identity/index.html}Identity}}
+  
+   Some object stores do not need the use of this
+   bytecode module, because they hook into the lazy loading of the underlying ORM.  For these, you should
+   use the <identity> (no-op) implementation.

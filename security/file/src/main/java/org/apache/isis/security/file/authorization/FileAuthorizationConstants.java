@@ -21,8 +21,8 @@
 package org.apache.isis.security.file.authorization;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizationConstants;
+import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizationConstants;
 
 public final class FileAuthorizationConstants {
 	

@@ -442,7 +442,7 @@
         <fileSet encoding="UTF-8">
           <directory/>
           <includes>
-            <include>nakedobjects.log</include>
+            <include>isis.log</include>
           </includes>
         </fileSet>
       </fileSets>

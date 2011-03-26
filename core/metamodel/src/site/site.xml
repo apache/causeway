@@ -3,10 +3,10 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="MetaModel" href="index.html"/>
+			<item name="Metamodel" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="MetaModel">
+		<menu name="Meta Model">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
@@ -14,8 +14,10 @@
         <menu name="Core Modules">
             <item name="Core Test Support" href="../testsupport/index.html" />
             <item name="Core Commons" href="../commons/index.html" />
-            <item name="Core MetaModel" href="../metamodel/index.html" />
-            <item name="Core ProgModel" href="../progmodel/index.html" />
+            <item name="Core Metamodel" href="../metamodel/index.html" />
+            <item name="Core Progmodel" href="../progmodel/index.html" />
+            <item name="Core Runtime" href="../runtime/index.html" />
+            <item name="Core Webapp" href="../webapp/index.html" />
         </menu>
 
 		<menu name="Maven Reports" ref="reports"/>

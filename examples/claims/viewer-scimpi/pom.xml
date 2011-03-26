@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.apache.isis.examples.apps</groupId>
         <artifactId>claims</artifactId>
-        <version>0.1.1-incubating-SNAPSHOT</version>
+        <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
 
 	<artifactId>claims-viewer-scimpi</artifactId>
@@ -57,14 +57,12 @@
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>xml</artifactId>
         </dependency>
-        
-        <!-- isis profilestore implementations -->
         <dependency>
-            <groupId>org.apache.isis.profilestores</groupId>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.profilestores</groupId>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>xml</artifactId>
         </dependency>
         

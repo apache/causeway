@@ -19,7 +19,7 @@
 
 Security
  
- The <security> module is the parent for alternative implementations of the 
+ The <security> module is the parent for various implementations of the 
  security APIs defined in the {{{../core/index.html}core}} framework.
 
   Security implementations provide authentication and 

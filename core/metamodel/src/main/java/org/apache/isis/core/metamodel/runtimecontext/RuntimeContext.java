@@ -72,11 +72,6 @@ public interface RuntimeContext extends Injectable {
 	// container
 	/////////////////////////////////////////////
 
-    /**
-     * Called in multiple places.
-     */
 	void setContainer(DomainObjectContainer container);
-
-
     
 }

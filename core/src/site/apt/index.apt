@@ -31,16 +31,18 @@ Core Framework
 
   * reusable {{{./progmodel/index.html}programming model}} elements
 
+  * reusable {{{./runtime/index.html}runtime}} elements (common across any runtime implementation)
+
+  * reusable {{{./webapp/index.html}webapp}} servlets and filters (common across any web-based viewer implementations)
+
   []
   
   Across these modules a number of APIs are defined:  
   
   * persistence / entity lifecycle management ({{{../runtimes/index.html}runtimes}} API)  
 
-  * user preferences ({{{../profilestores/index.html}profile store}} API)
-  
-  * authentication and authorization {{{../security/index.html}security}} API)
+  * authentication and authorization ({{{../security/index.html}security}} API)
    
-  * programming model definitions ({{{../progmodel/index.html}progmodel}} API)
+  * programming model definitions ({{{../progmodels/index.html}progmodel}} API)
 
   []

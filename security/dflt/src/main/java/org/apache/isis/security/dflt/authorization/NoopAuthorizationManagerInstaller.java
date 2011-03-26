@@ -21,8 +21,8 @@
 package org.apache.isis.security.dflt.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authorization.standard.Authorizor;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
+import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
 public class NoopAuthorizationManagerInstaller extends
 		AuthorizationManagerStandardInstallerAbstract {

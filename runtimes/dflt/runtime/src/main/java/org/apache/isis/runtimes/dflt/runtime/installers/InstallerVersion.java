@@ -26,8 +26,8 @@ import java.util.Properties;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.runtimes.dflt.runtime.about.AboutIsis;
-import org.apache.isis.runtimes.dflt.runtime.about.ComponentDetails;
+import org.apache.isis.core.runtime.about.AboutIsis;
+import org.apache.isis.core.runtime.about.ComponentDetails;
 
 /**
  * Details name and version of installer.

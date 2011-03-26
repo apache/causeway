@@ -24,8 +24,8 @@ import java.awt.Toolkit;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
 
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImage;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.TemplateImage;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;

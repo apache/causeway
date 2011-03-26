@@ -38,7 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;

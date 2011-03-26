@@ -23,4 +23,14 @@ XML ObjectStore
  proprietary XML schema.
  
  Note that the XML object store is suitable for single-user standalone apps, but is not intended for multi-user deployments.
+
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}dflt}} in-memory object store (for prototyping only)
+
+  * the {{{../sql/index.html}SQL}} object store
+
+  * the {{{../nosql/index.html}NoSQL}} object store
  

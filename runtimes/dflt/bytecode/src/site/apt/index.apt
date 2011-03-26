@@ -23,7 +23,7 @@ Bytecode Implementations
  number of implementations for the bytecode enhancement API
  as defined within the {{{../../dflt/index.html}default runtime}}:
 
- * {{{./dflt/index.html}Javassist}}
+ * {{{./dflt/index.html}CGLib}}
 
    The <dflt> (default) bytecode module provides an implementation of the bytecode
    enhancement API using {{{http://cglib.sourceforge.net//}CGLib}}.

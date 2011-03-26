@@ -21,11 +21,11 @@
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticatorAbstractForDfltRuntime;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-public class LogonFixtureAuthenticator extends AuthenticatorAbstract {
+public class LogonFixtureAuthenticator extends AuthenticatorAbstractForDfltRuntime {
 	
     public LogonFixtureAuthenticator(final IsisConfiguration configuration) {
     	super(configuration);

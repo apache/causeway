@@ -27,8 +27,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 
-
-
 public final class AuthenticationSessionUtils {
 
     private AuthenticationSessionUtils() {}

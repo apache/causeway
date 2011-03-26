@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.html.action;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;

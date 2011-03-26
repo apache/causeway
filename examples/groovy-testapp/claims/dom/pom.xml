@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis.examples.apps</groupId>
         <artifactId>groovy-claims</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>groovy-claims-dom</artifactId>

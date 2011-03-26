@@ -26,7 +26,7 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;

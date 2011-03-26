@@ -6,7 +6,23 @@ hetype-catalog/1.0.0 http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd">
     <archetype>
        <groupId>org.apache.isis.support</groupId>
        <artifactId>quickstart-archetype</artifactId>
+       <version>0.1.2-incubating-SNAPSHOT</version>
+       <repository>https://repository.apache.org/content/groups/snapshots-group/
+</repository>
+       <description>Isis Quickstart Archetype</description>
+    </archetype>
+    <archetype>
+       <groupId>org.apache.isis.support</groupId>
+       <artifactId>quickstart-archetype</artifactId>
        <version>0.1.1-incubating-SNAPSHOT</version>
+       <repository>https://repository.apache.org/content/groups/snapshots-group/
+</repository>
+       <description>Isis Quickstart Archetype</description>
+    </archetype>
+    <archetype>
+       <groupId>org.apache.isis.support</groupId>
+       <artifactId>quickstart-archetype</artifactId>
+       <version>0.1.0-incubating-SNAPSHOT</version>
        <repository>https://repository.apache.org/content/groups/snapshots-group/
 </repository>
        <description>Isis Quickstart Archetype</description>

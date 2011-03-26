@@ -11,7 +11,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>isis-parent</artifactId>
-    <version>0.1.1-incubating-SNAPSHOT</version>
+    <version>0.1.2-incubating-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -1282,7 +1282,6 @@
                 <module>core</module>
                 <module>runtimes</module>
                 <module>progmodels</module>
-                <module>profilestores</module>
                 <module>security</module>
                 <module>viewer</module>
             </modules>
@@ -1304,7 +1303,6 @@
                 <module>core</module>
                 <module>runtimes</module>
                 <module>progmodels</module>
-                <module>profilestores</module>
                 <module>security</module>
                 <module>viewer</module>
                 <module>release</module>
@@ -1385,18 +1383,6 @@
             </activation>
             <modules>
                 <module>security</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-profilestores</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>profilestores</value>
-                </property>
-            </activation>
-            <modules>
-                <module>profilestores</module>
             </modules>
         </profile>
         <profile>

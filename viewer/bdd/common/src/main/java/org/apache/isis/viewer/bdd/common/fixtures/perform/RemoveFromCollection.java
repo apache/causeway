@@ -30,6 +30,7 @@ public class RemoveFromCollection extends PerformAbstractTypeParams {
 				.getObjectMember();
 		final CellBinding onMemberBinding = performContext.getPeer()
 				.getOnMemberBinding();
+		@SuppressWarnings("unused")
 		final ScenarioCell onMemberCell = onMemberBinding.getCurrentCell();
 
 		final List<ScenarioCell> argumentCells = performContext.getArgumentCells();

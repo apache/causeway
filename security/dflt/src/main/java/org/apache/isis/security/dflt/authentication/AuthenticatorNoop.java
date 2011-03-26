@@ -22,8 +22,8 @@ package org.apache.isis.security.dflt.authentication;
 
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
 public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
 

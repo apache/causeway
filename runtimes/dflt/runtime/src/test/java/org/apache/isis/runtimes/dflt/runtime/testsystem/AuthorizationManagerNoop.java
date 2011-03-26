@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.testsystem;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 public class AuthorizationManagerNoop implements AuthorizationManager {
 

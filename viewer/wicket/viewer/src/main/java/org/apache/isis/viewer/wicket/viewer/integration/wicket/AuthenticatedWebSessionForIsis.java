@@ -29,9 +29,9 @@ import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 import org.apache.wicket.Request;

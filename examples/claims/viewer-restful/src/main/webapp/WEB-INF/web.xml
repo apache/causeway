@@ -40,7 +40,7 @@
 
     <servlet>
         <servlet-name>Resource</servlet-name>
-        <servlet-class>org.apache.isis.runtimes.dflt.webapp.servlets.ResourceServlet</servlet-class>
+        <servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

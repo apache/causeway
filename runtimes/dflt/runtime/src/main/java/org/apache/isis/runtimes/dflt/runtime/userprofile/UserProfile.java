@@ -20,7 +20,6 @@
 
 package org.apache.isis.runtimes.dflt.runtime.userprofile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.adapters.Localization;
@@ -29,32 +28,19 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
+import com.google.common.collect.Lists;
 
 public class UserProfile implements DebuggableWithTitle {
 	
-    private final Options options = new Options();
-    private final List<PerspectiveEntry> entries = new ArrayList<PerspectiveEntry>();
-    private PerspectiveEntry entry;
-    private Localization localization;
 
     public UserProfile() {}
 
-    public List<String> list() {
-        List<String> list = new ArrayList<String>();
-        for (PerspectiveEntry entry : entries) {
-            list.add(entry.getName());
-        }
-        return list;
-    }
+    
+    /////////////////////////////////////////////////////////
+    // Perspective
+    /////////////////////////////////////////////////////////
 
-    public void select(String name) {
-        for (PerspectiveEntry entry : entries) {
-            if (entry.getName().equals(name)) {
-                this.entry = entry;
-                break;
-            }
-        }
-    }
+    private PerspectiveEntry entry;
 
     public PerspectiveEntry getPerspective() {
         if (entry == null) {
@@ -66,6 +52,27 @@ public class UserProfile implements DebuggableWithTitle {
         }
         return entry;
     }
+
+    public PerspectiveEntry newPerspective(String name) {
+        entry = new PerspectiveEntry();
+        entry.setName(name);
+        entries.add(entry);
+        return entry;
+    }
+
+    public void removeCurrent() {
+        if (entries.size() > 1) {
+            entries.remove(entry);
+            entry = entries.get(0);
+        }
+    }
+
+    
+    /////////////////////////////////////////////////////////
+    // Perspective Entries
+    /////////////////////////////////////////////////////////
+
+    private final List<PerspectiveEntry> entries = Lists.newArrayList();
 
     public PerspectiveEntry getPerspective(String name) {
         for (PerspectiveEntry entry : entries) {
@@ -82,33 +89,21 @@ public class UserProfile implements DebuggableWithTitle {
         entries.add(e);
     }
 
-    public void addToOptions(String name, String value) {
-        options.addOption(name, value);
+
+    public List<String> list() {
+        List<String> list = Lists.newArrayList();
+        for (PerspectiveEntry entry : entries) {
+            list.add(entry.getName());
+        }
+        return list;
     }
 
-    public Options getOptions() {
-        return options;
-    }
-
-    public Localization getLocalization() {
-        return localization;
-    }
-    
-    public void setLocalization(Localization localization) {
-        this.localization = localization;
-    }
-    
-    public PerspectiveEntry newPerspective(String name) {
-        entry = new PerspectiveEntry();
-        entry.setName(name);
-        entries.add(entry);
-        return entry;
-    }
-
-    public void removeCurrent() {
-        if (entries.size() > 1) {
-            entries.remove(entry);
-            entry = entries.get(0);
+    public void select(String name) {
+        for (PerspectiveEntry entry : entries) {
+            if (entry.getName().equals(name)) {
+                this.entry = entry;
+                break;
+            }
         }
     }
 
@@ -120,10 +115,48 @@ public class UserProfile implements DebuggableWithTitle {
         }
         options.copy(template.getOptions());
     }
+    
+    /////////////////////////////////////////////////////////
+    // Options
+    /////////////////////////////////////////////////////////
+
+    private final Options options = new Options();
+    private Localization localization;
+
+    public Options getOptions() {
+        return options;
+    }
+
+    public void addToOptions(String name, String value) {
+        options.addOption(name, value);
+    }
+    
+    
+    /////////////////////////////////
+    // Localization
+    /////////////////////////////////
+
+    public Localization getLocalization() {
+        return localization;
+    }
+    
+    public void setLocalization(Localization localization) {
+        this.localization = localization;
+    }
+
+    
+
+    /////////////////////////////////
+    // Save
+    /////////////////////////////////
 
     public void saveObjects(List<ObjectAdapter> objects) {
         entry.save(objects);
     }
+
+    /////////////////////////////////
+    // Debug
+    /////////////////////////////////
 
     public void debugData(DebugBuilder debug) {
         debug.appendTitle("Options");

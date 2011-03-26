@@ -1,6 +1,8 @@
 package org.apache.isis.viewer.restful.viewer.resources;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.restful.applib.resources.HomePageResource;
 import org.apache.isis.viewer.restful.viewer.html.XhtmlTemplate;
@@ -13,6 +15,8 @@ import org.apache.isis.viewer.restful.viewer.html.XhtmlTemplate;
 @Path("/")
 public class HomePageResourceImpl extends ResourceAbstract implements HomePageResource {
 
+	
+	@Produces(MediaType.APPLICATION_XHTML_XML)
     public String resources() {
         init();
         final XhtmlTemplate xhtml = new XhtmlTemplate("Home Page", getServletRequest());

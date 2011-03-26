@@ -21,11 +21,12 @@
 package org.apache.isis.security.ldap.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.Authenticator;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
 
-public class LdapAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstract {
+public class LdapAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 	
 	public static String NAME = "ldap";
 

@@ -6,8 +6,8 @@
 <!-- #$-:Please do not edit lines starting with "#$" -->
 <!-- #$VERSION:2.3 -->
 <!-- #$AUTHOR:alexander -->
-<area shape="rect" coords="88,112,189,135" alt="Dflt (in-mem)" href="./profilestores/dflt/index.html" />
-<area shape="rect" coords="88,138,189,160" alt="XML" href="./profilestores/xml/index.html" />
+<area shape="polygon" coords="260,120,410,120,480,240,410,375,260,375,190,240" alt="Core" href="./core/index.html" />
+
 <area shape="rect" coords="20,175,119,197" alt="DnD" href="./viewer/dnd/index.html" />
 <area shape="rect" coords="20,215,120,235" alt="HTML" href="./viewer/html/index.html" />
 <area shape="rect" coords="20,240,120,263" alt="Scimpi" href="./viewer/scimpi/index.html" />
@@ -15,19 +15,30 @@
 <area shape="rect" coords="20,292,121,315" alt="RESTful" href="./viewer/restful/index.html" />
 <area shape="rect" coords="20,332,121,353" alt="BDD" href="./viewer/bdd/index.html" />
 <area shape="rect" coords="19,358,120,379" alt="JUnit" href="./viewer/junit/index.html" />
-<area shape="rect" coords="128,447,229,470" alt="Groovy" href="./progmodels/groovy/index.html" />
+
+<area shape="rect" coords="20,460,103,482" alt="Applib" href="./applib/index.html" />
 <area shape="rect" coords="186,478,287,501" alt="Dflt (Java5)" href="./progmodels/dflt/index.html" />
+<area shape="rect" coords="128,447,229,470" alt="Groovy" href="./progmodels/groovy/index.html" />
 <area shape="rect" coords="242,446,343,470" alt="Wrapper" href="./progmodels/wrapper/index.html" />
+
 <area shape="rect" coords="365,446,465,469" alt="Javassist" href="./runtimes/dflt/bytecode/javassist/index.html" />
 <area shape="rect" coords="423,476,524,497" alt="Dflt (cglib)" href="./runtimes/dflt/bytecode/dflt/index.html" />
 <area shape="rect" coords="479,446,581,469" alt="Identity" href="./runtimes/dflt/bytecode/identity/index.html" />
+
 <area shape="rect" coords="583,254,684,277" alt="NoSQL" href="./runtimes/dflt/objectstores/nosql/index.html" />
 <area shape="rect" coords="582,228,683,253" alt="SQL" href="./runtimes/dflt/objectstores/sql/index.html" />
 <area shape="rect" coords="582,203,683,226" alt="XML" href="./runtimes/dflt/objectstores/xml/index.html" />
 <area shape="rect" coords="582,177,683,198" alt="Dflt (in-mem)" href="./runtimes/dflt/objectstores/dflt/index.html" />
+
+<area shape="rect" coords="88,112,189,135" alt="Sockets" href="./runtimes/dflt/remoting/sockets/index.html" />
+<area shape="rect" coords="88,138,189,160" alt="Http" href="./runtimes/dflt/remoting/http/index.html" />
 <area shape="rect" coords="516,139,618,161" alt="Sockets" href="./runtimes/dflt/remoting/sockets/index.html" />
 <area shape="rect" coords="517,112,618,135" alt="Http" href="./runtimes/dflt/remoting/http/index.html" />
+
 <area shape="rect" coords="300,49,401,71" alt="LDAP" href="./security/ldap/index.html" />
 <area shape="rect" coords="239,20,341,43" alt="Noop" href="./security/dflt/index.html" />
 <area shape="rect" coords="183,48,283,72" alt="File" href="./security/file/index.html" />
+
+<area shape="rect" coords="533,293,633,314" alt="Dflt (in-mem)" href="./profilestores/dflt/index.html" />
+<area shape="rect" coords="533,319,633,340" alt="XML" href="./profilestores/xml/index.html" />
 </map>

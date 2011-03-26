@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
@@ -53,7 +54,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
-import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServiceUtil;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 

@@ -38,7 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;

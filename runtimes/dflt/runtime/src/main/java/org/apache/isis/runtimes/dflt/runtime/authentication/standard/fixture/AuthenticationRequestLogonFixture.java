@@ -23,8 +23,8 @@ package org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture;
 import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 
 
 

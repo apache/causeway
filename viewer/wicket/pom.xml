@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>viewer</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>wicket</artifactId>
-	<version>0.1.1-incubating-SNAPSHOT</version>
+	<version>0.1.2-incubating-SNAPSHOT</version>
 
 	<name>Wicket Viewer</name>
 
@@ -55,7 +55,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -64,60 +64,60 @@
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-applib</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-applib</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-metamodel</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-metamodel</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-model</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-model</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-ui</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-ui</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-viewer</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-viewer</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -126,22 +126,22 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>applib</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>metamodel</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>commons</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>commons</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -150,13 +150,13 @@
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt</groupId>
 				<artifactId>runtime</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
             <!-- TODO: remove this dependency -->            
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt</groupId>
 				<artifactId>webapp</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 
 

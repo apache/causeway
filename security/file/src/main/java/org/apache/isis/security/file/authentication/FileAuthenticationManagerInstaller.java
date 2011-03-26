@@ -21,14 +21,14 @@
 package org.apache.isis.security.file.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.Authenticator;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 
 
-public class FileAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstract {
+public class FileAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     public static final String NAME = "file";
 

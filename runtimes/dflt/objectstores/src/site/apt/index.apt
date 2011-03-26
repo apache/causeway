@@ -22,7 +22,7 @@ ObjectStore Implementations
  The <objectstores> module is the parent for implementations of the 
  {{{../index.html}default runtime}}'s object store API:
 
- * {{{./dflt/index.html}XML object store}}
+ * {{{./dflt/index.html}Default (in-memory) object store}}
  
    The <dflt> (default) object store persists objects only within memory.
    It is suitable for prototyping or testing purposes only.

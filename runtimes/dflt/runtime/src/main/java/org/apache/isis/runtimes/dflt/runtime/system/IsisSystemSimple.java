@@ -30,10 +30,10 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.FixturesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;

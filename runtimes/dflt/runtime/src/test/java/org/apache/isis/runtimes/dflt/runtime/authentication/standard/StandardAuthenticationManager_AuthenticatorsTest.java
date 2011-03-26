@@ -27,10 +27,10 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.authentication.NoAuthenticatorException;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.Authenticator;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+import org.apache.isis.core.runtime.authentication.standard.NoAuthenticatorException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;

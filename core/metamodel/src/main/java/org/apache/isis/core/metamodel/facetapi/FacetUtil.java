@@ -141,12 +141,12 @@ public final class FacetUtil {
         }
     }
 
-    public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder nos) {
+    public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder facetHolder) {
         final Hashtable<Class<? extends Facet>, Facet> facetByType = new Hashtable<Class<? extends Facet>, Facet>();
-        final Class<? extends Facet>[] facetsFor = nos.getFacetTypes();
+        final Class<? extends Facet>[] facetsFor = facetHolder.getFacetTypes();
         for (int i = 0; i < facetsFor.length; i++) {
             final Class<? extends Facet> facetType = facetsFor[i];
-            final Facet facet = nos.getFacet(facetType);
+            final Facet facet = facetHolder.getFacet(facetType);
             facetByType.put(facetType, facet);
         }
         return facetByType;

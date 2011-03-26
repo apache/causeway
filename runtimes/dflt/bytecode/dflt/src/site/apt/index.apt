@@ -19,14 +19,20 @@
 
 Default (CGLib) Bytecode Support
  
- The <Default Bytecode Support> module enables transparent lazy loading and object dirtying 
- support.
+ The <dflt> (default) bytecode support module enables transparent lazy 
+ loading and object dirtying support.
  
 Alternatives
 
- * As an alternative to CGLib you can use {{{../../alternatives/bytecode/javassist/index.html}Javassist}}.
+ * {{{../javassist/index.html}Javassist}}
  
- * Some object stores do not need the use of this
-   bytecode module, because they hook into the lazy loading of the underlying ORM.  For these, you should
-   use the {{{../../alternatives/bytecode/identity/index.html}Identity}} (aka no-op) implementation.
+   The Javassist implementation provides the same capabilities as the CGLib implementation,
+   but using the {{{http://http://www.jboss.org/javassist}Javassist}} library.
 
+ * {{{../identity/index.html}Identity}}
+  
+   Some object stores do not need the use of this
+   bytecode module, because they hook into the lazy loading of the underlying ORM.  For these, you should
+   use the identity (no-op) implementation.
+
+ []

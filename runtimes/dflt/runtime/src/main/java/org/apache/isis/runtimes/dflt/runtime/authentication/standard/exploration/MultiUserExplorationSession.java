@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 
 
 public final class MultiUserExplorationSession extends AuthenticationSessionAbstract implements Encodable {

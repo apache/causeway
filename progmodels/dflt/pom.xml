@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>progmodels</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.progmodels</groupId>
 	<artifactId>dflt</artifactId>
-	<name>Default ProgModel (Java)</name>
+	<name>Default Progmodel (Java)</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
@@ -46,29 +46,52 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- TODO: remove this dependency -->
             <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>core</artifactId>
+                <version>0.1.2-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+			<!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.2-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
 	<dependencies>
-        <!-- TODO: remove this dependency -->
 		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>progmodel</artifactId>
 		</dependency>
-        <!-- TODO: remove this dependency -->
+			
 		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>runtime</artifactId>
-		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>
+
+		<!-- required for JavaReflectorInstaller -->
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+		    <optional>true</optional>
+		</dependency>
+
+		<!-- TODO: remove this dependency -->
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+		    <scope>test</scope>
+		    <type>test-jar</type>
+		</dependency>
+		
 	</dependencies>
 </project>

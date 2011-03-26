@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
 		<artifactId>wicket</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>wicket-applib</artifactId>

@@ -5,7 +5,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 

@@ -31,9 +31,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;

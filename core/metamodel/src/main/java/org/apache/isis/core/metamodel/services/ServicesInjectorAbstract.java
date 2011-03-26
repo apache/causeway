@@ -27,25 +27,25 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 
 public abstract class ServicesInjectorAbstract implements ServicesInjector {
 
     private static final Logger LOG = Logger.getLogger(ServicesInjectorAbstract.class);
 
+    private final List<Object> services = Lists.newArrayList();
     private DomainObjectContainer container;
-    private final List<Object> services = new ArrayList<Object>();
 
     /**
      * Ensure that all services are wired into each other.
@@ -106,7 +106,7 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
         Assert.assertNotNull("no container", container);
         Assert.assertNotNull("no services", services);
         
-        ArrayList<Object> servicesCopy = new ArrayList<Object>(services);
+        List<Object> servicesCopy = Lists.newArrayList(services);
         servicesCopy.add(container);
         injectServices(object, servicesCopy);
     }

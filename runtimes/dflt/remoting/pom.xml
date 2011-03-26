@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes</groupId>
 		<artifactId>dflt</artifactId>
-		<version>0.1.1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt</groupId>
@@ -71,7 +71,7 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>core</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -79,38 +79,38 @@
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>common</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>marshalling-encode</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>marshalling-serialize</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>marshalling-xstream</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>transport-sockets</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 				<artifactId>transport-http</artifactId>
-				<version>0.1.1-incubating-SNAPSHOT</version>
+				<version>0.1.2-incubating-SNAPSHOT</version>
 			</dependency>
             
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
                 <artifactId>identity</artifactId>
-                <version>0.1.1-incubating-SNAPSHOT</version>
+                <version>0.1.2-incubating-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
             

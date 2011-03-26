@@ -17,8 +17,21 @@
 
 
 
-NoSQL ObjectStore Implementation
+NoSQL Objectstore Implementation
  
- The <nosql> module ...
+ The <nosql> objectstore module provides an implementation of the object store
+ API that persists domain objects using JSON.
+
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}dflt}} in-memory object store (for prototyping only)
+
+  * the {{{../sql/index.html}SQL}} object store
+
+  * the {{{../xml/index.html}XML}} object store
+
+  []
  
  []

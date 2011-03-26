@@ -17,16 +17,10 @@
 
 
 
-ProgModel
+Webapp
 
- The <core progmodel> provides a set of reusable elements (implementations of
- the <<<FacetFactory>>> API) that can be reused to make up a programming model.
- 
- Most of those within <this> module are in fact used in the
- default programming model, defined by the 
- {{{../../defaults/progmodel/index.html}default progmodel}} module.  They are
- defined within core, however, to allow custom programming models (perhaps
- extending or trimming back the default programming model) to be defined.
+ The <core webapp> module provides a set of reusable servlets and filters 
+ that can be reused in any deployment irrespective of runtime implementation.
  
 Documentation
 

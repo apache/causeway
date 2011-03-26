@@ -21,11 +21,12 @@
 package org.apache.isis.security.dflt.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.Authenticator;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
 
-public class NoopAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstract {
+public class NoopAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     public NoopAuthenticationManagerInstaller() {
         super("noop");

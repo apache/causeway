@@ -76,13 +76,13 @@
                     </item>
                     <item name="Object Stores" href="runtimes/dflt/objectstores/index.html">
                     </item>
+					<item name="Profile Stores" href="runtimes/dflt/profilestores/index.html">
+		            </item>
                     <item name="Remoting" href="runtimes/dflt/remoting/index.html">
                     </item>
                 </item>
                 <item name="Embedded" href="runtimes/embedded/index.html">
                 </item>
-            </item>
-			<item name="Profile Stores" href="profilestores/index.html">
             </item>
 			<item name="Programming Model" href="progmodels/index.html">
             </item>

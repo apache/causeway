@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.ExplorationAuthenticator;
 import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.ExplorationAuthenticatorConstants;

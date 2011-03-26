@@ -19,22 +19,24 @@
 
 Default Object Store (In-Memory)
  
- The <default object store> module provides an in-memory object store implementation.  As such, the
+ The <dflt> (default) object store module provides an in-memory object store implementation.  As such, the
  objects are only ever "persisted" for the duration of the running program, and not persisted
  in between runs.
  
  This makes the default object store suitable only for prototyping and for unit testing.  For 
- deployment you will typically need to configure one of the {{{../../alternatives/objectstore/index.html}alternative}} implementations. 
+ deployment you will typically need to configure one of the alternative implementations. 
  
 
 Alternatives
 
   Alternatives include:
   
-  * the {{{../../alternatives/objectstore/xml/index.html}XML}} object store
+  * the {{{../xml/index.html}XML}} object store
 
-  * the {{{../../alternatives/objectstore/sql/index.html}SQL}} object store
+  * the {{{../sql/index.html}SQL}} object store
 
-  * the {{{../../alternatives/objectstore/nosql/index.html}NoSQL}} object store
+  * the {{{../nosql/index.html}NoSQL}} object store
 
+  []
+  
  

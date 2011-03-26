@@ -29,10 +29,13 @@ Default Runtime
   
   * {{{./runtime/index.html}runtime}} module, providing the core functionality
   
-  * {{{./objectstores/index.html}objectstores}} module, acting as a parent to
-    various objectstore implementations
+  * {{{./objectstores/index.html}objectstores}} module, under which there are
+    various objectstore implementations (for persisting domain objects)
 
-  * {{{./bytecode/index.html}bytecode}} module, acting as a parent to
+  * {{{./profilestores/index.html}profilestores}} module, under which there are
+    various profilestore implementations (for persisting user preferences)
+
+  * {{{./bytecode/index.html}bytecode}} module, under which there are
     various bytecode enhancement implementations (used for transparent lazy
     loading/unit of work support)
 

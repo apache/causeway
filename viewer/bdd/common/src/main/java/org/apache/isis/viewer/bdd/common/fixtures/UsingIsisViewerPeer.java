@@ -273,7 +273,6 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
             performCommand.perform(performContext);
         } catch (final RuntimeException ex) {
             // handler should have colored in invalid cells.
-            Exception e = ex;
         }
         aliasResultFromPerformCommand(performCommand, aliasAs);
     }

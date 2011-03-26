@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.help;
 
-import org.apache.isis.runtimes.dflt.runtime.about.AboutIsis;
+import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;

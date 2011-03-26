@@ -38,10 +38,10 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;

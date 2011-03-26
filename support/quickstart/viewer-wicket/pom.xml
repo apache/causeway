@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.apache.isis.support</groupId>
         <artifactId>quickstart</artifactId>
-        <version>0.1.1-incubating-SNAPSHOT</version>
+        <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
 
 	<name>Quickstart Wicket Viewer</name>
@@ -74,15 +74,9 @@
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>xml</artifactId>
         </dependency>
-        
-        <!-- isis profilestore implementations -->
         <dependency>
-            <groupId>org.apache.isis.profilestores</groupId>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.profilestores</groupId>
-            <artifactId>xml</artifactId>
         </dependency>
         
         <!-- isis progmodel -->

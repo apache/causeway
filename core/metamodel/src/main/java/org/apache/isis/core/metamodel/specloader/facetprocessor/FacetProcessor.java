@@ -361,7 +361,7 @@ public class FacetProcessor implements RuntimeContextAware {
         if (factoryListByFeatureType != null) {
             return;
         }
-        factoryListByFeatureType = new HashMap<FeatureType, List<FacetFactory>>();
+        factoryListByFeatureType = Maps.newHashMap();
         for (final FacetFactory factory : factories) {
             final List<FeatureType> featureTypes = factory.getFeatureTypes();
             for (FeatureType featureType: featureTypes) {
@@ -433,9 +433,6 @@ public class FacetProcessor implements RuntimeContextAware {
 
     private IsisConfiguration getIsisConfiguration() {
         return configuration;
-    }
-    private SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
     }
     private CollectionTypeRegistry getCollectionTypeRepository() {
         return collectionTypeRegistry;

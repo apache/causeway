@@ -28,9 +28,10 @@ import java.util.StringTokenizer;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticatorAbstractForDfltRuntime;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 
@@ -52,7 +53,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
  * &amp;lt:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
  * </pre>
  */
-public class ExplorationAuthenticator extends AuthenticatorAbstract {
+public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntime {
 
     private final Set<SimpleSession> registeredSessions = new LinkedHashSet<SimpleSession>();;
     private final String users;

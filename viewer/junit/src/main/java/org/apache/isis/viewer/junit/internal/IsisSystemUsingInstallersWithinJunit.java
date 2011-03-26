@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.installers.IsisSystemUsingInstallers;
-import org.apache.isis.profilestores.dflt.InMemoryUserProfileStoreInstaller;
+import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.security.dflt.authentication.NoopAuthenticationManagerInstaller;
 import org.apache.isis.security.dflt.authorization.NoopAuthorizationManagerInstaller;
 

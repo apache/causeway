@@ -23,12 +23,13 @@ package org.apache.isis.runtimes.dflt.remoting.common.client.authentication;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.CloseSessionRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandardForDfltRuntime;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 
 
-public class AuthenticationManagerProxy extends AuthenticationManagerStandard {
+public class AuthenticationManagerProxy extends AuthenticationManagerStandardForDfltRuntime {
 
     private ServerFacade serverFacade;
 

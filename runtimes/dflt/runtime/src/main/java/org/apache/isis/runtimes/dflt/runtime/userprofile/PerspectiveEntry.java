@@ -20,22 +20,23 @@
 
 package org.apache.isis.runtimes.dflt.runtime.userprofile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServiceUtil;
+
+import com.google.common.collect.Lists;
 
 public class PerspectiveEntry implements DebuggableWithTitle {
 
-    private final List<Object> objects = new ArrayList<Object>();
-    private final List<Object> services = new ArrayList<Object>();
+    private final List<Object> objects = Lists.newArrayList();
+    private final List<Object> services = Lists.newArrayList();
     private String name;
 
     public PerspectiveEntry() {}
@@ -91,7 +92,7 @@ public class PerspectiveEntry implements DebuggableWithTitle {
         return services;
     }
 
-    public Object addToServices(Class serviceType) {
+    public Object addToServices(Class<?> serviceType) {
         Object service = findService(serviceType);
         addToServices(service);
         return service;
@@ -128,7 +129,7 @@ public class PerspectiveEntry implements DebuggableWithTitle {
     // Generic Repository
     /////////////////////////////////////////////////////////
 
-    public void addGenericRepository(Class type) {
+    public void addGenericRepository(Class<?> type) {
         Object service = getPersistenceSession().getService("repository#" + type.getName()).getObject();
         addToServices(service);
     }
@@ -163,13 +164,13 @@ public class PerspectiveEntry implements DebuggableWithTitle {
             debug.appendln(ServiceUtil.id(service));
         }
         debug.unindent();
-        
+
         debug.blankLine();
         debug.appendTitle("Objects");
         debug.indent();
-        AdapterManager adapterManager = getPersistenceSession().getAdapterManager();
+        AdapterMap adapterMap = getAdapterMap();
         for (Object obj : getObjects()) {
-            debug.appendln(adapterManager.adapterFor(obj).toString());
+			debug.appendln(adapterMap.adapterFor(obj).toString());
         }
         debug.unindent();
     }
@@ -183,6 +184,10 @@ public class PerspectiveEntry implements DebuggableWithTitle {
     /////////////////////////////////////////////////////////
     // Dependencies (from Context)
     /////////////////////////////////////////////////////////
+
+	private AdapterMap getAdapterMap() {
+		return getPersistenceSession().getAdapterManager();
+	}
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
