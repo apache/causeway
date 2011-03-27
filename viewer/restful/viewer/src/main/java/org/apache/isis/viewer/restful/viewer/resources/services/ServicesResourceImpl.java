@@ -34,7 +34,7 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             final String uri = MessageFormat.format("{0}/object/{1}", getServletRequest().getContextPath(), getOidStr(serviceAdapter));
-            ul.appendChild(xhtmlRenderer.li_a(uri, serviceAdapter.titleString(), "service", "services", HtmlClass.SERVICE));
+            ul.appendChild(xhtmlRenderer.li_a(uri, serviceAdapter.titleString(), "object", "services", HtmlClass.SERVICE));
         }
         div.appendChild(ul);
 
