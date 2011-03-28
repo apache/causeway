@@ -28,17 +28,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
-import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import org.apache.isis.applib.value.Color;
