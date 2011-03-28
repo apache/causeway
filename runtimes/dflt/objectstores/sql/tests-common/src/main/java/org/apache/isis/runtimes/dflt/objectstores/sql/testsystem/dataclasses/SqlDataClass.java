@@ -22,18 +22,18 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Color;
-import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.applib.value.Image;
+import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
 /**
  * The SqlDataClass is a test class used in the sql-persistor integration tests.
@@ -81,6 +81,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
 	// SQL Date Type
 	// {{ SqlDate
+	/**/
 	private java.sql.Date sqlDate;
 
 	@MemberOrder(sequence = "1")
@@ -91,6 +92,7 @@ public class SqlDataClass extends AbstractDomainObject {
 	public void setSqlDate(final java.sql.Date sqlDate) {
 		this.sqlDate = sqlDate;
 	}
+	/**/
 
 	// }}
 

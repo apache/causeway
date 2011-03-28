@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractDatabaseConnector;
@@ -37,6 +38,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
@@ -219,7 +222,20 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             int i = 1;
             try {
                 for (final Object value : queryValues) {
-                    statement.setObject(i, value);
+                    if (value instanceof LocalDate){
+                        try{
+                            statement.setObject(i, value, java.sql.Types.DATE);
+                        } catch (SQLException e){
+                            // This daft catch is required my MySQL, which also requires the TimeZone offset to be "undone"
+                            LocalDate localDate = (LocalDate) value;
+                            int millisOffset = -DateTimeZone.getDefault().getOffset(null);
+                            final Date javaDate = localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
+
+                            statement.setObject(i, javaDate, java.sql.Types.DATE);
+                        }
+                    } else {
+                        statement.setObject(i, value);
+                    }
                     i++;
                 }
             } catch (final SQLException e) {

@@ -62,5 +62,23 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	
+    <dependencyManagement>
+        <dependencies>
+            <!-- JodaTime -->
+            <dependency>
+	    		<groupId>joda-time</groupId>
+	    		<artifactId>joda-time</artifactId>
+	            <version>1.6.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+   </dependencies>
 
 </project>

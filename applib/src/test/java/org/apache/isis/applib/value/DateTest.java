@@ -124,8 +124,9 @@ public class DateTest {
         assertEquals(1970, date.getYear());
         assertEquals(1, date.getMonth());
         assertEquals(1, date.getDay());
-        final long time = date.dateValue().getTime();
-        assertEquals(1000 * 60 * 60 * 24 * 0, time);
+        java.util.Date dateValue = date.dateValue();
+        final long time = dateValue.getTime();
+        assertEquals(1000 * 60 * 60 * 12 * 0, time);
     }
 
     @Test

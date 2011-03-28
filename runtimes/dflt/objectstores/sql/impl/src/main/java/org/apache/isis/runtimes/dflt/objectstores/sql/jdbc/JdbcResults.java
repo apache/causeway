@@ -23,7 +23,9 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
@@ -80,7 +82,7 @@ public class JdbcResults implements Results {
 
     public Date getDate(final String columnName) {
         try {
-            return set.getDate(columnName);
+            return set.getDate(columnName, Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         } catch (SQLException e) {
             throw new SqlObjectStoreException(e);
         }

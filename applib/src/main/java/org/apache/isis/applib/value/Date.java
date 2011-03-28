@@ -19,11 +19,14 @@
 
 package org.apache.isis.applib.value;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import org.joda.time.DateTimeFieldType;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
@@ -44,7 +47,7 @@ import org.apache.isis.applib.clock.Clock;
 public class Date extends Magnitude<Date> {
     private static final long serialVersionUID = 1L;
     private static final TimeZone UTC_TIME_ZONE;
-    private final java.util.Date date;
+    private final LocalDate date;
 
     static {
         // for dotnet compatibility -
@@ -60,12 +63,7 @@ public class Date extends Magnitude<Date> {
      * Create a Date object for today's date.
      */
     public Date() {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-        final java.util.Date d = new java.util.Date(Clock.getTime());
-        cal.setTime(d);
-        clearTime(cal);
-        date = cal.getTime();
+        date = new LocalDate(Clock.getTime());
     }
 
     /**
@@ -73,44 +71,36 @@ public class Date extends Magnitude<Date> {
      */
     public Date(final int year, final int month, final int day) {
         checkDate(year, month, day);
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-        clearTime(cal);
-        cal.set(year, month - 1, day);
-        date = cal.getTime();
+        date = new LocalDate(year, month, day);
     }
 
     /**
      * Create a Date object based on the specified Java date object. The time portion of the Java date is disposed of.
      */
     public Date(final java.util.Date date) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-
-        // TODO when input date is BST then then date value ends up as the previous day
-        cal.setTime(date);
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        this.date = cal.getTime();
+        this.date = new LocalDate(date.getTime());
     }
 
-    protected Date createDate(final java.util.Date time) {
-        return new Date(time);
+    public Date(final long millisSinceEpoch) {
+        this.date = new LocalDate(millisSinceEpoch);
+    }
+
+    public Date(final LocalDate date) {
+        this.date = new LocalDate(date);
+    }
+
+    protected Date createDate(final LocalDate date) {
+        Date newDate = new Date(date);
+        return newDate;
     }
 
     /**
      * Add the specified days, years and months to this date value and return a new date object containing the result.
      */
     public Date add(final int years, final int months, final int days) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-        cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, days);
-        cal.add(Calendar.MONTH, months);
-        cal.add(Calendar.YEAR, years);
-        return createDate(cal.getTime());
+        Period add = new Period(years, months, 0, days, 0, 0, 0, 0);
+        LocalDate newDate = date.plus(add);
+        return new Date(newDate);
     }
 
     private void checkDate(final int year, final int month, final int day) {
@@ -127,60 +117,22 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * clear all aspects of the time that are not used
-     */
-    private void clearTime(final Calendar cal) {
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.AM_PM, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-    }
-
-    /**
      * Return this date value as a Java Date object.
      * 
      * @see java.util.Date
      */
     public java.util.Date dateValue() {
-        return new java.util.Date(date.getTime());
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(UTC_TIME_ZONE);
+        cal.clear();
+        cal.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
+        cal.set(Calendar.MONTH, date.getMonthOfYear()-1);
+        cal.set(Calendar.YEAR, date.getYear());
+        return cal.getTime();
     }
-
-    private int getEndDayOfMonthOneDotOne(final Calendar originalCalendar) {
-        final Calendar newCalendar = Calendar.getInstance();
-        newCalendar.setTimeZone(originalCalendar.getTimeZone());
-        newCalendar.setTime(originalCalendar.getTime());
-
-        final int firstPossibleDay = originalCalendar.getLeastMaximum(Calendar.DAY_OF_MONTH);
-        final int lastPossibleDay = originalCalendar.getMaximum(Calendar.DAY_OF_MONTH);
-        int lastValidDay = firstPossibleDay;
-
-        for (int day = firstPossibleDay + 1; day < lastPossibleDay; day++) {
-            newCalendar.set(Calendar.DAY_OF_MONTH, day);
-            if (newCalendar.get(Calendar.MONTH) != originalCalendar.get(Calendar.MONTH)) {
-                return lastValidDay;
-            }
-            lastValidDay = day;
-        }
-        return lastPossibleDay;
-    }
-
-    private int getEndDayOfMonth(final Calendar originalCalendar) {
-
-        final Class<?> cls = originalCalendar.getClass();
-        try {
-            final Method getActualMaximum = cls.getMethod("getActualMaximum", new Class[] { int.class });
-            final Integer dayOfMonth = Integer.valueOf(Calendar.DAY_OF_MONTH);
-            return ((Integer) getActualMaximum.invoke(originalCalendar, new Object[] { dayOfMonth })).intValue();
-        } catch (final NoSuchMethodException ignore) {
-            // expected if pre java 1.2 - fall through
-        } catch (final IllegalAccessException e) {
-            throw new RuntimeException(e.getMessage());
-        } catch (final InvocationTargetException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return getEndDayOfMonthOneDotOne(originalCalendar);
+    
+    public long getMillisSinceEpoch(){
+        return date.toDateTimeAtStartOfDay(DateTimeZone.UTC).getMillis();
     }
 
     /**
@@ -189,11 +141,7 @@ public class Date extends Magnitude<Date> {
      * @author Joshua Cassidy
      */
     public Date endOfMonth() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        c.set(Calendar.DAY_OF_MONTH, getEndDayOfMonth(c));
-        return createDate(c.getTime());
+        return new Date(date.dayOfMonth().withMaximumValue());
     }
 
     @Override
@@ -220,10 +168,7 @@ public class Date extends Magnitude<Date> {
      * Return the day from this date, in the range 1 - 31.
      */
     public int getDay() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        return c.get(Calendar.DAY_OF_MONTH);
+        return date.getDayOfMonth();
     }
 
     /**
@@ -233,35 +178,21 @@ public class Date extends Magnitude<Date> {
      * @author Joshua Cassidy
      */
     public int getDayOfWeek() {
-        final Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        final int day = c.get(Calendar.DAY_OF_WEEK);
-        // Calendar day is 1 - 7 for sun - sat
-        if (day == 1) {
-            return 6;
-        } else {
-            return day - 2;
-        }
+        return date.getDayOfWeek()-1; // Mon - Sun == 1 - 7
     }
 
     /**
      * Return the month from this date, in the range 1 - 12.
      */
     public int getMonth() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        return c.get(Calendar.MONTH) + 1;
+        return date.getMonthOfYear();
     }
 
     /**
      * Return the year from this date.
      */
     public int getYear() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        return c.get(Calendar.YEAR);
+        return date.getYear();
     }
 
     /**
@@ -277,19 +208,12 @@ public class Date extends Magnitude<Date> {
      */
     @Override
     public boolean isLessThan(final Date date) {
-        return this.date.before((date).date);
+        return this.date.isBefore((date).date);
     }
 
-    private boolean sameAs(final Date as, final int field) {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-
-        final Calendar c2 = Calendar.getInstance();
-        c2.setTimeZone(UTC_TIME_ZONE);
-        c2.setTime(as.date);
-
-        return c.get(field) == c2.get(field);
+    private boolean sameAs(final Date as, final DateTimeFieldType field) {
+        
+        return date.get(field) == as.date.get(field);
     }
 
     /**
@@ -297,7 +221,7 @@ public class Date extends Magnitude<Date> {
      * 3rd.
      */
     public boolean sameDayOfMonthAs(final Date as) {
-        return sameAs(as, Calendar.DAY_OF_MONTH);
+        return sameAs(as, DateTimeFieldType.dayOfMonth());
     }
 
     /**
@@ -305,7 +229,7 @@ public class Date extends Magnitude<Date> {
      * Tuesday.
      */
     public boolean sameDayOfWeekAs(final Date as) {
-        return sameAs(as, Calendar.DAY_OF_WEEK);
+        return sameAs(as, DateTimeFieldType.dayOfWeek());
     }
 
     /**
@@ -313,14 +237,14 @@ public class Date extends Magnitude<Date> {
      * 108th day of the year.
      */
     public boolean sameDayOfYearAs(final Date as) {
-        return sameAs(as, Calendar.DAY_OF_YEAR);
+        return sameAs(as, DateTimeFieldType.dayOfYear());
     }
 
     /**
      * Determines if this date and the specified date represent the same month, eg both dates are for the March.
      */
     public boolean sameMonthAs(final Date as) {
-        return sameAs(as, Calendar.MONTH);
+        return sameAs(as, DateTimeFieldType.monthOfYear());
     }
 
     /**
@@ -328,52 +252,39 @@ public class Date extends Magnitude<Date> {
      * 18th week of the year.
      */
     public boolean sameWeekAs(final Date as) {
-        return sameAs(as, Calendar.WEEK_OF_YEAR);
+        return sameAs(as, DateTimeFieldType.weekOfWeekyear());
     }
 
     /**
      * Determines if this date and the specified date represent the same year.
      */
     public boolean sameYearAs(final Date as) {
-        return sameAs(as, Calendar.YEAR);
+        return sameAs(as, DateTimeFieldType.year());
     }
 
     /**
      * Calculates, and returns, a date representing the first day of the month relative to the current date.
      */
     public Date startOfMonth() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        c.set(Calendar.DAY_OF_MONTH, c.getMinimum(Calendar.DAY_OF_MONTH));
-        return createDate(c.getTime());
+        return new Date(date.dayOfMonth().withMinimumValue());
     }
 
     /**
      * Calculates, and returns, a date representing the first day of the week relative to the current date.
      */
     public Date startOfWeek() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
-        return createDate(c.getTime());
+        return new Date(date.dayOfWeek().withMinimumValue());
     }
 
     /**
      * Calculates, and returns, a date representing the first day of the year relative to the current date.
      */
     public Date startOfYear() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UTC_TIME_ZONE);
-        c.setTime(date);
-        c.set(Calendar.DAY_OF_YEAR, c.getMinimum(Calendar.DAY_OF_YEAR));
-        return createDate(c.getTime());
+        return new Date(date.dayOfYear().withMinimumValue());
     }
 
     public String title() {
-        final DateFormat dateInstance = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        return dateInstance.format(date);
+        return DateTimeFormat.mediumDate().print(date);
     }
 
     @Override

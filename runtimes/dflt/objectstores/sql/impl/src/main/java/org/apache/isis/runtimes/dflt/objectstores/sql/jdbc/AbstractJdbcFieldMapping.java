@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public abstract class AbstractJdbcFieldMapping implements FieldMapping {
     private String columnName;
-    private final ObjectAssociation field;
+    protected final ObjectAssociation field;
         
     public AbstractJdbcFieldMapping(ObjectAssociation field) {
         this.field = field;

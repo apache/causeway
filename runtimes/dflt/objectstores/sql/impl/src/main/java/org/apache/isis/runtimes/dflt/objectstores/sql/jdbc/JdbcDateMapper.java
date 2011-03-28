@@ -20,13 +20,19 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.joda.time.LocalDate;
+
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 
 /**
  * Handles reading and writing java.sql.Date and org.apache.isis.applib.value.Date values to and from the data store.
@@ -50,18 +56,53 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
     protected Object preparedStatementObject(ObjectAdapter value){
         Object o = value.getObject();
         if (o instanceof java.sql.Date){
-            return (java.sql.Date) value.getObject();
+            java.sql.Date javaSqlDate = (java.sql.Date) value.getObject();
+            long millisSinceEpoch = javaSqlDate.getTime();
+           return new LocalDate(millisSinceEpoch);
         }else  if (o instanceof Date){
             Date asDate = (Date) value.getObject();
-            return  new java.sql.Date(asDate.dateValue().getTime());
+            return new LocalDate(asDate.getMillisSinceEpoch());
         } else {
             throw new IsisApplicationException("Unimplemented JdbcDateMapper instance type: "+value.getClass().toString());
         }
     }
     
+    
+    
+    @Override
+    public void initializeField(ObjectAdapter object, Results rs) {
+        java.util.Date javaDateValue;
+        
+        String columnName = Sql.sqlFieldName(field.getId());
+        String encodedValue = (String) rs.getString(columnName);
+        
+        javaDateValue = rs.getDate(columnName);
+
+        
+        ObjectAdapter restoredValue;
+        if (javaDateValue == null) {
+            restoredValue = null;
+        } else {
+            if (field.getSpecification().getFullIdentifier() == "java.sql.Date"){
+                // 2011-04-08 = 1302220800000L
+                restoredValue =  IsisContext.getPersistenceSession().getAdapterManager(). 
+                    adapterFor(javaDateValue);
+            } else if (field.getSpecification().getFullIdentifier() == Date.class.getCanonicalName()){
+                // 2010-3-5 = 1267747200000 millis
+                Date newDateValue = new Date(javaDateValue.getTime());
+                restoredValue =  IsisContext.getPersistenceSession().getAdapterManager(). 
+                    adapterFor(newDateValue);
+            } else {
+                throw new ApplicationException("Unhandled date type: "+field.getSpecification().getFullIdentifier());
+            }
+        }
+        ((OneToOneAssociation) field).initAssociation(object, restoredValue);
+    }
+
     @Override
     public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field) {
-        
+        throw new ApplicationException("Should never get called!");
+        /*
         String valueString, year, month, day;
         if (encodedValue.length() > 9) {
             // convert date to yyyymmdd
@@ -74,6 +115,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         }
         // Caution: ValueSemanticsProviderAbstractTemporal explicitly sets the timezone to UTC
         return field.getSpecification().getFacet(EncodableFacet.class).fromEncodedString(valueString);
+        */
     }
 
     public String columnType() {
