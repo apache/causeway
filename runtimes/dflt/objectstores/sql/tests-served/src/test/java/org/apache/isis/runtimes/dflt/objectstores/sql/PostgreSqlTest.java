@@ -44,6 +44,7 @@ public class PostgreSqlTest extends SqlIntegrationTestCommon {
 			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
 			
             //properties.put(SqlObjectStore.BASE_NAME + ".datatypes.timestamp", "TIMESTAMP");
+            //properties.put(SqlObjectStore.BASE_NAME + ".datatypes.datetime", "TIMESTAMP");
 		}
 		return properties;
 	}
