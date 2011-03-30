@@ -53,7 +53,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
-        log("Create object " + object);
+        log("create object " + object);
         return decorated.createCreateObjectCommand(object);
     }
 
@@ -63,12 +63,12 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
-        log("Destroy object " + object);
+        log("destroy object " + object);
         return decorated.createDestroyObjectCommand(object);
     }
 
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
-        log("Save object " + object);
+        log("save object " + object);
         return decorated.createSaveObjectCommand(object);
     }
 
@@ -87,27 +87,27 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
 
     public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException,
             UnsupportedFindException {
-        log("Get instances matching " + criteria);
+        log("get instances matching " + criteria);
         return decorated.getInstances(criteria);
     }
 
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
             ObjectPersistenceException {
         final ObjectAdapter object = decorated.getObject(oid, hint);
-        log("Get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
+        log("get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
         return object;
     }
 
     public Oid getOidForService(final String name) {
         final Oid oid = decorated.getOidForService(name);
-        log("Get OID for service " + name + ": " + oid);
+        log("get OID for service " + name + ": " + oid);
         return oid;
     }
 
     public boolean hasInstances(final ObjectSpecification specification)
             throws ObjectPersistenceException {
         final boolean hasInstances = decorated.hasInstances(specification);
-        log("Has instances of " + specification.getShortIdentifier(), "" + hasInstances);
+        log("has instances of " + specification.getShortIdentifier(), "" + hasInstances);
         return hasInstances;
     }
 
@@ -118,7 +118,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     public void open() throws IsisConfigurationException, InstanceCreationException, ObjectPersistenceException {
-        log("Opening " + name());
+        log("opening " + name());
         decorated.open();
     }
 
@@ -127,22 +127,22 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     public void reset() {
-        log("Reset");
+        log("reset");
         decorated.reset();
     }
 
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
-        log("Resolve eagerly object in field " + field + " of " + object);
+        log("resolve eagerly object in field " + field + " of " + object);
         decorated.resolveField(object, field);
     }
 
     public void resolveImmediately(final ObjectAdapter object) throws ObjectPersistenceException {
-        log("Resolve immediately: " + object);
+        log("resolve immediately: " + object);
         decorated.resolveImmediately(object);
     }
 
     public void execute(final List<PersistenceCommand> commands) throws ObjectPersistenceException {
-        log("Execute commands");
+        log("execute commands");
         int i = 0;
         for (PersistenceCommand command: commands) {
             log("  " + (i++) + " " + command);
@@ -151,7 +151,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     public void close() throws ObjectPersistenceException {
-        log("Closing " + decorated);
+        log("closing " + decorated);
         decorated.close();
     }
 
