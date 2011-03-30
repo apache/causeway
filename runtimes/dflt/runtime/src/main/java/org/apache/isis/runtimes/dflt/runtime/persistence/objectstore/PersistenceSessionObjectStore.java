@@ -411,10 +411,12 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
      */
     @Override
     public void destroyObject(final ObjectAdapter adapter) {
+        if (adapter.getSpecification().isAggregated()) {
+            return;
+        }
         if (LOG.isInfoEnabled()) {
             LOG.info("destroyObject " + adapter);
         }
-
         destroyObjectInPersistenceLayer(adapter);
     }
 
@@ -428,7 +430,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             @Override
             public void execute() {
                 if (adapter.getVersion() == null) {
-                    throw new ObjectPersistenceException("Object to be deleted does not have a version (maybe it should be reolved first): " + adapter);
+                    throw new ObjectPersistenceException("Object to be deleted does not have a version (maybe it should be resolved first): " + adapter);
                 }
                 final DestroyObjectCommand command = objectStore.createDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);

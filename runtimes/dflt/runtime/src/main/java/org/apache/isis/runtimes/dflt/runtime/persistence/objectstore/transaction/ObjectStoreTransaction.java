@@ -85,7 +85,7 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
             }
         }
 
-        // Destroys are ignored when preceded by a create
+        // Destroys are ignored when preceded by a create, or another destroy
         if (command instanceof DestroyObjectCommand) {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
@@ -101,6 +101,13 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
                     LOG.info("removed prior save command " + command);
                 }
             }
+            
+            if (alreadyHasDestroy(onObject)) {
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("ignored command " + command + " as command already recorded");
+                }
+                return;
+            }            
         }
 
         if (LOG.isDebugEnabled()) {
