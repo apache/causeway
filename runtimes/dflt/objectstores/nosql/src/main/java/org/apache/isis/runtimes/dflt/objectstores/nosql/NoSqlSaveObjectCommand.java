@@ -22,9 +22,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 
 
-final class SaveObjectCommandImplementation extends WriteObjectCommand implements SaveObjectCommand {
+final class NoSqlSaveObjectCommand extends WriteObjectCommand implements SaveObjectCommand {
 
-    public SaveObjectCommandImplementation(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
+    public NoSqlSaveObjectCommand(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
         super(true, keyCreator, versionCreator, object);
     }
 

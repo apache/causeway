@@ -28,7 +28,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.DestroyObjectCommandImplementation;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialNumberVersionCreator;
@@ -66,7 +66,7 @@ public class DestroyObjectCommandImplementationTest {
             }
         });
 
-        DestroyObjectCommandImplementation command = new DestroyObjectCommandImplementation(new SerialKeyCreator(),
+        NoSqlDestroyObjectCommand command = new NoSqlDestroyObjectCommand(new SerialKeyCreator(),
                 new SerialNumberVersionCreator(), object);
         command.execute(commandContext);
     }

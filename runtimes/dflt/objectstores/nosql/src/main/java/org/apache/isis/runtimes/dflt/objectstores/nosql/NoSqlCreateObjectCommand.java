@@ -22,9 +22,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 
 
-final class CreateObjectCommandImplementation extends WriteObjectCommand implements CreateObjectCommand {
+final class NoSqlCreateObjectCommand extends WriteObjectCommand implements CreateObjectCommand {
 
-    public CreateObjectCommandImplementation(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
+    public NoSqlCreateObjectCommand(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
         super(false, keyCreator, versionCreator, object);
     }
 

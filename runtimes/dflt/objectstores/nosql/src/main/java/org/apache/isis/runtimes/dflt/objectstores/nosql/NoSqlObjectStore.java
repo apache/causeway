@@ -75,7 +75,7 @@ public class NoSqlObjectStore implements ObjectStore {
             //throw new UnexpectedCallException("Aggregated objects should not be created outside of their owner");
             return null;
         } else {
-            return new CreateObjectCommandImplementation(keyCreator, versionCreator, object);
+            return new NoSqlCreateObjectCommand(keyCreator, versionCreator, object);
         }
     }
 
@@ -84,7 +84,7 @@ public class NoSqlObjectStore implements ObjectStore {
         if (object.getSpecification().isAggregated()) {
             throw new NoSqlStoreException("Can't delete an aggregated object");
         } else {
-            return new DestroyObjectCommandImplementation(keyCreator, versionCreator, object);
+            return new NoSqlDestroyObjectCommand(keyCreator, versionCreator, object);
         }
     }
 
@@ -92,7 +92,7 @@ public class NoSqlObjectStore implements ObjectStore {
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
         // TODO should this be done at a higher level so it is applicable for all OSes
         final ObjectAdapter rootAdapter = aggregateRootAdapterFor(adapter);
-        return new SaveObjectCommandImplementation(keyCreator, versionCreator, rootAdapter);
+        return new NoSqlSaveObjectCommand(keyCreator, versionCreator, rootAdapter);
     }
 
     /**

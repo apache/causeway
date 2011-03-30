@@ -78,12 +78,12 @@ public class ClientConnection {
     }
 
     void logComplete() {
-        LOG.info("request complete: " + outputStream);
+        LOG.debug("request complete: " + outputStream);
         LOG.debug("response complete: " + inputStream);
     }
 
     void logFailure() {
-        LOG.debug("request failed: " + outputStream);
+        LOG.info("request failed: " + outputStream);
         LOG.info("response failed: " + inputStream);
     }
 

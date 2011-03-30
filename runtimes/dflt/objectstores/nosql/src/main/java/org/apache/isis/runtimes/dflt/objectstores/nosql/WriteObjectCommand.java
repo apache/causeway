@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -152,6 +153,11 @@ class WriteObjectCommand implements PersistenceCommand {
         } else {
             String refs = "";
             for (ObjectAdapter element : collectionFacet.iterable(collection)) {
+                if (element.isAggregated()) {
+                    throw new DomainModelException(
+                            "Can't store an aggregated object within a collection that is not exoected aggregates: " + element
+                                    + " (" + collection + ")");
+                }
                 refs += keyCreator.reference(element) + "|";
             }
             if (refs.length() > 0) {
@@ -168,6 +174,7 @@ class WriteObjectCommand implements PersistenceCommand {
     @Override
     public String toString() {
         ToString toString = new ToString(this);
+        toString.append("spec", object.getSpecification().getFullIdentifier());
         toString.append("oid", object.getOid());
         return toString.toString();
     }

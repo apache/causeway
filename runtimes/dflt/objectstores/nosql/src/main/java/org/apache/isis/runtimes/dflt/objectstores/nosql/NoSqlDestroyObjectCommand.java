@@ -26,12 +26,12 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 
-final class DestroyObjectCommandImplementation implements DestroyObjectCommand {
+final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
     private final ObjectAdapter object;
     private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
 
-    public DestroyObjectCommandImplementation(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
+    public NoSqlDestroyObjectCommand(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
         this.object = object;
@@ -51,6 +51,7 @@ final class DestroyObjectCommandImplementation implements DestroyObjectCommand {
 
     public String toString() {
         ToString toString = new ToString(this);
+        toString.append("spec", object.getSpecification().getFullIdentifier());
         toString.append("oid", object.getOid());
         return toString.toString();
     }
