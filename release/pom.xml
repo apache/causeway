@@ -231,7 +231,7 @@
             <!-- runtimes-dflt: objectstore: sql -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>sql</artifactId>
+                <artifactId>sql-impl</artifactId>
                 <version>${isis.runtimes-dflt-objectstores-sql.version}</version>
             </dependency>
 
