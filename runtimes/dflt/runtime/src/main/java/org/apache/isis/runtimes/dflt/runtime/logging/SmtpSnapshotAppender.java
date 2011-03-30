@@ -100,7 +100,7 @@ public class SmtpSnapshotAppender extends SnapshotAppender {
 
             // message body
             send(out, details);
-            send(out, "\r\n.\r\n");
+            send(in, out, "\r\n.\r\n");
             send(in, out, "QUIT");
             s.close();
         } catch (final Exception e) {
@@ -111,14 +111,14 @@ public class SmtpSnapshotAppender extends SnapshotAppender {
     private void send(final BufferedReader in, final BufferedWriter out, final String s) throws IOException {
         out.write(s + "\r\n");
         out.flush();
-        // System.out.println(s);
-        in.readLine();
-        // System.out.println(s);
+        System.out.println(">  " + s);
+        String r = in.readLine();
+        System.out.println("<  "+ r);
     }
 
     private void send(final BufferedWriter out, final String s) throws IOException {
         out.write(s + "\r\n");
         out.flush();
-        // System.out.println(s);
+        System.out.println(">> " + s);
     }
 }

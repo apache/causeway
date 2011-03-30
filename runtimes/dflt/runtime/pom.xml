@@ -121,5 +121,13 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.1</version>
+            <optional>true</optional>
+            <scope>provided</scope> <!-- Used by log4j extended appended, and provided by log4j -->
+        </dependency>
+
 	</dependencies>
 </project>
