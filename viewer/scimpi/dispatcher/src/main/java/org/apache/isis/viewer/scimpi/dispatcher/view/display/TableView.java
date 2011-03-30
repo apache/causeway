@@ -111,6 +111,7 @@ public class TableView extends AbstractTableView {
 
         private void headerRow(final PageWriter writer, final String[] headers) {
             writer.appendHtml("<tr>");
+            writer.appendHtml("<th></th>");
             String[] columnHeaders = headers;
             for (int i = 0; i < columnHeaders.length; i++) {
                 if (columnHeaders[i] != null) {
@@ -137,6 +138,7 @@ public class TableView extends AbstractTableView {
                 }
 
             } else {
+                request.appendHtml("<td>" + element.titleString() + "</td>");
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i).isOneToManyAssociation()) {
                         continue;

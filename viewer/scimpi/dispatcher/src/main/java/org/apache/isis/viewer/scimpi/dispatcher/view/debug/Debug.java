@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.core.metamodel.util.Dump;
+import org.apache.isis.runtimes.dflt.runtime.util.Dump;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -82,6 +82,8 @@ public class Debug extends AbstractElementProcessor {
                  specificationFor(request);
              } else if (type.equals("specification")) {
                  specification(request);
+             } else if (type.equals("specification-graph")) {
+                 specificationGraph(request);
 
                 
                 
@@ -154,11 +156,27 @@ public class Debug extends AbstractElementProcessor {
 
     private void specification(Request request, ObjectSpecification spec) {
         request.appendHtml("<h1>Specification - " + spec.getFullIdentifier() + "</h1>");
+        request.appendHtml("<p><a href=\"./debug.shtml?type=specification-graph&value=" + spec.getFullIdentifier() + "\">Specification Graph</a></p>");
         DebugBuilder debug = new DebugHtmlString();
         specification(spec, debug);
         request.appendHtml(debug.toString());
     }
 
+    protected void specificationGraph(Request request) {
+        String name = request.getOptionalProperty(VALUE);
+        ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
+        request.appendHtml("<h1>Specification Graph - " + spec.getFullIdentifier() + "</h1>");
+        request.appendHtml("<p><a href=\"./debug.shtml?type=specification&value=" + spec.getFullIdentifier() + "\">Full Specification</a></p>");
+        request.appendHtml("<pre>");
+        DebugBuilder debug = new DebugString();
+        debug.appendln(spec.getFullIdentifier());
+        debug.indent();
+        specificationGraph(spec, debug, new ArrayList<ObjectSpecification>());
+        debug.unindent();
+        request.appendHtml(debug.toString());
+        request.appendHtml("</pre>");
+    }
+    
     private void displayContext(Request request) {
         request.appendHtml("<h1>Context</h1>");
         DebugHtmlString debugString = new DebugHtmlString();
@@ -222,6 +240,33 @@ public class Debug extends AbstractElementProcessor {
         return "debug";
     }
 
+    private void specificationGraph(ObjectSpecification spec, DebugBuilder view, ArrayList<ObjectSpecification> visited) {
+        List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>(spec.getAssociations());
+        Collections.sort(fields, new Comparator<ObjectAssociation>() {
+            public int compare(ObjectAssociation o1, ObjectAssociation o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        for (int i = 0; i < fields.size(); i++) {
+            ObjectAssociation field = fields.get(i);
+            ObjectSpecification specification = field.getSpecification();
+            if (!specification.isValue()) {
+                boolean contains = visited.contains(specification);
+                String aggregated = specification.isAggregated() ? "++" : "";
+                view.appendln(aggregated + field.getName() + "  (<a href=\"./debug.shtml?type=specification-graph&value="
+                        + specification.getFullIdentifier() + "\">" + specification.getFullIdentifier() + "</a>"
+                        + (contains ? "..." : "") + ")");
+                if (!contains) {
+                    visited.add(specification);
+                    view.indent();
+                    specificationGraph(specification, view, visited);
+                    view.unindent();
+                }
+            }
+        }
+
+    }
+    
     private void specification(ObjectSpecification spec, DebugBuilder view) {
         view.startSection("Summary");
         view.appendln("Hash code", "#" + Integer.toHexString(spec.hashCode()));
