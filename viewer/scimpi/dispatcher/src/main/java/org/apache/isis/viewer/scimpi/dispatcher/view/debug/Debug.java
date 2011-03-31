@@ -41,8 +41,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.util.Dump;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -84,6 +84,8 @@ public class Debug extends AbstractElementProcessor {
                  specification(request);
              } else if (type.equals("specification-graph")) {
                  specificationGraph(request);
+             } else if (type.equals("object-graph")) {
+                 objectGraph(request);
 
                 
                 
@@ -142,6 +144,18 @@ public class Debug extends AbstractElementProcessor {
         }
     }
     
+    protected void objectGraph(Request request) {
+        String id = request.getOptionalProperty(VALUE);
+        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        request.appendHtml("<h1>Object Graph - " + object + "</h1>");
+        request.appendHtml("<pre>");
+        DebugBuilder debug = new DebugString();
+        Dump.graph(object, debug, null);
+        request.appendHtml(debug.toString());
+        request.appendHtml("</pre>");
+    }
+    
+
     protected void specificationFor(Request request) {
         String id = request.getOptionalProperty(VALUE);
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);

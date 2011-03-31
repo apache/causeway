@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.util.Dump;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
@@ -201,7 +201,7 @@ public class DebugAction implements Action {
         view.appendTitle("Specifications");
         for (ObjectSpecification spec : fullIdentifierList) {
             String name = spec.getSingularName();
-      //      view.appendln(name, specificationLink(spec));
+   //         view.appendln(name, specificationLink(spec));
         }
 
         
