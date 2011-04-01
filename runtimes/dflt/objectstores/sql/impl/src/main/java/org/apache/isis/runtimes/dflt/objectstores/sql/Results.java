@@ -23,6 +23,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.Date;
 
 
+
 public interface Results {
 
     void close();
@@ -35,7 +36,9 @@ public interface Results {
 
     boolean next();
 
-    Date getDate(String lastActivityDateColumn);
+    Date getJavaDateOnly(String lastActivityDateColumn);
+    Date getJavaDateTime(String lastActivityDateColumn);
 
     Object getObject(String column);
+
 }

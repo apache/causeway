@@ -23,17 +23,17 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMappingFactory;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.log4j.Logger;
 
 
 public class FieldMappingLookup {
@@ -52,12 +52,12 @@ public class FieldMappingLookup {
             factory = new JdbcGeneralValueMapper.Factory("VARCHAR(65)");
             addFieldMappingFactory(spec, factory);
             return factory.createFieldMapping(field);
-        } else if (true /* TODO test for reference */) {
+        } else {//if (true /* TODO test for reference */) {
             factory = referenceFieldMappingfactory;
             addFieldMappingFactory(spec, factory);
             return factory.createFieldMapping(field);
-        } else {
-            throw new IsisException("No mapper for " + spec + " (no default mapper)");
+        //} else {
+            //throw new IsisException("No mapper for " + spec + " (no default mapper)");
         }
     }
 
@@ -72,16 +72,16 @@ public class FieldMappingLookup {
         } else if (spec.isEncodeable()) {
             // TODO add generic encodeable mapping
             throw new NotYetImplementedException();
-        } else if (true /* TODO test for reference */) {
+        } else {// if (true /* TODO test for reference */) {
             factory = objectReferenceMappingfactory;
          //   add(spec, factory);
             return factory.createReferenceMapping(columnName, spec); // TODO: here
-        } else {
-            throw new IsisException("No mapper for " + spec + " (no default mapper)");
+        //} else {
+        //    throw new IsisException("No mapper for " + spec + " (no default mapper)");
         }
     }
     
-    public void addFieldMappingFactory(final Class valueType, final FieldMappingFactory mapper) {
+    public void addFieldMappingFactory(final Class<?> valueType, final FieldMappingFactory mapper) {
         ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(valueType);
         addFieldMappingFactory(spec, mapper);
     }

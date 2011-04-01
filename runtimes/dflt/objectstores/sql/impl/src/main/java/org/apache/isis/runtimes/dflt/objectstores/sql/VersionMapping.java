@@ -97,7 +97,7 @@ public class VersionMapping {
     public Version getLock(Results rs) {
         long number = rs.getLong(versionColumn);
         String user = rs.getString(lastActivityUserColumn);
-        Date time = rs.getDate(lastActivityDateColumn);
+        Date time = rs.getJavaDateTime(lastActivityDateColumn);
         Version version = new SerialNumberVersion(number, user, time);
         return version;
     }

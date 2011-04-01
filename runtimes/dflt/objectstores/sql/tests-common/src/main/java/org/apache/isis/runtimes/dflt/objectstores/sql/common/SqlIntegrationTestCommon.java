@@ -69,7 +69,6 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     private static final Logger LOG = Logger.getLogger(SqlIntegrationTestCommon.class);
     
     
-    //private static final TimeZone UTC_TIME_ZONE;
     //private static final TimeZone GMTm2_TIME_ZONE;
     
     // Helper values
@@ -80,8 +79,12 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
          * 
         // For testing -ve offset timezone local regions.
         GMTm2_TIME_ZONE = TimeZone.getTimeZone("GMT-0200");
+        //GMTm2_TIME_ZONE = TimeZone.getTimeZone("UTC");
         TimeZone.setDefault(GMTm2_TIME_ZONE);
+        *
+         */
         
+        /*
         TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
         if (timeZone == null) {
             timeZone = TimeZone.getTimeZone("UTC");
@@ -98,12 +101,13 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         cal.set(Calendar.MONTH, 4-1);
         cal.set(Calendar.DAY_OF_MONTH, 8);
         */
-        // 2011-4-8 = 1302220800000
-        sqlDate = new java.sql.Date( 1302220800000L);// cal.getTimeInMillis()); 
+        // 2011-4-8 = 1270684800000
+        Date date20100308 = new Date(2010, 4, 8);
+        sqlDate = new java.sql.Date( date20100308.getMillisSinceEpoch());
     }
 	
     //{{ Setup
-	private static final Date applibDate = new Date(2010, 3, 5);
+	private static final Date applibDate = new Date(2010, 3, 5); // 2010-03-05 = 1267747200000
 	private static final DateTime dateTime = new DateTime(2010, 3, 5, 1, 23);
 	private static final TimeStamp timeStamp = new TimeStamp(
 			dateTime.longValue());
@@ -347,10 +351,10 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: "+sqlDataClass.getDate().getMillisSinceEpoch());
         
         if (!applibDate.isEqualTo(sqlDataClass.getDate())){
-            //fail("Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
-            //    + sqlDataClass.getDate().toString()+". Check log for more info.");
-            LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
+            fail("Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
                 + sqlDataClass.getDate().toString()+". Check log for more info.");
+            //LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
+            //    + sqlDataClass.getDate().toString()+". Check log for more info.");
         } else {
             LOG.log(Level.INFO, "SQL applib.value.date: test passed! Woohoo!");
         }
@@ -379,11 +383,10 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:"+sqlDataClass.getSqlDate().getTime());
 		
         if (sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0){
-            //TODO: Must still confirm about the timezone shift.
-            //fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got "
-             //   + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
-            LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", and got "
-                + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
+            fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got "
+               + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
+            //LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", and got "
+            //    + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
         } else {
             LOG.log(Level.INFO, "SQL date: test passed! Woohoo!");
         }
@@ -401,17 +404,19 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
          *  
          */
         /*
+         * *
         SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
         
         DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010, 3, 5, 1, 23);
         Date date = sqlDataClass.getDate(); // new Date(2010, 3, 5);
-        java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
-
+        
+        //java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
         //assertTrue("dateTime's value ("+dateTime.dateValue()+
-        //    ") should be after java.sql.date's ("+ date +")", dateTime.dateValue().after(sqlDate));
+        //    ") should be after java.sql.date's ("+ sqlDate +")", dateTime.dateValue().after(sqlDate));
 
-        //assertTrue("dateTime's value ("+dateTime.dateValue()+
-        //    ") should be after date's ("+ date +")", dateTime.dateValue().after(date.dateValue()));
+        assertTrue("dateTime's value ("+dateTime.dateValue()+
+            ") should be after date's ("+ date +")", dateTime.dateValue().after(date.dateValue()));
+        *
         */
     }
 	
