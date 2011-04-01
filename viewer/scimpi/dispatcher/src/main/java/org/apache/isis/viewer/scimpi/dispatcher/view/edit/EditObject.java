@@ -131,25 +131,7 @@ public class EditObject extends AbstractElementProcessor {
         hiddenFields.add(resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, resultOverride));
         hiddenFields.add(scope == null ? null : new HiddenInputField("_" + SCOPE, scope));
 
-        if (object.isTransient()) {
-            // restore transient details
-            List<ObjectAssociation> objectFields = object.getSpecification().getAssociations();
-            for (int i = 0; i < objectFields.size(); i++) {
-                ObjectAssociation field = objectFields.get(i);
-                ObjectAdapter fieldValue = field.get(object);
-                if (!viewFields.contains(field)) {
-                    String fieldId = field.getId();
-                    String value = getValue(context, fieldValue); 
-                    hiddenFields.add(new HiddenInputField(fieldId, value));
-                }
-                
-                if (fieldValue != null && fieldValue.isTransient()) {
-                    String fieldId = field.getId();
-                    String data = context.mapObject(fieldValue, Scope.REQUEST);
-                    hiddenFields.add(new HiddenInputField(fieldId, data));
-                }
-            }
-        } else {
+        if (!object.isTransient()) {
             // ensure all booleans are included so the pass back TRUE if set. 
             List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
             for (int i = 0; i < fields2.size(); i++) {
@@ -159,10 +141,8 @@ public class EditObject extends AbstractElementProcessor {
                     String value = getValue(context, field.get(object)); 
                     hiddenFields.add(new HiddenInputField(fieldId, value));
                 }
-            }
-            
+            }            
         }
-
 
         if (formTitle == null) {
             formTitle = specification.getSingularName();

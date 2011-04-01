@@ -145,6 +145,8 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             LOG.debug("encoded " + oid + " as " + id + " ~ " + encodedOid);
             if (isTransient) {
                 
+                // TODO cache these in requests so that Mementos are obly created once.
+                
                  // TODO if Transient/Interaction then return state; other store state in session an return OID string 
                 TransientObjectMapping mapping = new TransientObjectMapping((ObjectAdapter) inObject);
                 if (scope == Scope.REQUEST) {
