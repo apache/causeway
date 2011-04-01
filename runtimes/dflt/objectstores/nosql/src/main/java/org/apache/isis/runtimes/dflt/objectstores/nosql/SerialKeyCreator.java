@@ -29,8 +29,11 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Ser
 public class SerialKeyCreator implements KeyCreator {
 
     public String key(Oid oid) {
+        if (oid.isTransient()) {
+            throw new NoSqlStoreException("Oid is not for a persistent object: " + oid);
+        }
         long serialNo = ((SerialOid) oid).getSerialNo();
-        return Long.toHexString(serialNo);
+        return Long.toString(serialNo, 16);
     }
 
     public String reference(ObjectAdapter object) {
