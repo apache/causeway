@@ -36,27 +36,6 @@
             <item name="Case Study" href="naked-objects-case-study.html" />
         </menu>
 
-        <menu name="Project Info" ref="reports"/>
-
-		<menu name="Community and Help">
-			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
-            <item name="Mailing List">
-                <item name="Post to"
-                    href="mailto:isis-dev@incubator.apache.org" />
-                <item name="Archives"
-                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
-                <item name="Subscribe"
-                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
-            </item>
-            <!-- 
-            <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
-            -->
-            <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
-            <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
-            <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
-            <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
-        </menu>
-
 		<!-- This 'global' menu is inherited -->
 		<menu name="Isis Modules" inherit="bottom" href="core/index.html">
 			<item name="Application Library" href="applib/index.html" />
@@ -90,12 +69,23 @@
             </item>
 		</menu>
 
-        <menu name="For Contributors">
-            <item name="Contributor's Guide">
-                <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
-                <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
+		<menu name="Community and Help">
+			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
+            <item name="Mailing List">
+                <item name="Post to"
+                    href="mailto:isis-dev@incubator.apache.org" />
+                <item name="Archives"
+                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
+                <item name="Subscribe"
+                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
             </item>
-            <item name="Jottings" href="jottings.html" />
+            <!-- 
+            <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
+            -->
+            <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
+            <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
+            <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
+            <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
 
 		<menu name="Other Resources">
@@ -118,6 +108,16 @@
             </item>
             <item name="Isis Roadmap" href="roadmap.html" />
 		</menu>
+
+        <menu name="For Contributors">
+            <item name="Contributor's Guide">
+                <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
+                <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
+            </item>
+            <item name="Jottings" href="jottings.html" />
+        </menu>
+
+        <menu name="Project Info" ref="reports"/>
 
         <menu name="Apache">
             <item name="Foundation" href="http://www.apache.org/" />

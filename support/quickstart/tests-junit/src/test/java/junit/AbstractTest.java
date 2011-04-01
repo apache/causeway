@@ -36,7 +36,7 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@ConfigDir("../quickrun/config")
+@ConfigDir("../quickrun/src/main/resources")
 @Services({ @Service(ToDoItemRepositoryDefault.class) })
 public abstract class AbstractTest {
 

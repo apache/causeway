@@ -31,6 +31,7 @@ import org.junit.internal.runners.MethodRoadie;
 import org.junit.internal.runners.TestClass;
 import org.junit.internal.runners.TestMethod;
 import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
@@ -126,11 +127,11 @@ public class IsisTestRunner extends JUnit4ClassRunner {
 		    getTransactionManager().endTransaction();
             
         } catch (final InvocationTargetException e) {
-            notifier.testAborted(description, e.getCause());
+            testAborted(notifier, description, e.getCause());
             getTransactionManager().abortTransaction();
             return;
         } catch (final Exception e) {
-            notifier.testAborted(description, e);
+            testAborted(notifier, description, e);
             return;
         } finally {
             if (system != null) {
@@ -142,6 +143,13 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         }
     }
 
+
+	private void testAborted(RunNotifier notifier, Description description,
+			Throwable e) {
+		notifier.fireTestStarted(description);
+		notifier.fireTestFailure(new Failure(description, e));
+		notifier.fireTestFinished(description);
+	}
 
     /**
      * Taken from JMock's runner.
