@@ -101,6 +101,7 @@ public class ObjectData extends Data {
 				As.OBJECT.writeTo(output);
                 output.writeEncodable(value);
             } else if (value instanceof Null) {
+                As.NULL.writeTo(output);
             	// nothing to do; if read back corresponds to NO_ENTRY
             } else {
                 As.STRING.writeTo(output);

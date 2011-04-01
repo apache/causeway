@@ -263,6 +263,8 @@ public class Memento implements Serializable {
             PersistorUtil.end(object);
         } else if (object.getResolveState() == ResolveState.TRANSIENT && resolveState == ResolveState.TRANSIENT) {
             updateFields(object, state);
+        } else if (object.isAggregated()) {
+            updateFields(object, state);
         } else {
             final ObjectData od = (ObjectData) state;
             if (od.containsField()) {
