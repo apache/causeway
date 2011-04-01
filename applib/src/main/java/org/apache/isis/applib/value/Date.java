@@ -130,7 +130,10 @@ public class Date extends Magnitude<Date> {
         cal.set(Calendar.YEAR, date.getYear());
         return cal.getTime();
     }
-    
+    /**
+     * 
+     * @return the milliseconds from 1970-01-01T00:00:00Z
+     */
     public long getMillisSinceEpoch(){
         return date.toDateTimeAtStartOfDay(DateTimeZone.UTC).getMillis();
     }
