@@ -67,9 +67,9 @@ public final class Dump {
                 if (ignoreObjects.contains(element)) {
                     s.append("*\n");
                 } else {
-                    s.indent();
+//                    s.indent();
                     graph(element, level + 1, ignoreObjects, s, authenticationSession);
-                    s.unindent();
+//                    s.unindent();
                 }
             }
         }
@@ -94,7 +94,7 @@ public final class Dump {
 
     private static void simpleObject(final ObjectAdapter object, final DebugBuilder s) {
         s.appendln(object.titleString());
-        s.indent();
+  //     s.indent();
         final ObjectSpecification objectSpec = object.getSpecification();
         if (objectSpec.isCollection()) {
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(object);
@@ -123,7 +123,7 @@ public final class Dump {
                 s.appendException(e);
             }
         }
-        s.unindent();
+ //       s.unindent();
     }
 
     private static void graph(
@@ -429,8 +429,6 @@ public final class Dump {
                     debug.appendln(field.debugData());
 
                     debug.unindent();
-                    debug.unindent();
-                    debug.indent();
                 }
             }
         } catch (final RuntimeException e) {
