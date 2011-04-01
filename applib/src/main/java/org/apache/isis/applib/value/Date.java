@@ -19,9 +19,6 @@
 
 package org.apache.isis.applib.value;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -46,18 +43,7 @@ import org.apache.isis.applib.clock.Clock;
 @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvider")
 public class Date extends Magnitude<Date> {
     private static final long serialVersionUID = 1L;
-    private static final TimeZone UTC_TIME_ZONE;
     private final LocalDate date;
-
-    static {
-        // for dotnet compatibility -
-        TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
-        if (timeZone == null) {
-            // for dotnet compatibility - "Etc/UTC fails in dotnet
-            timeZone = TimeZone.getTimeZone("UTC");
-        }
-        UTC_TIME_ZONE = timeZone;
-    }
 
     /**
      * Create a Date object for today's date.
@@ -107,10 +93,8 @@ public class Date extends Magnitude<Date> {
         if ((month < 1) || (month > 12)) {
             throw new IllegalArgumentException("Month must be in the range 1 - 12 inclusive");
         }
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-        cal.set(year, month - 1, 0);
-        final int lastDayOfMonth = cal.getMaximum(Calendar.DAY_OF_MONTH);
+        final LocalDate newDate = new LocalDate(year, month, 1);
+        final int lastDayOfMonth = newDate.dayOfMonth().getMaximumValue();;
         if ((day < 1) || (day > lastDayOfMonth)) {
             throw new IllegalArgumentException("Day must be in the range 1 - " + lastDayOfMonth + " inclusive: " + day);
         }
@@ -122,13 +106,8 @@ public class Date extends Magnitude<Date> {
      * @see java.util.Date
      */
     public java.util.Date dateValue() {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-        cal.clear();
-        cal.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
-        cal.set(Calendar.MONTH, date.getMonthOfYear()-1);
-        cal.set(Calendar.YEAR, date.getYear());
-        return cal.getTime();
+        java.util.Date javaDate = date.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
+        return javaDate;
     }
     /**
      * 

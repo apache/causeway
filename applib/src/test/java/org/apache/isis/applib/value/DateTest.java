@@ -144,6 +144,13 @@ public class DateTest {
         assertEquals(new Date(2000, 3, 13), actual.startOfWeek());
         assertEquals(new Date(2000, 2, 28), new Date(2000, 3, 2).startOfWeek());
     }
+    
+    @Test
+    public void testEndOfMonth() {
+        assertEquals(new Date(2000, 2, 29), new Date(2000, 2, 2).endOfMonth());
+        assertEquals(new Date(2001, 2, 28), new Date(2001, 2, 2).endOfMonth());
+    }
+    
 
     @Test
     public void testNewWithTodaysDate() {
