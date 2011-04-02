@@ -81,9 +81,9 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
 
     @Override
     protected void clearFields(final Calendar cal) {
-        cal.set(Calendar.YEAR, 0);
+        cal.set(Calendar.YEAR, 1971);
         cal.set(Calendar.MONTH, 0);
-        cal.set(Calendar.DAY_OF_MONTH, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
     }
 
     @Override

@@ -19,12 +19,14 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
+import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 
 public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
@@ -41,20 +43,28 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
     @Override
 	protected Object preparedStatementObject(ObjectAdapter value){
-        Time asDate = (Time) value.getObject();
-        java.sql.Time time = java.sql.Time.valueOf(asDate.toString() + ":00");
-        return time;
+        Time asTime = (Time) value.getObject();
+        return asTime.asJavaTime();
 	}
 
 	@Override
-	public ObjectAdapter setFromDBColumn(final String encodedValue,
-			final ObjectAssociation field) {
-		Long hour = Long.decode(encodedValue.substring(0, 2));
-		Long minute = Long.decode(encodedValue.substring(3, 5));
-		Long millis = (minute + hour * 60) * 60 * 1000;
-		String valueString = "T" + Long.toString(millis);
-		return field.getSpecification().getFacet(EncodableFacet.class)
-				.fromEncodedString(valueString);
+	public ObjectAdapter setFromDBColumn(Results results,
+			final String encodedValue, String columnName, final ObjectAssociation field) {
+        /*
+         * Long hour = Long.decode(encodedValue.substring(0, 2)); Long minute = Long.decode(encodedValue.substring(3,
+         * 5)); Long millis = (minute + hour * 60) * 60 * 1000; String valueString = "T" + Long.toString(millis); return
+         * field.getSpecification().getFacet(EncodableFacet.class) .fromEncodedString(valueString);
+         */
+        ObjectAdapter restoredValue;
+        final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
+        if (correspondingClass == Time.class) {
+            Time timeValue = results.getTime(columnName);
+            restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(timeValue);
+        } else {
+            throw new PersistFailedException("Unhandled time type: " + correspondingClass.getCanonicalName());
+        }
+        return restoredValue;
+
 	}
 
 	@Override

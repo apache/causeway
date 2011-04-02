@@ -18,10 +18,18 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceFieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimeMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimestampMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper.Factory;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;

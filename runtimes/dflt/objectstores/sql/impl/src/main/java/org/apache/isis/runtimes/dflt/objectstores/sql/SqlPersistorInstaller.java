@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.auto.AutoMapperFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnectorFactory;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcFieldMappingFactoryInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;

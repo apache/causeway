@@ -24,6 +24,7 @@ import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
@@ -48,7 +49,7 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
     }
     
 
-    public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field)             {
+    public ObjectAdapter setFromDBColumn(Results results, final String encodedValue, String columnName, final ObjectAssociation field)             {
         // convert date to yyyymmddhhmm
         String year = encodedValue.substring(0, 4);
         String month = encodedValue.substring(5, 7);

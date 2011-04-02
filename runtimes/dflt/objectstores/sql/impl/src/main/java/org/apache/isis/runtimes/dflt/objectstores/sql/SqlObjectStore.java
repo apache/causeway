@@ -19,8 +19,13 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -44,7 +49,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
-import org.apache.log4j.Logger;
 
 public final class SqlObjectStore implements ObjectStore {
     private static final String TABLE_NAME = "isis_admin_services";
@@ -55,6 +59,22 @@ public final class SqlObjectStore implements ObjectStore {
     private DatabaseConnectorPool connectionPool;
     private ObjectMappingLookup objectMappingLookup;
     private boolean isInitialized;
+
+    private static Calendar calendar;
+    static {
+        TimeZone UTC = TimeZone.getTimeZone("UTC");
+        calendar = Calendar.getInstance(UTC);
+    }
+
+    public static Calendar defaultCalendar() {
+        return calendar;
+    }
+
+    private static DateTimeZone dateTimeZone = DateTimeZone.UTC;
+
+    public static DateTimeZone defaultTimeZone() {
+        return dateTimeZone;
+    }
 
     @Override
     public void abortTransaction() {

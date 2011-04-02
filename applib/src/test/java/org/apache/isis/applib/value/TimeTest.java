@@ -55,7 +55,7 @@ public class TimeTest {
 
     @Before
     public void setUp() throws Exception {
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         TestClock.initialize();
         time = new Time(13, 14);
     }
@@ -93,7 +93,7 @@ public class TimeTest {
     @Test
     public void testNewWithCurrentTime() {
         final Time expected = new Time(21, 30);
-        final Time actual = new Time();
+        final Time actual = new Time(); // Clock actually has 21:30:25
         assertEquals(expected, actual);
     }
 

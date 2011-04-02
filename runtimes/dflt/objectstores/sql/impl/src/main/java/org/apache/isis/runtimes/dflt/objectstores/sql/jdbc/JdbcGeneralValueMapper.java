@@ -26,6 +26,7 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
@@ -84,8 +85,8 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 	
 
 	@Override
-	public ObjectAdapter setFromDBColumn(final String encodeValue,
-			final ObjectAssociation field) {
+	public ObjectAdapter setFromDBColumn(Results results,
+			final String encodeValue, String columnName, final ObjectAssociation field) {
 		EncodableFacet facet = field.getSpecification().getFacet(
 				EncodableFacet.class);
 		return facet.fromEncodedString(encodeValue);

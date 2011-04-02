@@ -19,9 +19,11 @@
 
 package org.apache.isis.applib.value;
 
+import java.util.Calendar;
+
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 
@@ -43,13 +45,18 @@ import org.apache.isis.applib.clock.Clock;
 @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvider")
 public class Date extends Magnitude<Date> {
     private static final long serialVersionUID = 1L;
-    private final LocalDate date;
+    private final DateTime date;
 
     /**
      * Create a Date object for today's date.
      */
     public Date() {
-        date = new LocalDate(Clock.getTime());
+        Calendar time = Clock.getTimeAsCalendar();
+        time.set(Calendar.HOUR_OF_DAY, 0);
+        time.set(Calendar.MINUTE, 0);
+        time.set(Calendar.SECOND, 0);
+        time.set(Calendar.MILLISECOND, 0);
+        date = new DateTime(time.getTime(), DateTimeZone.UTC);
     }
 
     /**
@@ -57,25 +64,30 @@ public class Date extends Magnitude<Date> {
      */
     public Date(final int year, final int month, final int day) {
         checkDate(year, month, day);
-        date = new LocalDate(year, month, day);
+        date = newDateTime(year, month, day);
     }
+
 
     /**
      * Create a Date object based on the specified Java date object. The time portion of the Java date is disposed of.
      */
     public Date(final java.util.Date date) {
-        this.date = new LocalDate(date.getTime());
+        this.date = new DateTime(date.getTime(), DateTimeZone.UTC);
     }
 
     public Date(final long millisSinceEpoch) {
-        this.date = new LocalDate(millisSinceEpoch);
+        this.date = new DateTime(millisSinceEpoch);
     }
 
-    public Date(final LocalDate date) {
-        this.date = new LocalDate(date);
+    public Date(final DateTime date) {
+        this.date = new DateTime(date);
     }
 
-    protected Date createDate(final LocalDate date) {
+    private DateTime newDateTime(int year, int month, int day) {
+        return new DateTime(year, month, day, 0, 0, 0, 0, DateTimeZone.UTC);
+    }
+
+    protected Date createDate(final DateTime date) {
         Date newDate = new Date(date);
         return newDate;
     }
@@ -85,7 +97,7 @@ public class Date extends Magnitude<Date> {
      */
     public Date add(final int years, final int months, final int days) {
         Period add = new Period(years, months, 0, days, 0, 0, 0, 0);
-        LocalDate newDate = date.plus(add);
+        DateTime newDate = date.plus(add);
         return new Date(newDate);
     }
 
@@ -93,7 +105,7 @@ public class Date extends Magnitude<Date> {
         if ((month < 1) || (month > 12)) {
             throw new IllegalArgumentException("Month must be in the range 1 - 12 inclusive");
         }
-        final LocalDate newDate = new LocalDate(year, month, 1);
+        final DateTime newDate = newDateTime(year, month, 1);
         final int lastDayOfMonth = newDate.dayOfMonth().getMaximumValue();;
         if ((day < 1) || (day > lastDayOfMonth)) {
             throw new IllegalArgumentException("Day must be in the range 1 - " + lastDayOfMonth + " inclusive: " + day);
@@ -106,7 +118,7 @@ public class Date extends Magnitude<Date> {
      * @see java.util.Date
      */
     public java.util.Date dateValue() {
-        java.util.Date javaDate = date.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
+        java.util.Date javaDate = date.toDate();
         return javaDate;
     }
     /**
@@ -114,7 +126,7 @@ public class Date extends Magnitude<Date> {
      * @return the milliseconds from 1970-01-01T00:00:00Z
      */
     public long getMillisSinceEpoch(){
-        return date.toDateTimeAtStartOfDay(DateTimeZone.UTC).getMillis();
+        return date.getMillis();
     }
 
     /**

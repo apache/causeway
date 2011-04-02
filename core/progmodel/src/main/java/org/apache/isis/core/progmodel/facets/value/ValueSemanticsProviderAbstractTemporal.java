@@ -377,8 +377,8 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
 
     public void setMask(final String mask) {
         format = new SimpleDateFormat(mask);
-        format.setLenient(false);
         format.setTimeZone(UTC_TIME_ZONE);
+        format.setLenient(false);
     }
 
     protected boolean isEmpty() {

@@ -20,7 +20,10 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
+
 
 
 
@@ -36,8 +39,15 @@ public interface Results {
 
     boolean next();
 
-    Date getJavaDateOnly(String lastActivityDateColumn);
-    Date getJavaDateTime(String lastActivityDateColumn);
+    Date getJavaDateOnly(String dateColumn);
+
+    Time getJavaTimeOnly(String timeColumn);
+
+    Date getJavaDateTime(String lastActivityDateColumn, Calendar calendar);
+
+    org.apache.isis.applib.value.Date getDate(String columnName);
+
+    org.apache.isis.applib.value.Time getTime(String columnName);
 
     Object getObject(String column);
 

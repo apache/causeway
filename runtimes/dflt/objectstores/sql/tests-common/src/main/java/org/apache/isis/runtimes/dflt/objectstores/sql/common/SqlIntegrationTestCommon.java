@@ -351,7 +351,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: "+sqlDataClass.getDate().getMillisSinceEpoch());
         
         if (!applibDate.isEqualTo(sqlDataClass.getDate())){
-            fail("Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
+            fail("Applib date: Test '2010-3-5', expected " + applibDate.toString() + ", but got "
                 + sqlDataClass.getDate().toString()+". Check log for more info.");
             //LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
             //    + sqlDataClass.getDate().toString()+". Check log for more info.");
@@ -469,8 +469,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
 		assertNotNull("sqlDataClass is null", sqlDataClass);
 		assertNotNull("getTime() is null", sqlDataClass.getTime());
-		assertTrue("Time " + sqlDataClass.getTime().toString()
-				+ " is not equal to " + time.toString(),
+        assertTrue("Time 14h56: expected " + time.toString() + ", but got " + sqlDataClass.getTime().toString(),
 				time.isEqualTo(sqlDataClass.getTime()));
 	}
 
@@ -481,8 +480,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	 */
 	public void testColor() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-		assertTrue("Color " + color.toString() + " is not equal to "
-				+ sqlDataClass.getColor().toString(),
+        assertTrue("Color Black, expected " + color.toString() + " but got " + sqlDataClass.getColor().toString(),
 				color.isEqualTo(sqlDataClass.getColor()));
 	}
 

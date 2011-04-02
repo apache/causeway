@@ -82,7 +82,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         if (encodedValue == null) {
             restoredValue = null;
         } else {
-            restoredValue = setFromDBColumn(encodedValue, field);
+            restoredValue = setFromDBColumn(rs, encodedValue, columnName, field);
             
         }
         ((OneToOneAssociation) field).initAssociation(object, restoredValue);
@@ -96,7 +96,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
 
     protected abstract Object preparedStatementObject(ObjectAdapter value);
 
-    protected abstract ObjectAdapter setFromDBColumn(String encodeValue, ObjectAssociation field);
+    protected abstract ObjectAdapter setFromDBColumn(Results results, String encodeValue, String columnName, ObjectAssociation field);
 
 }
 

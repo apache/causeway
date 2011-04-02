@@ -22,15 +22,12 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
@@ -44,6 +41,7 @@ import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 public class JdbcDateMapper extends AbstractJdbcFieldMapping {
     
     public static class Factory implements FieldMappingFactory {
+        @Override
         public FieldMapping createFieldMapping(final ObjectAssociation field) {
             return new JdbcDateMapper(field);
         }
@@ -70,40 +68,28 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
     
     
     
+
     @Override
-    public void initializeField(ObjectAdapter object, Results rs) {
-        java.util.Date javaDateValue;
-        
-        String columnName = Sql.sqlFieldName(field.getId());
-        javaDateValue = rs.getJavaDateOnly(columnName);
-        
+    public ObjectAdapter setFromDBColumn(final Results results, final String encodedValue, final String columnName,
+        final ObjectAssociation field) {
         ObjectAdapter restoredValue;
-        if (javaDateValue == null) {
-            restoredValue = null;
+        java.util.Date javaDateValue = results.getJavaDateOnly(columnName);
+        final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
+        if (correspondingClass == java.util.Date.class || correspondingClass == java.sql.Date.class) {
+            // 2011-04-08 = 1270684800000
+            restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(javaDateValue);
+        } else if (correspondingClass == Date.class) {
+            // 2010-03-05 = 1267747200000
+            Date dateValue;
+            dateValue = new Date(javaDateValue);
+            restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(dateValue);
         } else {
-            final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
-            if (correspondingClass == java.util.Date.class || correspondingClass == java.sql.Date.class){
-                // 2011-04-08 = 1270684800000
-                restoredValue =  IsisContext.getPersistenceSession().getAdapterManager(). 
-                adapterFor(javaDateValue);
-            } else if (correspondingClass == Date.class){
-                // 2010-03-05 = 1267747200000  
-                Date dateValue;
-                dateValue = new Date(javaDateValue);
-                restoredValue =  IsisContext.getPersistenceSession().getAdapterManager(). 
-                    adapterFor(dateValue);
-            } else {
-                throw new PersistFailedException("Unhandled date type: "+correspondingClass.getCanonicalName());
-            }
+            throw new PersistFailedException("Unhandled date type: " + correspondingClass.getCanonicalName());
         }
-        ((OneToOneAssociation) field).initAssociation(object, restoredValue);
+        return restoredValue;
     }
 
     @Override
-    public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field) {
-        throw new ApplicationException("Should never get called!");
-    }
-
     public String columnType() {
         return JdbcConnector.TYPE_DATE;
     }

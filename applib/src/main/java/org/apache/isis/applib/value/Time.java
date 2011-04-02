@@ -19,10 +19,12 @@
 
 package org.apache.isis.applib.value;
 
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
@@ -48,91 +50,78 @@ public class Time extends Magnitude<Time> {
     public static final int MINUTE = 60;
     public static final int HOUR = 60 * MINUTE;
     public static final int DAY = 24 * HOUR;
-    private static final DateFormat SHORT_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
-    private static final long zero;
-    private static final TimeZone UtcTimeZone;
+    
 
-    static {
-        UtcTimeZone = TimeZone.getTimeZone("Etc/UTC");
-
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UtcTimeZone);
-        // set to 1-Jan-1970 00:00:00 (the epoch)
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.clear(Calendar.AM_PM);
-        cal.clear(Calendar.HOUR);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.MONTH, 0);
-        cal.set(Calendar.YEAR, 1970);
-        zero = cal.getTime().getTime();
-
-        SHORT_FORMAT.setTimeZone(UtcTimeZone);
-    }
-
-    static long getZero() {
-        return zero / 1000;
-    }
-
-    private final Date date;
+    private final DateTime time;
 
     /**
      * Create a Time object set to the current time.
      */
     public Time() {
-        final Calendar cal = createCalendar();
-        cal.setTimeZone(TimeZone.getDefault());
-        cal.setTime(new Date(Clock.getTime()));
+        Calendar calendar = Clock.getTimeAsCalendar();
+        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minuteOfHour = calendar.get(Calendar.MINUTE);
+        time = newDateTime(hourOfDay, minuteOfHour);
+    }
 
-        date = time(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
+    private DateTime newDateTime(int hourOfDay, int minuteOfHour) {
+        return new DateTime(1971, 1, 1, hourOfDay, minuteOfHour, 0, 0, DateTimeZone.UTC);
     }
 
     /**
      * Create a Time object for storing a time with the time set to the specified hours and minutes.
      */
     public Time(final int hour, final int minute) {
-        date = time(hour, minute);
+        time = time(hour, minute);
     }
 
-    private Date time(final int hour, final int minute) {
+    private DateTime time(final int hour, final int minute) {
         checkTime(hour, minute, 0);
-
-        final Calendar cal = createCalendar();
-        cal.setTimeZone(UtcTimeZone);
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.MONTH, 0);
-        cal.set(Calendar.YEAR, 1970);
-        return cal.getTime();
+        return newDateTime(hour, minute);
     }
 
     /**
      * Create a Time object for storing a time with the time set to the specified time of the Java Date object.
      */
-    public Time(final Date date) {
-        final Calendar localTime = createCalendar();
-        // localTime.setTimeZone(TimeZone.getDefault());
-        localTime.setTimeZone(UtcTimeZone);
-        localTime.setTime(date);
+    public Time(final java.sql.Date date) {
 
-        this.date = time(localTime.get(Calendar.HOUR_OF_DAY), localTime.get(Calendar.MINUTE));
+        this.time = new DateTime(date.getTime(), DateTimeZone.UTC);
     }
+
+    /**
+     * 
+     * @param date
+     *            must have Date portion equal to Epoch
+     * @param calendar
+     */
+
+    public Time(final java.util.Date date, final DateTimeZone dateTimeZone) {
+        DateTime DateTime = new DateTime(date.getTime(), dateTimeZone);
+        this.time = DateTime.secondOfMinute().setCopy(0);
+    }
+
+
+    /**
+     * Create a Time object for storing a time with the time set to the specified time of the Joda Time DateTime object.
+     */
+    public Time(final DateTime dateTime) {
+        this.time = newDateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour());
+    }
+
+    /**
+     * Create a new Time object from the millisSinceEpoch, using UTC.
+     */
+    public Time(long millisSinceEpoch) {
+        this.time = new DateTime(millisSinceEpoch, DateTimeZone.UTC);
+    }
+
 
     /**
      * Add the specified hours and minutes to this time value, returned as a new Time object.
      */
     public Time add(final int hours, final int minutes) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.MINUTE, minutes);
-        cal.add(Calendar.HOUR_OF_DAY, hours);
-        return createTime(cal.getTime());
+        Period period = new Period(hours, minutes, 0, 0);
+        return new Time(time.plus(period));
     }
 
     private void checkTime(final int hour, final int minute, final int second) {
@@ -149,49 +138,16 @@ public class Time extends Magnitude<Time> {
         }
     }
 
-    /**
-     * Returns a Calendar object with the irrelevant field (determined by this objects type) set to zero.
+    /*
+     * public java.util.Date dateValue() { return (date == null) ? null : date; }
      */
-    private Calendar createCalendar() {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UtcTimeZone);
-
-        // clear all aspects of the time that are not used
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.clear(Calendar.AM_PM);
-        cal.clear(Calendar.HOUR);
-        cal.set(Calendar.MONTH, 0);
-        cal.set(Calendar.YEAR, 1970);
-
-        return cal;
-    }
-
-    protected Time createTime(final int hours, final int minutes) {
-        return new Time(hours, minutes);
-    }
-
-    protected Time createTime(final Date date) {
-        return new Time(date);
-    }
-
-    public java.util.Date dateValue() {
-        return (date == null) ? null : date;
-    }
 
     public int getHour() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UtcTimeZone);
-        c.setTime(date);
-        return c.get(Calendar.HOUR_OF_DAY);
+        return time.getHourOfDay();
     }
 
     public int getMinute() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeZone(UtcTimeZone);
-        c.setTime(date);
-        return c.get(Calendar.MINUTE);
+        return time.getMinuteOfHour();
     }
 
     /**
@@ -199,7 +155,7 @@ public class Time extends Magnitude<Time> {
      */
     @Override
     public boolean isEqualTo(final Time time) {
-        return (date == null) ? false : (date.equals((time).date));
+        return (time == null) ? false : (this.equals(time));
     }
 
     /**
@@ -207,19 +163,32 @@ public class Time extends Magnitude<Time> {
      */
     @Override
     public boolean isLessThan(final Time time) {
-        return (date != null) && date.before((time).date);
+        return (time != null) && this.time.isBefore((time).time);
     }
 
     /**
      * The number of seconds since midnight.
      */
+    @Deprecated
     public long longValue() {
-        return date.getTime() / 1000;
+        return time.getMillisOfDay() / 1000;
+    }
+
+    /**
+     * The number of seconds since midnight.
+     */
+    public long secondsSinceMidnight() {
+        return time.getMillisOfDay() / 1000;
+    }
+
+    public long milliSecondsSinceMidnight() {
+        return time.getMillisOfDay();
     }
 
     public String titleString() {
-        final DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT);
-        return (date == null) ? "" : timeInstance.format(date);
+        return (time == null) ? "" : DateTimeFormat.shortTime().print(time);
+        // final DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT);
+        // return (date == null) ? "" : timeInstance.format(date);
     }
 
     @Override
@@ -237,14 +206,14 @@ public class Time extends Magnitude<Time> {
     }
 
     public Time onTheHour() {
-        return createTime(getHour(), 0);
+        return new Time(getHour(), 0);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((date == null) ? 0 : date.hashCode());
+        result = prime * result + ((time == null) ? 0 : time.hashCode());
         return result;
     }
 
@@ -260,14 +229,25 @@ public class Time extends Magnitude<Time> {
             return false;
         }
         final Time other = (Time) obj;
-        if (date == null) {
-            if (other.date != null) {
+        if (time == null) {
+            if (other.time != null) {
                 return false;
             }
-        } else if (!date.equals(other.date)) {
+        } else if (!time.equals(other.time)) {
             return false;
         }
         return true;
     }
+
+    public java.util.Date asJavaDate() {
+        return time.toDate();
+    }
+
+    public java.sql.Time asJavaTime() {
+        java.sql.Time time1 = java.sql.Time.valueOf(toString() + ":00");
+        // TODO: confirm that this is in UTC
+        return time1;
+    }
+
 
 }

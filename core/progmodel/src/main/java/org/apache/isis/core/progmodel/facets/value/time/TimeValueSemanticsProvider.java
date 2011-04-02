@@ -85,7 +85,7 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
     @Override
     protected Date dateValue(final Object object) {
         final Time time = (Time) object;
-        return time == null ? null : time.dateValue();
+        return time == null ? null : time.asJavaDate();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
 
     @Override
     protected Time setDate(final Date date) {
-        return new Time(date);
+        return new Time(date.getTime());
     }
 
 }
