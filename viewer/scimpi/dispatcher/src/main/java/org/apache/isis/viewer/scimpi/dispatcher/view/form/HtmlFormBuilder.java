@@ -117,8 +117,7 @@ public class HtmlFormBuilder {
 
     private static String createObjectField(InputField field, String type) {
         String value = field.getValue();
-        String valueSegment = value == null ? "" : " value=\"" + value + "\"";
-        return field.getHtml() + "\n  <input type=\"hidden\" name=\"" + field.getName() + "\"" + valueSegment + " />";
+        return field.getHtml();
     }
 
     private static String createTextArea(InputField field) {
