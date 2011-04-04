@@ -28,16 +28,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialNumberVersionCreator;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 
 
 public class DestroyObjectCommandImplementationTest {
@@ -54,7 +51,9 @@ public class DestroyObjectCommandImplementationTest {
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(
                 ExampleReferencePojo.class);
         ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
+        IsisContext.getPersistenceSession().makePersistent(object);
         object.setOptimisticLock(new SerialNumberVersion(3, "username", new Date(1000)));
+
         long id = ((SerialOid) object.getOid()).getSerialNo();
         final String key = Long.toHexString(id);
 
