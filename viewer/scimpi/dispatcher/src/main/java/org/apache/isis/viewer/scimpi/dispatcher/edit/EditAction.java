@@ -222,10 +222,9 @@ public class EditAction implements Action {
             FieldEditState fieldState = formState.createField(fieldId, newEntry);
             
             Consent consent = null;
-            if (field.isMandatory() && newEntry.equals("")) {
+            if (field.isMandatory() && (newEntry.equals("") || newEntry.equals("NULL"))) {
                 consent = new Veto(field.getName() + " required");
                 formState.setError("Not all fields have been set");
-
             } else if (field.getSpecification().containsFacet(ParseableFacet.class)) {
                 try {
                     ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
@@ -239,7 +238,7 @@ public class EditAction implements Action {
                 }
 
             } else {
-                ObjectAdapter associate = context.getMappedObject(newEntry);
+                ObjectAdapter associate = newEntry.equals("null") ? null : context.getMappedObject(newEntry);
                 if (associate != null) {
                     IsisContext.getPersistenceSession().resolveImmediately(associate);
                 }

@@ -87,13 +87,9 @@ public class FieldFactory {
         }
 
         if (optionsForParameter != null) {
-            int noOptions = optionsForParameter.length + (field.isRequired() ? 0 : 1);
+            int noOptions = optionsForParameter.length;
             String[] optionValues = new String[noOptions];
             String[] optionTitles = new String[noOptions];
-            if (!field.isRequired()) {
-                optionValues[0] = "null";
-                optionTitles[0] = "[not set]";
-            }
             for (int j = 0; j < optionsForParameter.length; j++) {
                 int i = j + (field.isRequired() ? 0 : 1);
                 optionValues[i] = getValue(context, optionsForParameter[j]);

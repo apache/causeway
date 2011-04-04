@@ -174,6 +174,9 @@ public class HtmlFormBuilder {
                 str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
             }
         }
+        if (!field.isRequired() || length == 0) {
+            str.append("    <option value=\"null\"></option>\n");
+        }
         if (offerOther) {
             str.append("    <option value=\"-OTHER-\">Other:</option>\n");
         }
@@ -182,6 +185,9 @@ public class HtmlFormBuilder {
             String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
             String hideSegment = " style=\"display: none;\" "; // TODO only hide when JS enabled
             str.append("  <input type=\"text\" name=\"" + field.getName() + "-other\"" + hideSegment + lengthSegment + disabled + " />");
+        }
+        if (field.isRequired() && length == 0) {
+            str.append(" <span class=\"required\">*</span>");
         }
         str.append("\n");
         return str.toString();

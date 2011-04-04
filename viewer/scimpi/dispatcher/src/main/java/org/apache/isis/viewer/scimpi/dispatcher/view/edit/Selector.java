@@ -137,7 +137,7 @@ public class Selector extends AbstractElementProcessor {
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         StringBuffer buffer = new StringBuffer();
         if (allowNotSet) {
-            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"null\">" + "[not set]" + "</input><br/>\n");
+            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"null\"></input><br/>\n");
         }
         while (iterator.hasNext()) {
             ObjectAdapter element = iterator.next();
@@ -165,7 +165,7 @@ public class Selector extends AbstractElementProcessor {
         size = size == null ? "" : " size =\"" + size + "\"";
         buffer.append("<select name=\"" + field + "\"" + size + " >\n");
         if (allowNotSet) {
-            buffer.append("  <option value=\"null\">" + "[not set]" + "</option>\n");
+            buffer.append("  <option value=\"null\"></option>\n");
         }
         while (iterator.hasNext()) {
             ObjectAdapter element = iterator.next();
