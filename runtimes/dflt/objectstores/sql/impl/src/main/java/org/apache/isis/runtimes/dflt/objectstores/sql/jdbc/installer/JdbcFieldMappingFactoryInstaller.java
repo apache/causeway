@@ -20,16 +20,6 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
-import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceFieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMappingFactory;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimeMapper;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimestampMapper;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper.Factory;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
@@ -38,10 +28,21 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcMoneyValueMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceFieldMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimeMapper;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimestampMapper;
 
 
 public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInstaller {
 
+    @Override
     public void load(FieldMappingLookup lookup) {
         lookup.addFieldMappingFactory(boolean.class, new JdbcGeneralValueMapper.Factory("CHAR(1)"));
         lookup.addFieldMappingFactory(short.class, new JdbcGeneralValueMapper.Factory("INT"));
@@ -51,7 +52,7 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
         lookup.addFieldMappingFactory(double.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
         lookup.addFieldMappingFactory(char.class, new JdbcGeneralValueMapper.Factory("CHAR(2)"));
 
-        lookup.addFieldMappingFactory(Money.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
+        lookup.addFieldMappingFactory(Money.class, new JdbcMoneyValueMapper.Factory("FLOAT", "VARCHAR(3)"));
         lookup.addFieldMappingFactory(Percentage.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
         lookup.addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory("VARCHAR(12)"));
         lookup.addFieldMappingFactory(Color.class, new JdbcGeneralValueMapper.Factory("INT"));

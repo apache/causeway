@@ -21,6 +21,16 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
@@ -32,19 +42,10 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.TitleMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
-import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		DebuggableWithTitle {
@@ -128,9 +129,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 	public void destroyObject(final DatabaseConnector connector,
 			final ObjectAdapter object) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("delete from " + table + " where ");
+        sql.append("delete from " + table + " WHERE ");
 		idMapping.appendWhereClause(connector, sql, object.getOid());
-		sql.append(" and ");
+        sql.append(" AND ");
 		sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object
 				.getVersion()));
 		int updateCount = connector.update(sql.toString());
@@ -153,7 +154,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 			final ObjectSpecification spec,
 			final PersistenceQueryFindByPattern query) {
 		StringBuffer sql = createSelectStatement();
-		sql.append(" where ");
+        sql.append(" WHERE ");
 
 		int initialLength = sql.length();
 		ObjectAdapter pattern = query.getPattern();
@@ -163,7 +164,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 				FieldMapping fieldMapping = fieldMappingFor(assoc);
 				if (fieldMapping != null) {
 					if (sql.length() > initialLength) {
-						sql.append(" and ");
+                        sql.append(" AND ");
 					}
 					fieldMapping.appendWhereClause(connector, sql, pattern);
 				}
@@ -176,7 +177,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 	public ObjectAdapter[] getInstances(final DatabaseConnector connector,
 			final ObjectSpecification spec, final String title) {
 		StringBuffer sql = createSelectStatement();
-		sql.append(" where ");
+        sql.append(" WHERE ");
 		titleMapping.appendWhereClause(sql, title);
 		return loadInstances(connector, spec, completeSelectStatement(sql));
 	}
@@ -185,7 +186,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 	public ObjectAdapter getObject(final DatabaseConnector connector,
 			final Oid oid, final ObjectSpecification hint) {
 		StringBuffer sql = createSelectStatement();
-		sql.append(" where ");
+        sql.append(" WHERE ");
 		idMapping.appendWhereClause(connector, sql, oid);
 		Results rs = connector.select(completeSelectStatement(sql));
 		if (rs.next()) {
@@ -218,10 +219,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		sql.append(" from " + table);
 		return sql;
 	} /*
-	 * if (whereClause != null) { sql.append(" where ");
-	 * sql.append(whereClause); } else if (whereClause != null) {
-	 * sql.append(" where "); idMapping.appendWhereClause(sql, oid); }
-	 */
+       * if (whereClause != null) { sql.append(" WHERE "); sql.append(whereClause); } else if (whereClause != null) {
+       * sql.append(" WHERE "); idMapping.appendWhereClause(sql, oid); }
+       */
 
 	private String completeSelectStatement(final StringBuffer sql) {
 		sql.append(" order by ");
@@ -295,7 +295,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		sql.append(columnList());
 		sql.append(",");
 		sql.append(versionMapping.appendSelectColumns());
-		sql.append(" from " + table + " where ");
+        sql.append(" from " + table + " WHERE ");
 		idMapping.appendWhereClause(connector, sql, object.getOid());
 
 		Results rs = connector.select(sql.toString());
@@ -343,7 +343,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		long nextSequence = version.getSequence() + 1;
 
 		StringBuffer sql = new StringBuffer();
-		sql.append("update " + table + " set ");
+        sql.append("UPDATE " + table + " SET ");
 		for (FieldMapping mapping : fieldMappings) {
 			mapping.appendUpdateValues(connector, sql, object);
 			sql.append(", ");
@@ -351,9 +351,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		sql.append(versionMapping.updateAssigment(connector, nextSequence));
 		sql.append(", ");
 		titleMapping.appendUpdateAssignment(connector, sql, object);
-		sql.append(" where ");
+        sql.append(" WHERE ");
 		idMapping.appendWhereClause(connector, sql, object.getOid());
-		sql.append(" and ");
+        sql.append(" AND ");
 		sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object
 				.getVersion()));
 

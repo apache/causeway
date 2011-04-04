@@ -35,6 +35,8 @@ public interface Results {
 
     long getLong(String columnName);
 
+    double getDouble(String columnName);
+
     String getString(String columnName);
 
     boolean next();

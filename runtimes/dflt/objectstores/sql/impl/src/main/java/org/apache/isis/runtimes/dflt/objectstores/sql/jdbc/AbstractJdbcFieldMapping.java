@@ -20,18 +20,18 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
+import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 
 
 public abstract class AbstractJdbcFieldMapping implements FieldMapping {
-    private String columnName;
+    private final String columnName;
     protected final ObjectAssociation field;
         
     public AbstractJdbcFieldMapping(ObjectAssociation field) {
@@ -39,35 +39,41 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         columnName = Sql.sqlFieldName(field.getId());
     }
 
+    @Override
     public void appendColumnDefinitions(StringBuffer sql) {
         sql.append(columnName);
         sql.append(" ");
         sql.append(columnType());
     }
 
+    @Override
     public void appendColumnNames(StringBuffer sql) {
         sql.append(columnName);
     }
 
+    @Override
     public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
         if (fieldValue == null) {
             sql.append("NULL");
         } else {
         	sql.append("?");
-        	connector.addToQueryValues(preparedStatementObject(fieldValue));
+            connector.addToQueryValues(preparedStatementObject(fieldValue));
         }
     }
 
+    @Override
     public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         appendEqualsClause(connector, sql, object, "=");
     }
 
+    @Override
     public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         appendEqualsClause(connector, sql, object, "=");
     }
 
-    private void appendEqualsClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object, String condition) {
+    protected void appendEqualsClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object,
+        String condition) {
         sql.append(Sql.sqlFieldName(field.getId()));
         sql.append(condition);
         ObjectAdapter fieldValue = field.get(object);
@@ -75,9 +81,10 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         connector.addToQueryValues(preparedStatementObject(fieldValue));
     }
     
+    @Override
     public void initializeField(ObjectAdapter object, Results rs) {
         String columnName = Sql.sqlFieldName(field.getId());
-        String encodedValue = (String) rs.getString(columnName);
+        String encodedValue = rs.getString(columnName);
         ObjectAdapter restoredValue;
         if (encodedValue == null) {
             restoredValue = null;
@@ -88,6 +95,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         ((OneToOneAssociation) field).initAssociation(object, restoredValue);
     }
     
+    @Override
     public void debugData(DebugBuilder debug) {
         debug.appendln(field.getId(), columnName + "/" + columnType());
     }
@@ -96,7 +104,9 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
 
     protected abstract Object preparedStatementObject(ObjectAdapter value);
 
-    protected abstract ObjectAdapter setFromDBColumn(Results results, String encodeValue, String columnName, ObjectAssociation field);
+    protected abstract ObjectAdapter setFromDBColumn(Results results, String encodeValue, String columnName,
+        ObjectAssociation field);
+
 
 }
 

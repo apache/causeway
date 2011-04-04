@@ -41,6 +41,7 @@ import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.applib.value.Image;
+import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
@@ -118,7 +119,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 			{ 4, 5, 6 }, { 7, 8, 9 } });
 	private static final Password password = new Password("password");
 	private static final Percentage percentage = new Percentage(42);
-    // private static final Money money = new Money(99.99, "GBP");
+    private static final Money money = new Money(99.99, "ZAR");
 	
 	// Collection mapper tests
 	private static final List<String> stringList1 = Arrays.asList("Baking",
@@ -246,7 +247,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		sqlDataClass.setString("Test String");
 		sqlDataClass.setDate(applibDate);
 		sqlDataClass.setSqlDate(sqlDate);
-		// sqlDataClass.setMoney(money); // TODO: Money is broken
+        sqlDataClass.setMoney(money); // TODO: Money is broken
 		sqlDataClass.setDateTime(dateTime);
 		sqlDataClass.setTimeStamp(timeStamp);
 		sqlDataClass.setTime(time);
@@ -423,13 +424,13 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	/**
 	 * Test {@link Money} type.
 	 */
-	/*
-	 * public void testMoney(){ SqlDataClass sqlDataClass =
-	 * SqlIntegrationTestSingleton.getPerson();
-	 * assertTrue("Money "+money.toString
-	 * ()+" is not equal to "+sqlDataClass.getMoney().toString(),
-	 * money.equals(sqlDataClass.getMoney())); }
-	 */
+
+    public void testMoney() {
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        assertEquals(money, sqlDataClass.getMoney());
+        // assertTrue("Money " + money.toString() + " is not equal to " + sqlDataClass.getMoney().toString(),
+        // money.equals(sqlDataClass.getMoney()));
+    }
 
 	/**
 	 * Test {@link DateTime} type.

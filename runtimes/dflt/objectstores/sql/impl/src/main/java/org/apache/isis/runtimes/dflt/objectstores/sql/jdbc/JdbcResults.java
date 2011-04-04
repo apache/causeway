@@ -168,4 +168,12 @@ public class JdbcResults implements Results {
             throw new SqlObjectStoreException(e);
         }
     }
+
+    public double getDouble(String columnName) {
+        try {
+            return set.getDouble(columnName);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
 }
