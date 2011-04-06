@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- common use cases: -->
-	<!-- mvn package                 : creates self-contained JAR -->
+	<!-- mvn package                    : creates self-contained JAR -->
 	<!-- mvn antrun:run -D exec=dnd     : runs JAR using DnD viewer -->
 	<!-- mvn antrun:run -D exec=html    : runs JAR as self-hosted webapp using HTML viewer (http://localhost:8080/logon.app)  -->
 	<!-- mvn antrun:run -D exec=restful : runs JAR as self-hosted webapp using RESTful viewer -->
@@ -107,24 +107,21 @@
         </dependency>
 
 
-		<!--  JETTY DEPENDENCIES FOR TESTING  -->
+		<!--  JETTY DEPENDENCIES FOR RUNNING webapp viewers in packaged JAR -->
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>jetty</artifactId>
 			<version>${jetty.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>jetty-util</artifactId>
 			<version>${jetty.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>jetty-management</artifactId>
 			<version>${jetty.version}</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

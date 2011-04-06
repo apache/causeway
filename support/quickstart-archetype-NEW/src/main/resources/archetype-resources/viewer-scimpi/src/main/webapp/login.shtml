@@ -1,0 +1,4 @@
+<swf:template  file="style/template.shtml" />
+
+<h2>Please Log On</h2>
+<swf:logon/>

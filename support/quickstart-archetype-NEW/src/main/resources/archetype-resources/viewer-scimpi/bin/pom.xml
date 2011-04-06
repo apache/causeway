@@ -1,0 +1,95 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>${package}</groupId>
+        <artifactId>${parentArtifactId}</artifactId>
+        <version>${version}</version>
+    </parent>
+
+	<artifactId>${parentArtifactId}-viewer-scimpi</artifactId>
+	<name>Quickstart Scimpi Viewer</name>
+	
+	<packaging>war</packaging>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	
+        <!-- other modules in this project -->
+        <dependency>
+            <groupId>${symbol_dollar}{project.groupId}</groupId>
+            <artifactId>${parentArtifactId}-dom</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>${symbol_dollar}{project.groupId}</groupId>
+            <artifactId>${parentArtifactId}-fixture</artifactId>
+        </dependency>
+
+		<!-- isis viewer -->
+		<dependency>
+	        <groupId>org.apache.isis.viewer</groupId>
+			<artifactId>scimpi-servlet</artifactId>
+		</dependency>
+
+        <!-- isis runtime -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <!-- isis progmodel -->
+        <dependency>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+
+        <!-- isis security implementations -->        
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>file</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+        
+        <!-- to run using WebServer -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webserver</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+	</dependencies>
+
+</project>
