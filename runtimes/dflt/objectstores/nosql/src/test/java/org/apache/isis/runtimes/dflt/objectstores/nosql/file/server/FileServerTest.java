@@ -19,6 +19,17 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+
+import org.apache.isis.core.commons.lang.IoUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import static org.apache.isis.core.commons.lang.StringUtils.lineSeparated;
 import static org.apache.isis.core.commons.matchers.IsisMatchers.existsAndNotEmpty;
 import static org.hamcrest.Matchers.containsString;
@@ -31,19 +42,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import org.apache.isis.core.commons.lang.IoUtils;
 
 public class FileServerTest {
     private FileServerProcessor server;
@@ -85,13 +83,40 @@ public class FileServerTest {
 
     @Test
     public void cantReadOrWriteAfterShutdown() throws Exception {
-        InputStream in = new ByteArrayInputStream(new byte[128]);
+        InputStream in =  IoUtils.asUtf8ByteStream("R[org.domain.Class 1025]\n");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ServerConnection connection = new ServerConnection(in, out);
 
         server.shutdown();
         server.process(connection);
         assertThat(new String(out.toByteArray(), "utf-8"), is(equalTo(lineSeparated("abort\n"))));
+    }
+
+    @Test
+    public void writeAbortedAsDataNotComplete() throws Exception {
+        InputStream in = IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 null 1  \n{da");
+        ServerConnection connection = new ServerConnection(in, out);
+        server.process(connection);
+
+        assertThat(out.toString(), is(containsString("stream ended prematurely while reading data, aborting request")));
+    }
+
+    @Test
+    public void writeAbortsIfMissingNextDataBlock() throws Exception {
+        InputStream in = IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\n");
+        ServerConnection connection = new ServerConnection(in, out);
+        server.process(connection);
+        
+        assertThat(out.toString(), is(containsString("stream ended prematurely while reading header, aborting request")));
+    }
+
+    @Test
+    public void writeAbortedAsHeaderNotComplete() throws Exception {
+        InputStream in = IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025");
+        ServerConnection connection = new ServerConnection(in, out);
+        server.process(connection);
+
+        assertThat(out.toString(), is(containsString("invalid header string, aborting request")));
     }
 
     @Test
@@ -104,7 +129,7 @@ public class FileServerTest {
         assertFalse(file2.exists());
 
         InputStream in =
-            IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\nIorg.domain.Class 1026 null 1\n{data2}\n");
+            IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\nIorg.domain.Class 1026 null 1\n{data2}\n\n\n");
         ServerConnection connection = new ServerConnection(in, out);
         server.process(connection);
         
@@ -122,7 +147,7 @@ public class FileServerTest {
         fileWriter.close();
 
         ServerConnection connection =
-            new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n"), out);
+            new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n\n\n"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n"))));
@@ -133,21 +158,21 @@ public class FileServerTest {
     public void writeUpdateFailsWhenVersionsDontMatch() throws Exception {
         File file2 = new File("target/test/org.domain.Class", "1026.data");
         FileWriter fileWriter = new FileWriter(file2);
-        String originalData = "org.domain.Class 1026 21\n{datax}";
+        String originalData = "org.domain.Class 1026 21\n{datax}\n\n\n***";
         fileWriter.write(originalData);
         fileWriter.close();
 
         ServerConnection connection =
-            new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 19 21 \n{data2}\n"), out);
+            new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 19 21 \n{data2}\n\n\n"), out);
         server.process(connection);
         
-        assertThat(out.toString(), is(equalTo(lineSeparated("error\n{datax}\n"))));
+        assertThat(out.toString(), is(equalTo(lineSeparated("error\nmismatch between FileContent version (19) and DataReader version (21)\n"))));
     }
 
     @Test
     public void writeCreatesLogFile() throws Exception {
         ServerConnection connection =
-            new ServerConnection(IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 6 7\n{data1}\n"), out);
+            new ServerConnection(IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 6 7\n{data1}\n\n\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n"))));
@@ -160,7 +185,7 @@ public class FileServerTest {
     public void readNonExistingFileThrowsException() throws Exception {
         File file1 = new File("target/test/org.domain.Class", "2020.data");
         file1.delete();
-        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2020"), out);
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2020\n\n"), out);
         server.process(connection);
 
         String string = out.toString();
@@ -190,12 +215,19 @@ public class FileServerTest {
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025"), out);
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));
     }
 
+    @Test
+    public void ReadFailIfEndsEarly() throws Exception {
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n"), out);
+        server.process(connection);
+        
+        assertThat(out.toString(), is(containsString("stream ended prematurely while reading end of command, aborting request")));
+    }
 
     @Test
     public void LookReadRenamed() throws Exception {
@@ -204,7 +236,7 @@ public class FileServerTest {
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025"), out);
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));
@@ -218,7 +250,7 @@ public class FileServerTest {
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025"), out);
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));

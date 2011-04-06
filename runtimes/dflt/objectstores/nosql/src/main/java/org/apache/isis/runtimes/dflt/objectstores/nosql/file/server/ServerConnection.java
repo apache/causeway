@@ -48,7 +48,10 @@ public class ServerConnection {
         inputStream = Util.trace(input, true);
         this.reader = new BufferedReader(new InputStreamReader(inputStream, Util.ENCODING));
         this.writer = new PrintWriter(new OutputStreamWriter(outputStream, Util.ENCODING));
-        readHeader();
+    }
+    
+    public void readCommand() {
+        readHeaders();
     }
 
     private void logFailure() {
@@ -61,15 +64,19 @@ public class ServerConnection {
         LOG.debug("(complete " + outputStream + ")");
     }
 
-    boolean readHeader() {
+    boolean readHeaders() {
         try {
-            String header = reader.readLine();
-            LOG.debug("request: " + header);
-            if (header == null || header.length() == 0) {
+            String line = reader.readLine();
+            LOG.debug("header: " + line);
+            if (line == null) {
+                logFailure();
+                throw new RemotingException("stream ended prematurely while reading header, aborting request");
+            }
+            if (line.length() == 0) {
                 return false;
             } else {
-                command = header.charAt(0);
-                headers = header.substring(1).split(" ");
+                command = line.charAt(0);
+                headers = line.substring(1).split(" ");
                 this.header = 0;
                 return true;
             }
@@ -77,6 +84,15 @@ public class ServerConnection {
             logFailure();
             throw new NoSqlStoreException(e);
         }
+    }
+
+    public boolean readWriteHeaders() {
+        boolean readHeaders = readHeaders();
+        if (readHeaders && headers.length != 4) {
+            logFailure();
+            throw new RemotingException("invalid header string, aborting request");
+        }
+        return readHeaders;
     }
 
     public String getRequest() {
@@ -91,6 +107,23 @@ public class ServerConnection {
         return command;
     }
 
+    public void endCommand() {
+        try {
+            String line = reader.readLine();
+            if (line == null) {
+                logFailure();
+                throw new RemotingException("stream ended prematurely while reading end of command, aborting request");
+            }
+            if (line.length() > 0) {
+                logFailure();
+                throw new RemotingException("command didn't end with an empty blank line, aborting request");
+            }
+        } catch (IOException e) {
+            logFailure();
+            throw new NoSqlStoreException(e);
+        }
+    }
+    
     /**
      * Reads all the data up until the next blank line.
      */
@@ -98,7 +131,15 @@ public class ServerConnection {
         try {
             StringBuffer buffer = new StringBuffer();
             String line;
-            while ((line = reader.readLine()) != null && line.length() != 0) {
+            while (true) {
+                line = reader.readLine();
+                if (line == null) {
+                    logFailure();
+                    throw new RemotingException("stream ended prematurely while reading data, aborting request");
+                }
+                if (line.length() == 0) {
+                    break;
+                }
                 buffer.append(line);
                 buffer.append('\n');
             }
@@ -108,7 +149,21 @@ public class ServerConnection {
             throw new RemotingException(e);
         }
     }
+/*
+    public void getTermination() {
+        try {
+            String line = reader.readLine();
+             if (line == null || !line.equals("***")) {
+                logFailure();
+                throw new RemotingException("stream ended abruptly while reading data, aborting request");
+            }
+        } catch (IOException e) {
+            logFailure();
+            throw new RemotingException(e);
+        }
 
+    }
+*/
     public void notFound(String message) {
         writer.println("not-found");
         writer.println(message);

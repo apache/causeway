@@ -59,6 +59,7 @@ public class FileServerProcessor {
     public void process(ServerConnection connection) {
         try {
             if (acceptNewRequests) {
+                connection.readCommand();
                 char command = connection.getCommand();
                 switch (command) {
                 case 'L':
@@ -111,6 +112,7 @@ public class FileServerProcessor {
 
     private void list(ServerConnection connection) {
         try {
+            connection.endCommand();
             String type = connection.getRequest();
             int limit = connection.getRequestAsInt();
             if (limit == 0) {
@@ -154,6 +156,7 @@ public class FileServerProcessor {
         String type = null;
         String id = null;
         try {
+            connection.endCommand();
             type = connection.getRequest();
             id = connection.getRequest();
             DataReader reader = findInstance(type, id, connection);
@@ -163,10 +166,12 @@ public class FileServerProcessor {
                 connection.ok();
                 readInstance(reader, connection);
             }
-            locks.release(id, getTransactionId());
         } catch (IOException e) {
             throw new NoSqlStoreException(Util.READ_ERROR + " for " + type + "/" + id, e);
+        } finally {
+            locks.release(id, getTransactionId());
         }
+
     }
 
 
@@ -212,7 +217,7 @@ public class FileServerProcessor {
 
     private List<FileContent> getWriteRequests(ServerConnection connection) throws IOException {
         ArrayList<FileContent> files = new ArrayList<FileContent>();
-        while(connection.readHeader()) {
+        while(connection.readWriteHeaders()) {
             char command = connection.getCommand();
             String type = connection.getRequest();
             String id = connection.getRequest();
@@ -223,6 +228,7 @@ public class FileServerProcessor {
             String buf = connection.getData();
             files.add(new FileContent(command, id, currentVersion, newVersion, type, buf));
         }
+//        connection.endCommand();
         return files;
     }
 
@@ -236,9 +242,9 @@ public class FileServerProcessor {
                 DataReader dataReader = new DataReader(item.type, item.id);
                 String version = dataReader.getVersion();
                 if (!version.equals(item.currentVersion)) {
-                    String data = dataReader.getData();
+                    //String data = dataReader.getData();
                     dataReader.close();
-                    return data;
+                    return "mismatch between FileContent version (" + item.currentVersion + ") and DataReader version (" + version + ")"; 
                 }
                 dataReader.close();
             }
@@ -258,6 +264,7 @@ public class FileServerProcessor {
     }
 
     private void status(ServerConnection connection) throws IOException {
+        connection.endCommand();
         String request = connection.getRequest();
         if (request.equals("contains-data")) {
             connection.response(Util.isPopulated());
@@ -268,6 +275,7 @@ public class FileServerProcessor {
     }
 
     private void service(ServerConnection connection) {
+        connection.endCommand();
         String name = connection.getRequest();
         File file = Util.serviceFile(name);
         if (file.exists()) {
@@ -297,6 +305,7 @@ public class FileServerProcessor {
     }
 
     private void saveService(ServerConnection connection) throws IOException {
+        connection.endCommand();
         String name = connection.getRequest();
         String key = connection.getRequest();
 
@@ -322,6 +331,7 @@ public class FileServerProcessor {
     private void nextSerialBatch(ServerConnection connection) throws IOException {
         // TODO lock file first
 
+        connection.endCommand();
         String name = connection.getRequest();
         int batchSize = connection.getRequestAsInt();
 
@@ -348,6 +358,7 @@ public class FileServerProcessor {
     }
 
     private void hasInstances(ServerConnection connection) throws IOException {
+        connection.endCommand();
         String type = connection.getRequest();
         File[] listFiles = listFiles(type); 
         boolean hasInstances = listFiles != null && listFiles.length > 0; 

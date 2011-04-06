@@ -53,9 +53,9 @@ public class DestroyObjectCommandImplementationTest {
         ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
         IsisContext.getPersistenceSession().makePersistent(object);
         object.setOptimisticLock(new SerialNumberVersion(3, "username", new Date(1000)));
-
+        
         long id = ((SerialOid) object.getOid()).getSerialNo();
-        final String key = Long.toHexString(id);
+        final String key = Long.toString(id, 16);
 
         Mockery context = new Mockery();
         final NoSqlCommandContext commandContext = context.mock(NoSqlCommandContext.class);

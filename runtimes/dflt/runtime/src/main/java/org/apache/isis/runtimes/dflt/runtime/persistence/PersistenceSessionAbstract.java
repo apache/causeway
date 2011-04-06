@@ -339,7 +339,9 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         if (adapter.getResolveState().isGhost()) {
             adapter.changeState(ResolveState.RESOLVING);
         }
-        adapter.changeState(ResolveState.RESOLVED);
+        if (adapter.getResolveState().isValidToChangeTo(ResolveState.RESOLVED)) {
+            adapter.changeState(ResolveState.RESOLVED);
+        }
         return adapter;
     }
     
