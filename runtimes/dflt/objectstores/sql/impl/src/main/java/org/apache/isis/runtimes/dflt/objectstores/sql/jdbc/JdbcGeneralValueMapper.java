@@ -32,35 +32,35 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactor
 
 public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 
-	public static class Factory implements FieldMappingFactory {
-		private final String type;
+    public static class Factory implements FieldMappingFactory {
+        private final String type;
 
-		public Factory(final String type) {
-			this.type = type;
-		}
+        public Factory(final String type) {
+            this.type = type;
+        }
 
-		@Override
-		public FieldMapping createFieldMapping(final ObjectAssociation field) {
-			return new JdbcGeneralValueMapper(field, type);
-		}
-	}
+        @Override
+        public FieldMapping createFieldMapping(final ObjectAssociation field) {
+            return new JdbcGeneralValueMapper(field, type);
+        }
+    }
 
-	private final String type;
+    private final String type;
 
-	public JdbcGeneralValueMapper(final ObjectAssociation field,
-			final String type) {
-		super(field);
-		this.type = type;
-	}
+    public JdbcGeneralValueMapper(final ObjectAssociation field, final String type) {
+        super(field);
+        this.type = type;
+    }
 
-	// TODO:KAM: here X
-	
-	@Override
-    protected Object preparedStatementObject(ObjectAdapter value){
-        if (value == null) return null;
-        
+    // TODO:KAM: here X
+
+    @Override
+    protected Object preparedStatementObject(ObjectAdapter value) {
+        if (value == null)
+            return null;
+
         Object o = value.getObject();
-        
+
         if (o instanceof Money) {
             return ((Money) o).floatValue();
         } else if (o instanceof Percentage) {
@@ -72,9 +72,8 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
         } else if (o instanceof String) {
             return o;
         } else {
-            if (columnType().contains("CHAR")){
-                EncodableFacet facet = value.getSpecification().getFacet(
-                        EncodableFacet.class);
+            if (columnType().contains("CHAR")) {
+                EncodableFacet facet = value.getSpecification().getFacet(EncodableFacet.class);
                 String encodedString = facet.toEncodedString(value);
                 return encodedString;
             } else {
@@ -82,19 +81,19 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
             }
         }
     }
-	
 
-	@Override
-	public ObjectAdapter setFromDBColumn(Results results,
-			final String encodeValue, String columnName, final ObjectAssociation field) {
-		EncodableFacet facet = field.getSpecification().getFacet(
-				EncodableFacet.class);
-		return facet.fromEncodedString(encodeValue);
-	}
+    @Override
+    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
+        String encodedValue = results.getString(columnName);
+        if (encodedValue == null)
+            return null;
+        EncodableFacet facet = field.getSpecification().getFacet(EncodableFacet.class);
+        return facet.fromEncodedString(encodedValue);
+    }
 
-	@Override
-	public String columnType() {
-		return type;
-	}
+    @Override
+    public String columnType() {
+        return type;
+    }
 
 }

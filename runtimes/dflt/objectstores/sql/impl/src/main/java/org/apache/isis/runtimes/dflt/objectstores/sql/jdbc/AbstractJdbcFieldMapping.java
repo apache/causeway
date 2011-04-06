@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -29,11 +28,10 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 
-
 public abstract class AbstractJdbcFieldMapping implements FieldMapping {
     private final String columnName;
     protected final ObjectAssociation field;
-        
+
     public AbstractJdbcFieldMapping(ObjectAssociation field) {
         this.field = field;
         columnName = Sql.sqlFieldName(field.getId());
@@ -57,7 +55,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         if (fieldValue == null) {
             sql.append("NULL");
         } else {
-        	sql.append("?");
+            sql.append("?");
             connector.addToQueryValues(preparedStatementObject(fieldValue));
         }
     }
@@ -80,21 +78,14 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         sql.append("?");
         connector.addToQueryValues(preparedStatementObject(fieldValue));
     }
-    
+
     @Override
     public void initializeField(ObjectAdapter object, Results rs) {
         String columnName = Sql.sqlFieldName(field.getId());
-        String encodedValue = rs.getString(columnName);
-        ObjectAdapter restoredValue;
-        if (encodedValue == null) {
-            restoredValue = null;
-        } else {
-            restoredValue = setFromDBColumn(rs, encodedValue, columnName, field);
-            
-        }
+        ObjectAdapter restoredValue = setFromDBColumn(rs, columnName, field);
         ((OneToOneAssociation) field).initAssociation(object, restoredValue);
     }
-    
+
     @Override
     public void debugData(DebugBuilder debug) {
         debug.appendln(field.getId(), columnName + "/" + columnType());
@@ -104,9 +95,6 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
 
     protected abstract Object preparedStatementObject(ObjectAdapter value);
 
-    protected abstract ObjectAdapter setFromDBColumn(Results results, String encodeValue, String columnName,
-        ObjectAssociation field);
-
+    protected abstract ObjectAdapter setFromDBColumn(Results results, String columnName, ObjectAssociation field);
 
 }
-

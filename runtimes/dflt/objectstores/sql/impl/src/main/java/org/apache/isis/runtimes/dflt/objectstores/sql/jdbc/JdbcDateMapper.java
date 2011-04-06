@@ -70,8 +70,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
     
 
     @Override
-    public ObjectAdapter setFromDBColumn(final Results results, final String encodedValue, final String columnName,
-        final ObjectAssociation field) {
+    public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         ObjectAdapter restoredValue;
         java.util.Date javaDateValue = results.getJavaDateOnly(columnName);
         final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();

@@ -49,7 +49,7 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
 	@Override
 	public ObjectAdapter setFromDBColumn(Results results,
-			final String encodedValue, String columnName, final ObjectAssociation field) {
+			String columnName, final ObjectAssociation field) {
         /*
          * Long hour = Long.decode(encodedValue.substring(0, 2)); Long minute = Long.decode(encodedValue.substring(3,
          * 5)); Long millis = (minute + hour * 60) * 60 * 1000; String valueString = "T" + Long.toString(millis); return

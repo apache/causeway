@@ -41,15 +41,17 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
     }
 
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value){
+    protected Object preparedStatementObject(ObjectAdapter value) {
         TimeStamp asDate = (TimeStamp) value.getObject();
         java.sql.Timestamp timeStamp = new java.sql.Timestamp(asDate.longValue());
         return timeStamp;
     }
-    
 
     @Override
-    public ObjectAdapter setFromDBColumn(Results results, final String encodedValue, String columnName, final ObjectAssociation field) {
+    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
+        String encodedValue = results.getString(columnName);
+        if (encodedValue == null)
+            return null;
         // convert date to yyyymmddhhmm
         String year = encodedValue.substring(0, 4);
         String month = encodedValue.substring(5, 7);

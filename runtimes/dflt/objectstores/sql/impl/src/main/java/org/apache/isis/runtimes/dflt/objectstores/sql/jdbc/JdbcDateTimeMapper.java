@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.applib.value.DateTime;
@@ -28,10 +27,10 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
-
 public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
-    
+
     public static class Factory implements FieldMappingFactory {
+        @Override
         public FieldMapping createFieldMapping(final ObjectAssociation field) {
             return new JdbcDateTimeMapper(field);
         }
@@ -42,14 +41,17 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
     }
 
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value){
+    protected Object preparedStatementObject(ObjectAdapter value) {
         DateTime asDate = (DateTime) value.getObject();
         java.sql.Timestamp dateTime = new java.sql.Timestamp(asDate.longValue());
         return dateTime;
     }
-    
 
-    public ObjectAdapter setFromDBColumn(Results results, final String encodedValue, String columnName, final ObjectAssociation field)             {
+    @Override
+    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
+        String encodedValue = results.getString(columnName);
+        if (encodedValue == null)
+            return null;
         // convert date to yyyymmddhhmm
         String year = encodedValue.substring(0, 4);
         String month = encodedValue.substring(5, 7);
@@ -59,7 +61,8 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
         String valueString = year + month + day + "T" + hour + minute + "00000";
         return field.getSpecification().getFacet(EncodableFacet.class).fromEncodedString(valueString);
     }
-    
+
+    @Override
     public String columnType() {
         return JdbcConnector.TYPE_DATETIME;
     }

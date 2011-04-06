@@ -4,7 +4,6 @@ import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
@@ -111,31 +110,11 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     @Override
-    public void initializeField(ObjectAdapter object, Results rs) {
-        // TODO: remove this definition when encodedValue is no longer passed to setFromDBColumn
-        String columnName = columnName(0);
-        String encodedValue = rs.getString(columnName);
-
-        ObjectAdapter restoredValue;
-        if (encodedValue == null) {
-            restoredValue = null;
-        } else {
-            restoredValue = setFromDBColumn(rs, encodedValue, columnName, field);
-
-        }
-        ((OneToOneAssociation) field).initAssociation(object, restoredValue);
-    }
-
-    @Override
-    public ObjectAdapter setFromDBColumn(Results results, final String encodedValue, String columnName,
-        final ObjectAssociation field) {
-
+    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
         ObjectAdapter restoredValue;
         Object objectValue = getObjectFromResults(results);
         restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(objectValue);
-
         return restoredValue;
-
     }
 
     @Override
