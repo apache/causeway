@@ -21,10 +21,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Money;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
@@ -35,7 +33,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactor
  */
 public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
 
-	public static class Factory implements FieldMappingFactory {
+    public static class Factory implements FieldMappingFactory {
         private final String type1;
         private final String type2;
 
@@ -45,31 +43,18 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
         }
 
         @Override
-		public FieldMapping createFieldMapping(final ObjectAssociation field) {
+        public FieldMapping createFieldMapping(final ObjectAssociation field) {
             return new JdbcMoneyValueMapper(field, type1, type2);
-		}
-	}
-
-    private final String[] types = new String[2];
-    private final String[] columnNames = new String[2];
-
+        }
+    }
 
     public JdbcMoneyValueMapper(ObjectAssociation field, String type1, String type2) {
-        super(field, 2);
-        this.types[0] = type1;
-        this.types[1] = type2;
-
-        String fieldName = field.getId();
-        columnNames[0] = Sql.sqlFieldName(fieldName + "1");
-        columnNames[1] = Sql.sqlFieldName(fieldName + "2");
+        super(field, 2, type1, type2);
     }
 
     @Override
-    protected Object preparedStatementObject(int index, ObjectAdapter value){
-        if (value == null) return null;
-        
-        Object o = value.getObject();
-        
+    protected Object preparedStatementObject(int index, Object o) {
+
         if (o instanceof Money) {
             if (index == 0) {
                 return ((Money) o).doubleValue();
@@ -81,18 +66,6 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
                 + " for MoneyValueMapper");
         }
     }
-	
-
-    @Override
-    protected String columnType(int index) {
-        return types[index];
-	}
-
-    @Override
-    protected String columnName(int index) {
-        return columnNames[index];
-    }
-
 
     @Override
     protected Object getObjectFromResults(Results results) {
@@ -103,9 +76,5 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
 
         return moneyObject;
     }
-
-
-
-
 
 }
