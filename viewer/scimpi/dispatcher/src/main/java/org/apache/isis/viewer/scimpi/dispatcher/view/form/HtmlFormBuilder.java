@@ -116,7 +116,6 @@ public class HtmlFormBuilder {
     }
 
     private static String createObjectField(InputField field, String type) {
-        String value = field.getValue();
         return field.getHtml();
     }
 
@@ -132,14 +131,15 @@ public class HtmlFormBuilder {
     }
 
     private static String createPasswordField(InputField field) {
-        return createTextField(field, "password");
+        String extra = " autocomplete=\"off\"";
+        return createTextField(field, "password", extra);
     }
 
     private static String createTextField(InputField field) {
-        return createTextField(field, "text");
+        return createTextField(field, "text", "");
     }
     
-    private static String createTextField(InputField field, String type) {
+    private static String createTextField(InputField field, String type, String additionalAttributes) {
         String value = field.getValue();
         String valueSegment = value == null ? "" : " value=\"" + value + "\"";
         String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
@@ -147,7 +147,7 @@ public class HtmlFormBuilder {
         String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
         String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
         return "<input type=\"" + type + "\" name=\"" + field.getName() + "\"" + valueSegment + lengthSegment + 
-            maxLengthSegment + disabled + " />" + requiredSegment;
+            maxLengthSegment + disabled + additionalAttributes + " />" + requiredSegment;
     }
 
     private static String createCheckbox(InputField field) {
@@ -174,7 +174,8 @@ public class HtmlFormBuilder {
             }
         }
         if (!field.isRequired() || length == 0) {
-            str.append("    <option value=\"null\"></option>\n");
+            String selectedSegment = field.getValue() == null || field.getValue().equals("") ? " selected=\"selected\"" : "";
+            str.append("    <option value=\"null\"" + selectedSegment + "></option>\n");
         }
         if (offerOther) {
             str.append("    <option value=\"-OTHER-\">Other:</option>\n");

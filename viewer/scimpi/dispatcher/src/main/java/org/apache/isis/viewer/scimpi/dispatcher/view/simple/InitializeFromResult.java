@@ -35,7 +35,7 @@ public class InitializeFromResult extends AbstractElementProcessor {
         String sourceObjectId = objectOrResult(request); 
         Class<?> cls = forClass(request); 
         String variableName = request.getRequiredProperty(NAME); 
-        //        String defaultObjectId = request.getOptionalProperty(DEFAULT);         
+        String defaultObjectId = request.getOptionalProperty(DEFAULT);         
         String scopeName = request.getOptionalProperty(SCOPE);
         Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
 
@@ -47,7 +47,10 @@ public class InitializeFromResult extends AbstractElementProcessor {
             request.appendDebug("     " + variableName + " set to " + sourceObjectId + " (" + scope + ")"); 
             context.addVariable(variableName, sourceObjectId, scope); 
         } else { 
-            request.appendDebug("     " + variableName + " set to " + sourceObjectId + " (" + scope + ")"); 
+            request.appendDebug("     " + variableName + " set to " + sourceObjectId + " (" + scope + ")");
+            if (defaultObjectId != null) {
+                context.addVariable(variableName, defaultObjectId, scope);
+            }
             context.changeScope(variableName, scope); 
         } 
     } 

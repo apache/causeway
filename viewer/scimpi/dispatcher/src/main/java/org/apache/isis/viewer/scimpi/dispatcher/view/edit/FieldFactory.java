@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
+import org.apache.isis.core.progmodel.facets.value.password.PasswordValueFacet;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
@@ -71,12 +72,10 @@ public class FieldFactory {
             field.setHeight(multiLineFacet.numberOfLines());
             field.setWrapped(!multiLineFacet.preventWrapping());
 
-            // TODO figure out a better way to determine if boolean or a password
             ObjectSpecification spec = param.getSpecification();
-            if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                    || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class.getName()))) {
+            if (spec.containsFacet(BooleanValueFacet.class)) {
                 field.setType(InputField.CHECKBOX);
-            } else if (spec.getFullIdentifier().endsWith(".Password")) {
+            } else if (spec.containsFacet(PasswordValueFacet.class)) {
                 field.setType(InputField.PASSWORD);
             } else {
                 field.setType(InputField.TEXT); 
@@ -91,7 +90,7 @@ public class FieldFactory {
             String[] optionValues = new String[noOptions];
             String[] optionTitles = new String[noOptions];
             for (int j = 0; j < optionsForParameter.length; j++) {
-                int i = j + (field.isRequired() ? 0 : 1);
+                int i = j; // + (field.isRequired() ? 0 : 1);
                 optionValues[i] = getValue(context, optionsForParameter[j]);
                 optionTitles[i] = optionsForParameter[j].titleString();
             }

@@ -56,6 +56,7 @@ public class DispatcherServlet extends HttpServlet {
         try {
             ServletRequestContext context = new ServletRequestContext();
             HttpSession httpSession = request.getSession(false);
+            // TODO when using version 3.0 of Servlet API use the HttpOnly setting for improved security
             if (httpSession != null) {
                 HashMap<String, Object> data = (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
                 if (data != null) {
