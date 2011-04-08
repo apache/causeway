@@ -217,6 +217,10 @@ public abstract class RequestContext {
                             break;
                         }
                     }
+                } else if (association.isOneToManyAssociation()) {
+                    if (association.getId().equals(idParts[2])) {
+                        return association.get(parentObject);
+                    }
                 }
             }
             return aggregatedAdapter;
