@@ -121,7 +121,7 @@ public class TimeTest {
 
     @Test
     public void testToString() {
-        assertEquals("13:14", time.toString());
+        assertEquals("13:14:00", time.toString());
     }
 
 }

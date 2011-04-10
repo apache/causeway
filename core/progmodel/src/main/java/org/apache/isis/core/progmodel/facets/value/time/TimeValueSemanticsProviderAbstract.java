@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.time;
 
 import java.text.DateFormat;
@@ -29,7 +28,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
-
 
 public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -50,13 +48,10 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     }
 
     @SuppressWarnings("unchecked")
-    public TimeValueSemanticsProviderAbstract(
-            final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE, configuration,
-                context);
+    public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE,
+            configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.time");
         if (formatRequired == null) {
@@ -81,7 +76,7 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
 
     @Override
     protected void clearFields(final Calendar cal) {
-        cal.set(Calendar.YEAR, 1971);
+        cal.set(Calendar.YEAR, 1970);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.DAY_OF_MONTH, 1);
     }

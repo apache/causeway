@@ -57,11 +57,11 @@ public class Time extends Magnitude<Time> {
      */
     public Time() {
         DateTime dateTime = Clock.getTimeAsDateTime();
-        time = dateTime.withDate(1971, 1, 1);
+        time = dateTime.withDate(1970, 1, 1); // Epoch is 1970-01-01
     }
 
     private DateTime newDateTime(final int hourOfDay, final int minuteOfHour, final int secondsOfMinute) {
-        return new DateTime(1971, 1, 1, hourOfDay, minuteOfHour, secondsOfMinute, 0, Defaults.getApplibTimeZone());
+        return new DateTime(1970, 1, 1, hourOfDay, minuteOfHour, secondsOfMinute, 0, Defaults.getApplibTimeZone());
     }
 
     /**
@@ -191,12 +191,6 @@ public class Time extends Magnitude<Time> {
         return (time == null) ? "" : DateTimeFormat.shortTime().print(time);
     }
 
-    @Override
-    public String toString() {
-        // return String.format("%02d:%02d:%02d", getHour(), getMinute(), getSecond());
-        return String.format("%02d:%02d", getHour(), getMinute());
-    }
-
     public boolean sameHourAs(final Time time) {
         return getHour() == time.getHour();
     }
@@ -247,6 +241,12 @@ public class Time extends Magnitude<Time> {
         java.sql.Time time1 = java.sql.Time.valueOf(toString() + ":00");
         // TODO: confirm that this is in UTC
         return time1;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%02d:%02d:%02d", getHour(), getMinute(), getSecond());
+        // return String.format("%02d:%02d", getHour(), getMinute());
     }
 
 }
