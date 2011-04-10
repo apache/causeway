@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import java.sql.CallableStatement;
@@ -32,15 +31,15 @@ import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Time;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
-
 
 public class JdbcResults implements Results {
     ResultSet set;
 
-    public JdbcResults(final CallableStatement statement) {}
+    public JdbcResults(final CallableStatement statement) {
+    }
 
     public JdbcResults(final ResultSet set) {
         this.set = set;
@@ -98,8 +97,8 @@ public class JdbcResults implements Results {
             // 2010-04-08 = 1270684800000
             // This is really painful! Java refuses to create java.util.Date in UTC!
             // It creates java.util.Dates in Local time-zone, but assumes the DB date is UTC.
-            String string = set.getString(columnName); 
-            final DateTime utcDate = new DateTime(string, SqlObjectStore.defaultTimeZone());
+            String string = set.getString(columnName);
+            final DateTime utcDate = new DateTime(string, Defaults.getTimeZone());
             final java.sql.Date date = new java.sql.Date(utcDate.getMillis());
             return date;
         } catch (SQLException e) {
@@ -114,7 +113,7 @@ public class JdbcResults implements Results {
 
             DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss");
 
-            final DateTime utcDate = formatter.withZone(SqlObjectStore.defaultTimeZone()).parseDateTime(string);
+            final DateTime utcDate = formatter.withZone(Defaults.getTimeZone()).parseDateTime(string);
             final java.sql.Time time = new java.sql.Time(utcDate.getMillis());
 
             return time;
@@ -124,7 +123,7 @@ public class JdbcResults implements Results {
     }
 
     @Override
-    public java.util.Date getJavaDateTime(String columnName, Calendar calendar){
+    public java.util.Date getJavaDateTime(String columnName, Calendar calendar) {
         try {
             return set.getDate(columnName, calendar);
         } catch (SQLException e) {
@@ -148,8 +147,8 @@ public class JdbcResults implements Results {
             // 2010-04-08 = 1270684800000
             // This is really painful! Java refuses to create java.util.Date in UTC!
             // It creates java.util.Dates in Local time-zone, but assumes the DB date is UTC.
-            String string = set.getString(columnName); 
-            final DateTime utcDate = new DateTime(string, SqlObjectStore.defaultTimeZone());
+            String string = set.getString(columnName);
+            final DateTime utcDate = new DateTime(string, Defaults.getTimeZone());
             return new Date(utcDate);
         } catch (SQLException e) {
             throw new SqlObjectStoreException(e);
@@ -161,7 +160,7 @@ public class JdbcResults implements Results {
         try {
             String string = set.getString(columnName);
             DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss");
-            final DateTimeZone defaultTimeZone = SqlObjectStore.defaultTimeZone();
+            final DateTimeZone defaultTimeZone = Defaults.getTimeZone();
             final DateTime utcDate = formatter.withZone(defaultTimeZone).parseDateTime(string);
             return new Time(utcDate);
         } catch (SQLException e) {
@@ -169,6 +168,7 @@ public class JdbcResults implements Results {
         }
     }
 
+    @Override
     public double getDouble(String columnName) {
         try {
             return set.getDouble(columnName);

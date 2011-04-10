@@ -19,13 +19,10 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.joda.time.DateTimeZone;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -59,22 +56,6 @@ public final class SqlObjectStore implements ObjectStore {
     private DatabaseConnectorPool connectionPool;
     private ObjectMappingLookup objectMappingLookup;
     private boolean isInitialized;
-
-    private static Calendar calendar;
-    static {
-        TimeZone UTC = TimeZone.getTimeZone("UTC");
-        calendar = Calendar.getInstance(UTC);
-    }
-
-    public static Calendar defaultCalendar() {
-        return calendar;
-    }
-
-    private static DateTimeZone dateTimeZone = DateTimeZone.UTC;
-
-    public static DateTimeZone defaultTimeZone() {
-        return dateTimeZone;
-    }
 
     @Override
     public void abortTransaction() {
@@ -238,6 +219,7 @@ public final class SqlObjectStore implements ObjectStore {
         return allInstances(spec);
     }
 
+    // TODO: allInstances of should find all derived types, too.
     private ObjectAdapter[] allInstances(ObjectSpecification spec) {
         DatabaseConnector connector = connectionPool.acquire();
         ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
@@ -323,6 +305,9 @@ public final class SqlObjectStore implements ObjectStore {
         DatabaseConnector connector = connectionPool.acquire();
         isInitialized = connector.hasTable(Sql.tableIdentifier(TABLE_NAME));
         if (!isInitialized) {
+
+            Defaults.initialise();
+
             StringBuffer sql = new StringBuffer();
             sql.append("create table ");
             sql.append(Sql.tableIdentifier(TABLE_NAME));
@@ -403,8 +388,8 @@ public final class SqlObjectStore implements ObjectStore {
     @Override
     public void startTransaction() {
     }
-    
-    public static String getTableName(){
+
+    public static String getTableName() {
         return TABLE_NAME;
     }
 

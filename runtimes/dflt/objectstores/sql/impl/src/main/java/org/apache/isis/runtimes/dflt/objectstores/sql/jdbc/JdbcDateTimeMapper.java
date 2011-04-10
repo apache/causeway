@@ -43,7 +43,7 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
     @Override
     protected Object preparedStatementObject(ObjectAdapter value) {
         DateTime asDate = (DateTime) value.getObject();
-        java.sql.Timestamp dateTime = new java.sql.Timestamp(asDate.longValue());
+        java.sql.Timestamp dateTime = new java.sql.Timestamp(asDate.millisSinceEpoch());
         return dateTime;
     }
 

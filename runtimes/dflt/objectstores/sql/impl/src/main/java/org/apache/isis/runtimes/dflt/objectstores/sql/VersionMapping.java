@@ -22,9 +22,9 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 
 public class VersionMapping {
     private String lastActivityDateColumn;
@@ -84,7 +84,7 @@ public class VersionMapping {
 
         sql.append(",");
         sql.append(lastActivityDateColumn);
-        sql.append(" "+JdbcConnector.timeStampType());
+        sql.append(" " + JdbcConnector.timeStampType());
 
         return sql.toString();
     }
@@ -97,7 +97,7 @@ public class VersionMapping {
     public Version getLock(Results rs) {
         long number = rs.getLong(versionColumn);
         String user = rs.getString(lastActivityUserColumn);
-        Date time = rs.getJavaDateTime(lastActivityDateColumn, SqlObjectStore.defaultCalendar());
+        Date time = rs.getJavaDateTime(lastActivityDateColumn, Defaults.getCalendar());
         Version version = new SerialNumberVersion(number, user, time);
         return version;
     }
