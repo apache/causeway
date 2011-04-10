@@ -272,7 +272,7 @@ public class TableView extends AbstractTableView {
         }
         RequestContext context = request.getContext();
         TableContentWriter rowBuilder = rowBuilder(request, context, context.mapObject(object, Scope.REQUEST), field.getId(), fields);
-        write(request, collection, summary, rowBuilder, null);
+        write(request, collection, summary, rowBuilder, null, null);
     }
 
     @Override

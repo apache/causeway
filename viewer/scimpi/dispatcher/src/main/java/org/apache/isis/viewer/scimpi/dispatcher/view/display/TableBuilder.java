@@ -42,6 +42,7 @@ public class TableBuilder extends AbstractTableView {
             ObjectAdapter collection) {
 
         final String variable = request.getOptionalProperty(ELEMENT_NAME, ELEMENT);
+        final String headerClass = request.getOptionalProperty("head-" + CLASS);
 
         final TableBlock block = new TableBlock();
         block.setCollection(collection);
@@ -57,7 +58,8 @@ public class TableBuilder extends AbstractTableView {
 
             @Override
             public void writeHeaders(PageWriter writer) {
-                writer.appendHtml("<thead>");
+                String headerSegment = headerClass == null ? "" : (" class=\"" + headerClass + "\"");
+                writer.appendHtml("<thead" + headerSegment + ">");
                 writer.appendHtml(headers);
                 writer.appendHtml("</thead>");
             }

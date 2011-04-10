@@ -48,7 +48,8 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         String parentObjectId = null;
         boolean isFieldEditable = false;
         String field = request.getOptionalProperty(FIELD);
-        ObjectSpecification elementSpec;
+        String tableClass = request.getOptionalProperty(CLASS);
+         ObjectSpecification elementSpec;
         if (field != null) {
             String objectId = request.getOptionalProperty(OBJECT);
             ObjectAdapter object = context.getMappedObjectOrResult(objectId);
@@ -81,7 +82,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         List<ObjectAssociation> allFields = elementSpec.getAssociations(
                 ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
-        write(request, collection, summary, rowBuilder, rowClasses);
+        write(request, collection, summary, rowBuilder, tableClass, rowClasses);
 
     }
 
@@ -95,10 +96,12 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             final String parent,
             final List<ObjectAssociation> allFields, ObjectAdapter collection);
 
-    public static void write(Request request, ObjectAdapter collection, String summary, TableContentWriter rowBuilder, String[] rowClasses) {
+    public static void write(Request request, ObjectAdapter collection, String summary, TableContentWriter rowBuilder, String tableClass, String[] rowClasses) {
         RequestContext context = request.getContext();
 
-        request.appendHtml("<table summary=\"" + summary + "\">");
+        String summarySegment = " summary=\"" + summary + "\"";
+        String classSegment = tableClass == null ? "" : (" class=\"" + tableClass + "\"");
+        request.appendHtml("<table" + classSegment + summarySegment + ">");
         rowBuilder.writeHeaders(request);
         rowBuilder.writeFooters(request);
 

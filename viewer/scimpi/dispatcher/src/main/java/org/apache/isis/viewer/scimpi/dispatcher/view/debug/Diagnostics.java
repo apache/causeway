@@ -57,6 +57,7 @@ public class Diagnostics extends AbstractElementProcessor {
                 RequestContext context = request.getContext();
                 DebugHtmlString debug = new DebugHtmlString();
                 context.append(debug, "variables");
+                request.appendHtml(debug.toString());
             } else  if ("processing".equals(type)) {
                 request.appendHtml(request.getContext().getDebugTrace());      
             } else {
