@@ -23,10 +23,10 @@ import java.util.Calendar;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
-import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 
+import org.apache.isis.applib.Defaults;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
@@ -56,7 +56,7 @@ public class Date extends Magnitude<Date> {
         time.set(Calendar.MINUTE, 0);
         time.set(Calendar.SECOND, 0);
         time.set(Calendar.MILLISECOND, 0);
-        date = new DateTime(time.getTime(), DateTimeZone.UTC);
+        date = new DateTime(time.getTime(), Defaults.getApplibTimeZone());
     }
 
     /**
@@ -67,12 +67,11 @@ public class Date extends Magnitude<Date> {
         date = newDateTime(year, month, day);
     }
 
-
     /**
      * Create a Date object based on the specified Java date object. The time portion of the Java date is disposed of.
      */
     public Date(final java.util.Date date) {
-        this.date = new DateTime(date.getTime(), DateTimeZone.UTC);
+        this.date = new DateTime(date.getTime(), Defaults.getApplibTimeZone());
     }
 
     public Date(final long millisSinceEpoch) {
@@ -84,7 +83,7 @@ public class Date extends Magnitude<Date> {
     }
 
     private DateTime newDateTime(int year, int month, int day) {
-        return new DateTime(year, month, day, 0, 0, 0, 0, DateTimeZone.UTC);
+        return new DateTime(year, month, day, 0, 0, 0, 0, Defaults.getApplibTimeZone());
     }
 
     protected Date createDate(final DateTime date) {
@@ -106,7 +105,8 @@ public class Date extends Magnitude<Date> {
             throw new IllegalArgumentException("Month must be in the range 1 - 12 inclusive");
         }
         final DateTime newDate = newDateTime(year, month, 1);
-        final int lastDayOfMonth = newDate.dayOfMonth().getMaximumValue();;
+        final int lastDayOfMonth = newDate.dayOfMonth().getMaximumValue();
+        ;
         if ((day < 1) || (day > lastDayOfMonth)) {
             throw new IllegalArgumentException("Day must be in the range 1 - " + lastDayOfMonth + " inclusive: " + day);
         }
@@ -121,11 +121,12 @@ public class Date extends Magnitude<Date> {
         java.util.Date javaDate = date.toDate();
         return javaDate;
     }
+
     /**
      * 
      * @return the milliseconds from 1970-01-01T00:00:00Z
      */
-    public long getMillisSinceEpoch(){
+    public long getMillisSinceEpoch() {
         return date.getMillis();
     }
 
@@ -172,7 +173,7 @@ public class Date extends Magnitude<Date> {
      * @author Joshua Cassidy
      */
     public int getDayOfWeek() {
-        return date.getDayOfWeek()-1; // Mon - Sun == 1 - 7
+        return date.getDayOfWeek() - 1; // Mon - Sun == 1 - 7
     }
 
     /**
@@ -206,7 +207,7 @@ public class Date extends Magnitude<Date> {
     }
 
     private boolean sameAs(final Date as, final DateTimeFieldType field) {
-        
+
         return date.get(field) == as.date.get(field);
     }
 

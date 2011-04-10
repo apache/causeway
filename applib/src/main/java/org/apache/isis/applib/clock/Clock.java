@@ -22,7 +22,10 @@ package org.apache.isis.applib.clock;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.Defaults;
 import org.apache.isis.applib.fixtures.FixtureClock;
 
 /**
@@ -77,18 +80,26 @@ public abstract class Clock {
 
     /**
      * Convenience method returning the current {@link #getTime() time} according to this Clock as a mutable
-     * {@link Calendar}.
+     * {@link Calendar}. Consider replacing with {@link #getTimeAsDateTime()
+
      */
+    @Deprecated
     public static Calendar getTimeAsCalendar() {
         return getInstance().timeAsCalendar();
     }
 
     /**
      * Convenience method returning the current {@link #getTime() time} according to this Clock as a (nominally
-     * im)mutable {@link Date}.
+     * im)mutable {@link Date}. You should now use {@link #getTimeAsDateTime()}
+     * 
      */
+    @Deprecated
     public static Date getTimeAsDate() {
         return new Date(getTime());
+    }
+
+    public static DateTime getTimeAsDateTime() {
+        return new DateTime(getTime(), Defaults.getApplibTimeZone());
     }
 
     private static void ensureReplaceable() {
@@ -137,4 +148,5 @@ final class SystemClock extends Clock {
     protected long time() {
         return System.currentTimeMillis();
     }
+
 }

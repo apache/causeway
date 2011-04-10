@@ -92,7 +92,7 @@ public class TimeTest {
 
     @Test
     public void testNewWithCurrentTime() {
-        final Time expected = new Time(21, 30);
+        final Time expected = new Time(21, 30, 25);
         final Time actual = new Time(); // Clock actually has 21:30:25
         assertEquals(expected, actual);
     }

@@ -200,6 +200,7 @@ public class FixtureClock extends Clock {
 
     @Override
     public String toString() {
-        return (calendar == null ? "System" : "Explicitly set") + ": " + Clock.getTimeAsCalendar().getTime().toString();
+        return (calendar == null ? "System" : "Explicitly set") + ": " + Clock.getTimeAsDateTime().toString();
     }
+
 }

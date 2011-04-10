@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -44,10 +43,12 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations(){{
-        	allowing(mockConfiguration).getString("isis.value.format.time");
-        	will(returnValue(null));
-        }});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.time");
+                will(returnValue(null));
+            }
+        });
 
         TestClock.initialize();
         setupSpecification(Time.class);
@@ -72,7 +73,7 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void testParseEntryOfHoursAfterNow() throws Exception {
         // TimeValueSemanticsProvider adapter = new TimeValueSemanticsProvider();
         final Object parsed = adapter.parseTextEntry(null, "+5H");
-        assertEquals(new Time(2, 30), parsed);
+        assertEquals(new Time(2, 30, 25), parsed);
     }
 
     @Test
@@ -86,7 +87,7 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void testParseEntryOfHoursBeforeToNow() throws Exception {
         // TimeValueSemanticsProvider adapter = new TimeValueSemanticsProvider();
         final Object parsed = adapter.parseTextEntry(null, "-5H");
-        assertEquals(new Time(16, 30), parsed);
+        assertEquals(new Time(16, 30, 25), parsed);
     }
 
     @Test
@@ -108,8 +109,8 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         try {
             adapter.fromEncodedString("two ten");
             fail();
-        } catch (final EncodingException expected) {}
+        } catch (final EncodingException expected) {
+        }
     }
 
 }
-

@@ -19,13 +19,12 @@
 
 package org.apache.isis.applib.value;
 
-import java.util.Calendar;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 
+import org.apache.isis.applib.Defaults;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
@@ -50,7 +49,6 @@ public class Time extends Magnitude<Time> {
     public static final int MINUTE = 60;
     public static final int HOUR = 60 * MINUTE;
     public static final int DAY = 24 * HOUR;
-    
 
     private final DateTime time;
 
@@ -58,26 +56,28 @@ public class Time extends Magnitude<Time> {
      * Create a Time object set to the current time.
      */
     public Time() {
-        Calendar calendar = Clock.getTimeAsCalendar();
-        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        final int minuteOfHour = calendar.get(Calendar.MINUTE);
-        time = newDateTime(hourOfDay, minuteOfHour);
+        DateTime dateTime = Clock.getTimeAsDateTime();
+        time = dateTime.withDate(1971, 1, 1);
     }
 
-    private DateTime newDateTime(int hourOfDay, int minuteOfHour) {
-        return new DateTime(1971, 1, 1, hourOfDay, minuteOfHour, 0, 0, DateTimeZone.UTC);
+    private DateTime newDateTime(final int hourOfDay, final int minuteOfHour, final int secondsOfMinute) {
+        return new DateTime(1971, 1, 1, hourOfDay, minuteOfHour, secondsOfMinute, 0, Defaults.getApplibTimeZone());
     }
 
     /**
      * Create a Time object for storing a time with the time set to the specified hours and minutes.
      */
     public Time(final int hour, final int minute) {
-        time = time(hour, minute);
+        this(hour, minute, 0);
     }
 
-    private DateTime time(final int hour, final int minute) {
-        checkTime(hour, minute, 0);
-        return newDateTime(hour, minute);
+    public Time(int hour, int minute, int second) {
+        time = time(hour, minute, second);
+    }
+
+    private DateTime time(final int hour, final int minute, final int seconds) {
+        checkTime(hour, minute, seconds);
+        return newDateTime(hour, minute, seconds);
     }
 
     /**
@@ -85,7 +85,7 @@ public class Time extends Magnitude<Time> {
      */
     public Time(final java.sql.Date date) {
 
-        this.time = new DateTime(date.getTime(), DateTimeZone.UTC);
+        this.time = new DateTime(date.getTime(), Defaults.getApplibTimeZone());
     }
 
     /**
@@ -100,21 +100,19 @@ public class Time extends Magnitude<Time> {
         this.time = DateTime.secondOfMinute().setCopy(0);
     }
 
-
     /**
      * Create a Time object for storing a time with the time set to the specified time of the Joda Time DateTime object.
      */
     public Time(final DateTime dateTime) {
-        this.time = newDateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour());
+        this.time = newDateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), dateTime.getSecondOfMinute());
     }
 
     /**
      * Create a new Time object from the millisSinceEpoch, using UTC.
      */
     public Time(long millisSinceEpoch) {
-        this.time = new DateTime(millisSinceEpoch, DateTimeZone.UTC);
+        this.time = new DateTime(millisSinceEpoch, Defaults.getApplibTimeZone());
     }
-
 
     /**
      * Add the specified hours and minutes to this time value, returned as a new Time object.
@@ -150,6 +148,10 @@ public class Time extends Magnitude<Time> {
         return time.getMinuteOfHour();
     }
 
+    public int getSecond() {
+        return time.getSecondOfMinute();
+    }
+
     /**
      * returns true if the time of this object has the same value as the specified time
      */
@@ -178,7 +180,7 @@ public class Time extends Magnitude<Time> {
      * The number of seconds since midnight.
      */
     public long secondsSinceMidnight() {
-        return time.getMillisOfDay() / 1000;
+        return milliSecondsSinceMidnight() / 1000;
     }
 
     public long milliSecondsSinceMidnight() {
@@ -187,14 +189,12 @@ public class Time extends Magnitude<Time> {
 
     public String titleString() {
         return (time == null) ? "" : DateTimeFormat.shortTime().print(time);
-        // final DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT);
-        // return (date == null) ? "" : timeInstance.format(date);
     }
 
     @Override
     public String toString() {
-        return getHour() + ":" + getMinute();
-
+        // return String.format("%02d:%02d:%02d", getHour(), getMinute(), getSecond());
+        return String.format("%02d:%02d", getHour(), getMinute());
     }
 
     public boolean sameHourAs(final Time time) {
@@ -248,6 +248,5 @@ public class Time extends Magnitude<Time> {
         // TODO: confirm that this is in UTC
         return time1;
     }
-
 
 }

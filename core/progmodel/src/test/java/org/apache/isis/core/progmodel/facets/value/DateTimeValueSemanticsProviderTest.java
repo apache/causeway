@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -42,10 +41,12 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Before
     public void setUpObjects() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.value.format.datetime");
-    		will(returnValue(null));
-    	}});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.datetime");
+                will(returnValue(null));
+            }
+        });
 
         TestClock.initialize();
         holder = new FacetHolderImpl();
@@ -75,14 +76,8 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
         // assertEquals("21-May-2007 10:30", adapter.titleString(null));
     }
 
-    private void assertEntry(
-            final String entry,
-            final int year,
-            final int month,
-            final int day,
-            final int hour,
-            final int minute,
-            final int second) {
+    private void assertEntry(final String entry, final int year, final int month, final int day, final int hour,
+        final int minute, final int second) {
         final Object object = adapter.parseTextEntry(null, entry);
         assertEquals(new DateTime(year, month, day, hour, minute, second), object);
     }
@@ -100,6 +95,11 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
     @Test
     public void testEntryWithLongISOFormat() {
         assertEntry("2007-05-21 10:30", 2007, 5, 21, 10, 30, 0);
+    }
+
+    @Test
+    public void testEntryWithLongISOFormatAndSeconds() {
+        assertEntry("2007-05-21 10:30:40", 2007, 5, 21, 10, 30, 40);
     }
 
     @Test
@@ -148,4 +148,3 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
     }
 
 }
-
