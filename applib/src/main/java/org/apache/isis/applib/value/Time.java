@@ -61,7 +61,7 @@ public class Time extends Magnitude<Time> {
     }
 
     private DateTime newDateTime(final int hourOfDay, final int minuteOfHour, final int secondsOfMinute) {
-        return new DateTime(1970, 1, 1, hourOfDay, minuteOfHour, secondsOfMinute, 0, Defaults.getApplibTimeZone());
+        return new DateTime(1970, 1, 1, hourOfDay, minuteOfHour, secondsOfMinute, 0, Defaults.getTimeZone());
     }
 
     /**
@@ -85,7 +85,7 @@ public class Time extends Magnitude<Time> {
      */
     public Time(final java.sql.Date date) {
 
-        this.time = new DateTime(date.getTime(), Defaults.getApplibTimeZone());
+        this.time = new DateTime(date.getTime(), Defaults.getTimeZone());
     }
 
     /**
@@ -111,7 +111,7 @@ public class Time extends Magnitude<Time> {
      * Create a new Time object from the millisSinceEpoch, using UTC.
      */
     public Time(long millisSinceEpoch) {
-        this.time = new DateTime(millisSinceEpoch, Defaults.getApplibTimeZone());
+        this.time = new DateTime(millisSinceEpoch, Defaults.getTimeZone());
     }
 
     /**

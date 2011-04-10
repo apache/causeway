@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.value;
 
-import java.util.Calendar;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.Period;
@@ -51,12 +49,8 @@ public class Date extends Magnitude<Date> {
      * Create a Date object for today's date.
      */
     public Date() {
-        Calendar time = Clock.getTimeAsCalendar();
-        time.set(Calendar.HOUR_OF_DAY, 0);
-        time.set(Calendar.MINUTE, 0);
-        time.set(Calendar.SECOND, 0);
-        time.set(Calendar.MILLISECOND, 0);
-        date = new DateTime(time.getTime(), Defaults.getApplibTimeZone());
+        DateTime time = Clock.getTimeAsDateTime().withTime(0, 0, 0, 0);
+        date = new DateTime(time, Defaults.getTimeZone());
     }
 
     /**
@@ -71,7 +65,7 @@ public class Date extends Magnitude<Date> {
      * Create a Date object based on the specified Java date object. The time portion of the Java date is disposed of.
      */
     public Date(final java.util.Date date) {
-        this.date = new DateTime(date.getTime(), Defaults.getApplibTimeZone());
+        this.date = new DateTime(date.getTime(), Defaults.getTimeZone());
     }
 
     public Date(final long millisSinceEpoch) {
@@ -83,7 +77,7 @@ public class Date extends Magnitude<Date> {
     }
 
     private DateTime newDateTime(int year, int month, int day) {
-        return new DateTime(year, month, day, 0, 0, 0, 0, Defaults.getApplibTimeZone());
+        return new DateTime(year, month, day, 0, 0, 0, 0, Defaults.getTimeZone());
     }
 
     protected Date createDate(final DateTime date) {
@@ -284,6 +278,8 @@ public class Date extends Magnitude<Date> {
 
     @Override
     public String toString() {
-        return getYear() + "-" + getMonth() + "-" + getDay();
+        // return getYear() + "-" + getMonth() + "-" + getDay();
+        return String.format("%04d-%02d-%02d", getYear(), getMonth(), getDay());
+
     }
 }

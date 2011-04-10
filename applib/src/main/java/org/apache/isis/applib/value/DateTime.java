@@ -44,7 +44,7 @@ public class DateTime extends Magnitude<DateTime> {
      * Create a Time object for storing a timeStamp set to the current time.
      */
     public DateTime() {
-        org.joda.time.DateTime d = new org.joda.time.DateTime(Clock.getTime(), Defaults.getApplibTimeZone());
+        org.joda.time.DateTime d = new org.joda.time.DateTime(Clock.getTime(), Defaults.getTimeZone());
         // dateTime = d.secondOfMinute().setCopy(0);
         dateTime = d;
     }
@@ -56,11 +56,11 @@ public class DateTime extends Magnitude<DateTime> {
      * @param date
      */
     public DateTime(final Date date) {
-        this.dateTime = new org.joda.time.DateTime(date, Defaults.getApplibTimeZone());
+        this.dateTime = new org.joda.time.DateTime(date, Defaults.getTimeZone());
     }
 
     public DateTime(final long millisSinceEpoch) {
-        this.dateTime = new org.joda.time.DateTime(millisSinceEpoch, Defaults.getApplibTimeZone());
+        this.dateTime = new org.joda.time.DateTime(millisSinceEpoch, Defaults.getTimeZone());
     }
 
     public DateTime(final Date date, TimeZone timeZone) {
@@ -83,7 +83,7 @@ public class DateTime extends Magnitude<DateTime> {
         checkTime(year, month, day, 0, 0);
         dateTime =
             new org.joda.time.DateTime(year, month, day, time.getHour(), time.getMinute(), time.getSecond(), 0,
-                Defaults.getApplibTimeZone());
+                Defaults.getTimeZone());
     }
 
     /**
@@ -98,7 +98,7 @@ public class DateTime extends Magnitude<DateTime> {
      */
     public DateTime(final int year, final int month, final int day, final int hour, final int minute, final int second) {
         checkTime(year, month, day, hour, minute);
-        dateTime = new org.joda.time.DateTime(year, month, day, hour, minute, second, 0, Defaults.getApplibTimeZone());
+        dateTime = new org.joda.time.DateTime(year, month, day, hour, minute, second, 0, Defaults.getTimeZone());
     }
 
     private void checkTime(final int year, final int month, final int day, final int hour, final int minute) {
@@ -178,6 +178,15 @@ public class DateTime extends Magnitude<DateTime> {
     }
 
     /**
+     * Day of year (1 to 365 [366 in leap years]) for Gregorian calendar.
+     * 
+     * @return
+     */
+    public int getDayOfYear() {
+        return dateTime.getDayOfYear();
+    }
+
+    /**
      * A DateTime that is at the start of the current week. Time is preserved.
      */
     public DateTime startOfWeek() {
@@ -196,15 +205,6 @@ public class DateTime extends Magnitude<DateTime> {
      */
     public DateTime startOfYear() {
         return new DateTime(dateTime.withDayOfYear(1));
-    }
-
-    /**
-     * Day of year (1 to 365 [366 in leap years]) for Gregorian calendar.
-     * 
-     * @return
-     */
-    public int getDayOfYear() {
-        return dateTime.getDayOfYear();
     }
 
     /**

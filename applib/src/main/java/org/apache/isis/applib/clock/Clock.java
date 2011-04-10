@@ -99,7 +99,7 @@ public abstract class Clock {
     }
 
     public static DateTime getTimeAsDateTime() {
-        return new DateTime(getTime(), Defaults.getApplibTimeZone());
+        return new DateTime(getTime(), Defaults.getTimeZone());
     }
 
     private static void ensureReplaceable() {
