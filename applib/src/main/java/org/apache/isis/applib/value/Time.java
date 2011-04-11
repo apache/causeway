@@ -238,7 +238,7 @@ public class Time extends Magnitude<Time> {
     }
 
     public java.sql.Time asJavaTime() {
-        java.sql.Time time1 = java.sql.Time.valueOf(toString() + ":00");
+        java.sql.Time time1 = java.sql.Time.valueOf(toString());
         // TODO: confirm that this is in UTC
         return time1;
     }
