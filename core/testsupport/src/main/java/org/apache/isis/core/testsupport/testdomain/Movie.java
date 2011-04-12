@@ -20,16 +20,18 @@
 
 package org.apache.isis.core.testsupport.testdomain;
 
-import java.util.Vector;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 
 public class Movie {
     private Person director;
     private String name;
-    private final Vector roles = new Vector();
+    private final List<Role> roles = Lists.newArrayList();
 
     public void addToRoles(final Role role) {
-        roles.addElement(role);
+        roles.add(role);
     }
 
     public Person getDirector() {
@@ -40,12 +42,12 @@ public class Movie {
         return name;
     }
 
-    public Vector getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
     public void removeFromRoles(final Role role) {
-        roles.removeElement(role);
+        roles.remove(role);
     }
 
     public void setDirector(final Person director) {

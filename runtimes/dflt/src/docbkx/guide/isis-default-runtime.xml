@@ -1375,6 +1375,109 @@ isis.fixtures=ExpenseTypes, Employees, ExampleClaim, Context</programlisting>
       <para></para>
 
       <sect1>
+        <title>Component loggers</title>
+
+        <para>The NOF provides a set of component loggers that specifically
+        log the use of a component, adding additional log messages to the
+        Log4j log or write out to a separate file. Additional logger can also
+        be defined for other components. These logger are designed to log the
+        parameters passed to and the the results return from the requests to a
+        component and tend to be more verbose than the general logging just
+        discussed. At present the following components have loggers
+        available:-</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The object persistor -
+            <classname>ObjectPersistorLogger</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>The object store -
+            <classname>ObjectStoreLogger</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>The distibution interface -
+            <classname>DistributionLogger</classname></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To set up a logger create an instance of it passing in the
+        object you are logging. Then use the logger instance in place of the
+        original component. The constructors for each of the loggers are
+        overloaded so they take a component to decorate and possibly a file
+        name. If the filename is specified then the logging is done to that
+        file. If there is no file name then the events are logged via Log4j.
+        For example the object store persistor would logged by
+        replacing:</para>
+
+        <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
+isis.setObjectPersistor(persistor);</programlisting>
+
+        <para>with this, which will log request to the persistor the <filename
+        class="directory" moreinfo="none">sever-persistor.log</filename>
+        file:</para>
+
+        <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
+persistor = new ObjectManagerLogger(persistor, "server-persistor.log");
+isis.setObjectPersistor(persistor);</programlisting>
+
+        <para>Please note that the log files, when used, are created when the
+        logger is instantiated and will overwrite any exsiting file. This is
+        not normally a problem as we are interested in the activities during
+        an entire session. However on a stateless server where the component
+        is being recreated each time the continual recreation of the file
+        could be a problem.</para>
+
+        <sect2>
+          <title>Defining a logger</title>
+
+          <para>To define a logger extend the Logger class, providing a
+          suitable constructor, and implement the
+          <methodname>getDecoratedClass</methodname> so it passes back the
+          <classname>Class</classname> object of the class being decorated
+          (this allows the Log4j logger to log messages as that class rather
+          than as a separate class). Within the subclass you can use the
+          following methods:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis> <methodname>void log(String
+              message)</methodname> </emphasis></para>
+
+              <para>output a log entry with the specified message.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis> <methodname>void log(String message, Object
+              result)</methodname> </emphasis></para>
+
+              <para>output a log entry with the specified message and the
+              specified result. This is useful when needing to show both the
+              entry and exit states, or the paramters and the return
+              value.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis> <methodname>void close()</methodname>
+              </emphasis></para>
+
+              <para>closes the file that is being written to.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1>
         <title>Diagnostics (Logging)</title>
 
         <para></para>
@@ -1892,16 +1995,74 @@ $ mvn clean package</screen>
   </part>
 
   <appendix>
-    <title>***</title>
+    <title>*** Deployment Principles</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>*** yada yada (have just pasted this chapter in from elsewhere;
+      need to think about where it lives in this doc)</para>
     </abstract>
 
-    <sect1 id="sec.module-ui">
-      <title>***</title>
+    <sect1>
+      <title>Setting up perspectives</title>
 
-      <para>*** yada yada</para>
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>profilestore</para>
+
+      <para>x-ref alternatives/profilestore/xml</para>
+
+      <para></para>
+
+      <para>Perspectives allow the set of services available to a user (eg as
+      icons in the DnD viewer) to be customized for that user. Since these
+      services represent the "start points" for the user to interact with the
+      domain model, they in a sense define an application on a per-user
+      basis.</para>
+
+      <para>The perspectives are stored in user-profiles, which are a
+      persistence mechanism independent of the object store. (The intent is
+      for user profiles to store additional information for use by viewers,
+      for example allowing a user to reskin an application or change colors or
+      fonts. As of NOF 4.0 the functionality provided is still limited,
+      however).</para>
+
+      <para>The key here is that if a user logs in and no perspective exists
+      for that user then one will be created for them. The new perspective
+      will be a copy of the 'template' perspective, or, if none was defined, a
+      perspective containing all the known services. To create a template
+      perspective add a perspective fixture that calls
+      <methodname>saveAsDefault()</methodname>, rather than
+      <methodname>saveForUser()</methodname> for a named user, as shown
+      below.</para>
+
+      <programlisting>public class PerspectivesFixture extends UserProfileFixture {
+    @Override
+    protected void installProfiles() {
+        Profile profile = newUserProfile();
+        Perspective perspective = profile.newPerspective("ECS");
+        perspective.addToServices(LocationFactory.class);
+        perspective.addToServices(CustomerRepository.class);
+        perspective.addToServices(PaymentMethodFactory.class);
+        
+        saveAsDefault(profile);
+    }
+}
+</programlisting>
+
+      <para>With that set up, when a new user now logs in they will see three
+      service icons on the screen for locations, customers and payment
+      methods. On the drag and drop user interface the user can add and remove
+      services from their perspective. To remove a service icon right-click on
+      the grey border and select the close option. To add a service select the
+      Services... option from the application menu (accessed by right-clicking
+      on the application background) and drag the required service onto the
+      desktop. Unfortunately there is no similar mechanism available on the
+      HTML user interface so you will need to modify the created perspectives
+      via the DND UI.</para>
     </sect1>
   </appendix>
 </book>

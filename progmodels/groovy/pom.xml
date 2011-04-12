@@ -22,10 +22,6 @@
 		<relativeUrl>progmodels/groovy/</relativeUrl>
 
 		<groovy.version>1.7.2</groovy.version>
-
-        <docbkxGuideTitle>Apache Isis Groovy Support</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Developing domain objects using Groovy</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-groovy-support</docbkxGuideName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
@@ -34,16 +30,6 @@
 		<module>applib</module>
 		<module>metamodel</module>
 	</modules>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.agilejava.docbkx</groupId>
-				<artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
-			</plugin>
-		</plugins>
-	</build>
 
 	<dependencyManagement>
 		<dependencies>

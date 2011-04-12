@@ -31,7 +31,9 @@
         downloaded) -->
 
     <!-- mvn clean install -o -->
-    <!-- mvn clean install -D modules=all -o -->
+    <!-- mvn clean install -D modules=standard -o -->
+    <!-- mvn clean install -D modules=release -o -->
+    <!-- mvn clean install -D modules=support -o -->
 
 
     <!-- 2. building site/docs: (-o flag recommended once dependencies/plugins 
@@ -106,7 +108,7 @@
         <developer>
             <id>rcmatthews</id>
             <name>Robert Matthews</name>
-            <email>rmatthews@isis.apache.org</email>
+            <email>rmatthews@apache.org</email>
             <organization>Naked Objects Group Ltd.</organization>
             <organizationUrl>http://nakedobjects.net</organizationUrl>
             <roles>
@@ -122,24 +124,39 @@
             <organization>Haywood Associates Ltd.</organization>
             <organizationUrl>http://www.haywood-associates.co.uk</organizationUrl>
             <roles>
+                <role>architect</role>
                 <role>developer</role>
             </roles>
             <timezone>+0</timezone>
         </developer>
-    </developers>
-
-    <!-- TODO: these need to altered to developers -->
-    <contributors>
-        <contributor>
+        <developer>
+            <id>kevin-m</id>
             <name>Kevin Meyer</name>
-        </contributor>
-        <contributor>
+            <email>kevin@kmz.co.za</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>dslaughter</id>
             <name>Dave Slaughter</name>
-        </contributor>
-        <contributor>
+            <email>dslaughter@digis.net</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>themalkolm</id>
             <name>Alexander Krasnuhkin</name>
-        </contributor>
-    </contributors>
+            <email>the.malkolm@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
 
     <issueManagement>
         <system>Jira</system>

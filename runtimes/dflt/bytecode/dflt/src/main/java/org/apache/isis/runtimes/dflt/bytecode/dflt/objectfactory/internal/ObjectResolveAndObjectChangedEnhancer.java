@@ -30,7 +30,6 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;

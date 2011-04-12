@@ -23,8 +23,6 @@ package org.apache.isis.core.commons.ensure;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 
-import com.google.common.base.Preconditions;
-
 
 /**
  * Uses the {@link Matcher Hamcrest API} as a means of verifying arguments and so on.

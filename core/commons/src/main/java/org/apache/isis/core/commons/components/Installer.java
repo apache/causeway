@@ -22,18 +22,21 @@ package org.apache.isis.core.commons.components;
 
 import java.util.List;
 
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
 /**
- * A factory for a component, used during it boot strapping process.
+ * A factory for a {@link Component}, defining that component's {@link #getType() type} and its
+ * {@link #getName() name}.  
  * 
  * <p>
- * All installers listed (by class name) in
- * <tt>installer-registry.properties</tt> are loaded when the boot strap class
- * is initially loaded. Then named installers are used during boot to create
- * components for the system. The name method specified is the name that the
- * component can be installed by.
+ * The ({@link #getType() type}, {@link #getName() name}) is expected to be 
+ * a unique identifier of a component.
+ * 
+ * <p>
+ * The <i>default runtime</i> (<tt>org.apache.isis.runtimes.dflt</tt> module),
+ * which adopts a service locator design, 
+ * uses the <tt>installer-registry.properties</tt> resource as a registry
+ * of all available installers.  The installers are loaded and indexed by
+ * their name and type.  Other runtime implementations may use different
+ * approaches.
  */
 public interface Installer extends ApplicationScopedComponent {
 
@@ -87,11 +90,6 @@ public interface Installer extends ApplicationScopedComponent {
 	 * keys.
 	 */
 	List<String> getConfigurationResources();
-	
-	/**
-	 * The {@link Module} used to bootstrap the component.
-	 */
-	Module getModule();
 	
 	/**
 	 * The (classes of) the types that this installer makes available in the {@link #getModule() module}.

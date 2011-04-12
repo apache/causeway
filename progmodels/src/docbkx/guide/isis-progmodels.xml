@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para>*** TODO</para>
+
+    <para></para>
+
+    <para></para>
+  </preface>
+
+  <part>
+    <title>Default (Java 5) Programming Model</title>
+
+    <chapter id="chp.ProgrammingModelApi">
+      <title>*** Introduction</title>
+
+      <para></para>
+
+      <para></para>
+
+      <note>
+        <para>At the moment this API is rather fine-grained. We intend to
+        introduce higher level abstractions to make it easier to work with. We
+        may also split out member sorting into a separate abstraction.</para>
+      </note>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <note>
+        <para>TODO: tidy up the following paras, were just copied/pasted in
+        from APT</para>
+      </note>
+
+      <para></para>
+
+      <para>Although we generally recommend that you stick to the conventions
+      of the programmingmodel as documented in the Application Library (in
+      <filename>applib</filename>), it is in fact possible to customize or
+      modify these conventions. A typical case might be to make Isis support
+      some of your own annotations. You'll find that some of the viewers and
+      object stores also define their own extensions to the standard
+      programming model.</para>
+
+      <para></para>
+
+      <para>The metamodel is built up using a collection of
+      &lt;&lt;&lt;FacetFactory&gt;&gt;&gt;s. These are used to identify the
+      classes and class members, and to decorate these class members with
+      semantics. It is easy to write new &lt;&lt;&lt;FacetFactory&gt;&gt;&gt;s
+      to support new programming conventions or, indeed, new languages. The
+      &lt;&lt;&lt;FacetFactory&gt;&gt;&gt; API is defined in
+      {{{../core/metamodel/index.html}metamodel}} module, along with
+      implementations to support the Java language. The
+      {{{http://groovyobjects.sourceforge.net}Groovy Objects}} sister project
+      provides implementations to allow Isis to support domain objects written
+      in {{{http://groovy.codehaus.org}Groovy}}.</para>
+
+      <para></para>
+
+      <sect1>
+        <title>ProgrammingModel API and ProgrammingModelFacetsJava5
+        Implementation</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>"Rolling-your-own" Programming Model</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Extending the reflector</title>
+
+        <remark>Describe how introspection takes place</remark>
+
+        <para></para>
+
+        <remark>Facets (describe (including how they are defined, how they are
+        used), then list all types with descriptions; Javadocs should detail
+        how to use each one, but do check as working through list)</remark>
+
+        <para></para>
+
+        <remark>Detail how introspector determines what facets to give to each
+        holder</remark>
+
+        <para></para>
+
+        <remark>Adding behaviour via decorator facets, eg for I18n, logging
+        etc</remark>
+
+        <para></para>
+
+        <remark>Adding new behaviour by adding new facets, including how to
+        access then</remark>
+
+        <para></para>
+
+        <formalpara>
+          <title>Interaction utilties</title>
+
+          <para>Other than the properties and actions that the are made
+          available by the reflector the other way the reflector is used is
+          via by the reflector utilities classes <remark>I don't think this
+          name really reflects the intent, a better one is required</remark>
+          such as InteractionUtils and CollectionUtils. These helper classes
+          generally make use of the <classname>Facet</classname>s on a
+          <classname>FacetHolder</classname> to interact with the domain
+          model. For example the <methodname>size(ObjectAdapter)</methodname>
+          method on the <classname>CollectionFacetUtils</classname> class will
+          determine the size of the collection without having to resort to
+          finding the right facet and using that yourself.</para>
+        </formalpara>
+
+        <para>These utility classes then make use of the related facets (got
+        singularly or a set via the
+        <methodname>getFacets(FacetFilter)</methodname> method that typically
+        search for facets using the mix-in interfaces that are used to mark
+        the facets for this kind of use) which are then all process on behalf
+        of the client. For example, the <methodname>isVisible</methodname>
+        method get all the facets to do with hidding things by filtering for
+        facets that <classname>are of the type
+        HidingInteractionAdvisor</classname>. This interface is implemented by
+        hide-related facets</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para><classname>DisablingInteractionAdvisor</classname>,
+        <classname>HidingInteractionAdvisor</classname> and
+        <classname>ValidatingInteractionAdvisor</classname> interfaces are
+        used to bring together all facets for disabling, hiding and validating
+        properties, actions and parameters. These each provide a single method
+        for for checking a proposed interaction. These are then used by the
+        <classname>InteractionUtils</classname> class to provide all the
+        domain related interaction checking behaviour to the clients of the
+        reflector</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>How to write your own Facet Decorator</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Configuring I18N</title>
+
+        <para>x-ref core.progmodel</para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Groovy Programming Model</title>
+
+    <partintro>
+      <para>*** TO UPDATE</para>
+
+      <para><ulink url="http://groovyobjects.sourceforge.net">Groovy
+      Objects</ulink> is a sister project to <ulink
+      url="http://nakedobjects.org">Naked Objects</ulink>, allowing domain
+      objects to be written in the <ulink
+      url="http://groovy.codehaus.org">Groovy</ulink> dynamic language as well
+      as in Java.</para>
+
+      <para><emphasis>Groovy Objects</emphasis> is hosted on <ulink
+      url="http://groovyobjects.sourceforge.net">SourceForge</ulink>, and is
+      licensed under <ulink
+      url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+      License v2</ulink>. <emphasis>Naked Objects</emphasis> is also hosted on
+      <ulink
+      url="http://sourceforge.net/projects/nakedobjects">SourceForge</ulink>,
+      and is also licensed under <ulink
+      url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+      License v2</ulink>.</para>
+
+      <para></para>
+
+      <para></para>
+    </partintro>
+
+    <chapter>
+      <title>Introduction</title>
+
+      <abstract>
+        <para>This chapter explains what <emphasis>Groovy Objects</emphasis>
+        is for, and a little about how it works.</para>
+      </abstract>
+
+      <para>The <ulink url="http://nakedobjects.org">Naked Objects</ulink>
+      framework enables design-driven applications to be rapidly developed and
+      optionally deployed, automatically providing a runtime-generated
+      <acronym>OOUI</acronym> for the domain objects. <emphasis>Naked
+      Objects</emphasis> is written in Java, and normally the domain objects
+      that make up the application are also written in Java. These objects are
+      basically pojos; <emphasis>Naked Objects</emphasis> provides a number of
+      annotations and defines a number of coding conventions so that business
+      rules and constraints can be picked up by the framework, and to expose
+      behaviour in the <acronym>UI</acronym> over-and-above simple
+      <acronym>CRUD</acronym> operations.</para>
+
+      <para><emphasis>Naked Objects</emphasis> performs its magic by building
+      a metamodel of the underlying domain objects, and uses this to build the
+      <acronym>OOUI</acronym>. The process is very similar to the way that
+      <acronym>ORM</acronym>s such as <ulink
+      url="http://hibernate.org">Hibernate</ulink> work, but rather than
+      reflecting the domain objects into the persistence layer, it reflects
+      them into the presentation layer.</para>
+
+      <para><ulink url="http://groovy.codehaus.org">Groovy</ulink> (as I'm
+      sure you know) is an alternative language for writing code to run on the
+      <acronym>JVM</acronym>. It offers a number of dynamic language features,
+      as well reduced syntax clutter (eg for properties) along with
+      programming constructs such as closures.</para>
+
+      <para>What <emphasis>Groovy Objects</emphasis> provides is the ability
+      to write domain objects in Groovy and then run on top within
+      <emphasis>Naked Objects</emphasis>. Because Groovy source files are
+      ultimately compiled down into Java bytecode, <emphasis>Naked
+      Objects</emphasis> is able (with a little bit of tweaking) to build up
+      its metamodel and run as normal. What <emphasis>Groovy
+      Objects</emphasis> does is perform the tweaking in how the metamodel is
+      built up.</para>
+
+      <para>This user guide explains how to configure your project to develop
+      using Groovy, and provides some guidance on how to follow the
+      <emphasis>Naked Objects</emphasis> coding conventions while programming
+      in Groovy. We generally recommend you develop your domain applications
+      using <ulink url="http://maven.apache.org">Apache Maven</ulink>, and
+      <emphasis>Groovy Objects</emphasis> itself is packaged as a Maven
+      module. The details provided focus solely on how to update a Maven-based
+      project; we also explain how to configure your application within an
+      <acronym>IDE</acronym>.</para>
+    </chapter>
+
+    <chapter>
+      <title>Configuring your (Maven) Project</title>
+
+      <abstract>
+        <para><emphasis>Groovy Objects</emphasis> is provided as a Maven
+        module. In this chapter we explain the configurations steps necessary
+        to update your Maven-based domain application, and how to configure a
+        common <acronym>IDE</acronym> so you can program in Groovy with
+        <emphasis>Naked Objects</emphasis>.</para>
+      </abstract>
+
+      <sect1>
+        <title>Structure of a Naked Objects Application</title>
+
+        <para>The typical structure for a <emphasis>Naked Objects</emphasis>
+        Maven-based application (and the one you'll end up with if you use
+        <emphasis>Naked Objects</emphasis>' Maven application archetype)
+        is:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><filename>app</filename></para>
+
+            <para>Main (parent) module, whose <filename>pom.xml</filename>
+            references the submodules</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/dom</filename></para>
+
+            <para>Domain object model, plus interfaces for services,
+            repositories and factories</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/service</filename></para>
+
+            <para>Implementation of services, repositories and
+            factories</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/fixture</filename></para>
+
+            <para>Fixtures, used to seed (in-memory) object store when running
+            in exploration/prototype mode</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/commandline</filename></para>
+
+            <para>Bootstrap for running from the command line (typically, the
+            <acronym>DnD</acronym> viewer or <acronym>HTML</acronym>
+            viewer)</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/webapp</filename></para>
+
+            <para>Packaging and running as a web application</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The application is normally run either from the
+        <emphasis>commandline</emphasis> project, using the
+        <code>org.nakedobjects.runtime.NakedObjects</code> main class (where
+        the viewer to use is specified using the
+        <classname>--viewer</classname> flag), or from the
+        <emphasis>webapp</emphasis> project (picking up
+        <filename>web.xml</filename> for bootstrapping as a web
+        application),</para>
+      </sect1>
+
+      <sect1>
+        <title>Updating the Main Project</title>
+
+        <para>There is no Groovy code in the <filename>main</filename>
+        project, but what we do here is to define the version, and where
+        necessary configuration, of dependencies used by the application's
+        submodules. We have classpath dependencies and build dependencies, so
+        both are defined.</para>
+
+        <para>There are three things to specify:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>which version of the Groovy runtime to use</para>
+          </listitem>
+
+          <listitem>
+            <para>which version of GMaven to use. GMaven is the Groovy maven
+            plugin that we use to compile Groovy, hosted at <ulink
+            url="http://docs.codehaus.org/display/GMAVEN/Home">codehaus.org</ulink>.
+            By default GMaven specifies a version of the Groovy runtime to
+            compile against, but this can be overridden</para>
+          </listitem>
+
+          <listitem>
+            <para>which version of <emphasis>Groovy Objects</emphasis> to use.
+            Groovy Objects is not itself written in Groovy, but it does have a
+            dependency on Groovy runtime. We want this to be in sync.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To start with, we specify the versions of these different
+        components, by adding the following to the
+        <filename>pom.xml</filename>:</para>
+
+        <programlisting>&lt;properties&gt;
+    &lt;groovy.version&gt;1.7.2&lt;/groovy.version&gt;
+    &lt;gmaven.version&gt;1.2&lt;/gmaven.version&gt;
+    &lt;gmaven.runtime&gt;1.7&lt;/gmaven.runtime&gt;
+    &lt;groovyobjects.version&gt;0.1-SNAPSHOT&lt;/groovyobjects.version&gt;
+&lt;/properties&gt;</programlisting>
+
+        <para>The <varname>gmaven.runtime</varname> must be compatible with
+        the <varname>groovy.version</varname>. Typically, if the
+        <varname>groovy.version</varname> is <literal>x.y.z</literal>, then
+        the <varname>gmaven.runtime</varname> will be simply
+        <literal>x.y</literal>. The documentation on <ulink
+        url="http://docs.codehaus.org/display/GMAVEN/Groovy+Runtime">GMaven
+        providers</ulink> for further details; running <code>mvn
+        groovy:providers</code> is a good place to start.</para>
+
+        <blockquote>
+          <para>Note: <emphasis>Groovy Objects</emphasis> also has a
+          dependency on the Groovy runtime, albeit in a very minor way. This
+          dependency is marked optional in order to allow your application to
+          specify its own Groovy runtime version which if needed can be
+          different from that needed by <emphasis>Groovy
+          Objects</emphasis>.</para>
+        </blockquote>
+
+        <para>Next, we define how we to compile Groovy code, using the GMaven
+        plugin. We specify the plugin, the version, and its configuration;
+        this goes in
+        <classname>&lt;build&gt;/&lt;pluginManagement&gt;</classname>:</para>
+
+        <programlisting>&lt;build&gt;
+    &lt;pluginManagement&gt;
+        &lt;plugins&gt;
+            ...
+
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.codehaus.gmaven&lt;/groupId&gt;
+                &lt;artifactId&gt;gmaven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;${gmaven.version}&lt;/version&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;compile&lt;/goal&gt;
+                            &lt;goal&gt;testCompile&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+                &lt;configuration&gt;
+                    &lt;providerSelection&gt;${gmaven.runtime}&lt;/providerSelection&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+
+        &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
+&lt;/build&gt;</programlisting>
+
+        <para>Finally, we define the dependencies to <emphasis>Groovy
+        Objects</emphasis> and to Groovy. This goes in
+        <classname>&lt;dependencyManagement&gt;/&lt;dependencies&gt;</classname>:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        ...
+
+        &lt;!-- Groovy Objects --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
+            &lt;artifactId&gt;gapplib&lt;/artifactId&gt;
+            &lt;version&gt;${groovyobjects.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
+            &lt;artifactId&gt;gmetamodel&lt;/artifactId&gt;
+            &lt;version&gt;${groovyobjects.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Groovy --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+            &lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+            &lt;version&gt;${groovy.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>Updating the DOM Project</title>
+
+        <para>The <emphasis>dom</emphasis> project is the place where the bulk
+        of your domain objects live. Since these are now written in Groovy, we
+        need to ensure that they are compiled.</para>
+
+        <sect2>
+          <title>Source folders</title>
+
+          <para>First off, we must separate our Groovy code from any Java
+          code. To do this, create the following folders:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><filename>src/main/groovy</filename></para>
+            </listitem>
+
+            <listitem>
+              <para><filename>src/test/groovy</filename></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>It's important to create both of these folders (even if you
+          aren't planning on writing any unit tests ;-) ... the
+          <acronym>IDE</acronym> integration that we describe below insists
+          upon it.</para>
+        </sect2>
+
+        <sect2>
+          <title>Updating the Maven POMs</title>
+
+          <para>First, we update the <acronym>POM</acronym> our domain objects
+          are compiled using the Groovy compiler. Add the following into
+          <classname>&lt;build&gt;</classname>:</para>
+
+          <programlisting>&lt;build&gt;
+    &lt;plugins&gt;
+
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.codehaus.gmaven&lt;/groupId&gt;
+            &lt;artifactId&gt;gmaven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+
+    &lt;/plugins&gt;
+&lt;/build&gt;</programlisting>
+
+          <para>Next, we add dependencies both to <emphasis>Groovy
+          Objects</emphasis>' own applib and to Groovy itself:</para>
+
+          <programlisting>&lt;dependencies&gt;
+    ...
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
+        &lt;artifactId&gt;gapplib&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+        &lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+&lt;/dependencies&gt;</programlisting>
+
+          <para>The <emphasis>Groovy Objects</emphasis> applib brings in a
+          transitive dependency to the <emphasis>Naked Objects</emphasis>
+          applib along one or two helper classes (of which more in <xref
+          linkend="chp.Fixtures" />). In the future the applib may be expanded
+          to include other helper classes or new annotations provided by
+          <emphasis>Groovy Objects</emphasis> itself.</para>
+
+          <para>Finally, a small workaround. <emphasis>Naked
+          Objects</emphasis> picks up icons for domain classes from the
+          classpath, with the Java compiler doing the job of copying these
+          icons from <filename>src/main/resources</filename> into target. The
+          Groovy compiler does not seem to do this. We therefore ensure that
+          the Java compiler runs by adding a small dummy Java class. It could
+          go anywhere, but the <classname>images</classname> package is
+          probably the best location:</para>
+
+          <programlisting>package images;
+
+/**
+ * workaround to force Java compiler to kick in and copy images over to target classpath
+ */
+class Dummy {}</programlisting>
+
+          <para>At this point you should be able to build your project from
+          the Maven command line. Let's see how to add in
+          <acronym>IDE</acronym> support.</para>
+        </sect2>
+
+        <sect2>
+          <title>Configuring Eclipse IDE</title>
+
+          <para>If you are using Eclipse <acronym>IDE</acronym>, then you can
+          add in Groovy support using the <ulink
+          url="http://groovy.codehaus.org/Eclipse+Plugin">GroovyEclipse</ulink>
+          plugin.</para>
+
+          <para>To start off with, install the plugin into your
+          <acronym>IDE</acronym> using the standard Eclipse update mechanisms.
+          There's a detailed <ulink
+          url="http://docs.codehaus.org/display/GROOVY/Install+Groovy-Eclipse+Plugin">walkthrough</ulink>
+          on the Groovy wiki if you need it.</para>
+
+          <para>Next, enable the Groovy nature in your
+          <emphasis>dom</emphasis> project:</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/ConvertToGroovy.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+
+          <para>Doing this brings in Groovy editor and compiler support
+          (technically: the Groovy nature is added to the project). But it
+          also adds in a reference to the Groovy runtime to our classpath,
+          which we don't need because we already have courtesy of Maven.
+          Therefore, remove the <emphasis>Groovy Libraries</emphasis>
+          classpath library:</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/RemoveGroovyLibraryFromClasspath.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+
+          <para>And that should do the trick.</para>
+        </sect2>
+
+        <sect2>
+          <title>Other IDEs</title>
+
+          <para>If you use another <acronym>IDE</acronym>, please let us know
+          what the steps are to configure it, and we'll update this
+          documentation.</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Updating the Fixture and Service Projects</title>
+
+        <para>As well as using Groovy for the <emphasis>dom</emphasis>
+        project, you may well want to use it for the
+        <emphasis>fixture</emphasis> project and the
+        <emphasis>service</emphasis> implementations project. In which case,
+        just follow the same steps as the described for the
+        <emphasis>dom</emphasis> project.</para>
+      </sect1>
+
+      <sect1>
+        <title>Updating the Commandline and/or Webapp Project</title>
+
+        <para>Finally, we need to update the <emphasis>commandline</emphasis>
+        and/or <emphasis>webapp</emphasis> project (depending on how you
+        intend to bootstrap your application). First, we add a dependency to
+        <emphasis>Groovy Objects</emphasis>'<filename> gmetamodel</filename>
+        module, in <classname>&lt;dependencies&gt;</classname>:</para>
+
+        <programlisting>&lt;dependencies&gt;
+    ...
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
+        &lt;artifactId&gt;gmetamodel&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    ...
+&lt;/dependencies&gt;</programlisting>
+
+        <para>Then, update the <filename>nakedobjects.properties</filename>
+        config file as follows:</para>
+
+        <programlisting>nakedobjects.reflector.facets.include=org.starobjects.groovy.gmetamodel.RemoveGroovyMethodsFacetFactory</programlisting>
+
+        <para>This little piece of magic alters the way that <emphasis>Naked
+        Objects</emphasis> builds up its metamodel of the domain objects.
+        Specifically what it does is to filter out the various methods that
+        the Groovy compiler adds behind the scenes.</para>
+
+        <para>In most circumstances that should be enough. If you have very
+        deep hierarchies of domain classes, then you may also need to add
+        in:</para>
+
+        <programlisting>starobjects.groovy.depth=NNN</programlisting>
+
+        <para>where NNN should be the depth of the class hierarchy. The
+        default is 5, so in many cases there won't be any need to add this
+        key. (The reason this is needed is that the Groovy compiler seems to
+        generate a set of methods for each level of the class
+        hierarchy).</para>
+
+        <para>And you should be good to go.</para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Writing Domains Object in Groovy</title>
+
+      <abstract>
+        <para><emphasis>Naked Objects</emphasis> uses convention over
+        configuration and annotations to build the metamodel of the domain
+        objects. This chapter explains what those conventions look like, and
+        where annotations should be applied, when developing domain objects in
+        Groovy.</para>
+      </abstract>
+
+      <para><emphasis>Naked Objects</emphasis> allows validation and other
+      business constraints to expressed either declaratively (using
+      annotations) and/or imperatively (using supporting methods). For a given
+      class member (property, collection or action) we can specify whether the
+      member:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>is visible, and if so, is it</para>
+        </listitem>
+
+        <listitem>
+          <para>is usable, and if modified, whether the proposed change</para>
+        </listitem>
+
+        <listitem>
+          <para>is valid</para>
+        </listitem>
+      </orderedlist>
+
+      <para>Or, slightly more pithily, <emphasis>can you see it, can you use
+      it, can you do it</emphasis>.</para>
+
+      <para>Any public methods that don't represent properties or collections
+      are interpreted as being actions. These are surfaced in the
+      <acronym>UI</acronym> (as menu items or buttons) to provide arbitrary
+      business behaviour (this is what makes <emphasis>Naked
+      Objects</emphasis> applications more than a simple
+      <acronym>CRUD</acronym> framework).</para>
+
+      <para>There are also a number of reserved method names that are used
+      either as rendering hints or to define lifecycle callbacks.</para>
+
+      <para>Collectively these conventions and annotations define the
+      <emphasis>Naked Objects Programming Model</emphasis>. This chapter
+      should give you a good flavour of what it's like to writing applications
+      for this programming model; but refer to the <emphasis>Naked
+      Objects</emphasis> <ulink
+      url="http://www.nakedobjects.org">documentation</ulink> for the complete
+      reference.</para>
+
+      <para>The code fragments that follow are taken from the <emphasis>Groovy
+      Objects</emphasis>' own test application (see the <emphasis>Groovy
+      Objects</emphasis> <ulink
+      url="https://groovyobjects.svn.sourceforge.net/svnroot/groovyobjects/trunk/testapp/claims">subversion</ulink>
+      repository).</para>
+
+      <sect1>
+        <title>(Optional) Superclass</title>
+
+        <para>Typically domain objects subclass from
+        <classname>AbstractDomainObject</classname> (in the <emphasis>Naked
+        Objects</emphasis> applib, transitively referenced from
+        <emphasis>Groovy Objects</emphasis>' own applib); for example:</para>
+
+        <programlisting>class Claim extends AbstractDomainObject {
+   ...
+}</programlisting>
+
+        <para>It isn't mandatory to subclass from
+        <classname>AbstractDomainObject</classname>. All that <emphasis>Naked
+        Objects</emphasis> requires is that it can inject its
+        <classname>DomainObjectContainer</classname> into the domain object to
+        support lazy loading and dirty tracking (the
+        <methodname>resolve()</methodname> and
+        <methodname>objectChanged()</methodname> methods, normally called by
+        CgLib proxies). The <classname>DomainObjectContainer</classname> also
+        allows your domain object to be able to instantiate and persist new
+        instances (using the <methodname>newTransientInstance()</methodname>
+        and <methodname>persist()</methodname> methods).</para>
+
+        <para>In practical terms, then, if you aren't able or don't want to
+        subclass from <classname>AbstractDomainObject</classname>, just make
+        sure you push down the above methods into your own objects (probably
+        by way of a project-specific superclass).</para>
+      </sect1>
+
+      <sect1>
+        <title>Properties and Collections</title>
+
+        <para><emphasis>Naked Objects</emphasis> follows the usual JavaBean
+        conventions for properties, and so any Groovy property is picked up
+        automatically by <emphasis>Naked Objects</emphasis>. This also works
+        for collections (a JavaBean property that returns a
+        <classname>java.util.Collection</classname>,
+        <classname>java.util.List</classname> or
+        <classname>java.util.Set</classname>).</para>
+
+        <para>For example, the <classname>Claim</classname> object is rendered
+        like this:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/title.png" scale="60" />
+          </imageobject>
+        </mediaobject>
+
+        <para>The corresponding Groovy source code is:</para>
+
+        <programlisting>class Claim extends AbstractDomainObject {
+
+  boolean rush
+  String description
+  Date date
+  String status
+  Claimant claimant
+  Approver approver
+  List&lt;ClaimItem&gt; items = new ArrayList&lt;ClaimItem&gt;()
+
+  ...
+}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>Title &amp; Icon</title>
+
+        <para><emphasis>Naked Objects</emphasis> uses the
+        <methodname>title()</methodname> method to render a label for domain
+        objects. For the <classname>Claim</classname> class, this is defined
+        as:</para>
+
+        <programlisting>class Claim extends AbstractDomainObject {
+
+  ...
+
+  String title() { status + " - " + date }
+
+  ...
+}</programlisting>
+
+        <para>It's important that this is defined as returning a
+        <emphasis>java.lang.String</emphasis>; a simple Groovy
+        <token>def</token> is not sufficient.</para>
+
+        <para>In addition, you may want to define an
+        <methodname>iconName()</methodname>. If present, this is used to
+        locate the icon for the entity (meaning that different instances of
+        the same type can render different icons). Otherwise, <emphasis>Naked
+        Objects</emphasis> infers the icon from the class name. The icon is
+        typically picked up from an <package>images</package> package (in
+        <filename>src/main/resources</filename>).</para>
+      </sect1>
+
+      <sect1>
+        <title>Creating and Persisting Objects</title>
+
+        <para><emphasis>Naked Objects</emphasis> will automatically inject any
+        domain services into your domain objects, but to do this must know
+        about then when they are instantiated. But it also requires to know
+        about them so that it can track their persistence state. To do this,
+        use the
+        <methodname>DomainObjectContainer#newTransientInstance(Class)</methodname>
+        method. Note that this also requires that your domain object has a
+        <code>public</code> no-arg constructor.</para>
+
+        <para>Similarly, if you want to persist a domain object, use
+        <methodname>DomainObjectContainer#persist()</methodname>.</para>
+
+        <para>If inheriting from <classname>AbstractDomainObject</classname>,
+        then there are helper methods that delegate to the container for
+        you.</para>
+      </sect1>
+
+      <sect1>
+        <title>Callbacks</title>
+
+        <para>There are a number of callback methods that <emphasis>Naked
+        Objects</emphasis> will call on your domain object if present. One of
+        these is <methodname>created()</methodname>, called after a transient
+        instance is just instantiated. It's a good place to perform
+        initialization logic (that would otherwise probably have lived in a
+        constructor). For example:</para>
+
+        <programlisting>class Claim extends AbstractDomainObject {
+
+  ...
+
+  void created() {
+    status = "New"
+    date = new Date()
+  }
+
+  ...
+}</programlisting>
+
+        <para>Note that the method must return <code>void</code> (Groovy's
+        <code>def</code> returns a <classname>java.lang.Object</classname>,
+        which is not what <emphasis>Naked Objects</emphasis> is looking
+        for).</para>
+
+        <para>Other callback methods include:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>loading()</methodname> and
+            <methodname>loaded()</methodname></para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>persisting()</methodname> and
+            <methodname>persisted()</methodname> (or
+            <methodname>saving()</methodname> and
+            <methodname>saved()</methodname> if you prefer)</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>updating()</methodname> and
+            <methodname>updated()</methodname></para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>removing()</methodname> and
+            <methodname>removed()</methodname> (or
+            <methodname>deleting()</methodname> and
+            <methodname>deleted()</methodname> if you prefer)</para>
+          </listitem>
+        </itemizedlist>
+      </sect1>
+
+      <sect1>
+        <title>Annotations</title>
+
+        <para>Declarative business rules amount to applying annotations on the
+        appropriate methods. But you should note that <emphasis>Naked
+        Objects</emphasis> does not (currently) support annotations on fields,
+        so it's necessary to put the annotation on the getter for the
+        property.</para>
+
+        <para>For example, to indicate that a property is disabled
+        (read-only), we can write:</para>
+
+        <programlisting>class Claim ... {
+    String status
+    ...
+
+    @Disabled
+    String getStatus() { status }
+}</programlisting>
+
+        <para>Other annotations are used as hints for the user interface. For
+        example the <classname>@MemberOrder</classname> is used to specify the
+        order in which properties and collections appear in the
+        <acronym>UI</acronym>:</para>
+
+        <programlisting>class Claim ... {
+    String status
+    ...
+
+    @MemberOrder("3")
+    String getStatus() { status }
+}</programlisting>
+
+        <para>Another annotation is <classname>@Named</classname>, which
+        commonly appears on action parameters if using built-in value types.
+        For example, the <classname>Claim</classname>'s
+        <methodname>addItem()</methodname> action looks like:</para>
+
+        <programlisting>class Claim ... {
+
+    void addItem(
+            @Named("Days since")  int days,
+            @Named("Amount")      double amount, 
+            @Named("Description") String description) { 
+        ClaimItem claimItem = newTransientInstance(ClaimItem.class)
+        Date date = new Date()
+        date = date.add(0, 0, days)
+        claimItem.dateIncurred = date
+        claimItem.description = description
+        claimItem.amount = new Money(amount, "USD")
+        persist(claimItem)
+        addToItems(claimItem)
+    }
+    ...
+}</programlisting>
+
+        <para>The full list of annotations can be found in the <emphasis>Naked
+        Objects</emphasis> applib, and are of course documented in the Naked
+        Objects documentation.</para>
+      </sect1>
+
+      <sect1>
+        <title>Supporting Methods</title>
+
+        <para>Business rules can also be specified imperatively, using
+        supporting methods. These methods are associated back to the class
+        member (property, collection or action) using a simple prefix. For
+        example, to imperatively disable the
+        <methodname>addItem()</methodname> action for a
+        <classname>Claim</classname>, we could use:</para>
+
+        <programlisting>class Claim ... {
+
+    void addItem(
+            @Named("Days since")  int days,
+            @Named("Amount")      double amount, 
+            @Named("Description") String description) { 
+       ...
+    }
+    String disableAddItem() {
+        status == "Submitted" ? "Already submitted" : null
+    }
+    ...
+}</programlisting>
+
+        <para>Returning a non-null value means the action (or more generally
+        class member) should be disabled; the string returned is the reason
+        why the action cannot be invoked.</para>
+
+        <para>There are supporting methods for each of the three levels of
+        business rules ("see it, use it, do it"), with the prefix being
+        <methodname>hideXxx()</methodname>,
+        <methodname>disableXxx()</methodname> and
+        <methodname>validateXxx()</methodname>. The
+        <methodname>hideXxx()</methodname> returns a <code>boolean</code>, the
+        other two (as you've just seen) return a
+        <classname>String</classname>. In the case of
+        <methodname>validateXxx()</methodname>, the method takes arguments to
+        allow validation to be performed, for example:</para>
+
+        <programlisting>class Claim ... {
+
+    ...
+    String validateAddItem(int days, double amount, String description) {
+        if (days &lt;= 0) "Days must be positive value"
+    }
+    ...
+}</programlisting>
+
+        <para>There are a couple of other supporting methods that can be
+        provided. The <methodname>defaultXxx()</methodname> prefix is used to
+        provide a default either for a property of a newly instantiated
+        object, or, more commonly, as the default for a parameter of an
+        action. In the latter case the argument number is specified:</para>
+
+        <programlisting>class Claim ... {
+
+    ...
+    int default0AddItem() { 1 }
+    ...
+}</programlisting>
+
+        <para>In a similar vein, the <methodname>choicesXxx()</methodname>
+        prefix provides a list of choices for a property or for an action
+        parameter:</para>
+
+        <programlisting>class Claim ... {
+
+    ...
+    List&lt;String&gt; choices2AddItem() { ["meal", "taxi", "plane", "train"] }
+    ...
+}</programlisting>
+
+        <para>There's no requirement for <methodname>choicesXxx()</methodname>
+        to tie in with <methodname>validateXxx()</methodname> or
+        <methodname>defaultXxx()</methodname>, but they usually are consistent
+        with each other.</para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.Fixtures">
+      <title>Writing Fixtures in Groovy</title>
+
+      <abstract>
+        <para>We can take advantage of one of Groovy's features to reduce the
+        boilerplate when writing fixtures. This chapter explains how.</para>
+      </abstract>
+
+      <para>One of the classes provided by the Groovy runtime is
+      <classname>ObjectGraphBuilder</classname>, which (as per its <ulink
+      url="http://groovy.codehaus.org/ObjectGraphBuilder">documentation</ulink>)
+      is "a builder for an arbitrary graph of beans that follow the JavaBean
+      convention,... useful for creating test data for example". Which is,
+      indeed, exactly what we need to do when we create fixtures for use with
+      the in-memory object store.</para>
+
+      <para>The <emphasis>Groovy Objects</emphasis> applib extends this class
+      by providing the <classname>DomainObjectBuilder</classname>, which
+      additionally ensures that domain objects are instantiated through the
+      <classname>DomainObjectContainer</classname>. The original
+      <classname>ObjectGraphBuilder</classname> also needs to be told
+      explicitly where the domain object packages are, so
+      <classname>DomainObjectBuilder</classname> makes this easy to do in a
+      typesafe way.</para>
+
+      <para>Let's see it in action. Here's the fixture from the
+      <emphasis>Groovy Objects</emphasis> testapp, to create 3
+      <classname>Employee</classname>s, some <classname>Claim</classname>s and
+      some <classname>ClaimItem</classname>s within those
+      <classname>Claim</classname>s:</para>
+
+      <programlisting>class ClaimsFixture extends AbstractFixture {
+
+    @Override
+    public void install() {
+        def builder = new DomainObjectBuilder(getContainer(), Employee.class, Claim.class)
+
+        builder.employee(id: 'fred', name:"Fred Smith")
+        builder.employee(id: "tom", name: "Tom Brown") {
+            approver( refId: 'fred')
+        }
+        builder.employee(name: "Sam Jones") {
+            approver( refId: 'fred')
+        }
+
+        builder.claim(id: 'tom:1', date: days(-16), description: "Meeting with client") {
+            claimant( refId: 'tom')
+            claimItem( dateIncurred: days(-16), amount: money(38.50), description: "Lunch with client")
+            claimItem( dateIncurred: days(-16), amount: money(16.50), description: "Euston - Mayfair (return)")
+        }
+        builder.claim(id: 'tom:2', date: days(-18), description: "Meeting in city office") {
+            claimant( refId: 'tom')
+            claimItem( dateIncurred: days(-18), amount: money(18.00), description: "Car parking")
+            claimItem( dateIncurred: days(-18), amount: money(26.50), description: "Reading - London (return)")
+        }
+        builder.claim(id: 'fred:1', date: days(-14), description: "Meeting at clients") {
+            claimant( refId: 'fred')
+            claimItem( dateIncurred: days(-14), amount: money(18.00), description: "Car parking")
+            claimItem( dateIncurred: days(-14), amount: money(26.50), description: "Reading - London (return)")
+        }
+    }
+
+    private Date days(int days) {
+        Date date = new Date();
+        date = date.add(0,0, days);
+        return date
+    }
+
+    private Money money(double amount) {
+        return new Money(amount, "USD");
+    }
+}</programlisting>
+
+      <para>The builder is instantiated by passing in the
+      <classname>DomainObjectContainer</classname>, as well as one
+      representative class from each package that holds entities to be built.
+      In this case the <literal>Employee.class</literal> takes care of the
+      <package>employee</package> package (for just
+      <classname>Employee</classname> itself), while
+      <literal>Claim.class</literal> represents the <package>claims</package>
+      package (for both <classname>Claim</classname> and
+      <classname>ClaimItem</classname>).</para>
+
+      <para>The <acronym>DSL</acronym> for building the object graph is just
+      that defined by Groovy's <classname>ObjectGraphBuilder</classname>. To
+      my eyes at least, this is easier to follow than its Java
+      equivalent.</para>
+
+      <para>There is one limitation to be aware of, though, which relates to
+      how the <classname>Claim</classname>/<classname>ClaimItem</classname>
+      parent/child is wired up. It's important for the collection name in the
+      parent (<classname>Claim</classname>) to match that of the class name of
+      the child (<classname>ClaimItem</classname>), and the back reference in
+      the child (if there is one) to match the class name of the parent. For
+      the test app, this means that the collection in
+      <classname>Claim</classname> is called
+      <methodname>claimItems</methodname>. If this is irksome, then the
+      <classname>ObjectGraphBuilder</classname> does define the ability to
+      tweak its behaviour as to how the relationship name is inferred. (A
+      future enhancement to <emphasis>Groovy Objects</emphasis> might be to
+      solve this problem in the general case, by perform the wiring using the
+      <emphasis>Naked Objects</emphasis> metamodel).</para>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Wrapper Programming Model</title>
+
+    <chapter>
+      <title></title>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
+    </chapter>
+  </part>
+</book>

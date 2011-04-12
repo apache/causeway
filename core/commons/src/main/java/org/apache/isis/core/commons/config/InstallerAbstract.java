@@ -23,11 +23,9 @@ package org.apache.isis.core.commons.config;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.inject.Module;
-import com.google.inject.internal.Lists;
-import com.google.inject.util.Modules;
-
 import org.apache.isis.core.commons.components.Installer;
+
+import com.google.inject.internal.Lists;
 
 public abstract class InstallerAbstract implements Installer,
 		IsisConfigurationBuilderAware {
@@ -75,10 +73,10 @@ public abstract class InstallerAbstract implements Installer,
 	 */
 	@Override
     public List<String> getConfigurationResources() {
-		List<String> resourceList = Lists.newArrayList();
-		String componentFile = getType() + ".properties";
+		final List<String> resourceList = Lists.newArrayList();
+		final String componentFile = getType() + ".properties";
 		resourceList.add(componentFile);
-		String componentImplementationFile = getType() + "_" + getName() + ".properties";
+		final String componentImplementationFile = getType() + "_" + getName() + ".properties";
 		resourceList.add(componentImplementationFile);
 		addConfigurationResources(resourceList);
 		return Collections.unmodifiableList(resourceList);
@@ -167,11 +165,6 @@ public abstract class InstallerAbstract implements Installer,
 		}
 	}
 	
-	@Override
-	public Module getModule() {
-		return Modules.EMPTY_MODULE;
-	}
-
 	/**
 	 * Helper for subclasses implementing {@link #getTypes()}.
 	 */

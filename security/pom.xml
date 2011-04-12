@@ -21,9 +21,22 @@
 	<properties>
         <siteBaseDir>..</siteBaseDir>
 		<relativeUrl>security/</relativeUrl>
+
+        <docbkxGuideTitle>Apache Isis Security</docbkxGuideTitle>
+        <docbkxGuideName>isis-security</docbkxGuideName>
 	</properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+            </plugin>
+		</plugins>
+	</build>
 
 	<modules>
 		<module>dflt</module>

@@ -62,5 +62,4 @@ public interface AuthenticationSession extends Encodable {
      * @see #getAttribute(String)
      */
     public void setAttribute(String attributeName, Object attribute);
-
 }

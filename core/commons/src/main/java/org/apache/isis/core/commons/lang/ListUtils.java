@@ -68,13 +68,13 @@ public final class ListUtils {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public
     static List<Object> asList(final Object[] objectArray) {
         final List<Object> list = new ArrayList<Object>();
         for (int i = 0; i < objectArray.length; i++) {
             if (Collection.class.isAssignableFrom(objectArray[i].getClass())) {
-                Collection collection = (Collection) objectArray[i];
+                @SuppressWarnings("rawtypes")
+				Collection collection = (Collection) objectArray[i];
                 list.addAll(asList(collection.toArray()));
             } else {
                 list.add(objectArray[i]);

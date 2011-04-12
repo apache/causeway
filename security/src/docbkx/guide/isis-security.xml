@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
+      </author>
+
+      <author>
+        <firstname>Dan Haywood</firstname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>*** Apache Isis</emphasis> is designed to allow
+    programmers rapidly develop domain-driven applications following the
+    <ulink url="http://en.wikipedia.org/wiki/Naked_Objects">Naked
+    Objects</ulink> pattern. It is made up of a core framework plus a number
+    of supporting implementations, and supports various viewers and object
+    stores. Apache Isis is hosted at the <ulink
+    url="http://incubator.apache.org/isis">Apache Foundation</ulink>, and is
+    licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para>This guide is written for ...</para>
+
+    <para></para>
+
+    <para></para>
+  </preface>
+
+  <chapter id="chp.SecurityApi">
+    <title>*** Introduction</title>
+
+    <abstract>
+      <para>This chapter covers the authentication and authorization
+      APIs</para>
+    </abstract>
+
+    <para></para>
+
+    <para>*** go through these words and move around; get rid of this
+    introductory chapter.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>Apache Isis supports authentication  and role-based authorization.
+    Within the framework the user is represented by a
+    <classname>Session</classname> object. From the session object you can get
+    the name of the user and their roles.</para>
+
+    <para>The session is used within the distribution mechanism and the
+    security manager. The security manager uses the session to determine if a
+    user can access or manipulate an object member. The distribution mechanism
+    passes the session to the server so the server knows which user is
+    accessing it.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>As with authentication, authorization may be executed via a file,
+    LDAP, or database. If no authorization mechanism is specified, all domain
+    calls, methods and properties will be available to all users.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <note>
+      <para>TODO: tidy up the following paras, were just copied/pasted in from
+      APT</para>
+    </note>
+
+    <para><emphasis></emphasis></para>
+
+    <para><emphasis>Apache Isis</emphasis> applications support authentication
+    ("who are you"?) and authorization ("what can you do?"). This allows the
+    set of functionality to be restricted based upon the user's role, with no
+    security knowledge needing to be embedded within the domain objects. The
+    API is defined in {{{../core/runtime/index.html}runtime}}, along with two
+    implementations, one file-based and one using LDAP.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>An <classname>Authoriser</classname> processes an
+    <classname>AuthorizationRequest</classname> and if granted generates a
+    <classname>Session</classname> object to represent the user.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>There is an optional capability to authorise the visibility and
+    usability of fields independently. Thus a field may be visible to certain
+    roles but not editable. In order to configure this against a authorization
+    a flag must be added as follows.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <sect1>
+      <title>Capturing authorization requirements automatically</title>
+
+      <para>As a tool for helping to configure the initial security settings
+      there is a 'learn' property.</para>
+
+      <programlisting format="linespecific">isis.authorization.learn=true</programlisting>
+
+      <para>When this is present and set, all methods will be authorised for
+      all roles. However as each method is accessed through the user interface
+      authorization will be configured for that method and the current role.
+      Configuration will be saved in either the file (saved on shutdown),
+      database table or LDAP security settings depending upon the reflector
+      setup.</para>
+
+      <para>The settings can then be modified to conform to the required
+      security settings.</para>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+  </chapter>
+
+  <part>
+    <title>Default (No-op) Security Implementation</title>
+
+    <chapter>
+      <title></title>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
+    </chapter>
+  </part>
+
+  <part>
+    <title>File Security Implementation</title>
+
+    <chapter id="chp.FileIntro">
+      <title>Introduction</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yada</emphasis></para>
+      </sect1>
+
+      <sect1>
+        <title>Adding Security (Authentication and Authorization)</title>
+
+        <para><remark></remark></para>
+
+        <para>x-ref Core documentation.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>... also, move into the next chapters</para>
+
+        <para></para>
+
+        <para>Starting [[NAME]] requires a user name and password . (The
+        exception is when running in exploration mode, which uses default
+        values). The simplest way to specify the list of user names and
+        passwords is in a passwords file.</para>
+
+        <sect2>
+          <title>Authentication using a passwords file</title>
+
+          <para>Create a file called <filename class="directory"
+          moreinfo="none">password</filename>s, and place into the <filename
+          class="directory" moreinfo="none">config</filename> directory as the
+          following example shows.</para>
+
+          <screen format="linespecific">config/
+   passwords
+</screen>
+
+          <para>The following example shows how user names (sven and dick) and
+          corresponding passwords (passwd1 and passwd2) should be specified in
+          the password file.</para>
+
+          <programlisting format="linespecific">sven:passwd1
+dick:passwd2</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Authentication through a passwords file</title>
+
+          <para>To explicitly use file-based authentication set the following
+          property. (Note, however, that if this property is absent, the
+          framework will anyway assume file-based authentication as the
+          default).</para>
+
+          <programlisting format="linespecific">isis.authentication=file</programlisting>
+
+          <para>The location and name of the passwords file may be specified
+          explicitly - if not it defaults to the <filename class="directory"
+          moreinfo="none">passwords</filename> file, assumed to be in the
+          <filename class="directory" moreinfo="none">config</filename>
+          directory (or under WEB-INF if running as a web application).</para>
+
+          <programlisting format="linespecific">isis.authentication.file.location= passwords  </programlisting>
+
+          <para>The <filename class="directory"
+          moreinfo="none">passwords</filename> file contains users, passwords
+          and any roles, as follows.</para>
+
+          <programlisting format="linespecific">&lt;user&gt;:&lt;password&gt;:&lt;role&gt;|&lt;role&gt;|...</programlisting>
+
+          <para>For example, user 'sven', with password 'pass' and roles
+          'role1' and 'role2' would be</para>
+
+          <programlisting format="linespecific">sven:pass:role1|role2 </programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Authorization using Allow and/or Disallow files</title>
+
+          <para>Authorization allows access to actions and properties to be
+          controlled by configuration. Authorization is entirely optional and
+          is disabled by default - in which case every user is given access to
+          all actions and properties. A prerequisite for authorization is for
+          users to have roles. These should be added to the password file as
+          follows.</para>
+
+          <programlisting format="linespecific">sven:passwd1:ordinary_user
+dick:passwd2:special_user|admin</programlisting>
+
+          <para>Sven has the role 'ordinary_user', dick has the two roles
+          'special_user' and 'admin'.</para>
+
+          <para>[[NAME]] needs to be told which actions and properties are
+          authorised for which roles. The simplest way to do this is in a file
+          i.e. <filename class="directory" moreinfo="none">allow</filename> in
+          the config directory.</para>
+
+          <screen format="linespecific">config/
+   <emphasis role="strong">password</emphasis>
+      <emphasis role="strong">allow</emphasis>
+   </screen>
+
+          <para>Each entry in the <filename class="directory"
+          moreinfo="none">allow</filename> file specifies either a class, or a
+          particular action or property within a class, together with the
+          roles that are allowed to access it. E.g.</para>
+
+          <screen format="linespecific">example.dom.PhoneNumber#Number:ordinary_user|special_user
+example.dom.Contact#Phones:ordinary_user|special_user
+example.dom.Contact#FullName:ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository#FindByTitle(java.lang.String):ordinary_user|special_user
+example.dom.PhoneNumber#Type:ordinary_user|special_user
+example.dom.Contact#KnownAs:ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository#NewPersistentInstance():ordinary_user|special_user
+example.dom.Contact#CreatePhone():special_user
+org.apache.isis.nof.core.service.SimpleRepository#NewTransientInstance():ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository#AllInstances():ordinary_user|special_user
+</screen>
+
+          <para>The above file allows 'example.dom.Contact#CreatePhone()' only
+          for users with role 'special_user' all other actions and properties
+          are allowed for roles 'ordinary_user' and 'special_user'. A
+          different, terser implementation of this would be to use separate
+          <filename class="directory" moreinfo="none">allow</filename> and
+          <filename class="directory" moreinfo="none">disallow</filename>
+          files, or example, the <filename class="directory"
+          moreinfo="none">allow</filename> file:</para>
+
+          <screen format="linespecific">example.dom.PhoneNumber:ordinary_user|special_user
+example.dom.Contact:ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository:ordinary_user|special_user
+</screen>
+
+          <para>and the <filename class="directory"
+          moreinfo="none">disallow</filename> file:</para>
+
+          <screen format="linespecific">example.dom.Contact#CreatePhone():ordinary_user</screen>
+
+          <para>For more details, see the section on Managing Security.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Authentication through a passwords file</title>
+
+          <para>from the "managing security" section</para>
+
+          <para></para>
+
+          <para>To explicitly use file-based authentication set the following
+          property. (Note, however, that if this property is absent, the
+          framework will anyway assume file-based authentication as the
+          default).</para>
+
+          <programlisting format="linespecific">isis.authentication=file</programlisting>
+
+          <para>The location and name of the passwords file may be specified
+          explicitly - if not it defaults to the <filename class="directory"
+          moreinfo="none">passwords</filename> file, assumed to be in the
+          <filename class="directory" moreinfo="none">config</filename>
+          directory (or under WEB-INF if running as a web application).</para>
+
+          <programlisting format="linespecific">isis.authentication.file.location= passwords  </programlisting>
+
+          <para>The <filename class="directory"
+          moreinfo="none">passwords</filename> file contains users, passwords
+          and any roles, as follows.</para>
+
+          <programlisting format="linespecific">&lt;user&gt;:&lt;password&gt;:&lt;role&gt;|&lt;role&gt;|...</programlisting>
+
+          <para>For example, user 'sven', with password 'pass' and roles
+          'role1' and 'role2' would be</para>
+
+          <programlisting format="linespecific">sven:pass:role1|role2 </programlisting>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Authorization through 'allow' and 'disallow' files</title>
+
+          <para>To enable authorization by file including the facet and
+          specifying the authorization implementation in the settings</para>
+
+          <programlisting format="linespecific">isis.reflector.facets.include=\
+    org.apache.isis.runtime.authorization.standard.AuthorizationFacetFactoryImpl
+isis.authorization=file</programlisting>
+
+          <para>With file authorization the current user's role will be
+          authorised against a white and (optionally) a black list for each
+          method possibly available to them. The files are identified by
+          properties, e.g.</para>
+
+          <programlisting format="linespecific">isis.authorization.file.whitelist=allow
+isis.authorization.file.blacklist=disallow  </programlisting>
+
+          <para>The white list file is mandatory, if there is no property it
+          defaults to 'allow' (picked up from the config directory or from
+          WEB-INF if running as a webapp). The black list file is optional.
+          The presence of the property indicates it is being used. If the
+          white list file default is being used then 'disallow' is suggested
+          as a setting for the black list.</para>
+
+          <para>Each file contains a signature to match against and a list of
+          roles. A match in the white list file permits the method and match
+          in the black list forbids it. The black list overrides the white
+          list. Matching occurs at three levels class, method (or property)
+          and parameters. Property matches are to the bean property name e.g.
+          'phone' for getPhone and setPhone.</para>
+
+          <para>Formatted as follows:</para>
+
+          <para>If only class is to be matched: &lt;fully qualified class&gt;
+          :role1|role2|..</para>
+
+          <para>Class and method: &lt;fully qualified
+          class&gt;#&lt;method&gt;:role1|role2|..</para>
+
+          <para>Class and property: &lt;fully qualified
+          class&gt;#&lt;property&gt;:role1|role2|..</para>
+
+          <para>Parameters where method takes no parameters: &lt;fully
+          qualified class&gt;#&lt;method&gt;():role1|role2|...</para>
+
+          <para>Parameters where method takes one parameter: &lt;fully
+          qualified class&gt;#&lt;method&gt;(fully qualified parameter
+          class):role1|role2|...</para>
+
+          <para>Parameters where method takes two or more:</para>
+
+          <para>&lt;fully qualified class&gt;#&lt;method&gt;(fully qualified
+          parameter class1, fully qualified parameter class2,
+          ...):role1|role2|...</para>
+
+          <para>Each line in the file is a separate match.</para>
+
+          <para>So, for example, in the white list file</para>
+
+          <programlisting format="linespecific">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate:role1 </programlisting>
+
+          <para>will permit all actions/properties on <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate</literal>
+          for role1</para>
+
+          <programlisting format="linespecific">com.isisgroup.expenses.services.hibernate.
+    ClaimantRepositoryHibernate#findClaimantByName:role1|role2</programlisting>
+
+          <para>will permit all overloaded methods named <literal
+          moreinfo="none">findClaimantByName</literal> on <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimantRepositoryHibernate</literal>
+          for role1 and role2 and</para>
+
+          <programlisting format="linespecific">com.isisgroup.expenses.services.hibernate.ClaimantRepositoryHibernate#findClaimantByIdentifier(java.lang.String):role3</programlisting>
+
+          <para>will permit <literal
+          moreinfo="none">findClaimantByIdentifier</literal> with parameter
+          <literal moreinfo="none">java.lang.String</literal> on <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimantRepositoryHibernate</literal>
+          for role3. In each case an identical entry in the black list file
+          will instead make the action or property unavailable. The
+          combination of white and black list allows some economy in the
+          settings. For example, if all but one method of a large class is to
+          be allowed, that could be configured with one entry per method in
+          the white list file or, better, a single entry for the class in the
+          white list and a single entry for the unavailable method in the
+          black list.</para>
+        </sect2>
+
+        <sect2>
+          <title>Authorization through 'allow' and 'disallow' files</title>
+
+          <para>To enable authorization by file including the facet and
+          specifying the authorization implementation in the settings</para>
+
+          <programlisting format="linespecific">isis.reflector.facets.include=\
+    org.apache.isis.runtime.authorization.standard.AuthorizationFacetFactoryImpl
+isis.authorization=file</programlisting>
+
+          <para>With file authorization the current user's role will be
+          authorised against a white and (optionally) a black list for each
+          method possibly available to them. The files are identified by
+          properties, e.g.</para>
+
+          <programlisting format="linespecific">isis.authorization.file.whitelist=allow
+isis.authorization.file.blacklist=disallow  </programlisting>
+
+          <para>The white list file is mandatory, if there is no property it
+          defaults to 'allow' (picked up from the config directory or from
+          WEB-INF if running as a webapp). The black list file is optional.
+          The presence of the property indicates it is being used. If the
+          white list file default is being used then 'disallow' is suggested
+          as a setting for the black list.</para>
+
+          <para>Each file contains a signature to match against and a list of
+          roles. A match in the white list file permits the method and match
+          in the black list forbids it. The black list overrides the white
+          list. Matching occurs at three levels class, method (or property)
+          and parameters. Property matches are to the bean property name e.g.
+          'phone' for getPhone and setPhone.</para>
+
+          <para>Formatted as follows:</para>
+
+          <para>If only class is to be matched: &lt;fully qualified class&gt;
+          :role1|role2|..</para>
+
+          <para>Class and method: &lt;fully qualified
+          class&gt;#&lt;method&gt;:role1|role2|..</para>
+
+          <para>Class and property: &lt;fully qualified
+          class&gt;#&lt;property&gt;:role1|role2|..</para>
+
+          <para>Parameters where method takes no parameters: &lt;fully
+          qualified class&gt;#&lt;method&gt;():role1|role2|...</para>
+
+          <para>Parameters where method takes one parameter: &lt;fully
+          qualified class&gt;#&lt;method&gt;(fully qualified parameter
+          class):role1|role2|...</para>
+
+          <para>Parameters where method takes two or more:</para>
+
+          <para>&lt;fully qualified class&gt;#&lt;method&gt;(fully qualified
+          parameter class1, fully qualified parameter class2,
+          ...):role1|role2|...</para>
+
+          <para>Each line in the file is a separate match.</para>
+
+          <para>So, for example, in the white list file</para>
+
+          <programlisting format="linespecific">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate:role1 </programlisting>
+
+          <para>will permit all actions/properties on <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate</literal>
+          for role1</para>
+
+          <programlisting format="linespecific">com.isisgroup.expenses.services.hibernate.
+    ClaimantRepositoryHibernate#findClaimantByName:role1|role2</programlisting>
+
+          <para>will permit all overloaded methods named <literal
+          moreinfo="none">findClaimantByName</literal> on <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimantRepositoryHibernate</literal>
+          for role1 and role2 and</para>
+
+          <programlisting format="linespecific">com.isisgroup.expenses.services.hibernate.ClaimantRepositoryHibernate#findClaimantByIdentifier(java.lang.String):role3</programlisting>
+
+          <para>will permit <literal
+          moreinfo="none">findClaimantByIdentifier</literal> with parameter
+          <literal moreinfo="none">java.lang.String</literal> on <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimantRepositoryHibernate</literal>
+          for role3. In each case an identical entry in the black list file
+          will instead make the action or property unavailable. The
+          combination of white and black list allows some economy in the
+          settings. For example, if all but one method of a large class is to
+          be allowed, that could be configured with one entry per method in
+          the white list file or, better, a single entry for the class in the
+          white list and a single entry for the unavailable method in the
+          black list.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>There is an optional capability to authorise the visibility
+          and usability of fields independently. Thus a field may be visible
+          to certain roles but not editable. In order to configure this
+          against a authorization a flag must be added as follows.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>As a tool for helping to configure the initial security
+          settings there is a 'learn' property.</para>
+
+          <programlisting format="linespecific">isis.authorization.learn=true</programlisting>
+
+          <para>When this is present and set, all methods will be authorised
+          for all roles. However as each method is accessed through the user
+          interface authorization will be configured for that method and the
+          current role. Configuration will be saved in either the file (saved
+          on shutdown), database table or LDAP security settings depending
+          upon the reflector setup.</para>
+
+          <para>The settings can then be modified to conform to the required
+          security settings.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>LDAP Security Implementation</title>
+
+    <chapter>
+      <title>Introduction</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yada</emphasis></para>
+
+        <sect2>
+          <title>Authentication through an LDAP server</title>
+
+          <para>To authenticate through LDAP set</para>
+
+          <programlisting format="linespecific">isis.authentication=ldap</programlisting>
+
+          <para>LDAP needs a URL for the server and a 'dn' of the root of the
+          users on the server. For example,</para>
+
+          <programlisting format="linespecific">isis.authentication.ldap.dn= dc=isis, dc=org </programlisting>
+
+          <programlisting format="linespecific">isis.authentication.ldap.server=ldap://localhost:10389</programlisting>
+
+          <para>The logon password check will be on uid='username', &lt;dn&gt;
+          - For example, attempting to logon with user 'sven' with the above
+          settings will check against the server on localhost, port = 10389,
+          uid=sven, dc=isis, dc=org, using the password in the standard
+          <literal moreinfo="none">userpassword</literal> attribute in that
+          entry. Once logged in, roles will be picked up from cn='rolename'
+          where objectclass =organizationalRole in child entries of the user
+          entry.</para>
+        </sect2>
+
+        <sect2>
+          <title>Authorization through LDAP server</title>
+
+          <para>To enable authorization by LDAP server include facet for
+          authorization and specifying the <literal
+          moreinfo="none">ldap</literal> implementation for
+          authorization.</para>
+
+          <programlisting format="linespecific">isis.reflector.facets.include=\
+    org.apache.isis.runtime.authorization.standard.AuthorizationFacetFactoryImpl
+isis.authorization=ldap</programlisting>
+
+          <para>With LDAP authorization the current user's role will be
+          authorised against an entry in the LDAP server for each method
+          possibly available to them. The URL of the server is obtained from
+          the same property as for authentication.</para>
+
+          <para>The authorization entries should exist under a DN configured
+          in the property file. For example.</para>
+
+          <programlisting format="linespecific">isis.authorization.ldap.application.dn= cn=expenses, dc=apps, dc=isis, dc=org </programlisting>
+
+          <para>This will be checked anonymously.</para>
+
+          <para>Entries to be matched against should exist under this dn.
+          Expected configuration is a hierarchy of class, method and
+          parameters. The cn of each entry is expected to be the fully
+          qualified class name, method or parameter list ('()' for an empty
+          parameter list). If an entry has a 'uniquemember' attribute equal to
+          'role' then that entry and all sub-entries are authorised.</para>
+
+          <para>For example</para>
+
+          <para>DN:
+          cn=com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate,
+          cn=expenses, dc=apps, dc=isis, dc=org</para>
+
+          <para>with uniquemember = role1 will authorise all members of
+          <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate</literal>
+          for users with role1.</para>
+
+          <para>DN: cn=(com.isisgroup.expenses.claimant.Claimant,
+          java.lang.String),</para>
+
+          <para>cn=createNewClaim,
+          cn=com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate,
+          cn=expenses, dc=apps, dc=isis, dc=org</para>
+
+          <para>with uniquemember = role1 will authorise the <literal
+          moreinfo="none">createNewClaim(com.isisgroup.expenses.claimant.Claimant,
+          String)</literal> member of <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate</literal>
+          for users with role1.</para>
+        </sect2>
+
+        <sect2>
+          <title>Authorization through LDAP server</title>
+
+          <para>To enable authorization by LDAP server include facet for
+          authorization and specifying the <literal
+          moreinfo="none">ldap</literal> implementation for
+          authorization.</para>
+
+          <programlisting format="linespecific">isis.reflector.facets.include=\
+    org.apache.isis.runtime.authorization.standard.AuthorizationFacetFactoryImpl
+isis.authorization=ldap</programlisting>
+
+          <para>With LDAP authorization the current user's role will be
+          authorised against an entry in the LDAP server for each method
+          possibly available to them. The URL of the server is obtained from
+          the same property as for authentication.</para>
+
+          <para>The authorization entries should exist under a DN configured
+          in the property file. For example.</para>
+
+          <programlisting format="linespecific">isis.authorization.ldap.application.dn= cn=expenses, dc=apps, dc=isis, dc=org </programlisting>
+
+          <para>This will be checked anonymously.</para>
+
+          <para>Entries to be matched against should exist under this dn.
+          Expected configuration is a hierarchy of class, method and
+          parameters. The cn of each entry is expected to be the fully
+          qualified class name, method or parameter list ('()' for an empty
+          parameter list). If an entry has a 'uniquemember' attribute equal to
+          'role' then that entry and all sub-entries are authorised.</para>
+
+          <para>For example</para>
+
+          <para>DN:
+          cn=com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate,
+          cn=expenses, dc=apps, dc=isis, dc=org</para>
+
+          <para>with uniquemember = role1 will authorise all members of
+          <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate</literal>
+          for users with role1.</para>
+
+          <para>DN: cn=(com.isisgroup.expenses.claimant.Claimant,
+          java.lang.String),</para>
+
+          <para>cn=createNewClaim,
+          cn=com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate,
+          cn=expenses, dc=apps, dc=isis, dc=org</para>
+
+          <para>with uniquemember = role1 will authorise the <literal
+          moreinfo="none">createNewClaim(com.isisgroup.expenses.claimant.Claimant,
+          String)</literal> member of <literal
+          moreinfo="none">com.isisgroup.expenses.services.hibernate.ClaimRepositoryHibernate</literal>
+          for users with role1.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>There is an optional capability to authorise the visibility
+          and usability of fields independently. Thus a field may be visible
+          to certain roles but not editable. In order to configure this
+          against a authorization a flag must be added as follows.</para>
+
+          <para></para>
+
+          <para>Add a flags attribute to the entry with the role. If it's set
+          to 'rw' editing will be allowed, any other value (typically 'ro')
+          will disallow editing.</para>
+
+          <para>In each case absence of the flag will mean that visibility and
+          usability and are always the same.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>As a tool for helping to configure the initial security
+          settings there is a 'learn' property.</para>
+
+          <programlisting format="linespecific">isis.authorization.learn=true</programlisting>
+
+          <para>When this is present and set, all methods will be authorised
+          for all roles. However as each method is accessed through the user
+          interface authorization will be configured for that method and the
+          current role. Configuration will be saved in either the file (saved
+          on shutdown), database table or LDAP security settings depending
+          upon the reflector setup.</para>
+
+          <para>The settings can then be modified to conform to the required
+          security settings.</para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+    </chapter>
+  </part>
+</book>

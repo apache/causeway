@@ -189,7 +189,9 @@
       <emphasis>Apache Isis</emphasis> than this.</para>
 
       <para>This chapter introduces the Apache Isis and the naked objects
-      pattern by way of a series of questions and answers.</para>
+      pattern by way of a series of questions and answers. It is adapted from
+      an <ulink url="www.infoq.com/articles/haywood-ddd-no">interview
+      originally published on InfoQ</ulink>.</para>
 
       <sect1>
         <title>Apache Isis implements naked objects pattern... but what is
@@ -709,7 +711,7 @@
         <para>Once you've got the archetype application running, you're ready
         to start developing your own domain objects. But no matter what
         application you are developing, you'll need to understand the
-        <emphasis>Isis programming model</emphasis>. </para>
+        <emphasis>Isis programming model</emphasis>.</para>
 
         <para>The programming model is the set of annotations and programming
         conventions that Isis recognizes. You'll find full details of the
@@ -794,7 +796,7 @@
             <para>The RESTful viewer (in <filename>viewers/restful</filename>)
             is designed to expose your domain objects through a <ulink
             url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
-            interface. </para>
+            interface.</para>
 
             <para>The intention of this viewer is to allow programmatic access
             to your domain objects from other (perhaps non-Java) clients. The

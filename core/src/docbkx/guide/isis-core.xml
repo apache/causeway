@@ -48,8 +48,6 @@
     </legalnotice>
   </bookinfo>
 
-  <!-- front matter -->
-
   <toc></toc>
 
   <preface id="preface">
@@ -67,55 +65,78 @@
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para>This guide is written for programmers looking to understand how the
-    core framework of <emphasis>Apache Isis</emphasis> fits together,
-    including an understanding of its core <acronym>API</acronym>s. It is
-    divided into the following chapters:<itemizedlist>
-        <listitem>
-          <para>Architectural Overview</para>
+    <sect1>
+      <title>Who this Guide is For</title>
 
-          <para>The introductory chapter discusses some of the main
-          architecture elements of the framework's design, distinguishing and
-          explaining the reason for the applib, the core modules, the viewers,
-          and the main <acronym>API</acronym>s exposed by the core.</para>
-        </listitem>
+      <para>This guide is written for programmers looking to understand how
+      the core framework of <emphasis>Apache Isis</emphasis> fits together,
+      including an understanding of its core <acronym>API</acronym>s. It is
+      divided into the following parts/chapters:<itemizedlist>
+          <listitem>
+            <para>Architectural Overview</para>
 
-        <listitem>
-          <para>Chapters for each of Core Modules and
-          <acronym>API</acronym>s</para>
+            <para>The introductory chapter discusses some of the main
+            architecture elements of the framework's design, distinguishing
+            and explaining the reason for the applib, the core modules, the
+            viewers, and the main <acronym>API</acronym>s exposed by the
+            core.</para>
+          </listitem>
 
-          <para>This part of the guide goes through each of the modules that
-          make up the core framework, along with more detailed coverage of the
-          <acronym>API</acronym>s exposed by the core.</para>
-        </listitem>
-      </itemizedlist></para>
+          <listitem>
+            <para>Chapters for each of core modules</para>
 
-    <para>You'll note that we <emphasis>don't</emphasis> describe the
-    implementations of these <acronym>API</acronym>s; most notably we don't
-    describe the default runtime implementation. What this means is that
-    details of how to actually deploy an <emphasis>Isis</emphasis> application
-    are not included here, because those details depend on which runtime is
-    being used. See the relevant runtime documentation for details.</para>
+            <para>This part of the guide goes through each of the modules that
+            make up the core framework. We also identify the main
+            <acronym>API</acronym>s exposed by the core: security, programming
+            models, and runtime.</para>
+          </listitem>
+        </itemizedlist></para>
 
-    <para>You'll also find that <emphasis>this</emphasis> guide (the core
-    documentation) does not cover the programming model in depth. Rather, it
-    explains why we have an applib in the first place, and more generally
-    covers the main principles and patterns of writing any <emphasis>Apache
-    Isis</emphasis> application. It also goes in depth into the architecture
-    and design of the framework. For details of the programming guide (that
-    is, how to actually write <emphasis>Isis</emphasis> applications) you
-    should look to the applib (application library) documentation.<footnote>
-        <para>This is a slight simplification; the applib defines the
-        programming conventions of the <emphasis>default</emphasis>
-        programming model. As you will learn, Isis can be extended to support
-        different programming models. Therefore the conventions your
-        application code follows will actually depend on whether you have
-        customized the programming mode or not.</para>
-      </footnote></para>
+      <para>You'll note that we <emphasis>don't</emphasis> describe the
+      implementations of these <acronym>API</acronym>s; for these see their
+      respective guides. Notably, that means that we don't describe how to
+      actually deploy an Isis application here, because that depends upon the
+      runtime/viewer in use. See the relevant runtime documentation for
+      details.</para>
 
-    <para></para>
+      <para>You'll also find that <emphasis>this</emphasis> guide (the core
+      documentation) does not cover the programming model. Rather, it explains
+      why we have an applib in the first place. For details of the programming
+      guide (that is, how to actually write <emphasis>Isis</emphasis>
+      applications) you should look to the applib (application library)
+      documentation. Meanwhile, the programming model guide describe how to
+      customize the default programming model to your own ends.</para>
+    </sect1>
 
-    <para></para>
+    <sect1>
+      <title>Abbreviations used in this Guide</title>
+
+      <para><emphasis>Apache Isis</emphasis> is built using Maven, which
+      identifies every module with a groupId, an artifactId, a version, and a
+      type. These are called the Maven <emphasis>co-ordinates</emphasis>. In
+      this guide we identify each module using notation
+      <package>(groupId:artifactId)</package>; you should assume that the
+      <emphasis>version</emphasis> is the latest version, and the
+      <emphasis>type</emphasis> is the default JAR artifact<footnote>
+          <para>Maven modules can create other artifacts too, such as a test
+          JAR artifact. This would be indicated with a type of test-jar. But
+          the default artifact is a regular JAR.</para>
+        </footnote>. Hence <package>(org.apache.isis:core)</package> is the
+      Maven module with a <emphasis>groupId</emphasis> of
+      <package>org.apache.isis</package> and an
+      <emphasis>artifactId</emphasis> of <package>core</package>.</para>
+
+      <para>As a further convenience, we use "oai" as an abbreviation for
+      <package>org.apache.isis</package>. Hence
+      <package>(oai.runtimes:dflt)</package> refers to the default runtime
+      module.</para>
+
+      <para>In this guide we also use the "oai" abbreviation within package
+      names. For example,
+      <package>oai.core.runtime.authentication.AuthenticationManager</package>
+      is an abbreviation of
+      <package>org.apache.isis.core.runtime.authentication.AuthenticationManager</package>.</para>
+    </sect1>
   </preface>
 
   <chapter id="chp.Intro">
@@ -136,651 +157,322 @@
     <sect1>
       <title>Hexagonal Architecture</title>
 
-      <para></para>
-
-      <para>*** update picture.</para>
-
-      <para></para>
+      <para><emphasis>Apache Isis</emphasis>' architecture is a variant of the
+      typical <ulink
+      url="http://xunitpatterns.com/Layered%20Architecture.html">layered
+      architecture</ulink>, called the <ulink
+      url="http://alistair.cockburn.us/Hexagonal+architecture">hexagonal
+      architecture</ulink>. Like the layered architecture, the hexagonal
+      architecture distinguishes between the user interface layer, the
+      persistence (or infrastructure) layer, and the domain layer.
+      <emphasis>Apache Isis</emphasis>' version of this architectural style is
+      shown below.</para>
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/HexagonalArchitectureOverview.png"
-                     scale="50" />
+          <imagedata fileref="../../../../src/site/resources/images/HexagonalArchitectureOverview.png"
+                     scale="45" />
         </imageobject>
       </mediaobject>
 
-      <para></para>
+      <para>The viewer modules constitute the presentation layer; these are
+      the means by which the end-user initiates an interaction with the domain
+      objects. The interaction is not directly with the domain objects,
+      though; instead think of the viewers as interacting through a "port"
+      into the hexagon. The <emphasis>Isis</emphasis> framework then adapts
+      this interaction for the domain objects. Indeed, another name for the
+      hexagonal architecture is the "ports and adapters" architecture.</para>
+
+      <para>As the domain objects are called, they are likely to interact with
+      other services. The most obvious of these is an interaction with the
+      persistence layer, either in terms of an update to themselves or the
+      creation/update or deletion of other objects. Again, though, this isn't
+      direct; instead the framework mediates/adapts to the configured
+      persistence mechanism.</para>
+
+      <para>Alternatively, though, the domain objects may interact with other
+      domain services. These services are specific to the application in
+      question, for example an email service, to publish an event, to generate
+      a <acronym>PDF</acronym>, to submit an order via a
+      <acronym>SOAP</acronym> web service etc. Here the framework is much less
+      involved; it merely will automatically inject any registered domain
+      services directly into domain objects in order that they can invoke the
+      service.</para>
+
+      <para>In order to support the interactions from the viewer to the domain
+      objects, and from the domain objects to the persistence mechanism, the
+      framework itself also calls out to other modules. The progmodel
+      <acronym>API</acronym> defines the programming conventions for the
+      domain objects; these conventions are used to build up a metamodel. Some
+      of these conventions depend on annotations, hence these dependency from
+      domain objects to the applib (application library) module which defines
+      such things. It's important to note that this is the only dependency
+      from domain objects to the framework, meaning that the domain objects
+      are basically pojos++. The other major <acronym>API</acronym> called by
+      the framework in order to do its job is the security
+      <acronym>API</acronym>, which is used for authentication and
+      authorization.</para>
+
+      <para>In the diagram you'll also see mention of the "default runtime".
+      In fact <emphasis>Apache Isis</emphasis> supports multiple runtimes. The
+      <emphasis>default runtime</emphasis> is reasonably heavyweight
+      implementation that supports defines a persistence
+      <acronym>API</acronym>, but also has support for remoting for
+      client/server deployments (whereby the server is configured for
+      persistence but the client's "persistence mechanism" is in fact the
+      proxy to the server). The default runtime also supports the concept of
+      profilestores, allowing user preferences to be stored and retrieved by
+      viewers. Finally, the default runtime defines a pluggable bytecode
+      enhancement <acronym>API</acronym>, allowing for transparent lazy
+      loading and object dirtying.</para>
+
+      <para>The default runtime is not the only runtime, however. One other
+      runtime supported is an "embedded runtime", allowing the embedding of
+      the Isis metamodel in any arbitrary application, for example a Maven
+      plugin. But we also expect to develop other - full-stack but more
+      lightweight - runtimes in the future. One such that is planned is to use
+      <ulink url="http://jcp.org/en/jsr/detail?id=299">CDI (JSR-299)</ulink>
+      for wiring, using <ulink url="http://db.apache.org/jdo/javadoc.html">JDO
+      3.0</ulink> for the persistence <acronym>API</acronym>.</para>
     </sect1>
 
     <sect1>
       <title>Core Framework</title>
 
-      <para></para>
+      <para>The core of <emphasis>Apache Isis</emphasis> is, well, the core
+      modules. These consist of a set of Maven modules grouped under a parent
+      module whose Maven co-ordinates are
+      <package>(org.apache.isis:core)</package>.</para>
 
-      <para>consists of:</para>
+      <para>Each of the core modules has a Maven co-ordinate of
+      <package>(org.apache.isis.core:xxx</package>), where
+      <emphasis>xxx</emphasis> is one of:</para>
 
       <itemizedlist>
         <listitem>
-          <para>common</para>
+          <para>test support</para>
+
+          <para>The <emphasis>testsupport</emphasis> module holds helper
+          classes to support writing unit tests in either JUnit or
+          JMock.</para>
         </listitem>
 
         <listitem>
-          <para>test support</para>
+          <para>commons</para>
+
+          <para>The <emphasis>commons</emphasis> module provides a set of
+          common utilities and language extensions for use across the rest of
+          the framework.</para>
         </listitem>
 
         <listitem>
           <para>metamodel</para>
+
+          <para>The <emphasis>metamodel</emphasis> module defines the
+          interfaces and classes which describe the structure of the domain
+          objects. The most obvious use of the metamodel is by the viewer
+          modules which use it in order to know how to render the user
+          interface. It is also used by some of the runtime/persistence
+          implementations.</para>
         </listitem>
 
         <listitem>
           <para>progmodel</para>
+
+          <para>The <emphasis>progmodel</emphasis> module provides a set of
+          reusable elements that are used to build up the metamodel. Some of
+          these depend upon annotations/interfaces in the
+          <emphasis>applib</emphasis> module, others merely define a
+          programming convention.</para>
+        </listitem>
+
+        <listitem>
+          <para>runtime</para>
+
+          <para>The <emphasis>runtime</emphasis> module defines security
+          <acronym>API</acronym> (authentication and authorization) as well as
+          a number of other lesser <acronym>API</acronym>s and implementations
+          that are likely to be of use by most runtime implementations.</para>
+        </listitem>
+
+        <listitem>
+          <para>webapp</para>
+
+          <para>The <emphasis>webapp</emphasis> module provides a number of
+          supporting filters, servlets and other classes for use by any
+          webapp-based viewer.</para>
         </listitem>
       </itemizedlist>
 
-      <para></para>
-
-      <para></para>
-
-      <para></para>
+      <para>These modules are covered more extensively in <xref
+      linkend="prt.CoreModules" />.</para>
     </sect1>
 
     <sect1>
-      <title>Core APIs</title>
+      <title>Core <acronym>API</acronym>s</title>
 
-      <para></para>
+      <para>Across the core modules a number of key <acronym>API</acronym>s
+      are defined.</para>
 
-      <sect2>
-        <title>Programming Model</title>
+      <itemizedlist>
+        <listitem>
+          <para>programming model <acronym>API</acronym></para>
 
-        <para></para>
-      </sect2>
+          <para>The <emphasis>core metamodel</emphasis> module defines the
+          <classname>oai.core.metamodel.progmodel.ProgrammingModel</classname>
+          interface, which defines the rules and conventions that constitute
+          the programming model.</para>
+        </listitem>
 
-      <sect2>
-        <title>Security</title>
+        <listitem>
+          <para>security <acronym>API</acronym></para>
 
-        <para></para>
-      </sect2>
+          <para>The <emphasis>core runtime</emphasis> module defines a
+          security <acronym>API</acronym> (specifically,
+          <package>oai.core.runtime.authentication.AuthenticationManager</package>
+          and
+          <package>oai.core.runtime.authorization.AuthorizationManager</package>)
+          as well as a number of other lesser <acronym>API</acronym>s and
+          implementations that are likely to be of use by most runtime
+          implementations.</para>
+        </listitem>
 
-      <sect2>
-        <title>Runtime (Persistence)</title>
+        <listitem>
+          <para>runtime (persistence) <acronym>API</acronym></para>
 
-        <para></para>
-      </sect2>
+          <para>The responsibility of the runtime - broadly speaking - is to
+          perform object lifecycle management, persistence and (optionally)
+          client/server remoting. Runtimes may also offer other services, such
+          as user preference (or profile) management.</para>
 
-      <sect2>
-        <title>Profile Stores</title>
+          <para>The runtime is not an <acronym>API</acronym> per-se, but
+          rather represents the environment in which the other functionality
+          provided by the <emphasis>Isis</emphasis> framework is called.
+          <emphasis>Isis</emphasis> has two runtime implementations:</para>
 
-        <para></para>
-      </sect2>
+          <itemizedlist>
+            <listitem>
+              <para>the <emphasis>default runtime</emphasis>
+              <package>(oai.core.runtimes:dflt)</package> that supports all of
+              the above (lifecycle, persistence, remoting and
+              profiles).</para>
+
+              <para>A key part of the design of the default runtime is the
+              <package>oai.runtimes.dflt.runtime.context.IsisContext</package>
+              interface, which is used to obtain the current session<footnote>
+                  <para>This interface is somewhat akin to <ulink
+                  url="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/tutorial.html">HibernateUtil</ulink>
+                  class used in Hibernate.</para>
+                </footnote>.</para>
+            </listitem>
+
+            <listitem>
+              <para>the <emphasis>embedded runtime</emphasis>
+              <package>(org.apache.isis.core.runtimes:embedded)</package>, to
+              allow the <emphasis>Isis</emphasis> metamodel to be embedded
+              within otherwise bespoke applications, and in utilities such as
+              Maven plugins.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The intent is that other runtimes implementations (eg using
+          CDI, JDO 3.0 etc) will be supported in the future.</para>
+        </listitem>
+      </itemizedlist>
     </sect1>
 
     <sect1>
       <title>Viewers</title>
 
-      <para></para>
-    </sect1>
-  </chapter>
-
-  <chapter>
-    <title>Conventions</title>
-
-    <para></para>
-
-    <para></para>
-
-    <para>The <emphasis>Isis</emphasis> framework provides a number of tools
-    to help resolve problems and debug the system. These are mainly applicable
-    to issues within system code, but some of them can be useful when
-    developing applications. The framework provides the following:-</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Extensive use of logging through the <ulink
-        url="http://logging.apache.org/log4j/docs/">Log4j</ulink> framework,
-        an open source logging framework made available as part of the Apache
-        Jakarta project ;</para>
-      </listitem>
-
-      <listitem>
-        <para>Additional logging decorators that can be explicitly added to
-        specific component to capture details about the usage of those
-        components;</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>In addition, the DnD viewer provides debug views that display
-    details of components and anything else that implements the
-    <classname>DebugInfo</classname> interface. There is further coverage of
-    this last feature in the DnD viewer's documentation.</para>
-
-    <para></para>
-
-    <sect1>
-      <title>Logging</title>
-
-      <para>Logging using Log4j is used throughout the framework and the
-      components the Isis development team have created, and it is recommended
-      that you use it too. Logging allows you to look what the framework and
-      components have been when you investigate a problem and help to identify
-      what parts of the system where doing what before an problem arose. Often
-      logging alone is enough to pin point a problem, but if not it help you
-      target what to investigate.</para>
-
-      <para>Log4j allows you to log log debug messages, information about the
-      system's state, warnings and errors. These events can be displayed on
-      the console, written to files, or sent out over the network for remote
-      logging. These are output in a user defined format and also can be
-      filtered (so only events from certain components are seen). All this is
-      configured through a set of properties passed to Log4J.</para>
-
-      <sect2>
-        <title>Configuring Logging</title>
-
-        <para>The complete options for outputting and formatting can be found
-        in the relavent Log4J documentation (including the API). However, it
-        crucial to smooth development of an NOF system that will cover some of
-        it here. The NOF configures Log4j using properties files and will
-        generally load <filename class="directory"
-        moreinfo="none">log4j.properties</filename> or retrieve the properties
-        from the that were loaded from <filename class="directory"
-        moreinfo="none">isis.properties</filename> after that is loaded for
-        framework configuration (these files need to be located in the working
-        directory). If you are not using classes within the NOF to start the
-        framework then how these properties are loaded could vary. The
-        downside of putting the logging properities in the framework
-        properties files is that there is no logging until it has been loaded.
-        If this is necessary then it is better to use the separate properties
-        file.</para>
-
-        <para>The following file, or portion of a file, is a basic
-        configuration for logging. It consists of two appenders and a basic
-        logging configuration.</para>
-
-        <programlisting format="linespecific">log4j.rootLogger=INFO, Console, File
-
-# The console appender
-log4j.appender.Console=org.apache.log4j.ConsoleAppender
-log4j.appender.Console.Target=System.out
-log4j.appender.Console.layout=org.apache.log4j.PatternLayout
-log4j.appender.Console.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  \t\t%m%n
-
-# The exploration.log file appender
-log4j.appender.File=org.apache.log4j.FileAppender
-log4j.appender.File.File=exploration.log
-log4j.appender.File.layout=org.apache.log4j.PatternLayout
-log4j.appender.File.layout.ConversionPattern=%-4r %-5p [%t] %37c %3x - %m%n
-log4j.appender.File.Append=false</programlisting>
-
-        <para>The first line sets up logging to show events of level
-        <emphasis>INFO</emphasis> and above through the
-        <emphasis>Console</emphasis> and <emphasis>File</emphasis> appenders,
-        which writes those events to the console and the file <filename
-        class="directory" moreinfo="none">exploration.log</filename>
-        respectively. The two blocks sepcifiy how to write to the console and
-        the file. Other appenders can be used to change where the logs are
-        written to. The number of appenders specified is unlimited, although
-        there should be at least one. The console below (from Eclipse) shows
-        the log. The file will contain the same thing although the formatting
-        will be slightly different as the conversion pattern for the two
-        appenders is different.</para>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/console-log.png" />
-          </imageobject>
-        </mediaobject>
-
-        <sect3>
-          <title>Logging levels</title>
-
-          <para>The types of events that are logged can be changed. This
-          determines how large the files become or how much traffic is put
-          over the network, and is reflected in the amount of processing that
-          needs to be done to process the events into messages that can be
-          written out. Levels in order of increasing verbosity and log size,
-          and is decreasing order of severity are:-</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>OFF - no logging</para>
-            </listitem>
-
-            <listitem>
-              <para>FATAL - something very serious has happened that requires
-              the system to be shut down.</para>
-            </listitem>
-
-            <listitem>
-              <para>ERROR - something serious has happened that might affect
-              any subsequent actions.</para>
-            </listitem>
-
-            <listitem>
-              <para>WARN - something has not been set up properly, or needs
-              attention. Although subsequent action might function correctly,
-              they might not function as expected.</para>
-            </listitem>
-
-            <listitem>
-              <para>INFO - information to the developer about something that
-              has taken place.</para>
-            </listitem>
-
-            <listitem>
-              <para>DEBUG - detailed information for the developer.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>So in the above example to increase the logging level to debug
-          change the first part of the property to <emphasis>DEBUG</emphasis>
-          from <emphasis>INFO</emphasis> as below:</para>
-
-          <programlisting format="linespecific">log4j.rootLogger=DEBUG, Console, File</programlisting>
-
-          <para>Logging should almost never be set to off, but should at least
-          be set to log the errors (unsing level ERROR). Whilst developing we
-          recommend that you set your basic level to INFO and switch to DEBUG
-          if you need to investigate something.</para>
-
-          <para>Setting the logging level via the properties file applies that
-          level at startup and cannot be changed using the properties, ie,
-          that level will be used to filter all logged event while the system
-          is running. If you are using the Skylark viewer, however, you can
-          use the debug options to change the logging level on the client at
-          any time. By using Ctrl-Shift-right-click on the desktop you will be
-          shown the debug menu and see the following options:-</para>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata align="left" fileref="images/logging-debug.png"
-                         format="PNG" />
-            </imageobject>
-          </mediaobject>
-
-          <para>The greyed-out option indicates the current level. Selectiing
-          one of the other levels will change the logging to that
-          level.</para>
-        </sect3>
-
-        <sect3>
-          <title>Limiting logging by class</title>
-
-          <para>As well as limiting the level of events that are logged, we
-          can also specify which classes we are interested in capturing log
-          events for. In Log4j events are organised by loggers, which are set
-          up programmatically, but as we create a logger for each class we
-          talk about classes.</para>
-
-          <para>To change the levels of events captured according to the class
-          where the log event was created we can class based requirements
-          after the root logger is specified. To set a logging level for a
-          class add a property in the form</para>
-
-          <programlisting format="linespecific">log4j.logger.&lt;package to log&gt;=&lt;level for package&gt;
-log4j.logger.&lt;class to log&gt;=&lt;level for class&gt;</programlisting>
-
-          <para>Events for the specified packages or class will be logged at
-          the specified level, overriding the root level set up first. So for
-          example the following configuration:</para>
-
-          <programlisting format="linespecific">log4j.rootLogger=WARN, Console
-
-log4j.logger.org.apache.isis.object=INFO
-log4j.logger.org.apache.isis.object.reflect=DEBUG
-log4j.logger.org.apache.isis.object.persistence=DEBUG
-
-log4j.logger.org.apache.isis.object.loader.ObjectLoaderImpl=OFF</programlisting>
-
-          <para>will capture warning and errors for all classes (as defined by
-          the root logger), and information messages for those classes whose
-          package begins with <classname>org.apache.isis.object</classname>.
-          In addition those classes beginning with
-          <classname>org.apache.isis.object.reflect </classname>or
-          <classname>org.apache.isis.object.persistence</classname> will have
-          their debug events captured as well. Finally, the class
-          <classname>ObjectLoader</classname> will have all of its events
-          ignored.</para>
-
-          <para>It is important to make use of this feature when using the
-          Skylark viewer as it logs events about it rendering. In Java
-          rendering the screen (via the
-          <methodname>paint(Graphics)</methodname> method) happens very often
-          and can cause the logs to be swamped with superflous events. The
-          logger for these events are prepended with the text 'ui.' so we can
-          disable all of these events across all the viewing classes by adding
-          the following to the properties:</para>
-
-          <programlisting format="linespecific">log4j.logger.ui=OFF</programlisting>
-        </sect3>
-
-        <sect3>
-          <title>Writing XML log files</title>
-
-          <para>By writing out the logs to a file in XML rather than as text
-          allows you to look at the log using Chainsaw, a Log4j viewer. This
-          tool allows you to quickly look at events in specific classes and
-          hide events that are of no interest by setting up simple
-          conditions.</para>
-
-          <para>To write out an XML file the same appender as before is used,
-          but the layout is changed. The following configuration logs all
-          events (DEBUG and greater) to a file with an XML layout.</para>
-
-          <programlisting format="linespecific">log4j.rootLogger=DEBUG, XmlFile
-
-log4j.appender.XmlFile=org.apache.log4j.FileAppender
-log4j.appender.XmlFile.file=isis.log.xml
-log4j.appender.XmlFile.layout=org.apache.log4j.xml.XMLLayout
-log4j.appender.XmlFile.append=false</programlisting>
-        </sect3>
-
-        <sect3>
-          <title>Writing HTML log files</title>
-
-          <para>HTML files can be viewed in a web browser and will display
-          nicely in most email clients. Change the appender to use the
-          <classname>HTMLLayout</classname> class.</para>
-
-          <programlisting format="linespecific">log4j.appender.Snapshot.layout=org.apache.log4j.HTMLLayout</programlisting>
-        </sect3>
-      </sect2>
-
-      <sect2>
-        <title>Using logging to get help</title>
-
-        <para>When you are working with someone else it is often useful to
-        send details of what is happening including screenshots, code, and
-        logs. To make the other person's life easier provide as much
-        information as possible:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Detail the version of the framework and the platform (Java
-            or .Net) you are using</para>
-          </listitem>
-
-          <listitem>
-            <para>Describe the problem in detail</para>
-          </listitem>
-
-          <listitem>
-            <para>Provide screenshots (as a <filename class="directory"
-            moreinfo="none">.gif</filename> or <filename class="directory"
-            moreinfo="none">.png</filename>, avoid jpegs and Word documents)
-            that shows the problem</para>
-          </listitem>
-
-          <listitem>
-            <para>Provide log files from both the client and the server in an
-            XML format so they can be viewed using Chainsaw</para>
-          </listitem>
-
-          <listitem>
-            <para>Include your contact details, preferrably you email
-            address</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>Collate all this information ensuring each file is clearly
-        named. Then zip up (or tar) the whole set (as the logs, in particular,
-        can be huge) and email the compressed file.</para>
-      </sect2>
-
-      <sect2>
-        <title>Adding logging to your code</title>
-
-        <para>It is recommended that you also add logging to your code,
-        particularly if you are developing a component or extending the
-        framework in some way. This way you will be able to see the
-        interaction of your classes with those of the NOF. The following lays
-        out how the framework uses Log4j, and hence how you should use it to
-        be consistent.</para>
-
-        <para>Simple ensure that any class that does any logging makes a
-        <classname>Logger</classname> available. By convention the name is
-        always <varname>LOG</varname>. The name of the logger should be the
-        name of the class in its fully qualified form. To make this easy use
-        the constructor that takes a <classname>Class</classname> object and
-        pass in your class using as shown here. Don't forget to add an import
-        to <classname>org.apache.log4j.Logger</classname>, not the class of
-        the same name in the NOF or in Java itself.</para>
-
-        <programlisting format="linespecific">private final static Logger LOG = Logger.getLogger(IsisClass.class);</programlisting>
-
-        <para>Where you wish to add log message add a statement like the
-        following, deciding first what level the event should be classified as
-        (see above); the available methods are <methodname>debug</methodname>,
-        <methodname>info</methodname>, <methodname>warn</methodname>,
-        <methodname>error</methodname> and
-        <methodname>fatal</methodname>.</para>
-
-        <programlisting format="linespecific">LOG.debug("mark as dirty " + object);
-
-LOG.error("failed to create instance of " + this, e);</programlisting>
-
-        <para>The first statement in this example contains just a message,
-        while the second version logs a message and, separately, the complete
-        stack trace.</para>
-
-        <sect3>
-          <title>Making you classes useful in logs</title>
-
-          <para>To make the most of logging, even if you don't log anything in
-          you code, make sure that you declare a
-          <methodname>toString</methodname> method in each of you classes.
-          This way when a log message is created that references your object
-          the message will show your object in detail rather than like
-          this:</para>
-
-          <screen format="linespecific">MyObject@33D4</screen>
-
-          <para>A suitable toString can cause it to be rendered more usefully
-          such as:</para>
-
-          <screen format="linespecific">MyObject [name=windows,size=34x20]</screen>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-      </sect2>
+      <para>The viewers can be thought of as the outermost layer of
+      <emphasis>Isis</emphasis>, and calls upon the services of the core
+      framework and the configured runtime.</para>
+
+      <para>At the time of writing, all viewers have a dependency on the
+      <emphasis>default runtime</emphasis>, because this is the only runtime
+      available. In the future we expect that this will be decoupled so that
+      viewers can run against multiple different runtime
+      implementations.</para>
+
+      <para>Slightly confusingly, the <emphasis>default runtime</emphasis>
+      does also provide the facility to "launch" viewers, meaning that for
+      bootstrapping purposes at least the runtime calls the viewer rather than
+      the other way around. In order to support this, the viewer
+      implementation must provide an implementation of the runtime's
+      <package>oai.runtimes.dflt.runtime.viewer.IsisViewerInstaller</package>
+      interface. You'll see that the <acronym>DnD</acronym> viewer does do
+      this, but the Scimpi and Wicket viewers do not. However, once the viewer
+      is "up and running", the calls are strictly from the viewer to the
+      metamodel and runtime.</para>
     </sect1>
 
     <sect1>
-      <title>Component loggers</title>
+      <title>Maven Modules and Conventions</title>
 
-      <para>The NOF provides a set of component loggers that specifically log
-      the use of a component, adding additional log messages to the Log4j log
-      or write out to a separate file. Additional logger can also be defined
-      for other components. These logger are designed to log the parameters
-      passed to and the the results return from the requests to a component
-      and tend to be more verbose than the general logging just discussed. At
-      present the following components have loggers available:-</para>
+      <para><emphasis>Apache Isis</emphasis> is a large framework consisting
+      of multiple modules. In order to make it easier to navigate, you'll find
+      that we've aligned Maven module Ids with package names. For
+      example:</para>
 
       <itemizedlist>
         <listitem>
-          <para>The object persistor -
-          <classname>ObjectPersistorLogger</classname></para>
+          <para>the <emphasis>core metamodel</emphasis> module is
+          <package>(oai.core:metamodel)</package>; all classes in this module
+          reside in the <package>oai.core.metamodel</package> package (or in
+          subpackages)</para>
         </listitem>
 
         <listitem>
-          <para>The object store -
-          <classname>ObjectStoreLogger</classname></para>
-        </listitem>
-
-        <listitem>
-          <para>The distibution interface -
-          <classname>DistributionLogger</classname></para>
+          <para>the <emphasis>applib</emphasis> module is
+          <package>(oai:applib)</package>; all classes in this module reside
+          in <package>oai.applib</package> package (or in subpackages).</para>
         </listitem>
       </itemizedlist>
 
-      <para>To set up a logger create an instance of it passing in the object
-      you are logging. Then use the logger instance in place of the original
-      component. The constructors for each of the loggers are overloaded so
-      they take a component to decorate and possibly a file name. If the
-      filename is specified then the logging is done to that file. If there is
-      no file name then the events are logged via Log4j. For example the
-      object store persistor would logged by replacing:</para>
+      <para>We have also grouped modules of the same nature/interface to have
+      a common parent. For example:</para>
 
-      <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
-isis.setObjectPersistor(persistor);</programlisting>
+      <itemizedlist>
+        <listitem>
+          <para><package>(oai:viewers)</package> is the parent of
+          <package>(oai.viewers:dnd)</package> and
+          <package>(oai.viewers:html)</package> modules</para>
+        </listitem>
 
-      <para>with this, which will log request to the persistor the <filename
-      class="directory" moreinfo="none">sever-persistor.log</filename>
-      file:</para>
+        <listitem>
+          <para><package>(oai:security)</package> is the parent of
+          <package>(oai.security:dflt)</package> and
+          <package>(oai.security:ldap)</package> modules</para>
+        </listitem>
+      </itemizedlist>
 
-      <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
-persistor = new ObjectManagerLogger(persistor, "server-persistor.log");
-isis.setObjectPersistor(persistor);</programlisting>
+      <para>There is also a top-level "parent" module,
+      <package>(oai:isis-parent)</package>. This is used to define common
+      build/plugin dependencies, as well as a number of Maven profiles that
+      can be used to build subsets of the modules, and to build the Maven
+      website.</para>
 
-      <para>Please note that the log files, when used, are created when the
-      logger is instantiated and will overwrite any exsiting file. This is not
-      normally a problem as we are interested in the activities during an
-      entire session. However on a stateless server where the component is
-      being recreated each time the continual recreation of the file could be
-      a problem.</para>
+      <para>Finally, Isis also has an <package>(oai:release)</package> module.
+      The purpose of this module is simply to define a set of
+      <emphasis>Isis</emphasis> modules/versions that are compatible with each
+      other and thereby constitute a release. These can be imported
+      using:</para>
 
-      <sect2>
-        <title>Defining a logger</title>
+      <programlisting>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis&lt;/groupId
+    &lt;artifactId&gt;release&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;scope&gt;import&lt;/scope&gt;
+  &lt;/dependency&gt;
+  ...
+&lt;/dependencies&gt;</programlisting>
 
-        <para>To define a logger extend the Logger class, providing a suitable
-        constructor, and implement the
-        <methodname>getDecoratedClass</methodname> so it passes back the
-        <classname>Class</classname> object of the class being decorated (this
-        allows the Log4j logger to log messages as that class rather than as a
-        separate class). Within the subclass you can use the following
-        methods:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><emphasis> <methodname>void log(String message)</methodname>
-            </emphasis></para>
-
-            <para>output a log entry with the specified message.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis> <methodname>void log(String message, Object
-            result)</methodname> </emphasis></para>
-
-            <para>output a log entry with the specified message and the
-            specified result. This is useful when needing to show both the
-            entry and exit states, or the paramters and the return
-            value.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis> <methodname>void close()</methodname>
-            </emphasis></para>
-
-            <para>closes the file that is being written to.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-      </sect2>
-    </sect1>
-
-    <sect1>
-      <title>The Dump Utility</title>
-
-      <sect2>
-        <title>The Dump Utility</title>
-
-        <para>The <classname>org.apache.isis.object.Dump</classname> class
-        provides a simple way out outputting the details of adapters and
-        specifications. The two <methodname>specification </methodname>methods
-        detail the specified <classname>ObjectSpecification</classname> as
-        follows:-</para>
-
-        <screen format="linespecific">Full Name: bom.Location
-Short Name: Location
-Plural Name: Locations
-Singular Name: Location
-
-Abstract: false
-Lookup: false
-Object: true
-Value: false
-Persistable: User Persistable
-Superclass: java.lang.Object
-Subclasses: empty
-Interfaces: bom.Common
-Fields
-    OneToOneAssociationImpl@1408a92 [type=VALUE,id=type,label='Type',derived=false,type=Option]
-    :
-    :</screen>
-
-        <para>The two <methodname>object</methodname> methods detail the
-        specified <classname>Isis</classname> object as follows:-</para>
-
-        <screen format="linespecific">Specification: bom.Location
-Class: bom.Location
-Adapter: org.apache.isis.object.defaults.PojoAdapter
-Hash: #dada24
-Title: test, Fort Worth
-Object: bom.Location@18e4327
-OID: OID#2F
-State: ResolveState@1e1be92 [name=Resolved,code=PR]
-Version: LongNumberVersion#1 20051118-025400170
-Icon: null
-Persistable: User Persistable</screen>
-
-        <para>The two <methodname>graph</methodname> methods detail the
-        specified <classname>Isis</classname> object as follows, showing each
-        adapter, it associated objects and values:-</para>
-
-        <screen format="linespecific">PojoAdapter@dada24 [PR:OID#2F,specification=Location,version=LongNumberVersion#1 20051118-025400...
-    +--type: POJO BusinessValueAdapter: One
-    +--knownas: POJO TextStringAdapter: test
-    +--streetaddress: POJO TextStringAdapter: address
-    +--city: PojoAdapter@b51404 [PR:OID#C,specification=City,version=LongNumberVersion#1 ...
-    |    +--name: POJO TextStringAdapter: Fort Worth
-    +--customer: PojoAdapter@92dcdb [PR:OID#1C,specification=Customer,version=LongNumberVers...
-    |    +--firstname: POJO TextStringAdapter: Richard
-    |    +--lastname: POJO TextStringAdapter: Pawson
-    |    +--phonenumbers: VectorCollectionAdapter@1d381d2 [PR:-,specification=Vector,version=...
-    : 
-    :</screen>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-      </sect2>
-    </sect1>
-
-    <sect1>
-      <title>Property naming conventions</title>
-
-      <para>Properties used within the framework start with 'isis', which is
-      available from the <literal moreinfo="none">Configuration.ROOT</literal>
-      constant. Next is the category and optionally a component. Finally is
-      the property name (which can be as many levels as needed) for the
-      component. Examples are:</para>
-
-      <programlisting format="linespecific">isis.viewer.cli.log
-isis.services.prefix
-isis.viewer.dnd.specification.view
-isis.exploration.users
-isis.viewer.html.header</programlisting>
+      <para>The <emphasis>Isis</emphasis> quickstart archetype makes use of
+      the release module in this way (as do the various examples that live in
+      <filename>.../trunk/examples</filename>).</para>
     </sect1>
   </chapter>
-
-  <!-- main content -->
 
   <part id="prt.CoreModules">
     <title>Core Framework Modules</title>
@@ -792,96 +484,75 @@ isis.viewer.html.header</programlisting>
 
       <para>This part of the guide goes through each of the modules that make
       up the core framework.</para>
-
-      <para></para>
     </partintro>
 
     <chapter>
       <title><emphasis>Test Support</emphasis> Module</title>
 
-      <para>The testsupport module holds helper classes to support writing
-      unit tests in either JUnit or JMock.</para>
+      <abstract>
+        <para>Classes and interfaces in the
+        <package>oai.core.testsupport</package> module.</para>
+      </abstract>
 
-      <para>It should only ever be added as a dependency with a scope of
-      test.</para>
+      <para>The <emphasis>testsupport</emphasis> module holds helper classes
+      to support writing unit tests using either JUnit or JMock. It should
+      only ever be added as a dependency with a scope of test:</para>
 
-      <para></para>
+      <para><programlisting>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis.core&lt;/groupId
+    &lt;artifactId&gt;testsupport&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    <emphasis>&lt;scope&gt;test&lt;/scope&gt;</emphasis>
+  &lt;/dependency&gt;
+  ...
+&lt;/dependencies&gt;</programlisting></para>
 
-      <para></para>
+      <sect1>
+        <title>JMock Support</title>
 
-      <para></para>
+        <para>The classes in the <package>oai.core.testsupport.jmock</package>
+        package provide convenience adapters for <ulink
+        url="http://jmock.org">JMock</ulink>. For example, they provide the
+        <classname>MockFixture</classname> interface that allows mocks
+        expectations to be managed as fixture objects in their own right
+        (thereby making such expectations reusable across tests). They also
+        provide subclasses of the <package>org.jmock.Mockery</package> class
+        with a number of convenience methods.</para>
+      </sect1>
+
+      <sect1>
+        <title>JUnit Support</title>
+
+        <para>The classes in the
+        <classname>oai.core.testsupport.junit</classname> package provide
+        helper classes designed, among other things, to make it easier to
+        write value types.</para>
+      </sect1>
     </chapter>
 
     <chapter>
-      <title><emphasis>Common</emphasis> Module</title>
+      <title><emphasis>Commons</emphasis> Module</title>
 
       <abstract>
-        <para>***</para>
+        <para>Classes and interfaces in the
+        <package>oai.core.commons</package> module.</para>
       </abstract>
 
-      <para></para>
+      <para>The core commons module provides a set of common utilities for use
+      across the rest of the framework. It also defines a number of small,
+      mostly internal, <acronym>API</acronym>s.</para>
 
-      <para></para>
-
-      <para></para>
+      <para>Generally it shouldn't be necessary to add an explicit dependency
+      to the <emphasis>commons</emphasis> module, because it will be depended
+      upon transitively by other modules in <package>oai.core</package>.
+      </para>
 
       <sect1>
-        <title></title>
+        <title>Package Dependencies / Architectural Layering</title>
 
-        <para></para>
-
-        <para>The core commons module provides a set of common utilities and
-        language extensions for use across the rest of the framework.</para>
-
-        <para>It also defines a number of small APIs that are used
-        throughout:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>a set of interfaces for defining Components and their
-            scope</para>
-          </listitem>
-
-          <listitem>
-            <para>a debug framework</para>
-          </listitem>
-
-          <listitem>
-            <para>an Ensure API</para>
-          </listitem>
-
-          <listitem>
-            <para>a set of Hamcrest Matchers</para>
-          </listitem>
-
-          <listitem>
-            <para>a ResourceStream API</para>
-          </listitem>
-
-          <listitem>
-            <para>a Future API</para>
-          </listitem>
-
-          <listitem>
-            <para>an Encoding API</para>
-          </listitem>
-
-          <listitem>
-            <para>a Configuration Builder API</para>
-          </listitem>
-
-          <listitem>
-            <para>definition of an AuthenticationSession</para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
-
-        <para></para>
-
-        <para>Package dependencies:</para>
-
-        <para></para>
+        <para>The packages that reside within commons have the following
+        dependencies:</para>
 
         <mediaobject>
           <imageobject>
@@ -890,13 +561,11 @@ isis.viewer.html.header</programlisting>
           </imageobject>
         </mediaobject>
 
-        <para></para>
+        <para>The relatively small number of dependencies between these
+        packages shows the extent to which the utility classes in common are
+        independent of each other.</para>
 
-        <para></para>
-
-        <para>Architecture layering:</para>
-
-        <para></para>
+        <para>Alternatively these packages can be viewed as layers:</para>
 
         <mediaobject>
           <imageobject>
@@ -904,125 +573,259 @@ isis.viewer.html.header</programlisting>
                        scale="60" />
           </imageobject>
         </mediaobject>
-
-        <para></para>
-
-        <para></para>
       </sect1>
 
       <sect1>
-        <title>Encoding</title>
+        <title>APIs</title>
 
-        <para></para>
+        <sect2>
+          <title><classname>Component</classname> and
+          <classname>Installer</classname> <acronym>API</acronym></title>
 
-        <para></para>
+          <para><emphasis>Isis</emphasis> is a modular framework, and the
+          <classname>Component</classname> interface (in
+          <package>oai.core.commons.components</package> package) represents
+          this abstraction. For example, an authentication manager is a
+          <classname>Component</classname>, and so too is an adapter map (for
+          tracking object identities).</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/common/encoding-classdiagram.png"
-                       scale="30" />
-          </imageobject>
-        </mediaobject>
+          <para><classname>Component</classname> has three subinterfaces to
+          represent different scopes (or lifetimes) of component instances,
+          namely:</para>
 
-        <para></para>
+          <itemizedlist>
+            <listitem>
+              <para> <classname>ApplicationScopedComponent</classname>, for
+              components that exist for the duration of the application</para>
+            </listitem>
 
-        <para></para>
-      </sect1>
+            <listitem>
+              <para><classname>SessionScopedComponent</classname> , for
+              components that are created a-new for each session, and</para>
+            </listitem>
 
-      <sect1>
-        <title>Loading configurations</title>
+            <listitem>
+              <para><classname>TransactionScopedComponent</classname>, for
+              components that are bound to a single transaction.</para>
+            </listitem>
+          </itemizedlist>
 
-        <para>Configurations are loaded by a
-        <classname>ConfigurationBuilder</classname>. The builder should
-        immediately create a <classname>Configuration</classname> object, and
-        then can be used to add more confiration properties to the
-        configuration object, ie properties cannot be added the
-        <classname>Configuration</classname> object directly. Properties can
-        loaded via the <classname>ConfigurationBuilder</classname> either from
-        files, via Properties object, or as key-value pairs. When files are
-        loaded they can be specified, via the addConfigurationFile(file name,
-        ensure loaded) method, as mandatory or optional. If mandatory then the
-        file must exist.</para>
+          <para>For webapp/server-based deployments, a session is created for
+          each interaction<footnote>
+              <para>Just like JPA or Hibernate sessions.</para>
+            </footnote>. There is typically just one transaction per
+          session.</para>
 
-        <para>Although properties can be accessed from the
-        <classname>Configuration</classname> object at any point, it should be
-        remembered that the properties that it contains only include
-        properties that have been loaded so far.</para>
+          <para>For client/standalone deployments, the session lasts for the
+          duration of the application, and so is one-to-one with the
+          application scope. For these cases a transaction is used to wrap
+          each client/server interaction<footnote>
+              <para>Strictly speaking, this is a statement about how the the
+              <emphasis>default runtime</emphasis> implementation works. Other
+              runtimes could conceivably take a different approach. If you are
+              only intending to use webapp-based viewers, then don't worry
+              about it... <emphasis>Isis</emphasis> works similarly to
+              JPA/Hibernate.</para>
+            </footnote>.</para>
 
-        <para>The default property loader (ConfigurationBuilderDefault) reads
-        the file <filename>isis.properties</filename> from the directory
-        <filename>config</filename>. The directory can be changed by
-        specifying it as the parameter of the single parameter constructor.
-        This loader uses Java style property files of the form</para>
+          <para>Closely related to <classname>Component</classname> is the
+          <classname>Installer</classname> interface, which acts as a
+          <classname>Component</classname> factory. Each Installer provides a
+          type (a string) and a name (also a string), and the combination of
+          (type, name) is expected to be unique. For example, the DnD viewer
+          has a type of "viewer" and a name of "dnd".</para>
 
-        <programlisting>name=value
-name2=value2 </programlisting>
+          <para>This (type, name) combination is used to determine the
+          configuration files that are searched for when the
+          <classname>Component</classname> is created. Each
+          <classname>Component</classname>'s <classname>Installer</classname>
+          will search for at least two property files:
+          <filename>type.properties</filename> and
+          <filename>type_name.properties</filename>. For example, the DnD
+          viewer will search for both <filename>viewer.properties</filename>
+          and also <filename>viewer_dnd.properties</filename> file<footnote>
+              <para>In fact, it is possible for an
+              <classname>Installer</classname> to nominate additional property
+              files; this is sometimes appropriate where a
+              <classname>Component</classname> does double-duty and plays more
+              than one role. At the time of writing this capability was only
+              used by the components that install client/server remoting for
+              the <emphasis>default runtime</emphasis> module.</para>
+            </footnote>. An Installer can also indicate whether a missing
+          config file should be treated as an error or can be ignored
+          (generally the latter).</para>
+        </sect2>
 
-        <para></para>
+        <sect2 id="sec.ConfigurationApi">
+          <title><classname>IsisConfiguration</classname> and
+          <classname>IsisConfigurationBuilder</classname>
+          <acronym>API</acronym></title>
 
-        <para></para>
+          <para>The <classname>IsisConfigurationBuilder</classname> (in
+          <package>oai.core.commons.config</package> package) is used to hold
+          the "current" configuration; as (the
+          <classname>Installer</classname> for)
+          <classname>Component</classname>s are loaded each indicates the
+          property file(s) to load, and these are used to update the current
+          configuration held within
+          <classname>IsisConfigurationBuilder</classname>. The "current"
+          configuration is initially just the properties in the
+          <filename>isis.properties</filename> file (see <xref
+          linkend="sec.ResourceStreamApi" /> for details on where this file is
+          actually loaded from) .</para>
 
-        <para></para>
+          <para>When the <classname>Component</classname> is actually
+          instantiated, it is handed an immutable
+          <classname>IsisConfiguration</classname> that can be thought of as a
+          snapshot of the set of properties held by the
+          <classname>IsisConfigurationBuilder</classname>. A consequence of
+          this design is that different <classname>Component</classname>s will
+          have references to different
+          <classname>IsisConfiguration</classname> objects; though all should
+          always have access to "their" properties.</para>
 
-        <para>Using properties specified in the configuration files is done by
-        get the <classname>IsisConfiguration</classname> singleton from the
-        context and using one of the lookup methods to get a value, as the
-        example below shows. The <literal
-        moreinfo="none">Configuration.ROOT</literal> constant provides the
-        base property name ("isis."). If no value is found with the specified
-        property name exists then null (or 0 or false) will be
-        returned.</para>
+          <para>Using properties specified in the configuration files is done
+          by get the <classname>IsisConfiguration</classname> singleton from
+          the context and using one of the lookup methods to get a value, as
+          the example below shows. The <literal
+          moreinfo="none">Configuration.ROOT</literal> constant provides the
+          base property name ("isis."). If no value is found with the
+          specified property name exists then null (or 0 or false) will be
+          returned.</para>
 
-        <programlisting format="linespecific">String formatRequired = IsisContext.getConfiguration().getString(Configuration.ROOT + "value.format.date");</programlisting>
+          <programlisting format="linespecific">String formatRequired = getConfiguration().getString(Configuration.ROOT + "value.format.date");</programlisting>
+        </sect2>
 
-        <para></para>
-      </sect1>
+        <sect2>
+          <title
+          id="sec.ResourceStreamApi"><classname>ResourceStreamSource</classname>
+          <acronym>API</acronym></title>
 
-      <sect1>
-        <title>Configuration</title>
+          <para>The <classname>ResourceStreamSource</classname> interface (in
+          <package>oai.core.commons.resource</package> package) is an
+          abstraction over locating resource files. It is used predominantly
+          to locate configuration files (see <xref
+          linkend="sec.ConfigurationApi" />), with implementations to load
+          from the config directory or from the classpath.</para>
 
-        <para></para>
+          <para>Different implementations of
+          <classname>IsisConfigurationBuilder</classname> use
+          <classname>ResourceStreamSource</classname> in order to search for
+          config files in specific locations. In principle it would be
+          straightforward to write a new implementation of
+          <classname>ResourceStreamSource</classname> that loads config files
+          from some other location (eg LDAP, the Windows registry or a
+          database) and then write a new
+          <classname>IsisConfigurationBuilder</classname> to use it.</para>
+        </sect2>
 
-        <para>If you have a look at Installer#getConfigurationResources(),
-        you'll see that the javadoc explains how which property files we look
-        for to build up the configuration; each component's Installer adds its
-        own set of property files. The implementaiton of this,
-        InstallerAbstract, will indicate that the configurations
-        xxx.properties and xxx_yyy.properties should be searched, where "xxx"
-        is the installer type (eg "persistor") and "yyy" is the name of the
-        implementation (eg "sql").</para>
+        <sect2>
+          <title>Encoding <acronym>API</acronym></title>
 
-        <para>Note that the type comes from the subclass of Installer for that
-        module; in the case of a persistor, it'll implement
-        PersistenceMechanismInstaller, where
-        PersistenceMechanismInstaller.TYPE = "persistor". This "type" is also
-        used to look for the key; and is done</para>
+          <para>The <package>oai.core.commons.encoding</package> package
+          provides a number of classes to support the custom serialization of
+          elements of any element:</para>
 
-        <para></para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/common/encoding-classdiagram.png"
+                         scale="30" />
+            </imageobject>
+          </mediaobject>
 
-        <para></para>
+          <para>The <classname>DataInputExtended</classname> and
+          <classname>DataOutputExtended</classname> interfaces are
+          straightforward extensions of
+          <classname>java.io.DataInput</classname> and
+          <classname>java.io.DataOutput</classname> respectively, simply
+          adding the capability to serialize arrays of primitives. The
+          <classname>DataInputStreamExtended</classname> and
+          <classname>DataOutputStreamExtended</classname> implement these
+          interfaces, providing the ability to read from/write to an
+          underlying <classname>java.io.InputStream</classname>.</para>
 
-        <para></para>
+          <para>Finally, the <classname>Encodable</classname> interface
+          defines a contract for objects to write themselves to a
+          <classname>DataOutputStreamExtended</classname>, with an implied
+          contract that they can be re-constructed from a corresponding
+          <classname>DataInputStreamExtended</classname>.</para>
 
-        <para></para>
-      </sect1>
+          <para>The primary usage of the encoding API is to enable
+          client/server remoting, as supported by the <emphasis>default
+          runtime</emphasis> implementation. However, it is also used in order
+          to create <classname>Memento</classname>s of domain objects (again,
+          a capability of the <emphasis>default runtime</emphasis>). This is
+          used by some viewers in order to maintain a handle on transient
+          (not-yet-persisted) objects.</para>
+        </sect2>
 
-      <sect1>
-        <title>Installers</title>
+        <sect2>
+          <title><classname>AuthenticationSession</classname>
+          Definition</title>
 
-        <para></para>
+          <para>The <classname>AuthenticationSession</classname> interface (in
+          the <package>oai.core.commons.authentication</package> package)
+          provides a representation of an authenticated user within the
+          system. </para>
 
-        <note>
-          <para>TODO: discuss Installer architecture; do indicate that this
-          stuff is going to change with JSR-299</para>
-        </note>
+          <para>Also worth mentioning is the utility class
+          <classname>AuthenticationSessionUtils</classname> can be used to
+          create an <classname>oai.applib.security.UserMemento</classname>,
+          which is the corresponding type within the applib (that is, the
+          identity of the authenticated user as the domain objects understand
+          it).</para>
 
-        <para></para>
+          <para>The interface to actually authenticate users and create
+          <classname>AuthenticationSession</classname>s - namely
+          <classname>AuthenticationManager</classname> - is defined in the
+          <emphasis>core runtime</emphasis> module (see <xref
+          linkend="chp.Runtime" />). This shouldn't be confused with
+          <classname>AuthenticationSessionProvider</classname> which merely
+          returns the current <classname>AuthenticationSession</classname>
+          <emphasis>if one exists</emphasis>.</para>
+        </sect2>
+
+        <sect2>
+          <title><classname>Debuggable</classname>
+          <acronym>API</acronym></title>
+
+          <para>The <classname>Debuggable</classname> interface(in the
+          <classname>oai.core.commons.debug</classname> package) is used by
+          some <classname>Component</classname>s in order to build structured
+          string representations of themselves for debug purposes. A good
+          example is the debug menu options available within the DnD
+          viewer.</para>
+        </sect2>
+
+        <sect2>
+          <title>Hamcrest <classname>Matcher</classname>s</title>
+
+          <para>The <classname>IsisMatchers</classname> class (in the
+          <classname>oai.core.commons.matchers</classname> package) provides a
+          collection of <ulink url="http://hamcrest.org">Hamcrest
+          </ulink><classname>Matcher</classname>s for use in both tests and
+          also production code.</para>
+        </sect2>
+
+        <sect2>
+          <title><classname>Ensure</classname> API</title>
+
+          <para>The <classname>Ensure</classname> class (in the
+          <package>oai.core.commons.ensure</package> package) allows
+          assertions to be made about arguments, state or general context, and
+          uses Hamcrest <classname>Matcher</classname>s to express those
+          assertions.</para>
+        </sect2>
       </sect1>
     </chapter>
 
-    <chapter>
+    <chapter id="chp.MetaModel">
       <title><emphasis>Metamodel</emphasis> Module</title>
+
+      <abstract>
+        <para>Classes and interfaces in the
+        <package>oai.core.metamodel</package> module.</para>
+      </abstract>
 
       <para></para>
 
@@ -1035,9 +838,10 @@ name2=value2 </programlisting>
 
         <para></para>
 
-        <para>The core metamodel module defines the interfaces and classes
-        that make up the Apache Isis metamodel. The metamodel is used in
-        numerous ways, including:</para>
+        <para>The core <emphasis>metamodel</emphasis> module defines the
+        interfaces and classes that make up the <emphasis>Apache
+        Isis</emphasis> metamodel. The metamodel is used in numerous ways,
+        including:</para>
 
         <itemizedlist>
           <listitem>
@@ -1069,7 +873,7 @@ name2=value2 </programlisting>
       </sect1>
 
       <sect1>
-        <title>Architecture Diagram</title>
+        <title>Package Dependencies / Architectural Layering</title>
 
         <para></para>
 
@@ -1645,13 +1449,84 @@ for (int i = 0; i &lt; properties.length; i++) {
 
         <para></para>
       </sect1>
+
+      <sect1>
+        <title>The Dump Utility</title>
+
+        <sect2>
+          <title>The Dump Utility</title>
+
+          <para>The <classname>org.apache.isis.core.metamodel.Dump</classname>
+          class provides a simple way out outputting the details of adapters
+          and specifications. The two <methodname>specification
+          </methodname>methods detail the specified
+          <classname>ObjectSpecification</classname> as follows:-</para>
+
+          <screen format="linespecific">Full Name: bom.Location
+Short Name: Location
+Plural Name: Locations
+Singular Name: Location
+
+Abstract: false
+Lookup: false
+Object: true
+Value: false
+Persistable: User Persistable
+Superclass: java.lang.Object
+Subclasses: empty
+Interfaces: bom.Common
+Fields
+    OneToOneAssociationImpl@1408a92 [type=VALUE,id=type,label='Type',derived=false,type=Option]
+    :
+    :</screen>
+
+          <para>The two <methodname>object</methodname> methods detail the
+          specified <classname>Isis</classname> object as follows:-</para>
+
+          <screen format="linespecific">Specification: bom.Location
+Class: bom.Location
+Adapter: org.apache.isis.object.defaults.PojoAdapter
+Hash: #dada24
+Title: test, Fort Worth
+Object: bom.Location@18e4327
+OID: OID#2F
+State: ResolveState@1e1be92 [name=Resolved,code=PR]
+Version: LongNumberVersion#1 20051118-025400170
+Icon: null
+Persistable: User Persistable</screen>
+
+          <para>The two <methodname>graph</methodname> methods detail the
+          specified <classname>Isis</classname> object as follows, showing
+          each adapter, it associated objects and values:-</para>
+
+          <screen format="linespecific">PojoAdapter@dada24 [PR:OID#2F,specification=Location,version=LongNumberVersion#1 20051118-025400...
+    +--type: POJO BusinessValueAdapter: One
+    +--knownas: POJO TextStringAdapter: test
+    +--streetaddress: POJO TextStringAdapter: address
+    +--city: PojoAdapter@b51404 [PR:OID#C,specification=City,version=LongNumberVersion#1 ...
+    |    +--name: POJO TextStringAdapter: Fort Worth
+    +--customer: PojoAdapter@92dcdb [PR:OID#1C,specification=Customer,version=LongNumberVers...
+    |    +--firstname: POJO TextStringAdapter: Richard
+    |    +--lastname: POJO TextStringAdapter: Pawson
+    |    +--phonenumbers: VectorCollectionAdapter@1d381d2 [PR:-,specification=Vector,version=...
+    : 
+    :</screen>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
     </chapter>
 
     <chapter>
       <title><emphasis>Progmodel</emphasis> Module</title>
 
       <abstract>
-        <para>***</para>
+        <para>Classes and interfaces in the
+        <package>oai.core.progmodel</package> module.</para>
       </abstract>
 
       <para></para>
@@ -1661,9 +1536,10 @@ for (int i = 0; i &lt; properties.length; i++) {
 
         <para></para>
 
-        <para>The core progmodel provides a set of reusable elements
-        (implementations of the <classname>FacetFactory</classname> API) that
-        can be reused to make up a programming model.</para>
+        <para>The core <emphasis>progmodel</emphasis> provides a set of
+        reusable elements (implementations of the
+        <classname>FacetFactory</classname> API) that can be reused to make up
+        a programming model.</para>
 
         <para>Most of those within this module are in fact used in the default
         programming model, defined by the default progmodel module. They are
@@ -1793,8 +1669,18 @@ example.dom.Contact.action.createPhone.description=Créez un nouveau téléphone
       </sect1>
     </chapter>
 
-    <chapter>
+    <chapter id="chp.Runtime">
       <title><emphasis>Runtime</emphasis> Module</title>
+
+      <abstract>
+        <para>Classes and interfaces in the
+        <package>oai.core.runtime</package> module.</para>
+      </abstract>
+
+      <para>The <emphasis>core runtime</emphasis> module (not to be confused
+      with the <emphasis>dflt runtime</emphasis> module) ...</para>
+
+      <para>***</para>
 
       <para></para>
     </chapter>
@@ -1802,290 +1688,404 @@ example.dom.Contact.action.createPhone.description=Créez un nouveau téléphone
     <chapter>
       <title><emphasis>Webapp</emphasis> Module</title>
 
+      <abstract>
+        <para>Classes and interfaces in the <package>oai.core.webapp</package>
+        module.</para>
+      </abstract>
+
       <para></para>
     </chapter>
   </part>
 
-  <part id="prt.DefaultImplementations">
-    <title>APIs and Implementations</title>
+  <part>
+    <title>*** Principles</title>
 
-    <partintro>
-      <abstract>
-        <para>The implementations of the core <acronym>API</acronym>s.</para>
-      </abstract>
+    <chapter>
+      <title>Conventions</title>
 
-      <para>This part of the guide discusses the default implementations of
-      the core <acronym>API</acronym>s. (Alternative implementations have
-      their own guides).</para>
-
-      <para></para>
-    </partintro>
-
-    <chapter id="chp.ProgrammingModelApi">
-      <title>Programming Model Default Implementation</title>
-
-      <para></para>
-
-      <para>*** not part of core</para>
+      <para>*** change into an appendix?</para>
 
       <para></para>
 
       <para></para>
 
-      <note>
-        <para>At the moment this API is rather fine-grained. We intend to
-        introduce higher level abstractions to make it easier to work with. We
-        may also split out member sorting into a separate abstraction.</para>
-      </note>
+      <para>The <emphasis>Isis</emphasis> framework provides a number of tools
+      to help resolve problems and debug the system. These are mainly
+      applicable to issues within system code, but some of them can be useful
+      when developing applications. The framework provides the
+      following:-</para>
 
-      <para></para>
+      <itemizedlist>
+        <listitem>
+          <para>Extensive use of logging through the <ulink
+          url="http://logging.apache.org/log4j/docs/">Log4j</ulink> framework,
+          an open source logging framework made available as part of the
+          Apache Jakarta project ;</para>
+        </listitem>
+      </itemizedlist>
 
-      <para></para>
-
-      <para></para>
-
-      <note>
-        <para>TODO: tidy up the following paras, were just copied/pasted in
-        from APT</para>
-      </note>
-
-      <para></para>
-
-      <para>Although we generally recommend that you stick to the conventions
-      of the programmingmodel as documented in the Application Library (in
-      <filename>applib</filename>), it is in fact possible to customize or
-      modify these conventions. A typical case might be to make Isis support
-      some of your own annotations. You'll find that some of the viewers and
-      object stores also define their own extensions to the standard
-      programming model.</para>
-
-      <para></para>
-
-      <para>The metamodel is built up using a collection of
-      &lt;&lt;&lt;FacetFactory&gt;&gt;&gt;s. These are used to identify the
-      classes and class members, and to decorate these class members with
-      semantics. It is easy to write new &lt;&lt;&lt;FacetFactory&gt;&gt;&gt;s
-      to support new programming conventions or, indeed, new languages. The
-      &lt;&lt;&lt;FacetFactory&gt;&gt;&gt; API is defined in
-      {{{../core/metamodel/index.html}metamodel}} module, along with
-      implementations to support the Java language. The
-      {{{http://groovyobjects.sourceforge.net}Groovy Objects}} sister project
-      provides implementations to allow Isis to support domain objects written
-      in {{{http://groovy.codehaus.org}Groovy}}.</para>
+      <para>In addition, the DnD viewer provides debug views that display
+      details of components and anything else that implements the
+      <classname>DebugInfo</classname> interface. There is further coverage of
+      this last feature in the DnD viewer's documentation.</para>
 
       <para></para>
 
       <sect1>
-        <title>ProgrammingModel API and ProgrammingModelFacetsJava5
-        Implementation</title>
+        <title>Logging</title>
 
-        <para></para>
+        <para>Logging using Log4j is used throughout the framework and the
+        components the Isis development team have created, and it is
+        recommended that you use it too. Logging allows you to look what the
+        framework and components have been when you investigate a problem and
+        help to identify what parts of the system where doing what before an
+        problem arose. Often logging alone is enough to pin point a problem,
+        but if not it help you target what to investigate.</para>
 
-        <para></para>
+        <para>Log4j allows you to log log debug messages, information about
+        the system's state, warnings and errors. These events can be displayed
+        on the console, written to files, or sent out over the network for
+        remote logging. These are output in a user defined format and also can
+        be filtered (so only events from certain components are seen). All
+        this is configured through a set of properties passed to Log4J.</para>
+
+        <sect2>
+          <title>Configuring Logging</title>
+
+          <para>The complete options for outputting and formatting can be
+          found in the relavent Log4J documentation (including the API).
+          However, it crucial to smooth development of an NOF system that will
+          cover some of it here. The NOF configures Log4j using properties
+          files and will generally load <filename class="directory"
+          moreinfo="none">log4j.properties</filename> or retrieve the
+          properties from the that were loaded from <filename
+          class="directory" moreinfo="none">isis.properties</filename> after
+          that is loaded for framework configuration (these files need to be
+          located in the working directory). If you are not using classes
+          within the NOF to start the framework then how these properties are
+          loaded could vary. The downside of putting the logging properities
+          in the framework properties files is that there is no logging until
+          it has been loaded. If this is necessary then it is better to use
+          the separate properties file.</para>
+
+          <para>The following file, or portion of a file, is a basic
+          configuration for logging. It consists of two appenders and a basic
+          logging configuration.</para>
+
+          <programlisting format="linespecific">log4j.rootLogger=INFO, Console, File
+
+# The console appender
+log4j.appender.Console=org.apache.log4j.ConsoleAppender
+log4j.appender.Console.Target=System.out
+log4j.appender.Console.layout=org.apache.log4j.PatternLayout
+log4j.appender.Console.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  \t\t%m%n
+
+# The exploration.log file appender
+log4j.appender.File=org.apache.log4j.FileAppender
+log4j.appender.File.File=exploration.log
+log4j.appender.File.layout=org.apache.log4j.PatternLayout
+log4j.appender.File.layout.ConversionPattern=%-4r %-5p [%t] %37c %3x - %m%n
+log4j.appender.File.Append=false</programlisting>
+
+          <para>The first line sets up logging to show events of level
+          <emphasis>INFO</emphasis> and above through the
+          <emphasis>Console</emphasis> and <emphasis>File</emphasis>
+          appenders, which writes those events to the console and the file
+          <filename class="directory"
+          moreinfo="none">exploration.log</filename> respectively. The two
+          blocks sepcifiy how to write to the console and the file. Other
+          appenders can be used to change where the logs are written to. The
+          number of appenders specified is unlimited, although there should be
+          at least one. The console below (from Eclipse) shows the log. The
+          file will contain the same thing although the formatting will be
+          slightly different as the conversion pattern for the two appenders
+          is different.</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/console-log.png" />
+            </imageobject>
+          </mediaobject>
+
+          <sect3>
+            <title>Logging levels</title>
+
+            <para>The types of events that are logged can be changed. This
+            determines how large the files become or how much traffic is put
+            over the network, and is reflected in the amount of processing
+            that needs to be done to process the events into messages that can
+            be written out. Levels in order of increasing verbosity and log
+            size, and is decreasing order of severity are:-</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>OFF - no logging</para>
+              </listitem>
+
+              <listitem>
+                <para>FATAL - something very serious has happened that
+                requires the system to be shut down.</para>
+              </listitem>
+
+              <listitem>
+                <para>ERROR - something serious has happened that might affect
+                any subsequent actions.</para>
+              </listitem>
+
+              <listitem>
+                <para>WARN - something has not been set up properly, or needs
+                attention. Although subsequent action might function
+                correctly, they might not function as expected.</para>
+              </listitem>
+
+              <listitem>
+                <para>INFO - information to the developer about something that
+                has taken place.</para>
+              </listitem>
+
+              <listitem>
+                <para>DEBUG - detailed information for the developer.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>So in the above example to increase the logging level to
+            debug change the first part of the property to
+            <emphasis>DEBUG</emphasis> from <emphasis>INFO</emphasis> as
+            below:</para>
+
+            <programlisting format="linespecific">log4j.rootLogger=DEBUG, Console, File</programlisting>
+
+            <para>Logging should almost never be set to off, but should at
+            least be set to log the errors (unsing level ERROR). Whilst
+            developing we recommend that you set your basic level to INFO and
+            switch to DEBUG if you need to investigate something.</para>
+
+            <para>Setting the logging level via the properties file applies
+            that level at startup and cannot be changed using the properties,
+            ie, that level will be used to filter all logged event while the
+            system is running. If you are using the Skylark viewer, however,
+            you can use the debug options to change the logging level on the
+            client at any time. By using Ctrl-Shift-right-click on the desktop
+            you will be shown the debug menu and see the following
+            options:-</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="left" fileref="images/logging-debug.png"
+                           format="PNG" />
+              </imageobject>
+            </mediaobject>
+
+            <para>The greyed-out option indicates the current level.
+            Selectiing one of the other levels will change the logging to that
+            level.</para>
+          </sect3>
+
+          <sect3>
+            <title>Limiting logging by class</title>
+
+            <para>As well as limiting the level of events that are logged, we
+            can also specify which classes we are interested in capturing log
+            events for. In Log4j events are organised by loggers, which are
+            set up programmatically, but as we create a logger for each class
+            we talk about classes.</para>
+
+            <para>To change the levels of events captured according to the
+            class where the log event was created we can class based
+            requirements after the root logger is specified. To set a logging
+            level for a class add a property in the form</para>
+
+            <programlisting format="linespecific">log4j.logger.&lt;package to log&gt;=&lt;level for package&gt;
+log4j.logger.&lt;class to log&gt;=&lt;level for class&gt;</programlisting>
+
+            <para>Events for the specified packages or class will be logged at
+            the specified level, overriding the root level set up first. So
+            for example the following configuration:</para>
+
+            <programlisting format="linespecific">log4j.rootLogger=WARN, Console
+
+log4j.logger.org.apache.isis.object=INFO
+log4j.logger.org.apache.isis.object.reflect=DEBUG
+log4j.logger.org.apache.isis.object.persistence=DEBUG
+
+log4j.logger.org.apache.isis.object.loader.ObjectLoaderImpl=OFF</programlisting>
+
+            <para>will capture warning and errors for all classes (as defined
+            by the root logger), and information messages for those classes
+            whose package begins with
+            <classname>org.apache.isis.object</classname>. In addition those
+            classes beginning with <classname>org.apache.isis.object.reflect
+            </classname>or
+            <classname>org.apache.isis.object.persistence</classname> will
+            have their debug events captured as well. Finally, the class
+            <classname>ObjectLoader</classname> will have all of its events
+            ignored.</para>
+
+            <para>It is important to make use of this feature when using the
+            Skylark viewer as it logs events about it rendering. In Java
+            rendering the screen (via the
+            <methodname>paint(Graphics)</methodname> method) happens very
+            often and can cause the logs to be swamped with superflous events.
+            The logger for these events are prepended with the text 'ui.' so
+            we can disable all of these events across all the viewing classes
+            by adding the following to the properties:</para>
+
+            <programlisting format="linespecific">log4j.logger.ui=OFF</programlisting>
+          </sect3>
+
+          <sect3>
+            <title>Writing XML log files</title>
+
+            <para>By writing out the logs to a file in XML rather than as text
+            allows you to look at the log using Chainsaw, a Log4j viewer. This
+            tool allows you to quickly look at events in specific classes and
+            hide events that are of no interest by setting up simple
+            conditions.</para>
+
+            <para>To write out an XML file the same appender as before is
+            used, but the layout is changed. The following configuration logs
+            all events (DEBUG and greater) to a file with an XML
+            layout.</para>
+
+            <programlisting format="linespecific">log4j.rootLogger=DEBUG, XmlFile
+
+log4j.appender.XmlFile=org.apache.log4j.FileAppender
+log4j.appender.XmlFile.file=isis.log.xml
+log4j.appender.XmlFile.layout=org.apache.log4j.xml.XMLLayout
+log4j.appender.XmlFile.append=false</programlisting>
+          </sect3>
+
+          <sect3>
+            <title>Writing HTML log files</title>
+
+            <para>HTML files can be viewed in a web browser and will display
+            nicely in most email clients. Change the appender to use the
+            <classname>HTMLLayout</classname> class.</para>
+
+            <programlisting format="linespecific">log4j.appender.Snapshot.layout=org.apache.log4j.HTMLLayout</programlisting>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Using logging to get help</title>
+
+          <para>When you are working with someone else it is often useful to
+          send details of what is happening including screenshots, code, and
+          logs. To make the other person's life easier provide as much
+          information as possible:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Detail the version of the framework and the platform (Java
+              or .Net) you are using</para>
+            </listitem>
+
+            <listitem>
+              <para>Describe the problem in detail</para>
+            </listitem>
+
+            <listitem>
+              <para>Provide screenshots (as a <filename class="directory"
+              moreinfo="none">.gif</filename> or <filename class="directory"
+              moreinfo="none">.png</filename>, avoid jpegs and Word documents)
+              that shows the problem</para>
+            </listitem>
+
+            <listitem>
+              <para>Provide log files from both the client and the server in
+              an XML format so they can be viewed using Chainsaw</para>
+            </listitem>
+
+            <listitem>
+              <para>Include your contact details, preferrably you email
+              address</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Collate all this information ensuring each file is clearly
+          named. Then zip up (or tar) the whole set (as the logs, in
+          particular, can be huge) and email the compressed file.</para>
+        </sect2>
+
+        <sect2>
+          <title>Adding logging to your code</title>
+
+          <para>It is recommended that you also add logging to your code,
+          particularly if you are developing a component or extending the
+          framework in some way. This way you will be able to see the
+          interaction of your classes with those of the NOF. The following
+          lays out how the framework uses Log4j, and hence how you should use
+          it to be consistent.</para>
+
+          <para>Simple ensure that any class that does any logging makes a
+          <classname>Logger</classname> available. By convention the name is
+          always <varname>LOG</varname>. The name of the logger should be the
+          name of the class in its fully qualified form. To make this easy use
+          the constructor that takes a <classname>Class</classname> object and
+          pass in your class using as shown here. Don't forget to add an
+          import to <classname>org.apache.log4j.Logger</classname>, not the
+          class of the same name in the NOF or in Java itself.</para>
+
+          <programlisting format="linespecific">private final static Logger LOG = Logger.getLogger(IsisClass.class);</programlisting>
+
+          <para>Where you wish to add log message add a statement like the
+          following, deciding first what level the event should be classified
+          as (see above); the available methods are
+          <methodname>debug</methodname>, <methodname>info</methodname>,
+          <methodname>warn</methodname>, <methodname>error</methodname> and
+          <methodname>fatal</methodname>.</para>
+
+          <programlisting format="linespecific">LOG.debug("mark as dirty " + object);
+
+LOG.error("failed to create instance of " + this, e);</programlisting>
+
+          <para>The first statement in this example contains just a message,
+          while the second version logs a message and, separately, the
+          complete stack trace.</para>
+
+          <sect3>
+            <title>Making you classes useful in logs</title>
+
+            <para>To make the most of logging, even if you don't log anything
+            in you code, make sure that you declare a
+            <methodname>toString</methodname> method in each of you classes.
+            This way when a log message is created that references your object
+            the message will show your object in detail rather than like
+            this:</para>
+
+            <screen format="linespecific">MyObject@33D4</screen>
+
+            <para>A suitable toString can cause it to be rendered more
+            usefully such as:</para>
+
+            <screen format="linespecific">MyObject [name=windows,size=34x20]</screen>
+
+            <para></para>
+
+            <para></para>
+
+            <para></para>
+
+            <para></para>
+          </sect3>
+        </sect2>
       </sect1>
 
       <sect1>
-        <title>"Rolling-your-own" Programming Model</title>
+        <title>Property naming conventions</title>
 
-        <para></para>
+        <para>Properties used within the framework start with 'isis', which is
+        available from the <literal
+        moreinfo="none">Configuration.ROOT</literal> constant. Next is the
+        category and optionally a component. Finally is the property name
+        (which can be as many levels as needed) for the component. Examples
+        are:</para>
 
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Extending the reflector</title>
-
-        <remark>Describe how introspection takes place</remark>
-
-        <para></para>
-
-        <remark>Facets (describe (including how they are defined, how they are
-        used), then list all types with descriptions; Javadocs should detail
-        how to use each one, but do check as working through list)</remark>
-
-        <para></para>
-
-        <remark>Detail how introspector determines what facets to give to each
-        holder</remark>
-
-        <para></para>
-
-        <remark>Adding behaviour via decorator facets, eg for I18n, logging
-        etc</remark>
-
-        <para></para>
-
-        <remark>Adding new behaviour by adding new facets, including how to
-        access then</remark>
-
-        <para></para>
-
-        <formalpara>
-          <title>Interaction utilties</title>
-
-          <para>Other than the properties and actions that the are made
-          available by the reflector the other way the reflector is used is
-          via by the reflector utilities classes <remark>I don't think this
-          name really reflects the intent, a better one is required</remark>
-          such as InteractionUtils and CollectionUtils. These helper classes
-          generally make use of the <classname>Facet</classname>s on a
-          <classname>FacetHolder</classname> to interact with the domain
-          model. For example the <methodname>size(ObjectAdapter)</methodname>
-          method on the <classname>CollectionFacetUtils</classname> class will
-          determine the size of the collection without having to resort to
-          finding the right facet and using that yourself.</para>
-        </formalpara>
-
-        <para>These utility classes then make use of the related facets (got
-        singularly or a set via the
-        <methodname>getFacets(FacetFilter)</methodname> method that typically
-        search for facets using the mix-in interfaces that are used to mark
-        the facets for this kind of use) which are then all process on behalf
-        of the client. For example, the <methodname>isVisible</methodname>
-        method get all the facets to do with hidding things by filtering for
-        facets that <classname>are of the type
-        HidingInteractionAdvisor</classname>. This interface is implemented by
-        hide-related facets</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para><classname>DisablingInteractionAdvisor</classname>,
-        <classname>HidingInteractionAdvisor</classname> and
-        <classname>ValidatingInteractionAdvisor</classname> interfaces are
-        used to bring together all facets for disabling, hiding and validating
-        properties, actions and parameters. These each provide a single method
-        for for checking a proposed interaction. These are then used by the
-        <classname>InteractionUtils</classname> class to provide all the
-        domain related interaction checking behaviour to the clients of the
-        reflector</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>How to write your own Facet Decorator</title>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Configuring I18N</title>
-
-        <para>x-ref core.progmodel</para>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-    </chapter>
-
-    <chapter id="chp.SecurityApi">
-      <title>Security API</title>
-
-      <abstract>
-        <para>This chapter covers the authentication and authorization
-        APIs</para>
-      </abstract>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para>Apache Isis supports authentication  and role-based authorization.
-      Within the framework the user is represented by a
-      <classname>Session</classname> object. From the session object you can
-      get the name of the user and their roles.</para>
-
-      <para>The session is used within the distribution mechanism and the
-      security manager. The security manager uses the session to determine if
-      a user can access or manipulate an object member. The distribution
-      mechanism passes the session to the server so the server knows which
-      user is accessing it.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para>As with authentication, authorization may be executed via a file,
-      LDAP, or database. If no authorization mechanism is specified, all
-      domain calls, methods and properties will be available to all
-      users.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <note>
-        <para>TODO: tidy up the following paras, were just copied/pasted in
-        from APT</para>
-      </note>
-
-      <para><emphasis></emphasis></para>
-
-      <para><emphasis>Apache Isis</emphasis> applications support
-      authentication ("who are you"?) and authorization ("what can you do?").
-      This allows the set of functionality to be restricted based upon the
-      user's role, with no security knowledge needing to be embedded within
-      the domain objects. The API is defined in
-      {{{../core/runtime/index.html}runtime}}, along with two implementations,
-      one file-based and one using LDAP.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <para>An <classname>Authoriser</classname> processes an
-      <classname>AuthorizationRequest</classname> and if granted generates a
-      <classname>Session</classname> object to represent the user.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <para>There is an optional capability to authorise the visibility and
-      usability of fields independently. Thus a field may be visible to
-      certain roles but not editable. In order to configure this against a
-      authorization a flag must be added as follows.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <sect1>
-        <title>Capturing authorization requirements automatically</title>
-
-        <para>As a tool for helping to configure the initial security settings
-        there is a 'learn' property.</para>
-
-        <programlisting format="linespecific">isis.authorization.learn=true</programlisting>
-
-        <para>When this is present and set, all methods will be authorised for
-        all roles. However as each method is accessed through the user
-        interface authorization will be configured for that method and the
-        current role. Configuration will be saved in either the file (saved on
-        shutdown), database table or LDAP security settings depending upon the
-        reflector setup.</para>
-
-        <para>The settings can then be modified to conform to the required
-        security settings.</para>
-
-        <para></para>
-
-        <para></para>
+        <programlisting format="linespecific">isis.viewer.cli.log
+isis.services.prefix
+isis.viewer.dnd.specification.view
+isis.exploration.users
+isis.viewer.html.header</programlisting>
       </sect1>
     </chapter>
 
@@ -2148,65 +2148,6 @@ example.dom.Contact.action.createPhone.description=Créez un nouveau téléphone
       <para></para>
 
       <sect1>
-        <title>Setting up perspectives</title>
-
-        <para></para>
-
-        <para>profilestore</para>
-
-        <para>x-ref alternatives/profilestore/xml</para>
-
-        <para></para>
-
-        <para>Perspectives allow the set of services available to a user (eg
-        as icons in the DnD viewer) to be customized for that user. Since
-        these services represent the "start points" for the user to interact
-        with the domain model, they in a sense define an application on a
-        per-user basis.</para>
-
-        <para>The perspectives are stored in user-profiles, which are a
-        persistence mechanism independent of the object store. (The intent is
-        for user profiles to store additional information for use by viewers,
-        for example allowing a user to reskin an application or change colors
-        or fonts. As of NOF 4.0 the functionality provided is still limited,
-        however).</para>
-
-        <para>The key here is that if a user logs in and no perspective exists
-        for that user then one will be created for them. The new perspective
-        will be a copy of the 'template' perspective, or, if none was defined,
-        a perspective containing all the known services. To create a template
-        perspective add a perspective fixture that calls
-        <methodname>saveAsDefault()</methodname>, rather than
-        <methodname>saveForUser()</methodname> for a named user, as shown
-        below.</para>
-
-        <programlisting>public class PerspectivesFixture extends UserProfileFixture {
-    @Override
-    protected void installProfiles() {
-        Profile profile = newUserProfile();
-        Perspective perspective = profile.newPerspective("ECS");
-        perspective.addToServices(LocationFactory.class);
-        perspective.addToServices(CustomerRepository.class);
-        perspective.addToServices(PaymentMethodFactory.class);
-        
-        saveAsDefault(profile);
-    }
-}
-</programlisting>
-
-        <para>With that set up, when a new user now logs in they will see
-        three service icons on the screen for locations, customers and payment
-        methods. On the drag and drop user interface the user can add and
-        remove services from their perspective. To remove a service icon
-        right-click on the grey border and select the close option. To add a
-        service select the Services... option from the application menu
-        (accessed by right-clicking on the application background) and drag
-        the required service onto the desktop. Unfortunately there is no
-        similar mechanism available on the HTML user interface so you will
-        need to modify the created perspectives via the DND UI.</para>
-      </sect1>
-
-      <sect1>
         <title>Adding Security (Authentication and Authorization)</title>
 
         <para></para>
@@ -2214,12 +2155,6 @@ example.dom.Contact.action.createPhone.description=Créez un nouveau téléphone
         <para>x-ref alternatives/security/file</para>
 
         <para></para>
-
-        <sect2>
-          <title></title>
-
-          <para></para>
-        </sect2>
       </sect1>
 
       <sect1>
@@ -2285,20 +2220,6 @@ example.dom.Contact.property.FullName.description=Le nom complet du client</prog
           <link linkend="locale">locale</link> in a properties file.</para>
         </sect2>
       </sect1>
-    </chapter>
-  </part>
-
-  <part>
-    <title>TO MOVE</title>
-
-    <chapter>
-      <title></title>
-
-      <section>
-        <title></title>
-
-        <para></para>
-      </section>
     </chapter>
   </part>
 </book>

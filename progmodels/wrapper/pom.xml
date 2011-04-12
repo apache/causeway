@@ -20,23 +20,9 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>progmodels/wrapper/</relativeUrl>
-
-        <docbkxGuideTitle>Apache Isis Wrapper Programming Model</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Validating inter-domain object interactions</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-wrapper</docbkxGuideName>
     </properties>
 
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
-
-	<build>
-		<plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
-            </plugin>
-		</plugins>
-	</build>
 
 	<modules>
 		<module>applib</module>

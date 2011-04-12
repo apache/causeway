@@ -76,7 +76,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      * Add the properties from an existing Properties object.
      */
     public void add(final Properties properties) {
-        final Enumeration e = properties.propertyNames();
+        final Enumeration<?> e = properties.propertyNames();
         while (e.hasMoreElements()) {
             final String name = (String) e.nextElement();
             this.properties.put(name, properties.getProperty(name));
@@ -106,7 +106,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         }
         final int prefixLength = startsWith.length();
 
-        final Enumeration e = properties.keys();
+        final Enumeration<?> e = properties.keys();
         while (e.hasMoreElements()) {
             final String key = (String) e.nextElement();
             if (key.startsWith(startsWith)) {
@@ -196,7 +196,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     public void debugData(final DebugBuilder str) {
         str.appendln("Resource Stream Source", resourceStreamSource);
         str.appendln();
-        final Enumeration names = properties.propertyNames();
+        final Enumeration<?> names = properties.propertyNames();
         while (names.hasMoreElements()) {
             final String name = (String) names.nextElement();
             str.append(name, 55);
@@ -295,7 +295,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         final int prefixLength = "".length();
 
         final Properties pp = new Properties();
-        final Enumeration e = properties.keys();
+        final Enumeration<?> e = properties.keys();
         while (e.hasMoreElements()) {
             final String key = (String) e.nextElement();
             if (key.startsWith(withPrefix)) {

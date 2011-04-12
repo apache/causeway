@@ -24,7 +24,7 @@ QuickStart App
 
 +------------------------------------------------------------
 mvn archetype:generate  \
-    -D archetypeCatalog=https://incubator.apache.org/isis \
+    -D archetypeCatalog=http://incubator.apache.org/isis \
     -D archetypeGroupId=org.apache.isis.support \
     -D archetypeArtifactId=quickstart-archetype
 

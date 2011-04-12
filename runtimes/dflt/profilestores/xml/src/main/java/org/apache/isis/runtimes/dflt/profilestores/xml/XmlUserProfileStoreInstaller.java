@@ -41,16 +41,6 @@ public class XmlUserProfileStoreInstaller extends InstallerAbstract implements U
 	}
 
 
-	@Override
-	public Module getModule() {
-		return new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(UserProfileStore.class).to(XmlUserProfileStore.class);
-			}
-		};
-	}
-	
     public List<Class<?>> getTypes() {
     	return listOf(UserProfileStore.class);
     }

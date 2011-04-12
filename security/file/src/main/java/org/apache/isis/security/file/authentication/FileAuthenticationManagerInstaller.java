@@ -41,13 +41,4 @@ public class FileAuthenticationManagerInstaller extends AuthenticationManagerSta
         return new FileAuthenticator(configuration);
     }
 
-    @Override
-    public Module getModule() {
-    	return new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(Authenticator.class);
-			}
-		};
-    }
 }
