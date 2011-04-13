@@ -145,7 +145,7 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 
     // {{ someActionWithParameterChoices
     @MemberOrder(sequence = "1")
-    public int someActionWithParameterChoices(final int param0, final int param1) {
+    public Integer someActionWithParameterChoices(final Integer param0, final Integer param1) {
         return param0 - param1;
     }
 
