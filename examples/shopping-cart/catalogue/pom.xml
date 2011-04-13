@@ -19,6 +19,7 @@
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>scimpi-servlet</artifactId>
+            <version>${isis.version}</version>
         </dependency>
         
         <dependency>
