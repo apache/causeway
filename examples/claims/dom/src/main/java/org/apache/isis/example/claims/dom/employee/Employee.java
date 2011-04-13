@@ -133,8 +133,9 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 
     // {{ SomeActionWithParameterDefaults
     @MemberOrder(sequence = "1")
-    public int someActionWithParameterDefaults(final int param0, final int param1) {
-        return param0 + param1;
+    public Employee someActionWithParameterDefaults(final int param0, final int param1) {
+        setLimit(param0 + param1);
+        return this;
     }
 
     public int default0SomeActionWithParameterDefaults() {
@@ -145,8 +146,9 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 
     // {{ someActionWithParameterChoices
     @MemberOrder(sequence = "1")
-    public Integer someActionWithParameterChoices(final Integer param0, final Integer param1) {
-        return param0 - param1;
+    public Employee someActionWithParameterChoices(final Integer param0, final Integer param1) {
+        setLimit(param0 - param1);
+        return this;
     }
 
     public List<Integer> choices0SomeActionWithParameterChoices() {
