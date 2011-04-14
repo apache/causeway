@@ -177,7 +177,7 @@ public abstract class RequestContext {
         }
 
         if (id.startsWith("D")) {
-            return objectMapping.decodeObject(id.substring(1));
+            return objectMapping.mappedTransientObject(id.substring(1));
         }
         
         String[] idParts = id.split("@");
@@ -688,7 +688,7 @@ public abstract class RequestContext {
         if (object.getResolveState().isValue()) {
             return object.titleString();
         } else if (scope == Scope.INTERACTION && object.isTransient()) {
-            return objectMapping.encodedObject(object);
+            return objectMapping.mapTransientObject(object);
         } else if (object.getOid() != null) {
             return objectMapping.mapObject(object, scope);
         } else {

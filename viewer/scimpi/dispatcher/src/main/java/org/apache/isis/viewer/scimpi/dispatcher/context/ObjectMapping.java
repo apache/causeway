@@ -39,11 +39,11 @@ public interface ObjectMapping {
 
     ObjectAdapter mappedObject(String id);
 
-    ObjectAdapter decodeObject(String substring);
+    ObjectAdapter mappedTransientObject(String substring);
 
     String mapObject(ObjectAdapter obj, Scope scope);
 
-    String encodedObject(ObjectAdapter object);
+    String mapTransientObject(ObjectAdapter object);
 
     void append(DebugBuilder debug);
 

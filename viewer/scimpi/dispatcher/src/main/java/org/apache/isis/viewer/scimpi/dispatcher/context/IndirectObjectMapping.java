@@ -182,11 +182,11 @@ public class IndirectObjectMapping implements ObjectMapping {
         appendMappings(debug, Scope.REQUEST);
     }
 
-    public ObjectAdapter decodeObject(String substring) {
+    public ObjectAdapter mappedTransientObject(String substring) {
         throw new NotYetImplementedException();
     }
 
-    public String encodedObject(ObjectAdapter object) {
+    public String mapTransientObject(ObjectAdapter object) {
         throw new NotYetImplementedException();
     }
 
