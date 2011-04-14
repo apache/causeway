@@ -15,6 +15,34 @@
 		<jetty.version>6.1.4</jetty.version>
 	</properties>
 
+        <build>
+                <plugins>
+                        <!-- mvn package -->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-shade-plugin</artifactId>
+                                <executions>
+                                        <execution>
+                                                <phase>package</phase>
+                                                <goals>
+                                                        <goal>shade</goal>
+                                                </goals>
+                                                <configuration>
+                                                        <transformers>
+                                                                <transformer
+                                                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                                                        <mainClass>org.apache.isis.Isis</mainClass>
+                                                                </transformer>
+                                                        </transformers>
+                                                </configuration>
+                                        </execution>
+                                </executions>
+                        </plugin>
+                </plugins>
+        </build>
+
+
+
 	<dependencies>
 		<!-- other modules in this project -->
 		<dependency>
