@@ -775,8 +775,8 @@ public abstract class RequestContext {
     }
 
     public boolean showDebugData() {
-        String variable = (String) getVariable("debug");
-        return variable != null && "on".equalsIgnoreCase(variable);
+        Boolean variable = (Boolean) getVariable("debug");
+        return variable != null && variable.booleanValue();
     }
 
     

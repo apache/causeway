@@ -203,12 +203,14 @@ public class TableView extends AbstractTableView {
             final String parent,
             final List<ObjectAssociation> allFields, ObjectAdapter collection) {
         final String fieldName = request.getOptionalProperty(FIELD);
-        return rowBuilder(request, context, parent, fieldName, allFields);
+        final String title = request.getOptionalProperty(FORM_TITLE);
+        return rowBuilder(request, context, title, parent, fieldName, allFields);
     }
 
     private static TableContentWriter rowBuilder(
             final Request request,
             RequestContext context,
+            String title,
             final String object,
             String fieldName, 
             List<ObjectAssociation> allFields) {
@@ -219,7 +221,6 @@ public class TableView extends AbstractTableView {
                 context.fullUriPath(linkRowView));
         final boolean includeHeading = request.isRequested(HEADING, true);
         final boolean includeFooting = request.isRequested(FOOTING, false);
-        final String title = request.getOptionalProperty(FORM_TITLE);
         
         boolean linkFields = request.isRequested("link-fields", true);
         final boolean showIcons = request.isRequested(SHOW_ICON, true);
@@ -271,7 +272,7 @@ public class TableView extends AbstractTableView {
             }
         }
         RequestContext context = request.getContext();
-        TableContentWriter rowBuilder = rowBuilder(request, context, context.mapObject(object, Scope.REQUEST), field.getId(), fields);
+        TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields);
         write(request, collection, summary, rowBuilder, null, null);
     }
 
