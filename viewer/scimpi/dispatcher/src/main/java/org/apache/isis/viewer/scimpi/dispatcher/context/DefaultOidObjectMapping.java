@@ -116,7 +116,6 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         if (oid instanceof AggregatedOid) {
             AggregatedOid aoid = (AggregatedOid) oid;
             Oid parentOid = aoid.getParentOid();
-            object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);
             String aggregatedId = aoid.getId();
             encodedOid = Long.toString(((SerialOid) parentOid).getSerialNo(), 16) + "@" + aggregatedId;
         } else if (oid instanceof SerialOid) {
