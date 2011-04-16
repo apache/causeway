@@ -384,7 +384,14 @@ public class Debug extends AbstractElementProcessor {
             buffer.append("none");
         } else {
             for (int i = 0; i < members.size(); i++) {
-                buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + members.get(i).getId() + "</a><br>");
+                ObjectMember member = members.get(i);
+                buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + member.getId() + "</a>   <small>");
+                buffer.append(member.isAlwaysHidden() ? "": "Visible ");
+                if (member.isPropertyOrCollection()) {
+                    buffer.append(((ObjectAssociation) member).isNotPersisted() ? "Not-Persisted ": " ");
+                    buffer.append(((ObjectAssociation) member).isMandatory() ? "Mandatory " : "");
+                }
+                buffer.append("</small></a><br>");
             }
         }
         view.appendln(label, buffer.toString());
