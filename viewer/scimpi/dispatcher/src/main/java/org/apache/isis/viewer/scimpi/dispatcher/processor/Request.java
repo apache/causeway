@@ -56,6 +56,7 @@ public class Request implements PageWriter {
     private final Stack<StringBuffer> buffers;
     private final Stack<BlockContent> blocks;
     private final ProcessorLookup processors;
+    private int nextFormId;
     private int index = -1;
     private final String path;
 
@@ -239,6 +240,10 @@ public class Request implements PageWriter {
 
     public String getViewPath() {
         return path;
+    }
+
+    public String nextFormId() {
+        return String.valueOf(nextFormId++);
     }
 
     public String getOptionalProperty(String name, String defaultValue) {

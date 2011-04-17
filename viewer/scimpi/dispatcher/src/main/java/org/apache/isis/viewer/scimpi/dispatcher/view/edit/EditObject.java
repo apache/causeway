@@ -58,6 +58,7 @@ public class EditObject extends AbstractElementProcessor {
         boolean showIcon = request.isRequested(SHOW_ICON, true);
         String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String formTitle = request.getOptionalProperty(FORM_TITLE);
+        String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
         String variable = request.getOptionalProperty(RESULT_NAME);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         String scope = request.getOptionalProperty(SCOPE);
@@ -115,7 +116,7 @@ public class EditObject extends AbstractElementProcessor {
         copyFieldContent(context, object, formFields, showIcon);
         overrideWithHtml(context, containedBlock, formFields);
         String errors = null;
-        if (entryState != null && entryState.isForForm(actualObjectId)) {
+        if (entryState != null && entryState.isForForm(formId)) {
             copyEntryState(context, object, formFields, entryState);
             errors = entryState.getError(); 
         }
@@ -124,6 +125,7 @@ public class EditObject extends AbstractElementProcessor {
         List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField("_" + OBJECT, actualObjectId));
         hiddenFields.add(new HiddenInputField("_" + VERSION, version));
+        hiddenFields.add(new HiddenInputField("_" + FORM_ID, formId));
         hiddenFields.add(completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, completionMessage));
         hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context.fullFilePath(forwardEditedTo)));
         hiddenFields.add(new HiddenInputField("_" + ERRORS, errorView));

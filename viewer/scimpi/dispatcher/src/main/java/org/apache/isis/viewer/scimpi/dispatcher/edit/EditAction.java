@@ -62,53 +62,13 @@ public class EditAction implements Action {
         try {
             String objectId = context.getParameter("_" + OBJECT);
             String version = context.getParameter("_" + VERSION);
+            String formId = context.getParameter("_" + FORM_ID);
             String resultName = context.getParameter("_" + RESULT_NAME);
             resultName = resultName == null ? RequestContext.RESULT : resultName;
             String override = context.getParameter("_" + RESULT_OVERRIDE);
             String message = context.getParameter("_" + MESSAGE);
             
             ObjectAdapter adapter = context.getMappedObject(objectId);
-            
-            if (adapter.isTransient()) {
-                //restore object state first
-                List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
-                for (int i = 0; i < fields.size(); i++) {
-                    ObjectAssociation field = fields.get(i);
-                    String fieldId = field.getId();
-                    String newEntry = context.getParameter(fieldId);
-                    if (fields.get(i).isOneToManyAssociation()) {
-                        continue;
-                    }
-                    if (newEntry != null && newEntry.equals("-OTHER-")) {
-                        newEntry = context.getParameter(fieldId + "-other");
-                    }
-                    if (newEntry == null) {
-                        // TODO duplicated in EditObject; line 97
-                        ObjectSpecification spec = field.getSpecification();
-                        if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                                        || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
-                            newEntry = FALSE;
-                        } else {
-                           continue;
-                        }
-                    }
-                    
-                    ObjectAdapter originalValue = null; // fields.get(i).get(adapter);
-                    if (fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
-                        ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
-                        ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
-                        ((OneToOneAssociation) fields.get(i)).setAssociation(adapter, newValue);
-                    } else {
-                        ObjectAdapter associate = context.getMappedObject(newEntry);
-                        if (associate != null) {
-                            IsisContext.getPersistenceSession().resolveImmediately(associate);
-                        }
-                        ((OneToOneAssociation) fields.get(i)).setAssociation(adapter, associate);
-                    }
-                }
-
-            }
-            
             List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
             FormState entryState = validateObject(context, adapter, fields);
             Version adapterVersion = adapter.getVersion();
@@ -121,7 +81,7 @@ public class EditAction implements Action {
                 String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.EDIT);
                 
-                entryState.setForm(objectId);
+                entryState.setForm(formId);
                 context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
                 context.addVariable(resultName, objectId, Scope.REQUEST);
                 if (override != null) {
@@ -166,7 +126,7 @@ public class EditAction implements Action {
                 String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.EDIT);
                 
-                entryState.setForm(objectId);
+                entryState.setForm(formId);
                 context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
                 context.addVariable(resultName, objectId, Scope.REQUEST);
                 if (override != null) {
@@ -231,10 +191,10 @@ public class EditAction implements Action {
                     ObjectAdapter originalValue = field.get(object);
                     ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
                     consent = ((OneToOneAssociation) field).isAssociationValid(object, newValue);
-                    fieldState.setValue(originalValue);
+                    fieldState.setValue(newValue);
                 } catch (TextEntryParseException e) {
                     consent = new Veto(e.getMessage());
-                    formState.setError("Not all fields have been entered correctly");
+//                    formState.setError("Not all fields have been entered correctly");
                 }
 
             } else {

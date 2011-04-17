@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 public class HiddenInputField {
     private String value;
     private String name;
@@ -34,7 +36,7 @@ public class HiddenInputField {
     }
 
     public String getValue() {
-        return value;
+        return StringEscapeUtils.escapeHtml(value);
     }
 
 }

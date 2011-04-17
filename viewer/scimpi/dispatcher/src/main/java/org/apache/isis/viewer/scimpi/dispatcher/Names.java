@@ -34,6 +34,7 @@ public interface Names {
     static final String FIELD = "field";
     static final String FIELD_NAME = "field-name";
     static final String FOOTING = "footing";
+    static final String FORM_ID = "form-id";
     static final String FORM_TITLE = "title";
     static final String FORMS = "show-forms";
     static final String HEADING = "heading";

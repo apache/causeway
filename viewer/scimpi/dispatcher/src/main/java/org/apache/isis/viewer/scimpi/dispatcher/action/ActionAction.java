@@ -63,6 +63,7 @@ public class ActionAction implements Action {
     public void process(RequestContext context) throws IOException {
         String objectId = context.getParameter("_" + OBJECT);
         String version = context.getParameter("_" + VERSION);
+        String formId = context.getParameter("_" + FORM_ID);
         String methodName = context.getParameter("_" + METHOD);
         String override = context.getParameter("_" + RESULT_OVERRIDE);
         String resultName = context.getParameter("_" + RESULT_NAME);
@@ -131,7 +132,7 @@ public class ActionAction implements Action {
                     context.addVariable(resultName, objectId, Scope.REQUEST);
                 }                
             } else {
-                entryState.setForm(objectId + ":" + methodName);
+                entryState.setForm(formId);
                 context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
                 context.addVariable(resultName, objectId, Scope.REQUEST);
                 if (override != null) {
@@ -155,7 +156,7 @@ public class ActionAction implements Action {
             
             IsisContext.getMessageBroker().addMessage(e.getMessage());
 
-            entryState.setForm(objectId + ":" + methodName);
+            entryState.setForm(formId);
             context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
             context.addVariable(resultName, objectId, Scope.REQUEST);
             if (override != null) {

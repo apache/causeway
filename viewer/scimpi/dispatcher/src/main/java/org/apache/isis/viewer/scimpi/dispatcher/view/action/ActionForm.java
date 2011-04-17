@@ -55,6 +55,7 @@ public class ActionForm extends AbstractElementProcessor {
         parameters.showIcon = request.isRequested(SHOW_ICON, true);
         parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
+        parameters.formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
         parameters.resultName = request.getOptionalProperty(RESULT_NAME);
         parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         parameters.scope = request.getOptionalProperty(SCOPE);
@@ -104,6 +105,7 @@ public class ActionForm extends AbstractElementProcessor {
         HiddenInputField[] hiddenFields = new HiddenInputField[] {
                 new HiddenInputField("_" + OBJECT, objectId),
                 new HiddenInputField("_" + VERSION, version),
+                new HiddenInputField("_" + FORM_ID, parameterObject.formId),
                 new HiddenInputField("_" + METHOD, parameterObject.methodName),
                 parameterObject.forwardResultTo == null ? null : new HiddenInputField("_" + VIEW, context
                         .fullFilePath(parameterObject.forwardResultTo)),
@@ -138,7 +140,7 @@ public class ActionForm extends AbstractElementProcessor {
         initializeFields(context, object, action, formFields);
         setDefaults(context, object, action, formFields, entryState, parameterObject.showIcon);
         String errors = null;
-        if (entryState != null && entryState.isForForm(objectId + ":" + parameterObject.methodName)) {
+        if (entryState != null && entryState.isForForm(parameterObject.formId)) {
             copyEntryState(context, object, action, formFields, entryState);
             errors = entryState.getError(); 
         }

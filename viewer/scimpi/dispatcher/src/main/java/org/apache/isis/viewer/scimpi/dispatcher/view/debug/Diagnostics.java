@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -39,8 +38,8 @@ public class Diagnostics extends AbstractElementProcessor {
         boolean isForced = request.isRequested("force");
         if (isForced || request.getContext().showDebugData()) {
             request.appendHtml("<div class=\"debug\">");
-            request.appendHtml("<pre>");
             if ("page".equals(type)) {
+                request.appendHtml("<pre>");
                 RequestContext context = request.getContext();
                 request.appendHtml("URI:  " + context.getUri());
                 request.appendHtml("\n");
@@ -50,20 +49,26 @@ public class Diagnostics extends AbstractElementProcessor {
                     request.appendHtml("\n");
                     request.appendHtml("Object: " + result);
                 }
-            } else  if ("session".equals(type)) {
+                request.appendHtml("</pre>");
+            } else if ("session".equals(type)) {
+                request.appendHtml("<pre>");
                 AuthenticationSession session = IsisContext.getAuthenticationSession();
                 request.appendHtml("Session:  " + session.getUserName() + " " + session.getRoles());
-            } else  if ("variables".equals(type)) {
+                request.appendHtml("</pre>");
+            } else if ("variables".equals(type)) {
                 RequestContext context = request.getContext();
                 DebugHtmlString debug = new DebugHtmlString();
+                debug.appendln("", "");
                 context.append(debug, "variables");
+                debug.close();
                 request.appendHtml(debug.toString());
-            } else  if ("processing".equals(type)) {
-                request.appendHtml(request.getContext().getDebugTrace());      
+            } else if ("processing".equals(type)) {
+                request.appendHtml("<pre>");
+                request.appendHtml(request.getContext().getDebugTrace());
+                request.appendHtml("</pre>");
             } else {
                 request.appendHtml("<i>No such type " + type + "</i>");
             }
-            request.appendHtml("</pre>");
             request.appendHtml("</div>");
         }
     }
@@ -73,4 +78,3 @@ public class Diagnostics extends AbstractElementProcessor {
     }
 
 }
-

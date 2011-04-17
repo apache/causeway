@@ -76,7 +76,7 @@ public class DebugAction implements Action {
             authorization(context, null);      
         } else if (context.getParameter("mode") != null) {            
             boolean isDebugOn = context.getParameter("mode").equals("debug");
-            context.addVariable("debug", isDebugOn, Scope.SESSION);
+            context.addVariable("debug-on", isDebugOn, Scope.SESSION);
             // TODO need to use configuration to find path
             context.setRequestPath("/debug/debug.shtml");
         } else {
@@ -201,7 +201,8 @@ public class DebugAction implements Action {
         view.appendTitle("Specifications");
         for (ObjectSpecification spec : fullIdentifierList) {
             String name = spec.getSingularName();
-   //         view.appendln(name, specificationLink(spec));
+            view.appendln(name, "");
+            //view.appendln(name, specificationLink(spec));
         }
 
         

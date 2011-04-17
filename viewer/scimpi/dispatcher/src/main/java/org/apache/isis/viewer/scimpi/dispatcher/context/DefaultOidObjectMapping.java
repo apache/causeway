@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -95,7 +94,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         try {
             List<ObjectAdapter> savedObject = new ArrayList<ObjectAdapter>();
             JSONObject data = encodeTransientData(object, savedObject);
-            return "D" + StringEscapeUtils.escapeHtml(data.toString(4));
+            return "D" + data.toString(4); //StringEscapeUtils.escapeHtml(data.toString(4));
         } catch (JSONException e) {
             throw new ScimpiException(e);
         }
@@ -204,7 +203,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
     }
 
     public ObjectAdapter mappedTransientObject(String data) {
-        String objectData = StringEscapeUtils.unescapeHtml(data);
+        String objectData = data; //StringEscapeUtils.unescapeHtml(data);
         LOG.debug("data" + objectData);
 
         try {

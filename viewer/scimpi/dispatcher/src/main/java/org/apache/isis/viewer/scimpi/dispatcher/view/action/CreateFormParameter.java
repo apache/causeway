@@ -27,6 +27,7 @@ public class CreateFormParameter {
     public String forwardErrorTo;
     public String buttonTitle;
     public String formTitle;
+    public String formId;
     public String resultName;
     public String scope;
     public String objectId;
