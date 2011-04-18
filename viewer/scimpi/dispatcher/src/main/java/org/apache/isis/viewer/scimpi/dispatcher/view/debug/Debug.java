@@ -398,25 +398,25 @@ public class Debug extends AbstractElementProcessor {
     }
 
     private void speficationFacets(DebugBuilder view, FacetHolder facetHolder) {
-        Facet[] facets = facetHolder.getFacets(new Filter<Facet>() {
+        List<Facet> facets = facetHolder.getFacets(new Filter<Facet>() {
             @Override
             public boolean accept(Facet facet) {
                 return true;
             }
         });
         StringBuffer buffer = new StringBuffer();
-        if (facets == null || facets.length == 0) {
+        if (facets == null || facets.size() == 0) {
             buffer.append("none");
         } else {
-            Arrays.sort(facets, new Comparator<Facet>() {
+            Collections.sort(facets, new Comparator<Facet>() {
                 public int compare(Facet o1, Facet o2) {
                     String facetType1 = o1.facetType().getName();
                     String facetType2 = o2.facetType().getName();
                     return facetType1.substring(facetType1.lastIndexOf('.') + 1).compareTo(facetType2.substring(facetType2.lastIndexOf('.') + 1));
                 }});
-            for (int i = 0; i < facets.length; i++) {
-                String facetType = facets[i].facetType().getName();
-                buffer.append("<span class=\"facet-type\">" + facetType .substring(facetType.lastIndexOf('.') + 1)  + "</span>:  " + facets[i] + "<br>");
+            for (Facet facet: facets) {
+                String facetType = facet.facetType().getName();
+                buffer.append("<span class=\"facet-type\">" + facetType .substring(facetType.lastIndexOf('.') + 1)  + "</span>:  " + facet + "<br>");
             }
         }
         view.appendln("Facets", buffer.toString());

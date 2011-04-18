@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -40,6 +41,8 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+
+import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
 public class ImperativeFacetUtilsTest {
@@ -78,7 +81,7 @@ public class ImperativeFacetUtilsTest {
     	context.checking(new Expectations() {
 			{
 				one(mockObjectMember).getFacets(with(any(Filter.class)));
-				will(returnValue(new Facet[0]));
+				will(returnValue(Lists.newArrayList()));
 			}
 		});
     	ImperativeFacetFlags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
@@ -94,7 +97,7 @@ public class ImperativeFacetUtilsTest {
     	context.checking(new Expectations() {
 			{
 				one(mockObjectMember).getFacets(with(any(Filter.class)));
-				will(returnValue(new Facet[]{(Facet) imperativeFacet}));
+				will(returnValue(Lists.newArrayList((Facet)imperativeFacet)));
 			}
 		});
     	ImperativeFacetFlags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);

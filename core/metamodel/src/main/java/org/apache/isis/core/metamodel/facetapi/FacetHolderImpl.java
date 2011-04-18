@@ -21,6 +21,7 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.filter.Filter;
@@ -95,7 +96,7 @@ public class FacetHolderImpl implements FacetHolder {
     }
 
     @Override
-    public Facet[] getFacets(final Filter<Facet> filter) {
+    public List<Facet> getFacets(final Filter<Facet> filter) {
         return FacetUtil.getFacets(facetsByClass, filter);
     }
 

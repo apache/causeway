@@ -27,6 +27,8 @@ import java.util.Map;
 
 import org.apache.isis.applib.filter.Filter;
 
+import com.google.common.collect.Lists;
+
 
 public final class FacetUtil {
 
@@ -96,8 +98,8 @@ public final class FacetUtil {
      * @param facetsByClass
      * @return
      */
-    public static Facet[] getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Filter<Facet> filter) {
-        final List<Facet> filteredFacets = new ArrayList<Facet>();
+    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Filter<Facet> filter) {
+        final List<Facet> filteredFacets = Lists.newArrayList();
         final List<Facet> allFacets = new ArrayList<Facet>(facetsByClass.values());
         for (int i = 0; i < allFacets.size(); i++) {
             final Facet facet = allFacets.get(i);
@@ -105,15 +107,7 @@ public final class FacetUtil {
                 filteredFacets.add(facet);
             }
         }
-        return filteredFacets.toArray(new Facet[] {});
-    }
-
-    public static Facet[] getFacets(final Facet facet, final Filter<Facet> filter) {
-        if (filter.accept(facet)) {
-            return new Facet[] { facet };
-        } else {
-            return new Facet[] {};
-        }
+        return filteredFacets;
     }
 
     public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Facet facet) {

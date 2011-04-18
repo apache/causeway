@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -138,7 +140,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     @Override
-    public Facet[] getFacets(final Filter<Facet> filter) {
+    public List<Facet> getFacets(final Filter<Facet> filter) {
         return getFacetedMethod().getFacets(filter);
     }
 

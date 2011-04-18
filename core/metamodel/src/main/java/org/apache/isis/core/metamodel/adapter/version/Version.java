@@ -23,9 +23,12 @@ package org.apache.isis.core.metamodel.adapter.version;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+
 
 /**
- * Version marks a ObjectAdapter as being a particular variant of that object.
+ * An instance of this class is held by each {@link ObjectAdapter} and is used to represent
+ * a particular version (at a point in time) of domain object wrapped by that adapter.
  *
  * <p>
  * This is normally done using some form of incrementing number or timestamp, which would be held within the

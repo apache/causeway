@@ -34,14 +34,14 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 public interface FacetFactory {
 
     static class AbstractProcessContext<T extends FacetHolder> {
-        private final T facetedMethod;
+        private final T facetHolder;
 
-        public AbstractProcessContext(T facetedMethod) {
-            this.facetedMethod = facetedMethod;
+        public AbstractProcessContext(T facetHolder) {
+            this.facetHolder = facetHolder;
         }
 
         public T getFacetHolder() {
-            return facetedMethod;
+            return facetHolder;
         }
     }
 

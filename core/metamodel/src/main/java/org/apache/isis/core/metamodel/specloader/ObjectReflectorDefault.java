@@ -170,9 +170,6 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
      */
     private List<Class<?>> serviceClasses = Lists.newArrayList();
 
-    /**
-     * Optionally {@link #setValidator(MetaModelValidator) injected}.
-     */
     private MetaModelValidator metaModelValidator;
 
     /**
@@ -218,8 +215,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
 
         this.metaModelValidator = metaModelValidator;
         
-        this.facetProcessor = new FacetProcessor(configuration, this,
-                collectionTypeRegistry, programmingModel);
+        this.facetProcessor = new FacetProcessor(configuration, collectionTypeRegistry,
+                programmingModel);
         
         this.cache = new SpecificationCacheDefault();
     }
@@ -474,12 +471,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     
-    // added to try to track down a race condition
-    // TODO: should probably remove 
-    private ObjectSpecification introspectSpecificationIfRequired(
-            ObjectSpecification spec) {
-        if (spec instanceof ObjectSpecificationAbstract) {
-        }
+    private ObjectSpecification introspectSpecificationIfRequired(ObjectSpecification spec) {
         if(!spec.isIntrospected()) {
             spec.introspectTypeHierarchyAndMembers();
             facetDecoratorSet.decorate(spec);

@@ -36,17 +36,20 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
         this.equalByContent = equalByContent;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public EncoderDecoder<T> getEncoderDecoder() {
         return (EncoderDecoder<T>) (this instanceof EncoderDecoder ? this : null);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Parser<T> getParser() {
         return (Parser<T>) (this instanceof Parser ? this : null);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public DefaultsProvider<T> getDefaultsProvider() {
         return (DefaultsProvider<T>) (this instanceof DefaultsProvider ? this : null);
     }

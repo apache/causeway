@@ -20,11 +20,15 @@
 
 package org.apache.isis.runtimes.dflt.runtime.testspec;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+
+import com.google.common.collect.Lists;
 
 
 /**
@@ -55,8 +59,8 @@ public class FacetHolderNoop implements FacetHolder {
     }
 
     @Override
-    public Facet[] getFacets(final Filter<Facet> filter) {
-        return new Facet[0];
+    public List<Facet> getFacets(final Filter<Facet> filter) {
+        return Lists.newArrayList();
     }
 
     public Identifier getIdentifier() {

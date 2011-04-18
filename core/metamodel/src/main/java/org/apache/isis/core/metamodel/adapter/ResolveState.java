@@ -44,12 +44,13 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.Serializing.RE
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 public final class ResolveState {
-    private static final Hashtable<String,ResolveState> statesByName = new Hashtable<String,ResolveState>();
+    private static final Map<String,ResolveState> statesByName = Maps.newHashMap();
     
     static enum ResolvableFrom {
         RESOLVABLE_FROM,

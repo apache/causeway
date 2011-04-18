@@ -53,7 +53,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContex
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 
@@ -63,7 +62,6 @@ public class FacetProcessor implements RuntimeContextAware {
     private final CollectionTypeRegistry collectionTypeRegistry;
     private final ProgrammingModel programmingModel;
     
-    private final SpecificationLoader specificationLoader;
 	private RuntimeContext runtimeContext;
 
 
@@ -124,16 +122,13 @@ public class FacetProcessor implements RuntimeContextAware {
     
     public FacetProcessor(
     		final IsisConfiguration configuration, 
-    		final SpecificationLoader specificationLoader, 
     		final CollectionTypeRegistry collectionTypeRegistry, 
     		final ProgrammingModel programmingModel) {
         ensureThatState(configuration, is(notNullValue()));
         ensureThatState(collectionTypeRegistry, is(notNullValue()));
         ensureThatState(programmingModel, is(notNullValue()));
-        ensureThatState(specificationLoader, is(notNullValue()));
     	
     	this.configuration = configuration;
-    	this.specificationLoader = specificationLoader;
     	this.programmingModel = programmingModel;
     	this.collectionTypeRegistry = collectionTypeRegistry;
     }
@@ -215,6 +210,7 @@ public class FacetProcessor implements RuntimeContextAware {
      *      List)
      */
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    	cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
         for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
         }

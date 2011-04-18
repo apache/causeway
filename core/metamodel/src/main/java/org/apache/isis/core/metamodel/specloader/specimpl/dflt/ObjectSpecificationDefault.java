@@ -493,10 +493,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<ObjectAssociation> fields = getAssociations(noop);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
-            final Facet[] facets = field.getFacets(ImperativeFacet.FILTER);
-            for (int j = 0; j < facets.length; j++) {
-                final ImperativeFacet facet = ImperativeFacetUtils.getImperativeFacet(facets[j]);
-                for (Method imperativeFacetMethod : facet.getMethods()) {
+            final List<Facet> facets = field.getFacets(ImperativeFacet.FILTER);
+            for (final Facet facet: facets) {
+                final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+                for (Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, field);
                 }
             }
@@ -507,10 +507,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<ObjectAction> userActions = getObjectActions(ActionType.USER);
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction userAction = userActions.get(i);
-            final Facet[] facets = userAction.getFacets(ImperativeFacet.FILTER);
-            for (int j = 0; j < facets.length; j++) {
-                final ImperativeFacet facet = ImperativeFacetUtils.getImperativeFacet(facets[j]);
-                for (Method imperativeFacetMethod : facet.getMethods()) {
+            final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);
+            for (final Facet facet: facets) {
+                final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+                for (Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, userAction);
                 }
             }

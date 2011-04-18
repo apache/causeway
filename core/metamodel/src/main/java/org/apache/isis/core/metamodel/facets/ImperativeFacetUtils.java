@@ -83,7 +83,7 @@ public final class ImperativeFacetUtils {
         if (member == null) {
             return flags;
         }
-        Facet[] allFacets = member.getFacets(Filters.anyOfType(Facet.class));
+        List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
         for (Facet facet : allFacets) {
             ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
             if (imperativeFacet == null) {

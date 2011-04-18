@@ -22,16 +22,17 @@ package org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standar
 
 import java.util.List;
 
+import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.TransactionFacetDecoratorInstallerAbstract;
+import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 
 import com.google.common.collect.Lists;
 
 
-public class TransactionFacetDecoratorInstaller extends TransactionFacetDecoratorInstallerAbstract {
+public class TransactionFacetDecoratorInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
     public TransactionFacetDecoratorInstaller() {
-        super("transaction");
+    	super(FacetDecoratorInstaller.TYPE, "transaction");
     }
 
     public List<FacetDecorator> createDecorators() {
@@ -43,6 +44,4 @@ public class TransactionFacetDecoratorInstaller extends TransactionFacetDecorato
     public List<Class<?>> getTypes() {
     	return listOf(List.class); // ie List<FacetDecorator>
     }
-
-
 }

@@ -333,7 +333,9 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     }
 
     public ObjectAdapter createAggregatedInstance(ObjectSpecification specification, ObjectAdapter parent) {
-        LOG.debug("creating aggregated instance of " + specification);
+    	if (LOG.isDebugEnabled()) {
+    		LOG.debug("creating aggregated instance of " + specification);
+    	}
         final Object pojo = specification.createAggregatedObject(parent, CreationMode.INITIALIZE);
         ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
         if (adapter.getResolveState().isGhost()) {

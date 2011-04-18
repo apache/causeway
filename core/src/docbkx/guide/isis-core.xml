@@ -92,32 +92,36 @@
           </listitem>
         </itemizedlist></para>
 
-      <para>You'll note that we <emphasis>don't</emphasis> describe the
-      implementations of these <acronym>API</acronym>s; for these see their
-      respective guides. Notably, that means that we don't describe how to
-      actually deploy an Isis application here, because that depends upon the
-      runtime/viewer in use. See the relevant runtime documentation for
+      <para>We <emphasis>don't</emphasis> however describe the implementations
+      of these <acronym>API</acronym>s; for these see their respective guides.
+      What that means is that we don't describe how to actually deploy an
+      <emphasis>Isis</emphasis> application here, because that depends upon
+      the runtime/viewer in use. See the relevant runtime documentation for
       details.</para>
 
-      <para>You'll also find that <emphasis>this</emphasis> guide (the core
-      documentation) does not cover the programming model. Rather, it explains
-      why we have an applib in the first place. For details of the programming
-      guide (that is, how to actually write <emphasis>Isis</emphasis>
-      applications) you should look to the applib (application library)
-      documentation. Meanwhile, the programming model guide describe how to
-      customize the default programming model to your own ends.</para>
+      <para>You'll also find that <emphasis>this</emphasis> guide does explain
+      how to actually write the domain objects that make up an
+      <emphasis>Isis</emphasis> application; for that you should look to the
+      <emphasis>applib (application library)</emphasis> documentation.
+      Meanwhile, the <emphasis>programming model</emphasis> documentation
+      describe how to customize the default programming model to your own
+      ends. However this guide <emphasis>does</emphasis> explain why
+      <emphasis>Isis</emphasis> is architected to have an applib in the first
+      place, and it shows what the programming model looks like
+      <emphasis>inside</emphasis> of <emphasis>Isis</emphasis>.</para>
     </sect1>
 
     <sect1>
       <title>Abbreviations used in this Guide</title>
 
       <para><emphasis>Apache Isis</emphasis> is built using Maven, which
-      identifies every module with a groupId, an artifactId, a version, and a
-      type. These are called the Maven <emphasis>co-ordinates</emphasis>. In
-      this guide we identify each module using notation
-      <package>(groupId:artifactId)</package>; you should assume that the
-      <emphasis>version</emphasis> is the latest version, and the
-      <emphasis>type</emphasis> is the default JAR artifact<footnote>
+      identifies every module with a <emphasis>groupId</emphasis>, an
+      <emphasis>artifactId</emphasis>, a <emphasis>version</emphasis>, and a
+      <emphasis>type</emphasis>. These are called the Maven
+      <emphasis>co-ordinates</emphasis>. In this guide we identify each module
+      using notation <package>(groupId:artifactId)</package>; you should
+      assume that the <emphasis>version</emphasis> is the latest version, and
+      the <emphasis>type</emphasis> is the default JAR artifact<footnote>
           <para>Maven modules can create other artifacts too, such as a test
           JAR artifact. This would be indicated with a type of test-jar. But
           the default artifact is a regular JAR.</para>
@@ -539,20 +543,31 @@
         <package>oai.core.commons</package> module.</para>
       </abstract>
 
-      <para>The core commons module provides a set of common utilities for use
-      across the rest of the framework. It also defines a number of small,
-      mostly internal, <acronym>API</acronym>s.</para>
+      <para>The <emphasis>core commons</emphasis> module provides a set of
+      common utilities for use across the rest of the framework. It also
+      defines a number of small, mostly internal,
+      <acronym>API</acronym>s.</para>
 
       <para>Generally it shouldn't be necessary to add an explicit dependency
       to the <emphasis>commons</emphasis> module, because it will be depended
-      upon transitively by other modules in <package>oai.core</package>.
-      </para>
+      upon transitively by other modules in
+      <package>oai.core</package>.</para>
 
       <sect1>
-        <title>Package Dependencies / Architectural Layering</title>
+        <title>Package Layering / Dependencies</title>
 
-        <para>The packages that reside within commons have the following
-        dependencies:</para>
+        <para>The packages that reside within <emphasis>commons</emphasis>
+        have break into the following layers (top layer packages depending on
+        lower layers):</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/common/architecture-perspective.png"
+                       scale="60" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Alternatively we can see the actual dependencies:</para>
 
         <mediaobject>
           <imageobject>
@@ -564,15 +579,6 @@
         <para>The relatively small number of dependencies between these
         packages shows the extent to which the utility classes in common are
         independent of each other.</para>
-
-        <para>Alternatively these packages can be viewed as layers:</para>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/common/architecture-perspective.png"
-                       scale="60" />
-          </imageobject>
-        </mediaobject>
       </sect1>
 
       <sect1>
@@ -595,7 +601,7 @@
 
           <itemizedlist>
             <listitem>
-              <para> <classname>ApplicationScopedComponent</classname>, for
+              <para><classname>ApplicationScopedComponent</classname>, for
               components that exist for the duration of the application</para>
             </listitem>
 
@@ -766,7 +772,7 @@
           <para>The <classname>AuthenticationSession</classname> interface (in
           the <package>oai.core.commons.authentication</package> package)
           provides a representation of an authenticated user within the
-          system. </para>
+          system.</para>
 
           <para>Also worth mentioning is the utility class
           <classname>AuthenticationSessionUtils</classname> can be used to
@@ -827,57 +833,56 @@
         <package>oai.core.metamodel</package> module.</para>
       </abstract>
 
-      <para></para>
+      <para>The core <emphasis>metamodel</emphasis> module defines the
+      interfaces and classes that make up the <emphasis>Apache Isis</emphasis>
+      metamodel. This metamodel is at the very heart of
+      <emphasis>Isis</emphasis>, and used in numerous ways:</para>
 
-      <para></para>
+      <itemizedlist>
+        <listitem>
+          <para>by viewers to obtain information about the domain objects, so
+          that they can be rendered in a generic object-oriented user
+          interface;</para>
+        </listitem>
+
+        <listitem>
+          <para>by persistence mechanisms (within the <emphasis>default
+          runtime</emphasis> module, <package>(oai.runtimes:dflt)</package>)
+          to determine which data is to be persisted;</para>
+        </listitem>
+
+        <listitem>
+          <para>by client/server remoting (within the <emphasis>default
+          runtime</emphasis> module) , to marshall domain objects
+          automatically between different tiers;</para>
+        </listitem>
+
+        <listitem>
+          <para>to provide the ability to provide XML Snapshots (through the
+          <classname>XmlSnapshot</classname> utility class, in the
+          <emphasis>core runtime</emphasis> module,
+          <package>(oai.core:runtime)</package>).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In addition, the metamodel provides a mechanism for the framework
+      and the clients of the framework to access and manipulate the domain
+      objects by wrapping them in an adapter. This is an important point: the
+      framework and its clients never interact with the domain objects
+      directly.</para>
+
+      <para>Note however that the <emphasis>metamodel</emphasis> module does
+      not itself define the programming model conventions; that is the
+      responsibility of the configured programming model (the default being
+      the one defined in the <emphasis>default progmodel</emphasis>
+      <package>(oai.progmodels:dflt)</package>.</para>
 
       <sect1>
-        <title></title>
+        <title>Package Layering / Dependencies</title>
 
-        <para></para>
-
-        <para></para>
-
-        <para>The core <emphasis>metamodel</emphasis> module defines the
-        interfaces and classes that make up the <emphasis>Apache
-        Isis</emphasis> metamodel. The metamodel is used in numerous ways,
-        including:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>by viewers to obtain information about the domain objects,
-            so that they can be rendered in a generic object-oriented user
-            interface;</para>
-          </listitem>
-
-          <listitem>
-            <para>by object stores (the default and some of the alternatives)
-            to determine which data is to be persisted;</para>
-          </listitem>
-
-          <listitem>
-            <para>by remoting, to marshall domain objects automatically
-            between different tiers;</para>
-          </listitem>
-
-          <listitem>
-            <para>by the core runtime, to provide the ability to provide XML
-            Snapshots (through the <classname>XmlSnapshot</classname> utility
-            class). The metamodel module does not itself define the
-            programming model conventions; that is the responsibility of the
-            core progmodel.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Package Dependencies / Architectural Layering</title>
-
-        <para></para>
-
-        <para></para>
+        <para>The packages that reside within <emphasis>metamodel</emphasis>
+        have break into the following layers (top layer packages depending on
+        lower layers):</para>
 
         <screenshot>
           <screeninfo>Top-level Architecture Diagram with SpecLoader
@@ -886,12 +891,18 @@
           <mediaobject>
             <imageobject>
               <imagedata fileref="images/metamodel/architecture-diagram-top-level-with-specloader-expanded.png"
-                         scale="60" />
+                         scale="100" />
             </imageobject>
           </mediaobject>
         </screenshot>
 
-        <para></para>
+        <para>Note that the diagram shows the <package>specloader</package>
+        package and also its subpackages. It also indicates that there is a
+        tangle (bidirectional dependencies)<footnote>
+            <para>Not a good thing, we recognize. But refactor to eliminate
+            this would considerably complicate the codebase.</para>
+          </footnote>Alternatively we can see the actual dependencies between
+        packages (again, with that tangle highlighted):</para>
 
         <screenshot>
           <screeninfo>Composition Diagram</screeninfo>
@@ -903,524 +914,827 @@
             </imageobject>
           </mediaobject>
         </screenshot>
-
-        <para></para>
       </sect1>
 
-      <sect1>
-        <title>Reflection</title>
-
-        <para></para>
-
-        <para></para>
+      <sect1 id="sec.ObjectSpecifications">
+        <title><classname>ObjectSpecification</classname>s and the
+        <classname>SpecificationLoader</classname></title>
 
         <para>To make the domain objects useful within the framework the
-        objects' public interfaces must be exposed. Reflection capabilities
-        are used to determine what fields or properties an object has, what
-        behaviour it can offer, and to find other information such as the
-        object's title, a suggested order of it fields, when the actions can
-        or can't be used. The details about this interface are recorded in an
-        instance of <classname>ObjectSpecification</classname>. As each class
-        of domain object is loaded into the system introspection is performed
-        and an instance of <classname>ObjectSpecification</classname> is
-        generated. That specification object is subsequently available from
-        any object adapter (using the
-        <methodname>ObjectAdapter.getSpecification</methodname> method) for
-        that type of domain object; or it can be retrieved directly, by name
-        or class, from the <classname>ObjectSpecificationLoader</classname>
-        instance (obtained from the <classname>Isis</classname>
-        repository).</para>
+        objects' public interfaces must be exposed. <emphasis>Isis</emphasis>
+        uses a number of techniques to do this, but the predominant one is the
+        Java reflection <acronym>API</acronym>s (in the
+        <package>java.lang.reflect</package> package), a process we call
+        introspection. These are used to determine what properties and
+        collections an object has, what behaviour it can offer, and to find
+        other information such as the object's title, a suggested order of its
+        fields, and when its actions can or can't be used. It also is used to
+        flag the type of object (abstract, lookup, object, value, and whether
+        persistable); to refer to its superclass, any inteferfaces it
+        implements and to list any subclasses.</para>
 
-        <para>Through an object's <classname>ObjectSpecification</classname>
-        instance the rest of the NOF can find out the fields that an object
-        has, the methods it offers, the title to use to identify the object,
-        and other details about the object. These are used normally used by
-        the implementations of ObjectAdapter etc when another component ask
-        the adapter for details about another object. For example For example
-        the statement <code>adapter.getField(no.getFields()[0])</code> would
-        retrieve the first field in the domain object held by the Isis
-        referenced by <code>adapter</code>.</para>
+        <para>The details about this interface are recorded in an instance of
+        <classname>ObjectSpecification</classname> (in the
+        <package>oai.core.metamodel.spec</package> package). As each class of
+        domain object is loaded into the system its corresponding instance of
+        <classname>ObjectSpecification</classname> is generated. You can think
+        of <classname>ObjectSpecification</classname> as analogous to
+        <classname>java.lang.Class</classname>.</para>
 
         <sect2>
-          <title>How it Works</title>
+          <title><classname>SpecificationLoader</classname> component</title>
 
-          <para>When a domain object is used within the NOF the
-          <classname>ObjectSpecificationLoader</classname> instance is asked
-          for the <classname>ObjectSpecification</classname> for the domain
-          object's class (by name or <classname>java.lang.Class</classname>
-          object). For performance reasons these objects are normally cached
-          and if the class has previously been introspected then the cached
-          version would be returned. The first time that class is requested
-          however the loader is responsible for performing the introspection
-          and creating a complete
-          <classname>ObjectSpecification</classname>.</para>
+          <para>The specification object can be retrieved directly, by name or
+          class, from the <classname>SpecificationLoader</classname>
+          component<footnote>
+              <para>For historical reasons the
+              <classname>SpecificationLoader</classname> component is also
+              sometimes called the reflector; indeed
+              <classname>ObjectReflector</classname> is a subinterface that is
+              used internally.</para>
+            </footnote></para>
 
-          <para>For each field that the reflector recognises the loader
-          creates either a <classname>OneToOneAssociation</classname> object
-          for a value field or a reference field, or a
-          <classname>OneToManyAssociation</classname> object for a collection
-          or array. Using the field objects the NOF can access or change the
-          values and references in the domain object. The fields can also be
-          used by the NOF to find out the field name, if the fields are
-          visible and whether it can be modified.</para>
+          <para>. When a domain object is used within the framework the
+          <classname>SpecificationLoader</classname> instance is asked for the
+          <classname>ObjectSpecification</classname> of the domain object's
+          class. The first time that a class is requested the loader is
+          responsible for performing the introspection and creating a complete
+          <classname>ObjectSpecification</classname>. Thereafter the
+          specification is returned from a cache.</para>
 
-          <para>For each action method that the reflector recognises the
-          loader must create an <classname>Action</classname> object. Using
-          the action object the NOF can invoke the method on the domain
-          object. The action object also can be used by the NOF to find out
-          the action's name, whether it is visible and whether it can be
-          executed.</para>
+          <para>The set of <classname>ObjectSpecification</classname>s built
+          up by the <classname>SpecificationLoader</classname> are all those
+          that are reachable from the service classes (defined in
+          <filename>isis.properties</filename> configuration file under
+          <emphasis>isis.services</emphasis> key). Because cycles between
+          <classname>ObjectSpecification</classname>s are permitted (that is,
+          <classname>ClassA</classname> can reference
+          <classname>ClassB</classname> and <classname>ClassB</classname> can
+          reference <classname>ClassA</classname>), the creation of
+          <classname>ObjectSpecification</classname>s is actually a two-stage
+          process. When a class' <classname>ObjectSpecification</classname> is
+          being created, any prerequisite specifications (for its class
+          members) will be created if necessary, however those prerequisites
+          will not flagged as not yet "introspected". Only when those
+          prerequisite <classname>ObjectSpecification</classname>s are
+          actually requested by name will their introspection be formed. This
+          prevents infinite loops from occurring in the
+          <classname>SpecificationLoader</classname>.</para>
 
-          <para>In addition to the fields and actions the specification must
-          can also: return the various forms of class name (singular; plural;
-          short; and full); retrieve a title from, or generate a title for,
-          the domain object; flag the type of object (abstract, lookup,
-          object, value, and whether persistable); refer to its superclass,
-          any inteferfaces it implements and any subclasses; and allow objects
-          to marked/cleared as being dirty.</para>
+          <para>It is also possible - and common - to obtain the
+          <classname>ObjectSpecification</classname> from the domain object's
+          adapter (the <classname>ObjectAdapter</classname> interface,
+          discussed in <xref linkend="sec.ObjectAdapter" />).</para>
+
+          <sect3>
+            <title>Accessing the
+            <classname>SpecificationLoader</classname></title>
+
+            <para>If using the <emphasis>default runtime</emphasis> module
+            <package>(oai.runtimes:dflt)</package>, then the
+            <classname>SpecificationLoader</classname> can be accessed using
+            <package>oai.runtimes.dflt.runtime.context.IsisContext#getSpecificationLoader()</package>.
+            It is an application-scoped component, meaning that a single
+            instance is used for the duration of the application
+            running.</para>
+
+            <para>Other runtime implementations will (are likely to) use
+            dependency injection to make the
+            <classname>SpecificationLoader</classname> available.</para>
+          </sect3>
+        </sect2>
+
+        <sect2 id="sec.ObjectMembers">
+          <title><classname>ObjectMember</classname>s</title>
+
+          <para>One of the main purposes of
+          <classname>ObjectSpecification</classname> is to describe the
+          structure of the domain object to which it relates, in other words
+          the members of that object's class. These are represented by
+          (sub-)interfaces of the <classname>ObjectMember</classname>
+          interface (in the <package>oai.core.metamodel.spec.feature</package>
+          package). The main sub-interfaces of
+          <classname>ObjectMember</classname> are
+          <classname>OneToOneAssociation</classname>,
+          <classname>OneToManyAssociation</classname> and
+          <classname>ObjectAction</classname>.</para>
+
+          <para>The
+          <methodname>ObjectSpecification#getProperties()</methodname> method
+          returns a list of <classname>OneToOneAssociation</classname>s that
+          represent the properties (eg
+          <methodname>Order#getShipDate()</methodname> or
+          <methodname>Order#getCustomer()</methodname>), while
+          <methodname>ObjectSpecification#getCollections()</methodname>
+          returns <classname>OneToManyAssociation</classname>s to represent
+          collections (eg <methodname>Order#getLineItems()</methodname>).
+          Properties and collections are typically rendered in some sort of
+          form within a viewer. Any remaining public methods (eg
+          <methodname>Order#cancel()</methodname>) are represented as actions,
+          accessible using
+          <methodname>ObjectSpecification#getActions()</methodname> and
+          returning a list of <classname>ObjectAction</classname>s. These are
+          typically rendered as menu items or links in viewers.</para>
+
+          <para>The <classname>OneToOneAssociation</classname>,
+          <classname>OneToManyAssociation</classname> and
+          <classname>ObjectAction</classname> interfaces all provide the
+          ability to interact with the underlying domain object, allowing
+          viewers to determine whether the property/collection/action is
+          visible, is enabled/disabled, and whether a new value/argument is
+          valid.</para>
+
+          <para>It is also possible to obtain individual class members. For
+          example, an individual property can be accessed via the
+          <methodname>getProperty(String)</methodname> method, where the sole
+          parameter is the the identifier of the property. In the case of a
+          property, its identifier will be the name of the property method
+          with the <emphasis>get</emphasis> prefix removed, and the first
+          character of the remaining string converted to lowercase, so
+          <methodname>getCustomerId()</methodname> become
+          <emphasis>customerId</emphasis>. A similar pattern is used for
+          collections, while actions have an identifier that also takes into
+          account the parameters. In fact, the rules for constructing
+          identifiers are available within the applib, in the
+          <classname>oai.applib.Identifier</classname> class.</para>
+
+          <para>The complete list of properties/collections/actions is used
+          for things like persistence and remoting, however user interfaces
+          need to consider what properties they show to avoid making hidden or
+          unauthorised properties visible. To selectively get hold of all
+          associations (properties and collections) the
+          <methodname>getAssociations(Filter&lt;ObjectAssociation&gt;)</methodname>
+          method should be used<footnote>
+              <para>Rather than reinvent a filter API, the core framework
+              reuses the applib's
+              <classname>oai.applib.filter.Filter&lt;T&gt;</classname>
+              class</para>
+            </footnote>, allowing us to set up a search filter based on any
+          criteria that might be relevant. Typically views are created using
+          only dynamically visible properties (so hidden fields are not
+          visible and do not have any screen space reserved form them).
+          However, in the case of a table the view will require a column for
+          each <emphasis>potentially</emphasis> available (statically visible)
+          property has a column created for it, but only show a value in the
+          cell if the property is visible for the object in question
+          (dynamically visible). To support this, two useful predefined
+          instances are the available:
+          <methodname>ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS</methodname>
+          and the
+          <methodname>ObjectAssociationFilters.dynamicallyVisible(ObjectAdapter)</methodname>
+          factory method.</para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.HowTheMetaModelIsBuiltUpInternally">
+        <title>How the metamodel is built up internally</title>
+
+        <para>As already explained, the
+        <classname>SpecificationLoader</classname> is responsible for building
+        up completed <classname>ObjectSpecification</classname>s, one for each
+        class that is reachable within the domain model. Moreover to avoid
+        cyclic dependencies, these <classname>ObjectSpecification</classname>s
+        are built-up in two stages; initially they are created but not fully
+        built (introspected); only when required does introspection take
+        place.</para>
+
+        <para>This section goes into some of the internals as to how
+        introspection process works.</para>
+
+        <sect2>
+          <title><classname>FacetFactory</classname>s and
+          <classname>Facet</classname>s</title>
+
+          <para>The first thing that <emphasis>Isis</emphasis> does is to
+          create a <classname>FacetedMethodsBuilder</classname> for each
+          <classname>ObjectSpecification</classname>. This is a helper object
+          that co-ordinates the identification of the object members (ie the
+          properties, collections and actions) of the
+          <classname>ObjectSpecification</classname>. Each such object member
+          is represented as a <classname>FacetedMethod</classname>. You can
+          think of this as analogous to
+          <methodname>java.lang.reflect.Method</methodname>, and it does
+          indeed wrap an instance of such a <classname>Method</classname>.
+          We'll get onto the "faceted" part of that name in just a
+          minute.</para>
+
+          <para>The actual hard work of building up the metamodel, though, is
+          done by a collection of <classname>FacetFactory</classname>s. Each
+          <classname>FacetFactory</classname> is responsible for understanding
+          a specific element of the programming model. For example, one
+          <classname>FacetFactory</classname> looks for the
+          <methodname>disableXxx()</methodname> method that is used to disable
+          (grey out) an object member, another looks for
+          <classname>@Hidden</classname> that will hide an object member,
+          another looks for <classname>@RegEx</classname> that can be used to
+          validate property proposed values or action parameter arguments.
+          Each of these pieces of knowledge is represented as a
+          <classname>Facet</classname>, and is attached to the corresponding
+          <classname>FacetedMethod</classname> (hence its name).</para>
+
+          <para>If you explore the type hierarchy then you'll see that
+          <classname>FacetMethod</classname> implements
+          <classname>FacetHolder</classname>, and it is this interface through
+          which the <classname>FacetFactory</classname>s work. You might also
+          note that <classname>ObjectSpecification</classname> also implements
+          <classname>FacetHolder</classname>, as does
+          <classname>FacetedMethodParameter</classname>, which represents an
+          action parameter. What that means is that
+          <classname>FacetFactory</classname>s can also add
+          <classname>Facet</classname>s to these other types too. The
+          interface for <classname>FacetFactory</classname> reflects this,
+          having methods to handle the processing of a class, a method and an
+          action parameter. All of these can have Facets.</para>
+
+          <para>To summarize: the Isis metamodel has a type that is equivalent
+          to a <classname>java.lang.Class</classname>
+          (<classname>ObjectSpecification</classname>), to a
+          <classname>java.lang.reflect.Method</classname>
+          (<classname>FacetedMethod</classname>) and to an action parameter
+          (<classname>FacetedMethodParameter</classname>). Each of these can
+          have a set of <classname>Facet</classname>s attached to it, and
+          these <classname>Facet</classname>s <emphasis>are</emphasis> the
+          metadata for each such element.</para>
         </sect2>
 
         <sect2>
-          <title>Installation</title>
+          <title>Identifying object members</title>
 
-          <para>To set up the NOF to use a reflection mechanism the
-          <classname>Isis</classname> repository must be given a
-          <classname>ObjectSpecificationLoader</classname> instance before the
-          repository is initialised. This can be done using the repository's
-          static <methodname>setSpecificationLoader</methodname> method. For
-          example, the following sets the NOF up to use the basic
-          reflector.</para>
+          <para>Recall that the <classname>FacetedMethodsBuilder</classname>
+          is responsible for co-ordinating the building of the
+          <classname>FacetMethod</classname>s of its owning
+          <classname>ObjectSpecification</classname>. The first step involves
+          identifying the actual properties, collections and actions of that
+          <classname>ObjectSpecification</classname> (based on the underlying
+          <classname>java.lang.Class</classname>). To do this, the
+          <classname>FacetedMethodsBuilder</classname> searches the set of
+          <classname>FacetFactory</classname>s for a factory that implements
+          the
+          <classname>PropertyOrCollectionIdentifyingFacetFactory</classname>.
+          From these two collections of <classname>FacetedMethod</classname>s
+          are created, one set to represent the properties and the other to
+          represent the collections.</para>
 
-          <programlisting>ObjectSpecificationLoader loader = new
-        JavaSpecificationLoader();
-        Isis.setSpecificationLoader(loader);</programlisting>
+          <para>Once all properties and collections have been identified, all
+          remaining <code>public</code> methods are assumed to be actions.
+          These form a third set of
+          <classname>FacetedMethod</classname>s.</para>
+        </sect2>
 
-          <para></para>
+        <sect2>
+          <title>Ordering Members
+          (<classname>MemberLayoutArranger</classname>)</title>
+
+          <para>The <classname>FacetedMethodsBuilder</classname>'s job is done
+          once all the <classname>FacetedMethod</classname>s have been
+          identified. At this point, the
+          <classname>ObjectSpecification</classname> takes over and completes
+          the job of building itself. The first task is to re-order the
+          identified members (still in the form of
+          <classname>FacetMethod</classname>s). It does this by delegating to
+          a <classname>MemberLayoutArranger</classname> which is used returns
+          the members in the required order.</para>
+
+          <para><note>
+              <para>The current implementation of MemberLayoutArranger orders
+              the members as per the <classname>@MemberOrder</classname>
+              annotation. In the future this component may take responsibility
+              for more sophisticated layout arranger, to handle column-based
+              layouts. This will require a change to its
+              <acronym>API</acronym>.</para>
+            </note></para>
+        </sect2>
+
+        <sect2>
+          <title>Creating <classname>ObjectMember</classname>s (wrapping
+          <classname>FacetedMethod</classname>s)</title>
+
+          <para>After the <classname>FacetedMethod</classname>s have been
+          ordered, they are then wrapped in the appropriate subclass of
+          <classname>ObjectMember</classname> (already discussed, see <xref
+          linkend="sec.ObjectMembers" />), in other words as a
+          <classname>OneToOneAssociation</classname>,
+          <classname>OneToManyAssociation</classname> or as an
+          <classname>ObjectAction</classname>. These objects provide a number
+          of methods that allow the clients of the metamodel (eg specifically,
+          viewers) to interact with underlying domain objects (see <xref
+          linkend="sec.O" />) through the metamodel.</para>
+        </sect2>
+
+        <sect2>
+          <title>Decorating <classname>Facet</classname>s
+          (<classname>FacetDecorator</classname>)</title>
+
+          <para>The last major step of building the metamodel is to decorate
+          any <classname>Facet</classname>s, using any registered
+          <classname>FacetDecorator</classname>s. Decorated
+          <classname>Facet</classname>s allow additional behaviour to be added
+          to already identified <classname>Facet</classname>s, and so are
+          useful for adding internationalization and (in the client/server
+          remoting support provided by the <emphasis>default
+          runtime</emphasis>), transactional control.</para>
+
+          <para><classname>FacetDecorator</classname>s are specified as a
+          comma-separated list in the <emphasis>isis.properties</emphasis>
+          configuration file using the
+          <code>isis.reflector.facet-decorators</code> key. For
+          example:</para>
+
+          <programlisting format="linespecific">isis.reflector.facet-decorators=resource-i18n</programlisting>
+
+          <para>will install a <classname>FacetDecorator</classname> for
+          internationalization that loads from a
+          <classname>java.util.ResourceBundle</classname>.</para>
+
+          <para>The core <classname>FacetDecorator</classname> implementations
+          are in the <emphasis>core progmodel</emphasis> module (see <xref
+          linkend="chp.ProgModel" />).</para>
+
+          <para><note>
+              <para>The <classname>FacetDecorator</classname> design actually
+              predates use of <classname>Facet</classname>s within the Isis
+              metamodel (we renamed it to
+              <classname>FacetDecorator</classname> after the fact). If you
+              dig into the <classname>Facet</classname> API you'll see that it
+              supports the concept of an underlying
+              <classname>Facet</classname>
+              (<methodname>Facet#getUnderlyingFacet()</methodname>). At some
+              stage we hope to remove FacetDecorators completely and simply
+              use the underlying <classname>Facet</classname> approach.</para>
+            </note></para>
         </sect2>
       </sect1>
 
       <sect1>
-        <title>Reflector</title>
+        <title>MetaModel Validation
+        (<classname>MetaModelValidator</classname>)</title>
 
-        <para></para>
+        <para>After all <classname>ObjectSpecification</classname>s have been
+        identified and loaded, the <classname>SpecificationLoader</classname>
+        calls out to the configured <classname>MetaModelValidator</classname>
+        (defined in the
+        <package>org.apache.isis.core.metamodel.specloader.validator</package>
+        package). This provides the ability to validate that all loaded types
+        are valid. Precisely what "valid" means depends on the context; the
+        default <classname>MetaModelValidator</classname> is a no-op. However,
+        some plug-in modules for <emphasis>Isis</emphasis> might provide their
+        own rules. For example, the <acronym>JPA</acronym> object
+        store<footnote>
+            <para>Note that at the time of writing the JPA object store was
+            part of Isis, having originally been written as a sister project
+            for the Naked Objects framework.</para>
+          </footnote> requires that all domain objects that are annotated with
+        <classname>javax.jpa.Entity</classname> provide an "id" property
+        annotated with <classname>javax.jpa.Identifier</classname>. Or, you
+        might wish to configure your own
+        <classname>MetaModelValidator</classname> in order to enforce your own
+        project-specific rules.</para>
 
-        <para>The reflector provides the NOF with two distinct facilities.
-        First it provides the framework with a model of the domain objects
-        that it will be using, and second, it provides a mechanism for the
-        framework and the clients of the framework to access and maniplate the
-        domain objects (the framework and its clients should never interact
-        with the domain objects directly).</para>
+        <para>The <classname>MetaModelValidator</classname> can be specified
+        using the <code>isis.reflector.validator</code> key. For
+        example:</para>
 
-        <para>This section is divided into two. The first part looks at how
-        the reflector is used by the framework and its clients, while the
-        second part looks at how the reflector itself works and how it can be
-        extended.</para>
+        <programlisting format="linespecific">isis.reflector.validator=com.mycompany.myproj.isis.MyMetaModelValidator</programlisting>
+
+        <para>will install
+        <classname>com.mycompany.myproj.isis.MyMetaModelValidator</classname>
+        as the <classname>MetaModelValidator</classname>.</para>
       </sect1>
 
       <sect1>
-        <title>ObjectAdapter and ObjectSpecification</title>
+        <title><classname>ProgrammingModel</classname> API</title>
 
-        <para></para>
+        <para>As will be apparent from <xref
+        linkend="sec.HowTheMetaModelIsBuiltUpInternally" />, the set of
+        conventions that make up the programming model is determined by the
+        set of <classname>FacetFactory</classname>s that are used to process
+        each class as it is loaded by the
+        <classname>SpecificationLoader</classname>.</para>
+
+        <para>The <classname>ProgrammingModel</classname> (in the
+        <package>org.apache.isis.core.metamodel.progmodel</package> package)
+        class is used to define this set of
+        <classname>FacetFactory</classname>s, and is looked up right at the
+        beginning of the bootstrap process when the SpecificationLoader is
+        being specified. The default <classname>ProgrammingModel</classname>
+        is defined in the <emphasis>default progmodel</emphasis>
+        [oai.progmodels:dflt] module, and corresponds to the set of
+        conventions described in the applib documentation.</para>
+
+        <para>You may have occasion when you want to modify the
+        <classname>ProgrammingModel</classname>. For example, suppose you
+        wanted to support a new annotation, for example
+        <classname>@StringLengthBetween(3, 10)</classname> annotation intended
+        to be applied to string properties and parameters. This would require
+        a corresponding
+        <classname>StringLengthBetweenFacetFactory</classname>. This
+        <classname>FacetFactory</classname> would then need to be added to the
+        <classname>ProgrammingModel</classname>.</para>
+
+        <para>There are two ways in which you can register this new
+        FacetFactory. The first is to create your own
+        <classname>ProgrammingModel</classname> (typically by subclassing the
+        default <classname>ProgrammingModel</classname>) and then call its
+        <methodname>#addFactory(Class&lt;? extends
+        FacetFactory&gt;)</methodname> method. Your new implementation should
+        then be registered in the isis.properties configuration file using the
+        <code>isis.reflector.facets</code> key:</para>
+
+        <programlisting format="linespecific">isis.reflector.facets=com.mycompany.myproj.isis.MyProgrammingModel</programlisting>
+
+        <para>will install
+        <classname>com.mycompany.myproj.isis.MyProgrammingModel</classname> as
+        the <classname>MetaModelValidator</classname>.</para>
+
+        <para>Alternatively, if you are just tweaking the default
+        ProgrammingModel, then you can simply use
+        <code>isis.reflector.facets.include</code> and
+        <code>isis.reflector.facets.exclude</code> keys to include/exclude
+        facets. The value for each of these keys is a comma-separated
+        list:</para>
+
+        <programlisting format="linespecific">isis.reflector.facets.include=com.mycompany.myproj.isis.StringLengthBetweenFacetFactory,\
+                              com.mycompany.myproj.isis.PositiveValuesOnlyFacetFactory</programlisting>
+
+        <para><note>
+            <para>Isis' support for Groovy works by defining a custom
+            <classname>ProgrammingModel</classname>.</para>
+          </note></para>
       </sect1>
 
-      <sect1>
-        <title>Adapters and OIDs</title>
+      <sect1 id="sec.ObjectAdapter">
+        <title><classname>ObjectAdapter</classname>s</title>
 
-        <para>Isis wrap each domain object in the system. The rest of the
-        framework does not normally work with the domain objects directly, but
-        via these proxies. The proxies provide access to the tools of the
-        reflector by providing a <classname>ObjectSpecification</classname>
-        for the object's class and to access additional information about the
-        domain object. The specification is accessed via the
-        <methodname>getSpecification()</methodname> method and is then used
-        with the proxy as a mechanism to access and manipulate the domain
-        object. Other key methods on the proxy allow access to the: object
-        identifier, via the getOid() method to get its unique OID; version
-        information, via <methodname>getVersion()</methodname> to get it
-        current Version object; and its lazy loaded state, via the
-        <methodname>getResolved()</methodname> state returning the
-        <classname>ResolvedSate</classname> object reflecting how complete the
-        object is.</para>
+        <para><emphasis>Isis</emphasis> wraps each domain object in an
+        <classname>ObjectAdapter</classname> (in the
+        <package>oai.core.metamodel.adapter</package> package). The rest of
+        the framework does not normally work with the domain objects directly,
+        but via these adapters. This is typically done by asking the
+        <classname>ObjectAdapter</classname> for its corresponding
+        <classname>ObjectSpecification</classname> by way of its
+        <methodname>#getSpecification()</methodname> method. This allows the
+        viewers to query the state of the object. For example the statement
+        <code>adapter.getSpecification().getProperties().get(0).get(adapter)</code>
+        would retrieve the first value of the first property of the domain
+        object held by the <emphasis>Isis</emphasis> referenced by
+        <code>adapter</code>.</para>
+
+        <para>The adapter also exposes facilities to allow the runtime to
+        manage the lifecycle of the wrapped domain object.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the <methodname>#getOid()</methodname> method is used to
+            return a unique object identifier (an instance of the
+            <classname>Oid</classname> class in the
+            <package>org.apache.isis.core.metamodel.adapter.oid</package>
+            package)</para>
+
+            <para>This is an abstraction over a primary key, because it is
+            guaranteed to also be unique for non-persisted objects (if the
+            runtime supports non-persisted objects; the <emphasis>default
+            runtime</emphasis> does)</para>
+          </listitem>
+
+          <listitem>
+            <para>the <methodname>#getVersion()</methodname> returns version
+            information about the domain object through a
+            <classname>Version</classname> object</para>
+
+            <para>This allowing runtimes to implement optimistic
+            locking</para>
+          </listitem>
+
+          <listitem>
+            <para>the #<methodname>getResolveState()</methodname> state
+            returning lazy loaded state, via the
+            <classname>ResolveSate</classname> object</para>
+
+            <para>This allows runtimes to know whether the datastore needs to
+            be queried to bring back additional data as the user "walks the
+            object graph".</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The <classname>Oid</classname> class in particular warrants
+        further discussion.</para>
 
         <sect2>
-          <title>OIDs</title>
+          <title>Object Identifiers (<classname>Oid</classname>s)</title>
 
-          <para></para>
+          <para>An <classname>Oid</classname> is an object identifier for
+          every domain entity, and is typically assigned by the runtime. For
+          persisted objects it is value is assigned by the object store, but
+          for transient objects (if the configured runtime supports them) the
+          framework will also assign an <classname>Oid</classname>, and will
+          manage its mutation if the object changes its persistence state
+          (from transient to persisted, or vice versa).</para>
 
-          <para></para>
-
-          <para>*** An Oid is an object identifier, assigned by the runtime.
-          For persisted objects it is value is assigned by the object store,
-          but for transient objects the framework still assigns an Oid also
-          (and will update the Oid if the object is persisted).</para>
-
-          <para></para>
-
-          <para></para>
-
-          <para>Any domain object that is not a composite part of another
-          domain object must have an identity so that the references between
-          objects can be persisted for future access and transferred between
-          VMs. The OID must be unique so that a one to one mapping can be
-          maintained between an <classname>Oid</classname> and a
-          <classname>ObjectAdapter</classname>, and hence a domain object.
-          Using the OID the client and server can have copies of the same
-          objects and identify those objects remotely and persistently. The
-          identity is held by the proxy is an <classname>Oid</classname>
-          object. The OID for a specific domain object is unique and will not
-          change other than when the object is persisted. Until that point it
-          has a transient OID that is morphed into the persistent OID when the
-          object is persisted. This is so that the transient objects can be
-          passed back and forth between client and server, and once persisted
-          both ends can match the identity of the previously transient object
-          with the identity of the now persistent object.</para>
-
-          <para>When an object is made persistent (typically via the persistor
-          and specifically via <classname>OidGenerator</classname>) its OID is
-          changed to reflect this and also to allow the persistor to provide
-          its own identifier (as is necessary when using natural keys in a
-          relational database backend). So the
-          <methodname>isTransient()</methodname> state changes from
-          <code>true</code> to <code>false</code> while the internal id state
-          might be changed. More visibly, the previous state of the OID is
+          <para>This <classname>Oid</classname> is used to uniquely reference
+          the same object either across space (client/server remoting calls
+          between VMs) or across time (between a sequence of requests to a
+          webapp, say). The <classname>Oid</classname> is unique and that
+          means that the runtime can maintain a one-to-one mapping to the
+          <classname>ObjectAdapter</classname>, and hence to the wrapped a
+          domain object.<note>
+              <para>Mapping the <classname>Oid</classname> to
+              <classname>ObjectAdapter</classname> is an example of the
+              identity map pattern. In the case of the <emphasis>default
+              runtime </emphasis><package>[oai.runtimes:dflt]</package>, the
+              mapping is actually both from <classname>Oid</classname> --&gt;
+              <classname>ObjectAdapter</classname>, and from domain object
+              pojo --&gt; <classname>ObjectAdapter</classname>. (The
+              <classname>ObjectAdapter</classname> has references to its
+              <classname>Oid</classname> and wrapped domain object pojo, so
+              this makes both of these implicitly bidirectional
+              mappings).</para>
+            </note>Typically an <classname>Oid</classname> is also immutable,
+          however its value may change if an object changes its persistence
+          state. In this case the runtime is required to ensure that all
+          mappings that it might hold (eg from <classname>Oid</classname> to
+          <classname>ObjectAdapter</classname>) are correctly maintained. To
+          support this the previous state of the <classname>Oid</classname> is
           copied so that <methodname>getPrevious()</methodname> now returns a
-          copy of the original OID instead of null and
-          <methodname>hasPrevious()</methodname> will return true.</para>
+          copy of the original <classname>Oid</classname> (instead of null)
+          and <methodname>hasPrevious()</methodname> will return
+          <code>true</code>.</para>
 
-          <para>When a OID with a previous OID is used to retrieve an object
-          from the persistor the persistor first checks the OID and if
-          <methodname>hasPrevious()</methodname> returns <code>true</code> the
-          original tranisent object is retrieved, that object is removed from
-          the cache, its OID is updated (via the
-          <methodname>copyFrom(Oid)</methodname> method) and then it is
-          returned to the cache. This results in the newly persisted object
-          having the new persistent OID and it being accessible as such from
-          the cache. At this point the original version's transient state will
-          no longer be recognised.</para>
+          <note>
+            <para>This feature is used by the <emphasis>default
+            runtime</emphasis>'s [oai.runtimes:dflt] client/server remoting
+            module. When an <classname>Oid</classname> with a previous value
+            is persisted, the client-side runtime uses the previous
+            <classname>Oid</classname> to obtain the original tranisent object
+            from its local cache. The object is then removed from the cache,
+            its <classname>Oid</classname> is updated (via the
+            <methodname>copyFrom(Oid)</methodname> method) and then it is
+            returned to the cache. The results in the newly persisted object
+            having the new persistent <classname>Oid</classname> and it being
+            accessible as such from the cache. At this point the original
+            version's transient state will no longer be recognised.</para>
+          </note>
+
+          <sect3>
+            <title>Entity (owned) Collections</title>
+
+            <para>When an domain object is an entity that has a scalar
+            reference to another object (eg, an <classname>Order</classname>
+            has an associated <classname>Customer</classname>) then the
+            referenced pojo (<classname>Customer</classname>) will be wrapped
+            in its own <classname>ObjectAdapter</classname>. This is the
+            usual, normal, case, as described above.</para>
+
+            <para>When a domain object is an entity that has a vector
+            reference to another object (eg an <classname>Order</classname>
+            has a collection of <classname>OrderItem</classname>s), there is
+            another object to consider: the instance of
+            <classname>List&lt;?&gt;</classname> (eg
+            <classname>ArrayList&lt;OrderItem&gt;</classname>) that is "owned"
+            by the owning entity (<classname>Order</classname>).</para>
+
+            <para>An <classname>ObjectAdapter</classname> is created for this
+            owned <classname>List&lt;?&gt;</classname> also, but its
+            <classname>Oid</classname> is of type
+            <classname>AggregatedOid</classname>, and its identity its kept
+            synchronized with its parent. This is done by way of the
+            <classname>AggregatedOid#getParentOid()</classname> method.</para>
+          </sect3>
+
+          <sect3>
+            <title>Values</title>
+
+            <para>Although values (such as <code>String</code>s, or
+            <code>int</code>s) are also wrapped in
+            <classname>ObjectAdapter</classname>, these always have a
+            <code>null </code><classname>Oid</classname>. Instead, the
+            <classname>ResolveState</classname> (as described in <xref
+            linkend="sec.ResolveState" />) is used to distinguish values and
+            deal with them appropriately.</para>
+          </sect3>
         </sect2>
 
         <sect2>
-          <title>ResolveState</title>
+          <title>Optimistic Locking (<classname>Version</classname>s)</title>
 
-          <para></para>
+          <para>In addition to an <classname>Oid</classname>, every
+          <classname>ObjectAdapter</classname> also references a
+          <classname>Version</classname> which represents the object at a
+          particular point in time. Calling
+          <methodname>ObjectAdapter#checkLock(Version)</methodname> allows the
+          adapter to check the <classname>Version</classname> it holds
+          internally against the provided <classname>Version</classname>; if
+          they are different then it will throw a
+          <classname>ConcurrencyException</classname>.</para>
 
-          <para></para>
+          <para>The <methodname>#checkVersion()</methodname> method is
+          intended to be called by server-side runtimes that either cache
+          <classname>ObjectAdapter</classname>s between calls (either
+          server-side in a <classname>HttpSession</classname>, say, or passed
+          up from a client-side runtime). The typical process is that the
+          server-side code will retrieve/recreate the cached object, and then
+          will compare it with the current version of the domain object as
+          retrieved from the database/object store. If there is a mismatch,
+          then the configured viewer is expected to handle the thrown
+          exception, eg by refreshing the view and prompting the user to
+          retry.</para>
         </sect2>
 
-        <sect2>
-          <title>Version</title>
+        <sect2 id="sec.ResolveState">
+          <title>Lazy Loading (<classname>ResolveState</classname>)</title>
 
-          <para></para>
+          <para>The <classname>ResolveState</classname> class (in the
+          <package>org.apache.isis.core.metamodel.adapter</package> package)
+          is used by the <classname>ObjectAdapter</classname> to track the
+          state of the objects references by the underlying domain object.
+          These states form a state machine by which the framework can request
+          to resolve objects from the database/persistence mechanism if
+          required.</para>
 
-          <para></para>
+          <para>The exact states available depend on the nature of the
+          <classname>ObjectAdapter</classname>, that is whether it represents
+          a regular domain entity, a value, or an owned collection
+          (<classname>List&lt;?&gt;</classname>) of an entity:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>NEW - just instantiated. All ResolveStates start in this
+              object.</para>
+            </listitem>
+
+            <listitem>
+              <para>TRANSIENT - a not-yet persisted object. The corresponding
+              <classname>Oid</classname> of the
+              <classname>ObjectAdapter</classname> should also indicate that
+              the object is transient
+              (<methodname>Oid#isTransient()</methodname>).</para>
+            </listitem>
+
+            <listitem>
+              <para>GHOST - a persisted object whose state has not yet been
+              resolved (ie retrieved from the database/object store)</para>
+            </listitem>
+
+            <listitem>
+              <para>PART_RESOLVED - a persisted object whose properties are
+              resolved but some of the collections are not.</para>
+            </listitem>
+
+            <listitem>
+              <para>RESOLVED - a persisted object all of whose properties and
+              collections have been resolved</para>
+            </listitem>
+
+            <listitem>
+              <para>RESOLVING - a short-lived state on the way to RESOLVED;
+              any changes made to the object while in this state are ignored
+              because they are likely to be the result of an object store
+              rehydrating the object's properties/collections</para>
+            </listitem>
+
+            <listitem>
+              <para>RESOLVING_PART - a short-lived state on the way to
+              PART_RESOLVED; same rationale as RESOLVING</para>
+            </listitem>
+
+            <listitem>
+              <para>UPDATING - a short-lived state while the object is being
+              updated, eg as the result of invoking an action.</para>
+            </listitem>
+
+            <listitem>
+              <para>DESTROYED - a object that has now been removed from the
+              database and so is no longer considered persistent<footnote>
+                  <para>The intent (at some stage) is to combine DESTROYED
+                  with TRANSIENT, so the object simply switches from persisted
+                  and not-persisted</para>
+                </footnote></para>
+            </listitem>
+
+            <listitem>
+              <para>SERIALIZING_GHOST, SERIALIZING_GHOST_PART_RESOLVED,
+              SERIALIZING_RESOLVED, SERIALIZING_TRANSIENT - states for the
+              adapter while it is being serialized, typically for remoting
+              purposes</para>
+            </listitem>
+
+            <listitem>
+              <para>VALUE - the state of a value (all other states relate to
+              entities or to entity collections)</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The diagram below shows the state transitions supported by
+          <classname>ResolveState</classname>:</para>
+
+          <screenshot>
+            <screeninfo><classname>ResolveState</classname> state
+            transitions</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/metamodel/ResolveState-stateChart.png"
+                           scale="40" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>
+
+          <para>In the case of the <emphasis>default runtime</emphasis>, the
+          transition between these states is typically managed by the bytecode
+          modules (cglib or javassist). These generate proxies that will
+          automatically trigger the resolving of properties/collections if
+          required (based on the <classname>ResolveState</classname>).</para>
         </sect2>
       </sect1>
 
       <sect1>
-        <title>ObjectMember hierarchy</title>
+        <title>Interacting with domain objects
+        (<classname>InteractionAdvisor</classname>)</title>
 
-        <para></para>
-      </sect1>
+        <para>One of the main responsibilities of the
+        <emphasis>Isis</emphasis> viewers is to interact with the domain
+        objects and to render them in generic (or customized)
+        <acronym>OOUI</acronym>s. This involves an interplay between the
+        <classname>ObjectAdapter</classname> (that holds the domain object)
+        and the <classname>ObjectMember</classname>s
+        (<classname>OneToOneAssociation</classname>,
+        <classname>OneToManyAssociation</classname> and
+        <classname>ObjectAdapter</classname>) accessible from the
+        <classname>ObjectAdapter</classname>'s
+        <classname>ObjectSpecification</classname> (see <xref
+        linkend="sec.ObjectSpecification" />).</para>
 
-      <sect1>
-        <title>FacetedMethod</title>
+        <para>The success or otherwise of this interaction is determined by
+        the Facets associated with the <classname>ObjectMember</classname>,
+        and in particular by those <classname>Facet</classname>s that
+        implement (sub-interfaces of) the
+        <classname>InteractionAdvisor</classname> interface:</para>
 
-        <para>aka ObjectMemberPeer</para>
+        <itemizedlist>
+          <listitem>
+            <para><classname>Facet</classname>s that implement
+            <classname>HidingInteractionAdvisor</classname> are used to
+            determine whether the <classname>ObjectMember</classname> is
+            visible.</para>
 
-        <para></para>
-      </sect1>
+            <para>If any <classname>Facet</classname> indicates that the
+            member is invisible, then the viewer should not display that
+            member at all.</para>
+          </listitem>
 
-      <sect1>
-        <title>Similarity between Properties and Parameters</title>
+          <listitem>
+            <para><classname>Facet</classname>s that implement
+            <classname>DisablingInteractionAdvisor</classname> are used to
+            determine whether the <classname>ObjectMember</classname> is
+            disabled.</para>
 
-        <para></para>
+            <para>If any <classname>Facet</classname> indicates that the
+            member is disable, then the viewer should disable (typically: grey
+            out) that member in the <acronym>UI</acronym>.</para>
+          </listitem>
 
-        <para></para>
+          <listitem>
+            <para><classname>Facet</classname>s that implement
+            <classname>ValidatingInteractionAdvisor</classname> are used to
+            determine whether the proposed modification to/through the
+            <classname>ObjectMember</classname> is valid or not.</para>
 
-        <para></para>
-      </sect1>
+            <para>For a property, this means validating whether the proposed
+            new value for that property is valid, or if the request is to
+            clear the property, it means validating that the property may be
+            set to null.</para>
 
-      <sect1>
-        <title>FacetFactory</title>
+            <para>For a collection, this means validating whether the proposed
+            object can be add to the collection (or removed from the
+            collection).</para>
 
-        <para></para>
-      </sect1>
+            <para>For an action, this means validating that each argument is
+            valid, and that the argument set as a whole is valid.</para>
+          </listitem>
+        </itemizedlist>
 
-      <sect1>
-        <title>MethodFilteringFacetFactory</title>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>MethodPrefixBasedFacetFactory</title>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>PropertyOrCollectionIdentifyingFacetFactory</title>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>InteractionAdvisor</title>
-
-        <para></para>
-
-        <para></para>
-
-        <sect2>
-          <title>HidingInteractionAdvisor</title>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>DisablingInteractionAdvisor</title>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>ValidatingInteractionAdvisor</title>
-
-          <para></para>
-        </sect2>
+        <para>It doesn't matter to the viewer whether the
+        <classname>Facet</classname> (that is,
+        <classname>InteractionAdvisor</classname>) vetoing the interaction is
+        because of an annotation (eg <classname>@MaxLength</classname>) or a
+        method call (eg <methodname>validatePlaceOrder(...)</methodname>),
+        they are all checked in the same way<footnote>
+            <para>The <classname>InteractionUtils</classname> class is used
+            internally by the <classname>ObjectMember</classname>s to check
+            that none of the Facets attached that are also
+            <classname>InteractionAdvisor</classname>s veto the request. This
+            can be a good place to add a breakpoint if you want to see Isis in
+            action at close quarters.</para>
+          </footnote>.</para>
       </sect1>
 
       <sect1>
         <title>RuntimeContext</title>
 
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>PropertyOrCollectionIdentifyingFacetFactory</title>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Reflector Properties</title>
-
-        <sect2>
-          <title>FacetDecorator</title>
-
-          <para></para>
-
-          <para>*** gonna try to get rid of.</para>
-
-          <para></para>
-
-          <para>The reflector facet-decorators property specifies a list of
-          <classname>FacetDecoratorInstaller</classname> objects that should
-          be installed and registered with the reflector. These decorators
-          decorate specific facets of the metamodel, allowing it change or
-          modify their behaviour. This allows us to add internationalization,
-          help look up and other features. Although transaction management is
-          also achieved by decorating the reflector this is done automatically
-          and does not need to be specified using this property. The following
-          example adds a single decorator that provide internationalization
-          via resource files.</para>
-
-          <programlisting format="linespecific">isis.reflector.facet-decorators=resource-i18n</programlisting>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Using the reflector</title>
+        <para>The </para>
 
         <para></para>
 
-        <para>When the framework starts up it is told about the service
-        objects that are provided by DOM and any referenced class is then
-        introspected to build up the model of the known domain objects. Any
-        other domain classes that are subsequently used will also be reflected
-        upon as they are used (this will happen when there are classes that
-        have no direct references from the service objects, typically because
-        the references are for abstract types and not concrete ones). With the
-        model in place clients can then determine how to interact with the
-        domain model. Each domain class that is in use by the framework has a
-        corresponding <classname>ObjectSpecification</classname> detailing the
-        properties and structure of the domain class. Properties include the
-        classes variouse names (full, short, singular and plural names), a
-        description and flags indicating various features. The structure of
-        the object includes related classes (superclass, subclasses and
-        implemented interfaces), properties and actions. In additions to these
-        common elements there are also a set of <classname>Facet</classname>s
-        associated with each specification that provide additional information
-        about and behaviour for the class.</para>
-
-        <para></para>
-
-        <remark>Classes: MemberIdentifier</remark>
-
-        <sect2>
-          <title>Specifications</title>
-
-          <para>The specification is typically retrieved from an adapted
-          domain object via the
-          <methodname>ObjectAdapter.getSpecification()</methodname> method,
-          but can also be looked up via the
-          <emphasis>ObjectReflector.loadSpecification()</emphasis> method (for
-          a class object or class name) as follows</para>
-
-          <programlisting>ObjectSpecification spec;
-spec = IsisContext.getReflector().loadSpecification(Book.class);
-String screenName = spec.getSingularName();</programlisting>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>Properties</title>
-
-          <para></para>
-
-          <para></para>
-
-          <para>From the specification an array of every available property
-          can be access via the <methodname>getProperties()</methodname>
-          method and an individual property can be accessed via the
-          <methodname>getProperty(String)</methodname> method, where the sole
-          parameter is the the identifier of the property. For the included
-          introspector the property identifier will be the name of the
-          property method with the <emphasis>get</emphasis> prefix removed,
-          and the first character of the remaining string converted to
-          lowercase, so <methodname>getCustomerId()</methodname> become
-          <emphasis>customerId</emphasis>. Typically the complete list of
-          properties is used for things like persistence and remoting, user
-          interfaces need to consider what properties they show to avoid
-          making hidden or unauthorised properties visible.</para>
-
-          <para>To gather a selective set of properties for a specification
-          you can use the .... method.</para>
-
-          <para>All properties detailed are as
-          <classname>ObjectAssociation</classname> objects, specifically
-          <classname>OneToOneAssociation</classname> and
-          <classname>OneToManyAssociation</classname> for value and reference
-          objects and collections respectively. Each association object knows
-          what type it for (<methodname>getSpecification()</methodname>), can
-          provide its name, description and help text, determine whether it
-          should be visible and useable, provides various flags indicating its
-          usage and provides access to the facets that exist a the property
-          level.</para>
-
-          <programlisting>ObjectAssociation[] properties = spec.getProperties();
-for (int i = 0; i &lt; properties.length; i++) {
-    String name = properties[i].getName();
-    boolean mustEnter = properties[i].isMandatory();
-    :
-    :
-}</programlisting>
-
-          <para>To selectively get hold of properties the
-          <methodname>getProperties(ObjectAssociationFilter)</methodname>
-          method should be used. The
-          <classname>ObjectAssociationFilter</classname> class allows us to
-          set up a search filter to get properties based on name, type, facet
-          etc. Predefined instances and factory methods are available from the
-          <classname>Filters</classname> and
-          <classname>DynamicFilters</classname> classes or you can extend the
-          <classname>ObjectAssociationFilter</classname> class to create your
-          own. Two useful predefined versions are the
-          <varname>Filters.STATICALLY_VISIBLE</varname> instance and the
-          <methodname>DynamicFilters.dynamicallyVisible(ObjectAdapter)</methodname>
-          factory method. Using these filters you can find the properties that
-          are visible on a particular type and for a particular object, in
-          other words excluding those that where hidden during definition
-          (using anotations etc) and those that are programatically hidden
-          depending on role or state. Typically views are created using only
-          dynamically visible properties so hidden fields are not visible and
-          do not have any screen space reserved form them. In particular views
-          all the possible properties might need space although the final
-          propert might not be shown, a good example of this is table views
-          where each statically visible property has a column created for it,
-          while for each object shown in table only the dynamically visible
-          properties for that object are show (ie there may be blank
-          cells).</para>
-
-          <para></para>
-
-          <programlisting>ObjectAssociationFilter filter = DynamicFilters.DynamicFilters.dynamicallyVisible(object);
-ObjectAssociation[] properties = object.getSpecification().getProperties(filter);
-for (int i = 0; i &lt; properties.length; i++) {
-    addField(properties[i].getName(), createFieldView(properties[i]));
-}</programlisting>
-
-          <para></para>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>Actions</title>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Facets</title>
-
-        <para>*** eliminate overlap with above</para>
-
-        <para></para>
-
-        <para></para>
-
-        <sect2>
-          <title>PropertiesAndCollectionsIdentifyingFacet</title>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>InteractionAdvisors</title>
-
-          <para></para>
-
-          <sect3>
-            <title>HidingInteractionAdvisor</title>
-
-            <para></para>
-          </sect3>
-
-          <sect3>
-            <title>DisablingInteractionAdvisor</title>
-
-            <para></para>
-          </sect3>
-
-          <sect3>
-            <title>ValidatingInteractionAdvisor</title>
-
-            <para></para>
-
-            <para></para>
-          </sect3>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>MetaModel Validator</title>
+        <para>***</para>
 
         <para></para>
 
@@ -1428,37 +1742,14 @@ for (int i = 0; i &lt; properties.length; i++) {
       </sect1>
 
       <sect1>
-        <title>ProgrammingModel API</title>
-
-        <para></para>
-
-        <para><classname>org.apache.isis.core.metamodel.progmodel.ProgrammingModel</classname></para>
-
-        <para></para>
-
-        <para>Isis also allows you to develop your domain application in
-        Groovy. This support should be considered experimental for the moment;
-        although the viewers and fixtures/in-memory object store work fine, it
-        has not been fully tested out with other object stores. Further
-        details are available in the
-        {{{./support/languages/groovy/index.html}groovy}} module.p</para>
-
-        <para></para>
-
-        <para>x-ref chapter in part 2</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>The Dump Utility</title>
+        <title>Utilities</title>
 
         <sect2>
           <title>The Dump Utility</title>
 
-          <para>The <classname>org.apache.isis.core.metamodel.Dump</classname>
-          class provides a simple way out outputting the details of adapters
-          and specifications. The two <methodname>specification
+          <para>The <classname>oai.core.metamodel.Dump</classname> class
+          provides a simple way out outputting the details of adapters and
+          specifications. The two <methodname>specification
           </methodname>methods detail the specified
           <classname>ObjectSpecification</classname> as follows:-</para>
 
@@ -1521,7 +1812,7 @@ Persistable: User Persistable</screen>
       </sect1>
     </chapter>
 
-    <chapter>
+    <chapter id="chp.ProgModel">
       <title><emphasis>Progmodel</emphasis> Module</title>
 
       <abstract>

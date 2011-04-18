@@ -40,6 +40,8 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import com.google.common.collect.Lists;
+
 
 public class ObjectActionSet implements ObjectAction {
 
@@ -175,8 +177,8 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing
      */
     @Override
-    public Facet[] getFacets(final Filter<Facet> filter) {
-        return new Facet[0];
+    public List<Facet> getFacets(final Filter<Facet> filter) {
+        return Lists.newArrayList();
     }
 
     /**

@@ -102,7 +102,7 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public Facet[] getFacets(final Filter<Facet> filter) {
+    public List<Facet> getFacets(final Filter<Facet> filter) {
         return null;
     }
 

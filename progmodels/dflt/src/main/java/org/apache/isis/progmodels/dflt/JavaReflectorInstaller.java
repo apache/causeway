@@ -178,11 +178,8 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
      */
     protected ProgrammingModel createProgrammingModelFacets(final IsisConfiguration configuration) {
         ProgrammingModel programmingModel = lookupAndCreateProgrammingModelFacets(configuration);
-
         includeFacetFactories(configuration, programmingModel);
-
         excludeFacetFactories(configuration, programmingModel);
-
         return programmingModel;
     }
 

@@ -51,6 +51,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import com.google.common.collect.Lists;
+
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
@@ -156,8 +158,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public Facet[] getFacets(final Filter<Facet> filter) {
-        return peer != null ? peer.getFacets(filter) : new Facet[] {};
+    public List<Facet> getFacets(final Filter<Facet> filter) {
+        return peer != null ? peer.getFacets(filter) : Lists.<Facet>newArrayList();
     }
 
     @Override

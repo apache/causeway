@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.List;
+
 import org.apache.isis.applib.filter.Filter;
 
 
@@ -60,7 +62,7 @@ public interface FacetHolder {
      * @param filter
      * @return
      */
-    Facet[] getFacets(Filter<Facet> filter);
+    List<Facet> getFacets(Filter<Facet> filter);
 
     /**
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.

@@ -148,7 +148,7 @@ public abstract class ResourceAbstract {
 	
     protected Element asDivTableFacets(final FacetHolder facetHolder, final String pathPrefix) {
         final Element div = xhtmlRenderer.div_p("Facets", HtmlClass.FACETS);
-        final List<Facet> rows = ListUtils.toList(facetHolder.getFacets(FacetFilters.ANY));
+        final List<Facet> rows = facetHolder.getFacets(FacetFilters.ANY);
 
         final List<TableColumn<Facet>> columns = new ArrayList<TableColumn<Facet>>();
         columns.add(new TableColumnFacetFacetType(pathPrefix, getResourceContext()));
