@@ -108,10 +108,10 @@ public class Dispatcher {
             }
             
             try {
-                // TODO pick this up from configuration
+                // TODO pick options up from configuration
                 // context.raiseError(404);
                 //context.setRequestPath("/error/notfound_404.shtml");
-                IsisContext.getMessageBroker().addWarning("Failed to find page....");  // TODO complete message
+                IsisContext.getMessageBroker().addWarning("Failed to find page " + servletPath + ". Please navigate from here");
                 context.setRequestPath("/index.shtml");
                 processTheView(context);
             } catch (IOException e1) {
@@ -124,7 +124,7 @@ public class Dispatcher {
             try {
                 processTheView(context);
             } catch (IOException e1) {
-                throw new ScimpiException(e);
+                throw new ScimpiException(e1);
             }
             
         } catch (Throwable e) {
@@ -162,9 +162,9 @@ public class Dispatcher {
             } else {
                 // TODO allow these values to be got configuration
                 // context.raiseError(500);    
-                context.setRequestPath("/error/server_500.shtml");
-                //IsisContext.getMessageBroker().addWarning("There was a error while processing this request....");   // TODO include the reference code so it can be looked up
-                //context.setRequestPath("/index.shtml");
+               // context.setRequestPath("/error/server_500.shtml");
+                IsisContext.getMessageBroker().addWarning("There was a error while processing this request....");   // TODO include the reference code so it can be looked up
+                context.setRequestPath("/index.shtml");
                 try {
                     processTheView(context);
                 } catch (IOException e1) {
