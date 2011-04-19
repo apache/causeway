@@ -1557,8 +1557,9 @@
 
           <itemizedlist>
             <listitem>
-              <para>NEW - just instantiated. All ResolveStates start in this
-              object.</para>
+              <para>NEW - a short-lived state only applicable while figuring
+              out what type of object this is (value, transient or
+              persisted).</para>
             </listitem>
 
             <listitem>
@@ -1727,18 +1728,55 @@
           </footnote>.</para>
       </sect1>
 
-      <sect1>
-        <title>RuntimeContext</title>
-
-        <para>The </para>
-
-        <para></para>
+      <sect1 id="sec.DomainObjectContainer">
+        <title>DomainObjectContainer implementation</title>
 
         <para>***</para>
 
         <para></para>
 
         <para></para>
+      </sect1>
+
+      <sect1>
+        <title><classname>RuntimeContext</classname></title>
+
+        <para>The role of the <classname>RuntimeContext</classname> interface
+        is to decouple the metamodel from the configured runtime. It is
+        primarily used by the metamodel to obtain access to services provided
+        by the configured runtime. For example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the <methodname>#getAdapterMap()</methodname> method is used
+            by the metamodel in order to create new
+            <classname>ObjectSpecification</classname>s (it is ultimately used
+            in <methodname>ObjectSpecification#createObject(...)</methodname>
+            and
+            <methodname>ObjectSpecification#createAggregatedObject(...)</methodname>;</para>
+          </listitem>
+
+          <listitem>
+            <para>the <methodname>#getQuerySubmitter()</methodname> method is
+            used by the metamodel within its implementation of
+            <classname>oai.applib.DomainObjectContainer</classname> (see <xref
+            linkend="sec.DomainObjectContainer" />) to support the
+            <methodname>#allMatches(...)</methodname> and
+            <methodname>#allInstances(...)</methodname> methods.</para>
+          </listitem>
+
+          <listitem>
+            <para>the #</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The metamodel provides a default implementation of
+        <classname>RuntimeContext</classname>, however this is a no-op and
+        will throw <classname>UnsupportedOperationException</classname>s in
+        most cases. The default runtime module's implementation is called
+        <classname>RuntimeContextFromSession</classname>, and provides access
+        to various services through the default runtimes service-locator
+        (<classname>IsisContext</classname>).</para>
       </sect1>
 
       <sect1>
@@ -2021,6 +2059,14 @@ example.dom.Contact.action.createPhone.description=Créez un nouveau téléphone
       this last feature in the DnD viewer's documentation.</para>
 
       <para></para>
+
+      <sect1>
+        <title>"XxxAware" convention for components</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
 
       <sect1>
         <title>Logging</title>
