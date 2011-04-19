@@ -128,13 +128,15 @@ public class Dispatcher {
             }
             
         } catch (Throwable e) {
+            String errorRef = Long.toString(System.currentTimeMillis(), 36).toUpperCase();
+
+            LOG.info("error " + errorRef);
             LOG.debug(e.getMessage(), e);
-            LOG.info("testing");
             
             DebugString error = new DebugString();
-            generateErrorPage(e, context, error);
+            generateErrorPage(e, context, error, errorRef);
             String message = "failed while processing " + servletPath;
-            LOG.error(message + "\n" + error + "\n" + message);
+            LOG.error(message + " (#" + errorRef + ")\n" + error + "\n" + message);
              
             PersistenceSession checkSession = IsisContext.getPersistenceSession();
             IsisTransactionManager transactionManager = checkSession.getTransactionManager();
@@ -152,7 +154,7 @@ public class Dispatcher {
                 // TODO allow these values to be got configuration
                 // context.raiseError(403);
                 // context.setRequestPath("/error/security_403.shtml");
-                IsisContext.getMessageBroker().addWarning("You did not have the right permissions to perform this.....");
+                IsisContext.getMessageBroker().addWarning("You did not have the right permissions to perform this (#" + errorRef + ")");
                 context.setRequestPath("/index.shtml");
                 try {
                     processTheView(context);
@@ -163,7 +165,7 @@ public class Dispatcher {
                 // TODO allow these values to be got configuration
                 // context.raiseError(500);    
                // context.setRequestPath("/error/server_500.shtml");
-                IsisContext.getMessageBroker().addWarning("There was a error while processing this request....");   // TODO include the reference code so it can be looked up
+                IsisContext.getMessageBroker().addWarning("There was a error while processing this request (#" + errorRef + ")");
                 context.setRequestPath("/index.shtml");
                 try {
                     processTheView(context);
@@ -198,7 +200,7 @@ public class Dispatcher {
     }
 
 
-    private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error) {
+    private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error, String errorRef) {
         if (IsisContext.getCurrentTransaction() != null) {
             List<String> messages =  IsisContext.getMessageBroker().getMessages();
             for (String message : messages) {
@@ -217,10 +219,9 @@ public class Dispatcher {
         
         PrintWriter writer;
         try {
-            String ref = Long.toString(System.currentTimeMillis(), 36).toUpperCase();
-            requestContext.addVariable("_error-ref", ref, Scope.INTERACTION);
+            requestContext.addVariable("_error-ref", errorRef, Scope.INTERACTION);
             String directory = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
-            writer = new PrintWriter(new File(directory, "error_" + ref + ".html"));
+            writer = new PrintWriter(new File(directory, "error_" + errorRef + ".html"));
             writeErrorContent(requestContext, exception, new DebugString(), writer, true);
         } catch (FileNotFoundException e) {
             LOG.error("Failed to archive error page", e);
