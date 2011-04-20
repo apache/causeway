@@ -116,7 +116,7 @@ public class DebugAction implements Action {
         ObjectAdapter object = context.getMappedObjectOrResult(context.getParameter("object"));
         DebugString str = new DebugString();
         Dump.adapter(object, str);
-        Dump.graph(object, str, IsisContext.getAuthenticationSession());
+        Dump.graph(object, IsisContext.getAuthenticationSession(), str);
         view.appendTitle(object.getSpecification().getFullIdentifier());
         view.appendln("<pre class=\"debug\">" + str + "</pre>");
     }

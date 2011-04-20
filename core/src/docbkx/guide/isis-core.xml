@@ -1728,17 +1728,7 @@
           </footnote>.</para>
       </sect1>
 
-      <sect1 id="sec.DomainObjectContainer">
-        <title>DomainObjectContainer implementation</title>
-
-        <para>***</para>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
+      <sect1 id="sec.RuntimeContext">
         <title><classname>RuntimeContext</classname></title>
 
         <para>The role of the <classname>RuntimeContext</classname> interface
@@ -1764,10 +1754,6 @@
             <methodname>#allMatches(...)</methodname> and
             <methodname>#allInstances(...)</methodname> methods.</para>
           </listitem>
-
-          <listitem>
-            <para>the #</para>
-          </listitem>
         </itemizedlist>
 
         <para>The metamodel provides a default implementation of
@@ -1779,19 +1765,54 @@
         (<classname>IsisContext</classname>).</para>
       </sect1>
 
+      <sect1 id="sec.DomainObjectContainer">
+        <title><classname>DomainObjectContainer</classname>
+        implementation</title>
+
+        <para>The <classname>oai.applib.DomainObjectContainer</classname>
+        interface represents the single point of coupling from domain objects
+        to the framework. Using <classname>DomainObjectContainer</classname>,
+        a domain object can do such things as create new objects, search for
+        existing objects, and raise warnings and such like.
+        <emphasis>Isis</emphasis> will automatically inject the
+        DomainObjectContainer into any entity that provides a setter for
+        it<footnote>
+            <para>Inheriting from the
+            <classname>oai.applib.AbstractDomainObject</classname> means that
+            such a setter is automatically inherited.</para>
+          </footnote>.</para>
+
+        <para>The actual implementation of
+        <classname>DomainObjectContainer</classname> is provided by the
+        <emphasis>core metamodel</emphasis>, specifically by the
+        <classname>DomainObjectContainerDefault</classname> class (in
+        <package>oai.core.metamodel.services.container</package>). This
+        delegates off to various other parts of the framework as required. In
+        particular, it delegates to the configured runtime, by way of the
+        <classname>RuntimeContext</classname> interface (see <xref
+        linkend="sec.RuntimeContext" />).</para>
+      </sect1>
+
       <sect1>
         <title>Utilities</title>
 
         <sect2>
           <title>The Dump Utility</title>
 
-          <para>The <classname>oai.core.metamodel.Dump</classname> class
-          provides a simple way out outputting the details of adapters and
-          specifications. The two <methodname>specification
-          </methodname>methods detail the specified
-          <classname>ObjectSpecification</classname> as follows:-</para>
+          <para>The <classname>Dump</classname> class (in
+          <package>oai.core.metamodel.util</package> package) provides a
+          simple way out outputting the details of adapters and
+          specifications:</para>
 
-          <screen format="linespecific">Full Name: bom.Location
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#specification(ObjectAdapter)</methodname> and
+              <methodname>#specification(ObjectAdapter,
+              DebugBuilder)</methodname> detail the
+              <classname>ObjectSpecification</classname> of the specified
+              adapter:</para>
+
+              <screen format="linespecific">Full Name: bom.Location
 Short Name: Location
 Plural Name: Locations
 Singular Name: Location
@@ -1808,11 +1829,14 @@ Fields
     OneToOneAssociationImpl@1408a92 [type=VALUE,id=type,label='Type',derived=false,type=Option]
     :
     :</screen>
+            </listitem>
 
-          <para>The two <methodname>object</methodname> methods detail the
-          specified <classname>Isis</classname> object as follows:-</para>
+            <listitem>
+              <para><methodname>#adapter(ObjectAdapter)</methodname> and
+              <methodname>#adapter(ObjectAdapter, DebugBuilder)</methodname>
+              detail specified adapter:</para>
 
-          <screen format="linespecific">Specification: bom.Location
+              <screen format="linespecific">Specification: bom.Location
 Class: bom.Location
 Adapter: org.apache.isis.object.defaults.PojoAdapter
 Hash: #dada24
@@ -1823,12 +1847,17 @@ State: ResolveState@1e1be92 [name=Resolved,code=PR]
 Version: LongNumberVersion#1 20051118-025400170
 Icon: null
 Persistable: User Persistable</screen>
+            </listitem>
 
-          <para>The two <methodname>graph</methodname> methods detail the
-          specified <classname>Isis</classname> object as follows, showing
-          each adapter, it associated objects and values:-</para>
+            <listitem>
+              <para><methodname>#graph(ObjectAdapter,
+              AuthenticationSession)</methodname> and
+              <methodname>#graph(ObjectAdapter, AuthenticationSession,
+              DebugBuilder)</methodname> create a graph of the specified
+              adapter, showing the wrapped object's associated objects and
+              values:</para>
 
-          <screen format="linespecific">PojoAdapter@dada24 [PR:OID#2F,specification=Location,version=LongNumberVersion#1 20051118-025400...
+              <screen format="linespecific">PojoAdapter@dada24 [PR:OID#2F,specification=Location,version=LongNumberVersion#1 20051118-025400...
     +--type: POJO BusinessValueAdapter: One
     +--knownas: POJO TextStringAdapter: test
     +--streetaddress: POJO TextStringAdapter: address
@@ -1840,12 +1869,8 @@ Persistable: User Persistable</screen>
     |    +--phonenumbers: VectorCollectionAdapter@1d381d2 [PR:-,specification=Vector,version=...
     : 
     :</screen>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
+            </listitem>
+          </itemizedlist>
         </sect2>
       </sect1>
     </chapter>

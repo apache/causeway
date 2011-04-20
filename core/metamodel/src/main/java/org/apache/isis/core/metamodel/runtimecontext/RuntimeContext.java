@@ -39,18 +39,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
  */
 public interface RuntimeContext extends Injectable {
 
-	public SpecificationLookup getSpecificationLookup();
-
-	public AdapterMap getAdapterMap();
-
-	public ObjectDirtier getObjectDirtier();
-
-	public ObjectPersistor getObjectPersistor();
-	
-	public QuerySubmitter getQuerySubmitter();
-	
-    public DomainObjectServices getDomainObjectServices();
-
     
     /**
      * A mechanism for returning the <tt>current</tt> {@link AuthenticationSession}.
@@ -59,19 +47,33 @@ public interface RuntimeContext extends Injectable {
      * Note that the scope of {@link RuntimeContext} is global,
      * whereas {@link AuthenticationSession} may change over time.
      */
-    AuthenticationSessionProvider getAuthenticationSessionProvider();
-    
-	ObjectInstantiator getObjectInstantiator();
+	public AuthenticationSessionProvider getAuthenticationSessionProvider();
 
-    ServicesProvider getServicesProvider();
+	public QuerySubmitter getQuerySubmitter();
 
-    DependencyInjector getDependencyInjector();
+	public AdapterMap getAdapterMap();
+
+	public ObjectInstantiator getObjectInstantiator();
+
+	public SpecificationLookup getSpecificationLookup();
+
+    public ServicesProvider getServicesProvider();
+
+    public DependencyInjector getDependencyInjector();
+
+	
+	
+	public ObjectDirtier getObjectDirtier();
+
+	public ObjectPersistor getObjectPersistor();
+	
+    public DomainObjectServices getDomainObjectServices();
 
 	
 	/////////////////////////////////////////////
 	// container
 	/////////////////////////////////////////////
 
-	void setContainer(DomainObjectContainer container);
+	public void setContainer(DomainObjectContainer container);
     
 }

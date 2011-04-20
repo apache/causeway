@@ -44,7 +44,7 @@ public class DebugObjectGraph implements DebuggableWithTitle {
 
     private void dumpGraph(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
-            Dump.graph(object, info, IsisContext.getAuthenticationSession());
+            Dump.graph(object, IsisContext.getAuthenticationSession(), info);
         }
     }
 }

@@ -95,7 +95,7 @@ public class Debug extends AbstractElementProcessor {
                 ObjectAdapter object = context.getMappedObject(value);
                 DebugString str = new DebugString();
                 Dump.adapter(object, str);
-                Dump.graph(object, str, IsisContext.getAuthenticationSession());
+                Dump.graph(object, IsisContext.getAuthenticationSession(), str);
                 request.appendHtml("<h2>" + object.getSpecification().getFullIdentifier() + "</h2>");
                 request.appendHtml("<pre class=\"debug\">" + str + "</pre>");
             }
@@ -150,7 +150,7 @@ public class Debug extends AbstractElementProcessor {
         request.appendHtml("<h1>Object Graph - " + object + "</h1>");
         request.appendHtml("<pre>");
         DebugBuilder debug = new DebugString();
-        Dump.graph(object, debug, null);
+        Dump.graph(object, null, debug);
         request.appendHtml(debug.toString());
         request.appendHtml("</pre>");
     }

@@ -104,7 +104,7 @@ public class DebugView implements DebuggableWithTitle {
     public void dumpGraph(final ObjectAdapter object, final DebugBuilder info) {
         if (object != null) {
             info.appendTitle("GRAPH");
-            Dump.graph(object, info, IsisContext.getAuthenticationSession());
+            Dump.graph(object, IsisContext.getAuthenticationSession(), info);
         }
     }
 
