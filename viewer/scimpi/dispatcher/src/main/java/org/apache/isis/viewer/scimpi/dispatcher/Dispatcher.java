@@ -73,6 +73,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ErrorMessages;
+
 
 public class Dispatcher {
     public static final String ACTION = "_action";
@@ -166,11 +168,21 @@ public class Dispatcher {
                 // context.raiseError(500);    
                // context.setRequestPath("/error/server_500.shtml");
                 IsisContext.getMessageBroker().addWarning("There was a error while processing this request (#" + errorRef + ")");
+                context.clearVariables(Scope.REQUEST);
                 context.setRequestPath("/index.shtml");
                 try {
                     processTheView(context);
+                } catch (TagProcessingException e1) {
+                    IsisContext.getMessageBroker().addWarning("There was a error while processing this request (#" + errorRef + ")");
+                    context.clearVariables(Scope.REQUEST);
+                    context.setRequestPath("/error.shtml");
+                    try {
+                        processTheView(context);
+                    } catch (IOException e2) {
+                        throw new ScimpiException(e2);
+                    }
                 } catch (IOException e1) {
-                    throw new ScimpiException(e);
+                    throw new ScimpiException(e1);
                 }
             }
         } finally {
@@ -230,8 +242,8 @@ public class Dispatcher {
         String replace = "";
         String withReplacement = "";
         String message = exception.getMessage();
-        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.REQUEST);
-        requestContext.addVariable("_error-details", out.toString().replaceAll(replace, withReplacement), Scope.REQUEST);
+        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.INTERACTION);
+        requestContext.addVariable("_error-details", out.toString().replaceAll(replace, withReplacement), Scope.INTERACTION);
         requestContext.clearTransientVariables();
     }
 
