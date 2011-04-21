@@ -52,8 +52,6 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
         this.type = type;
     }
 
-    // TODO:KAM: here X
-
     @Override
     protected Object preparedStatementObject(ObjectAdapter value) {
         if (value == null)

@@ -84,7 +84,7 @@ public class VersionMapping {
 
         sql.append(",");
         sql.append(lastActivityDateColumn);
-        sql.append(" " + JdbcConnector.timeStampType());
+        sql.append(" " + JdbcConnector.TYPE_TIMESTAMP());
 
         return sql.toString();
     }

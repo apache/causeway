@@ -29,33 +29,33 @@ import org.apache.isis.applib.AbstractDomainObject;
  * 
  */
 public class SimpleClassTwo extends AbstractDomainObject {
-	public String title() {
-		return text;
-	}
+    public String title() {
+        return text;
+    }
 
-	// {{ String type
-	public String text;
+    // {{ String type
+    public String text;
 
-	public String getText() {
-		return text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public void setText(final String text) {
-		this.text = text;
-	}
+    public void setText(final String text) {
+        this.text = text;
+    }
 
-	// }}
+    // }}
 
-	// {{ Value
-	private Integer integer;
+    // {{ Value
+    private int integer;
 
-	public Integer getValue() {
-		return integer;
-	}
+    public int getValue() {
+        return integer;
+    }
 
-	public void setValue(final Integer integer) {
-		this.integer = integer;
-	}
-	// }}
+    public void setValue(final int integer) {
+        this.integer = integer;
+    }
+    // }}
 
 }

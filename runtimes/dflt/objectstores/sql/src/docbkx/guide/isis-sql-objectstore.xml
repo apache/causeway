@@ -83,6 +83,23 @@
     </abstract>
 
     <sect1>
+      <title>Background</title>
+
+      <para>The SQL objectstore provides a fully-automatic object store that
+      uses a SQL-compatible database server.</para>
+
+      <para>All domain objects (entities) are introspected during
+      initialisation, and have a 1-to-1 mapping onto a database table. All
+      properties (values) are mapped onto one or more columns with each
+      database table.</para>
+
+      <para>Domain object classes are introspected and all properties
+      recursively introspected to value types. Thus, if a property stores a
+      reference to a class, that class's properties are introspected,
+      etc.</para>
+    </sect1>
+
+    <sect1>
       <title>Setup</title>
 
       <sect2>
@@ -105,28 +122,192 @@
         <para>The driver property must contain the name of the jdbc driver
         class that provides access to your SQL server. Known examples are
         given below in <xref linkend="sec.servers.tested" />.</para>
+      </sect2>
 
-        <para></para>
+      <sect2>
+        <title>Table Creation</title>
+
+        <para>Missing database tables are automatically created when the SQL
+        objectstore is initialised.</para>
+
+        <para>Please note that changes to domain classes such as renaming
+        fields (properties) or the classes themselves, are
+        <emphasis>not</emphasis> automatically detected. If you rename a
+        property after a table has been created, you should use the
+        appropriate database administration tool to rename the column in the
+        containing table.</para>
+
+        <para>If you rename a domain class (entity), you must also rename the
+        appropriate table.</para>
       </sect2>
     </sect1>
 
     <sect1>
       <title>Mappers</title>
 
-      <para>For persistance, classes are introspected and all properties
-      recursively introspected to value types. Thus, if a property stores a
-      reference to a class, that class's properties are introspected,
-      etc.</para>
+      <para>The mappers take care of mapping a value type onto a SQL data
+      type. Default mappers are provided by JdbcFieldMappingFactoryInstaller.
+      </para>
 
-      <para>By default, the value types are mapped onto SQL data types, as
-      determined by the mappers. Default mappers are provided by
-      AutoMapperFactory.</para>
+      <sect2>
+        <title>Modifiable values</title>
+
+        <para>The following SQL datatypes can be overridden, if specified in
+        the properties file (the default value is given in parenthesis), [the
+        mapped value classes are given in square brackets]:<simplelist>
+            <member>isis.persistor.sql.datatypes.timestamp (DATETIME)
+            [TimeStamp, java.sql.Timestamp]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.datetime (DATETIME)
+            [DateTime]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.date (DATE) [Date,
+            java.sql.Date, java.util.Date]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.time (TIME) [Time]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.double (FLOAT)
+            [double]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.float (FLOAT)
+            [float]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.short (INT) [short,
+            Color]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.long (INT) [long]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.int (INT) [int]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.boolean (CHAR(1))
+            [boolean]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.string (VARCHAR(65))
+            [String]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.password (VARCHAR(12))
+            [Password]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.default (VARCHAR(65))
+            [Everything else, e.g. Image]</member>
+          </simplelist></para>
+
+        <para><simplelist>
+            <member>isis.persistor.sql.datatypes.primarykey (INTEGER)
+            [IdMappingAbstract -&gt; JdbcObjectReferenceMapping -&gt;
+            JdbcObjectReferenceFieldMapping]</member>
+          </simplelist></para>
+
+        <para>The final value, primarykey, is a special value.</para>
+
+        <para>In general, be very careful about changing the SQL data type, as
+        the default value mappers are written assuming the default values.
+        Data parsing uses prepared statements and reads/writes values as
+        objects.</para>
+      </sect2>
+
+      <sect2>
+        <title>Fixed values</title>
+
+        <para>The following classes are not modifiable:</para>
+
+        <para>[char] is set to CHAR(1)</para>
+
+        <para>[Money] value is FLOAT, currency is VARCHAR(3)</para>
+
+        <para>[Percentage] is FLOAT</para>
+      </sect2>
     </sect1>
 
     <sect1>
-      <title></title>
+      <title>Naming Conventions</title>
 
-      <para></para>
+      <para>While case is determined by the capabilities of the database
+      driver, all SQL names will be written in UPPER CASE, below.</para>
+
+      <sect2>
+        <title>Tables</title>
+
+        <para>By default, all Isis tables are preceded with "ISIS_".</para>
+
+        <sect3>
+          <title>Internal Tables</title>
+
+          <para>ISIS_ADMIN_SERIAL_ID ISIS_ADMIN_SERVICES</para>
+        </sect3>
+
+        <sect3>
+          <title>Domain Tables</title>
+
+          <para>Only the "class" part of the package name is used. Thus a
+          domain class called "some.package.Client", will be mapped onto a
+          table "ISIS_CLIENT".</para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Columns</title>
+
+        <sect3>
+          <title>Internal columns</title>
+
+          <para>ID column: PK_ID</para>
+
+          <para>VERSION BIGINT,</para>
+
+          <para>MODIFIED_BY VARCHAR(32),</para>
+
+          <para>MODIFIED_ON TIMESTAMP</para>
+        </sect3>
+
+        <sect3>
+          <title>Properties</title>
+
+          <para>Most properties are named as per the class property. This
+          means you must take care not to use SQL reserved labels are property
+          names. The exceptions are collections and multi-field values (e.g.
+          Money).</para>
+        </sect3>
+
+        <sect3>
+          <title>Collections</title>
+
+          <para>Collections are mapped onto the child class:</para>
+
+          <para>If a parent class (some.package.Parent) has a collection of
+          (some.other.package.Child) named "children", the child table
+          (ISIS_CHILD) gets a column labeled "FK_PARENT_CHILDREN" of type
+          primarykey. The child property is assigned the ID of the parent
+          class.</para>
+
+          <para>This means that a given child can only appear in one parent's
+          collection of the same name.</para>
+        </sect3>
+      </sect2>
     </sect1>
   </chapter>
 
@@ -179,7 +360,39 @@
             <para><property>isis.persistor.sql.jdbc.user=sa</property></para>
 
             <para><property>isis.persistor.sql.jdbc.password=</property></para>
-          </blockquote></para>
+          </blockquote>The default TimeStamp and DateTime SQL data class is
+        DATETIME, which does not work on Postgresql. Here, the default must be
+        replaced with the following properties file entries:</para>
+
+        <blockquote>
+          <para>isis.persistor.sql.datatypes.timestamp=TIMESTAMP </para>
+
+          <para>isis.persistor.sql.datatypes.datetime=TIMESTAMP</para>
+        </blockquote>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>MySQL</title>
+
+        <para>There was an issue with storing and correctly retrieving date
+        (time) values - a special "try .. catch" has been used to ensure that
+        UTC temporal values are correctly retrieved.</para>
+      </sect2>
+
+      <sect2>
+        <title>Microsoft SQL Server 2008</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>IBM DB2 (v8)</title>
+
+        <para>Beware! This version of DB2 has a very small limit on table and
+        column names. You will have to keep your domain class and property
+        names short to suite, especially collections (see ..).</para>
       </sect2>
     </sect1>
 
@@ -196,8 +409,9 @@
         </listitem>
 
         <listitem>
-          <para>standard classes: Money ([does not work]), Percentage (FLOAT),
-          Password (VARCHAR(12)), Color (INT), String (VARCHAR (65)).</para>
+          <para>standard classes: Money (FLOAT and VARCHAR(3)), Percentage
+          (FLOAT), Password (VARCHAR(12)), Color (INT), String (VARCHAR
+          (65)).</para>
         </listitem>
 
         <listitem>
@@ -211,8 +425,9 @@
             </listitem>
 
             <listitem>
-              <para>blah Time, DateTime, java.sql.Time, java.util.Date,
-              java.sql.Timestamp blah</para>
+              <para>blah Time, DateTime (DATETIME), java.sql.Time,
+              java.util.Date, java.sql.Timestamp (DATETIME), TimeStamp
+              (DATETIME) blah</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -225,6 +440,9 @@
       <para>Default automapper is installed by
       <code>org.apache.isis.alternatives.objectstore.sql.FieldMappingFactoryInstaller</code>
       ..</para>
+
+      <para>Default automapper is
+      <code>org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller</code></para>
 
       <para></para>
     </sect1>
@@ -329,7 +547,7 @@
     <sect1>
       <title>Edit History</title>
 
-      <para>Last editted: Kevin, 31/01/2011.<!--dd/mm/yyyy--></para>
+      <para>Last editted: Kevin, 21/04/2011.<!--dd/mm/yyyy--></para>
     </sect1>
   </appendix>
 </book>

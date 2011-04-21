@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer;
 
 import org.apache.isis.applib.value.Color;
@@ -30,6 +29,7 @@ import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
@@ -39,24 +39,24 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMa
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimeMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimestampMapper;
 
-
 public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInstaller {
 
     @Override
     public void load(FieldMappingLookup lookup) {
-        lookup.addFieldMappingFactory(boolean.class, new JdbcGeneralValueMapper.Factory("CHAR(1)"));
-        lookup.addFieldMappingFactory(short.class, new JdbcGeneralValueMapper.Factory("INT"));
-        lookup.addFieldMappingFactory(int.class, new JdbcGeneralValueMapper.Factory("INT"));
-        lookup.addFieldMappingFactory(long.class, new JdbcGeneralValueMapper.Factory("INT"));
-        lookup.addFieldMappingFactory(float.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
-        lookup.addFieldMappingFactory(double.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
+        lookup.addFieldMappingFactory(boolean.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_BOOLEAN()));
+        lookup.addFieldMappingFactory(short.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
+        lookup.addFieldMappingFactory(int.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_INT()));
+        lookup.addFieldMappingFactory(long.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_LONG()));
+        lookup.addFieldMappingFactory(float.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_FLOAT()));
+        lookup.addFieldMappingFactory(double.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_DOUBLE()));
         lookup.addFieldMappingFactory(char.class, new JdbcGeneralValueMapper.Factory("CHAR(2)"));
 
         lookup.addFieldMappingFactory(Money.class, new JdbcMoneyValueMapper.Factory("FLOAT", "VARCHAR(3)"));
         lookup.addFieldMappingFactory(Percentage.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
-        lookup.addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory("VARCHAR(12)"));
-        lookup.addFieldMappingFactory(Color.class, new JdbcGeneralValueMapper.Factory("INT"));
-        lookup.addFieldMappingFactory(String.class, new JdbcGeneralValueMapper.Factory("VARCHAR(65)"));
+        lookup
+            .addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_PASSWORD()));
+        lookup.addFieldMappingFactory(Color.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
+        lookup.addFieldMappingFactory(String.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_STRING()));
 
         lookup.addFieldMappingFactory(Date.class, new JdbcDateMapper.Factory());
         lookup.addFieldMappingFactory(Time.class, new JdbcTimeMapper.Factory());
@@ -69,10 +69,9 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
         lookup.addFieldMappingFactory(java.sql.Timestamp.class, new JdbcTimestampMapper.Factory());
 
         lookup.setReferenceFieldMappingFactory(new JdbcObjectReferenceFieldMapping.Factory());
-        
-        lookup .setObjectReferenceMappingfactory(new JdbcObjectReferenceMappingFactory());
+
+        lookup.setObjectReferenceMappingfactory(new JdbcObjectReferenceMappingFactory());
 
     }
 
 }
-
