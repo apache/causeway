@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.fallback;
+package org.apache.isis.core.progmodel.facets.fallback;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,16 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.progmodel.fallback.facets.ActionChoicesFacetNone;
-import org.apache.isis.core.progmodel.fallback.facets.ActionDefaultsFacetNone;
-import org.apache.isis.core.progmodel.fallback.facets.DescribedAsFacetNone;
-import org.apache.isis.core.progmodel.fallback.facets.ExecutedFacetAtDefault;
-import org.apache.isis.core.progmodel.fallback.facets.HelpFacetNone;
-import org.apache.isis.core.progmodel.fallback.facets.MaxLengthFacetUnlimited;
-import org.apache.isis.core.progmodel.fallback.facets.MultiLineFacetNone;
-import org.apache.isis.core.progmodel.fallback.facets.NamedFacetNone;
-import org.apache.isis.core.progmodel.fallback.facets.NotPersistableFacetNull;
-import org.apache.isis.core.progmodel.fallback.facets.TitleFacetNone;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s required by the Apache Isis framework itself.

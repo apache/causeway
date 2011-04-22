@@ -46,8 +46,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
+import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -100,7 +100,7 @@ public abstract class JavaReflectorTestAbstract {
         final ObjectReflectorDefault reflector =
             new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
                 new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
-                new MetaModelValidatorNoop());
+                new MetaModelValidatorDefault());
         reflector.setRuntimeContext(new RuntimeContextFromSession());
         reflector.init();
 

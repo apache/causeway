@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.core.progmodel.fallback.FallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 
 
 public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {

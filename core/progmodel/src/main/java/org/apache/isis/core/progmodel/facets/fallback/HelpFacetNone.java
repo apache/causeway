@@ -18,22 +18,24 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
-import org.apache.isis.applib.adapters.Localization;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.help.HelpFacetAbstract;
 
 
-public class TitleFacetNone extends TitleFacetAbstract {
+/**
+ * Has a description of <tt>null</tt>.
+ */
+public class HelpFacetNone extends HelpFacetAbstract {
 
-    public TitleFacetNone(final FacetHolder holder) {
-        super(holder);
+    public HelpFacetNone(final FacetHolder holder) {
+        super(null, holder);
     }
 
-    public String title(final ObjectAdapter object, Localization localization) {
-        return null;
+    @Override
+    public String value() {
+        return "No help available";
     }
 
     @Override

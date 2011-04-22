@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.progmodel.facets.CollectionUtils;
 import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
-import org.apache.isis.core.progmodel.util.CollectionUtils;
 
 
 

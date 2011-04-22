@@ -18,16 +18,27 @@
  */
 
 
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.isis.core.progmodel.facets.ignore.isis;
+
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
-public class MetaModelValidatorNoop extends MetaModelValidatorAbstract {
+/**
+ * Removes any static getter or setter methods.
+ */
+public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstract {
 
-	/**
-	 * Does nothing.
-	 */
-	public void validate() {
-	}
-	
+    public RemoveStaticGettersAndSettersFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
+    }
+
+    @Override
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethods(MethodScope.CLASS, "get", null, false, 0);
+        processClassContext.removeMethods(MethodScope.CLASS, "set", null, false, 0);
+    }
 
 }
+

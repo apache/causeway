@@ -18,40 +18,28 @@
  */
 
 
-package org.apache.isis.core.progmodel.ignore.annotation;
+package org.apache.isis.core.progmodel.facets.ignore.isis;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
-public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+/**
+ * Removes any calls to <tt>setContainer(DomainObjectContainer)</tt>.
+ */
+public class RemoveSetDomainObjectContainerMethodFacetFactory extends FacetFactoryAbstract {
 
-    public RemoveIgnoreAnnotationMethodsFacetFactory() {
+    public RemoveSetDomainObjectContainerMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(ProcessClassContext processClassContext) {
-        removeIgnoredMethods(processClassContext.getCls(), processClassContext);
-    }
-
-    private void removeIgnoredMethods(final Class<?> cls, final MethodRemover methodRemover) {
-        if (cls == null) {
-            return;
-        }
-
-        final Method[] methods = cls.getMethods();
-        for (int j = 0; j < methods.length; j++) {
-            final Method method = methods[j];
-            final Ignore annotation = getAnnotation(method, Ignore.class);
-            if (annotation != null) {
-                methodRemover.removeMethod(method);
-            }
-        }
+        processClassContext.removeMethod(MethodScope.OBJECT, "setContainer", void.class, new Class[] { DomainObjectContainer.class });
+        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class, new Class[] { DomainObjectContainer.class });
     }
 
 }
+

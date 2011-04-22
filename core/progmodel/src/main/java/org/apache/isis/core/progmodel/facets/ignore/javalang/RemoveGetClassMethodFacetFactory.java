@@ -18,26 +18,28 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.ignore.javalang;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
-public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
+/**
+ * Removes any static getter or setter methods.
+ * 
+ * <p>
+ * TODO: this is probably redundant given we also have {@link RemoveJavaLangObjectMethodsFacetFactory}.
+ */
+public class RemoveGetClassMethodFacetFactory extends FacetFactoryAbstract {
 
-    public ActionChoicesFacetNone(final FacetHolder holder) {
-        super(holder);
-    }
-
-    public Object[][] getChoices(final ObjectAdapter inObject) {
-        return new ObjectAdapter[0][0];
+    public RemoveGetClassMethodFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public boolean isNoop() {
-        return true;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "getClass", Class.class, null);
     }
 
 }

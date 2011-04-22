@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;

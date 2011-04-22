@@ -18,22 +18,16 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacetAbstract;
 
 
-/**
- * Has a name of <tt>null</tt>.
- * 
- * <p>
- * TODO: should this instead be the empty string?
- */
-public class NamedFacetNone extends NamedFacetAbstract {
+public class MultiLineFacetNone extends MultiLineFacetAbstract {
 
-    public NamedFacetNone(final FacetHolder holder) {
-        super(null, holder);
+    public MultiLineFacetNone(final boolean preventWrapping, final FacetHolder holder) {
+        super(1, preventWrapping, holder);
     }
 
     @Override

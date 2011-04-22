@@ -18,29 +18,30 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
+import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.help.HelpFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 
 /**
- * Has a description of <tt>null</tt>.
+ * Installed by the {@link FallbackFacetFactory}, and means that this class <i>is</i> persistable (ie not
+ * {@link NotPersistableFacet not persistable}).
  */
-public class HelpFacetNone extends HelpFacetAbstract {
+public class NotPersistableFacetNull extends NotPersistableFacetAbstract {
 
-    public HelpFacetNone(final FacetHolder holder) {
+    public NotPersistableFacetNull(final FacetHolder holder) {
         super(null, holder);
     }
 
-    @Override
-    public String value() {
-        return "No help available";
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+    /**
+     * Always returns <tt>null</tt> (that is, does <i>not</i> disable).
+     */
+    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+        return null;
     }
 
 }

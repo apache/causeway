@@ -18,31 +18,27 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
-import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.progmodel.fallback.FallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 
 
 /**
- * Installed by the {@link FallbackFacetFactory}, and means that this class <i>is</i> persistable (ie not
- * {@link NotPersistableFacet not persistable}).
+ * Has a name of <tt>null</tt>.
+ * 
+ * <p>
+ * TODO: should this instead be the empty string?
  */
-public class NotPersistableFacetNull extends NotPersistableFacetAbstract {
+public class NamedFacetNone extends NamedFacetAbstract {
 
-    public NotPersistableFacetNull(final FacetHolder holder) {
+    public NamedFacetNone(final FacetHolder holder) {
         super(null, holder);
     }
 
-    /**
-     * Always returns <tt>null</tt> (that is, does <i>not</i> disable).
-     */
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        return null;
+    @Override
+    public boolean isNoop() {
+        return true;
     }
 
 }

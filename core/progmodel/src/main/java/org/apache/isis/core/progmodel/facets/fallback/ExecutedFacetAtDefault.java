@@ -18,26 +18,16 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacetAbstract;
 
 
-public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
+public class ExecutedFacetAtDefault extends ExecutedFacetAbstract {
 
-    public ActionDefaultsFacetNone(final FacetHolder holder) {
-        super(holder, false);
-    }
-
-    public Object[] getDefaults(final ObjectAdapter inObject) {
-        return null;
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+    public ExecutedFacetAtDefault(final FacetHolder holder) {
+        super(Where.DEFAULT, holder);
     }
 
 }

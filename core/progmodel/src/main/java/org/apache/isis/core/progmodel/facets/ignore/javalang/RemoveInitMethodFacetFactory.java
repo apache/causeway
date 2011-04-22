@@ -18,21 +18,25 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.ignore.javalang;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
-public class MultiLineFacetNone extends MultiLineFacetAbstract {
+/**
+ * Removes any calls to <tt>init</tt>.
+ */
+public class RemoveInitMethodFacetFactory extends FacetFactoryAbstract {
 
-    public MultiLineFacetNone(final boolean preventWrapping, final FacetHolder holder) {
-        super(1, preventWrapping, holder);
+    public RemoveInitMethodFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public boolean isNoop() {
-        return true;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
     }
 
 }

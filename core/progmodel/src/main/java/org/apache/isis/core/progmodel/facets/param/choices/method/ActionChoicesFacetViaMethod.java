@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacetA
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.progmodel.util.CollectionUtils;
+import org.apache.isis.core.progmodel.facets.CollectionUtils;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 

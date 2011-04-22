@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.progmodel.ignore.javalang;
+package org.apache.isis.core.progmodel.facets.ignore.javalang;
 
 import java.lang.reflect.Method;
 

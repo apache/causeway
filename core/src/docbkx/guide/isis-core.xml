@@ -880,9 +880,9 @@
       <sect1>
         <title>Package Layering / Dependencies</title>
 
-        <para>The packages that reside within <emphasis>metamodel</emphasis>
-        have break into the following layers (top layer packages depending on
-        lower layers):</para>
+        <para>The packages that reside within <emphasis>core
+        metamodel</emphasis> have break into the following layers (top layer
+        packages depending on lower layers):</para>
 
         <screenshot>
           <screeninfo>Top-level Architecture Diagram with SpecLoader
@@ -1132,6 +1132,18 @@
           <classname>Facet</classname>, and is attached to the corresponding
           <classname>FacetedMethod</classname> (hence its name).</para>
 
+          <para>Each of the methods in <classname>FacetFactory</classname>
+          retrieves a "context" object, which provides a mechanism to remove
+          methods so that subsequent <classname>FacetFactory</classname>s do
+          not consider them. For example, if a supporting
+          <methodname>disableXxx()</methodname> method is noticed while
+          processing a <methodname>getXxx()</methodname> property or
+          collection, then the <classname>FacetFactory</classname> in question
+          will remove this method. This design means that the
+          <classname>FacetFactory</classname> that identifies actions - which
+          are taken to be all "remaining" public actions - will not
+          inadvertantly create an action for these supporting methods.</para>
+
           <para>If you explore the type hierarchy then you'll see that
           <classname>FacetMethod</classname> implements
           <classname>FacetHolder</classname>, and it is this interface through
@@ -1181,7 +1193,7 @@
           <classname>FacetedMethod</classname>s.</para>
         </sect2>
 
-        <sect2>
+        <sect2 id="sec.MemberLayoutArranger">
           <title>Ordering Members
           (<classname>MemberLayoutArranger</classname>)</title>
 
@@ -1221,7 +1233,7 @@
           linkend="sec.O" />) through the metamodel.</para>
         </sect2>
 
-        <sect2>
+        <sect2 id="sec.FacetDecorator">
           <title>Decorating <classname>Facet</classname>s
           (<classname>FacetDecorator</classname>)</title>
 
@@ -1259,13 +1271,14 @@
               supports the concept of an underlying
               <classname>Facet</classname>
               (<methodname>Facet#getUnderlyingFacet()</methodname>). At some
-              stage we hope to remove FacetDecorators completely and simply
-              use the underlying <classname>Facet</classname> approach.</para>
+              stage we hope to remove <classname>FacetDecorator</classname>s
+              completely and simply use the underlying
+              <classname>Facet</classname> approach.</para>
             </note></para>
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.MetaModelValidator">
         <title>MetaModel Validation
         (<classname>MetaModelValidator</classname>)</title>
 
@@ -1301,8 +1314,9 @@
         as the <classname>MetaModelValidator</classname>.</para>
       </sect1>
 
-      <sect1>
-        <title><classname>ProgrammingModel</classname> API</title>
+      <sect1 id="sec.ProgrammingModelAPI">
+        <title><classname>ProgrammingModel</classname>
+        <acronym>API</acronym></title>
 
         <para>As will be apparent from <xref
         linkend="sec.HowTheMetaModelIsBuiltUpInternally" />, the set of
@@ -1883,27 +1897,33 @@ Persistable: User Persistable</screen>
         <package>oai.core.progmodel</package> module.</para>
       </abstract>
 
-      <para></para>
+      <para>The core <emphasis>progmodel</emphasis> provides a set of reusable
+      elements (implementations of the <classname>FacetFactory</classname>
+      <acronym>API</acronym>) that can be reused to make up a programming
+      model. These are brought together by implementations of the
+      <classname>ProgrammingModel</classname> interface (in
+      <package>oai.core.metamodel.progmodel</package> package, see <xref
+      linkend="sec.ProgrammingModelAPI" />).</para>
+
+      <para>The default programming model (as defined by the <emphasis>default
+      progmodel</emphasis> module <package>[oai.progmodels:dflt]</package>)
+      provides an implementation of <classname>ProgrammingModel</classname>
+      that includes the vast majority of the
+      <classname>FacetFactory</classname>s in this, the <emphasis>core
+      progmodel</emphasis> module. However, we've chosen to separate these two
+      modules because in the future we might want to implement new
+      <classname>FacetFactory</classname>s, perhaps experimental, but not
+      necessarily include them in the default programming model.</para>
+
+      <para>The module also provides implementations of two other lesser
+      <acronym>API</acronym>s; so let's look at the detail now.</para>
 
       <sect1>
-        <title></title>
+        <title>Package Layering / Dependencies</title>
 
-        <para></para>
-
-        <para>The core <emphasis>progmodel</emphasis> provides a set of
-        reusable elements (implementations of the
-        <classname>FacetFactory</classname> API) that can be reused to make up
-        a programming model.</para>
-
-        <para>Most of those within this module are in fact used in the default
-        programming model, defined by the default progmodel module. They are
-        defined within core, however, to allow custom programming models
-        (perhaps extending or trimming back the default programming model) to
-        be defined.</para>
-
-        <para></para>
-
-        <para></para>
+        <para>The packages that reside within <emphasis>core
+        metamodel</emphasis> have break into the following layers (top layer
+        packages depending on lower layers):</para>
 
         <screenshot>
           <screeninfo>Architecture Diagram</screeninfo>
@@ -1916,7 +1936,9 @@ Persistable: User Persistable</screen>
           </mediaobject>
         </screenshot>
 
-        <para></para>
+        <para>Alternatively we can see the actual dependencies between
+        packages. Here we just focus on the subpackages of the
+        <package>facets</package> package:</para>
 
         <screenshot>
           <screeninfo>Composition Diagram (facets package)</screeninfo>
@@ -1929,76 +1951,117 @@ Persistable: User Persistable</screen>
           </mediaobject>
         </screenshot>
 
-        <para></para>
+        <para>As the diagrams show, most of the classes in the <emphasis>core
+        progmodel</emphasis> module are implementations of the
+        <classname>FacetFactory</classname> <acronym>API</acronym> (residing
+        in the <package>oai.core.progmodel.facets</package> package). In
+        addition, the package provides implementations of the
+        <classname>FacetDecorator</classname> <acronym>API</acronym> (as
+        discussed in <xref linkend="sec.FacetDecorator" />), the
+        <classname>MemberLayoutArranger</classname><acronym> API</acronym>
+        (see <xref linkend="sec.MemberLayoutArranger" />) and the
+        <classname>MetaModelValidator</classname> <acronym>API</acronym> (see
+        <xref linkend="sec.MetaModelValidator" />).</para>
+      </sect1>
 
-        <para></para>
+      <sect1>
+        <title><classname>FacetFactory</classname> Implementations</title>
 
         <para></para>
       </sect1>
 
-      <sect1 id="i18n-files" label="">
-        <title>Internationalization resource files (I18n Facet
-        Decorator)</title>
+      <sect1>
+        <title><classname>FacetDecorator</classname> Implementations</title>
+
+        <note>
+          <para>As was noted in <xref linkend="sec.FacetDecorator" />, the
+          <classname>FacetDecorator</classname> design actually predates use
+          of <classname>Facet</classname>s within the Isis metamodel (we
+          renamed it to <classname>FacetDecorator</classname> after the fact).
+          If you dig into the <classname>Facet</classname> API you'll see that
+          it supports the concept of an underlying
+          <classname>Facet</classname>
+          (<methodname>Facet#getUnderlyingFacet()</methodname>). At some stage
+          we hope to remove <classname>FacetDecorator</classname>s completely
+          and simply use the underlying <classname>Facet</classname>
+          approach.</para>
+        </note>
+
+        <para><note>
+            <para>As was noted </para>
+          </note></para>
+
+        <para></para>
+
+        <para></para>
 
         <sect2>
-          <title>Files</title>
+          <title>Internationalization (I18n) Decorator</title>
 
-          <para>Translated names, descriptions and help text for a specific
-          language should be held in a file named in the following
-          format:</para>
+          <para></para>
 
-          <screen format="linespecific">i18n_&lt;language code&gt;_&lt;country code&gt;.properties</screen>
+          <sect3>
+            <title>Files</title>
 
-          <para>The language and country codes must reflect the translated
-          language are ISO standards and are detailed in the <link
-          linkend="locale">Locale section</link>.</para>
+            <para>Translated names, descriptions and help text for a specific
+            language should be held in a file named in the following
+            format:</para>
 
-          <para>Theses files must be on the root of the class path, otherwise
-          they cannot be loaded.</para>
-        </sect2>
+            <screen format="linespecific">i18n_&lt;language code&gt;_&lt;country code&gt;.properties</screen>
 
-        <sect2>
-          <title>Properties</title>
+            <para>The language and country codes must reflect the translated
+            language are ISO standards and are detailed in the <link
+            linkend="locale">Locale section</link>.</para>
 
-          <para>Each property can have a line for each of the name,
-          description and help text. The format for each is shown
-          below.</para>
+            <para>Theses files must be on the root of the class path,
+            otherwise they cannot be loaded.</para>
+          </sect3>
 
-          <programlisting format="linespecific">&lt;fully qualified class name&gt;.property.&lt;property name&gt;.name=&lt;translated name&gt;
+          <sect3>
+            <title>Properties and Collections</title>
+
+            <para>Each property or collection can have a line for each of the
+            name, description and help text. </para>
+
+            <para>The format for properties is:</para>
+
+            <programlisting format="linespecific">&lt;fully qualified class name&gt;.property.&lt;property name&gt;.name=&lt;translated name&gt;
 &lt;fully qualified class name&gt;.property.&lt;property name&gt;.description=&lt;translated description&gt;
 &lt;fully qualified class name&gt;.property.&lt;property name&gt;.help=&lt;translated help&gt;</programlisting>
 
-          <para>The class name must be fully qualified and the property name
-          is the short name provided by the reflector. All the values are case
-          sensitive. The following shows the translated name and description
-          being specified for the property <emphasis>fullName</emphasis>,
-          which is defined by the <methodname>getFullName</methodname>
-          method.</para>
+            <para>while the format for collections, not surprisingly,
+            is:</para>
 
-          <programlisting format="linespecific">example.dom.Contact.property.fullName.name=Nom
+            <programlisting format="linespecific">&lt;fully qualified class name&gt;.collection.&lt;collection name&gt;.name=&lt;translated name&gt;
+&lt;fully qualified class name&gt;.collection.&lt;collection name&gt;.description=&lt;translated description&gt;
+&lt;fully qualified class name&gt;.collection.&lt;collection name&gt;.help=&lt;translated help&gt;</programlisting>
+
+            <para>The class name must be fully qualified and the
+            property/collection name is the short name provided by the
+            metamodel. All the values are case sensitive.</para>
+
+            <para>The following shows the translated name and description
+            being specified for the property <emphasis>fullName</emphasis>,
+            which is defined by the <methodname>#getFullName()</methodname>
+            method.</para>
+
+            <programlisting format="linespecific">example.dom.Contact.property.fullName.name=Nom
 example.dom.Contact.property.fullName.description=Le nom complet du client</programlisting>
-        </sect2>
+          </sect3>
 
-        <sect2>
-          <title>Collections</title>
+          <sect3>
+            <title>Actions</title>
 
-          <para><remark>TODO: presumably i18n is supported for collections,
-          too?</remark></para>
-        </sect2>
+            <para>Actions are specified in a similar fashion to properties and
+            collections but with the keyword <emphasis>action</emphasis>
+            instead of <emphasis>property</emphasis>. Parameters within an
+            action can also be translated by inserting
+            <emphasis>parameter</emphasis> and a number before the keyword.
+            Each parameter must be numbered to show its position, starting
+            from one (1), eg <emphasis>parameter1</emphasis>,
+            <emphasis>parameter2</emphasis> etc.</para>
 
-        <sect2>
-          <title>Actions</title>
-
-          <para>Actions are specified in a similar fashion to properties but
-          with the keyword <emphasis>action</emphasis> instead of
-          <emphasis>property</emphasis>. Parameters within an action can also
-          be translated by inserting <emphasis>parameter</emphasis> and a
-          number before the keyword. Each parameter must be numbered to show
-          its position, starting from one (1), eg
-          <emphasis>parameter1</emphasis>, <emphasis>parameter2</emphasis>
-          etc.</para>
-
-          <programlisting format="linespecific">&lt;fully qualified class name&gt;.action.&lt;action name&gt;.name=&lt;translated name&gt;
+            <programlisting format="linespecific">&lt;fully qualified class name&gt;.action.&lt;action name&gt;.name=&lt;translated name&gt;
 &lt;fully qualified class name&gt;.action.&lt;action name&gt;.description=&lt;translated description&gt;
 &lt;fully qualified class name&gt;.action.&lt;action name&gt;.help=&lt;translated help&gt;
 
@@ -2006,20 +2069,45 @@ example.dom.Contact.property.fullName.description=Le nom complet du client</prog
 &lt;fully qualified class name&gt;.action.&lt;action name&gt;.parameter&lt;index&gt;.description=&lt;translated description&gt;
 &lt;fully qualified class name&gt;.action.&lt;action name&gt;.parameter&lt;index&gt;.help=&lt;translated help&gt;</programlisting>
 
-          <para>The class name must be fully qualified and the action name is
-          the short name provided by the reflector. All the values are case
-          sensitive. The following shows the translated action name and
-          description, and two parameter names being specified for the action
-          <emphasis>createPhone</emphasis>, which is defined by the
-          <methodname>createPhone</methodname> method.</para>
+            <para>The class name must be fully qualified and the action name
+            is the short name provided by the reflector. All the values are
+            case sensitive. The following shows the translated action name and
+            description, and two parameter names being specified for the
+            action <emphasis>createPhone</emphasis>, which is defined by the
+            <methodname>createPhone</methodname> method.</para>
 
-          <programlisting format="linespecific">example.dom.Contact.action.createPhone.name=Nouveau téléphone
+            <programlisting format="linespecific">example.dom.Contact.action.createPhone.name=Nouveau téléphone
 example.dom.Contact.action.createPhone.parameter1.name=Indicatif de zone
 example.dom.Contact.action.createPhone.parameter2.name=Nombre
 example.dom.Contact.action.createPhone.description=Créez un nouveau téléphone et ajoutez-le au contact actuel</programlisting>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Help Decorator</title>
+
+          <para></para>
 
           <para></para>
         </sect2>
+      </sect1>
+
+      <sect1>
+        <title><classname>MemberLayoutArranger</classname>
+        Implementations</title>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title><classname>MetaModelValidator</classname>
+        Implementation</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
       </sect1>
     </chapter>
 

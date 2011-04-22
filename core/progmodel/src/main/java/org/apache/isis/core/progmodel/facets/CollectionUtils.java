@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.progmodel.util;
+package org.apache.isis.core.progmodel.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;

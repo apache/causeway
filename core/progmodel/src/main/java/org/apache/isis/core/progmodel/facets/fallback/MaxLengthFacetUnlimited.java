@@ -18,26 +18,31 @@
  */
 
 
-package org.apache.isis.core.progmodel.ignore.isis;
+package org.apache.isis.core.progmodel.facets.fallback;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
-/**
- * Removes any static getter or setter methods.
- */
-public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstract {
+public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
 
-    public RemoveStaticGettersAndSettersFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    public MaxLengthFacetUnlimited(final FacetHolder holder) {
+        super(Integer.MAX_VALUE, holder);
+    }
+
+    /**
+     * No limit to maximum length.
+     */
+    @Override
+    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+        return null;
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
-        processClassContext.removeMethods(MethodScope.CLASS, "get", null, false, 0);
-        processClassContext.removeMethods(MethodScope.CLASS, "set", null, false, 0);
+    public boolean isNoop() {
+        return true;
     }
 
 }

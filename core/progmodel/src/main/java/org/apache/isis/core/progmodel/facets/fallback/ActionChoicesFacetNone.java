@@ -18,26 +18,21 @@
  */
 
 
-package org.apache.isis.core.progmodel.fallback.facets;
+package org.apache.isis.core.progmodel.facets.fallback;
 
-import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacetAbstract;
 
 
-public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
+public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
 
-    public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder);
+    public ActionChoicesFacetNone(final FacetHolder holder) {
+        super(holder);
     }
 
-    /**
-     * No limit to maximum length.
-     */
-    @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
-        return null;
+    public Object[][] getChoices(final ObjectAdapter inObject) {
+        return new ObjectAdapter[0][0];
     }
 
     @Override

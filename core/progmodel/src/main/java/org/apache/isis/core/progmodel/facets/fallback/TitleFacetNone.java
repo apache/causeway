@@ -18,28 +18,27 @@
  */
 
 
-package org.apache.isis.core.progmodel.ignore.javalang;
+package org.apache.isis.core.progmodel.facets.fallback;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
 
-/**
- * Removes any static getter or setter methods.
- * 
- * <p>
- * TODO: this is probably redundant given we also have {@link RemoveJavaLangObjectMethodsFacetFactory}.
- */
-public class RemoveGetClassMethodFacetFactory extends FacetFactoryAbstract {
+public class TitleFacetNone extends TitleFacetAbstract {
 
-    public RemoveGetClassMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    public TitleFacetNone(final FacetHolder holder) {
+        super(holder);
+    }
+
+    public String title(final ObjectAdapter object, Localization localization) {
+        return null;
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "getClass", Class.class, null);
+    public boolean isNoop() {
+        return true;
     }
 
 }

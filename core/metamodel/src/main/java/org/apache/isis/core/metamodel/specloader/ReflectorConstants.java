@@ -28,9 +28,32 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 
 public final class ReflectorConstants {
+
+    /**
+     * Key used to lookup implementation of {@link ProgrammingModel} in {@link IsisConfiguration}.
+     * 
+     * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
+     * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
+     */
+    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.facets";
+    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT =
+        "org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5";
+
+    /**
+     * Key used to lookup implementation of {@link MetaModelValidator} in {@link IsisConfiguration}.
+     */
+    public static final String META_MODEL_VALIDATOR_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.validator";
+    public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault";
+
+
+    /**
+     * Key used to lookup implementation of {@link MemberLayoutArrangerDefault} in {@link IsisConfiguration}.
+     */
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.memberlayoutarranger";
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault";
+
 
     /**
      * Key used to lookup implementation of {@link ClassSubstitutor} in {@link IsisConfiguration}.
@@ -46,22 +69,6 @@ public final class ReflectorConstants {
     public static final String SPECIFICATION_TRAVERSER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.traverser";
     public static final String SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT = SpecificationTraverserDefault.class
         .getName();
-
-    /**
-     * Key used to lookup implementation of {@link MemberLayoutArrangerDefault} in {@link IsisConfiguration}.
-     */
-    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.memberlayoutarranger";
-    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault";
-
-    /**
-     * Key used to lookup implementation of {@link ProgrammingModel} in {@link IsisConfiguration}.
-     * 
-     * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
-     * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
-     */
-    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.facets";
-    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT =
-        "org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5";
 
     /**
      * Key used to lookup comma-separated list of {@link FacetFactory}s to include (over and above those specified by
@@ -87,12 +94,6 @@ public final class ReflectorConstants {
      * Key used to lookup comma-separated list of {@link FacetDecorator}s.
      */
     public static final String FACET_DECORATOR_CLASS_NAMES = ConfigurationConstants.ROOT + "reflector.facet-decorators";
-
-    /**
-     * Key used to lookup implementation of {@link MetaModelValidator} in {@link IsisConfiguration}.
-     */
-    public static final String META_MODEL_VALIDATOR_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.validator";
-    public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = MetaModelValidatorNoop.class.getName();
 
     private ReflectorConstants() {
     }

@@ -18,26 +18,18 @@
  */
 
 
-package org.apache.isis.core.progmodel.ignore.javalang;
+package org.apache.isis.core.progmodel.metamodelvalidator.dflt;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 
 
-/**
- * Removes any calls to <tt>init</tt>.
- */
-public class RemoveInitMethodFacetFactory extends FacetFactoryAbstract {
+public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
 
-    public RemoveInitMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
-    }
-
-    @Override
-    public void process(ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
-    }
+	/**
+	 * Does nothing.
+	 */
+	public void validate() {
+	}
+	
 
 }
-

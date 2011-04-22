@@ -52,8 +52,8 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
+import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
@@ -106,7 +106,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 		setFacetDecorators(new TreeSet<FacetDecorator>());
 		setProgrammingModelFacets(new ProgrammingModelFacetsJava5());
 		
-		setMetaModelValidator(new MetaModelValidatorNoop());
+		setMetaModelValidator(new MetaModelValidatorDefault());
 
 		this.context = context;
 	}

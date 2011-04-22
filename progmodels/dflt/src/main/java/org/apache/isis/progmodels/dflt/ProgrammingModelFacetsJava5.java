@@ -40,6 +40,14 @@ import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddRemoveAndValidateFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation.NotPersistedAnnotationForCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfAnnotationForCollectionsFacetFactory;
+import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.annotation.RemoveIgnoreAnnotationMethodsFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.javalang.RemoveGetClassMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.javalang.RemoveInitMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
+import org.apache.isis.core.progmodel.facets.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsAnnotationOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaDescriptionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledAnnotationFacetFactory;
@@ -163,14 +171,6 @@ import org.apache.isis.core.progmodel.facets.value.time.TimeValueTypeFacetFactor
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.timestampsql.JavaSqlTimeStampValueTypeFacetFactory;
-import org.apache.isis.core.progmodel.fallback.FallbackFacetFactory;
-import org.apache.isis.core.progmodel.ignore.annotation.RemoveIgnoreAnnotationMethodsFacetFactory;
-import org.apache.isis.core.progmodel.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
-import org.apache.isis.core.progmodel.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
-import org.apache.isis.core.progmodel.ignore.javalang.RemoveGetClassMethodFacetFactory;
-import org.apache.isis.core.progmodel.ignore.javalang.RemoveInitMethodFacetFactory;
-import org.apache.isis.core.progmodel.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
-import org.apache.isis.core.progmodel.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
 
 
 public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
