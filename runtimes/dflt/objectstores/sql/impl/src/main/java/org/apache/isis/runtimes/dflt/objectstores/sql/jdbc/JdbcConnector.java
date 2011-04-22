@@ -184,12 +184,12 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         TYPE_DATETIME = dataTypes.getString(baseName + "datetime", "DATETIME");
         TYPE_DATE = dataTypes.getString(baseName + "date", "DATE");
         TYPE_TIME = dataTypes.getString(baseName + "time", "TIME");
-        TYPE_DOUBLE = dataTypes.getString(baseName + "double", "FLOAT");
+        TYPE_DOUBLE = dataTypes.getString(baseName + "double", "DOUBLE");
         TYPE_FLOAT = dataTypes.getString(baseName + "float", "FLOAT");
         TYPE_SHORT = dataTypes.getString(baseName + "short", "INT");
-        TYPE_LONG = dataTypes.getString(baseName + "long", "INT");
+        TYPE_LONG = dataTypes.getString(baseName + "long", "BIGINT");
         TYPE_INT = dataTypes.getString(baseName + "int", "INT");
-        TYPE_BOOLEAN = dataTypes.getString(baseName + "boolean", "CHAR(1)");
+        TYPE_BOOLEAN = dataTypes.getString(baseName + "boolean", "BOOLEAN"); // CHAR(1)
         TYPE_PK = dataTypes.getString(baseName + "primarykey", "INTEGER");
         TYPE_STRING = dataTypes.getString(baseName + "string", "VARCHAR(65)");
         TYPE_PASSWORD = dataTypes.getString(baseName + "password", "VARCHAR(12)");

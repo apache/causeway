@@ -106,6 +106,13 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     private static final Percentage percentage = new Percentage(42);
     private static final Money money = new Money(99.99, "ZAR");
 
+    // Standard values
+    private static final int intValue = Integer.MIN_VALUE;
+    private static final short shortValue = Short.MAX_VALUE;
+    private static final long longValue = Long.MAX_VALUE;
+    private static final double doubleValue = Double.MAX_VALUE;
+    private static final float floatValue = Float.MIN_VALUE;
+
     // Collection mapper tests
     private static final List<String> stringList1 = Arrays.asList("Baking", "Bakery", "Canned", "Dairy");
     private static final List<String> stringList2 = Arrays.asList("Fridge", "Deli", "Fresh Produce", "Frozen",
@@ -226,7 +233,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         sqlDataClass.setString("Test String");
         sqlDataClass.setDate(applibDate);
         sqlDataClass.setSqlDate(sqlDate);
-        sqlDataClass.setMoney(money); // TODO: Money is broken
+        sqlDataClass.setMoney(money);
         sqlDataClass.setDateTime(dateTime);
         sqlDataClass.setTimeStamp(timeStamp);
         sqlDataClass.setTime(time);
@@ -235,9 +242,18 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         sqlDataClass.setPassword(password);
         sqlDataClass.setPercentage(percentage);
 
+        // standard value types
+        sqlDataClass.setIntValue(intValue);
+        sqlDataClass.setShortValue(shortValue);
+        sqlDataClass.setLongValue(longValue);
+        sqlDataClass.setDoubleValue(doubleValue);
+        sqlDataClass.setFloatValue(floatValue);
+
         // Setup SimpleClassTwo
         simpleClassTwoA = factory.newSimpleClassTwo();
         simpleClassTwoA.setText("A");
+        simpleClassTwoA.setIntValue(999);
+        simpleClassTwoA.setBooleanValue(true);
         // simpleClassTwoB = factory.newSimpleClassTwo();
         // simpleClassTwoB.setString("A");
 
@@ -480,8 +496,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     public void testPassword() {
         SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-        assertTrue("Password " + password.toString() + " is not equal to " + sqlDataClass.getPassword().toString(),
-            password.equals(sqlDataClass.getPassword()));
+        assertEquals(password, sqlDataClass.getPassword());
     }
 
     /**
@@ -489,8 +504,16 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     public void testPercentage() {
         SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-        assertTrue("Percentage " + percentage.toString() + " is not equal to "
-            + sqlDataClass.getPercentage().toString(), percentage.equals(sqlDataClass.getPercentage()));
+        assertEquals(percentage, sqlDataClass.getPercentage());
+    }
+
+    public void testStandardValueTypes() {
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        assertEquals(shortValue, sqlDataClass.getShortValue());
+        assertEquals(intValue, sqlDataClass.getIntValue());
+        assertEquals(longValue, sqlDataClass.getLongValue());
+        assertEquals(doubleValue, sqlDataClass.getDoubleValue());
+        assertEquals(floatValue, sqlDataClass.getFloatValue());
     }
 
     /**
@@ -573,6 +596,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
             SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
             factory.resolve(a);
             assertEquals(simpleClassTwoA.getText(), a.getText());
+            assertEquals(simpleClassTwoA.getIntValue(), a.getIntValue());
+            assertEquals(simpleClassTwoA.getBooleanValue(), a.getBooleanValue());
         }
     }
 
@@ -592,6 +617,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
         SimpleClassTwo simpleClass = classes.get(0);
         simpleClass.setText("XXX");
+        simpleClass.setBooleanValue(false);
+        simpleClassTwoA.setBooleanValue(false);
     }
 
     public void testUpdate2() {
@@ -601,6 +628,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
         SimpleClassTwo simpleClass = classes.get(0);
         assertEquals("XXX", simpleClass.getText());
+        assertEquals(simpleClassTwoA.getBooleanValue(), simpleClass.getBooleanValue());
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.

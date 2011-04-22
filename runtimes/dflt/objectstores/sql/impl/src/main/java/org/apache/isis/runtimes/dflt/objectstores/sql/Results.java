@@ -17,15 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
-
-
-
 
 public interface Results {
 
@@ -38,6 +34,12 @@ public interface Results {
     double getDouble(String columnName);
 
     String getString(String columnName);
+
+    Float getFloat(String columnName);
+
+    Object getShort(String columnName);
+
+    Object getBoolean(String columnName);
 
     boolean next();
 
@@ -52,5 +54,7 @@ public interface Results {
     org.apache.isis.applib.value.Time getTime(String columnName);
 
     Object getObject(String column);
+
+    Object getAsType(String columnName, Class<?> clazz);
 
 }

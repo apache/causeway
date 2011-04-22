@@ -25,9 +25,9 @@ import java.util.List;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Color;
+import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.applib.value.Image;
-import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
@@ -36,275 +36,341 @@ import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
 /**
- * The SqlDataClass is a test class used in the sql-persistor integration tests.
- * It's properties are stored and retrieved using the persistor, to confirm
- * accurate persistence behaviour.
+ * The SqlDataClass is a test class used in the sql-persistor integration tests. It's properties are stored and
+ * retrieved using the persistor, to confirm accurate persistence behaviour.
  * 
- * Each property here requires an equivalent test in
- * {@link SqlIntegrationTestCommon}
+ * Each property here requires an equivalent test in {@link SqlIntegrationTestCommon}
  * 
  * @author Kevin Meyer
  * 
  */
 
 public class SqlDataClass extends AbstractDomainObject {
-	public String title() {
-		return string;
-	}
+    public String title() {
+        return string;
+    }
 
-	// Isis Date Type
-	// {{ Date
-	private Date date;
+    // Isis Date Type
+    // {{ Date
+    private Date date;
 
-	public Date getDate() {
-		return date;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setDate(final Date date) {
-		this.date = date;
-	}
+    public void setDate(final Date date) {
+        this.date = date;
+    }
 
-	// }}
+    // }}
 
-	// {{ String type
-	private String string;
+    // {{ String type
+    private String string;
 
-	public String getString() {
-		return string;
-	}
+    public String getString() {
+        return string;
+    }
 
-	public void setString(final String string) {
-		this.string = string;
-	}
+    public void setString(final String string) {
+        this.string = string;
+    }
 
-	// }}
+    // }}
 
-	// SQL Date Type
-	// {{ SqlDate
-	/**/
-	private java.sql.Date sqlDate;
+    // SQL Date Type
+    // {{ SqlDate
+    /**/
+    private java.sql.Date sqlDate;
 
-	@MemberOrder(sequence = "1")
-	public java.sql.Date getSqlDate() {
-		return sqlDate;
-	}
+    @MemberOrder(sequence = "1")
+    public java.sql.Date getSqlDate() {
+        return sqlDate;
+    }
 
-	public void setSqlDate(final java.sql.Date sqlDate) {
-		this.sqlDate = sqlDate;
-	}
-	/**/
+    public void setSqlDate(final java.sql.Date sqlDate) {
+        this.sqlDate = sqlDate;
+    }
 
-	// }}
+    /**/
 
-	// {{ Money
-	private Money money;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public Money getMoney() {
-		return money;
-	}
+    // {{ Money
+    private Money money;
 
-	public void setMoney(final Money money) {
-		this.money = money;
-	}
+    @MemberOrder(sequence = "1")
+    public Money getMoney() {
+        return money;
+    }
 
-	// }}
+    public void setMoney(final Money money) {
+        this.money = money;
+    }
 
-	// {{ DateTime
-	private DateTime dateTime;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public DateTime getDateTime() {
-		return dateTime;
-	}
+    // {{ DateTime
+    private DateTime dateTime;
 
-	public void setDateTime(final DateTime dateTime) {
-		this.dateTime = dateTime;
-	}
+    @MemberOrder(sequence = "1")
+    public DateTime getDateTime() {
+        return dateTime;
+    }
 
-	// }}
+    public void setDateTime(final DateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	// {{ TimeStamp
-	private TimeStamp timeStamp;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public TimeStamp getTimeStamp() {
-		return timeStamp;
-	}
+    // {{ TimeStamp
+    private TimeStamp timeStamp;
 
-	public void setTimeStamp(final TimeStamp timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    @MemberOrder(sequence = "1")
+    public TimeStamp getTimeStamp() {
+        return timeStamp;
+    }
 
-	// }}
+    public void setTimeStamp(final TimeStamp timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
-	// Color, Image, Password, Percentage, Time
-	// {{ Time
-	private Time time;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public Time getTime() {
-		return time;
-	}
+    // Color, Image, Password, Percentage, Time
+    // {{ Time
+    private Time time;
 
-	public void setTime(final Time time) {
-		this.time = time;
-	}
+    @MemberOrder(sequence = "1")
+    public Time getTime() {
+        return time;
+    }
 
-	// }}
+    public void setTime(final Time time) {
+        this.time = time;
+    }
 
-	// {{ Color
-	private Color color;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public Color getColor() {
-		return color;
-	}
+    // {{ Color
+    private Color color;
 
-	public void setColor(final Color color) {
-		this.color = color;
-	}
+    @MemberOrder(sequence = "1")
+    public Color getColor() {
+        return color;
+    }
 
-	// }}
+    public void setColor(final Color color) {
+        this.color = color;
+    }
 
-	// {{ Image
-	private Image image;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public Image getImage() {
-		return image;
-	}
+    // {{ Image
+    private Image image;
 
-	public void setImage(final Image image) {
-		this.image = image;
-	}
+    @MemberOrder(sequence = "1")
+    public Image getImage() {
+        return image;
+    }
 
-	// }}
+    public void setImage(final Image image) {
+        this.image = image;
+    }
 
-	// {{ Password
-	private Password password;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public Password getPassword() {
-		return password;
-	}
+    // {{ Password
+    private Password password;
 
-	public void setPassword(final Password password) {
-		this.password = password;
-	}
+    @MemberOrder(sequence = "1")
+    public Password getPassword() {
+        return password;
+    }
 
-	// }}
+    public void setPassword(final Password password) {
+        this.password = password;
+    }
 
-	// {{ Percentage
-	private Percentage percentage;
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public Percentage getPercentage() {
-		return percentage;
-	}
+    // {{ Percentage
+    private Percentage percentage;
 
-	public void setPercentage(final Percentage percentage) {
-		this.percentage = percentage;
-	}
+    @MemberOrder(sequence = "1")
+    public Percentage getPercentage() {
+        return percentage;
+    }
 
-	// }}
+    public void setPercentage(final Percentage percentage) {
+        this.percentage = percentage;
+    }
 
-	// {{ SimpleClasses
-	public List<SimpleClass> simpleClasses1 = new ArrayList<SimpleClass>();
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public List<SimpleClass> getSimpleClasses1() {
-		return simpleClasses1;
-	}
+    // Basic value types
+    // {{ IntValue
+    private int intValue;
 
-	public void setSimpleClasses1(final List<SimpleClass> simpleClasses) {
-		this.simpleClasses1 = simpleClasses;
-	}
+    public int getIntValue() {
+        return intValue;
+    }
 
-	public void addToSimpleClasses1(final SimpleClass simpleClass) {
-		// check for no-op
-		if (simpleClass == null || getSimpleClasses1().contains(simpleClass)) {
-			return;
-		}
-		// associate new
-		getSimpleClasses1().add(simpleClass);
-		// additional business logic
-		onAddToSimpleClasses1(simpleClass);
-	}
+    public void setIntValue(final int value) {
+        this.intValue = value;
+    }
 
-	public void removeFromSimpleClasses1(final SimpleClass simpleClass) {
-		// check for no-op
-		if (simpleClass == null || !getSimpleClasses1().contains(simpleClass)) {
-			return;
-		}
-		// dissociate existing
-		getSimpleClasses1().remove(simpleClass);
-		// additional business logic
-		onRemoveFromSimpleClasses1(simpleClass);
-	}
+    // }}
 
-	protected void onAddToSimpleClasses1(final SimpleClass simpleClass) {
-	}
+    // {{ ShortValue
+    private short shortValue;
 
-	protected void onRemoveFromSimpleClasses1(final SimpleClass simpleClass) {
-	}
+    public short getShortValue() {
+        return shortValue;
+    }
 
-	// }}
+    public void setShortValue(final short value) {
+        this.shortValue = value;
+    }
 
-	// {{ SimpleClasses2
-	/**/
-	private List<SimpleClass> simpleClasses2 = new ArrayList<SimpleClass>();
+    // }}
 
-	@MemberOrder(sequence = "1")
-	public List<SimpleClass> getSimpleClasses2() {
-		return simpleClasses2;
-	}
+    // {{ LongValue
+    private long longValue;
 
-	public void setSimpleClasses2(final List<SimpleClass> simpleClasses) {
-		this.simpleClasses2 = simpleClasses;
-	}
+    public long getLongValue() {
+        return longValue;
+    }
 
-	public void addToSimpleClasses2(final SimpleClass simpleClass) {
-		// check for no-op
-		if (simpleClass == null || getSimpleClasses2().contains(simpleClass)) {
-			return;
-		}
-		// associate new
-		getSimpleClasses2().add(simpleClass);
-		// additional business logic
-		onAddToSimpleClasses2(simpleClass);
-	}
+    public void setLongValue(final long value) {
+        this.longValue = value;
+    }
 
-	public void removeFromSimpleClasses2(final SimpleClass simpleClass) {
-		// check for no-op
-		if (simpleClass == null || !getSimpleClasses2().contains(simpleClass)) {
-			return;
-		}
-		// dissociate existing
-		getSimpleClasses2().remove(simpleClass);
-		// additional business logic
-		onRemoveFromSimpleClasses2(simpleClass);
-	}
+    // }}
 
-	protected void onAddToSimpleClasses2(final SimpleClass simpleClass) {
-	}
+    // {{ FloatValue
+    private Float floatValue;
 
-	protected void onRemoveFromSimpleClasses2(final SimpleClass simpleClass) {
-	}
+    public Float getFloatValue() {
+        return floatValue;
+    }
 
-	/**/
-	// }}
+    public void setFloatValue(final Float value) {
+        this.floatValue = value;
+    }
 
-	// {{ SimpleClassTwo
-	private SimpleClassTwo simplyClassTwo;
+    // }}
 
-	public SimpleClassTwo getSimpleClassTwo() {
-		return simplyClassTwo;
-	}
+    // {{ DoubleValue
+    private double doubleValue;
 
-	public void setSimpleClassTwo(final SimpleClassTwo simpleClassTwo) {
-		this.simplyClassTwo = simpleClassTwo;
-	}
-	// }}
+    public double getDoubleValue() {
+        return doubleValue;
+    }
+
+    public void setDoubleValue(final double value) {
+        this.doubleValue = value;
+    }
+
+    // }}
+
+    // References to other entities
+    // {{ SimpleClasses
+    public List<SimpleClass> simpleClasses1 = new ArrayList<SimpleClass>();
+
+    @MemberOrder(sequence = "1")
+    public List<SimpleClass> getSimpleClasses1() {
+        return simpleClasses1;
+    }
+
+    public void setSimpleClasses1(final List<SimpleClass> simpleClasses) {
+        this.simpleClasses1 = simpleClasses;
+    }
+
+    public void addToSimpleClasses1(final SimpleClass simpleClass) {
+        // check for no-op
+        if (simpleClass == null || getSimpleClasses1().contains(simpleClass)) {
+            return;
+        }
+        // associate new
+        getSimpleClasses1().add(simpleClass);
+        // additional business logic
+        onAddToSimpleClasses1(simpleClass);
+    }
+
+    public void removeFromSimpleClasses1(final SimpleClass simpleClass) {
+        // check for no-op
+        if (simpleClass == null || !getSimpleClasses1().contains(simpleClass)) {
+            return;
+        }
+        // dissociate existing
+        getSimpleClasses1().remove(simpleClass);
+        // additional business logic
+        onRemoveFromSimpleClasses1(simpleClass);
+    }
+
+    protected void onAddToSimpleClasses1(final SimpleClass simpleClass) {
+    }
+
+    protected void onRemoveFromSimpleClasses1(final SimpleClass simpleClass) {
+    }
+
+    // }}
+
+    // {{ SimpleClasses2
+    /**/
+    private List<SimpleClass> simpleClasses2 = new ArrayList<SimpleClass>();
+
+    @MemberOrder(sequence = "1")
+    public List<SimpleClass> getSimpleClasses2() {
+        return simpleClasses2;
+    }
+
+    public void setSimpleClasses2(final List<SimpleClass> simpleClasses) {
+        this.simpleClasses2 = simpleClasses;
+    }
+
+    public void addToSimpleClasses2(final SimpleClass simpleClass) {
+        // check for no-op
+        if (simpleClass == null || getSimpleClasses2().contains(simpleClass)) {
+            return;
+        }
+        // associate new
+        getSimpleClasses2().add(simpleClass);
+        // additional business logic
+        onAddToSimpleClasses2(simpleClass);
+    }
+
+    public void removeFromSimpleClasses2(final SimpleClass simpleClass) {
+        // check for no-op
+        if (simpleClass == null || !getSimpleClasses2().contains(simpleClass)) {
+            return;
+        }
+        // dissociate existing
+        getSimpleClasses2().remove(simpleClass);
+        // additional business logic
+        onRemoveFromSimpleClasses2(simpleClass);
+    }
+
+    protected void onAddToSimpleClasses2(final SimpleClass simpleClass) {
+    }
+
+    protected void onRemoveFromSimpleClasses2(final SimpleClass simpleClass) {
+    }
+
+    /**/
+    // }}
+
+    // {{ SimpleClassTwo
+    private SimpleClassTwo simplyClassTwo;
+
+    public SimpleClassTwo getSimpleClassTwo() {
+        return simplyClassTwo;
+    }
+
+    public void setSimpleClassTwo(final SimpleClassTwo simpleClassTwo) {
+        this.simplyClassTwo = simpleClassTwo;
+    }
+    // }}
 }
 // Copyright (c) Kevin Meyer, www.kmz.co.za.

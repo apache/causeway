@@ -46,15 +46,28 @@ public class SimpleClassTwo extends AbstractDomainObject {
 
     // }}
 
-    // {{ Value
-    private int integer;
+    // {{ IntValue
+    private int intValue;
 
-    public int getValue() {
-        return integer;
+    public int getIntValue() {
+        return intValue;
     }
 
-    public void setValue(final int integer) {
-        this.integer = integer;
+    public void setIntValue(final int value) {
+        this.intValue = value;
+    }
+
+    // }}
+
+    // {{ BooleanValue
+    private boolean booleanValue;
+
+    public boolean getBooleanValue() {
+        return booleanValue;
+    }
+
+    public void setBooleanValue(final boolean value) {
+        this.booleanValue = value;
     }
     // }}
 

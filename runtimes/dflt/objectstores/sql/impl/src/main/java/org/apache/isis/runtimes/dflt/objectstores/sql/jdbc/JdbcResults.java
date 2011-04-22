@@ -23,6 +23,7 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -172,6 +173,44 @@ public class JdbcResults implements Results {
     public double getDouble(String columnName) {
         try {
             return set.getDouble(columnName);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
+
+    @Override
+    public Object getAsType(String columnName, Class<?> clazz) {
+        try {
+            HashMap<String, Class<?>> map = new HashMap<String, Class<?>>();
+            map.put("FLOAT", float.class);
+            return set.getObject(columnName, map);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
+
+    @Override
+    public Float getFloat(String columnName) {
+        try {
+            return set.getFloat(columnName);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
+
+    @Override
+    public Short getShort(String columnName) {
+        try {
+            return set.getShort(columnName);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
+
+    @Override
+    public Boolean getBoolean(String columnName) {
+        try {
+            return set.getBoolean(columnName);
         } catch (SQLException e) {
             throw new SqlObjectStoreException(e);
         }

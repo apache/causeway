@@ -29,6 +29,7 @@ import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcBinaryValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcColorValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
@@ -44,12 +45,12 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
 
     @Override
     public void load(FieldMappingLookup lookup) {
-        lookup.addFieldMappingFactory(boolean.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_BOOLEAN()));
-        lookup.addFieldMappingFactory(short.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
-        lookup.addFieldMappingFactory(int.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_INT()));
-        lookup.addFieldMappingFactory(long.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_LONG()));
-        lookup.addFieldMappingFactory(float.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_FLOAT()));
-        lookup.addFieldMappingFactory(double.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_DOUBLE()));
+        lookup.addFieldMappingFactory(boolean.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_BOOLEAN()));
+        lookup.addFieldMappingFactory(short.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
+        lookup.addFieldMappingFactory(int.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_INT()));
+        lookup.addFieldMappingFactory(long.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_LONG()));
+        lookup.addFieldMappingFactory(Float.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_FLOAT()));
+        lookup.addFieldMappingFactory(double.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_DOUBLE()));
         lookup.addFieldMappingFactory(char.class, new JdbcGeneralValueMapper.Factory("CHAR(2)"));
 
         lookup.addFieldMappingFactory(Money.class, new JdbcMoneyValueMapper.Factory("FLOAT", "VARCHAR(3)"));
