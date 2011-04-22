@@ -29,6 +29,7 @@ import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcColorValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper;
@@ -55,7 +56,7 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
         lookup.addFieldMappingFactory(Percentage.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
         lookup
             .addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_PASSWORD()));
-        lookup.addFieldMappingFactory(Color.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
+        lookup.addFieldMappingFactory(Color.class, new JdbcColorValueMapper.Factory(JdbcConnector.TYPE_LONG()));
         lookup.addFieldMappingFactory(String.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_STRING()));
 
         lookup.addFieldMappingFactory(Date.class, new JdbcDateMapper.Factory());

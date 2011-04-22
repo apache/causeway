@@ -184,12 +184,12 @@
           </simplelist></para>
 
         <para><simplelist>
-            <member>isis.persistor.sql.datatypes.short (INT) [short,
-            Color]</member>
+            <member>isis.persistor.sql.datatypes.short (INT) [short]</member>
           </simplelist></para>
 
         <para><simplelist>
-            <member>isis.persistor.sql.datatypes.long (INT) [long]</member>
+            <member>isis.persistor.sql.datatypes.long (INT) [long,
+            Color]</member>
           </simplelist></para>
 
         <para><simplelist>
@@ -306,6 +306,19 @@
 
           <para>This means that a given child can only appear in one parent's
           collection of the same name.</para>
+        </sect3>
+
+        <sect3>
+          <title>Multi-field values</title>
+
+          <para>Some value types need more than 1 field to store their values,
+          e.g. Money - some.package.class#price.</para>
+
+          <para>In this case, the SQL objectstore creates 2 fields, price1 and
+          price2.</para>
+
+          <para>See "<code>JdbcMoneyValueMapper</code>", which extends
+          "<code>AbstractJdbcMultiFieldMapping</code>".</para>
         </sect3>
       </sect2>
     </sect1>

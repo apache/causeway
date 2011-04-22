@@ -19,7 +19,6 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
@@ -65,8 +64,6 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
             return ((Percentage) o).floatValue();
         } else if (o instanceof Password) {
             return ((Password) o).getPassword();
-        } else if (o instanceof Color) {
-            return ((Color) o).intValue();
         } else if (o instanceof String) {
             return o;
         } else {

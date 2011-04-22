@@ -100,7 +100,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     private static final TimeStamp timeStamp = new TimeStamp(dateTime.millisSinceEpoch());
     private static final Time time = new Time(14, 56);
 
-    private static final Color color = Color.BLACK;
+    private static final Color color = Color.WHITE;
     private static final Image image = new Image(new int[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });
     private static final Password password = new Password("password");
     private static final Percentage percentage = new Percentage(42);
@@ -454,8 +454,9 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     public void testColor() {
         SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-        assertTrue("Color Black, expected " + color.toString() + " but got " + sqlDataClass.getColor().toString(),
-            color.isEqualTo(sqlDataClass.getColor()));
+        assertEquals(color, sqlDataClass.getColor());
+        // assertTrue("Color Black, expected " + color.toString() + " but got " + sqlDataClass.getColor().toString(),
+        // color.isEqualTo(sqlDataClass.getColor()));
     }
 
     /**
