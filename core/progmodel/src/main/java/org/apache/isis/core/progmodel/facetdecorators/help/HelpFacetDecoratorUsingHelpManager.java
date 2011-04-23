@@ -35,26 +35,34 @@ public class HelpFacetDecoratorUsingHelpManager  extends FacetDecoratorAbstract 
         helpManager = manager;
     }
 
-    public Facet decorate(final Facet facet, FacetHolder requiredHolder) {
-    	if (!(requiredHolder instanceof IdentifiedHolder)) {
+    public Facet decorate(final Facet facet, FacetHolder facetHolder) {
+        if (facet.facetType() != HelpFacet.class) {
+        	return facet;
+        } 
+
+        if (!(facetHolder instanceof IdentifiedHolder)) {
     		return null;
     	} 
 
-    	IdentifiedHolder identifiedHolder = (IdentifiedHolder) requiredHolder;
-		final Identifier identifier = identifiedHolder.getIdentifier();
-		
-        if (facet.facetType() == HelpFacet.class) {
-            final String lookupHelp = helpManager.help(identifier);
-            if (lookupHelp != null) {
-                HelpFacetLookedUpViaHelpManager decoratingFacet = new HelpFacetLookedUpViaHelpManager(lookupHelp, facet.getFacetHolder());
-				return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
-            }
-        }
-
-        return facet;
+    	IdentifiedHolder identifiedHolder = (IdentifiedHolder) facetHolder;
+		return decorateWithHelpFacet(facet, identifiedHolder);
     }
 
-    public Class<? extends Facet>[] getFacetTypes() {
+	private Facet decorateWithHelpFacet(final Facet facet,
+			IdentifiedHolder identifiedHolder) {
+		final Identifier identifier = identifiedHolder.getIdentifier();
+		
+        final String helpText = helpManager.getHelpText(identifier);
+		if (helpText != null) {
+		    HelpFacetLookedUpViaHelpManager decoratingFacet = new HelpFacetLookedUpViaHelpManager(helpText, facet.getFacetHolder());
+		    identifiedHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
+		}
+		return null;
+	}
+
+    @SuppressWarnings("unchecked")
+	public Class<? extends Facet>[] getFacetTypes() {
         return new Class[] { HelpFacet.class };
     }
 }

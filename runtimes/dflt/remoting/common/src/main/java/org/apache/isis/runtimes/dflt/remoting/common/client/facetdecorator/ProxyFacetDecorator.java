@@ -68,7 +68,8 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             PropertySetterFacetWrapProxy decoratingFacet = new PropertySetterFacetWrapProxy(
             		propertySetterFacet, serverFacade, encoderDecoder,
             		identifiedHolder.getIdentifier().getMemberName());
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == PropertyClearFacet.class) {
@@ -76,7 +77,8 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             PropertyClearFacetWrapProxy decoratingFacet = new PropertyClearFacetWrapProxy(
             		propertyClearFacet, serverFacade, encoderDecoder,
             		identifiedHolder.getIdentifier().getMemberName());
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == CollectionAddToFacet.class) {
@@ -84,7 +86,8 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             CollectionAddToFacetWrapProxy decoratingFacet = new CollectionAddToFacetWrapProxy(
             		collectionAddToFacet, serverFacade, encoderDecoder,
             		identifiedHolder.getIdentifier().getMemberName());
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == CollectionRemoveFromFacet.class) {
@@ -92,7 +95,8 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             CollectionRemoveFromFacetWrapProxy decoratingFacet = new CollectionRemoveFromFacetWrapProxy(
             		collectionRemoveFromFacet, serverFacade, encoderDecoder,
             		identifiedHolder.getIdentifier().getMemberName());
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == ActionInvocationFacet.class) {
@@ -100,7 +104,8 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
 			ObjectAction objectAction = (ObjectAction) requiredHolder;
 			ActionInvocationFacetWrapProxy decoratingFacet = new ActionInvocationFacetWrapProxy(
             		invocationFacet, serverFacade, encoderDecoder, objectAction);
-			return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+			requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         return facet;

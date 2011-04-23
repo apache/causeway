@@ -18,19 +18,27 @@
  */
 
 
-package org.apache.isis.core.progmodel.facetdecorators.help;
+package org.apache.isis.core.progmodel.facets.object.ignore.isis;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
-public interface HelpManager extends ApplicationScopedComponent {
+/**
+ * Removes any static getter or setter methods.
+ */
+public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstract {
 
-    /**
-     * Returns help text for the specified {@link Identifier}.
-     * 
-     * <p>If no help text is available then an empty String
-     * should be returned.
-     */
-    String getHelpText(Identifier identifier);
+    public RemoveStaticGettersAndSettersFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
+    }
+
+    @Override
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethods(MethodScope.CLASS, "get", null, false, 0);
+        processClassContext.removeMethods(MethodScope.CLASS, "set", null, false, 0);
+    }
+
 }
+

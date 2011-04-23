@@ -24,14 +24,13 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nManager;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 /**
  * REVIEW: why isn't there a type for collections also?
@@ -42,13 +41,14 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
 
     private static final String BASE_FILE_NAME = "i18n";
 
-    private static final String PROPERTY = "property";
-    private static final String ACTION = "action";
-    private static final String PARAMETER = "parameter";
+    private static final String MEMBER_TYPE_PROPERTY = "property";
+    private static final String MEMBER_TYPE_COLLECTION = "collection";
+    private static final String MEMBER_TYPE_ACTION = "action";
+    private static final String MEMBER_TYPE_PARAMETER = "parameter";
     
-    private static final String NAME = "name";
-    private static final String DESCRIPTION = "description";
-    private static final String HELP = "help";
+    private static final String TEXT_TYPE_NAME = "name";
+    private static final String TEXT_TYPE_DESCRIPTION = "description";
+    private static final String TEXT_TYPE_HELP = "help";
 
     private ResourceBundle bundle;
 
@@ -83,39 +83,51 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
 
     @Override
     public String getName(final Identifier identifier) {
-        return internalizedTextForClassMember(identifier, NAME);
+        return internalizedTextForClassMember(identifier, TEXT_TYPE_NAME);
     }
 
     @Override
     public String getDescription(final Identifier identifier) {
-        return internalizedTextForClassMember(identifier, DESCRIPTION);
+        return internalizedTextForClassMember(identifier, TEXT_TYPE_DESCRIPTION);
     }
 
     @Override
     public String getHelp(final Identifier identifier) {
-        return internalizedTextForClassMember(identifier, HELP);
+        return internalizedTextForClassMember(identifier, TEXT_TYPE_HELP);
     }
 
     private String internalizedTextForClassMember(final Identifier identifier, final String textType) {
         if (bundle == null) {
             return null;
         } 
-        final String key = buildMemberTypeKey(identifier, textType);
+        final List<String> key = buildMemberTypeKey(identifier, textType);
         return lookupTextFromBundle(key);
     }
 
-    private static String buildMemberTypeKey(final Identifier identifier, final String textType) {
-        StringBuilder sb = new StringBuilder();
-        final String form = identifier.isPropertyOrCollection() ? PROPERTY
-            : ACTION;
-        sb = sb.append(identifier.getClassName()).append(".").append(form);
+    private static List<String> buildMemberTypeKey(final Identifier identifier, final String textType) {
+    	final List<String> keys = Lists.newArrayList();
+        
+		if (identifier.isPropertyOrCollection()) {
+			keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_PROPERTY));
+			keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_COLLECTION));
+		} else {
+			keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_ACTION));
+		}
+		return keys;
+    }
+
+	private static String buildMemberTypeKey(final Identifier identifier,
+			final String textType, final String memberType) {
+		final StringBuilder sb = new StringBuilder();
+        sb.append(identifier.getClassName()).append(".");
+        sb.append(memberType);
         final String memberName = identifier.getMemberName();
         if (!StringUtils.isNullOrEmpty(memberName)) {
             sb.append(".").append(memberName);
         }
         sb.append(".").append(textType);
         return sb.toString();
-    }
+	}
 
     ////////////////////////////////////////////////////////////////
     // Parameters
@@ -123,10 +135,10 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
 
     @Override
     public List<String> getParameterNames(final Identifier identifier) {
-        return internalizedTextForParameter(identifier, NAME);
+        return internalizedTextForParameter(identifier, TEXT_TYPE_NAME);
     }
 
-    protected List<String> internalizedTextForParameter(final Identifier identifier, final String textType) {
+    private List<String> internalizedTextForParameter(final Identifier identifier, final String textType) {
         if (bundle == null) {
             return null;
         } 
@@ -142,18 +154,33 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     }
 
     private static String buildParameterTypeKey(final Identifier identifier, final String textType, int paramNum) {
-        return identifier.getClassName() + "." + ACTION + "." + identifier.getMemberName() + "." + PARAMETER
+        return identifier.getClassName() + "." + MEMBER_TYPE_ACTION + "." + identifier.getMemberName() + "." + MEMBER_TYPE_PARAMETER
                 + (paramNum + 1) + "." + textType;
     }
 
+
     
-    private String lookupTextFromBundle(final String key) {
-        try {
+    ////////////////////////////////////////////////////////////////
+    // Helpers
+    ////////////////////////////////////////////////////////////////
+
+    private String lookupTextFromBundle(final List<String> keys) {
+    	for(String key: keys) {
+    		String text = lookupTextFromBundle(key);
+    		if (text != null) {
+    			return text;
+    		}
+    	}
+    	return null;
+    }
+
+	private String lookupTextFromBundle(final String key) {
+		try {
             return bundle.getString(key);
         } catch (final MissingResourceException e) {
             return null;
         }
-    }
+	}
     
 }
 

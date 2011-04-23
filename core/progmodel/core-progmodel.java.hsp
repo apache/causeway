@@ -51,14 +51,12 @@
             </row>
             <row>
               <cell name="fallback" pattern="org.apache.isis.core.progmodel.facets.fallback.?" vexpanded="false" visibility="public" />
-              <cell name="ignore" pattern="org.apache.isis.core.progmodel.facets.ignore.*" vexpanded="false" visibility="public" />
             </row>
           </grid>
         </cell>
         <cell name="facetdecorators" pattern="org.apache.isis.core.progmodel.facetdecorators.*" vexpanded="true" visibility="public">
           <grid>
             <row>
-              <cell name="help" pattern="org.apache.isis.core.progmodel.facetdecorators.help.*" vexpanded="false" visibility="public" />
               <cell name="i18n" pattern="org.apache.isis.core.progmodel.facetdecorators.i18n.*" vexpanded="false" visibility="public" />
             </row>
           </grid>
@@ -73,13 +71,7 @@
             </row>
           </grid>
         </cell>
-        <cell name="metamodelvalidator.dflt" pattern="org.apache.isis.core.progmodel.metamodelvalidator.dflt.?" vexpanded="false" visibility="public">
-          <grid>
-            <row>
-              <cell name="MetaModelValidatorDefault" pattern="org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault" vexpanded="false" visibility="public" />
-            </row>
-          </grid>
-        </cell>
+        <cell name="metamodelvalidator.dflt" pattern="org.apache.isis.core.progmodel.metamodelvalidator.dflt.?" vexpanded="false" visibility="public" />
       </row>
     </grid>
   </grid-set>

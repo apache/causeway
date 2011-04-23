@@ -21,7 +21,6 @@
 package org.apache.isis.core.metamodel.facetdecorator;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class FacetDecoratorAbstract implements FacetDecorator {
@@ -36,20 +35,6 @@ public abstract class FacetDecoratorAbstract implements FacetDecorator {
             buf.append(decoratorFacetTypes[i].getName());
         }
         return buf.toString();
-	}
-
-	protected Facet replaceFacetWithDecoratingFacet(
-			final Facet facet, Facet decoratingFacet, FacetHolder requiredHolder) {
-		
-		// we don't remove, so that the original facet points back to its facet holder
-		// (eg a runtime peer object);
-		// however, adding the decorating facet means that the required holder points to the 
-		// decorating facet rather than the original facet
-		
-		// holder.removeFacet(facet);
-		
-		requiredHolder.addFacet(decoratingFacet);
-		return decoratingFacet;
 	}
 
 }

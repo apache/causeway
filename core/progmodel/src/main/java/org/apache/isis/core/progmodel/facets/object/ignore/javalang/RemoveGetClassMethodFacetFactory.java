@@ -18,31 +18,29 @@
  */
 
 
-package org.apache.isis.core.progmodel.facetdecorators.help;
+package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
-public class HelpManagerAssist extends HelpManagerAbstract {
+/**
+ * Removes any static getter or setter methods.
+ * 
+ * <p>
+ * TODO: this is probably redundant given we also have {@link RemoveJavaLangObjectMethodsFacetFactory}.
+ */
+public class RemoveGetClassMethodFacetFactory extends FacetFactoryAbstract {
 
-    private HelpManager underlyingHelpManager;
-    private boolean showIdentifier = false;
-
-    public void setShowIdentifier(final boolean showIdentifier) {
-        this.showIdentifier = showIdentifier;
-    }
-
-    public void setDecorated(final HelpManager decorated) {
-        this.underlyingHelpManager = decorated;
+    public RemoveGetClassMethodFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public String help(final Identifier identifier) {
-        String help = "";
-        if (underlyingHelpManager != null) {
-            help = underlyingHelpManager.help(identifier);
-        }
-        return showIdentifier ? (identifier.toString() + "\n") : "" + help;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "getClass", Class.class, null);
     }
 
 }
+

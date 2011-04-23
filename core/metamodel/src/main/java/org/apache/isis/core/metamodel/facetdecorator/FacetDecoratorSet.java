@@ -153,7 +153,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 		}
 	}
 
-	private void ensureDecoratorMetContract(FacetDecorator facetDecorator,
+	private static void ensureDecoratorMetContract(FacetDecorator facetDecorator,
 			Facet decoratingFacet, Class<? extends Facet> facetType,
 			FacetHolder originalFacetHolder) {
 		if (decoratingFacet.facetType() != facetType) {

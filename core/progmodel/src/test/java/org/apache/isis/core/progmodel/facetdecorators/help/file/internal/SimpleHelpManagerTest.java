@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.runtime.help.file;
+package org.apache.isis.core.progmodel.facetdecorators.help.file.internal;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ public class SimpleHelpManagerTest extends TestCase {
 
     public void testNoLines() {
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier("cls", "mth");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("", s);
     }
 
@@ -56,7 +56,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Help about class");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about class\n", s);
     }
 
@@ -66,7 +66,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Help about class");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("", s);
     }
 
@@ -77,7 +77,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Different text");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about class\n", s);
     }
 
@@ -89,7 +89,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Different text");
 
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier("cls", "fld");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about method\n", s);
     }
 
@@ -101,7 +101,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Different text");
 
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier("cls", "fld");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about method\n", s);
     }
 
@@ -112,7 +112,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Different text");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about class\n", s);
     }
 
@@ -123,7 +123,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("line 3");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about class\nline 2\nline 3\n", s);
     }
 
@@ -132,7 +132,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Help about class");
 
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier("cls", "fld2");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("", s);
     }
 
@@ -144,7 +144,7 @@ public class SimpleHelpManagerTest extends TestCase {
                 throw new FileNotFoundException("not found");
             }
         };
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Failure opening help file: not found", s);
     }
 
@@ -157,7 +157,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Help about second field");
 
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier("cls", "fld2");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about second field\n", s);
     }
 
@@ -168,7 +168,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Help about class");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("\n\nHelp about class\n", s);
 
     }
@@ -179,7 +179,7 @@ public class SimpleHelpManagerTest extends TestCase {
         manager.addLine("Help about class");
 
         final Identifier identifier = Identifier.classIdentifier("cls");
-        final String s = manager.help(identifier);
+        final String s = manager.getHelpText(identifier);
         assertEquals("Help about class\n", s);
 
     }

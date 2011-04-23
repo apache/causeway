@@ -25,7 +25,7 @@ import java.util.Iterator;
 
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.IteratorFilteringFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 
 
 public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {

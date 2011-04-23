@@ -57,7 +57,7 @@ public class HelpManagerUsingFiles extends HelpManagerAbstract {
     }
 
     @Override
-    public String help(final Identifier identifier) {
+    public String getHelpText(final Identifier identifier) {
         BufferedReader reader = null;
         try {
             reader = getReader();

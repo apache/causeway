@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.progmodel.facets.object;
+package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

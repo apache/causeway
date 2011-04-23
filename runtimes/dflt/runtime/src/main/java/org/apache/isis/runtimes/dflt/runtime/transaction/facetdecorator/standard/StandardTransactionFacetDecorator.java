@@ -49,37 +49,43 @@ public class StandardTransactionFacetDecorator extends TransactionFacetDecorator
         if (facetType == ActionInvocationFacet.class) {
             ActionInvocationFacet decoratedFacet = (ActionInvocationFacet) facet;
             Facet decoratingFacet = new ActionInvocationFacetWrapTransaction(decoratedFacet);
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == CollectionAddToFacet.class) {
             CollectionAddToFacet decoratedFacet = (CollectionAddToFacet) facet;
             Facet decoratingFacet = new CollectionAddToFacetWrapTransaction(decoratedFacet);
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == CollectionClearFacet.class) {
             CollectionClearFacet decoratedFacet = (CollectionClearFacet) facet;
             Facet decoratingFacet = new CollectionClearFacetWrapTransaction(decoratedFacet);
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == CollectionRemoveFromFacet.class) {
             CollectionRemoveFromFacet decoratedFacet = (CollectionRemoveFromFacet) facet;
             Facet decoratingFacet = new CollectionRemoveFromFacetWrapTransaction(decoratedFacet);
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == PropertyClearFacet.class) {
             PropertyClearFacet decoratedFacet = (PropertyClearFacet) facet;
             Facet decoratingFacet = new PropertyClearFacetWrapTransaction(decoratedFacet);
-            return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+            requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         if (facetType == PropertySetterFacet.class) {
             PropertySetterFacet decoratedFacet = (PropertySetterFacet) facet;
             Facet decoratingFacet = new PropertySetterFacetWrapTransaction(decoratedFacet);
-			return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
+			requiredHolder.addFacet(decoratingFacet);
+			return decoratingFacet;
         }
 
         return facet;

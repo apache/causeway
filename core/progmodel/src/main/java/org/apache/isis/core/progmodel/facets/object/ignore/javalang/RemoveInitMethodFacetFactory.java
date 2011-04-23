@@ -18,40 +18,25 @@
  */
 
 
-package org.apache.isis.core.progmodel.facets.object;
+package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
 /**
- * Designed to simply filter out {@link Iterable#iterator()} method if it exists.
- * 
- * <p>
- * Does not add any {@link Facet}s.
+ * Removes any calls to <tt>init</tt>.
  */
-public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implements MethodFilteringFacetFactory {
+public class RemoveInitMethodFacetFactory extends FacetFactoryAbstract {
 
-    public IteratorFilteringFacetFactory() {
+    public RemoveInitMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
-        processClassContaxt.removeMethod(MethodScope.OBJECT, "iterator", java.util.Iterator.class, new Class[] {});
-    }
-
-    @Override
-    public boolean recognizes(final Method method) {
-        if (method.toString().equals("public abstract java.util.Iterator java.lang.Iterable.iterator()")) {
-            return true;
-        }
-        return false;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
     }
 
 }

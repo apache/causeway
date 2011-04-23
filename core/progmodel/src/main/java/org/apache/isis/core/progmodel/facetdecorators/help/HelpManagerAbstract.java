@@ -39,6 +39,6 @@ public abstract class HelpManagerAbstract implements HelpManager {
      */
     public void shutdown() {}
 
-    public abstract String help(final Identifier identifier);
+    public abstract String getHelpText(final Identifier identifier);
 
 }
