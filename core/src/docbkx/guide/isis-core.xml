@@ -750,7 +750,7 @@
         objects.</para>
       </sect2>
 
-      <sect2>
+      <sect2 id="sec.AuthenticationSession">
         <title><classname>AuthenticationSession</classname> Definition</title>
 
         <para>The <classname>AuthenticationSession</classname> interface (in
@@ -2368,9 +2368,14 @@ com.mycompany.myapp.dom.Contact.action.CreatePhone.parameter2.name=Nombre</progr
       <para>The <emphasis>core runtime</emphasis> also provides a "standard"
       implementation, <classname>AuthenticationManagerStandard</classname>.
       This defines a sub-<acronym>API</acronym>,
-      <classname>Authenticator</classname>, which allows different
-      implementations to be easily plugged in. This also assigns a unique
-      session key to all currently authenticated users.</para>
+      <classname>Authenticator</classname>, which reduces the responsibilities
+      down to a small number of methods, including
+      <methodname>#authentication(AuthenticationRequest)</methodname>, and
+      returning an <classname>AuthenticationSession</classname> (as defined in
+      <xref linkend="sec.AuthenticationSession" />). The standard
+      implementation also assigns a unique session key to all currently
+      authenticated users, which can be used to check if a given
+      <classname>AuthenticationSession</classname> is valid.</para>
 
       <para>If using the <emphasis>default runtime</emphasis>, the
       authentication mechanism is specified using
@@ -2407,43 +2412,145 @@ com.mycompany.myapp.dom.Contact.action.CreatePhone.parameter2.name=Nombre</progr
       <methodname>AuthorizationManager#isUsable(...)</methodname>
       method).</para>
 
-      <para>Again like authentication, the core runtime provides a "standard"
-      implementaion, <classname>AuthorizationManagerStandard</classname>,
-      which in turn defines a sub-<acronym>API</acronym>,
-      <classname>Authorizor</classname>. This simplies the API for
-      authorization</para>
+      <para>Again like authentication, the <emphasis>core runtime</emphasis>
+      provides a "standard" implementaion,
+      <classname>AuthorizationManagerStandard</classname>, which in turn
+      defines a sub-<acronym>API</acronym>, <classname>Authorizor</classname>.
+      This simplies the <acronym>API</acronym> for authorization down to two
+      methods: isVisibleInRole(...) and
+      <classname>isUsableInRole(...)</classname>.</para>
 
-      <para></para>
+      <para>If using the <emphasis>default runtime</emphasis>, the
+      authorization mechanism is specified using
+      <filename>isis.properties</filename> configuration file:</para>
+
+      <para><programlisting>isis.authorization=xxx</programlisting>where "xxx"
+      is the name provided by implementation of
+      <classname>AuthorizationManagerInstaller</classname>.</para>
+
+      <para>The actual implementations of security can be found in the
+      security modules implementations, that is child modules of
+      <package>[oai:security]</package>. For example, the file-based
+      authorization manager is specified by
+      <classname>FileAuthorizationManagerInstaller</classname> (in the
+      <package>[oai.security:file]</package> module); and can be specified
+      using:</para>
+
+      <programlisting>isis.authorization=file</programlisting>
     </sect1>
 
     <sect1>
-      <title>Image Loading (<classname>TemplateImageLoader</classname>
+      <title>(Client) Image Loading
+      (<classname>TemplateImageLoader</classname>
       <acronym>API</acronym>)</title>
 
-      <para></para>
+      <para>The <classname>TemplateImageLoader</classname> API is a minor
+      <acronym>API</acronym> used by client-side applications for loading
+      <classname>java.awt.Image</classname>s from the classpath or from files.
+      Two of its uses are to render the initial splash window, and to load
+      images and icons for the DnD viewer.</para>
+
+      <para>Viewers are not compelled to use this <acronym>API</acronym>, and
+      indeed the web-based viewers tend to use their own mechanism.</para>
+
+      <para><note>
+          <para>It's not clear that this API is really significant enough to
+          be factored out. It may be better to just duplicate the code for the
+          splash window and move the main implementation to the DnD
+          viewer.</para>
+        </note></para>
     </sect1>
 
     <sect1>
       <title>Snapshot</title>
 
-      <para></para>
+      <para>The <package>oai.core.runtime.snapshot</package> package provides
+      the <classname>XmlSnapshot</classname> utility class. This is not used
+      by the framework itself; rather it is provided as the basis for domain
+      services (called by domain objects) that wish to generate
+      <acronym>XML</acronym> representations of a domain object or a graph of
+      domain objects.</para>
 
-      <para> XmlSnapshot snapshot = new XmlSnapshot(customer); // where
-      customer is a reference to an ObjectAdapter </para>
+      <para>The functionality was originally developed to support the
+      generation of <acronym>PDF</acronym> form letters using
+      <acronym>XML</acronym> and <acronym>XSD</acronym>s, but has since been
+      used for the generation of other communication types (such as emails and
+      <acronym>SMS</acronym>) as well as a means to publish
+      <acronym>XML</acronym> domain events to an enterprise service
+      bus.</para>
 
-      <para>Element customerAsXml = snapshot.toXml(); // returns customer's
-      fields, titles of simple references, number of items in collections
-      </para>
+      <para>The XmlSnapshot Javadoc summarises how to use the class:</para>
 
-      <para>snapshot.include("placeOfBirth"); // navigates to another object
-      represented by simple reference "placeOfBirth" </para>
+      <programlisting>XmlSnapshot snapshot = new XmlSnapshot(customerAdapter);  // (1) 
+Element customerAsXml = snapshot.toXml(); // (2)
+snapshot.include("placeOfBirth");   // (3) 
+snapshot.include("orders/product"); // (4)
+Element customerAsXml2 = snapshot.toXml(); // (5)</programlisting>
 
-      <para>snapshot.include("orders/product"); // navigates to all Orders of
-      Customer, and from them for their Products </para>
+      <para>where:</para>
 
-      <para></para>
+      <itemizedlist>
+        <listitem>
+          <para>(1) <code>customerAdapter</code> is a reference to an
+          <classname>ObjectAdapter</classname> (see <xref
+          linkend="sec.ObjectAdapter" />).</para>
+        </listitem>
 
-      <para></para>
+        <listitem>
+          <para>(2) returns customer's fields, titles of simple references,
+          number of items in collections</para>
+        </listitem>
+
+        <listitem>
+          <para>(3) specify that the snapshot should also navigate to all
+          "orders" of Customer, and from them to their "product"s</para>
+        </listitem>
+
+        <listitem>
+          <para>(4) specify that the snapshot should also navigate to another
+          object represented by simple reference "placeOfBirth"</para>
+        </listitem>
+
+        <listitem>
+          <para>(5) returns the new snapshot, including the specified
+          navigations from (3) and (4)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In order to make the functionality available through a domain
+      service, the service will need to convert a domain object pojo into an
+      <classname>ObjectAdapter</classname>. The precise mechanism for doing
+      this will depend on the configured runtime; if using the
+      <emphasis>default runtime
+      </emphasis><package>[oai.runtimes:dflt]</package> then this can be done
+      through the <classname>IsisContext</classname> service locator. The
+      default runtime further simplifies snapshot creation through its
+      <classname>XmlSnapshotBuilder</classname>:</para>
+
+      <para><programlisting> XmlSnapshot snapshot = XmlSnapshotBuilder.create(customerPojo)
+                            .includePath("placeOfBirth")
+                            .includePath("orders/product")
+                            .build();
+Element customerAsXml = snapshot.toXml(); </programlisting></para>
+
+      <para>A domain service for generating snapshots might therefore have the
+      following interface:</para>
+
+      <programlisting>public interface XmlSnapshotService {
+    public Element snapshot(Object pojo, String... includePaths);
+}</programlisting>
+
+      <para>and would be implemented as:</para>
+
+      <programlisting>public class XmlSnapshotServiceUsingDefaultRuntime implements XmlSnapshotService {
+    public Element snapshot(Object pojo, String... includePaths) {
+        XmlSnapshotBuilder builder = XmlSnapshotBuilder.create(pojo);
+        for(String includePath: includePaths) {
+            builder.includePath(includePath);
+        }
+        return builder.build().toXml();
+    }
+}</programlisting>
     </sect1>
   </chapter>
 

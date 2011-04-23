@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
  * XmlSnapshot snapshot = 
  *     XmlSnapshotBuilder.create(customer)
  *                .includePath(&quot;placeOfBirth&quot;)
- *                .include(&quot;orders/product&quot;)
+ *                .includePath(&quot;orders/product&quot;)
  *                .build();
  * Element customerAsXml = snapshot.toXml();
  * </pre>

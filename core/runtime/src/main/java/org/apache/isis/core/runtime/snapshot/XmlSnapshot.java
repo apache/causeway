@@ -368,10 +368,14 @@ public class XmlSnapshot {
             fieldNames.addElement(token);
         }
 
-        LOG.debug("include(..): " + log("fieldNames", fieldNames));
+        if(LOG.isDebugEnabled()) {
+        	LOG.debug("include(..): " + log("fieldNames", fieldNames));
+        }
 
         // navigate first field, from the root.
-        LOG.debug("include(..): invoking includeField");
+        if(LOG.isDebugEnabled()) {
+        	LOG.debug("include(..): invoking includeField");
+        }
         includeField(rootPlace, fieldNames, annotation);
     }
 
