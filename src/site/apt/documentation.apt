@@ -27,11 +27,16 @@ Documentation
   
   If you're just starting out with Isis, we recommend you look first at:
   
-  * the {{{./applib/docbkx/pdf/isis-applib.pdf}applib}} documentation
+  * the applib documentation ({{{./applib/docbkx/pdf/isis-applib.pdf}PDF}}, {{{./applib/docbkx/html/guide/isis-applib.html}HTML}})
   
-  * the {{{./core/docbkx/pdf/isis-core.pdf}core}} documentation
+  * the core documentation ({{{./core/docbkx/pdf/isis-core.pdf}PDF}}, {{{./core/docbkx/html/guide/isis-core.html}HTML}}) 
   
   []
+
+  If you're looking to contribute to Isis, we also recommend you look at the
+  contributors documentation ({{{./docbkx/pdf/isis-contributors-guide.pdf}}PDF}, 
+  {{{./docbkx/html/guide/isis-contributors-guide.html}}HTML})
+  
   
   Thereafter you'll want to drill into the documentation for individual 
   components.  The table below lists all the documentation guides available,
@@ -43,9 +48,9 @@ Documentation
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
 |applib                          |Application Library                 |Programming Model Conventions                   |{{{./applib/docbkx/pdf/isis-applib.pdf}PDF}}                                     |{{{./applib/docbkx/html/guide/isis-applib.html}HTML}}                                     |Done      |Dan      |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
-|core                            |Core Framework                      |Architecture, APIs and Customization            |{{{./core/docbkx/pdf/isis-core.pdf}PDF}}                                         |{{{./core/docbkx/html/guide/isis-core.html}HTML}}                                         |50%       |Dan, Rob |
+|core                            |Core Framework                      |Architecture, APIs and Customization            |{{{./core/docbkx/pdf/isis-core.pdf}PDF}}                                         |{{{./core/docbkx/html/guide/isis-core.html}HTML}}                                         |Done      |Dan, Rob |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
-|progmodels                      |Programming Models                  |Configuration and Customization Guide           |{{{./progmodels/docbkx/pdf/isis-progmodels.pdf}PDF}}                             |{{{./progmodels/docbkx/html/guide/isis-progmodels.html}HTML}}                             |33%       |Dan      |
+|progmodels                      |Programming Models                  |Configuration and Customization Guide           |{{{./progmodels/docbkx/pdf/isis-progmodels.pdf}PDF}}                             |{{{./progmodels/docbkx/html/guide/isis-progmodels.html}HTML}}                             |40%       |Dan      |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
 |security                        |Security                            |Configuration and Deployment Guide              |{{{./security/docbkx/pdf/isis-security.pdf}PDF}}                                 |{{{./security/docbkx/html/guide/isis-security.html}HTML}}                                 |10%       |Dan,Rob  |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
@@ -69,7 +74,7 @@ Documentation
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
 |viewers:scimpi                  |Scimpi Viewer                       |Configuration and Deployment Guide              |{{{./viewer/scimpi/docbkx/pdf/isis-scimpi-viewer.pdf}PDF}}                       |{{{./viewer/scimpi/docbkx/html/guide/isis-scimpi-viewer.html}HTML}}                       |0%        |Rob      |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
-|viewers:wicket                  |Wicket Viewer                       |Configuration and Deployment Guide              |{{{./viewer/wicket/docbkx/pdf/isis-wicket-viewer.pdf}PDF}}                       |{{{./viewer/wicket/docbkx/html/guide/isis-wicket-viewer.html}HTML}}                       |Done      |Dan      |
+|viewers:wicket                  |Wicket Viewer                       |Configuration and Deployment Guide              |{{{./viewer/wicket/docbkx/pdf/isis-wicket-viewer.pdf}PDF}}                       |{{{./viewer/wicket/docbkx/html/guide/isis-wicket-viewer.html}HTML}}                       |95%       |Dan      |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+
 |viewers:restful                 |Restful Viewer                      |Configuration and Deployment Guide              |{{{./viewer/restful/docbkx/pdf/isis-restful-viewer.pdf}PDF}}                     |{{{./viewer/restful/docbkx/html/guide/isis-restful-viewer.html}HTML}}                     |90%       |Dan      |
 *--------------------------------+------------------------------------+------------------------------------------------+---------------------------------------------------------------------------------*------------------------------------------------------------------------------------------*----------*---------+

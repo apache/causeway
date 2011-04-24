@@ -29,79 +29,178 @@
   <preface id="preface">
     <title>Preface</title>
 
-    <para>*** TODO</para>
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework that supports supports various
+    viewers, along with <acronym>API</acronym>s and implementations relating
+    to security, the programming model, the runtime (persistence) and profile
+    stores (user preferences). <emphasis>Apache Isis</emphasis> is hosted at
+    the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
 
-    <para></para>
+    <para>At the heart of <emphasis>Apache Isis</emphasis> is a metamodel,
+    used by the viewers to render the domain objects and by the runtime to
+    persist them, remote them, and so forth. This metamodel is built up by the
+    framework looking for specific programming conventions, annotations and so
+    forth. The collection of programming conventions is termed a "programming
+    model", and is pluggable.</para>
 
-    <para></para>
+    <para>This documentation describes how to use and customize the default
+    programming models, or to use other available programming models (for
+    example, for other JVM-based languages).</para>
+
+    <sect1>
+      <title>Who this Guide is For</title>
+
+      <para>This guide is written for programmers looking to either customize
+      the default programming model (adding or removing programming
+      conventions), or to use other available programming models. It is
+      divided into the following parts:<itemizedlist>
+          <listitem>
+            <para>Default Programming Model</para>
+
+            <para>This part of the guide (see <xref linkend="prt.Java5" />)
+            covers the default (Java 5) programming model, how to customize
+            it, and how to extend it.</para>
+          </listitem>
+
+          <listitem>
+            <para>Groovy Programming Model</para>
+
+            <para>This part of the guide (see <xref linkend="prt.Groovy" />)
+            describes how to configure your application to use Groovy as the
+            programming language for your domain objects, rather than
+            Java.</para>
+          </listitem>
+
+          <listitem>
+            <para>Wrapper Programming Model</para>
+
+            <para>This part of the guide (see <xref
+            linkend="prt.Wrapper" />)</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect1>
+
+    <sect1>
+      <title>How this Guide relates to other Documentation</title>
+
+      <para>If all you want to do is to program domain objects against the
+      default programming model, then see the Isis <emphasis>applib</emphasis>
+      documentation.</para>
+
+      <para>If you want to start customizing the default programming model,
+      however, then we recommend that you first consult Isis'
+      <emphasis>core</emphasis> documentation, which, describes the general
+      design of the metamodel (in the <emphasis>core metamodel</emphasis>
+      chapter), and then get an understanding of the library of programming
+      model elements available to assemble a programming model (in the
+      <emphasis>core progmodel</emphasis> chapter). You can then turn to
+      <emphasis>this</emphasis> guide which describes which of those elements
+      are actually used for the default programming model (most of
+      them).</para>
+    </sect1>
+
+    <sect1>
+      <title>Abbreviations used in this Guide</title>
+
+      <para><emphasis>Apache Isis</emphasis> is built using Maven, which
+      identifies every module with a <emphasis>groupId</emphasis>, an
+      <emphasis>artifactId</emphasis>, a <emphasis>version</emphasis>, and a
+      <emphasis>type</emphasis>. These are called the Maven
+      <emphasis>co-ordinates</emphasis>. In this guide we identify each module
+      using notation <package>(groupId:artifactId)</package>; you should
+      assume that the <emphasis>version</emphasis> is the latest version, and
+      the <emphasis>type</emphasis> is the default JAR artifact<footnote>
+          <para>Maven modules can create other artifacts too, such as a test
+          JAR artifact. This would be indicated with a type of test-jar. But
+          the default artifact is a regular JAR.</para>
+        </footnote>. Hence <package>(org.apache.isis:core)</package> is the
+      Maven module with a <emphasis>groupId</emphasis> of
+      <package>org.apache.isis</package> and an
+      <emphasis>artifactId</emphasis> of <package>core</package>.</para>
+
+      <para>As a further convenience, we use "oai" as an abbreviation for
+      <package>org.apache.isis</package>. Hence
+      <package>(oai.runtimes:dflt)</package> refers to the <emphasis>default
+      runtime</emphasis> module. In this guide we also use the "oai"
+      abbreviation within package names.</para>
+    </sect1>
   </preface>
 
-  <part>
+  <part id="prt.Java5">
     <title>Default (Java 5) Programming Model</title>
 
+    <partintro>
+      <para><emphasis>Apache Isis</emphasis>' default programming model
+      <package>[oai.progmodels:dflt]</package> is targetted at domain
+      applications written using Java 5, and corresponds to the set of
+      programming conventions described in the documentation fo the
+      <emphasis>applib</emphasis> <package>[oai:applib]</package> module. If
+      using the <emphasis>default runtime</emphasis>
+      <package>[oai.runtimes:dflt]</package> then the Java 5 programming model
+      is configured by default . </para>
+
+      <para>The chapters in this part of the guide describe:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>using and customizing the default programming model</para>
+        </listitem>
+
+        <listitem>
+          <para>writing a new <classname>FacetFactory</classname></para>
+        </listitem>
+
+        <listitem>
+          <para>writing a new <classname>FacetDecorator</classname></para>
+        </listitem>
+
+        <listitem>
+          <para>writing a new <classname>MetaModelValidator</classname></para>
+        </listitem>
+
+        <listitem>
+          <para>writing a new
+          <classname>MemberLayoutArranger</classname></para>
+        </listitem>
+      </itemizedlist>
+    </partintro>
+
     <chapter id="chp.ProgrammingModelApi">
-      <title>*** Introduction</title>
+      <title>Using the Default Programming Model</title>
 
-      <para></para>
+      <para>We generally recommend that you stick to the conventions of the
+      programming model as documented in the <emphasis>applib</emphasis>
+      module <package>[oai:applib]</package>. However, it is in fact possible
+      to customize or modify these conventions. A typical case might be to
+      make <emphasis>Isis</emphasis> support some of your own annotations.
+      You'll find that some of the viewers and object stores also define their
+      own extensions to the standard programming model.</para>
 
-      <para></para>
-
-      <note>
-        <para>At the moment this API is rather fine-grained. We intend to
-        introduce higher level abstractions to make it easier to work with. We
-        may also split out member sorting into a separate abstraction.</para>
-      </note>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <note>
-        <para>TODO: tidy up the following paras, were just copied/pasted in
-        from APT</para>
-      </note>
-
-      <para></para>
-
-      <para>Although we generally recommend that you stick to the conventions
-      of the programmingmodel as documented in the Application Library (in
-      <filename>applib</filename>), it is in fact possible to customize or
-      modify these conventions. A typical case might be to make Isis support
-      some of your own annotations. You'll find that some of the viewers and
-      object stores also define their own extensions to the standard
-      programming model.</para>
-
-      <para></para>
-
-      <para>The metamodel is built up using a collection of
-      &lt;&lt;&lt;FacetFactory&gt;&gt;&gt;s. These are used to identify the
-      classes and class members, and to decorate these class members with
-      semantics. It is easy to write new &lt;&lt;&lt;FacetFactory&gt;&gt;&gt;s
-      to support new programming conventions or, indeed, new languages. The
-      &lt;&lt;&lt;FacetFactory&gt;&gt;&gt; API is defined in
-      {{{../core/metamodel/index.html}metamodel}} module, along with
-      implementations to support the Java language. The
-      {{{http://groovyobjects.sourceforge.net}Groovy Objects}} sister project
-      provides implementations to allow Isis to support domain objects written
-      in {{{http://groovy.codehaus.org}Groovy}}.</para>
-
-      <para></para>
+      <para>In this chapter we show you how to use the default programming
+      model, and then we go on to show how to customise it to your own
+      needs.</para>
 
       <sect1>
-        <title>ProgrammingModel API and ProgrammingModelFacetsJava5
-        Implementation</title>
+        <title>*** The Default Programming Model
+        (<classname>ProgrammingModelFacetsJava5</classname>)</title>
 
-        <para></para>
+        <para>*** show what is used by default; how to specify explicitly in
+        <emphasis>default runtime</emphasis> if required.</para>
 
         <para></para>
       </sect1>
 
       <sect1>
-        <title>"Rolling-your-own" Programming Model</title>
+        <title>*** Minor Customizations to the Programming Model</title>
 
-        <para></para>
+        <para>*** discuss use of .include and .exclude</para>
+
+        <programlisting>isis.reflector.facets.include=com.mycompany.myproj.isis.StringLengthBetweenFacetFactory,\ com.mycompany.myproj.isis.PositiveValuesOnlyFacetFactory</programlisting>
 
         <para></para>
 
@@ -111,89 +210,114 @@
       </sect1>
 
       <sect1>
-        <title>Extending the reflector</title>
+        <title>*** Writing a Custom
+        <classname>ProgrammingModel</classname></title>
 
-        <remark>Describe how introspection takes place</remark>
-
-        <para></para>
-
-        <remark>Facets (describe (including how they are defined, how they are
-        used), then list all types with descriptions; Javadocs should detail
-        how to use each one, but do check as working through list)</remark>
-
-        <para></para>
-
-        <remark>Detail how introspector determines what facets to give to each
-        holder</remark>
-
-        <para></para>
-
-        <remark>Adding behaviour via decorator facets, eg for I18n, logging
-        etc</remark>
-
-        <para></para>
-
-        <remark>Adding new behaviour by adding new facets, including how to
-        access then</remark>
-
-        <para></para>
-
-        <formalpara>
-          <title>Interaction utilties</title>
-
-          <para>Other than the properties and actions that the are made
-          available by the reflector the other way the reflector is used is
-          via by the reflector utilities classes <remark>I don't think this
-          name really reflects the intent, a better one is required</remark>
-          such as InteractionUtils and CollectionUtils. These helper classes
-          generally make use of the <classname>Facet</classname>s on a
-          <classname>FacetHolder</classname> to interact with the domain
-          model. For example the <methodname>size(ObjectAdapter)</methodname>
-          method on the <classname>CollectionFacetUtils</classname> class will
-          determine the size of the collection without having to resort to
-          finding the right facet and using that yourself.</para>
-        </formalpara>
-
-        <para>These utility classes then make use of the related facets (got
-        singularly or a set via the
-        <methodname>getFacets(FacetFilter)</methodname> method that typically
-        search for facets using the mix-in interfaces that are used to mark
-        the facets for this kind of use) which are then all process on behalf
-        of the client. For example, the <methodname>isVisible</methodname>
-        method get all the facets to do with hidding things by filtering for
-        facets that <classname>are of the type
-        HidingInteractionAdvisor</classname>. This interface is implemented by
-        hide-related facets</para>
+        <para>*** recommended approach is to subclass
+        <classname>ProgrammingModelFacetsJava5</classname>:</para>
 
         <para></para>
 
         <para></para>
 
-        <para><classname>DisablingInteractionAdvisor</classname>,
-        <classname>HidingInteractionAdvisor</classname> and
-        <classname>ValidatingInteractionAdvisor</classname> interfaces are
-        used to bring together all facets for disabling, hiding and validating
-        properties, actions and parameters. These each provide a single method
-        for for checking a proposed interaction. These are then used by the
-        <classname>InteractionUtils</classname> class to provide all the
-        domain related interaction checking behaviour to the clients of the
-        reflector</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>How to write your own Facet Decorator</title>
+        <programlisting format="linespecific">isis.reflector.facets=com.mycompany.myproj.isis.MyProgrammingModel</programlisting>
 
         <para></para>
 
         <para></para>
       </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Writing a New <classname>FacetFactory</classname></title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
 
       <sect1>
-        <title>Configuring I18N</title>
+        <title>*** NameFileFacetFactory</title>
 
-        <para>x-ref core.progmodel</para>
+        <para>*** copied from trunk/examples</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>*** TitleAnnotationFacetFactory</title>
+
+        <para>*** write a-new; render the title using those properties
+        annotated as @Title(n) (where n=order)</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>*** StringLengthBetweenFacetFactory</title>
+
+        <para>*** write a-new</para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Writing a New <classname>FacetDecorator</classname></title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect1>
+        <title>*** LoggingFacetDecorator</title>
+
+        <para></para>
+
+        <para>*** eg for capture of response times, or for replay</para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Writing a New <classname>MetaModelValidator</classname></title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect1>
+        <title>*** Require all pojos are annotated</title>
+
+        <para></para>
+
+        <para>eg @Root vs @Entity vs @Value vs @Service</para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Writing a New <classname>MemberLayoutArranger</classname></title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect1>
+        <title>*** FileBasedMemberLayoutArranger</title>
 
         <para></para>
 
@@ -202,113 +326,88 @@
     </chapter>
   </part>
 
-  <part>
+  <part id="prt.Groovy">
     <title>Groovy Programming Model</title>
 
     <partintro>
-      <para>*** TO UPDATE</para>
+      <para><emphasis>Apache Isis</emphasis> enables design-driven
+      applications to be rapidly developed and optionally deployed,
+      automatically providing a runtime-generated <acronym>OOUI</acronym> for
+      the domain objects. <emphasis>Isis</emphasis> itself is written in Java,
+      and normally the domain objects that make up the application are also
+      written in Java. These objects are basically pojos;
+      <emphasis>Isis</emphasis> provides a number of annotations and defines a
+      number of coding conventions so that business rules and constraints can
+      be picked up by the framework, and to expose behaviour in the
+      <acronym>UI</acronym> over-and-above simple <acronym>CRUD</acronym>
+      operations.</para>
 
-      <para><ulink url="http://groovyobjects.sourceforge.net">Groovy
-      Objects</ulink> is a sister project to <ulink
-      url="http://nakedobjects.org">Naked Objects</ulink>, allowing domain
-      objects to be written in the <ulink
-      url="http://groovy.codehaus.org">Groovy</ulink> dynamic language as well
-      as in Java.</para>
+      <para><ulink url="http://groovy.codehaus.org">Groovy</ulink> is an
+      alternative language for writing code to run on the
+      <acronym>JVM</acronym>. It offers a number of dynamic language features,
+      as well reduced syntax clutter (eg for properties) along with
+      programming constructs such as closures. What the Groovy programming
+      model <package>[oai.progmodels:groovy]</package>does is to provide is
+      the ability to write domain objects in Groovy and then run on top within
+      <emphasis>Apache Isis</emphasis>. Because Groovy source files are
+      ultimately compiled down into Java bytecode, <emphasis>Isis</emphasis>
+      is able (with a little bit of tweaking) to build up its metamodel and
+      run as normal. What the <emphasis>groovy progmodel</emphasis> does is
+      perform the tweaking in how the metamodel is built up.</para>
 
-      <para><emphasis>Groovy Objects</emphasis> is hosted on <ulink
-      url="http://groovyobjects.sourceforge.net">SourceForge</ulink>, and is
-      licensed under <ulink
-      url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
-      License v2</ulink>. <emphasis>Naked Objects</emphasis> is also hosted on
-      <ulink
-      url="http://sourceforge.net/projects/nakedobjects">SourceForge</ulink>,
-      and is also licensed under <ulink
-      url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
-      License v2</ulink>.</para>
+      <para>The chapters in this part of the guide:</para>
 
-      <para></para>
+      <itemizedlist>
+        <listitem>
+          <para>how to configure Maven for an existing domain application to
+          use the Groovy</para>
 
-      <para></para>
+          <para>We generally recommend you develop your domain applications
+          using <ulink url="http://maven.apache.org">Apache Maven</ulink>, and
+          <emphasis>Isis</emphasis>itself is packaged as a set of Maven
+          modules. The details provided focus solely on how to update a
+          Maven-based project; we also explain how to configure your
+          application within an <acronym>IDE</acronym>.</para>
+        </listitem>
+
+        <listitem>
+          <para>writing domain objects in Groovy</para>
+
+          <para>Guidance on how to follow the <emphasis>Apache Isis</emphasis>
+          coding conventions while programming in Groovy. </para>
+        </listitem>
+
+        <listitem>
+          <para>writing fixtures in Groovy</para>
+
+          <para>For testing and prototyping.</para>
+        </listitem>
+      </itemizedlist>
     </partintro>
 
     <chapter>
-      <title>Introduction</title>
+      <title>Configuring your Domain Application's (Maven) Project</title>
 
       <abstract>
-        <para>This chapter explains what <emphasis>Groovy Objects</emphasis>
-        is for, and a little about how it works.</para>
-      </abstract>
-
-      <para>The <ulink url="http://nakedobjects.org">Naked Objects</ulink>
-      framework enables design-driven applications to be rapidly developed and
-      optionally deployed, automatically providing a runtime-generated
-      <acronym>OOUI</acronym> for the domain objects. <emphasis>Naked
-      Objects</emphasis> is written in Java, and normally the domain objects
-      that make up the application are also written in Java. These objects are
-      basically pojos; <emphasis>Naked Objects</emphasis> provides a number of
-      annotations and defines a number of coding conventions so that business
-      rules and constraints can be picked up by the framework, and to expose
-      behaviour in the <acronym>UI</acronym> over-and-above simple
-      <acronym>CRUD</acronym> operations.</para>
-
-      <para><emphasis>Naked Objects</emphasis> performs its magic by building
-      a metamodel of the underlying domain objects, and uses this to build the
-      <acronym>OOUI</acronym>. The process is very similar to the way that
-      <acronym>ORM</acronym>s such as <ulink
-      url="http://hibernate.org">Hibernate</ulink> work, but rather than
-      reflecting the domain objects into the persistence layer, it reflects
-      them into the presentation layer.</para>
-
-      <para><ulink url="http://groovy.codehaus.org">Groovy</ulink> (as I'm
-      sure you know) is an alternative language for writing code to run on the
-      <acronym>JVM</acronym>. It offers a number of dynamic language features,
-      as well reduced syntax clutter (eg for properties) along with
-      programming constructs such as closures.</para>
-
-      <para>What <emphasis>Groovy Objects</emphasis> provides is the ability
-      to write domain objects in Groovy and then run on top within
-      <emphasis>Naked Objects</emphasis>. Because Groovy source files are
-      ultimately compiled down into Java bytecode, <emphasis>Naked
-      Objects</emphasis> is able (with a little bit of tweaking) to build up
-      its metamodel and run as normal. What <emphasis>Groovy
-      Objects</emphasis> does is perform the tweaking in how the metamodel is
-      built up.</para>
-
-      <para>This user guide explains how to configure your project to develop
-      using Groovy, and provides some guidance on how to follow the
-      <emphasis>Naked Objects</emphasis> coding conventions while programming
-      in Groovy. We generally recommend you develop your domain applications
-      using <ulink url="http://maven.apache.org">Apache Maven</ulink>, and
-      <emphasis>Groovy Objects</emphasis> itself is packaged as a Maven
-      module. The details provided focus solely on how to update a Maven-based
-      project; we also explain how to configure your application within an
-      <acronym>IDE</acronym>.</para>
-    </chapter>
-
-    <chapter>
-      <title>Configuring your (Maven) Project</title>
-
-      <abstract>
-        <para><emphasis>Groovy Objects</emphasis> is provided as a Maven
-        module. In this chapter we explain the configurations steps necessary
-        to update your Maven-based domain application, and how to configure a
+        <para>In this chapter we explain the configurations steps necessary to
+        update your Maven-based domain application, and how to configure a
         common <acronym>IDE</acronym> so you can program in Groovy with
-        <emphasis>Naked Objects</emphasis>.</para>
+        <emphasis>Apache Isis</emphasis>.</para>
       </abstract>
 
       <sect1>
-        <title>Structure of a Naked Objects Application</title>
+        <title>Review: structure of an Isis Application</title>
 
-        <para>The typical structure for a <emphasis>Naked Objects</emphasis>
-        Maven-based application (and the one you'll end up with if you use
-        <emphasis>Naked Objects</emphasis>' Maven application archetype)
+        <para>The typical structure for a <emphasis>Apache Isis
+        </emphasis>Maven-based application (and the one you'll end up with if
+        you use <emphasis>Apache Isis</emphasis>' quickstart archetype)
         is:</para>
 
         <itemizedlist>
           <listitem>
             <para><filename>app</filename></para>
 
-            <para>Main (parent) module, whose <filename>pom.xml</filename>
+            <para>Root (parent) module, whose <filename>pom.xml</filename>
             references the submodules</para>
           </listitem>
 
@@ -320,52 +419,58 @@
           </listitem>
 
           <listitem>
-            <para><filename>app/service</filename></para>
-
-            <para>Implementation of services, repositories and
-            factories</para>
-          </listitem>
-
-          <listitem>
             <para><filename>app/fixture</filename></para>
 
-            <para>Fixtures, used to seed (in-memory) object store when running
+            <para>Fixtures, used to seed the default object store when running
             in exploration/prototype mode</para>
           </listitem>
 
           <listitem>
-            <para><filename>app/commandline</filename></para>
+            <para><filename>app/objstore-dflt</filename></para>
 
-            <para>Bootstrap for running from the command line (typically, the
-            <acronym>DnD</acronym> viewer or <acronym>HTML</acronym>
-            viewer)</para>
+            <para>Implementation of services, repositories and factories for
+            use with the default runtime/default (in-memory) object
+            store.</para>
           </listitem>
 
           <listitem>
-            <para><filename>app/webapp</filename></para>
+            <para><filename>app/quickrun</filename></para>
 
-            <para>Packaging and running as a web application</para>
+            <para>Bootstrap for running from the command line (the
+            <acronym>DnD</acronym> viewer, the <acronym>HTML</acronym> viewer
+            or the Restful viewer)</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/viewer-xxx</filename></para>
+
+            <para>Packaging and running as a web application using the 'xxx'
+            viewer (where xxx=html, restful, scimpi or wicket)</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>app/test-xxx</filename></para>
+
+            <para>Running as tests (where xxx=junit or bdd)</para>
           </listitem>
         </itemizedlist>
 
         <para>The application is normally run either from the
-        <emphasis>commandline</emphasis> project, using the
-        <code>org.nakedobjects.runtime.NakedObjects</code> main class (where
-        the viewer to use is specified using the
-        <classname>--viewer</classname> flag), or from the
-        <emphasis>webapp</emphasis> project (picking up
-        <filename>web.xml</filename> for bootstrapping as a web
-        application),</para>
+        <emphasis>quickrun</emphasis> project, using the
+        <code>org.apache.isis.Isis</code> main class, and where the viewer to
+        use is specified using the <classname>--viewer</classname> flag).
+        Alternatively it can be run as a webapp from the
+        <emphasis>viewer-xxx</emphasis> projects.</para>
       </sect1>
 
       <sect1>
-        <title>Updating the Main Project</title>
+        <title>Updating the Parent Project</title>
 
-        <para>There is no Groovy code in the <filename>main</filename>
-        project, but what we do here is to define the version, and where
-        necessary configuration, of dependencies used by the application's
-        submodules. We have classpath dependencies and build dependencies, so
-        both are defined.</para>
+        <para>There is no Groovy code in the root parent project, but what we
+        do here is to define the version, and where necessary configuration,
+        of dependencies used by the application's submodules. We have
+        classpath dependencies and build dependencies, so both are
+        defined.</para>
 
         <para>There are three things to specify:</para>
 
@@ -381,12 +486,6 @@
             By default GMaven specifies a version of the Groovy runtime to
             compile against, but this can be overridden</para>
           </listitem>
-
-          <listitem>
-            <para>which version of <emphasis>Groovy Objects</emphasis> to use.
-            Groovy Objects is not itself written in Groovy, but it does have a
-            dependency on Groovy runtime. We want this to be in sync.</para>
-          </listitem>
         </itemizedlist>
 
         <para>To start with, we specify the versions of these different
@@ -397,7 +496,6 @@
     &lt;groovy.version&gt;1.7.2&lt;/groovy.version&gt;
     &lt;gmaven.version&gt;1.2&lt;/gmaven.version&gt;
     &lt;gmaven.runtime&gt;1.7&lt;/gmaven.runtime&gt;
-    &lt;groovyobjects.version&gt;0.1-SNAPSHOT&lt;/groovyobjects.version&gt;
 &lt;/properties&gt;</programlisting>
 
         <para>The <varname>gmaven.runtime</varname> must be compatible with
@@ -410,15 +508,15 @@
         groovy:providers</code> is a good place to start.</para>
 
         <blockquote>
-          <para>Note: <emphasis>Groovy Objects</emphasis> also has a
+          <para>Note: the <emphasis>groovy progmodel </emphasis>also has a
           dependency on the Groovy runtime, albeit in a very minor way. This
           dependency is marked optional in order to allow your application to
           specify its own Groovy runtime version which if needed can be
-          different from that needed by <emphasis>Groovy
-          Objects</emphasis>.</para>
+          different from that needed by <emphasis>groovy progmodel</emphasis>
+          module.</para>
         </blockquote>
 
-        <para>Next, we define how we to compile Groovy code, using the GMaven
+        <para>Then, we define how we to compile Groovy code, using the GMaven
         plugin. We specify the plugin, the version, and its configuration;
         this goes in
         <classname>&lt;build&gt;/&lt;pluginManagement&gt;</classname>:</para>
@@ -449,36 +547,38 @@
     &lt;/pluginManagement&gt;
 &lt;/build&gt;</programlisting>
 
-        <para>Finally, we define the dependencies to <emphasis>Groovy
-        Objects</emphasis> and to Groovy. This goes in
+        <para>Finally, we define the dependencies to Groovy. This goes in
         <classname>&lt;dependencyManagement&gt;/&lt;dependencies&gt;</classname>:</para>
 
         <programlisting>&lt;dependencyManagement&gt;
     &lt;dependencies&gt;
         ...
-
-        &lt;!-- Groovy Objects --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
-            &lt;artifactId&gt;gapplib&lt;/artifactId&gt;
-            &lt;version&gt;${groovyobjects.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
-            &lt;artifactId&gt;gmetamodel&lt;/artifactId&gt;
-            &lt;version&gt;${groovyobjects.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- Groovy --&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
             &lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
             &lt;version&gt;${groovy.version}&lt;/version&gt;
         &lt;/dependency&gt;
-
+        ...
     &lt;/dependencies&gt;
 &lt;/dependencyManagement&gt;</programlisting>
+
+        <para>The dependency to <emphasis>groovy progmodel</emphasis> modules
+        themselves can be set up through a scope=import dependency of
+        [org.apache.isis:release]. Note that the quickstart archetype does
+        this automatically:</para>
+
+        <programlisting>&lt;dependencies&gt;
+    ...
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
+        &lt;artifactId&gt;release&lt;/artifactId&gt;
+        &lt;version&gt;${isis.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    ...
+&lt;/dependencies&gt;</programlisting>
+
+        <para>where <code>${isis.version}</code> is the version of
+        <emphasis>Apache Isis</emphasis> being used.</para>
       </sect1>
 
       <sect1>
@@ -528,15 +628,17 @@
     &lt;/plugins&gt;
 &lt;/build&gt;</programlisting>
 
-          <para>Next, we add dependencies both to <emphasis>Groovy
-          Objects</emphasis>' own applib and to Groovy itself:</para>
+          <para>Next, we add dependencies both to <emphasis>groovy
+          progmodel</emphasis>'s own applib
+          <package>[oai.progmodels:groovy-applib]</package> and to Groovy
+          itself:</para>
 
           <programlisting>&lt;dependencies&gt;
     ...
 
     &lt;dependency&gt;
-        &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
-        &lt;artifactId&gt;gapplib&lt;/artifactId&gt;
+        &lt;groupId&gt;org.apache.isis.progmodels&lt;/groupId&gt;
+        &lt;artifactId&gt;groovy-applib&lt;/artifactId&gt;
     &lt;/dependency&gt;
 
     &lt;dependency&gt;
@@ -546,21 +648,25 @@
 
 &lt;/dependencies&gt;</programlisting>
 
-          <para>The <emphasis>Groovy Objects</emphasis> applib brings in a
-          transitive dependency to the <emphasis>Naked Objects</emphasis>
-          applib along one or two helper classes (of which more in <xref
-          linkend="chp.Fixtures" />). In the future the applib may be expanded
-          to include other helper classes or new annotations provided by
-          <emphasis>Groovy Objects</emphasis> itself.</para>
+          <para>The <emphasis>groovy progmodel</emphasis> applib brings in a
+          transitive dependency to <emphasis>Isis </emphasis>main applib along
+          one or two helper classes (of which more in <xref
+          linkend="chp.Fixtures" />).</para>
 
-          <para>Finally, a small workaround. <emphasis>Naked
-          Objects</emphasis> picks up icons for domain classes from the
-          classpath, with the Java compiler doing the job of copying these
-          icons from <filename>src/main/resources</filename> into target. The
-          Groovy compiler does not seem to do this. We therefore ensure that
-          the Java compiler runs by adding a small dummy Java class. It could
-          go anywhere, but the <classname>images</classname> package is
-          probably the best location:</para>
+          <note>
+            <para>In the future the applib may be expanded to include other
+            helper classes or new annotations provided by <emphasis>Groovy
+            Objects</emphasis> itself.</para>
+          </note>
+
+          <para>Finally, a small workaround. <emphasis>Apache Isis
+          </emphasis>picks up icons for domain classes from the classpath,
+          with the Java compiler doing the job of copying these icons from
+          <filename>src/main/resources</filename> into target. The Groovy
+          compiler does not seem to do this. We therefore ensure that the Java
+          compiler runs by adding a small dummy Java class. It could go
+          anywhere, but the <classname>images</classname> package is probably
+          the best location:</para>
 
           <programlisting>package images;
 
@@ -635,40 +741,39 @@ class Dummy {}</programlisting>
       </sect1>
 
       <sect1>
-        <title>Updating the Commandline and/or Webapp Project</title>
+        <title>Updating the <filename>quickrun</filename> and/or
+        <filename>viewer-xxx</filename> projects</title>
 
-        <para>Finally, we need to update the <emphasis>commandline</emphasis>
-        and/or <emphasis>webapp</emphasis> project (depending on how you
+        <para>Finally, we need to update the <emphasis>quickrun</emphasis>
+        and/or <emphasis>viewer-xxx</emphasis> project (depending on how you
         intend to bootstrap your application). First, we add a dependency to
-        <emphasis>Groovy Objects</emphasis>'<filename> gmetamodel</filename>
-        module, in <classname>&lt;dependencies&gt;</classname>:</para>
+        <emphasis>groovy progmodel</emphasis>s'<filename> </filename>metamodel
+        module <package>[oai.progmodels:groovy-metamodel]</package>, in
+        <classname>&lt;dependencies&gt;</classname>:</para>
 
         <programlisting>&lt;dependencies&gt;
     ...
-
     &lt;dependency&gt;
-        &lt;groupId&gt;org.starobjects.groovy&lt;/groupId&gt;
-        &lt;artifactId&gt;gmetamodel&lt;/artifactId&gt;
+        &lt;groupId&gt;org.apache.isis.progmodels&lt;/groupId&gt;
+        &lt;artifactId&gt;groovy-metamodel&lt;/artifactId&gt;
     &lt;/dependency&gt;
-
     ...
 &lt;/dependencies&gt;</programlisting>
 
-        <para>Then, update the <filename>nakedobjects.properties</filename>
-        config file as follows:</para>
+        <para>Then, update the <filename>isis.properties</filename> config
+        file as follows:</para>
 
-        <programlisting>nakedobjects.reflector.facets.include=org.starobjects.groovy.gmetamodel.RemoveGroovyMethodsFacetFactory</programlisting>
+        <programlisting>isis.reflector.facets.include=org.starobjects.groovy.gmetamodel.RemoveGroovyMethodsFacetFactory</programlisting>
 
-        <para>This little piece of magic alters the way that <emphasis>Naked
-        Objects</emphasis> builds up its metamodel of the domain objects.
-        Specifically what it does is to filter out the various methods that
-        the Groovy compiler adds behind the scenes.</para>
+        <para>This little piece of magic ensures that the various methods that
+        the Groovy compiler adds behind the scenes are filtered out so that
+        they don't appear in the <emphasis>Isis</emphasis> metamodel.</para>
 
         <para>In most circumstances that should be enough. If you have very
         deep hierarchies of domain classes, then you may also need to add
         in:</para>
 
-        <programlisting>starobjects.groovy.depth=NNN</programlisting>
+        <programlisting>isis.groovy.depth=NNN</programlisting>
 
         <para>where NNN should be the depth of the class hierarchy. The
         default is 5, so in many cases there won't be any need to add this
@@ -684,14 +789,14 @@ class Dummy {}</programlisting>
       <title>Writing Domains Object in Groovy</title>
 
       <abstract>
-        <para><emphasis>Naked Objects</emphasis> uses convention over
+        <para><emphasis>Apache Isis </emphasis> uses convention over
         configuration and annotations to build the metamodel of the domain
         objects. This chapter explains what those conventions look like, and
         where annotations should be applied, when developing domain objects in
         Groovy.</para>
       </abstract>
 
-      <para><emphasis>Naked Objects</emphasis> allows validation and other
+      <para><emphasis>Apache Isis </emphasis>allows validation and other
       business constraints to expressed either declaratively (using
       annotations) and/or imperatively (using supporting methods). For a given
       class member (property, collection or action) we can specify whether the
@@ -725,25 +830,17 @@ class Dummy {}</programlisting>
       either as rendering hints or to define lifecycle callbacks.</para>
 
       <para>Collectively these conventions and annotations define the
-      <emphasis>Naked Objects Programming Model</emphasis>. This chapter
-      should give you a good flavour of what it's like to writing applications
-      for this programming model; but refer to the <emphasis>Naked
-      Objects</emphasis> <ulink
-      url="http://www.nakedobjects.org">documentation</ulink> for the complete
-      reference.</para>
-
-      <para>The code fragments that follow are taken from the <emphasis>Groovy
-      Objects</emphasis>' own test application (see the <emphasis>Groovy
-      Objects</emphasis> <ulink
-      url="https://groovyobjects.svn.sourceforge.net/svnroot/groovyobjects/trunk/testapp/claims">subversion</ulink>
-      repository).</para>
+      <emphasis>Isis Programming Model</emphasis>. This chapter should give
+      you a good flavour of what it's like to writing applications for this
+      programming model; but refer to the <emphasis>applib
+      </emphasis>documentation for the complete reference.</para>
 
       <sect1>
         <title>(Optional) Superclass</title>
 
         <para>Typically domain objects subclass from
-        <classname>AbstractDomainObject</classname> (in the <emphasis>Naked
-        Objects</emphasis> applib, transitively referenced from
+        <classname>AbstractDomainObject</classname> (in the
+        <emphasis>Isis</emphasis> applib, transitively referenced from
         <emphasis>Groovy Objects</emphasis>' own applib); for example:</para>
 
         <programlisting>class Claim extends AbstractDomainObject {
@@ -751,16 +848,14 @@ class Dummy {}</programlisting>
 }</programlisting>
 
         <para>It isn't mandatory to subclass from
-        <classname>AbstractDomainObject</classname>. All that <emphasis>Naked
-        Objects</emphasis> requires is that it can inject its
+        <classname>AbstractDomainObject</classname>. All that <emphasis>Isis
+        </emphasis>requires is that it can inject its
         <classname>DomainObjectContainer</classname> into the domain object to
-        support lazy loading and dirty tracking (the
-        <methodname>resolve()</methodname> and
-        <methodname>objectChanged()</methodname> methods, normally called by
-        CgLib proxies). The <classname>DomainObjectContainer</classname> also
-        allows your domain object to be able to instantiate and persist new
-        instances (using the <methodname>newTransientInstance()</methodname>
-        and <methodname>persist()</methodname> methods).</para>
+        support lazy loading and dirty tracking. The
+        <classname>DomainObjectContainer</classname> also allows your domain
+        object to be able to instantiate and persist new instances (using the
+        <methodname>newTransientInstance()</methodname> and
+        <methodname>persist()</methodname> methods).</para>
 
         <para>In practical terms, then, if you aren't able or don't want to
         subclass from <classname>AbstractDomainObject</classname>, just make
@@ -771,11 +866,10 @@ class Dummy {}</programlisting>
       <sect1>
         <title>Properties and Collections</title>
 
-        <para><emphasis>Naked Objects</emphasis> follows the usual JavaBean
-        conventions for properties, and so any Groovy property is picked up
-        automatically by <emphasis>Naked Objects</emphasis>. This also works
-        for collections (a JavaBean property that returns a
-        <classname>java.util.Collection</classname>,
+        <para><emphasis>Isis </emphasis>follows the usual JavaBean conventions
+        for properties, and so any Groovy property is picked up automatically
+        by the framework. This also works for collections (a JavaBean property
+        that returns a <classname>java.util.Collection</classname>,
         <classname>java.util.List</classname> or
         <classname>java.util.Set</classname>).</para>
 
@@ -807,7 +901,7 @@ class Dummy {}</programlisting>
       <sect1>
         <title>Title &amp; Icon</title>
 
-        <para><emphasis>Naked Objects</emphasis> uses the
+        <para><emphasis>Apache Isis</emphasis> uses the
         <methodname>title()</methodname> method to render a label for domain
         objects. For the <classname>Claim</classname> class, this is defined
         as:</para>
@@ -828,20 +922,19 @@ class Dummy {}</programlisting>
         <para>In addition, you may want to define an
         <methodname>iconName()</methodname>. If present, this is used to
         locate the icon for the entity (meaning that different instances of
-        the same type can render different icons). Otherwise, <emphasis>Naked
-        Objects</emphasis> infers the icon from the class name. The icon is
-        typically picked up from an <package>images</package> package (in
+        the same type can render different icons). Otherwise, <emphasis>Isis
+        </emphasis>infers the icon from the class name. The icon is typically
+        picked up from an <package>images</package> package (in
         <filename>src/main/resources</filename>).</para>
       </sect1>
 
       <sect1>
         <title>Creating and Persisting Objects</title>
 
-        <para><emphasis>Naked Objects</emphasis> will automatically inject any
-        domain services into your domain objects, but to do this must know
-        about then when they are instantiated. But it also requires to know
-        about them so that it can track their persistence state. To do this,
-        use the
+        <para><emphasis>Isis</emphasis> will automatically inject any domain
+        services into your domain objects, but to do this must know about then
+        when they are instantiated. But it also requires to know about them so
+        that it can track their persistence state. To do this, use the
         <methodname>DomainObjectContainer#newTransientInstance(Class)</methodname>
         method. Note that this also requires that your domain object has a
         <code>public</code> no-arg constructor.</para>
@@ -857,10 +950,10 @@ class Dummy {}</programlisting>
       <sect1>
         <title>Callbacks</title>
 
-        <para>There are a number of callback methods that <emphasis>Naked
-        Objects</emphasis> will call on your domain object if present. One of
-        these is <methodname>created()</methodname>, called after a transient
-        instance is just instantiated. It's a good place to perform
+        <para>There are a number of callback methods that
+        <emphasis>Isis</emphasis> will call on your domain object if present.
+        One of these is <methodname>created()</methodname>, called after a
+        transient instance is just instantiated. It's a good place to perform
         initialization logic (that would otherwise probably have lived in a
         constructor). For example:</para>
 
@@ -878,8 +971,7 @@ class Dummy {}</programlisting>
 
         <para>Note that the method must return <code>void</code> (Groovy's
         <code>def</code> returns a <classname>java.lang.Object</classname>,
-        which is not what <emphasis>Naked Objects</emphasis> is looking
-        for).</para>
+        which is not what <emphasis>Isis</emphasis> is looking for).</para>
 
         <para>Other callback methods include:</para>
 
@@ -914,10 +1006,9 @@ class Dummy {}</programlisting>
         <title>Annotations</title>
 
         <para>Declarative business rules amount to applying annotations on the
-        appropriate methods. But you should note that <emphasis>Naked
-        Objects</emphasis> does not (currently) support annotations on fields,
-        so it's necessary to put the annotation on the getter for the
-        property.</para>
+        appropriate methods. However, <emphasis>Isis</emphasis> does not
+        (currently) support annotations on fields, so it's necessary to put
+        the annotation on the getter for the property.</para>
 
         <para>For example, to indicate that a property is disabled
         (read-only), we can write:</para>
@@ -966,9 +1057,9 @@ class Dummy {}</programlisting>
     ...
 }</programlisting>
 
-        <para>The full list of annotations can be found in the <emphasis>Naked
-        Objects</emphasis> applib, and are of course documented in the Naked
-        Objects documentation.</para>
+        <para>The full list of annotations are documented in the
+        <emphasis>applib</emphasis> <package>[oai:applib]</package>
+        documentation.</para>
       </sect1>
 
       <sect1>
@@ -1066,8 +1157,8 @@ class Dummy {}</programlisting>
       indeed, exactly what we need to do when we create fixtures for use with
       the in-memory object store.</para>
 
-      <para>The <emphasis>Groovy Objects</emphasis> applib extends this class
-      by providing the <classname>DomainObjectBuilder</classname>, which
+      <para>The <emphasis>groovy progmodel </emphasis>applib extends this
+      class by providing the <classname>DomainObjectBuilder</classname>, which
       additionally ensures that domain objects are instantiated through the
       <classname>DomainObjectContainer</classname>. The original
       <classname>ObjectGraphBuilder</classname> also needs to be told
@@ -1075,8 +1166,7 @@ class Dummy {}</programlisting>
       <classname>DomainObjectBuilder</classname> makes this easy to do in a
       typesafe way.</para>
 
-      <para>Let's see it in action. Here's the fixture from the
-      <emphasis>Groovy Objects</emphasis> testapp, to create 3
+      <para>Let's see it in action. Here's a fixture to create 3
       <classname>Employee</classname>s, some <classname>Claim</classname>s and
       some <classname>ClaimItem</classname>s within those
       <classname>Claim</classname>s:</para>
@@ -1134,9 +1224,8 @@ class Dummy {}</programlisting>
       <classname>ClaimItem</classname>).</para>
 
       <para>The <acronym>DSL</acronym> for building the object graph is just
-      that defined by Groovy's <classname>ObjectGraphBuilder</classname>. To
-      my eyes at least, this is easier to follow than its Java
-      equivalent.</para>
+      that defined by Groovy's <classname>ObjectGraphBuilder</classname>, and
+      is substantially more succinct than its Java equivalent.</para>
 
       <para>There is one limitation to be aware of, though, which relates to
       how the <classname>Claim</classname>/<classname>ClaimItem</classname>
@@ -1148,15 +1237,25 @@ class Dummy {}</programlisting>
       <classname>Claim</classname> is called
       <methodname>claimItems</methodname>. If this is irksome, then the
       <classname>ObjectGraphBuilder</classname> does define the ability to
-      tweak its behaviour as to how the relationship name is inferred. (A
-      future enhancement to <emphasis>Groovy Objects</emphasis> might be to
-      solve this problem in the general case, by perform the wiring using the
-      <emphasis>Naked Objects</emphasis> metamodel).</para>
+      tweak its behaviour as to how the relationship name is inferred.</para>
+
+      <note>
+        <para>(A future enhancement might be to solve this problem in the
+        general case, by perform the wiring using the
+        <emphasis>Isis</emphasis> metamodel).</para>
+      </note>
     </chapter>
   </part>
 
-  <part>
+  <part id="prt.Wrapper">
     <title>Wrapper Programming Model</title>
+
+    <partintro>
+      <para>*** describe the [oai.progmodels:wrapper] programming
+      model.</para>
+
+      <para></para>
+    </partintro>
 
     <chapter>
       <title></title>

@@ -56,7 +56,7 @@
     <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
-    pattern. It is made up of a core framework that supports supports various
+    pattern. It is made up of a core framework that supports supports variouys
     viewers, along with <acronym>API</acronym>s and implementations relating
     to security, the programming model, the runtime (persistence) and profile
     stores (user preferences). <emphasis>Apache Isis</emphasis> is hosted at
@@ -175,7 +175,7 @@
       <mediaobject>
         <imageobject>
           <imagedata fileref="../../../../src/site/resources/images/HexagonalArchitectureOverview.png"
-                     scale="45" />
+                     scale="55" />
         </imageobject>
       </mediaobject>
 
@@ -550,7 +550,7 @@
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/common/architecture-perspective.png"
-                     scale="60" />
+                     scale="80" />
         </imageobject>
       </mediaobject>
 
@@ -559,7 +559,7 @@
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/common/composition-perspective.png"
-                     scale="60" />
+                     scale="80" />
         </imageobject>
       </mediaobject>
 
@@ -721,7 +721,7 @@
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/common/encoding-classdiagram.png"
-                       scale="30" />
+                       scale="35" />
           </imageobject>
         </mediaobject>
 
@@ -874,7 +874,7 @@
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/metamodel/architecture-diagram-top-level-with-specloader-expanded.png"
-                       scale="100" />
+                       scale="110" />
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -893,7 +893,7 @@
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/metamodel/composition-diagram-top-level.png"
-                       scale="60" />
+                       scale="70" />
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -976,9 +976,9 @@
           <para>If using the <emphasis>default runtime</emphasis> module
           <package>(oai.runtimes:dflt)</package>, then the
           <classname>SpecificationLoader</classname> can be accessed using
-          <package>oai.runtimes.dflt.runtime.context.IsisContext#getSpecificationLoader()</package>.
-          It is an application-scoped component, meaning that a single
-          instance is used for the duration of the application running.</para>
+          <methodname>IsisContext.getSpecificationLoader()</methodname>. It is
+          an application-scoped component, meaning that a single instance is
+          used for the duration of the application running.</para>
 
           <para>Other runtime implementations will (are likely to) use
           dependency injection to make the
@@ -1331,7 +1331,7 @@
 
       <para>will install
       <classname>com.mycompany.myproj.isis.MyProgrammingModel</classname> as
-      the <classname>MetaModelValidator</classname>.</para>
+      the <classname>ProgrammingModel</classname>.</para>
 
       <para>Alternatively, if you are just tweaking the default
       ProgrammingModel, then you can simply use
@@ -1617,7 +1617,7 @@
           <mediaobject>
             <imageobject>
               <imagedata fileref="images/metamodel/ResolveState-stateChart.png"
-                         scale="40" />
+                         scale="60" />
             </imageobject>
           </mediaobject>
         </screenshot>
@@ -1898,7 +1898,7 @@ Persistable: User Persistable</screen>
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/progmodel/architecture-diagram.png"
-                       scale="60" />
+                       scale="70" />
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -1913,7 +1913,7 @@ Persistable: User Persistable</screen>
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/progmodel/composition-diagram-facets-package.png"
-                       scale="60" />
+                       scale="80" />
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -2338,7 +2338,7 @@ com.mycompany.myapp.dom.Contact.action.CreatePhone.parameter2.name=Nombre</progr
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/runtime/architecture-diagram.png"
-                       scale="60" />
+                       scale="70" />
           </imageobject>
         </mediaobject>
       </screenshot>

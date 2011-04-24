@@ -140,6 +140,16 @@
                 <artifactId>groovy</artifactId>
                 <version>${isis.progmodel-groovy.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>groovy-applib</artifactId>
+                <version>${isis.progmodel-groovy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.progmodels</groupId>
+                <artifactId>groovy-metamodel</artifactId>
+                <version>${isis.progmodel-groovy.version}</version>
+            </dependency>
 
             <!-- security: dflt -->
             <dependency>
