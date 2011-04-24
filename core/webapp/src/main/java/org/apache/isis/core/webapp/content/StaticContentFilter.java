@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  * <pre>
  * &lt;filter>
  *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
- *   &lt;filter-class>org.apache.isis.webapp.StaticContentFilter&lt;/filter-class>
+ *   &lt;filter-class>org.apache.isis.core.webapp.content.StaticContentFilter&lt;/filter-class>
  *   &lt;init-param>
  *     &lt;param-name>CacheTime&lt;/param-name>
  *     &lt;param-value>86400&lt;/param-value>

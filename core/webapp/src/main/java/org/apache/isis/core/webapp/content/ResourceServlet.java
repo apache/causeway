@@ -55,12 +55,17 @@ public class ResourceServlet extends HttpServlet {
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response)
         throws ServletException, IOException {
         final String servletPath = StringUtils.stripLeadingSlash(request.getServletPath());
-        LOG.info("request: " + servletPath);
+        if (LOG.isInfoEnabled()) {
+        	LOG.info("request: " + servletPath);	
+        }
+        
 
         // try to load from filesystem
         InputStream is2 = getRealPath(request);
         if (is2 != null) {
-            LOG.debug("request: " + servletPath + " loaded from filesystem");
+            if(LOG.isDebugEnabled()) {
+            	LOG.debug("request: " + servletPath + " loaded from filesystem");
+            }
             IoUtils.copy(is2, response.getOutputStream());
             is2.close();
             return;
@@ -69,7 +74,9 @@ public class ResourceServlet extends HttpServlet {
         // otherwise, try to load from classpath
         InputStream is = Resources.getResourceAsStream(servletPath);
         if (is != null) {
-            LOG.debug("request: " + servletPath + " loaded from classpath");
+        	if(LOG.isDebugEnabled()) {
+        		LOG.debug("request: " + servletPath + " loaded from classpath");
+        	}
             IoUtils.copy(is, response.getOutputStream());
             is.close();
             return;

@@ -249,14 +249,14 @@
       <package>(org.apache.isis:core)</package>.</para>
 
       <para>Each of the core modules has a Maven co-ordinate of
-      <package>(org.apache.isis.core:xxx</package>), where
+      <package>[org.apache.isis.core:xxx</package>], where
       <emphasis>xxx</emphasis> is one of:</para>
 
       <itemizedlist>
         <listitem>
-          <para>test support</para>
+          <para>testsupport</para>
 
-          <para>The <emphasis>testsupport</emphasis> module holds helper
+          <para>The <emphasis>core testsupport</emphasis> module holds helper
           classes to support writing unit tests in either JUnit or
           JMock.</para>
         </listitem>
@@ -264,7 +264,7 @@
         <listitem>
           <para>commons</para>
 
-          <para>The <emphasis>commons</emphasis> module provides a set of
+          <para>The <emphasis>core commons</emphasis> module provides a set of
           common utilities and language extensions for use across the rest of
           the framework.</para>
         </listitem>
@@ -272,7 +272,7 @@
         <listitem>
           <para>metamodel</para>
 
-          <para>The <emphasis>metamodel</emphasis> module defines the
+          <para>The <emphasis>core metamodel</emphasis> module defines the
           interfaces and classes which describe the structure of the domain
           objects. The most obvious use of the metamodel is by the viewer
           modules which use it in order to know how to render the user
@@ -283,9 +283,9 @@
         <listitem>
           <para>progmodel</para>
 
-          <para>The <emphasis>progmodel</emphasis> module provides a set of
-          reusable elements that are used to build up the metamodel. Some of
-          these depend upon annotations/interfaces in the
+          <para>The <emphasis>core progmodel</emphasis> module provides a set
+          of reusable elements that are used to build up the metamodel. Some
+          of these depend upon annotations/interfaces in the
           <emphasis>applib</emphasis> module, others merely define a
           programming convention.</para>
         </listitem>
@@ -293,7 +293,7 @@
         <listitem>
           <para>runtime</para>
 
-          <para>The <emphasis>runtime</emphasis> module defines security
+          <para>The <emphasis>core runtime</emphasis> module defines security
           <acronym>API</acronym> (authentication and authorization) as well as
           a number of other lesser <acronym>API</acronym>s and implementations
           that are likely to be of use by most runtime implementations.</para>
@@ -302,8 +302,8 @@
         <listitem>
           <para>webapp</para>
 
-          <para>The <emphasis>webapp</emphasis> module provides a number of
-          supporting filters, servlets and other classes for use by any
+          <para>The <emphasis>core webapp</emphasis> module provides a number
+          of supporting filters, servlets and other classes for use by any
           webapp-based viewer.</para>
         </listitem>
       </itemizedlist>
@@ -2562,6 +2562,93 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
       module.</para>
     </abstract>
 
-    <para></para>
+    <para>The <emphasis>core webapp</emphasis> module provides a number of
+    supporting filters, servlets and other classes for use by any webapp-based
+    viewer.</para>
+
+    <sect1>
+      <title>Package Layering / Dependencies</title>
+
+      <para>The packages that reside within <emphasis>core runtime</emphasis>
+      break into the following layers (top layer packages depending on lower
+      layers):</para>
+
+      <screenshot>
+        <screeninfo>Architecture Diagram</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/webapp/architecture-diagram.png"
+                       scale="60" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>As the diagram show, the classes in the <emphasis>core
+      runtime</emphasis> module relate either to authentication,
+      authorization, image loading or the snapshot facility. Let's look at
+      each in turn.</para>
+    </sect1>
+
+    <sect1>
+      <title>Configuration</title>
+
+      <para>The <classname>ConfigurationBuilderForWebApp</classname> is an
+      implementation of <classname>IsisConfigurationBuilder</classname> (see
+      <xref linkend="sec.ConfigurationApi" />) that is designed for use within
+      webapps. It uses the associated implementation of
+      <classname>ResourceStreamSource</classname> to load
+      <filename>isis.properties</filename> from the
+      <filename>WEB-INF</filename> directory.</para>
+    </sect1>
+
+    <sect1>
+      <title>Content</title>
+
+      <para>The servlets and filters in the
+      <package>oai.isis.core.webapp.content</package> package are provided in
+      order to serve up static content from either the filesystem or from the
+      classpath.</para>
+
+      <para>The <classname>ResourceServlet</classname> actually retrieves and
+      serves up the content, while the
+      <classname>StaticContentFilter</classname> adds response headers such as
+      <code>CacheTime</code>. This can be fine-tuned through the
+      <filename>web.xml</filename> file, for example:<programlisting>&lt;filter&gt;
+    &lt;filter-name&gt;StaticContentFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.apache.isis.webapp.content.StaticContentFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;CacheTime&lt;/param-name&gt;
+        &lt;param-value&gt;86400&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;</programlisting></para>
+    </sect1>
+
+    <sect1>
+      <title>Routing</title>
+
+      <para>The <classname>RedirectToServlet</classname> (with an
+      <code>init-param</code> of <emphasis>"redirectTo"</emphasis>) can be
+      used to redirect a request to another request, while the
+      <classname>ForwardingServlet</classname> (with an
+      <code>init-param</code> of <emphasis>"forwardTo"</emphasis>) can be used
+      to forward a request.</para>
+
+      <para>For example:</para>
+
+      <programlisting>&lt;servlet&gt;
+    &lt;servlet-name&gt;RedirectToServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.apache.isis.webapp.routing.RedirectToServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;redirectTo&lt;/param-name&gt;
+        &lt;param-value&gt;/foo/bar&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;RedirectToServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/bar/foo&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</programlisting>
+    </sect1>
   </chapter>
 </book>
