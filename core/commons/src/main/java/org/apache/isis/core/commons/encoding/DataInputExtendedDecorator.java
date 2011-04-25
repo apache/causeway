@@ -17,178 +17,197 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.encoding;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
 public class DataInputExtendedDecorator implements DataInputExtended {
-	
-	private final DataInputExtended underlying;
-	
-	public DataInputExtendedDecorator(DataInputExtended underlying) {
-		this.underlying = underlying;
-	}
-	
-	public DataInputStream getDataInputStream() {
-		return underlying.getDataInputStream();
-	}
 
-	//////////////////////////////////////////
-	// Boolean, Char
-	//////////////////////////////////////////
-	
-	public boolean readBoolean() throws IOException {
-		return underlying.readBoolean();
-	}
+    private final DataInputExtended underlying;
 
-	public boolean[] readBooleans() throws IOException {
-		return underlying.readBooleans();
-	}
+    public DataInputExtendedDecorator(final DataInputExtended underlying) {
+        this.underlying = underlying;
+    }
 
+    @Override
+    public DataInputStream getDataInputStream() {
+        return underlying.getDataInputStream();
+    }
 
-	public char readChar() throws IOException {
-		return underlying.readChar();
-	}
-	
-	public char[] readChars() throws IOException {
-		return underlying.readChars();
-	}
+    // ////////////////////////////////////////
+    // Boolean, Char
+    // ////////////////////////////////////////
 
+    @Override
+    public boolean readBoolean() throws IOException {
+        return underlying.readBoolean();
+    }
 
-	//////////////////////////////////////////
-	// Integral Numbers
-	//////////////////////////////////////////
+    @Override
+    public boolean[] readBooleans() throws IOException {
+        return underlying.readBooleans();
+    }
 
-	public byte readByte() throws IOException {
-		return underlying.readByte();
-	}
+    @Override
+    public char readChar() throws IOException {
+        return underlying.readChar();
+    }
 
-	public int readUnsignedByte() throws IOException {
-		return underlying.readUnsignedByte();
-	}
+    @Override
+    public char[] readChars() throws IOException {
+        return underlying.readChars();
+    }
 
-	public byte[] readBytes() throws IOException {
-		return underlying.readBytes();
-	}
+    // ////////////////////////////////////////
+    // Integral Numbers
+    // ////////////////////////////////////////
 
-	public short readShort() throws IOException {
-		return underlying.readShort();
-	}
+    @Override
+    public byte readByte() throws IOException {
+        return underlying.readByte();
+    }
 
-	public int readUnsignedShort() throws IOException {
-		return underlying.readUnsignedShort();
-	}
+    @Override
+    public int readUnsignedByte() throws IOException {
+        return underlying.readUnsignedByte();
+    }
 
-	public short[] readShorts() throws IOException {
-		return underlying.readShorts();
-	}
-	
-	public int readInt() throws IOException {
-		return underlying.readInt();
-	}
+    @Override
+    public byte[] readBytes() throws IOException {
+        return underlying.readBytes();
+    }
 
-	public int[] readInts() throws IOException {
-		return underlying.readInts();
-	}
-	
-	public long[] readLongs() throws IOException {
-		return underlying.readLongs();
-	}
+    @Override
+    public short readShort() throws IOException {
+        return underlying.readShort();
+    }
 
-	public long readLong() throws IOException {
-		return underlying.readLong();
-	}
+    @Override
+    public int readUnsignedShort() throws IOException {
+        return underlying.readUnsignedShort();
+    }
 
-	
-	//////////////////////////////////////////
-	// Floating Point Numbers
-	//////////////////////////////////////////
+    @Override
+    public short[] readShorts() throws IOException {
+        return underlying.readShorts();
+    }
 
-	public float readFloat() throws IOException {
-		return underlying.readFloat();
-	}
+    @Override
+    public int readInt() throws IOException {
+        return underlying.readInt();
+    }
 
-	public float[] readFloats() throws IOException {
-		return underlying.readFloats();
-	}
+    @Override
+    public int[] readInts() throws IOException {
+        return underlying.readInts();
+    }
 
-	public double readDouble() throws IOException {
-		return underlying.readDouble();
-	}
+    @Override
+    public long[] readLongs() throws IOException {
+        return underlying.readLongs();
+    }
 
-	public double[] readDoubles() throws IOException {
-		return underlying.readDoubles();
-	}
-	
+    @Override
+    public long readLong() throws IOException {
+        return underlying.readLong();
+    }
 
-	//////////////////////////////////////////
-	// Strings
-	//////////////////////////////////////////
+    // ////////////////////////////////////////
+    // Floating Point Numbers
+    // ////////////////////////////////////////
 
-	public String readUTF() throws IOException {
-		return underlying.readUTF();
-	}
+    @Override
+    public float readFloat() throws IOException {
+        return underlying.readFloat();
+    }
 
-	public String[] readUTFs() throws IOException {
-		return underlying.readUTFs();
-	}
+    @Override
+    public float[] readFloats() throws IOException {
+        return underlying.readFloats();
+    }
 
+    @Override
+    public double readDouble() throws IOException {
+        return underlying.readDouble();
+    }
 
+    @Override
+    public double[] readDoubles() throws IOException {
+        return underlying.readDoubles();
+    }
 
-	//////////////////////////////////////////
-	// Encodable and Serializable
-	//////////////////////////////////////////
+    // ////////////////////////////////////////
+    // Strings
+    // ////////////////////////////////////////
 
-	public <T> T readEncodable(Class<T> encodableType) throws IOException {
-		return underlying.readEncodable(encodableType);
-	}
+    @Override
+    public String readUTF() throws IOException {
+        return underlying.readUTF();
+    }
 
-	public <T> T[] readEncodables(Class<T> encodableType) throws IOException {
-		return underlying.readEncodables(encodableType);
-	}
+    @Override
+    public String[] readUTFs() throws IOException {
+        return underlying.readUTFs();
+    }
 
-	public <T> T readSerializable(Class<T> serializableType) throws IOException {
-		return underlying.readSerializable(serializableType);
-	}
-	
-	public <T> T[] readSerializables(Class<T> serializableType) throws IOException {
-		return underlying.readSerializables(serializableType);
-	}
+    // ////////////////////////////////////////
+    // Encodable and Serializable
+    // ////////////////////////////////////////
 
-	
-	//////////////////////////////////////////
-	// Other
-	//////////////////////////////////////////
+    @Override
+    public <T> T readEncodable(final Class<T> encodableType) throws IOException {
+        return underlying.readEncodable(encodableType);
+    }
 
-	public void readFully(byte[] b) throws IOException {
-		underlying.readFully(b);
-	}
+    @Override
+    public <T> T[] readEncodables(final Class<T> encodableType) throws IOException {
+        return underlying.readEncodables(encodableType);
+    }
 
-	public void readFully(byte[] b, int off, int len) throws IOException {
-		underlying.readFully(b, off, len);
-	}
+    @Override
+    public <T> T readSerializable(final Class<T> serializableType) throws IOException {
+        return underlying.readSerializable(serializableType);
+    }
 
-	public String readLine() throws IOException {
-		return underlying.readLine();
-	}
+    @Override
+    public <T> T[] readSerializables(final Class<T> serializableType) throws IOException {
+        return underlying.readSerializables(serializableType);
+    }
 
-	public int skipBytes(int n) throws IOException {
-		return underlying.skipBytes(n);
-	}
+    // ////////////////////////////////////////
+    // Other
+    // ////////////////////////////////////////
 
+    @Override
+    public void readFully(final byte[] b) throws IOException {
+        underlying.readFully(b);
+    }
 
-//	//////////////////////////////////////////
-//	// Closeable
-//	//////////////////////////////////////////
-//
-//	public void close() throws IOException {
-//		if (underlying instanceof Closeable) {
-//			Closeable closeable = (Closeable) underlying;
-//			closeable.close();
-//		}
-//	}
+    @Override
+    public void readFully(final byte[] b, final int off, final int len) throws IOException {
+        underlying.readFully(b, off, len);
+    }
 
+    @Override
+    public String readLine() throws IOException {
+        return underlying.readLine();
+    }
+
+    @Override
+    public int skipBytes(final int n) throws IOException {
+        return underlying.skipBytes(n);
+    }
+
+    // //////////////////////////////////////////
+    // // Closeable
+    // //////////////////////////////////////////
+    //
+    // public void close() throws IOException {
+    // if (underlying instanceof Closeable) {
+    // Closeable closeable = (Closeable) underlying;
+    // closeable.close();
+    // }
+    // }
 
 }

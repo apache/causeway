@@ -17,18 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
-
 
 public class ConfigurationBuilderTwoDirectoriesTest extends TestCase {
     IsisConfigurationBuilderFileSystem builder;
@@ -45,4 +39,3 @@ public class ConfigurationBuilderTwoDirectoriesTest extends TestCase {
         assertEquals("version 3", configuration.getString("different.property"));
     }
 }
-

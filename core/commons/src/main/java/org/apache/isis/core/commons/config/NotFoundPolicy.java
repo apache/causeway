@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 public enum NotFoundPolicy {
-	CONTINUE,
-	FAIL_FAST
+    CONTINUE, FAIL_FAST
 }

@@ -28,5 +28,4 @@ public interface AuthenticationSessionProvider extends Injectable {
      */
     AuthenticationSession getAuthenticationSession();
 
-    
 }

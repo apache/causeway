@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.Array;
@@ -27,11 +26,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-
-
 public final class ArrayUtils {
 
-    private ArrayUtils() {}
+    private ArrayUtils() {
+    }
 
     public static Object[] convertCharToCharacterArray(final Object originalArray) {
         final char[] original = (char[]) originalArray;
@@ -43,92 +41,90 @@ public final class ArrayUtils {
         return converted;
     }
 
-	public static <T> T[] combine(final T[]... arrays) {
-	    final List<T> combinedList = new ArrayList<T>();
-	    for (final T[] array : arrays) {
-	        for (final T t : array) {
-	            combinedList.add(t);
-	        }
-	    }
-	    return combinedList.toArray(arrays[0]); // using 1st element of arrays to specify the type
-	}
+    public static <T> T[] combine(final T[]... arrays) {
+        final List<T> combinedList = new ArrayList<T>();
+        for (final T[] array : arrays) {
+            for (final T t : array) {
+                combinedList.add(t);
+            }
+        }
+        return combinedList.toArray(arrays[0]); // using 1st element of arrays to specify the type
+    }
 
     /**
-	 * Creates a mutable copy of the provided array.
-	 */
-	public static <T> List<T> asList(final T[] items) {
-	    final List<T> list = new ArrayList<T>();
-	    for (final T item : items) {
-	        list.add(item);
-	    }
-	    return list;
-	}
+     * Creates a mutable copy of the provided array.
+     */
+    public static <T> List<T> asList(final T[] items) {
+        final List<T> list = new ArrayList<T>();
+        for (final T item : items) {
+            list.add(item);
+        }
+        return list;
+    }
 
-	/**
-	 * Creates a mutable copy of the provided array, eliminating duplicates.
-	 *
-	 * <p>
-	 * The order of the items will be preserved.
-	 */
-	public static <T> Set<T> asOrderedSet(final T[] items) {
-	    final LinkedHashSet<T> list = new LinkedHashSet<T>();
-	    if (items != null) {
-	        for (final T item : items) {
-	            list.add(item);
-	        }
-	    }
-	    return list;
-	}
+    /**
+     * Creates a mutable copy of the provided array, eliminating duplicates.
+     * 
+     * <p>
+     * The order of the items will be preserved.
+     */
+    public static <T> Set<T> asOrderedSet(final T[] items) {
+        final LinkedHashSet<T> list = new LinkedHashSet<T>();
+        if (items != null) {
+            for (final T item : items) {
+                list.add(item);
+            }
+        }
+        return list;
+    }
 
-	/**
-	 * Creates a mutable list of the provided array, also appending the additional element(s).
-	 */
-	public static <T> List<T> concat(T[] elements, T... elementsToAppend) {
-	    List<T> result = new ArrayList<T>();
-	    for(T element: elements) {
-	        result.add(element);
-	    }
-	    for(T element: elementsToAppend) {
-	        if (element != null) {
-	            result.add(element);
-	        }
-	    }
-	    return result;
-	}
+    /**
+     * Creates a mutable list of the provided array, also appending the additional element(s).
+     */
+    public static <T> List<T> concat(final T[] elements, final T... elementsToAppend) {
+        final List<T> result = new ArrayList<T>();
+        for (final T element : elements) {
+            result.add(element);
+        }
+        for (final T element : elementsToAppend) {
+            if (element != null) {
+                result.add(element);
+            }
+        }
+        return result;
+    }
 
-	public static String[] append(String[] args, String... moreArgs) {
-		ArrayList<String> argList = new ArrayList<String>();
-		argList.addAll(Arrays.asList(args));
-		argList.addAll(Arrays.asList(moreArgs));
-		return argList.toArray(new String[]{});
-	}
+    public static String[] append(final String[] args, final String... moreArgs) {
+        final ArrayList<String> argList = new ArrayList<String>();
+        argList.addAll(Arrays.asList(args));
+        argList.addAll(Arrays.asList(moreArgs));
+        return argList.toArray(new String[] {});
+    }
 
-	/**
-	 * Creates a mutable list of the provided array, also appending the additional element(s).
-	 */
-	public static <T> List<T> concat(T[] elements, List<T> elementsToAppend) {
-	    List<T> result = new ArrayList<T>();
-	    for(T element: elements) {
-	        result.add(element);
-	    }
-	    for(T element: elementsToAppend) {
-	        if (element != null) {
-	            result.add(element);
-	        }
-	    }
-	    return result;
-	}
+    /**
+     * Creates a mutable list of the provided array, also appending the additional element(s).
+     */
+    public static <T> List<T> concat(final T[] elements, final List<T> elementsToAppend) {
+        final List<T> result = new ArrayList<T>();
+        for (final T element : elements) {
+            result.add(element);
+        }
+        for (final T element : elementsToAppend) {
+            if (element != null) {
+                result.add(element);
+            }
+        }
+        return result;
+    }
 
-	@SuppressWarnings("unchecked")
-	public static <D,S> D[] copy(S[] source, Class<D> cls) {
-		if (source == null) {
-			throw new IllegalArgumentException("Source array cannot be null");
-		}
-		D[] destination = (D[]) Array.newInstance(cls, source.length);
-		System.arraycopy(source, 0, destination, 0, source.length);
-		return destination;
-	}
-
+    @SuppressWarnings("unchecked")
+    public static <D, S> D[] copy(final S[] source, final Class<D> cls) {
+        if (source == null) {
+            throw new IllegalArgumentException("Source array cannot be null");
+        }
+        final D[] destination = (D[]) Array.newInstance(cls, source.length);
+        System.arraycopy(source, 0, destination, 0, source.length);
+        return destination;
+    }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.ensure;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,8 +25,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.apache.isis.core.commons.ensure.Ensure;
-
 
 public class Ensure_GivenValueThatDoesNotMatchTest {
 
@@ -36,7 +33,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
         try {
             Ensure.ensureThatArg("foo", is(nullValue()));
             fail();
-        } catch(IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             assertThat(ex.getMessage(), is("illegal argument, expected: is null"));
         }
     }
@@ -46,7 +43,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
         try {
             Ensure.ensureThatArg("foo", is(nullValue()), "my message");
             fail();
-        } catch(IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             assertThat(ex.getMessage(), is("my message"));
         }
     }
@@ -56,7 +53,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
         try {
             Ensure.ensureThatState("foo", is(nullValue()));
             fail();
-        } catch(IllegalStateException ex) {
+        } catch (final IllegalStateException ex) {
             assertThat(ex.getMessage(), is("illegal argument, expected: is null"));
         }
     }
@@ -66,7 +63,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
         try {
             Ensure.ensureThatState("foo", is(nullValue()), "my message");
             fail();
-        } catch(IllegalStateException ex) {
+        } catch (final IllegalStateException ex) {
             assertThat(ex.getMessage(), is("my message"));
         }
     }
@@ -76,7 +73,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
         try {
             Ensure.ensureThatContext("foo", is(nullValue()));
             fail();
-        } catch(IllegalThreadStateException ex) {
+        } catch (final IllegalThreadStateException ex) {
             assertThat(ex.getMessage(), is("illegal argument, expected: is null"));
         }
     }
@@ -86,10 +83,9 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
         try {
             Ensure.ensureThatContext("foo", is(nullValue()), "my message");
             fail();
-        } catch(IllegalThreadStateException ex) {
+        } catch (final IllegalThreadStateException ex) {
             assertThat(ex.getMessage(), is("my message"));
         }
     }
-
 
 }

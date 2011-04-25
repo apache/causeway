@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.Array;
@@ -26,11 +25,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
-
-
 public final class ArrayUtil {
 
-    private ArrayUtil() {}
+    private ArrayUtil() {
+    }
 
     public static Object[] getObjectAsObjectArray(final Object option) {
         final Class<?> arrayType = option.getClass().getComponentType();
@@ -44,8 +42,7 @@ public final class ArrayUtil {
         }
     }
 
-    private static Object[] convertPrimitiveToObjectArray(
-    		final Class<?> arrayType, final Object originalArray) {
+    private static Object[] convertPrimitiveToObjectArray(final Class<?> arrayType, final Object originalArray) {
         Object[] convertedArray;
         try {
             final Class<?> wrapperClass = WrapperUtils.wrap(arrayType);
@@ -71,6 +68,4 @@ public final class ArrayUtil {
         return convertedArray;
     }
 
-
 }
-

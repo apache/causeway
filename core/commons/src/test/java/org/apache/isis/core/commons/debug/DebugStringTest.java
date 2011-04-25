@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.debug;
 
-import org.apache.isis.core.commons.debug.DebugString;
-
 import junit.framework.TestCase;
-
 
 public class DebugStringTest extends TestCase {
     private DebugString str;
@@ -72,21 +68,14 @@ public class DebugStringTest extends TestCase {
         str.appendln("text 2");
         str.endSection();
         str.startSection("Section B");
-        assertEquals("\n1. Section A\n" +
-        		"------------\n" +
-                "   text 1\n" +
-                "   text 2\n\n\n" +
-        		"2. Section B\n" +
-        		"------------\n", str.toString());
+        assertEquals("\n1. Section A\n" + "------------\n" + "   text 1\n" + "   text 2\n\n\n" + "2. Section B\n"
+            + "------------\n", str.toString());
     }
 
     public void testTitle() {
         str.appendTitle("New Section");
         str.appendln("text");
-        assertEquals("\nNew Section\n" +
-                "-----------\n" +
-                "text\n", str.toString());
+        assertEquals("\nNew Section\n" + "-----------\n" + "text\n", str.toString());
     }
-    
-}
 
+}

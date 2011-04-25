@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.junit.Test;
 
 public class StringUtils_toLineSeparated {
@@ -50,5 +49,4 @@ public class StringUtils_toLineSeparated {
         assumeThat(System.getProperty("file.separator"), is(equalTo("\\")));
     }
 
-    
 }

@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.apache.isis.core.commons.lang.StringUtils;
-
 
 public class StringUtils_StripLeadingSlashTest {
 
@@ -44,9 +41,9 @@ public class StringUtils_StripLeadingSlashTest {
         assertThat(StringUtils.stripLeadingSlash("/"), is(""));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void shouldFailOnNull() {
-    	StringUtils.stripLeadingSlash(null);
+        StringUtils.stripLeadingSlash(null);
     }
 
 }

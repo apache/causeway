@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.encoding;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -34,13 +33,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
-import org.apache.isis.core.commons.encoding.Encodable;
-
-
 public class ByteEncoderDecoderRoundtripTest {
 
     private DataOutputStreamExtended outputImpl;
@@ -48,16 +40,16 @@ public class ByteEncoderDecoderRoundtripTest {
 
     @Before
     public void setUp() throws Exception {
-		PipedInputStream pipedInputStream = new PipedInputStream();
-		PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-		outputImpl = new DataOutputStreamExtended(pipedOutputStream);
-		inputImpl = new DataInputStreamExtended(pipedInputStream);
+        final PipedInputStream pipedInputStream = new PipedInputStream();
+        final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+        outputImpl = new DataOutputStreamExtended(pipedOutputStream);
+        inputImpl = new DataInputStreamExtended(pipedInputStream);
     }
-    
+
     @After
-	public void tearDown() throws Exception {
-		// does nothing yet
-	}
+    public void tearDown() throws Exception {
+        // does nothing yet
+    }
 
     @Test
     public void encodeAndDecodeBoolean() throws IOException {
@@ -70,11 +62,11 @@ public class ByteEncoderDecoderRoundtripTest {
 
     @Test
     public void encodeAndDecodeByteArray() throws IOException {
-    	byte[] bytes = {3, 76, -1, 21};
-    	outputImpl.writeBytes(bytes);
-    	byte[] decodedBytes = inputImpl.readBytes();
-    	
-    	assertThatArraysEqual(bytes, decodedBytes);
+        final byte[] bytes = { 3, 76, -1, 21 };
+        outputImpl.writeBytes(bytes);
+        final byte[] decodedBytes = inputImpl.readBytes();
+
+        assertThatArraysEqual(bytes, decodedBytes);
     }
 
     @Test
@@ -101,9 +93,9 @@ public class ByteEncoderDecoderRoundtripTest {
 
         final Object object = inputImpl.readEncodable(Object.class);
         assertThat(object, is(instanceOf(EncodableObject.class)));
-        
-        EncodableObject encodeableObject = (EncodableObject) object;
-		assertThat(encodeableObject.field, is(equalTo("test field")));
+
+        final EncodableObject encodeableObject = (EncodableObject) object;
+        assertThat(encodeableObject.field, is(equalTo("test field")));
     }
 
     @Test
@@ -114,22 +106,17 @@ public class ByteEncoderDecoderRoundtripTest {
         assertThat(object, is(nullValue()));
     }
 
-    
     @Test
     public void encodeAndDecodeObjectArray() throws IOException {
-        final EncodableObject[] array = 
-        	new EncodableObject[] { 
-        		new EncodableObject(), 
-        		new EncodableObject(),
-                new EncodableObject() };
+        final EncodableObject[] array =
+            new EncodableObject[] { new EncodableObject(), new EncodableObject(), new EncodableObject() };
         outputImpl.writeEncodables(array);
 
         final Encodable[] objects = inputImpl.readEncodables(Encodable.class);
         assertThat(objects.length, is(3));
-        EncodableObject encodeableObject = (EncodableObject) objects[2];
+        final EncodableObject encodeableObject = (EncodableObject) objects[2];
         assertThat(encodeableObject.field, is(equalTo("test field")));
     }
-
 
     @Test
     public void encodeAndDecodeNullObjectArray() throws IOException {
@@ -163,27 +150,28 @@ public class ByteEncoderDecoderRoundtripTest {
         assertThat(returnedList[2], is(equalTo(list[2])));
     }
 
-	private void assertThatArraysEqual(byte[] bytes, byte[] decodedBytes) {
-		assertThat(decodedBytes.length, is(equalTo(bytes.length)));
-    	for(int i=0; i<bytes.length; i++) {
-    		assertThat(decodedBytes[i], is(equalTo(bytes[i])));
-    	}
-	}
+    private void assertThatArraysEqual(final byte[] bytes, final byte[] decodedBytes) {
+        assertThat(decodedBytes.length, is(equalTo(bytes.length)));
+        for (int i = 0; i < bytes.length; i++) {
+            assertThat(decodedBytes[i], is(equalTo(bytes[i])));
+        }
+    }
 
 }
 
 class EncodableObject implements Encodable {
     String field;
 
-    public EncodableObject() {}
+    public EncodableObject() {
+    }
 
     public EncodableObject(final DataInputExtended input) throws IOException {
         field = input.readUTF();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF("test field");
     }
 
 }
-

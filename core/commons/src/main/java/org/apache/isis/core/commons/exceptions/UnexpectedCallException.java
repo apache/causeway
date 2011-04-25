@@ -17,15 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.exceptions;
 
-
-
-
 /**
- * Indicates that a call was made to a method (normally an overridden one) that was not expected, and hence
- * not coded for.
+ * Indicates that a call was made to a method (normally an overridden one) that was not expected, and hence not coded
+ * for.
  */
 public class UnexpectedCallException extends IsisException {
     private static final long serialVersionUID = 1L;

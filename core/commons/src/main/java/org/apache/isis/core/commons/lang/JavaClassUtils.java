@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.Method;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 public final class JavaClassUtils {
 
@@ -46,19 +44,17 @@ public final class JavaClassUtils {
         put(double.class);
     }
 
+    private static void put(final Class<?> cls) {
+        builtInClasses.put(cls.getName(), cls);
+    }
 
-	private static void put(Class<?> cls) {
-		builtInClasses.put(cls.getName(), cls);
-	}
+    private JavaClassUtils() {
+    }
 
-	
-    private JavaClassUtils() {}
+    public static Class<?> getBuiltIn(final String name) {
+        return builtInClasses.get(name);
+    }
 
-    
-	public static Class<?> getBuiltIn(String name) {
-		return builtInClasses.get(name);
-	}
-    
     public static String getSuperclass(final Class<?> type) {
         final Class<?> superType = type.getSuperclass();
 
@@ -87,22 +83,21 @@ public final class JavaClassUtils {
     public static boolean isPublic(final Method method) {
         return Modifier.isPublic(method.getModifiers());
     }
-    
-    public static List<Class<?>> toClasses(List<Object> objectList) {
-	    List<Class<?>> classList = new ArrayList<Class<?>>();
-	    for (Object service : objectList) {
-	    classList.add(service.getClass());
-	    }
-	    return classList;
+
+    public static List<Class<?>> toClasses(final List<Object> objectList) {
+        final List<Class<?>> classList = new ArrayList<Class<?>>();
+        for (final Object service : objectList) {
+            classList.add(service.getClass());
+        }
+        return classList;
     }
 
-
     /**
-     * Returns the supplied Class so long as it implements (or is a subclass of) the
-     * required class, and also has either a constructor accepting the specified param type,
-     * or has a no-arg constructor.
+     * Returns the supplied Class so long as it implements (or is a subclass of) the required class, and also has either
+     * a constructor accepting the specified param type, or has a no-arg constructor.
      */
-    public static Class<?> implementingClassOrNull(final Class<?> classCandidate, final Class<?> requiredClass, final Class<?> constructorParamType) {
+    public static Class<?> implementingClassOrNull(final Class<?> classCandidate, final Class<?> requiredClass,
+        final Class<?> constructorParamType) {
         if (classCandidate == null) {
             return null;
         }
@@ -110,11 +105,11 @@ public final class JavaClassUtils {
             return null;
         }
         try {
-            classCandidate.getConstructor(new Class[] {constructorParamType});
+            classCandidate.getConstructor(new Class[] { constructorParamType });
         } catch (final NoSuchMethodException ex) {
             try {
-                classCandidate.getConstructor(new Class[]{});
-            } catch (NoSuchMethodException e) {
+                classCandidate.getConstructor(new Class[] {});
+            } catch (final NoSuchMethodException e) {
                 return null;
             }
         } catch (final SecurityException e) {
@@ -127,8 +122,8 @@ public final class JavaClassUtils {
         return classCandidate;
     }
 
-
-    public static Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass, final Class<?> constructorParamType) {
+    public static Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass,
+        final Class<?> constructorParamType) {
         if (classCandidateName == null) {
             return null;
         }
@@ -141,22 +136,17 @@ public final class JavaClassUtils {
         }
     }
 
-
     public static boolean directlyImplements(final Class<?> cls, final Class<?> interfaceType) {
-    	for(Class<?> directlyImplementedInterface: cls.getInterfaces()) {
-    		if (directlyImplementedInterface == interfaceType) {
-    			return true;
-    		}
-    	}
-    	return false;
+        for (final Class<?> directlyImplementedInterface : cls.getInterfaces()) {
+            if (directlyImplementedInterface == interfaceType) {
+                return true;
+            }
+        }
+        return false;
     }
-
 
     public static boolean isStatic(final Method method) {
         return Modifier.isStatic(method.getModifiers());
     }
-    
-
-    
 
 }

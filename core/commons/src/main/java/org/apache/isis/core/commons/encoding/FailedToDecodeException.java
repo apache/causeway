@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,17 +26,17 @@ import java.io.IOException;
 
 public class FailedToDecodeException extends IOException {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Throwable cause;
-	
-	public FailedToDecodeException(Throwable cause) {
-		this.cause = cause;
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public Throwable getCause() {
-		return cause;
-	}
-	
+    private final Throwable cause;
+
+    public FailedToDecodeException(final Throwable cause) {
+        this.cause = cause;
+    }
+
+    @Override
+    public Throwable getCause() {
+        return cause;
+    }
+
 }

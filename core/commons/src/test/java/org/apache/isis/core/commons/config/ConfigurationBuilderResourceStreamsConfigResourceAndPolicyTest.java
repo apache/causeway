@@ -24,28 +24,25 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
-
 public class ConfigurationBuilderResourceStreamsConfigResourceAndPolicyTest {
 
     @Test
     public void toStringWhenNull() throws Exception {
-        IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
+        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
             new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy(null, null);
         assertThat(configurationResourceAndPolicy.toString(), is("null{null}"));
     }
 
     @Test
     public void toStringWhenConfigResourceNotNull() throws Exception {
-        IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
+        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
             new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties", null);
         assertThat(configurationResourceAndPolicy.toString(), is("foo.properties{null}"));
     }
 
     @Test
     public void toStringWhenAllSpecified() throws Exception {
-        IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
+        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
             new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties",
                 NotFoundPolicy.CONTINUE);
         assertThat(configurationResourceAndPolicy.toString(), is("foo.properties{CONTINUE}"));

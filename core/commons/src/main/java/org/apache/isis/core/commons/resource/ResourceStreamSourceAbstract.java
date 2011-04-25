@@ -30,17 +30,17 @@ public abstract class ResourceStreamSourceAbstract implements ResourceStreamSour
     private static Logger LOG = Logger.getLogger(ResourceStreamSourceAbstract.class);
 
     @Override
-    public final InputStream readResource(String resourcePath) {
+    public final InputStream readResource(final String resourcePath) {
 
         try {
-            InputStream resourceStream = doReadResource(resourcePath);
+            final InputStream resourceStream = doReadResource(resourcePath);
             if (resourceStream != null) {
                 return resourceStream;
             }
             if (LOG.isDebugEnabled()) {
                 LOG.debug("could not load resource path '" + resourcePath + "' from " + getName());
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("could not load resource path '" + resourcePath + "' from " + getName() + ", exception: "
                     + e.getMessage());
@@ -59,7 +59,7 @@ public abstract class ResourceStreamSourceAbstract implements ResourceStreamSour
      * Default implementation returns <tt>null</tt> (that is, not supported).
      */
     @Override
-    public OutputStream writeResource(String resourcePath) {
+    public OutputStream writeResource(final String resourcePath) {
         return null;
     }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.xml;
 
 import java.io.IOException;
@@ -28,5 +27,3 @@ public interface ContentWriter {
     void write(Writer writer) throws IOException;
 
 }
-
-

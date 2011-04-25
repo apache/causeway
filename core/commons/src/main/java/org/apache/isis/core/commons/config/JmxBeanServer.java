@@ -11,7 +11,6 @@ import javax.management.ObjectName;
 
 import org.apache.log4j.Logger;
 
-
 public class JmxBeanServer {
 
     private static final Logger LOG = Logger.getLogger(JmxBeanServer.class);
@@ -23,7 +22,7 @@ public class JmxBeanServer {
         server = ManagementFactory.getPlatformMBeanServer();
         instance = this;
     }
-    
+
     public static JmxBeanServer getInstance() {
         if (instance == null) {
             LOG.info("JMX bean server created");
@@ -32,20 +31,20 @@ public class JmxBeanServer {
         return instance;
     }
 
-    public void register(String name, Object object) {
+    public void register(final String name, final Object object) {
         try {
-            ObjectName objectName = new ObjectName("Isis:name=" + name);
+            final ObjectName objectName = new ObjectName("Isis:name=" + name);
             server.registerMBean(object, objectName);
             LOG.info(name + " JMX mbean registered: " + object);
-        } catch (MalformedObjectNameException e) {
+        } catch (final MalformedObjectNameException e) {
             throw new RuntimeException(e);
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             throw new RuntimeException(e);
-        } catch (InstanceAlreadyExistsException e) {
+        } catch (final InstanceAlreadyExistsException e) {
             throw new RuntimeException(e);
-        } catch (MBeanRegistrationException e) {
+        } catch (final MBeanRegistrationException e) {
             throw new RuntimeException(e);
-        } catch (NotCompliantMBeanException e) {
+        } catch (final NotCompliantMBeanException e) {
             throw new RuntimeException(e);
         }
 

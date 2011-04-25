@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.io.File;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
-
 
 /**
  * Adapted from Ibatis Common.
@@ -119,4 +117,3 @@ public class Resources {
     }
 
 }
-

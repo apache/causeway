@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.ensure;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -27,52 +26,50 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.apache.isis.core.commons.ensure.Ensure;
-
 
 public class Ensure_GivenValueThatDoesMatchTest {
 
     @Test
     public void whenCallEnsureThatArgThenShouldReturnOriginalObject() {
-        String object = "foo";
-        String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class))));
+        final String object = "foo";
+        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class))));
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatArgWithOverloadedShouldReturnOriginalObject() {
-        String object = "foo";
-        String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class))), "some message");
+        final String object = "foo";
+        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class))), "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatStateThenShouldReturnOriginalObject() {
-        String object = "foo";
-        String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class))));
+        final String object = "foo";
+        final String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class))));
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatStateWithOverloadedShouldReturnOriginalObject() {
-        String object = "foo";
-        String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class))), "some message");
+        final String object = "foo";
+        final String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class))), "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatContextThenShouldReturnOriginalObject() {
-        String object = "foo";
-        String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class))));
+        final String object = "foo";
+        final String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class))));
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatContextWithOverloadedShouldReturnOriginalObject() {
-        String object = "foo";
-        String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class))), "some message");
+        final String object = "foo";
+        final String returnedObject =
+            Ensure.ensureThatContext(object, is(not(nullValue(String.class))), "some message");
         assertThat(returnedObject, sameInstance(object));
     }
-
 
 }

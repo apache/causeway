@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 public interface IsisConfigurationBuilderAware {
 
-	void setConfigurationBuilder(IsisConfigurationBuilder configurationLoader);
+    void setConfigurationBuilder(IsisConfigurationBuilder configurationLoader);
 }

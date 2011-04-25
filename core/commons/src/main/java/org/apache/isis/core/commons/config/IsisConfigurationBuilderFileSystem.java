@@ -19,11 +19,10 @@
 
 package org.apache.isis.core.commons.config;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.log4j.Logger;
 
 /**
  * Convenience implementation of {@link IsisConfigurationBuilder} that loads configuration resource from a specified
@@ -36,15 +35,15 @@ public class IsisConfigurationBuilderFileSystem extends IsisConfigurationBuilder
     @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderFileSystem.class);
 
-    private static ResourceStreamSource createResourceStreamSource(String... directories) {
-        ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
-        for (String directory : directories) {
+    private static ResourceStreamSource createResourceStreamSource(final String... directories) {
+        final ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
+        for (final String directory : directories) {
             composite.addResourceStreamSource(new ResourceStreamSourceFileSystem(directory));
         }
         return composite;
     }
 
-    public IsisConfigurationBuilderFileSystem(String... directories) {
+    public IsisConfigurationBuilderFileSystem(final String... directories) {
         super(createResourceStreamSource(directories));
     }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.components;
 
 /**
@@ -25,7 +24,7 @@ package org.apache.isis.core.commons.components;
  * 
  * <p>
  * Unlike {@link ApplicationScopedComponent} and {@link SessionScopedComponent} there are not lifecycle
- * (initialization/shutdown) methods here.  That is, this is strictly a marker interface.
+ * (initialization/shutdown) methods here. That is, this is strictly a marker interface.
  * 
  * <p>
  * Analogous to Hibernate's <tt>Transaction</tt>.
@@ -34,6 +33,5 @@ package org.apache.isis.core.commons.components;
  * @see SessionScopedComponent
  */
 public interface TransactionScopedComponent extends Component {
-
 
 }

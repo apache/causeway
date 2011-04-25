@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import junit.framework.TestCase;
-
-import org.apache.isis.core.commons.lang.NameUtils;
-
 
 public class NameUtilTest extends TestCase {
 

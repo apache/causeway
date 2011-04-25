@@ -17,20 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.components;
 
 /**
  * Marker interface for components that are no-ops.
  * 
  * <p>
- * Originally introduced in order to support bootstrapping by
- * dependency injection frameworks; allows us to
- * specify a no-op in the configuration files which will be
- * ignored.
+ * Originally introduced in order to support bootstrapping by dependency injection frameworks; allows us to specify a
+ * no-op in the configuration files which will be ignored.
  */
 public interface Noop {
 
 }
-
-

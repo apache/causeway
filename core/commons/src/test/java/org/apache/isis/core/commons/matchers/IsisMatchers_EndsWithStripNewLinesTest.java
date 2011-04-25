@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.matchers;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,8 +25,6 @@ import static org.junit.Assert.assertThat;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
-
 
 public class IsisMatchers_EndsWithStripNewLinesTest {
 

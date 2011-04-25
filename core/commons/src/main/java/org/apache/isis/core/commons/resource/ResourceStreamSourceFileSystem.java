@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.resource;
 
 import java.io.File;
@@ -32,36 +31,35 @@ public class ResourceStreamSourceFileSystem extends ResourceStreamSourceAbstract
     /**
      * Factory method to guard against nulls
      */
-    public static ResourceStreamSource create(String directory2) {
-        return directory2!=null?new ResourceStreamSourceFileSystem(directory2):null;
+    public static ResourceStreamSource create(final String directory2) {
+        return directory2 != null ? new ResourceStreamSourceFileSystem(directory2) : null;
     }
 
-	private String directory;
+    private final String directory;
 
-	public ResourceStreamSourceFileSystem(String directory) {
-		this.directory = directory;
-	}
+    public ResourceStreamSourceFileSystem(final String directory) {
+        this.directory = directory;
+    }
 
-	@Override
-    protected InputStream doReadResource(String resourcePath) throws FileNotFoundException {
-		File file = new File(directory, resourcePath);
-		return new FileInputStream(file);
-	}
+    @Override
+    protected InputStream doReadResource(final String resourcePath) throws FileNotFoundException {
+        final File file = new File(directory, resourcePath);
+        return new FileInputStream(file);
+    }
 
-	@Override
-	public OutputStream writeResource(String resourcePath) {
-		File file = new File(directory, resourcePath);
-		try {
-			return new FileOutputStream(file);
-		} catch (FileNotFoundException e) {
-			return null;
-		}
-	}
-	
-	@Override
+    @Override
+    public OutputStream writeResource(final String resourcePath) {
+        final File file = new File(directory, resourcePath);
+        try {
+            return new FileOutputStream(file);
+        } catch (final FileNotFoundException e) {
+            return null;
+        }
+    }
+
+    @Override
     public String getName() {
-		return "file system (directory '" + directory + "')";
-	}
-
+        return "file system (directory '" + directory + "')";
+    }
 
 }

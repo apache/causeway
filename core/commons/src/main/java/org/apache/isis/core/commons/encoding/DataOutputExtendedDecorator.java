@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.encoding;
 
 import java.io.DataOutputStream;
@@ -25,156 +24,183 @@ import java.io.IOException;
 
 public class DataOutputExtendedDecorator implements DataOutputExtended {
 
+    private final DataOutputExtended underlying;
 
-	private final DataOutputExtended underlying;
+    public DataOutputExtendedDecorator(final DataOutputExtended underlying) {
+        this.underlying = underlying;
+    }
 
-	public DataOutputExtendedDecorator(DataOutputExtended underlying) {
-		this.underlying = underlying;
-	}
+    @Override
+    public DataOutputStream getDataOutputStream() {
+        return underlying.getDataOutputStream();
+    }
 
-	public DataOutputStream getDataOutputStream() {
-		return underlying.getDataOutputStream();
-	}
+    // ////////////////////////////////////////
+    // Boolean, Char
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Boolean, Char
-	//////////////////////////////////////////
+    @Override
+    public void writeBoolean(final boolean v) throws IOException {
+        underlying.writeBoolean(v);
+    }
 
-	public void writeBoolean(boolean v) throws IOException {
-		underlying.writeBoolean(v);
-	}
+    @Override
+    public void writeBooleans(final boolean[] booleans) throws IOException {
+        underlying.writeBooleans(booleans);
+    }
 
-	public void writeBooleans(boolean[] booleans) throws IOException {
-		underlying.writeBooleans(booleans);
-	}
+    @Override
+    public void writeChar(final int v) throws IOException {
+        underlying.writeChar(v);
+    }
 
-	public void writeChar(int v) throws IOException {
-		underlying.writeChar(v);
-	}
+    @Override
+    public void writeChars(final char[] chars) throws IOException {
+        underlying.writeChars(chars);
+    }
 
-	public void writeChars(char[] chars) throws IOException {
-		underlying.writeChars(chars);
-	}
+    // ////////////////////////////////////////
+    // Integral Numbers
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Integral Numbers
-	//////////////////////////////////////////
+    @Override
+    public void write(final int b) throws IOException {
+        underlying.write(b);
+    }
 
-	public void write(int b) throws IOException {
-		underlying.write(b);
-	}
+    @Override
+    public void writeByte(final int v) throws IOException {
+        underlying.writeByte(v);
+    }
 
-	public void writeByte(int v) throws IOException {
-		underlying.writeByte(v);
-	}
+    @Override
+    public void write(final byte[] b) throws IOException {
+        underlying.write(b);
+    }
 
-	public void write(byte[] b) throws IOException {
-		underlying.write(b);
-	}
+    @Override
+    public void writeBytes(final byte[] bytes) throws IOException {
+        underlying.writeBytes(bytes);
+    }
 
-	public void writeBytes(byte[] bytes) throws IOException {
-		underlying.writeBytes(bytes);
-	}
+    @Override
+    public void writeShort(final int v) throws IOException {
+        underlying.writeShort(v);
+    }
 
-	public void writeShort(int v) throws IOException {
-		underlying.writeShort(v);
-	}
+    @Override
+    public void writeShorts(final short[] shorts) throws IOException {
+        underlying.writeShorts(shorts);
+    }
 
-	public void writeShorts(short[] shorts) throws IOException {
-		underlying.writeShorts(shorts);
-	}
+    @Override
+    public void writeInt(final int v) throws IOException {
+        underlying.writeInt(v);
+    }
 
-	public void writeInt(int v) throws IOException {
-		underlying.writeInt(v);
-	}
+    @Override
+    public void writeInts(final int[] ints) throws IOException {
+        underlying.writeInts(ints);
+    }
 
-	public void writeInts(int[] ints) throws IOException {
-		underlying.writeInts(ints);
-	}
+    @Override
+    public void writeLong(final long v) throws IOException {
+        underlying.writeLong(v);
+    }
 
-	public void writeLong(long v) throws IOException {
-		underlying.writeLong(v);
-	}
+    @Override
+    public void writeLongs(final long[] longs) throws IOException {
+        underlying.writeLongs(longs);
+    }
 
-	public void writeLongs(long[] longs) throws IOException {
-		underlying.writeLongs(longs);
-	}
+    // ////////////////////////////////////////
+    // Floating Point Numbers
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Floating Point Numbers
-	//////////////////////////////////////////
+    @Override
+    public void writeFloat(final float v) throws IOException {
+        underlying.writeFloat(v);
+    }
 
-	public void writeFloat(float v) throws IOException {
-		underlying.writeFloat(v);
-	}
+    @Override
+    public void writeFloats(final float[] floats) throws IOException {
+        underlying.writeFloats(floats);
+    }
 
-	public void writeFloats(float[] floats) throws IOException {
-		underlying.writeFloats(floats);
-	}
+    @Override
+    public void writeDouble(final double v) throws IOException {
+        underlying.writeDouble(v);
+    }
 
-	public void writeDouble(double v) throws IOException {
-		underlying.writeDouble(v);
-	}
+    @Override
+    public void writeDoubles(final double[] doubles) throws IOException {
+        underlying.writeDoubles(doubles);
+    }
 
-	public void writeDoubles(double[] doubles) throws IOException {
-		underlying.writeDoubles(doubles);
-	}
+    // ////////////////////////////////////////
+    // Strings
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Strings
-	//////////////////////////////////////////
+    @Override
+    public void writeUTF(final String str) throws IOException {
+        underlying.writeUTF(str);
+    }
 
-	public void writeUTF(String str) throws IOException {
-		underlying.writeUTF(str);
-	}
+    @Override
+    public void writeUTFs(final String[] strings) throws IOException {
+        underlying.writeUTFs(strings);
+    }
 
-	public void writeUTFs(String[] strings) throws IOException {
-		underlying.writeUTFs(strings);
-	}
+    // ////////////////////////////////////////
+    // Encodable and Serializable
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Encodable and Serializable
-	//////////////////////////////////////////
+    @Override
+    public void writeEncodable(final Object encodable) throws IOException {
+        underlying.writeEncodable(encodable);
+    }
 
-	public void writeEncodable(Object encodable) throws IOException {
-		underlying.writeEncodable(encodable);
-	}
+    @Override
+    public void writeEncodables(final Object[] encodables) throws IOException {
+        underlying.writeEncodables(encodables);
+    }
 
-	public void writeEncodables(Object[] encodables) throws IOException {
-		underlying.writeEncodables(encodables);
-	}
+    @Override
+    public void writeSerializable(final Object serializable) throws IOException {
+        underlying.writeSerializable(serializable);
+    }
 
-	public void writeSerializable(Object serializable) throws IOException {
-		underlying.writeSerializable(serializable);
-	}
+    @Override
+    public void writeSerializables(final Object[] serializables) throws IOException {
+        underlying.writeSerializables(serializables);
+    }
 
-	public void writeSerializables(Object[] serializables) throws IOException {
-		underlying.writeSerializables(serializables);
-	}
+    // ////////////////////////////////////////
+    // Other
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Other
-	//////////////////////////////////////////
+    @Override
+    public void write(final byte[] b, final int off, final int len) throws IOException {
+        underlying.write(b, off, len);
+    }
 
-	public void write(byte[] b, int off, int len) throws IOException {
-		underlying.write(b, off, len);
-	}
+    @Override
+    public void writeBytes(final String s) throws IOException {
+        underlying.writeBytes(s);
+    }
 
-	public void writeBytes(String s) throws IOException {
-		underlying.writeBytes(s);
-	}
+    @Override
+    public void writeChars(final String s) throws IOException {
+        underlying.writeChars(s);
+    }
 
-	public void writeChars(String s) throws IOException {
-		underlying.writeChars(s);
-	}
+    // ////////////////////////////////////////
+    // Flush
+    // ////////////////////////////////////////
 
-	//////////////////////////////////////////
-	// Flush
-	//////////////////////////////////////////
-
-	public void flush() throws IOException {
-		underlying.flush();
-	}
-
+    @Override
+    public void flush() throws IOException {
+        underlying.flush();
+    }
 
 }

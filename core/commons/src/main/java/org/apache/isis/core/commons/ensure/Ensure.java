@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.ensure;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-
 
 /**
  * Uses the {@link Matcher Hamcrest API} as a means of verifying arguments and so on.
  */
 public final class Ensure {
 
-    private Ensure() {}
+    private Ensure() {
+    }
 
     /**
      * To ensure that the provided argument is correct.
@@ -38,12 +37,12 @@ public final class Ensure {
      * @see #ensureThatState(Object, Matcher, String)
      * @see #ensureThatContext(Object, Matcher)
      * 
-     * @throws IllegalArgumentException if matcher does not {@link Matcher#matches(Object) match}.
+     * @throws IllegalArgumentException
+     *             if matcher does not {@link Matcher#matches(Object) match}.
      */
     public static <T> T ensureThatArg(final T object, final Matcher<T> matcher) {
         if (!matcher.matches(object)) {
-            throw new IllegalArgumentException(
-                    "illegal argument, expected: " + descriptionOf(matcher));
+            throw new IllegalArgumentException("illegal argument, expected: " + descriptionOf(matcher));
         }
         return object;
     }
@@ -55,12 +54,12 @@ public final class Ensure {
      * @see #ensureThatState(Object, Matcher, String)
      * @see #ensureThatContext(Object, Matcher)
      * 
-     * @throws IllegalArgumentException if matcher does not {@link Matcher#matches(Object) match}.
+     * @throws IllegalArgumentException
+     *             if matcher does not {@link Matcher#matches(Object) match}.
      */
     public static <T> T ensureThatArg(final T arg, final Matcher<T> matcher, final String message) {
         if (!matcher.matches(arg)) {
-            throw new IllegalArgumentException(
-                    message);
+            throw new IllegalArgumentException(message);
         }
         return arg;
     }
@@ -72,7 +71,8 @@ public final class Ensure {
      * @see #ensureThatContext(Object, Matcher)
      * @see #ensureThatState(Object, Matcher, String)
      * 
-     * @throws IllegalStateException if matcher does not {@link Matcher#matches(Object) match}.
+     * @throws IllegalStateException
+     *             if matcher does not {@link Matcher#matches(Object) match}.
      */
     public static <T> T ensureThatState(final T field, final Matcher<T> matcher) {
         if (!matcher.matches(field)) {
@@ -88,7 +88,8 @@ public final class Ensure {
      * @see #ensureThatContext(Object, Matcher)
      * @see #ensureThatState(Object, Matcher)
      * 
-     * @throws IllegalStateException if matcher does not {@link Matcher#matches(Object) match}.
+     * @throws IllegalStateException
+     *             if matcher does not {@link Matcher#matches(Object) match}.
      */
     public static <T> T ensureThatState(final T field, final Matcher<T> matcher, final String message) {
         if (!matcher.matches(field)) {
@@ -97,7 +98,6 @@ public final class Ensure {
         return field;
     }
 
-
     /**
      * To ensure that the current context (<tt>IsisContext</tt>) is correct.
      * 
@@ -105,7 +105,8 @@ public final class Ensure {
      * @see #ensureThatState(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher, String)
      * 
-     * @throws IllegalThreadStateException if matcher does not {@link Matcher#matches(Object) match}.
+     * @throws IllegalThreadStateException
+     *             if matcher does not {@link Matcher#matches(Object) match}.
      */
     public static <T> T ensureThatContext(final T contextProperty, final Matcher<T> matcher) {
         if (!matcher.matches(contextProperty)) {
@@ -121,7 +122,8 @@ public final class Ensure {
      * @see #ensureThatState(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher, String)
      * 
-     * @throws IllegalThreadStateException if matcher does not {@link Matcher#matches(Object) match}.
+     * @throws IllegalThreadStateException
+     *             if matcher does not {@link Matcher#matches(Object) match}.
      */
     public static <T> T ensureThatContext(final T contextProperty, final Matcher<T> matcher, final String message) {
         if (!matcher.matches(contextProperty)) {
@@ -131,9 +133,9 @@ public final class Ensure {
     }
 
     private static <T> String descriptionOf(final Matcher<T> matcher) {
-        StringDescription stringDescription = new StringDescription();
+        final StringDescription stringDescription = new StringDescription();
         matcher.describeTo(stringDescription);
-        String description = stringDescription.toString();
+        final String description = stringDescription.toString();
         return description;
     }
 

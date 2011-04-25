@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.util.HashMap;
@@ -25,31 +24,30 @@ import java.util.Map;
 
 public final class MapUtils {
 
-	private MapUtils() {}
+    private MapUtils() {
+    }
 
-	/**
-	 * Converts a list of objects [a, 1, b, 2] into a map {a -> 1; b -> 2}
-	 */
-	public static Map<String, String> asMap(String... paramArgs) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		boolean param = true;
-		String paramStr = null;
-		for (String paramArg : paramArgs) {
-			if (param) {
-			    paramStr = (String) paramArg;
-			} else {
-				String arg = paramArg;
-				map.put(paramStr, arg);
-				paramStr = null;
-			}
-			param = !param;
-		}
-		if (paramStr != null) {
-			throw new IllegalArgumentException(
-					"Must have equal number of parameters and arguments");
-		}
-		return map;
-	}
-
+    /**
+     * Converts a list of objects [a, 1, b, 2] into a map {a -> 1; b -> 2}
+     */
+    public static Map<String, String> asMap(final String... paramArgs) {
+        final HashMap<String, String> map = new HashMap<String, String>();
+        boolean param = true;
+        String paramStr = null;
+        for (final String paramArg : paramArgs) {
+            if (param) {
+                paramStr = paramArg;
+            } else {
+                final String arg = paramArg;
+                map.put(paramStr, arg);
+                paramStr = null;
+            }
+            param = !param;
+        }
+        if (paramStr != null) {
+            throw new IllegalArgumentException("Must have equal number of parameters and arguments");
+        }
+        return map;
+    }
 
 }

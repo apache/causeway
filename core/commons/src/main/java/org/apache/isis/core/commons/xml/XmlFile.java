@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -36,8 +37,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
-import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class XmlFile {
     private static final String[] ESCAPE_STRING = { "&amp;", "&lt;", "&gt;", "&quot;", "&apos;" };
@@ -143,7 +142,7 @@ public class XmlFile {
     public boolean isFixturesInstalled() {
         final String[] list = directory.list(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String name) {
+            public boolean accept(final File dir, final String name) {
                 return name.toLowerCase().endsWith(".xml");
             }
         });

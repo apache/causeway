@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
-
 
 public class Threads {
 
-	private Threads() {}
-	
-    public static Thread startThread(Runnable target, String name) {
+    private Threads() {
+    }
+
+    public static Thread startThread(final Runnable target, final String name) {
         final Thread thread = new Thread(target, name);
-		thread.start();
-		return thread;
+        thread.start();
+        return thread;
     }
 
 }

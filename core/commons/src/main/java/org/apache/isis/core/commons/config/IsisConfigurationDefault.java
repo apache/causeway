@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 import java.awt.Color;
@@ -27,50 +26,45 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-
+import org.apache.log4j.Logger;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
     private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);
     private final Properties properties = new Properties();
-	private final ResourceStreamSource resourceStreamSource;
-    
-    //////////////////////////////////////////////////
+    private final ResourceStreamSource resourceStreamSource;
+
+    // ////////////////////////////////////////////////
     // Constructor
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
     public IsisConfigurationDefault() {
         this(null);
     }
 
-    public IsisConfigurationDefault(ResourceStreamSource resourceStreamSource) {
+    public IsisConfigurationDefault(final ResourceStreamSource resourceStreamSource) {
         this.resourceStreamSource = resourceStreamSource;
         LOG.info("from :" + nameOf(resourceStreamSource));
     }
 
-	private String nameOf(ResourceStreamSource resourceStreamSource) {
-		return resourceStreamSource != null? resourceStreamSource.getName(): null;
-	}
+    private String nameOf(final ResourceStreamSource resourceStreamSource) {
+        return resourceStreamSource != null ? resourceStreamSource.getName() : null;
+    }
 
-    
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // ResourceStreamSource
-    //////////////////////////////////////////////////
-    
-    
-	@Override
-    public ResourceStreamSource getResourceStreamSource() {
-		return resourceStreamSource;
-	}
+    // ////////////////////////////////////////////////
 
-	
-    //////////////////////////////////////////////////
+    @Override
+    public ResourceStreamSource getResourceStreamSource() {
+        return resourceStreamSource;
+    }
+
+    // ////////////////////////////////////////////////
     // add
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
     /**
      * Add the properties from an existing Properties object.
@@ -117,14 +111,13 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         return subset;
     }
 
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // getXxx
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
     /**
-     * Gets the boolean value for the specified name where no value or 'on' will result in true being
-     * returned; anything gives false. If no boolean property is specified with this name then false is
-     * returned.
+     * Gets the boolean value for the specified name where no value or 'on' will result in true being returned; anything
+     * gives false. If no boolean property is specified with this name then false is returned.
      * 
      * @param name
      *            the property name
@@ -135,8 +128,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the boolean value for the specified name. If no property is specified with this name then the
-     * specified default boolean value is returned.
+     * Gets the boolean value for the specified name. If no property is specified with this name then the specified
+     * default boolean value is returned.
      * 
      * @param name
      *            the property name
@@ -157,12 +150,12 @@ public class IsisConfigurationDefault implements IsisConfiguration {
             return false;
         }
 
-        throw new IsisConfigurationException("Illegal flag for " + name + "; must be one of on, off, yes, no, true or false");
+        throw new IsisConfigurationException("Illegal flag for " + name
+            + "; must be one of on, off, yes, no, true or false");
     }
 
     /**
-     * Gets the color for the specified name. If no color property is specified with this name then null is
-     * returned.
+     * Gets the color for the specified name. If no color property is specified with this name then null is returned.
      * 
      * @param name
      *            the property name
@@ -173,8 +166,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the color for the specified name. If no color property is specified with this name then the
-     * specified default color is returned.
+     * Gets the color for the specified name. If no color property is specified with this name then the specified
+     * default color is returned.
      * 
      * @param name
      *            the property name
@@ -211,8 +204,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the font for the specified name. If no font property is specified with this name then null is
-     * returned.
+     * Gets the font for the specified name. If no font property is specified with this name then null is returned.
      * 
      * @param name
      *            the property name
@@ -223,8 +215,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the font for the specified name. If no font property is specified with this name then the
-     * specified default font is returned.
+     * Gets the font for the specified name. If no font property is specified with this name then the specified default
+     * font is returned.
      * 
      * @param name
      *            the property name
@@ -243,8 +235,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the number value for the specified name. If no property is specified with this name then 0 is
-     * returned.
+     * Gets the number value for the specified name. If no property is specified with this name then 0 is returned.
      * 
      * @param name
      *            the property name
@@ -255,8 +246,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the number value for the specified name. If no property is specified with this name then the
-     * specified default number value is returned.
+     * Gets the number value for the specified name. If no property is specified with this name then the specified
+     * default number value is returned.
      * 
      * @param name
      *            the property name
@@ -324,8 +315,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Returns the configuration property with the specified name. If there is no matching property then null
-     * is returned.
+     * Returns the configuration property with the specified name. If there is no matching property then null is
+     * returned.
      */
     @Override
     public String getString(final String name) {
@@ -354,8 +345,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Returns as a String that the named property is refered to as. For example in a simple properties file
-     * the property z might be specified in the file as x.y.z.
+     * Returns as a String that the named property is refered to as. For example in a simple properties file the
+     * property z might be specified in the file as x.y.z.
      */
     private String referedToAs(final String name) {
         return name;
@@ -371,15 +362,14 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         return "ConfigurationParameters [properties=" + properties + "]";
     }
 
-    
     // ////////////////////////////////////////////////////////////////////
     // injectInto
     // ////////////////////////////////////////////////////////////////////
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (IsisConfigurationAware.class.isAssignableFrom(candidate.getClass())) {
-            IsisConfigurationAware cast = IsisConfigurationAware.class.cast(candidate);
+            final IsisConfigurationAware cast = IsisConfigurationAware.class.cast(candidate);
             cast.setIsisConfiguration(this);
         }
     }

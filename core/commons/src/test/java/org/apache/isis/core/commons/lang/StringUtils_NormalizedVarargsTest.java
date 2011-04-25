@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -31,23 +30,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-
 @RunWith(Parameterized.class)
 public class StringUtils_NormalizedVarargsTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-            {new String[]{"yada Foobar","Yada\r \tFoo \n\tbar  Baz"}, 
-             new String[]{"yada Foobar", "Yada Foo bar Baz"}, }, 
-        });
+        return Arrays.asList(new Object[][] { { new String[] { "yada Foobar", "Yada\r \tFoo \n\tbar  Baz" },
+            new String[] { "yada Foobar", "Yada Foo bar Baz" }, }, });
     }
-    
+
     private final String[] input;
     private final String[] expected;
-    
-    
-    public StringUtils_NormalizedVarargsTest(String[] input, String[] expected) {
+
+    public StringUtils_NormalizedVarargsTest(final String[] input, final String[] expected) {
         this.input = input;
         this.expected = expected;
     }

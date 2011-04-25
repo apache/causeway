@@ -17,26 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.authentication;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 
+import com.google.common.collect.Lists;
+
 public final class AuthenticationSessionUtils {
 
-    private AuthenticationSessionUtils() {}
+    private AuthenticationSessionUtils() {
+    }
 
     public static UserMemento createUserMemento(final AuthenticationSession session) {
         final List<RoleMemento> roles = Lists.newArrayList();
-        for (String roleName : session.getRoles()) {
-			roles.add(new RoleMemento(roleName));
+        for (final String roleName : session.getRoles()) {
+            roles.add(new RoleMemento(roleName));
         }
         return new UserMemento(session.getUserName(), roles);
     }
 }
-

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.ensure;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class IsisAssertException extends IsisException {
 

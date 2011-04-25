@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.exceptions;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
 
-
 /**
- * General exception raised by the framework, typically
- * a system exception.
+ * General exception raised by the framework, typically a system exception.
  */
 public class IsisException extends RuntimeException {
     private static final long serialVersionUID = 1L;
@@ -57,7 +54,7 @@ public class IsisException extends RuntimeException {
         cause = null;
     }
 
-    public IsisException(final String messageFormat, Object... args) {
+    public IsisException(final String messageFormat, final Object... args) {
         super(MessageFormat.format(messageFormat, args));
         cause = null;
     }

@@ -23,37 +23,37 @@ public class DebugTee implements DebugBuilder {
     private final DebugBuilder builder1;
     private final DebugBuilder builder2;
 
-    public DebugTee(DebugBuilder builder1, DebugBuilder builder2) {
+    public DebugTee(final DebugBuilder builder1, final DebugBuilder builder2) {
         this.builder1 = builder1;
         this.builder2 = builder2;
     }
 
     @Override
-    public void append(int number, int width) {
+    public void append(final int number, final int width) {
         builder1.append(number, width);
         builder2.append(number, width);
     }
 
     @Override
-    public void append(Object object) {
+    public void append(final Object object) {
         builder1.append(object);
         builder2.append(object);
     }
 
     @Override
-    public void append(Object object, int width) {
+    public void append(final Object object, final int width) {
         builder1.append(object, width);
         builder2.append(object, width);
     }
 
     @Override
-    public void appendAsHexln(String label, long value) {
+    public void appendAsHexln(final String label, final long value) {
         builder1.appendAsHexln(label, value);
         builder2.appendAsHexln(label, value);
     }
 
     @Override
-    public void appendException(Throwable e) {
+    public void appendException(final Throwable e) {
         builder1.appendException(e);
         builder2.appendException(e);
     }
@@ -65,49 +65,49 @@ public class DebugTee implements DebugBuilder {
     }
 
     @Override
-    public void appendln(String text) {
+    public void appendln(final String text) {
         builder1.appendln(text);
         builder2.appendln(text);
     }
 
     @Override
-    public void appendln(String label, boolean value) {
+    public void appendln(final String label, final boolean value) {
         builder1.appendln(label, value);
         builder2.appendln(label, value);
     }
 
     @Override
-    public void appendln(String label, double value) {
+    public void appendln(final String label, final double value) {
         builder1.appendln(label, value);
         builder2.appendln(label, value);
     }
 
     @Override
-    public void appendln(String label, long value) {
+    public void appendln(final String label, final long value) {
         builder1.appendln(label, value);
         builder2.appendln(label, value);
     }
 
     @Override
-    public void appendln(String label, Object object) {
+    public void appendln(final String label, final Object object) {
         builder1.appendln(label, object);
         builder2.appendln(label, object);
     }
 
     @Override
-    public void appendln(String label, Object[] objects) {
+    public void appendln(final String label, final Object[] objects) {
         builder1.appendln(label, objects);
         builder2.appendln(label, objects);
     }
 
     @Override
-    public void appendTitle(String title) {
+    public void appendTitle(final String title) {
         builder1.appendTitle(title);
         builder2.appendTitle(title);
     }
 
     @Override
-    public void startSection(String title) {
+    public void startSection(final String title) {
         builder1.startSection(title);
         builder2.startSection(title);
     }
@@ -135,10 +135,10 @@ public class DebugTee implements DebugBuilder {
         builder1.unindent();
         builder2.unindent();
     }
-    
+
     @Override
     public void close() {
         builder1.close();
-        builder2.close();        
+        builder2.close();
     }
 }

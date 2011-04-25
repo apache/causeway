@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.matchers;
 
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -25,6 +24,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.io.File;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
@@ -35,8 +35,6 @@ import org.hamcrest.number.IsGreaterThan;
 import org.hamcrest.text.StringContains;
 import org.hamcrest.text.StringEndsWith;
 import org.hamcrest.text.StringStartsWith;
-import org.apache.isis.core.commons.lang.StringUtils;
-
 
 /**
  * Hamcrest {@link Matcher} implementations.
@@ -44,7 +42,8 @@ import org.apache.isis.core.commons.lang.StringUtils;
  */
 public final class IsisMatchers {
 
-    private IsisMatchers() {}
+    private IsisMatchers() {
+    }
 
     @Factory
     public static Matcher<String> containsStripNewLines(final String expected) {
@@ -118,6 +117,7 @@ public final class IsisMatchers {
                 return expected.isAssignableFrom(actual.getClass());
             }
 
+            @Override
             public void describeTo(final Description description) {
                 description.appendText("an instance of ").appendValue(expected);
             }
@@ -128,14 +128,15 @@ public final class IsisMatchers {
     public static Matcher<String> nonEmptyString() {
         return new TypeSafeMatcher<String>() {
             @Override
-            public boolean matchesSafely(String str) {
+            public boolean matchesSafely(final String str) {
                 return str != null && str.length() > 0;
             }
 
-            public void describeTo(Description description) {
+            @Override
+            public void describeTo(final Description description) {
                 description.appendText("a non empty string");
             }
-            
+
         };
     }
 
@@ -145,11 +146,11 @@ public final class IsisMatchers {
         return CoreMatchers.anyOf(nullValue(String.class), nonEmptyString());
     }
 
-    
     public static Matcher<List<?>> containsElementThat(final Matcher<?> elementMatcher) {
         return new TypeSafeMatcher<List<?>>() {
-            public boolean matchesSafely(List<?> list) {
-                for(Object o: list) {
+            @Override
+            public boolean matchesSafely(final List<?> list) {
+                for (final Object o : list) {
                     if (elementMatcher.matches(o)) {
                         return true;
                     }
@@ -157,24 +158,24 @@ public final class IsisMatchers {
                 return false;
             }
 
-            public void describeTo(Description description) {
+            @Override
+            public void describeTo(final Description description) {
                 description.appendText("contains element that ").appendDescriptionOf(elementMatcher);
             }
         };
     }
 
-
     @Factory
-    public static <T extends Comparable<T>> Matcher<T> greaterThan(T c) {
+    public static <T extends Comparable<T>> Matcher<T> greaterThan(final T c) {
         return new IsGreaterThan<T>(c);
     }
-
 
     @Factory
     public static Matcher<Class<?>> classEqualTo(final Class<?> operand) {
 
         class ClassEqualsMatcher extends TypeSafeMatcher<Class<?>> {
             private final Class<?> clazz;
+
             public ClassEqualsMatcher(final Class<?> clazz) {
                 this.clazz = clazz;
             }
@@ -184,6 +185,7 @@ public final class IsisMatchers {
                 return clazz == arg;
             }
 
+            @Override
             public void describeTo(final Description description) {
                 description.appendValue(clazz);
             }
@@ -193,19 +195,19 @@ public final class IsisMatchers {
     }
 
     public static Matcher<File> existsAndNotEmpty() {
-        
+
         return new TypeSafeMatcher<File>() {
-    
+
             @Override
-            public void describeTo(Description arg0) {
+            public void describeTo(final Description arg0) {
                 arg0.appendText("exists and is not empty");
             }
-    
+
             @Override
-            public boolean matchesSafely(File f) {
+            public boolean matchesSafely(final File f) {
                 return f.exists() && f.length() > 0;
             }
         };
     }
-    
+
 }

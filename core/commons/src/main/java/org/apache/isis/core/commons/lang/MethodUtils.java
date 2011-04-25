@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.Method;
 
-
 public class MethodUtils {
 
-    private MethodUtils() {}
+    private MethodUtils() {
+    }
 
     public static Method getMethod(final Object object, final String methodName, final Class<?>... parameterClass)
-            throws NoSuchMethodException {
+        throws NoSuchMethodException {
         return getMethod(object.getClass(), methodName, parameterClass);
     }
 
@@ -37,11 +36,12 @@ public class MethodUtils {
     }
 
     public static Method getMethod(final Class<?> clazz, final String methodName, final Class<?>... parameterClass)
-            throws NoSuchMethodException {
+        throws NoSuchMethodException {
         return clazz.getMethod(methodName, parameterClass);
     }
 
-    public static Method findMethodElseNull(final Class<?> clazz, final String methodName, final Class<?>... parameterClass) {
+    public static Method findMethodElseNull(final Class<?> clazz, final String methodName,
+        final Class<?>... parameterClass) {
         try {
             return clazz.getMethod(methodName, parameterClass);
         } catch (final NoSuchMethodException e) {
@@ -49,10 +49,8 @@ public class MethodUtils {
         }
     }
 
-    public static Method findMethodElseNull(
-            final Class<?> clazz,
-            final String[] candidateMethodNames,
-            final Class<?>... parameterClass) {
+    public static Method findMethodElseNull(final Class<?> clazz, final String[] candidateMethodNames,
+        final Class<?>... parameterClass) {
         for (final String candidateMethodName : candidateMethodNames) {
             final Method method = findMethodElseNull(clazz, candidateMethodName, parameterClass);
             if (method != null) {

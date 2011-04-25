@@ -21,25 +21,27 @@ package org.apache.isis.core.commons.debug;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-
 public abstract class DebugHtmlStringAbstract implements DebugBuilder {
 
     private final boolean createPage;
     private int tableLevel;
     private boolean isOdd;
 
-    public DebugHtmlStringAbstract(boolean createPage) {
+    public DebugHtmlStringAbstract(final boolean createPage) {
         this.createPage = createPage;
     }
 
     @Override
-    public void append(int number, int width) {}
+    public void append(final int number, final int width) {
+    }
 
     @Override
-    public void append(Object object) {}
+    public void append(final Object object) {
+    }
 
     @Override
-    public void append(Object object, int width) {}
+    public void append(final Object object, final int width) {
+    }
 
     @Override
     public void appendln() {
@@ -60,33 +62,33 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
-    public void appendln(String label, boolean value) {
+    public void appendln(final String label, final boolean value) {
         appendln(label, String.valueOf(value));
     }
 
     @Override
-    public void appendln(String label, double value) {
+    public void appendln(final String label, final double value) {
         appendln(label, String.valueOf(value));
     }
 
     @Override
-    public void appendln(String label, long value) {
+    public void appendln(final String label, final long value) {
         appendln(label, String.valueOf(value));
     }
 
     @Override
-    public void appendAsHexln(String label, long value) {
+    public void appendAsHexln(final String label, final long value) {
         appendln(label, Long.toHexString(value));
     }
 
     @Override
-    public void appendln(String label, Object object) {
-        String value = object == null ? "null" : object.toString();
+    public void appendln(final String label, final Object object) {
+        final String value = object == null ? "null" : object.toString();
         appendln(label, value);
     }
 
     @Override
-    public void appendln(String label, Object[] object) {
+    public void appendln(final String label, final Object[] object) {
         if (object.length == 0) {
             appendln(label, "empty array");
         } else {
@@ -98,7 +100,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
-    public void startSection(String title) {
+    public void startSection(final String title) {
         startTableIfNeeded(true);
         appendTitle(title);
     }
@@ -132,13 +134,13 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
             appendHtml("<title>Debug Details</title>");
             appendHtml("<style type=\"text/css\">");
             appendHtml("body { margin: 15px; }\n"
-                    + "links { font-size: 80%; padding-bottom:5px; }\n"
-                    + "td {vertical-align: top; margin-left: 15px;}\n"
-                    + "td.error {color: red; font-style: italic; }\n"
-                    + "td.code {white-space: pre; font-family: monospace;}\n"
-                    + "th.title {text-align: left; padding: 0.3em 1em; font-style: italic; background: #AED1FF; }\n"
-                    + "td.label {width: 14em; text-align: right; padding-right: 1.5em; padding-top: 0.2em; font-size: 80%; font-weight: bold; }\n"
-                    + "span.facet-type { font-weight: bold; padding-right: 10px; }\n");
+                + "links { font-size: 80%; padding-bottom:5px; }\n"
+                + "td {vertical-align: top; margin-left: 15px;}\n"
+                + "td.error {color: red; font-style: italic; }\n"
+                + "td.code {white-space: pre; font-family: monospace;}\n"
+                + "th.title {text-align: left; padding: 0.3em 1em; font-style: italic; background: #AED1FF; }\n"
+                + "td.label {width: 14em; text-align: right; padding-right: 1.5em; padding-top: 0.2em; font-size: 80%; font-weight: bold; }\n"
+                + "span.facet-type { font-weight: bold; padding-right: 10px; }\n");
             appendHtml("</style>");
             appendHtml("</head>");
             appendHtml("<body>");
@@ -156,24 +158,24 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
-    public void appendException(Throwable e) {
+    public void appendException(final Throwable e) {
         appendTitle("Exception");
-        String message = e.getMessage();
+        final String message = e.getMessage();
         if (message != null) {
             appendHtml(row() + "<td class=\"error\" colspan=\"2\" >" + message + "<td></tr>");
         }
         causingException(e);
         appendHtml(row() + "<td class=\"code\" colspan=\"2\" ><pre>");
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
+        final StringWriter stringWriter = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);
         appendHtml(stringWriter.toString());
         appendHtml("</pre><td></tr>");
 
     }
 
-    private void causingException(Throwable throwable) {
-        Throwable cause = throwable.getCause();
+    private void causingException(final Throwable throwable) {
+        final Throwable cause = throwable.getCause();
         if (cause != null && cause != throwable) {
             appendHtml(row() + "<td colspan=\"2\" >" + cause.getMessage() + "<td></tr>");
             causingException(cause);
@@ -181,7 +183,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
-    public void appendTitle(String title) {
+    public void appendTitle(final String title) {
         if (tableLevel > 0) {
             appendHtml(row() + "<th class=\"title\" colspan=\"2\" >" + title + "</th></tr>");
         } else {
@@ -189,18 +191,18 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
         }
     }
 
-    private void appendln(String name, String value) {
+    private void appendln(final String name, final String value) {
         startTableIfNeeded(false);
         appendHtml(row() + "<td class=\"label\">" + name + "</td><td>" + value + "<td></tr>");
     }
 
     private String row() {
-        String line = isOdd ? "odd" : "even";
+        final String line = isOdd ? "odd" : "even";
         isOdd = !isOdd;
         return "<tr class=\"" + line + "\">";
     }
 
-    private void startTableIfNeeded(boolean b) {
+    private void startTableIfNeeded(final boolean b) {
         if (tableLevel == 0 || b) {
             appendHtml("<table class=\"debug\" width=\"100%\" summary=\"Debug details\" >");
             tableLevel++;
@@ -215,7 +217,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
-    public void appendln(String text) {
+    public void appendln(final String text) {
         if (tableLevel > 0) {
             appendHtml(row() + "<td colspan=\"2\">" + text + "</td></tr>");
         } else {

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 public final class ToString {
 
@@ -44,7 +42,7 @@ public final class ToString {
     }
 
     public static String timestamp(final Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmssSSS");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmssSSS");
         return date == null ? "" : simpleDateFormat.format(date);
     }
 

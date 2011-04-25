@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.Array;
 
-
 /**
- * Collected methods which allow easy implementation of <code>hashCode</code>, based on Josh Bloch's Effective
- * Java.
+ * Collected methods which allow easy implementation of <code>hashCode</code>, based on Josh Bloch's Effective Java.
  * 
  * <p>
  * Example use case:
@@ -33,7 +30,7 @@ import java.lang.reflect.Array;
  * <pre>
  * public int hashCode() {
  *     int result = HashCodeUtil.SEED;
- *     //collect the contributions of various fields
+ *     // collect the contributions of various fields
  *     result = HashCodeUtil.hash(result, fPrimitive);
  *     result = HashCodeUtil.hash(result, fObject);
  *     result = HashCodeUtil.hash(result, fArray);
@@ -45,11 +42,12 @@ import java.lang.reflect.Array;
  */
 public final class HashCodeUtils {
 
-    private HashCodeUtils() {}
+    private HashCodeUtils() {
+    }
 
     /**
-     * An initial value for a <code>hashCode</code>, to which is added contributions from fields. Using a
-     * non-zero value decreases collisons of <code>hashCode</code> values.
+     * An initial value for a <code>hashCode</code>, to which is added contributions from fields. Using a non-zero value
+     * decreases collisons of <code>hashCode</code> values.
      */
     public static final int SEED = 23;
 

@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.authentication;
 
 public interface AuthenticationSessionProviderAware {
-	
-	public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider);
+
+    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider);
 
 }

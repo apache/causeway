@@ -1,6 +1,5 @@
 package org.apache.isis.core.commons.lang;
 
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;

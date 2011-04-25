@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-
 
 public final class ThrowableUtils {
 
@@ -37,7 +35,8 @@ public final class ThrowableUtils {
             if (baos != null) {
                 try {
                     baos.close();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
             }
         }
     }

@@ -25,14 +25,13 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.log4j.Logger;
+
+import com.google.common.base.Objects;
 
 /**
  * Adapter for {@link IsisConfigurationBuilder}, loading the specified configuration resource (file) from the given
@@ -49,7 +48,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         private final String configurationResource;
         private final NotFoundPolicy notFoundPolicy;
 
-        public ConfigurationResourceAndPolicy(String configurationResource, NotFoundPolicy notFoundPolicy) {
+        public ConfigurationResourceAndPolicy(final String configurationResource, final NotFoundPolicy notFoundPolicy) {
             this.configurationResource = configurationResource;
             this.notFoundPolicy = notFoundPolicy;
         }
@@ -97,9 +96,11 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     }
 
     public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource... resourceStreamSources) {
-        ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
-        for (ResourceStreamSource rss : resourceStreamSources) {
-            if(rss==null) {continue;}
+        final ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
+        for (final ResourceStreamSource rss : resourceStreamSources) {
+            if (rss == null) {
+                continue;
+            }
             composite.addResourceStreamSource(rss);
         }
         this.resourceStreamSource = composite;
@@ -201,16 +202,16 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         return cachedConfiguration = configuration;
     }
 
-    private void loadConfigurationResources(IsisConfigurationDefault configuration) {
-        for (ConfigurationResourceAndPolicy configResourceAndPolicy : configurationResources) {
+    private void loadConfigurationResources(final IsisConfigurationDefault configuration) {
+        for (final ConfigurationResourceAndPolicy configResourceAndPolicy : configurationResources) {
             loadConfigurationResource(configuration, configResourceAndPolicy);
         }
     }
 
-    private void loadConfigurationResource(IsisConfigurationDefault configuration,
-        ConfigurationResourceAndPolicy configResourceAndPolicy) {
-        String configurationResource = configResourceAndPolicy.getConfigurationResource();
-        NotFoundPolicy notFoundPolicy = configResourceAndPolicy.getNotFoundPolicy();
+    private void loadConfigurationResource(final IsisConfigurationDefault configuration,
+        final ConfigurationResourceAndPolicy configResourceAndPolicy) {
+        final String configurationResource = configResourceAndPolicy.getConfigurationResource();
+        final NotFoundPolicy notFoundPolicy = configResourceAndPolicy.getNotFoundPolicy();
         if (LOG.isDebugEnabled()) {
             LOG.debug("loading configuration resource: " + configurationResource + ", notFoundPolicy: "
                 + notFoundPolicy);
@@ -229,13 +230,14 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     protected void loadConfigurationResource(final IsisConfigurationDefault configuration,
         final String configurationResource, final NotFoundPolicy notFoundPolicy) {
         try {
-            PropertiesReader propertiesReader = loadConfigurationResource(resourceStreamSource, configurationResource);
+            final PropertiesReader propertiesReader =
+                loadConfigurationResource(resourceStreamSource, configurationResource);
             addProperties(configuration, propertiesReader.getProperties());
             if (LOG.isInfoEnabled()) {
                 LOG.info("'" + configurationResource + "' FOUND");
             }
             return;
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // keep going
         }
         if (notFoundPolicy == NotFoundPolicy.FAIL_FAST) {
@@ -248,28 +250,28 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         }
     }
 
-    private PropertiesReader loadConfigurationResource(ResourceStreamSource resourceStreamSource,
+    private PropertiesReader loadConfigurationResource(final ResourceStreamSource resourceStreamSource,
         final String configurationResource) throws IOException {
         return new PropertiesReader(resourceStreamSource, configurationResource);
     }
 
-    private void addShowExplorationOptionsIfNotSpecified(IsisConfigurationDefault configuration) {
+    private void addShowExplorationOptionsIfNotSpecified(final IsisConfigurationDefault configuration) {
         if (configuration.getString(ConfigurationConstants.SHOW_EXPLORATION_OPTIONS) == null) {
             configuration.add(ConfigurationConstants.SHOW_EXPLORATION_OPTIONS, "yes");
         }
     }
 
-    private void addSystemPropertiesIfRequested(IsisConfigurationDefault configuration) {
+    private void addSystemPropertiesIfRequested(final IsisConfigurationDefault configuration) {
         if (includeSystemProperties) {
             addProperties(configuration, System.getProperties());
         }
     }
 
-    private void addAdditionalProperties(IsisConfigurationDefault configuration) {
+    private void addAdditionalProperties(final IsisConfigurationDefault configuration) {
         addProperties(configuration, additionalProperties);
     }
 
-    protected void addProperties(IsisConfigurationDefault configuration, Properties properties) {
+    protected void addProperties(final IsisConfigurationDefault configuration, final Properties properties) {
         configuration.add(properties);
     }
 
@@ -282,9 +284,9 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     // ////////////////////////////////////////////////////////////
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (IsisConfigurationBuilderAware.class.isAssignableFrom(candidate.getClass())) {
-            IsisConfigurationBuilderAware cast = IsisConfigurationBuilderAware.class.cast(candidate);
+            final IsisConfigurationBuilderAware cast = IsisConfigurationBuilderAware.class.cast(candidate);
             cast.setConfigurationBuilder(this);
         }
     }

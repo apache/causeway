@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.io.ByteArrayInputStream;
@@ -27,12 +26,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-
 public final class IoUtils {
 
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
-    private IoUtils() {}
+    private IoUtils() {
+    }
 
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
@@ -67,20 +66,19 @@ public final class IoUtils {
         return count;
     }
 
-    public static InputStream asUtf8ByteStream(String string) throws UnsupportedEncodingException {
-        byte[] data = string.getBytes("utf-8");
-        InputStream in = new ByteArrayInputStream(data);
+    public static InputStream asUtf8ByteStream(final String string) throws UnsupportedEncodingException {
+        final byte[] data = string.getBytes("utf-8");
+        final InputStream in = new ByteArrayInputStream(data);
         return in;
     }
 
-    public static void closeSafely(Closeable reader) {
+    public static void closeSafely(final Closeable reader) {
         if (reader != null) {
             try {
                 reader.close();
-            } catch (final IOException ignore) {}
+            } catch (final IOException ignore) {
+            }
         }
     }
 
-
 }
-

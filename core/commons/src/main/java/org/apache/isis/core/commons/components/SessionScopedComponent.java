@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.components;
 
 /**
- * Indicate that the implementing component is scoped at the session level (for a single user) and 
- * might also need to be "opened" or "closed" at the start/end of the session.
+ * Indicate that the implementing component is scoped at the session level (for a single user) and might also need to be
+ * "opened" or "closed" at the start/end of the session.
  * 
  * <p>
  * Analogous to Hibernate's <tt>Session</tt>.
@@ -38,8 +37,8 @@ public interface SessionScopedComponent extends Component {
     void open();
 
     /**
-     * Indicates to the component that no more requests will be made of it and it can safely release any
-     * services it has hold of.
+     * Indicates to the component that no more requests will be made of it and it can safely release any services it has
+     * hold of.
      */
     void close();
 

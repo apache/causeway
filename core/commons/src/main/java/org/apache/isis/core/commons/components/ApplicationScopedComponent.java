@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.components;
 
 /**
- * Indicate that the implementing component is scoped at application level (shared across multiple 
- * sessions) and might also require initialization or being shutdown.
+ * Indicate that the implementing component is scoped at application level (shared across multiple sessions) and might
+ * also require initialization or being shutdown.
  * 
  * <p>
  * Analogous to Hibernate's <tt>SessionFactory</tt>.

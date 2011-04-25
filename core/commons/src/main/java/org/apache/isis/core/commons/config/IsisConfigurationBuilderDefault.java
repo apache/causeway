@@ -22,13 +22,12 @@ package org.apache.isis.core.commons.config;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 /**
  * Convenience implementation of {@link IsisConfigurationBuilder} that loads configuration resource as per
@@ -46,25 +45,21 @@ public class IsisConfigurationBuilderDefault extends IsisConfigurationBuilderRes
         super(resourceStreamSources(null));
     }
 
-    public IsisConfigurationBuilderDefault(String firstDirectory) {
+    public IsisConfigurationBuilderDefault(final String firstDirectory) {
         super(resourceStreamSources(firstDirectory));
     }
 
-    
-    private static ResourceStreamSource[] resourceStreamSources(String firstDirectory) {
+    private static ResourceStreamSource[] resourceStreamSources(final String firstDirectory) {
         final ArrayList<ResourceStreamSource> rssList = Lists.newArrayList();
-        if(firstDirectory!=null) {
+        if (firstDirectory != null) {
             rssList.add(fromFileSystem(firstDirectory));
         }
-        rssList.addAll(
-            Arrays.asList(
-                fromFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
-                fromFileSystem(ConfigurationConstants.WEBINF_CONFIG_DIRECTORY), 
-                fromClassPath()));
+        rssList.addAll(Arrays.asList(fromFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
+            fromFileSystem(ConfigurationConstants.WEBINF_CONFIG_DIRECTORY), fromClassPath()));
         return rssList.toArray(new ResourceStreamSource[0]);
     }
-    
-    private static ResourceStreamSource fromFileSystem(String directory) {
+
+    private static ResourceStreamSource fromFileSystem(final String directory) {
         return ResourceStreamSourceFileSystem.create(directory);
     }
 

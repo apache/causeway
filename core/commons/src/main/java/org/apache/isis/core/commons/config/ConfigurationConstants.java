@@ -17,24 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 public final class ConfigurationConstants {
 
-	public static final String ROOT = "isis.";
-	public static final String SHOW_EXPLORATION_OPTIONS = ROOT
-			+ "exploration.show";
+    public static final String ROOT = "isis.";
+    public static final String SHOW_EXPLORATION_OPTIONS = ROOT + "exploration.show";
 
-	public static final String LIST_SEPARATOR = ",";
-	public static final String DELIMITER = ".";
-	public static final String DEFAULT_CONFIG_DIRECTORY = "config";
-	public static final String WEBINF_CONFIG_DIRECTORY = "src/main/webapp/WEB-INF";
+    public static final String LIST_SEPARATOR = ",";
+    public static final String DELIMITER = ".";
+    public static final String DEFAULT_CONFIG_DIRECTORY = "config";
+    public static final String WEBINF_CONFIG_DIRECTORY = "src/main/webapp/WEB-INF";
 
-	public static final String DEFAULT_CONFIG_FILE = "isis.properties";
-	public static final String WEB_CONFIG_FILE = "web.properties";
-	
-	private ConfigurationConstants() {
-	}
+    public static final String DEFAULT_CONFIG_FILE = "isis.properties";
+    public static final String WEB_CONFIG_FILE = "web.properties";
+
+    private ConfigurationConstants() {
+    }
 }
-

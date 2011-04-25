@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.commons.authentication;
 
-
 public abstract class AuthenticationSessionProviderAbstract implements AuthenticationSessionProvider {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
+            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
         }
     }

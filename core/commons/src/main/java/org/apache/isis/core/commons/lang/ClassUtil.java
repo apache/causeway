@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.Constructor;
@@ -25,35 +24,36 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
-
-
 public final class ClassUtil {
 
-    private ClassUtil() {}
+    private ClassUtil() {
+    }
 
-    public static Object newInstance(final Class<?> type, final Class<?> constructorParamType, Object constructorArg) {
-        return ClassUtil.newInstance(type, new Class[]{constructorParamType}, new Object[]{constructorArg});
+    public static Object newInstance(final Class<?> type, final Class<?> constructorParamType,
+        final Object constructorArg) {
+        return ClassUtil.newInstance(type, new Class[] { constructorParamType }, new Object[] { constructorArg });
     }
 
     /**
-     * Tries to instantiate using a constructor accepting the supplied arguments; if no such
-     * constructor then falls back to trying the no-arg constructor.
+     * Tries to instantiate using a constructor accepting the supplied arguments; if no such constructor then falls back
+     * to trying the no-arg constructor.
      */
-    public static Object newInstance(final Class<?> type, final Class<?>[] constructorParamTypes, Object[] constructorArgs) {
+    public static Object newInstance(final Class<?> type, final Class<?>[] constructorParamTypes,
+        final Object[] constructorArgs) {
         try {
             Constructor<?> constructor;
             try {
                 constructor = type.getConstructor(constructorParamTypes);
                 return constructor.newInstance(constructorArgs);
-            } catch (NoSuchMethodException ex) {
+            } catch (final NoSuchMethodException ex) {
                 try {
                     constructor = type.getConstructor();
                     return constructor.newInstance();
-                } catch (NoSuchMethodException e) {
+                } catch (final NoSuchMethodException e) {
                     throw new IsisException(e);
                 }
             }
-        } catch (SecurityException ex) {
+        } catch (final SecurityException ex) {
             throw new IsisException(ex);
         } catch (final IllegalArgumentException e) {
             throw new IsisException(e);
@@ -67,4 +67,3 @@ public final class ClassUtil {
     }
 
 }
-

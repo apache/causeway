@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.authentication;
 
 import java.io.IOException;
@@ -40,102 +39,99 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     private final String name;
     private final List<String> roles = new ArrayList<String>();
     private final String code;
-    
+
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
 
-    
-	/////////////////////////////////////////////////////////
-	// Constructor, encode
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Constructor, encode
+    // ///////////////////////////////////////////////////////
 
     @SuppressWarnings("unchecked")
-	public AuthenticationSessionAbstract(String name, String code) {
-    	this(name, Collections.EMPTY_LIST, code);
+    public AuthenticationSessionAbstract(final String name, final String code) {
+        this(name, Collections.EMPTY_LIST, code);
     }
 
-    public AuthenticationSessionAbstract(String name, List<String> roles, String code) {
-    	this.name = name;
-    	this.roles.addAll(roles);
-    	this.code = code;
-    	initialized();
-	}
+    public AuthenticationSessionAbstract(final String name, final List<String> roles, final String code) {
+        this.name = name;
+        this.roles.addAll(roles);
+        this.code = code;
+        initialized();
+    }
 
     public AuthenticationSessionAbstract(final DataInputExtended input) throws IOException {
-    	this.name = input.readUTF();
+        this.name = input.readUTF();
         this.roles.addAll(Arrays.asList(input.readUTFs()));
         this.code = input.readUTF();
         initialized();
     }
 
-
-	public void encode(final DataOutputExtended output) throws IOException {
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(getUserName());
-        output.writeUTFs(roles.toArray(new String[]{}));
+        output.writeUTFs(roles.toArray(new String[] {}));
         output.writeUTF(code);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-	/////////////////////////////////////////////////////////
-	// User Name
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // User Name
+    // ///////////////////////////////////////////////////////
 
+    @Override
     public String getUserName() {
         return name;
     }
 
-	public boolean hasUserNameOf(final String userName) {
-		return userName == null ? false : userName.equals(getUserName());
-	}
+    @Override
+    public boolean hasUserNameOf(final String userName) {
+        return userName == null ? false : userName.equals(getUserName());
+    }
 
-	
-	/////////////////////////////////////////////////////////
-	// Roles
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Roles
+    // ///////////////////////////////////////////////////////
 
     /**
      * Can be overridden.
      */
-	public List<String> getRoles() {
-		return Collections.unmodifiableList(roles);
-	}
-    
-	
-	/////////////////////////////////////////////////////////
-	// Code
-	/////////////////////////////////////////////////////////
+    @Override
+    public List<String> getRoles() {
+        return Collections.unmodifiableList(roles);
+    }
 
+    // ///////////////////////////////////////////////////////
+    // Code
+    // ///////////////////////////////////////////////////////
+
+    @Override
     public String getValidationCode() {
         return code;
     }
 
-	
-	/////////////////////////////////////////////////////////
-	// Attributes
-	/////////////////////////////////////////////////////////
-	
-	
-	public Object getAttribute(String attributeName) {
-		return attributeByName.get(attributeName);
-	}
+    // ///////////////////////////////////////////////////////
+    // Attributes
+    // ///////////////////////////////////////////////////////
 
+    @Override
+    public Object getAttribute(final String attributeName) {
+        return attributeByName.get(attributeName);
+    }
 
-	public void setAttribute(String attributeName, Object attribute) {
-		attributeByName.put(attributeName, attribute);
-	}
+    @Override
+    public void setAttribute(final String attributeName, final Object attribute) {
+        attributeByName.put(attributeName, attribute);
+    }
 
-
-	/////////////////////////////////////////////////////////
-	// toString
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // toString
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {
         return new ToString(this).append("name", getUserName()).append("code", getValidationCode()).toString();
     }
-
-
 
 }

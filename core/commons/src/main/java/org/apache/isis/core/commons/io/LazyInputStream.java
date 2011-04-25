@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.io;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -30,154 +29,153 @@ import java.io.InputStream;
 import org.apache.isis.core.commons.ensure.Ensure;
 
 /**
- * An input stream that reads from an underlying {@link InputStream}, deferring
- * the interactions until needed.
+ * An input stream that reads from an underlying {@link InputStream}, deferring the interactions until needed.
  * 
  * <p>
- * This other stream is provided as needed by an {@link InputStreamProvider} so
- * that the underlying stream is not eagerly loaded.
+ * This other stream is provided as needed by an {@link InputStreamProvider} so that the underlying stream is not
+ * eagerly loaded.
  */
 public class LazyInputStream extends InputStream {
 
-	/**
-	 * An interface to be implemented by clients that wish to utilize
-	 * {@link LazyInputStream}s. The implementation of this interface should
-	 * defer obtaining the desired input stream until absolutely necessary.
-	 */
-	public static interface InputStreamProvider {
-		InputStream getInputStream() throws IOException;
-	}
+    /**
+     * An interface to be implemented by clients that wish to utilize {@link LazyInputStream}s. The implementation of
+     * this interface should defer obtaining the desired input stream until absolutely necessary.
+     */
+    public static interface InputStreamProvider {
+        InputStream getInputStream() throws IOException;
+    }
 
-	private InputStreamProvider provider;
+    private final InputStreamProvider provider;
 
-	private InputStream underlying = null;
+    private InputStream underlying = null;
 
-	// ///////////////////////////////////////////////////////
-	// Constructor
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Constructor
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * Construct a new lazy stream based off the given provider.
-	 * 
-	 * @param provider
-	 *            the input stream provider. Must not be <code>null</code>.
-	 */
-	public LazyInputStream(InputStreamProvider provider) {
-		Ensure.ensureThatArg(provider, is(not(nullValue())));
-		this.provider = provider;
-	}
+    /**
+     * Construct a new lazy stream based off the given provider.
+     * 
+     * @param provider
+     *            the input stream provider. Must not be <code>null</code>.
+     */
+    public LazyInputStream(final InputStreamProvider provider) {
+        Ensure.ensureThatArg(provider, is(not(nullValue())));
+        this.provider = provider;
+    }
 
-	// ///////////////////////////////////////////////////////
-	// InputStream API
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // InputStream API
+    // ///////////////////////////////////////////////////////
 
-	@Override
-	public void close() throws IOException {
-		obtainUnderlyingIfRequired();
-		underlying.close();
-	}
+    @Override
+    public void close() throws IOException {
+        obtainUnderlyingIfRequired();
+        underlying.close();
+    }
 
-	@Override
-	public int available() throws IOException {
-		obtainUnderlyingIfRequired();
-		return underlying.available();
-	}
+    @Override
+    public int available() throws IOException {
+        obtainUnderlyingIfRequired();
+        return underlying.available();
+    }
 
-	@Override
-	public void mark(int readlimit) {
-		try {
-			obtainUnderlyingIfRequired();
-			underlying.mark(readlimit);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @Override
+    public void mark(final int readlimit) {
+        try {
+            obtainUnderlyingIfRequired();
+            underlying.mark(readlimit);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public boolean markSupported() {
-		try {
-			obtainUnderlyingIfRequired();
-			return underlying.markSupported();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @Override
+    public boolean markSupported() {
+        try {
+            obtainUnderlyingIfRequired();
+            return underlying.markSupported();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public int read() throws IOException {
-		obtainUnderlyingIfRequired();
-		return underlying.read();
-	}
+    @Override
+    public int read() throws IOException {
+        obtainUnderlyingIfRequired();
+        return underlying.read();
+    }
 
-	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
-		obtainUnderlyingIfRequired();
-		return underlying.read(b, off, len);
-	}
+    @Override
+    public int read(final byte[] b, final int off, final int len) throws IOException {
+        obtainUnderlyingIfRequired();
+        return underlying.read(b, off, len);
+    }
 
-	@Override
-	public int read(byte[] b) throws IOException {
-		obtainUnderlyingIfRequired();
-		return underlying.read(b);
-	}
+    @Override
+    public int read(final byte[] b) throws IOException {
+        obtainUnderlyingIfRequired();
+        return underlying.read(b);
+    }
 
-	@Override
-	public long skip(long n) throws IOException {
-		obtainUnderlyingIfRequired();
-		return underlying.skip(n);
-	}
+    @Override
+    public long skip(final long n) throws IOException {
+        obtainUnderlyingIfRequired();
+        return underlying.skip(n);
+    }
 
-	@Override
-	public void reset() throws IOException {
-		obtainUnderlyingIfRequired();
-		underlying.reset();
-	}
+    @Override
+    public void reset() throws IOException {
+        obtainUnderlyingIfRequired();
+        underlying.reset();
+    }
 
-	// ///////////////////////////////////////////////////////
-	// helpers
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // helpers
+    // ///////////////////////////////////////////////////////
 
-	private void obtainUnderlyingIfRequired() throws IOException {
-		if (underlying == null) {
-			underlying = provider.getInputStream();
-		}
-	}
+    private void obtainUnderlyingIfRequired() throws IOException {
+        if (underlying == null) {
+            underlying = provider.getInputStream();
+        }
+    }
 
-	// ///////////////////////////////////////////////////////
-	// equals, hashCode
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // equals, hashCode
+    // ///////////////////////////////////////////////////////
 
-	@Override
-	public boolean equals(Object obj) {
-		try {
-			obtainUnderlyingIfRequired();
-			return underlying.equals(obj);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @Override
+    public boolean equals(final Object obj) {
+        try {
+            obtainUnderlyingIfRequired();
+            return underlying.equals(obj);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public int hashCode() {
-		try {
-			obtainUnderlyingIfRequired();
-			return underlying.hashCode();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @Override
+    public int hashCode() {
+        try {
+            obtainUnderlyingIfRequired();
+            return underlying.hashCode();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	// ///////////////////////////////////////////////////////
-	// toString
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // toString
+    // ///////////////////////////////////////////////////////
 
-	public String toString() {
-		try {
-			obtainUnderlyingIfRequired();
-			return underlying.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @Override
+    public String toString() {
+        try {
+            obtainUnderlyingIfRequired();
+            return underlying.toString();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

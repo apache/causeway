@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.resource;
 
 import java.io.InputStream;
@@ -29,63 +28,62 @@ import org.apache.log4j.Logger;
 
 public class ResourceStreamSourceComposite extends ResourceStreamSourceAbstract {
 
-	private static Logger LOG = Logger.getLogger(ResourceStreamSourceComposite.class);
+    private static Logger LOG = Logger.getLogger(ResourceStreamSourceComposite.class);
 
-	private List<ResourceStreamSource> resourceStreamSources = new ArrayList<ResourceStreamSource>();
-	
-	public ResourceStreamSourceComposite(ResourceStreamSource... resourceStreamSources) {
-		for(ResourceStreamSource rss: resourceStreamSources) {
-			addResourceStreamSource(rss);
-		}
-	}
-	
-	
-	public void addResourceStreamSource(ResourceStreamSource rss) {
-		this.resourceStreamSources.add(rss);
-	}
-	
-	protected InputStream doReadResource(String resourcePath) {
-		for(ResourceStreamSource rss: resourceStreamSources) {
-			InputStream resourceStream = rss.readResource(resourcePath);
-			if (resourceStream != null) {
-				return resourceStream;
-			}
-		}
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("could not load resource path '" + resourcePath + "' from " + getName() );
-		}
-		return null;
-	}
+    private final List<ResourceStreamSource> resourceStreamSources = new ArrayList<ResourceStreamSource>();
 
-	@Override
-	public OutputStream writeResource(String resourcePath) {
-		for(ResourceStreamSource rss: resourceStreamSources) {
-			OutputStream os = rss.writeResource(resourcePath);
-			if (os != null) {
-				return os;
-			}
-		}
-		return null;
-	}
-	
-	public String getName() {
-		return "[" + resourceStreamNames() + "]";
-	}
+    public ResourceStreamSourceComposite(final ResourceStreamSource... resourceStreamSources) {
+        for (final ResourceStreamSource rss : resourceStreamSources) {
+            addResourceStreamSource(rss);
+        }
+    }
 
-	private String resourceStreamNames() {
-		StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (ResourceStreamSource rss : resourceStreamSources) {
-			if (first) {
-				first = false;
-			} else {
-				buf.append(", ");
-			}
-			buf.append(rss.getName());
-		}
-		return buf.toString();
-	}
+    public void addResourceStreamSource(final ResourceStreamSource rss) {
+        this.resourceStreamSources.add(rss);
+    }
 
+    @Override
+    protected InputStream doReadResource(final String resourcePath) {
+        for (final ResourceStreamSource rss : resourceStreamSources) {
+            final InputStream resourceStream = rss.readResource(resourcePath);
+            if (resourceStream != null) {
+                return resourceStream;
+            }
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("could not load resource path '" + resourcePath + "' from " + getName());
+        }
+        return null;
+    }
 
+    @Override
+    public OutputStream writeResource(final String resourcePath) {
+        for (final ResourceStreamSource rss : resourceStreamSources) {
+            final OutputStream os = rss.writeResource(resourcePath);
+            if (os != null) {
+                return os;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return "[" + resourceStreamNames() + "]";
+    }
+
+    private String resourceStreamNames() {
+        final StringBuilder buf = new StringBuilder();
+        boolean first = true;
+        for (final ResourceStreamSource rss : resourceStreamSources) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(", ");
+            }
+            buf.append(rss.getName());
+        }
+        return buf.toString();
+    }
 
 }

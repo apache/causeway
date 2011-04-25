@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
-
 /**
- * Allows components (eg facet factories) to indicate that they have a dependency on
- * {@link IsisConfiguration}.
+ * Allows components (eg facet factories) to indicate that they have a dependency on {@link IsisConfiguration}.
  */
 public interface IsisConfigurationAware {
 

@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
-
 
 public interface IsisConfigurationBuilderPrimer {
 
-	void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder);
+    void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder);
 
 }

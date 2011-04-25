@@ -17,13 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.components;
 
 public interface Component {
 
-
-
 }
-
-

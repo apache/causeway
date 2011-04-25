@@ -17,34 +17,31 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
 
 public final class ListUtils {
     private static final String DEFAULT_DELIMITER = ",";
 
-	private ListUtils() {}
+    private ListUtils() {
+    }
 
-	public static <T> List<T> combine(final List<T> list, final List<T> list2) {
-	    final List<T> combinedList = new ArrayList<T>();
-	    combinedList.addAll(list);
-	    combinedList.addAll(list2);
-	    return combinedList;
-	}
-	
+    public static <T> List<T> combine(final List<T> list, final List<T> list2) {
+        final List<T> combinedList = new ArrayList<T>();
+        combinedList.addAll(list);
+        combinedList.addAll(list2);
+        return combinedList;
+    }
+
     /**
      * Returns list1 with everything in list2, ignoring duplicates.
      */
     public static <T> List<T> merge(final List<T> list1, final List<T> list2) {
-        for (final Iterator<T> iter = list2.iterator(); iter.hasNext();) {
-            final T obj = iter.next();
+        for (final T obj : list2) {
             if (!(list1.contains(obj))) {
                 list1.add(obj);
             }
@@ -52,7 +49,6 @@ public final class ListUtils {
         return list1;
     }
 
-    
     public static List<String> merge(final String[] array1, final String[] array2) {
         final List<String> prefixes = new ArrayList<String>();
         addNoDuplicates(array1, prefixes);
@@ -68,16 +64,15 @@ public final class ListUtils {
         }
     }
 
-    public
-    static List<Object> asList(final Object[] objectArray) {
+    public static List<Object> asList(final Object[] objectArray) {
         final List<Object> list = new ArrayList<Object>();
-        for (int i = 0; i < objectArray.length; i++) {
-            if (Collection.class.isAssignableFrom(objectArray[i].getClass())) {
+        for (final Object element : objectArray) {
+            if (Collection.class.isAssignableFrom(element.getClass())) {
                 @SuppressWarnings("rawtypes")
-				Collection collection = (Collection) objectArray[i];
+                final Collection collection = (Collection) element;
                 list.addAll(asList(collection.toArray()));
             } else {
-                list.add(objectArray[i]);
+                list.add(element);
             }
         }
         return list;
@@ -85,67 +80,64 @@ public final class ListUtils {
 
     /**
      * @see #listToString(List, String)
-	 * @see #stringToList(String)
+     * @see #stringToList(String)
      */
-	public static String listToString(List<String> list) {
-		return listToString(list, DEFAULT_DELIMITER);
-	}
+    public static String listToString(final List<String> list) {
+        return listToString(list, DEFAULT_DELIMITER);
+    }
 
-	/**
-	 * @see #listToString(List, String)
-	 * @see #stringToList(String)
-	 */
-	public static String listToString(List<String> list, String delimiter) {
-		if (list.size() == 0) {
-			return null;
-		}
-		StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for(String str: list) {
-			if(first) {
-				first = false;
-			} else {
-				buf.append(delimiter);
-			}
-			buf.append(str);
-		}
-		return buf.toString();
-	}
+    /**
+     * @see #listToString(List, String)
+     * @see #stringToList(String)
+     */
+    public static String listToString(final List<String> list, final String delimiter) {
+        if (list.size() == 0) {
+            return null;
+        }
+        final StringBuilder buf = new StringBuilder();
+        boolean first = true;
+        for (final String str : list) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(delimiter);
+            }
+            buf.append(str);
+        }
+        return buf.toString();
+    }
 
-	/**
-	 * @see #stringToList(String, String)
-	 * @see #listToString(List)
-	 */
-	public static List<String> stringToList(String commaSeparated) {
-		return appendDelimitedStringToList(commaSeparated, new ArrayList<String>());
-	}
+    /**
+     * @see #stringToList(String, String)
+     * @see #listToString(List)
+     */
+    public static List<String> stringToList(final String commaSeparated) {
+        return appendDelimitedStringToList(commaSeparated, new ArrayList<String>());
+    }
 
-	/**
-	 * @see #stringToList(String)
-	 * @see #listToString(List, String)
-	 */
-	public static List<String> stringToList(String delimited, String delimiter) {
-		return appendDelimitedStringToList(delimited, delimiter, new ArrayList<String>());
-	}
+    /**
+     * @see #stringToList(String)
+     * @see #listToString(List, String)
+     */
+    public static List<String> stringToList(final String delimited, final String delimiter) {
+        return appendDelimitedStringToList(delimited, delimiter, new ArrayList<String>());
+    }
 
-	/**
-	 * @see #appendDelimitedStringToList(String, String, List)
-	 */
-	public static List<String> appendDelimitedStringToList(
-			String commaSeparated, List<String> list) {
-		return appendDelimitedStringToList(commaSeparated, DEFAULT_DELIMITER, list);
-	}
+    /**
+     * @see #appendDelimitedStringToList(String, String, List)
+     */
+    public static List<String> appendDelimitedStringToList(final String commaSeparated, final List<String> list) {
+        return appendDelimitedStringToList(commaSeparated, DEFAULT_DELIMITER, list);
+    }
 
-	public static List<String> appendDelimitedStringToList(
-			String delimited, String delimiter, List<String> list) {
-		if (delimited == null) {
-			return list;
-		}
-		String[] optionValues = delimited.split(delimiter);
-		list.addAll(Arrays.asList(optionValues));
-		return list;
-	}
-
+    public static List<String> appendDelimitedStringToList(final String delimited, final String delimiter,
+        final List<String> list) {
+        if (delimited == null) {
+            return list;
+        }
+        final String[] optionValues = delimited.split(delimiter);
+        list.addAll(Arrays.asList(optionValues));
+        return list;
+    }
 
 }
-

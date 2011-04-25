@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.encoding;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -29,69 +28,62 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
-import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
-import org.apache.isis.core.commons.encoding.Encodable;
-
 public abstract class EncodabilityContractTest {
 
-	protected final Mockery context = new JUnit4Mockery();
-	protected AuthenticationSession mockAuthSession;
-	
-	protected Encodable encodable;
+    protected final Mockery context = new JUnit4Mockery();
+    protected AuthenticationSession mockAuthSession;
 
-	public EncodabilityContractTest() {
-		super();
-	}
+    protected Encodable encodable;
 
-	@Before
-	public void setUp() throws Exception {
-		encodable = createEncodable();
-		mockAuthSession = context.mock(AuthenticationSession.class);
-	}
+    public EncodabilityContractTest() {
+        super();
+    }
 
+    @Before
+    public void setUp() throws Exception {
+        encodable = createEncodable();
+        mockAuthSession = context.mock(AuthenticationSession.class);
+    }
 
-	/**
-	 * Hook for subclasses to provide object to be tested.
-	 */
-	protected abstract Encodable createEncodable();
+    /**
+     * Hook for subclasses to provide object to be tested.
+     */
+    protected abstract Encodable createEncodable();
 
-	@Test
-	public void shouldImplementEncodeable() throws Exception {
-		assertThat(encodable, is(instanceOf(Encodable.class)));
-	}
+    @Test
+    public void shouldImplementEncodeable() throws Exception {
+        assertThat(encodable, is(instanceOf(Encodable.class)));
+    }
 
-	@Test
-	public void shouldHaveOneArgConstructorThatAcceptsInput() {
-		Object o = encodable;
-		try {
-			o.getClass().getConstructor(DataInputExtended.class);
-		} catch (Exception e) {
-			fail("could not locate 1-arg constructor accepting a DataInputExtended instance");
-		}
-	}
+    @Test
+    public void shouldHaveOneArgConstructorThatAcceptsInput() {
+        final Object o = encodable;
+        try {
+            o.getClass().getConstructor(DataInputExtended.class);
+        } catch (final Exception e) {
+            fail("could not locate 1-arg constructor accepting a DataInputExtended instance");
+        }
+    }
 
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		PipedInputStream pipedInputStream = new PipedInputStream();
-		PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-		DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(pipedOutputStream);
-		DataInputStreamExtended inputImpl = new DataInputStreamExtended(pipedInputStream);
-		
-		outputImpl.writeEncodable(encodable);
-		Object decodedEncodable = inputImpl.readEncodable(Object.class);
-		
-		assertRoundtripped(decodedEncodable, encodable);
-	}
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        final PipedInputStream pipedInputStream = new PipedInputStream();
+        final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+        final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(pipedOutputStream);
+        final DataInputStreamExtended inputImpl = new DataInputStreamExtended(pipedInputStream);
 
-	protected abstract void assertRoundtripped(Object decodedEncodable, Object originalEncodable);
+        outputImpl.writeEncodable(encodable);
+        final Object decodedEncodable = inputImpl.readEncodable(Object.class);
 
+        assertRoundtripped(decodedEncodable, encodable);
+    }
+
+    protected abstract void assertRoundtripped(Object decodedEncodable, Object originalEncodable);
 
 }

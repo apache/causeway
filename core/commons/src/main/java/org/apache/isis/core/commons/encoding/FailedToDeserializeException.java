@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,17 +26,17 @@ import java.io.IOException;
 
 public class FailedToDeserializeException extends IOException {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Throwable cause;
-	
-	public FailedToDeserializeException(ClassNotFoundException cause) {
-		this.cause = cause;
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public Throwable getCause() {
-		return cause;
-	}
-	
+    private final Throwable cause;
+
+    public FailedToDeserializeException(final ClassNotFoundException cause) {
+        this.cause = cause;
+    }
+
+    @Override
+    public Throwable getCause() {
+        return cause;
+    }
+
 }

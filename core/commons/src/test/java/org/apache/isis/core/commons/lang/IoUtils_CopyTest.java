@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import static org.junit.Assert.assertThat;
@@ -31,9 +30,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.core.commons.lang.IoUtils;
-
 
 public class IoUtils_CopyTest {
 
@@ -58,6 +54,7 @@ public class IoUtils_CopyTest {
             return true;
         }
 
+        @Override
         public void describeTo(final Description arg0) {
             arg0.appendText("does not match expected array");
         }
@@ -66,7 +63,8 @@ public class IoUtils_CopyTest {
     private static int BUF_INTERNAL_SIZE = 1024;
 
     @Before
-    public void setUp() throws Exception {}
+    public void setUp() throws Exception {
+    }
 
     @After
     public void tearDown() throws Exception {
@@ -136,4 +134,3 @@ public class IoUtils_CopyTest {
     }
 
 }
-

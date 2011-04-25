@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 import java.io.IOException;
@@ -27,7 +26,6 @@ import java.util.Properties;
 import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
-
 /**
  * Loads properties using the specified {@link ResourceStreamSource}.
  */
@@ -35,7 +33,8 @@ class PropertiesReader {
 
     private final Properties properties = new Properties();
 
-    public PropertiesReader(final ResourceStreamSource resourceStream, final String configurationResource) throws IOException {
+    public PropertiesReader(final ResourceStreamSource resourceStream, final String configurationResource)
+        throws IOException {
 
         InputStream in = null;
         try {

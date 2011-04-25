@@ -17,11 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.exceptions;
-
-
-
 
 public class UnknownTypeException extends IsisException {
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.util.Locale;
@@ -26,8 +25,8 @@ public class LocaleUtils {
 
     public static Locale findLocale(final String localeStr) {
         if (localeStr != null) {
-            Locale[] availableLocales = Locale.getAvailableLocales();
-            for(Locale locale: availableLocales) {
+            final Locale[] availableLocales = Locale.getAvailableLocales();
+            for (final Locale locale : availableLocales) {
                 if (locale.toString().equals(localeStr)) {
                     return locale;
                 }

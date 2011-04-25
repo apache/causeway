@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.util.ArrayList;
@@ -25,11 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
 public final class WrapperUtils {
 
-    private WrapperUtils() {}
+    private WrapperUtils() {
+    }
 
     private static Map<Class<?>, Class<?>> wrapperClasses = new HashMap<Class<?>, Class<?>>();
 
@@ -44,22 +42,20 @@ public final class WrapperUtils {
         wrapperClasses.put(double.class, Double.class);
     }
 
+    public static Class<?> wrap(final Class<?> primitiveClass) {
+        return wrapperClasses.get(primitiveClass);
+    }
 
-	public static Class<?> wrap(final Class<?> primitiveClass) {
-	    return wrapperClasses.get(primitiveClass);
-	}
-
-
-	public static Class<?>[] wrapAsNecessary(final Class<?>[] classes) {
-	    final List<Class<?>> wrappedClasses = new ArrayList<Class<?>>();
-	    for (final Class<?> cls : classes) {
-	        if (cls.isPrimitive()) {
-	            wrappedClasses.add((Class<?>) wrap(cls));
-	        } else {
-	            wrappedClasses.add(cls);
-	        }
-	    }
-	    return wrappedClasses.toArray(new Class[] {});
-	}
+    public static Class<?>[] wrapAsNecessary(final Class<?>[] classes) {
+        final List<Class<?>> wrappedClasses = new ArrayList<Class<?>>();
+        for (final Class<?> cls : classes) {
+            if (cls.isPrimitive()) {
+                wrappedClasses.add(wrap(cls));
+            } else {
+                wrappedClasses.add(cls);
+            }
+        }
+        return wrappedClasses.toArray(new Class[] {});
+    }
 
 }

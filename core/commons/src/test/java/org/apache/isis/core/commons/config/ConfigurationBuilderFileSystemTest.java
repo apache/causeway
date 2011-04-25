@@ -17,19 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.config;
 
 import junit.framework.TestCase;
 
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
-import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class ConfigurationBuilderFileSystemTest extends TestCase {
     IsisConfigurationBuilderFileSystem loader;
@@ -67,7 +61,8 @@ public class ConfigurationBuilderFileSystemTest extends TestCase {
             loader.addConfigurationResource("unfound.properties", NotFoundPolicy.FAIL_FAST);
             loader.getConfiguration();
             fail();
-        } catch (final IsisException expected) {}
+        } catch (final IsisException expected) {
+        }
     }
 
     public void testAddedConfigurationIgnoreUnfoundFile() {
@@ -87,4 +82,3 @@ public class ConfigurationBuilderFileSystemTest extends TestCase {
         assertEquals(System.getProperty("os.name"), configuration.getString("os.name"));
     }
 }
-

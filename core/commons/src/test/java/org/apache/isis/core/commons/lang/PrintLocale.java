@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.TimeZone;
-
 
 public class PrintLocale {
     public static void main(final String[] args) {
@@ -59,4 +57,3 @@ public class PrintLocale {
         System.out.println("DST: " + timezone.getDSTSavings() / (1000 * 60 * 60));
     }
 }
-

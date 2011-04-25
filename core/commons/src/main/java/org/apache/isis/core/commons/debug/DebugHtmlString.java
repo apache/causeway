@@ -21,12 +21,12 @@ package org.apache.isis.core.commons.debug;
 public class DebugHtmlString extends DebugHtmlStringAbstract {
 
     StringBuffer debug = new StringBuffer();
-    
+
     public DebugHtmlString() {
         super(false);
     }
-    
-    public DebugHtmlString(boolean createPage) {
+
+    public DebugHtmlString(final boolean createPage) {
         super(createPage);
         header();
     }
@@ -37,7 +37,7 @@ public class DebugHtmlString extends DebugHtmlStringAbstract {
     }
 
     @Override
-    protected void appendHtml(String html) {
+    protected void appendHtml(final String html) {
         debug.append(html);
         debug.append("\n");
     }

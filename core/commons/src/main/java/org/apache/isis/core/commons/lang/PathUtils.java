@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 public final class PathUtils {
 
-    private PathUtils() {}
+    private PathUtils() {
+    }
 
     public static String combine(final String path, final String suffix) {
         if (isEmpty(path) && isEmpty(suffix)) {
@@ -36,7 +36,6 @@ public final class PathUtils {
         }
         return path + "/" + suffix;
     }
-
 
     private static boolean isEmpty(final String str) {
         return str == null || str.length() == 0;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.lang;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -31,32 +30,29 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-
 @RunWith(Parameterized.class)
 public class StringUtils_NormalizedTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-            {null, null, }, // null 
-            {"", "", }, // empty string 
-            {"yada Foobar", "yada Foobar", }, // alreadyNormalized 
-            { "Yada\tFoobar", "Yada Foobar", } , // tab
-            { "Yada\t Foobar", "Yada Foobar", }, // tab and space 
-            {"Yada  foobar", "Yada foobar", }, // two spaces
-            {"Yada\nfoobar", "Yada foobar", }, // new line
+        return Arrays.asList(new Object[][] { { null, null, }, // null
+            { "", "", }, // empty string
+            { "yada Foobar", "yada Foobar", }, // alreadyNormalized
+            { "Yada\tFoobar", "Yada Foobar", }, // tab
+            { "Yada\t Foobar", "Yada Foobar", }, // tab and space
+            { "Yada  foobar", "Yada foobar", }, // two spaces
+            { "Yada\nfoobar", "Yada foobar", }, // new line
             { "Yada\n Foobar", "Yada Foobar", }, // newline and space
             { "Yada\r\n Foobar", "Yada Foobar", }, // windows newline
             { "Yada\r Foobar", "Yada Foobar", }, // macos newline
             { "Yada\r \tFoo \n\tbar  Baz", "Yada Foo bar Baz", }, // multiple
         });
     }
-    
+
     private final String input;
     private final String expected;
-    
-    
-    public StringUtils_NormalizedTest(String input, String expected) {
+
+    public StringUtils_NormalizedTest(final String input, final String expected) {
         this.input = input;
         this.expected = expected;
     }
