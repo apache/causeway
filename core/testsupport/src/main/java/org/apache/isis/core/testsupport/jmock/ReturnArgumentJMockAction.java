@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
 import org.hamcrest.Description;
@@ -27,15 +26,17 @@ import org.jmock.api.Invocation;
 public final class ReturnArgumentJMockAction implements Action {
     private final int i;
 
-    public ReturnArgumentJMockAction(int i) {
+    public ReturnArgumentJMockAction(final int i) {
         this.i = i;
     }
 
-    public void describeTo(Description description) {
+    @Override
+    public void describeTo(final Description description) {
         description.appendText("parameter #" + i + " ");
     }
 
-    public Object invoke(Invocation invocation) throws Throwable {
+    @Override
+    public Object invoke(final Invocation invocation) throws Throwable {
         return invocation.getParameter(i);
     }
 
@@ -43,8 +44,7 @@ public final class ReturnArgumentJMockAction implements Action {
      * Factory
      */
     public static Action returnArgument(final int i) {
-    	return new ReturnArgumentJMockAction(i);
+        return new ReturnArgumentJMockAction(i);
     }
 
 }
-

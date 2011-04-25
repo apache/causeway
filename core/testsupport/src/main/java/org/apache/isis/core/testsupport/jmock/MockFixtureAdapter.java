@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
 import org.jmock.Mockery;
@@ -27,20 +26,20 @@ import org.jmock.Mockery;
  */
 public abstract class MockFixtureAdapter<T> implements MockFixture<T> {
 
-	private T object;
-	
-	/**
-	 * Assumes that the mock created is the one to be {@link #object() returned}
-	 * (though subclass can override that if need be).
-	 */
-	protected T createMock(MockFixture.Context fixtureContext, Class<T> cls) {
-		final Mockery mockery = fixtureContext.getMockery();
-		final String name = fixtureContext.name();
-		return object = name!=null?mockery.mock(cls, name):mockery.mock(cls);
-	}
+    private T object;
 
-	@Override
-	public T object() {
-		return object;
-	}
+    /**
+     * Assumes that the mock created is the one to be {@link #object() returned} (though subclass can override that if
+     * need be).
+     */
+    protected T createMock(final MockFixture.Context fixtureContext, final Class<T> cls) {
+        final Mockery mockery = fixtureContext.getMockery();
+        final String name = fixtureContext.name();
+        return object = name != null ? mockery.mock(cls, name) : mockery.mock(cls);
+    }
+
+    @Override
+    public T object() {
+        return object;
+    }
 }

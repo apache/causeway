@@ -17,67 +17,67 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
-
 
 /**
  * A subinterface of {@link Fixture} representing a mock collaborator to be setup.
  */
 public interface MockFixture<T> extends Fixture<MockFixture.Context> {
-	
-	public interface Context extends Fixture.Context {
 
-		FixtureMockery getMockery();
-		/**
-		 * Name to use for mock, if any.
-		 * 
-		 * <p>
-		 * If <tt>null</tt>, then uses the default name.
-		 */
-		String name();
-	}
+    public interface Context extends Fixture.Context {
 
-	public static class Builder<T extends MockFixture<?>> {
+        FixtureMockery getMockery();
 
-		private final FixtureMockery mockery;
-		private T fixture;
-		private String name;
-		
-		public Builder(FixtureMockery mockery, Class<T> cls) {
-			this.mockery = mockery;
-			try {
-				fixture = cls.newInstance();
-			} catch (InstantiationException e) {
-				throw new IllegalArgumentException(e);
-			} catch (IllegalAccessException e) {
-				throw new IllegalArgumentException(e);
-			}
+        /**
+         * Name to use for mock, if any.
+         * 
+         * <p>
+         * If <tt>null</tt>, then uses the default name.
+         */
+        String name();
+    }
 
-		}
-		public Builder<T> named(String name) { 
-			this.name = name;
-			return this;
-		}
-		
-		public T build() {
-			final Context context = new Context() {
+    public static class Builder<T extends MockFixture<?>> {
 
-				@Override
-				public FixtureMockery getMockery() {
-					return mockery;
-				}
+        private final FixtureMockery mockery;
+        private T fixture;
+        private String name;
 
-				@Override
-				public String name() {
-					return name;
-				}
-			};
-			fixture.setUp(context);
-			return fixture;
-		}
-	}
-	
-	T object();
+        public Builder(final FixtureMockery mockery, final Class<T> cls) {
+            this.mockery = mockery;
+            try {
+                fixture = cls.newInstance();
+            } catch (final InstantiationException e) {
+                throw new IllegalArgumentException(e);
+            } catch (final IllegalAccessException e) {
+                throw new IllegalArgumentException(e);
+            }
+
+        }
+
+        public Builder<T> named(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public T build() {
+            final Context context = new Context() {
+
+                @Override
+                public FixtureMockery getMockery() {
+                    return mockery;
+                }
+
+                @Override
+                public String name() {
+                    return name;
+                }
+            };
+            fixture.setUp(context);
+            return fixture;
+        }
+    }
+
+    T object();
 
 }

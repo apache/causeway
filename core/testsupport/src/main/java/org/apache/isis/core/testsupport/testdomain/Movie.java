@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.testdomain;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
-
 
 public class Movie {
     private Person director;
@@ -65,6 +63,5 @@ public class Movie {
     /*
      * public static void aboutActionFindMovie(ActionAbout about, String name, Person director, Person actor) {
      * about.setParameter(0, "Name"); about.setParameter(1, "Director"); about.setParameter(2, "Actor"); }
-     * 
      */
 }

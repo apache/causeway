@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.testdomain;
 
 public class Role {

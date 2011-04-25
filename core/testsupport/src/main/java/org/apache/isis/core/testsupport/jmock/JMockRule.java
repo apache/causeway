@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
 import java.lang.reflect.Field;
@@ -40,16 +39,14 @@ public class JMockRule implements org.junit.rules.MethodRule {
     }
 
     /**
-     * Specify the {@link Mockery context} to verify (as opposed to searching for it
-     * reflectively).
+     * Specify the {@link Mockery context} to verify (as opposed to searching for it reflectively).
      */
-    public JMockRule(Mockery context) {
+    public JMockRule(final Mockery context) {
         this.context = context;
     }
 
     @Override
-    public Statement apply(final Statement base, final FrameworkMethod method,
-            final Object target) {
+    public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
 
             @Override
@@ -60,7 +57,7 @@ public class JMockRule implements org.junit.rules.MethodRule {
 
             private void verifyMocks() {
                 final Mockery context = contextToVerifyIfAny();
-                if(context!=null) {
+                if (context != null) {
                     context.assertIsSatisfied();
                 } else {
                     throw new AssertionError("could not locate JMock context");
@@ -69,15 +66,14 @@ public class JMockRule implements org.junit.rules.MethodRule {
 
             private Mockery contextToVerifyIfAny() {
                 final Mockery context = JMockRule.this.context;
-                if (context!=null) {
+                if (context != null) {
                     return context;
                 }
                 return findContextReflectivelyIfAny();
             }
 
             private Mockery findContextReflectivelyIfAny() {
-                Class<?> clsToSearch = method.getMethod()
-                        .getDeclaringClass();
+                Class<?> clsToSearch = method.getMethod().getDeclaringClass();
                 do {
                     final Mockery mockery = findContextIfAny(clsToSearch, target);
                     if (mockery != null) {
@@ -90,15 +86,15 @@ public class JMockRule implements org.junit.rules.MethodRule {
 
             private Mockery findContextIfAny(final Class<?> cls, final Object target) {
                 final Field[] fields = cls.getDeclaredFields();
-                for (Field field : fields) {
+                for (final Field field : fields) {
                     final Class<?> type = field.getType();
                     if (Mockery.class.isAssignableFrom(type)) {
                         try {
                             field.setAccessible(true);
                             return (Mockery) field.get(target);
-                        } catch (IllegalArgumentException e) {
+                        } catch (final IllegalArgumentException e) {
                             continue;
-                        } catch (IllegalAccessException e) {
+                        } catch (final IllegalAccessException e) {
                             continue;
                         }
                     }

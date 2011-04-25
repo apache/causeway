@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
 /**
- * Represents something to be setup within a test; typically a collaborator of some
- * sort to the object under test.
+ * Represents something to be setup within a test; typically a collaborator of some sort to the object under test.
  */
 public interface Fixture<C extends Fixture.Context> {
-	
-	interface Context {}
-	
-	public void setUp(C fixtureContext);
+
+    interface Context {
+    }
+
+    public void setUp(C fixtureContext);
 }

@@ -17,15 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
-
 
 public abstract class AbstractJMockForClassesTest extends AbstractJMockTest {
 
-	protected ConvenienceMockery context = JMockContextBuilder.classMockingContext();
+    protected ConvenienceMockery context = JMockContextBuilder.classMockingContext();
+
+    @Override
     protected ConvenienceMockery getContext() {
-    	return context;
+        return context;
     }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
 import org.junit.Rule;
@@ -31,21 +30,21 @@ public abstract class AbstractJMockTest {
      */
     @Rule
     public JMockRule jmockRule = new JMockRule();
-    
+
     protected void ignoring(final Object mock) {
-    	getContext().ignoring(mock);
+        getContext().ignoring(mock);
     }
 
     protected void allowing(final Object mock) {
-    	getContext().allowing(mock);
+        getContext().allowing(mock);
     }
 
     protected void never(final Object mock) {
-    	getContext().never(mock);
+        getContext().never(mock);
     }
 
     protected void prohibit(final Object mock) {
-    	getContext().prohibit(mock);
+        getContext().prohibit(mock);
     }
 
 }

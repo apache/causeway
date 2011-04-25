@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
 import org.jmock.Expectations;
@@ -27,26 +26,24 @@ import org.jmock.Mockery;
  * Adds some convenience methods to {@link Mockery}.
  */
 public abstract class ConvenienceMockery extends Mockery {
-	
+
     /**
-     * Ignoring any interaction with the mock; an allowing/ignoring mock will be
-     * returned in turn.
+     * Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
      */
     public void ignoring(final Object mock) {
         checking(new Expectations() {
-        {
+            {
                 ignoring(mock);
             }
         });
     }
 
     /**
-     * Allow any interaction with the mock; an allowing mock will be
-     * returned in turn.
+     * Allow any interaction with the mock; an allowing mock will be returned in turn.
      */
     public void allowing(final Object mock) {
         checking(new Expectations() {
-        {
+            {
                 allowing(mock);
             }
         });
@@ -57,7 +54,7 @@ public abstract class ConvenienceMockery extends Mockery {
      */
     public void never(final Object mock) {
         checking(new Expectations() {
-        {
+            {
                 never(mock);
             }
         });
@@ -67,69 +64,80 @@ public abstract class ConvenienceMockery extends Mockery {
      * Same as {@link #never(Object)}.
      */
     public void prohibit(final Object mock) {
-    	never(mock);
+        never(mock);
     }
 
-	public <T> T mockAndIgnoreAnyInteraction(Class<T> typeToMock) {
-		final T mock = mock(typeToMock);
-		checking(new Expectations(){{
-			ignoring(mock);
-		}});
-		return mock;
-	}
-	
-	public <T> T mockAndIgnoreAnyInteraction(Class<T> typeToMock, String name) {
-		final T mock = mock(typeToMock, name);
-		checking(new Expectations(){{
-			ignoring(mock);
-		}});
-		return mock;
-	}
-	
-	public <T> T mockAndAllowAnyInteraction(Class<T> typeToMock) {
-		final T mock = mock(typeToMock);
-		checking(new Expectations(){{
-			allowing(mock);
-		}});
-		return mock;
-	}
-	
-	public <T> T mockAndAllowAnyInteraction(Class<T> typeToMock, String name) {
-		final T mock = mock(typeToMock, name);
-		checking(new Expectations(){{
-			allowing(mock);
-		}});
-		return mock;
-	}
-	
-	public <T> T mockAndNeverAnyInteraction(Class<T> typeToMock) {
-		final T mock = mock(typeToMock);
-		checking(new Expectations(){{
-			never(mock);
-		}});
-		return mock;
-	}
-	
-	public <T> T mockAndNeverAnyInteraction(Class<T> typeToMock, String name) {
-		final T mock = mock(typeToMock, name);
-		checking(new Expectations(){{
-			never(mock);
-		}});
-		return mock;
-	}
-	
+    public <T> T mockAndIgnoreAnyInteraction(final Class<T> typeToMock) {
+        final T mock = mock(typeToMock);
+        checking(new Expectations() {
+            {
+                ignoring(mock);
+            }
+        });
+        return mock;
+    }
 
-	/**
-	 * Same as {@link #mockAndNeverAnyInteraction(Class)}.
-	 */
-	public <T> T mockAndProhibitAnyInteraction(Class<T> typeToMock) {
-		return mockAndNeverAnyInteraction(typeToMock);
-	}
-	
-	/**
-	 * Same as {@link #mockAndNeverAnyInteraction(Class, String)}.
-	 */
-	public <T> T mockAndProhibitAnyInteraction(Class<T> typeToMock, String name) {
-		return mockAndNeverAnyInteraction(typeToMock, name);
-	}
+    public <T> T mockAndIgnoreAnyInteraction(final Class<T> typeToMock, final String name) {
+        final T mock = mock(typeToMock, name);
+        checking(new Expectations() {
+            {
+                ignoring(mock);
+            }
+        });
+        return mock;
+    }
+
+    public <T> T mockAndAllowAnyInteraction(final Class<T> typeToMock) {
+        final T mock = mock(typeToMock);
+        checking(new Expectations() {
+            {
+                allowing(mock);
+            }
+        });
+        return mock;
+    }
+
+    public <T> T mockAndAllowAnyInteraction(final Class<T> typeToMock, final String name) {
+        final T mock = mock(typeToMock, name);
+        checking(new Expectations() {
+            {
+                allowing(mock);
+            }
+        });
+        return mock;
+    }
+
+    public <T> T mockAndNeverAnyInteraction(final Class<T> typeToMock) {
+        final T mock = mock(typeToMock);
+        checking(new Expectations() {
+            {
+                never(mock);
+            }
+        });
+        return mock;
+    }
+
+    public <T> T mockAndNeverAnyInteraction(final Class<T> typeToMock, final String name) {
+        final T mock = mock(typeToMock, name);
+        checking(new Expectations() {
+            {
+                never(mock);
+            }
+        });
+        return mock;
+    }
+
+    /**
+     * Same as {@link #mockAndNeverAnyInteraction(Class)}.
+     */
+    public <T> T mockAndProhibitAnyInteraction(final Class<T> typeToMock) {
+        return mockAndNeverAnyInteraction(typeToMock);
+    }
+
+    /**
+     * Same as {@link #mockAndNeverAnyInteraction(Class, String)}.
+     */
+    public <T> T mockAndProhibitAnyInteraction(final Class<T> typeToMock, final String name) {
+        return mockAndNeverAnyInteraction(typeToMock, name);
+    }
 }

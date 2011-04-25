@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.testdomain;
 
 import java.util.Date;
-
 
 public class Person {
     private Date date;

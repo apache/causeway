@@ -17,37 +17,34 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.testsupport.jmock;
 
-
-import org.jmock.Mockery;
 import org.apache.isis.core.testsupport.jmock.MockFixture.Builder;
+import org.jmock.Mockery;
 
 public class FixtureMockery extends DelegatingMockery {
-	
-	public FixtureMockery(Mockery underlying) {
-		super(underlying); 
-	}
-	
-	public FixtureMockery() {
-		super(); 
-	}
-	
-	public <T extends MockFixture<?>> T fixture(Class<T> fixtureClass) {
-		final Builder<T> fixtureBuilder = fixtureBuilder(fixtureClass);
-		return fixtureBuilder.build();
-	}
-	
-	public <T extends MockFixture<?>> T fixture(Class<T> fixtureClass, String name) {
-		final Builder<T> fixtureBuilder = fixtureBuilder(fixtureClass);
-		fixtureBuilder.named(name);
-		return fixtureBuilder.build();
-	}
 
-	public <T extends MockFixture<?>> MockFixture.Builder<T> fixtureBuilder(Class<T> fixtureClass) {
-		return new MockFixture.Builder<T>(this, fixtureClass);
-	}
-	
+    public FixtureMockery(final Mockery underlying) {
+        super(underlying);
+    }
+
+    public FixtureMockery() {
+        super();
+    }
+
+    public <T extends MockFixture<?>> T fixture(final Class<T> fixtureClass) {
+        final Builder<T> fixtureBuilder = fixtureBuilder(fixtureClass);
+        return fixtureBuilder.build();
+    }
+
+    public <T extends MockFixture<?>> T fixture(final Class<T> fixtureClass, final String name) {
+        final Builder<T> fixtureBuilder = fixtureBuilder(fixtureClass);
+        fixtureBuilder.named(name);
+        return fixtureBuilder.build();
+    }
+
+    public <T extends MockFixture<?>> MockFixture.Builder<T> fixtureBuilder(final Class<T> fixtureClass) {
+        return new MockFixture.Builder<T>(this, fixtureClass);
+    }
 
 }
