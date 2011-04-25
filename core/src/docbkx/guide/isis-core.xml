@@ -1319,7 +1319,7 @@
       the <classname>ProgrammingModel</classname>.</para>
 
       <para>There are two ways in which you can register this new
-      FacetFactory. The first is to create your own
+      <classname>FacetFactory</classname>. The first is to create your own
       <classname>ProgrammingModel</classname> (typically by subclassing the
       default <classname>ProgrammingModel</classname>) and then call its
       <methodname>#addFactory(Class&lt;? extends
@@ -1334,7 +1334,7 @@
       the <classname>ProgrammingModel</classname>.</para>
 
       <para>Alternatively, if you are just tweaking the default
-      ProgrammingModel, then you can simply use
+      <classname>ProgrammingModel</classname>, then you can simply use
       <code>isis.reflector.facets.include</code> and
       <code>isis.reflector.facets.exclude</code> keys to include/exclude
       facets. The value for each of these keys is a comma-separated
@@ -1344,8 +1344,9 @@
                               com.mycompany.myproj.isis.PositiveValuesOnlyFacetFactory</programlisting>
 
       <para><note>
-          <para>Isis' support for Groovy works by defining a custom
-          <classname>ProgrammingModel</classname>.</para>
+          <para>Isis' support for Groovy works in this way; see the
+          <emphasis>progmodels</emphasis> <package>[oai:progmodels]</package>
+          documentation.</para>
         </note></para>
     </sect1>
 
