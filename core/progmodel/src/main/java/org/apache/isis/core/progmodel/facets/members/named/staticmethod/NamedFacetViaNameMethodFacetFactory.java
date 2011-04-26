@@ -39,7 +39,6 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
  */
 public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
 
     /**
@@ -54,7 +53,7 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         // namedXxx()
         attachNamedFacetIfNamedMethodIsFound(processMethodContext);
@@ -65,18 +64,18 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Method nameMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS,
-                MethodPrefixConstants.NAME_PREFIX + capitalizedName, String.class, new Class[0]);
+            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName,
+                String.class, new Class[0]);
 
         if (nameMethod == null) {
             return;
         }
 
         processMethodContext.removeMethod(nameMethod);
-        String name = invokeNameMethod(nameMethod);
-        
+        final String name = invokeNameMethod(nameMethod);
+
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new NamedFacetViaMethod(name, nameMethod, facetHolder));
     }
@@ -85,7 +84,7 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
         String name = null;
         try {
             name = (String) InvokeUtils.invokeStatic(nameMethod);
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             // ignore
         }
         if (name == null) {

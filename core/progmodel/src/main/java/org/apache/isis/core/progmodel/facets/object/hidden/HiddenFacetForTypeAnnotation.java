@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.hidden;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
-
 
 public class HiddenFacetForTypeAnnotation extends HiddenFacetImpl {
 
@@ -32,4 +30,3 @@ public class HiddenFacetForTypeAnnotation extends HiddenFacetImpl {
     }
 
 }
-

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks.create;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.progmodel.facets.object.callbacks.CallbackFacetAbstract;
-
 
 public abstract class CreatedCallbackFacetAbstract extends CallbackFacetAbstract implements CreatedCallbackFacet {
 
@@ -37,4 +35,3 @@ public abstract class CreatedCallbackFacetAbstract extends CallbackFacetAbstract
     }
 
 }
-

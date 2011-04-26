@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacetAbstract;
-
 
 public class MaxLengthFacetAnnotationForProperty extends MaxLengthFacetAbstract {
 
@@ -31,4 +29,3 @@ public class MaxLengthFacetAnnotationForProperty extends MaxLengthFacetAbstract 
     }
 
 }
-

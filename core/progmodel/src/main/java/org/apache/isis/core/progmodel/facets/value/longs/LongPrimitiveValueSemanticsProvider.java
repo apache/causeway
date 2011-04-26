@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.longs;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -28,9 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
+public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProviderAbstract implements
+    PropertyDefaultFacet {
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
@@ -39,10 +37,8 @@ public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProvi
         this(null, null, null);
     }
 
-    public LongPrimitiveValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public LongPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, long.class, configuration, context);
     }
 
@@ -54,6 +50,5 @@ public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProvi
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return createAdapter(long.class, Long.valueOf(0L));
     }
-
 
 }

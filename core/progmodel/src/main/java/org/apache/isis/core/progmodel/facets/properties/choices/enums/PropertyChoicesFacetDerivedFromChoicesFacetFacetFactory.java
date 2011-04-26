@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.choices.enums;
-
 
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
@@ -27,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends
-    FacetFactoryAbstract implements AdapterMapAware {
+public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements
+    AdapterMapAware {
 
     private AdapterMap adapterMap;
 
@@ -37,28 +35,28 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
-        Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        
+        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+
         if (!returnType.isEnum()) {
             return;
         }
-        
-        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(), getSpecificationLookup()));
-    }
-    
 
-    ///////////////////////////////////////////////
+        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(),
+            getSpecificationLookup()));
+    }
+
+    // /////////////////////////////////////////////
     // Injected
-    ///////////////////////////////////////////////
+    // /////////////////////////////////////////////
 
     protected AdapterMap getAdapterMap() {
         return adapterMap;
     }
-    
+
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 }

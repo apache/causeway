@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.typicallen.annotation;
 
 import java.lang.annotation.Annotation;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 
-
 public class TypicalLengthAnnotationOnParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public TypicalLengthAnnotationOnParameterFacetFactory() {
@@ -37,11 +35,12 @@ public class TypicalLengthAnnotationOnParameterFacetFactory extends AnnotationBa
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
-        for (int j = 0; j < parameterAnnotations.length; j++) {
-            if (parameterAnnotations[j] instanceof TypicalLength) {
-                final TypicalLength annotation = (TypicalLength) parameterAnnotations[j];
+    public void processParams(final ProcessParameterContext processParameterContext) {
+        final Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof TypicalLength) {
+                final TypicalLength annotation = (TypicalLength) parameterAnnotation;
                 FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }

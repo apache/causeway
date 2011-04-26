@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
 import java.lang.reflect.Method;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
-
 public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstract implements ImperativeFacet {
 
     private final Method method;
@@ -40,20 +38,24 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	public boolean impliesObjectChanged() {
-		return false;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
 
+    @Override
     public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedAdapter) {
         return (String) AdapterInvokeUtils.invoke(method, owningAdapter, proposedAdapter);
     }
@@ -64,4 +66,3 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     }
 
 }
-

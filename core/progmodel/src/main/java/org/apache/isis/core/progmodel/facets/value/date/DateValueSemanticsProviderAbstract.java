@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.date;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Map;
-
-import com.google.inject.internal.Maps;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -32,10 +29,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
+import com.google.inject.internal.Maps;
 
 public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static Map<String,DateFormat> formats = Maps.newHashMap();
+    private static Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
         formats.put("iso", createDateFormat("yyyy-MM-dd"));
@@ -45,14 +43,9 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         formats.put("short", DateFormat.getDateInstance(DateFormat.SHORT));
     }
 
-    public DateValueSemanticsProviderAbstract(
-            final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final boolean immutable,
-            final boolean equalByContent,
-            final T defaultValue,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
+        final boolean immutable, final boolean equalByContent, final T defaultValue,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super("date", holder, adaptedClass, 12, immutable, equalByContent, defaultValue, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.date");

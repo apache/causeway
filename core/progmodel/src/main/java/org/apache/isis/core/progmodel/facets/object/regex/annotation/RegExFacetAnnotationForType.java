@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.regex.annotation;
 
 import java.util.regex.Pattern;
@@ -25,20 +24,17 @@ import java.util.regex.Pattern;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacetAbstract;
 
-
 public class RegExFacetAnnotationForType extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
-    public RegExFacetAnnotationForType(
-            final String validation,
-            final String format,
-            final boolean caseSensitive,
-            final FacetHolder holder) {
+    public RegExFacetAnnotationForType(final String validation, final String format, final boolean caseSensitive,
+        final FacetHolder holder) {
         super(validation, format, caseSensitive, holder);
         pattern = Pattern.compile(validation(), patternFlags());
     }
 
+    @Override
     public String format(final String text) {
         if (text == null) {
             return "<not a string>";
@@ -49,6 +45,7 @@ public class RegExFacetAnnotationForType extends RegExFacetAbstract {
         return pattern.matcher(text).replaceAll(format());
     }
 
+    @Override
     public boolean doesNotMatch(final String text) {
         if (text == null) {
             return true;
@@ -61,4 +58,3 @@ public class RegExFacetAnnotationForType extends RegExFacetAbstract {
     }
 
 }
-

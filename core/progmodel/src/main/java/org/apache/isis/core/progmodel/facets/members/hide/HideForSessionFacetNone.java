@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.hide;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class HideForSessionFacetNone extends HideForSessionFacetAbstract {
 
@@ -33,6 +31,7 @@ public class HideForSessionFacetNone extends HideForSessionFacetAbstract {
     /**
      * Always returns <tt>null</tt>.
      */
+    @Override
     public String hiddenReason(final AuthenticationSession session) {
         return null;
     }
@@ -43,4 +42,3 @@ public class HideForSessionFacetNone extends HideForSessionFacetAbstract {
     }
 
 }
-

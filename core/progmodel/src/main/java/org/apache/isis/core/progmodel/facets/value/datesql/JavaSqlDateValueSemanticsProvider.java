@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.datesql;
 
 import java.sql.Date;
 import java.util.Calendar;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -35,10 +32,11 @@ import org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvid
 import org.apache.isis.core.progmodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
- *
+ * 
  * @see JavaUtilDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */
@@ -56,21 +54,14 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
         this(null, null, null);
     }
 
-    public JavaSqlDateValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     @Override
-    protected Date add(
-            final Date original,
-            final int years,
-            final int months,
-            final int days,
-            final int hours,
-            final int minutes) {
+    protected Date add(final Date original, final int years, final int months, final int days, final int hours,
+        final int minutes) {
         final Date date = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(date);

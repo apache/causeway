@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.order;
-
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
 
-
 public class MemberOrderAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MemberOrderAnnotationFacetFactory() {
@@ -36,14 +33,15 @@ public class MemberOrderAnnotationFacetFactory extends AnnotationBasedFacetFacto
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
-        Class<MemberOrder> annotationClass = MemberOrder.class;
-		final MemberOrder annotation = getAnnotation(processMethodContext.getMethod(), annotationClass);
+    public void process(final ProcessMethodContext processMethodContext) {
+        final Class<MemberOrder> annotationClass = MemberOrder.class;
+        final MemberOrder annotation = getAnnotation(processMethodContext.getMethod(), annotationClass);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private MemberOrderFacet create(final MemberOrder annotation, final FacetHolder holder) {
-        return annotation == null ? null : new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), holder);
+        return annotation == null ? null : new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(),
+            holder);
     }
 
 }

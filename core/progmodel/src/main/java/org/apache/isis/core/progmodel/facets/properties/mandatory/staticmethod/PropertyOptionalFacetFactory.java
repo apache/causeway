@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.mandatory.staticmethod;
 
 import java.lang.reflect.Method;
@@ -33,7 +32,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.OPTIONAL_PREFIX };
@@ -43,28 +41,30 @@ public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryA
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachMandatoryFacetIfOptionalMethodIsFound(processMethodContext);
     }
 
-    private static void attachMandatoryFacetIfOptionalMethodIsFound(ProcessMethodContext processMethodContext) {
+    private static void attachMandatoryFacetIfOptionalMethodIsFound(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        
+
         final String capitalizedName = NameUtils.javaBaseName(method.getName());
         final Class<?> returnType = method.getReturnType();
-        
-        Class<?> cls = processMethodContext.getCls();
-        final Method optionalMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX + capitalizedName, boolean.class, NO_PARAMETERS_TYPES);
+
+        final Class<?> cls = processMethodContext.getCls();
+        final Method optionalMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX
+                + capitalizedName, boolean.class, NO_PARAMETERS_TYPES);
         processMethodContext.removeMethod(optionalMethod);
-        
+
         if (!indicatesOptional(optionalMethod)) {
             return;
-        } 
+        }
         if (returnType.isPrimitive()) {
-            throw new MetaModelException(
-                cls.getName() + "#" + capitalizedName + " cannot be an optional property as it is of a primitive type");
-        } 
+            throw new MetaModelException(cls.getName() + "#" + capitalizedName
+                + " cannot be an optional property as it is of a primitive type");
+        }
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new MandatoryFacetOptionalViaMethodForProperty(property));
     }
@@ -74,16 +74,15 @@ public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryA
             Boolean optionalMethodReturnValue = null;
             try {
                 optionalMethodReturnValue = (Boolean) InvokeUtils.invoke(method, new Object[0]);
-            } catch (ClassCastException ex) {
+            } catch (final ClassCastException ex) {
                 // ignore
             }
-            if(optionalMethodReturnValue==null) {
-                throw new MetaModelException("method " + method + " should return a boolean" );
+            if (optionalMethodReturnValue == null) {
+                throw new MetaModelException("method " + method + " should return a boolean");
             }
             return optionalMethodReturnValue.booleanValue();
         }
         return false;
     }
-
 
 }

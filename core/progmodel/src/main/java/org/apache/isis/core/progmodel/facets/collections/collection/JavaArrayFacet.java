@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.collection;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
-
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
@@ -43,8 +41,8 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
      */
     @Override
     public void init(final ObjectAdapter collectionAdapter, final ObjectAdapter[] initData) {
-        int length = initData.length;
-        Object[] array = new Object[length];
+        final int length = initData.length;
+        final Object[] array = new Object[length];
         for (int i = 0; i < length; i++) {
             array[i] = initData[i].getObject();
         }
@@ -55,11 +53,11 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public Collection<ObjectAdapter> collection(ObjectAdapter collectionAdapter) {
+    public Collection<ObjectAdapter> collection(final ObjectAdapter collectionAdapter) {
         final Object[] array = array(collectionAdapter);
-        ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
-        for (int i = 0; i < array.length; i++) {
-            ObjectAdapter element = getAdapterMap().getAdapterFor(array[i]);
+        final ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
+        for (final Object element2 : array) {
+            final ObjectAdapter element = getAdapterMap().getAdapterFor(element2);
             objectCollection.add(element);
         }
         return objectCollection;
@@ -95,4 +93,3 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     }
 
 }
-

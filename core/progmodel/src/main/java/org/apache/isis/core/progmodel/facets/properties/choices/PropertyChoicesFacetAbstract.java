@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.choices;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-
 
 public abstract class PropertyChoicesFacetAbstract extends FacetAbstract implements PropertyChoicesFacet {
 
@@ -35,19 +33,17 @@ public abstract class PropertyChoicesFacetAbstract extends FacetAbstract impleme
 
     private final SpecificationLookup specificationLookup;
 
-
     public PropertyChoicesFacetAbstract(final FacetHolder holder, final SpecificationLookup specificationLookup) {
         super(type(), holder, false);
         this.specificationLookup = specificationLookup;
     }
-    
-    //////////////////////////////////////////////////////////
+
+    // ////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    //////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////
+
     protected SpecificationLookup getSpecificationLoader() {
         return specificationLookup;
     }
-    
 
 }

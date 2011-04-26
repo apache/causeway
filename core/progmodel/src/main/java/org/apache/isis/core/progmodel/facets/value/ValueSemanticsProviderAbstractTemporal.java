@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import java.text.DateFormat;
@@ -29,8 +28,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-
-import com.google.inject.internal.Maps;
 
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Localization;
@@ -44,25 +41,25 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
+import com.google.inject.internal.Maps;
 
-public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements DateValueFacet {
+public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T>
+    implements DateValueFacet {
 
     /**
-     * Introduced to allow BDD tests to provide a different format string
-     * "mid-flight".
+     * Introduced to allow BDD tests to provide a different format string "mid-flight".
      */
-    public static void setFormat(String propertyType, String formatStr) {
+    public static void setFormat(final String propertyType, final String formatStr) {
         FORMATS.get().put(propertyType, formatStr);
     }
 
-    private final static ThreadLocal<Map<String,String>> FORMATS = 
-        new ThreadLocal<Map<String,String>>() {
-            @Override
-            protected java.util.Map<String,String> initialValue() { 
-                return Maps.newHashMap();
-            }
-        };
-    
+    private final static ThreadLocal<Map<String, String>> FORMATS = new ThreadLocal<Map<String, String>>() {
+        @Override
+        protected java.util.Map<String, String> initialValue() {
+            return Maps.newHashMap();
+        }
+    };
+
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
     private static final TimeZone UTC_TIME_ZONE;
 
@@ -92,44 +89,30 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     private String configuredFormat;
     private String propertyType;
 
-
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public ValueSemanticsProviderAbstractTemporal(
-            final String propertyName,
-            final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final int typicalLength,
-            final boolean immutable,
-            final boolean equalByContent,
-            final T defaultValue,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        this(propertyName, type(), holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
-                context);
+    public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder,
+        final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent,
+        final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        this(propertyName, type(), holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue,
+            configuration, context);
     }
 
     /**
      * Allows the specific facet subclass to be specified (rather than use {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(
-            final String propertyType,
-            final Class<? extends Facet> facetType,
-            final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final int typicalLength,
-            final boolean immutable,
-            final boolean equalByContent,
-            final T defaultValue,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType,
+        final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable,
+        final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
-                context);
+            context);
         configureFormats();
-        
+
         this.propertyType = propertyType;
-        configuredFormat = getConfiguration().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
+        configuredFormat =
+            getConfiguration().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
         buildFormat(configuredFormat);
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);
@@ -137,7 +120,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
 
     protected void configureFormats() {
         final Map<String, DateFormat> formats = formats();
-        for (Map.Entry<String, DateFormat> mapEntry : formats.entrySet()) {
+        for (final Map.Entry<String, DateFormat> mapEntry : formats.entrySet()) {
             final DateFormat format = mapEntry.getValue();
             format.setLenient(false);
             if (ignoreTimeZone()) {
@@ -147,9 +130,9 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     }
 
     protected void buildDefaultFormatIfRequired() {
-        Map<String, String> map = FORMATS.get();
-        String currentlyConfiguredFormat = map.get(propertyType);
-        if ( currentlyConfiguredFormat==null || configuredFormat.equals(currentlyConfiguredFormat)) {
+        final Map<String, String> map = FORMATS.get();
+        final String currentlyConfiguredFormat = map.get(propertyType);
+        if (currentlyConfiguredFormat == null || configuredFormat.equals(currentlyConfiguredFormat)) {
             return;
         }
 
@@ -158,7 +141,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         buildFormat(configuredFormat);
     }
 
-    protected void buildFormat(String configuredFormat) {
+    protected void buildFormat(final String configuredFormat) {
         final Map<String, DateFormat> formats = formats();
         format = formats.get(configuredFormat);
         if (format == null) {
@@ -222,7 +205,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
                 date = relativeDate2(date, token, add);
             }
             return date;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return now();
         }
     }
@@ -268,7 +251,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         if (value == null) {
             return null;
         }
@@ -280,7 +263,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         return titleString(f, date);
     }
 
-    protected DateFormat format(Localization localization) {
+    protected DateFormat format(final Localization localization) {
         return format;
     }
 
@@ -312,20 +295,20 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     protected T doRestore(final String data) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeZone(UTC_TIME_ZONE);
-        
+
         try {
             cal.setTime(parse(data));
             clearFields(cal);
             return setDate(cal.getTime());
         } catch (final ParseException e) {
-        	if (data.charAt(0) == 'T'){
-                long millis = Long.parseLong(data.substring(1));
+            if (data.charAt(0) == 'T') {
+                final long millis = Long.parseLong(data.substring(1));
                 cal.setTimeInMillis(millis);
                 clearFields(cal);
                 return setDate(cal.getTime());
-        	} else {
-        		throw new EncodingException(e);
-        	}
+            } else {
+                throw new EncodingException(e);
+            }
         }
     }
 
@@ -359,7 +342,8 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
 
     protected abstract T add(T original, int years, int months, int days, int hours, int minutes);
 
-    protected void clearFields(final Calendar cal) {}
+    protected void clearFields(final Calendar cal) {
+    }
 
     protected abstract Date dateValue(Object value);
 
@@ -384,6 +368,5 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     protected boolean isEmpty() {
         return false;
     }
-
 
 }

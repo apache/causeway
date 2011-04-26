@@ -17,9 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.validate.perspec;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,33 +31,34 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
-public class MustSatisfySpecificationOnParameterFacetFactory  extends AnnotationBasedFacetFactoryAbstract {
+public class MustSatisfySpecificationOnParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MustSatisfySpecificationOnParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+    public void processParams(final ProcessParameterContext processParameterContext) {
+        final java.lang.annotation.Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
 
-        for (int j = 0; j < parameterAnnotations.length; j++) {
-            if (parameterAnnotations[j] instanceof MustSatisfy) {
-                final MustSatisfy annotation = (MustSatisfy) parameterAnnotations[j];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof MustSatisfy) {
+                final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
                 FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
-                return; 
+                return;
             }
         }
     }
-    
+
     private Facet create(final MustSatisfy annotation, final FacetHolder holder) {
         if (annotation == null) {
             return null;
         }
-        Class<?>[] values = annotation.value();
-        List<Specification> specifications = new ArrayList<Specification>();
-        for(Class<?> value: values) {
-            Specification specification = newSpecificationElseNull(value);
+        final Class<?>[] values = annotation.value();
+        final List<Specification> specifications = new ArrayList<Specification>();
+        for (final Class<?> value : values) {
+            final Specification specification = newSpecificationElseNull(value);
             if (specification != null) {
                 specifications.add(specification);
             }
@@ -65,15 +66,15 @@ public class MustSatisfySpecificationOnParameterFacetFactory  extends Annotation
         return specifications.size() > 0 ? new MustSatisfySpecificationOnParameterFacet(specifications, holder) : null;
     }
 
-    private static Specification newSpecificationElseNull(Class<?> value) {
+    private static Specification newSpecificationElseNull(final Class<?> value) {
         if (!(Specification.class.isAssignableFrom(value))) {
             return null;
         }
         try {
             return (Specification) value.newInstance();
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             return null;
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             return null;
         }
     }

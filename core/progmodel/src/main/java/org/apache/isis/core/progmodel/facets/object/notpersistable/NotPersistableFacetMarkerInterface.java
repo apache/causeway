@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
-
 
 public class NotPersistableFacetMarkerInterface extends NotPersistableFacetImpl {
 
@@ -31,4 +29,3 @@ public class NotPersistableFacetMarkerInterface extends NotPersistableFacetImpl 
     }
 
 }
-

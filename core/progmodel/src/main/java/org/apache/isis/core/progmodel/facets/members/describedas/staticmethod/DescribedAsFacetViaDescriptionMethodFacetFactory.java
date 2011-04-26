@@ -53,39 +53,38 @@ public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPref
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachDescribedAsFacetIfDescriptionMethodIsFound(processMethodContext);
     }
 
-    public static void attachDescribedAsFacetIfDescriptionMethodIsFound(
-        final ProcessMethodContext processMethodContext) {
+    public static void attachDescribedAsFacetIfDescriptionMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        Method descriptionMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS,
-                MethodPrefixConstants.DESCRIPTION_PREFIX + capitalizedName, String.class, new Class[0]);
+        final Method descriptionMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX
+                + capitalizedName, String.class, new Class[0]);
         if (descriptionMethod == null) {
             return;
         }
 
         processMethodContext.removeMethod(descriptionMethod);
-        String description = invokeDescriptionMethod(descriptionMethod);
+        final String description = invokeDescriptionMethod(descriptionMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new DescribedAsFacetViaMethod(description, descriptionMethod, facetedMethod));
     }
 
-    private static String invokeDescriptionMethod(Method descriptionMethod) {
+    private static String invokeDescriptionMethod(final Method descriptionMethod) {
         String description = null;
         try {
             description = (String) InvokeUtils.invokeStatic(descriptionMethod);
-        } catch (ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             // ignore
         }
-        if(description == null) {
+        if (description == null) {
             throw new MetaModelException("method " + descriptionMethod + "must return a string");
         }
         return description;

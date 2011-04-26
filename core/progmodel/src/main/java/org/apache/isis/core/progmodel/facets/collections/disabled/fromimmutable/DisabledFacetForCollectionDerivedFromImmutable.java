@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,13 +24,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
 
-
 public class DisabledFacetForCollectionDerivedFromImmutable extends DisabledFacetAbstract {
 
     public DisabledFacetForCollectionDerivedFromImmutable(final ImmutableFacet immutableFacet, final FacetHolder holder) {
         super(immutableFacet.value(), holder);
     }
 
+    @Override
     public String disabledReason(final ObjectAdapter target) {
         return when().isNowFor(target) ? "Immutable" : null;
     }

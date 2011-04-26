@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.mask.annotation;
-
 
 import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskFacet;
-
 
 public class MaskAnnotationForTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -39,7 +36,7 @@ public class MaskAnnotationForTypeFacetFactory extends AnnotationBasedFacetFacto
      * In readiness for supporting <tt>@Value</tt> in the future.
      */
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Mask annotation = getAnnotation(processClassContaxt.getCls(), Mask.class);
         FacetUtil.addFacet(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
     }
@@ -47,6 +44,5 @@ public class MaskAnnotationForTypeFacetFactory extends AnnotationBasedFacetFacto
     private MaskFacet createMaskFacet(final Mask annotation, final FacetHolder holder) {
         return annotation != null ? new MaskFacetAnnotationForType(annotation.value(), null, holder) : null;
     }
-
 
 }

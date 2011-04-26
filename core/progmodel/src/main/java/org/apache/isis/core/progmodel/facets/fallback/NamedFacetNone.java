@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
-
 
 /**
  * Has a name of <tt>null</tt>.
@@ -42,4 +40,3 @@ public class NamedFacetNone extends NamedFacetAbstract {
     }
 
 }
-

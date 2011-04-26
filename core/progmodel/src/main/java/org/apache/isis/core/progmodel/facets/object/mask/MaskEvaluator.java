@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.mask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 
 public class MaskEvaluator {
 
@@ -48,6 +46,7 @@ public class MaskEvaluator {
             return regex;
         }
 
+        @Override
         public void convert(final String str, final StringBuilder buf) {
             final String convert = str.replace(mask, regex);
             if (!convert.equals(str)) {
@@ -71,6 +70,7 @@ public class MaskEvaluator {
             add("L", "[a-z]");
 
             add(new Converter() {
+                @Override
                 public void convert(final String str, final StringBuilder buf) {
                     if (buf.length() == 0) {
                         buf.append(str);

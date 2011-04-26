@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value.annotation;
 
 import org.apache.isis.applib.annotation.Value;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderUtil;
-
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
@@ -45,22 +43,17 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
         return annotation.semanticsProviderClass();
     }
 
-    public ValueFacetAnnotation(
-    		final Class<?> annotatedClass, 
-    		final FacetHolder holder, 
-    		final IsisConfiguration configuration, 
-    		final ValueSemanticsProviderContext context) {
-        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder, configuration, context);
+    public ValueFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder,
+            configuration, context);
     }
 
-    private ValueFacetAnnotation(
-            final String candidateSemanticsProviderName,
-            final Class<?> candidateSemanticsProviderClass,
-            final FacetHolder holder, 
-    		final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    private ValueFacetAnnotation(final String candidateSemanticsProviderName,
+        final Class<?> candidateSemanticsProviderClass, final FacetHolder holder,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass,
-                candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, configuration, context);
+            candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, configuration, context);
     }
 
     /**
@@ -72,4 +65,3 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     }
 
 }
-

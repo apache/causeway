@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.regex;
 
 import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
-
 
 public class TitleFacetFormattedByRegex extends TitleFacetAbstract {
 
@@ -34,7 +32,8 @@ public class TitleFacetFormattedByRegex extends TitleFacetAbstract {
         this.regexFacet = regexFacet;
     }
 
-    public String title(final ObjectAdapter object, Localization localization) {
+    @Override
+    public String title(final ObjectAdapter object, final Localization localization) {
         return regexFacet.format(object.titleString());
     }
 

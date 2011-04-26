@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -26,26 +25,30 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
 public final class ValueSemanticsProviderUtil {
 
-    private ValueSemanticsProviderUtil() {}
+    private ValueSemanticsProviderUtil() {
+    }
 
     public static final String SEMANTICS_PROVIDER_NAME_KEY_PREFIX = "isis.core.progmodel.value.";
     public static final String SEMANTICS_PROVIDER_NAME_KEY_SUFFIX = ".semanticsProviderName";
 
-    public static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
-        final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
+    public static String semanticsProviderNameFromConfiguration(final Class<?> type,
+        final IsisConfiguration configuration) {
+        final String key =
+            SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);
         return !StringUtils.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
     }
 
     @SuppressWarnings("unchecked")
-	public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        final Class clazz = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
+    public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(
+        final Class<?> candidateClass, final String classCandidateName) {
+        final Class clazz =
+            candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
                 ValueSemanticsProvider.class, FacetHolder.class) : null;
-        return clazz != null ? clazz : JavaClassUtils.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+        return clazz != null ? clazz : JavaClassUtils.implementingClassOrNull(classCandidateName,
+            ValueSemanticsProvider.class, FacetHolder.class);
     }
 
 }
-

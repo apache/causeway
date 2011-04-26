@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.orderfields;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class FieldOrderFacetAnnotation extends FieldOrderFacetAbstract {
 
@@ -30,4 +28,3 @@ public class FieldOrderFacetAnnotation extends FieldOrderFacetAbstract {
     }
 
 }
-

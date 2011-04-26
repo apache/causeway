@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
-
 
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 
-
 public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public NotPersistableAnnotationFacetFactory() {
@@ -37,19 +34,20 @@ public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFa
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final NotPersistable annotation = getAnnotation(processClassContaxt.getCls(), NotPersistable.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final NotPersistable annotation = getAnnotation(processMethodContext.getMethod(), NotPersistable.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private NotPersistableFacet create(final NotPersistable annotation, final FacetHolder holder) {
-        return annotation != null ? new NotPersistableFacetAnnotation(InitiatedBy.decodeBy(annotation.value()), holder) : null;
+        return annotation != null ? new NotPersistableFacetAnnotation(InitiatedBy.decodeBy(annotation.value()), holder)
+            : null;
     }
 
 }

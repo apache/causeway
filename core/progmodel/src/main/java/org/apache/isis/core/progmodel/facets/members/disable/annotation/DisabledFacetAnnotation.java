@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.disable.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetImpl;
-
 
 public class DisabledFacetAnnotation extends DisabledFacetImpl {
 
@@ -32,4 +30,3 @@ public class DisabledFacetAnnotation extends DisabledFacetImpl {
     }
 
 }
-

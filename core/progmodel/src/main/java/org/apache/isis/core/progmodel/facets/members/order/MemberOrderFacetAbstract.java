@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.order;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
-
 
 public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstract implements MemberOrderFacet {
 
@@ -41,10 +39,12 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
         this.sequence = sequence;
     }
 
+    @Override
     public String name() {
         return name;
     }
 
+    @Override
     public String sequence() {
         return sequence;
     }

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
-
 
 /**
  * Has a description of the empty string.
@@ -39,4 +37,3 @@ public class DescribedAsFacetNone extends DescribedAsFacetAbstract {
     }
 
 }
-

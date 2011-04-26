@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
@@ -30,33 +29,34 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 
-
 public class CollectionRemoveFromFacetViaMethod extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
 
     private final Method method;
 
-    public CollectionRemoveFromFacetViaMethod(
-    		final Method method, 
-    		final FacetHolder holder) {
+    public CollectionRemoveFromFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder);
         this.method = method;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	public boolean impliesObjectChanged() {
-		return true;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return true;
+    }
 
+    @Override
     public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
         AdapterInvokeUtils.invoke(method, owningAdapter, elementAdapter);
     }
@@ -67,4 +67,3 @@ public class CollectionRemoveFromFacetViaMethod extends CollectionRemoveFromFace
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.executed.prefix;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ExecutedFacetViaNamingConvention;
-
 
 /**
  * Creates an {@link ExecutedFacet} based on the prefix of the action's name.
@@ -47,7 +45,7 @@ public class ExecutedViaNamingConventionFacetFactory extends FacetFactoryAbstrac
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final String fullMethodName = processMethodContext.getMethod().getName();
         final String capitalizedName = fullMethodName.substring(0, 1).toUpperCase() + fullMethodName.substring(1);
 
@@ -55,8 +53,9 @@ public class ExecutedViaNamingConventionFacetFactory extends FacetFactoryAbstrac
             return;
         }
 
-        FacetUtil.addFacets(new Facet[] { new ExecutedFacetViaNamingConvention(ExecutedFacet.Where.LOCALLY, processMethodContext.getFacetHolder()),
-                new NamedFacetInferred(capitalizedName.substring(5), processMethodContext.getFacetHolder()) });
+        FacetUtil.addFacets(new Facet[] {
+            new ExecutedFacetViaNamingConvention(ExecutedFacet.Where.LOCALLY, processMethodContext.getFacetHolder()),
+            new NamedFacetInferred(capitalizedName.substring(5), processMethodContext.getFacetHolder()) });
     }
 
     public boolean recognizes(final Method method) {

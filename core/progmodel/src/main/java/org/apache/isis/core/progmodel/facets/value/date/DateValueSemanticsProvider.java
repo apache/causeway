@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.date;
 
 import java.util.Date;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -30,12 +27,14 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<org.apache.isis.applib.value.Date> {
 
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
-    private static final org.apache.isis.applib.value.Date DEFAULT_VALUE = null; // new org.apache.isis.applib.value.Date(2007,1,1);
+    private static final org.apache.isis.applib.value.Date DEFAULT_VALUE = null; // new
+                                                                                 // org.apache.isis.applib.value.Date(2007,1,1);
 
     // // no default
 
@@ -47,21 +46,15 @@ public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstra
         this(null, null, null);
     }
 
-    public DateValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(holder, org.apache.isis.applib.value.Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public DateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(holder, org.apache.isis.applib.value.Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
+            configuration, context);
     }
 
     @Override
-    protected org.apache.isis.applib.value.Date add(
-            final org.apache.isis.applib.value.Date original,
-            final int years,
-            final int months,
-            final int days,
-            final int hours,
-            final int minutes) {
+    protected org.apache.isis.applib.value.Date add(final org.apache.isis.applib.value.Date original, final int years,
+        final int months, final int days, final int hours, final int minutes) {
         final org.apache.isis.applib.value.Date date = original;
         return date.add(years, months, days);
     }

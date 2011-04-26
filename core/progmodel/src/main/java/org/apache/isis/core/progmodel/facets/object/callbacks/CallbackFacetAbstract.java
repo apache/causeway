@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-
 
 /**
  * Adapter superclass for {@link Facet}s for {@link CallbackFacet}.
@@ -36,7 +34,7 @@ public abstract class CallbackFacetAbstract extends FacetAbstract implements Cal
         super(facetType, holder, false);
     }
 
+    @Override
     public abstract void invoke(ObjectAdapter object);
 
 }
-

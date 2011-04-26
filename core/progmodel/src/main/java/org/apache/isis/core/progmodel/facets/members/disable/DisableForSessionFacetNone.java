@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.disable;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class DisableForSessionFacetNone extends DisableForSessionFacetAbstract {
 
@@ -30,6 +28,7 @@ public class DisableForSessionFacetNone extends DisableForSessionFacetAbstract {
         super(holder);
     }
 
+    @Override
     public String disabledReason(final AuthenticationSession session) {
         return null;
     }
@@ -40,4 +39,3 @@ public class DisableForSessionFacetNone extends DisableForSessionFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.title;
 
 import java.lang.reflect.Method;
@@ -32,42 +31,42 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.log4j.Logger;
 
-
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
 
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleMethod.class);
     private final Method method;
 
-    public TitleFacetViaTitleMethod(
-    		final Method method, 
-    		final FacetHolder holder) {
+    public TitleFacetViaTitleMethod(final Method method, final FacetHolder holder) {
         super(holder);
         this.method = method;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	public boolean impliesObjectChanged() {
-		return false;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
 
-    public String title(final ObjectAdapter owningAdapter, Localization localization) {
+    @Override
+    public String title(final ObjectAdapter owningAdapter, final Localization localization) {
         try {
-			return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
-		} catch (RuntimeException ex) {
-		    LOG.warn("title failure", ex);
-			return "Failed Title";
-		}
+            return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
+        } catch (final RuntimeException ex) {
+            LOG.warn("title failure", ex);
+            return "Failed Title";
+        }
     }
 
 }
-

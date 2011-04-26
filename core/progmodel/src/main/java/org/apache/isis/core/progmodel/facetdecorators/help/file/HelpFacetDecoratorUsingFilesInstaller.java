@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help.file;
 
 import java.util.Arrays;
@@ -29,21 +28,20 @@ import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.progmodel.facetdecorators.help.HelpFacetDecoratorUsingHelpManager;
 import org.apache.isis.core.progmodel.facetdecorators.help.file.internal.HelpManagerUsingFiles;
 
-
 public class HelpFacetDecoratorUsingFilesInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
     public HelpFacetDecoratorUsingFilesInstaller() {
-		super(FacetDecoratorInstaller.TYPE, "help-file");
-	}
-
-	@Override
-    public List<FacetDecorator> createDecorators() {
-        final HelpManagerUsingFiles manager = new HelpManagerUsingFiles(getConfiguration());
-        return Arrays.<FacetDecorator>asList(new HelpFacetDecoratorUsingHelpManager(manager));
+        super(FacetDecoratorInstaller.TYPE, "help-file");
     }
 
-	@Override
-	public List<Class<?>> getTypes() {
-		return listOf(List.class);
-	}
+    @Override
+    public List<FacetDecorator> createDecorators() {
+        final HelpManagerUsingFiles manager = new HelpManagerUsingFiles(getConfiguration());
+        return Arrays.<FacetDecorator> asList(new HelpFacetDecoratorUsingHelpManager(manager));
+    }
+
+    @Override
+    public List<Class<?>> getTypes() {
+        return listOf(List.class);
+    }
 }

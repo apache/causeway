@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
@@ -39,15 +38,14 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
 
-
 /**
- * TODO: should probably split out into two {@link FacetFactory}s, one for
- * <tt>addTo()</tt>/<tt>removeFrom()</tt> and one for <tt>validateAddTo()</tt>/<tt>validateRemoveFrom()</tt>.
+ * TODO: should probably split out into two {@link FacetFactory}s, one for <tt>addTo()</tt>/<tt>removeFrom()</tt> and
+ * one for <tt>validateAddTo()</tt>/<tt>validateRemoveFrom()</tt>.
  */
 public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-        ObjectDirtierAware {
+    ObjectDirtierAware {
 
-    private static final String[] PREFIXES = {  };
+    private static final String[] PREFIXES = {};
 
     private ObjectDirtier objectDirtier;
 
@@ -56,19 +54,19 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         final Class<?> collectionType = attachAddToFacetAndRemoveFromFacet(processMethodContext);
         attachValidateAddToAndRemoveFromFacetIfMethodsFound(processMethodContext, collectionType);
     }
 
-    private Class<?> attachAddToFacetAndRemoveFromFacet(ProcessMethodContext processMethodContext) {
+    private Class<?> attachAddToFacetAndRemoveFromFacet(final ProcessMethodContext processMethodContext) {
 
         final Method accessorMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(accessorMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
-        
+        final Class<?> cls = processMethodContext.getCls();
+
         // add
         final Method addToMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT,
@@ -129,7 +127,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
                 + "both deal with same type of object: " + addType + "; " + removeType);
         }
 
-        Class<?> type = addType != null ? addType : removeType;
+        final Class<?> type = addType != null ? addType : removeType;
         if (type != null) {
             FacetUtil
                 .addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection, getSpecificationLookup()));
@@ -137,7 +135,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
         return type;
     }
 
-    private void attachValidateAddToAndRemoveFromFacetIfMethodsFound(ProcessMethodContext processMethodContext,
+    private void attachValidateAddToAndRemoveFromFacetIfMethodsFound(final ProcessMethodContext processMethodContext,
         final Class<?> collectionType) {
         attachValidateAddToFacetIfValidateAddToMethodIsFound(processMethodContext, collectionType);
         attachValidateRemoveFacetIfValidateRemoveFromMethodIsFound(processMethodContext, collectionType);
@@ -149,7 +147,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
         Method validateAddToMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX
@@ -174,7 +172,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
         Method validateRemoveFromMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX
@@ -194,19 +192,17 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
         FacetUtil.addFacet(new CollectionValidateRemoveFromFacetViaMethod(validateRemoveFromMethod, collection));
     }
 
-    
     // ///////////////////////////////////////////////////////
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
 
-
     protected ObjectDirtier getObjectDirtier() {
         return objectDirtier;
     }
-    
+
     @Override
-    public void setObjectDirtier(ObjectDirtier objectDirtier) {
+    public void setObjectDirtier(final ObjectDirtier objectDirtier) {
         this.objectDirtier = objectDirtier;
     }
-    
+
 }

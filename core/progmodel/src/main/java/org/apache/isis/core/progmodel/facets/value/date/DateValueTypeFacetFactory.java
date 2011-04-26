@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.date;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-
-public class DateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Date> {
+public class DateValueTypeFacetFactory extends
+    ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Date> {
 
     public DateValueTypeFacetFactory() {
         super(DateValueFacet.class); // as per inherited DateTimeValueSemanticsProvider#facetType
@@ -32,7 +31,7 @@ public class DateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderF
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

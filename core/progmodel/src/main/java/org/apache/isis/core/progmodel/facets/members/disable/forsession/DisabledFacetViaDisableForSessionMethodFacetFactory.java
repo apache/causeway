@@ -48,7 +48,7 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachDisableFacetIfDisableMethodForSessionIsFound(processMethodContext);
     }
 
@@ -58,11 +58,11 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
-        Class<?> cls = processMethodContext.getCls();
-        Method disableForSessionMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS,
-                MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class,
-                new Class[] { UserMemento.class });
+        final Class<?> cls = processMethodContext.getCls();
+        final Method disableForSessionMethod =
+            MethodFinderUtils
+                .findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
+                    String.class, new Class[] { UserMemento.class });
 
         if (disableForSessionMethod == null) {
             return;
@@ -73,7 +73,5 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new DisableForSessionFacetViaMethod(disableForSessionMethod, facetedMethod));
     }
-
-
 
 }

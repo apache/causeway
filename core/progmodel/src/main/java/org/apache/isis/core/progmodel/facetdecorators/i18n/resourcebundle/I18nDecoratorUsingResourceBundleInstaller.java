@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.i18n.resourcebundle;
 
 import java.util.Arrays;
@@ -29,23 +28,21 @@ import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nFacetDecorator;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.resourcebundle.internal.I18nManagerUsingResourceBundle;
 
-
 public class I18nDecoratorUsingResourceBundleInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
     public I18nDecoratorUsingResourceBundleInstaller() {
-		super(FacetDecoratorInstaller.TYPE, "resource-i18n");
-	}
-    
-	@Override
+        super(FacetDecoratorInstaller.TYPE, "resource-i18n");
+    }
+
+    @Override
     public List<FacetDecorator> createDecorators() {
         final I18nManagerUsingResourceBundle manager = new I18nManagerUsingResourceBundle(getConfiguration());
         manager.init();
-        return Arrays.<FacetDecorator>asList(new I18nFacetDecorator(manager));
+        return Arrays.<FacetDecorator> asList(new I18nFacetDecorator(manager));
     }
-	
-	@Override
-	public List<Class<?>> getTypes() {
-		return listOf(List.class); // ie, of List<FacetDecorator>
-	}
-}
 
+    @Override
+    public List<Class<?>> getTypes() {
+        return listOf(List.class); // ie, of List<FacetDecorator>
+    }
+}

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
@@ -25,7 +24,6 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
 
 /**
  * Removes all methods inherited from {@link Object}.
@@ -55,7 +53,7 @@ public class RemoveJavaLangObjectMethodsFacetFactory extends FacetFactoryAbstrac
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Method[] methods = Object.class.getMethods();
         for (int i = 0; i < methods.length; i++) {
             processClassContext.removeMethod(MethodScope.OBJECT, objectMethodNames[i], null, objectMethodParameters[i]);
@@ -63,4 +61,3 @@ public class RemoveJavaLangObjectMethodsFacetFactory extends FacetFactoryAbstrac
     }
 
 }
-

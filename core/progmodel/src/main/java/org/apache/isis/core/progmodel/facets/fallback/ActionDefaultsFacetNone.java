@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
-
 
 public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
 
@@ -31,6 +29,7 @@ public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
         super(holder, false);
     }
 
+    @Override
     public Object[] getDefaults(final ObjectAdapter inObject) {
         return null;
     }
@@ -41,4 +40,3 @@ public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
     }
 
 }
-

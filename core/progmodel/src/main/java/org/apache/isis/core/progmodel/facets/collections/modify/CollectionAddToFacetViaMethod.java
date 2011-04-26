@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
@@ -30,36 +29,36 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
 
-
 public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract implements ImperativeFacet {
 
     private final Method method;
 
-    public CollectionAddToFacetViaMethod(
-    		final Method method, 
-    		final FacetHolder holder) {
+    public CollectionAddToFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder);
         this.method = method;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	public boolean impliesObjectChanged() {
-		return true;
-	}
-	
+    @Override
+    public boolean impliesObjectChanged() {
+        return true;
+    }
 
+    @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
-        AdapterInvokeUtils.invoke(method, owningAdapter, elementAdapter );
+        AdapterInvokeUtils.invoke(method, owningAdapter, elementAdapter);
     }
 
     @Override
@@ -68,4 +67,3 @@ public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract 
     }
 
 }
-

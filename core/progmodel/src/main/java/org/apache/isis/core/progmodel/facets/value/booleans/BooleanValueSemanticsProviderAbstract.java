@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
 import org.apache.isis.applib.adapters.Localization;
@@ -31,8 +30,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueFacet {
+public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Boolean>
+    implements BooleanValueFacet {
 
     private static Class<? extends Facet> type() {
         return BooleanValueFacet.class;
@@ -42,13 +41,10 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
 
-    public BooleanValueSemanticsProviderAbstract(
-    		final FacetHolder holder, 
-    		final Class<Boolean> adaptedClass, 
-    		final Boolean defaultValue,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, context);
+    public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass,
+        final Boolean defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration,
+            context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -57,7 +53,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
 
     @Override
     protected Boolean doParse(final Object context, final String entry) {
-        String compareTo = entry.trim().toLowerCase();
+        final String compareTo = entry.trim().toLowerCase();
         if ("true".equals(compareTo)) {
             return Boolean.TRUE;
         } else if ("false".startsWith(compareTo)) {
@@ -68,10 +64,10 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return value == null ? "" : isSet(value) ? "True" : "False";
     }
-    
+
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
         return titleString(value, null);
@@ -92,12 +88,12 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
             throw new IsisException("Invalid data for logical, expected 1 byte, got " + data.length());
         }
         switch (data.charAt(0)) {
-        case 'T':
-            return Boolean.TRUE;
-        case 'F':
-            return Boolean.FALSE;
-        default:
-            throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
+            case 'T':
+                return Boolean.TRUE;
+            case 'F':
+                return Boolean.FALSE;
+            default:
+                throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
         }
     }
 

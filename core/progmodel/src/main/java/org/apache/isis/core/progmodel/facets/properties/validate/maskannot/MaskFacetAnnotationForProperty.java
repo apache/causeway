@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate.maskannot;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,15 +24,15 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskEvaluator;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskFacetAbstract;
 
-
 public class MaskFacetAnnotationForProperty extends MaskFacetAbstract {
     private final MaskEvaluator evaluator;
 
-    public MaskFacetAnnotationForProperty(final String outputMask, String inputMask, final FacetHolder holder) {
+    public MaskFacetAnnotationForProperty(final String outputMask, final String inputMask, final FacetHolder holder) {
         super(outputMask, holder);
         evaluator = inputMask == null ? null : new MaskEvaluator(inputMask);
     }
 
+    @Override
     public boolean doesNotMatch(final ObjectAdapter adapter) {
         if (evaluator == null) {
             return false;
@@ -50,4 +49,3 @@ public class MaskFacetAnnotationForProperty extends MaskFacetAbstract {
     }
 
 }
-

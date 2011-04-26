@@ -49,16 +49,15 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachDisabledFacetIfProtectMethodIsFound(processMethodContext);
     }
-
 
     public static void attachDisabledFacetIfProtectMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Class<?>[] paramTypes = new Class[] {};
 
-        Class<?> type = processMethodContext.getCls();
+        final Class<?> type = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
 
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
@@ -72,7 +71,7 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
 
         processMethodContext.removeMethod(protectMethod);
 
-        Boolean protectMethodReturnValue = invokeProtectMethod(protectMethod);
+        final Boolean protectMethodReturnValue = invokeProtectMethod(protectMethod);
         if (!protectMethodReturnValue.booleanValue()) {
             return;
         }
@@ -85,10 +84,10 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
         Boolean protectMethodReturnValue = null;
         try {
             protectMethodReturnValue = (Boolean) InvokeUtils.invokeStatic(protectMethod);
-        } catch (ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             // ignore
         }
-        if(protectMethodReturnValue == null) {
+        if (protectMethodReturnValue == null) {
             throw new MetaModelException("method " + protectMethod + "must return a boolean");
         }
         return protectMethodReturnValue;

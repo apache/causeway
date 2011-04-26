@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
 
 /**
  * Designed to simply filter out {@link Iterable#iterator()} method if it exists.
@@ -42,7 +40,7 @@ public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implemen
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         processClassContaxt.removeMethod(MethodScope.OBJECT, "iterator", java.util.Iterator.class, new Class[] {});
     }
 
@@ -55,4 +53,3 @@ public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implemen
     }
 
 }
-

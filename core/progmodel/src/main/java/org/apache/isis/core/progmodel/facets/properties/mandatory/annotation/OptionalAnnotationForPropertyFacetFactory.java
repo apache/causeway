@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.mandatory.annotation;
 
 import org.apache.isis.applib.annotation.Optional;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 
-
 public class OptionalAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public OptionalAnnotationForPropertyFacetFactory() {
@@ -35,7 +33,7 @@ public class OptionalAnnotationForPropertyFacetFactory extends AnnotationBasedFa
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         if (returnType.isPrimitive()) {
             return;

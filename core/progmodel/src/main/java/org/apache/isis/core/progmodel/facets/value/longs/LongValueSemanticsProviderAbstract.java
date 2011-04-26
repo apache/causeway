@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.longs;
 
 import java.text.DecimalFormat;
@@ -33,8 +32,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Long> implements LongValueFacet {
+public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Long> implements
+    LongValueFacet {
 
     public static Class<? extends Facet> type() {
         return LongValueFacet.class;
@@ -45,14 +44,12 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
 
-    private NumberFormat format;
+    private final NumberFormat format;
 
-    public LongValueSemanticsProviderAbstract(
-    		final FacetHolder holder, 
-    		final Class<Long> adaptedClass, 
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public LongValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Long> adaptedClass,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
         format = determineNumberFormat("value.format.long");
     }
 
@@ -70,7 +67,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return titleString(format, value);
     }
 
@@ -112,6 +109,5 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     public String toString() {
         return "LongValueSemanticsProvider: " + format;
     }
-
 
 }

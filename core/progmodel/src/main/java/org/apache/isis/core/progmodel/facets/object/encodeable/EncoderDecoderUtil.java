@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -26,10 +25,10 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
 public final class EncoderDecoderUtil {
 
-    private EncoderDecoderUtil() {}
+    private EncoderDecoderUtil() {
+    }
 
     public static final String ENCODER_DECODER_NAME_KEY_PREFIX = "isis.reflector.java.facets.encoderDecoder.";
     public static final String ENCODER_DECODER_NAME_KEY_SUFFIX = ".encoderDecoderName";
@@ -41,10 +40,11 @@ public final class EncoderDecoderUtil {
     }
 
     public static Class<?> encoderDecoderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        final Class<?> type = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
+        final Class<?> type =
+            candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
                 EncoderDecoder.class, FacetHolder.class) : null;
-        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, EncoderDecoder.class, FacetHolder.class);
+        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, EncoderDecoder.class,
+            FacetHolder.class);
     }
 
 }
-

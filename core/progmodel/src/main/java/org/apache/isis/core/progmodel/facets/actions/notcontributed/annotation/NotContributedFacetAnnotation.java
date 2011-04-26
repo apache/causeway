@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacetAbstract;
-
 
 public class NotContributedFacetAnnotation extends NotContributedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class NotContributedFacetAnnotation extends NotContributedFacetAbstract {
     }
 
 }
-

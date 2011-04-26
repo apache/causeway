@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.immutable.annotation;
-
 
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-
 public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public ImmutableAnnotationFacetFactory() {
@@ -37,7 +34,7 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Immutable annotation = getAnnotation(processClassContaxt.getCls(), Immutable.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
@@ -45,6 +42,5 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     private ImmutableFacet create(final Immutable annotation, final FacetHolder holder) {
         return annotation == null ? null : new ImmutableFacetAnnotation(When.decode(annotation.value()), holder);
     }
-
 
 }

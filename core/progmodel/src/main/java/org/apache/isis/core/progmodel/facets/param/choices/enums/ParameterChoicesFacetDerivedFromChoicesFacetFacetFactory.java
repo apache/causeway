@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.choices.enums;
-
 
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
@@ -27,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends
-    FacetFactoryAbstract implements AdapterMapAware {
+public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements
+    AdapterMapAware {
 
     private AdapterMap adapterMap;
 
@@ -37,27 +35,28 @@ public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
-        Class<?> paramType = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
-        
+    public void processParams(final ProcessParameterContext processParameterContext) {
+        final Class<?> paramType =
+            processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
+
         if (!paramType.isEnum()) {
             return;
         }
-        
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext.getFacetHolder(), getSpecificationLookup(), getAdapterMap()));
+
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext
+            .getFacetHolder(), getSpecificationLookup(), getAdapterMap()));
     }
 
-
-    ///////////////////////////////////////////////
+    // /////////////////////////////////////////////
     // Injected
-    ///////////////////////////////////////////////
+    // /////////////////////////////////////////////
 
     protected AdapterMap getAdapterMap() {
         return adapterMap;
     }
-    
+
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 }

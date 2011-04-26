@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.disable.annotation;
-
 
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 
-
 public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public DisabledAnnotationFacetFactory() {
@@ -37,7 +34,7 @@ public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryA
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Disabled annotation = getAnnotation(processMethodContext.getMethod(), Disabled.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }

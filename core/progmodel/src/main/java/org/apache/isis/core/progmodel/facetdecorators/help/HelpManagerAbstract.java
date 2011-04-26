@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Default implementation that does nothing.
@@ -32,13 +30,18 @@ public abstract class HelpManagerAbstract implements HelpManager {
     /**
      * Does nothing.
      */
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
     /**
      * Does nothing.
      */
-    public void shutdown() {}
+    @Override
+    public void shutdown() {
+    }
 
+    @Override
     public abstract String getHelpText(final Identifier identifier);
 
 }

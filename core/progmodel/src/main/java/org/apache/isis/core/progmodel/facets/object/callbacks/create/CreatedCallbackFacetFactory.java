@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks.create;
 
 import java.lang.reflect.Method;
@@ -33,7 +32,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CREATED_PREFIX, };
@@ -43,7 +41,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 
@@ -51,7 +49,9 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CREATED_PREFIX, void.class,
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new CreatedCallbackFacetViaMethod(method, holder));

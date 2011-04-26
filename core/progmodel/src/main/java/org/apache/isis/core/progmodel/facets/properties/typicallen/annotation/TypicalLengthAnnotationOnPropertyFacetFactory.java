@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.typicallen.annotation;
 
 import org.apache.isis.applib.annotation.TypicalLength;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 
-
 public class TypicalLengthAnnotationOnPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public TypicalLengthAnnotationOnPropertyFacetFactory() {
@@ -35,7 +33,7 @@ public class TypicalLengthAnnotationOnPropertyFacetFactory extends AnnotationBas
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final TypicalLength annotation = getAnnotation(processMethodContext.getMethod(), TypicalLength.class);
         final TypicalLengthFacet facet = create(annotation, processMethodContext.getFacetHolder());
 

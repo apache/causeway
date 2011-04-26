@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.aggregated;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacetAbstract;
-
 
 public class AggregatedSinceCollection extends AggregatedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class AggregatedSinceCollection extends AggregatedFacetAbstract {
     }
 
 }
-

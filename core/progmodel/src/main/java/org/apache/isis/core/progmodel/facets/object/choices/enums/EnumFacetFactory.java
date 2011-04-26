@@ -32,10 +32,9 @@ public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemantic
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
-
 
         if (!cls.isEnum()) {
             return;
@@ -45,7 +44,7 @@ public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemantic
         FacetUtil.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
     }
 
-    protected Class<T> asT(Class<?> cls) {
+    protected Class<T> asT(final Class<?> cls) {
         return CastUtils.cast(cls);
     }
 

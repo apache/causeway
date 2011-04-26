@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
@@ -34,42 +33,39 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 
-
 public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final ObjectDirtier objectDirtier;
 
-    public CollectionRemoveFromFacetViaAccessor(
-    		final Method method, 
-    		final FacetHolder holder, 
-    		final ObjectDirtier objectDirtier) {
+    public CollectionRemoveFromFacetViaAccessor(final Method method, final FacetHolder holder,
+        final ObjectDirtier objectDirtier) {
         super(holder);
         this.method = method;
         this.objectDirtier = objectDirtier;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
     @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	@Override
+    @Override
     public boolean impliesResolve() {
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Bytecode cannot automatically call {@link DomainObjectContainer#objectChanged(Object)}
-	 * because cannot distinguish whether interacting with accessor to read it or to modify its contents.
-	 */
-	@Override
+    /**
+     * Bytecode cannot automatically call {@link DomainObjectContainer#objectChanged(Object)} because cannot distinguish
+     * whether interacting with accessor to read it or to modify its contents.
+     */
+    @Override
     public boolean impliesObjectChanged() {
-		return false;
-	}
+        return false;
+    }
 
     @Override
     public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
@@ -78,21 +74,17 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
         getObjectDirtier().objectChanged(owningAdapter);
     }
 
-	@Override
+    @Override
     protected String toStringValues() {
         return "method=" + method;
     }
 
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     protected ObjectDirtier getObjectDirtier() {
         return objectDirtier;
     }
-    
-
 
 }
-

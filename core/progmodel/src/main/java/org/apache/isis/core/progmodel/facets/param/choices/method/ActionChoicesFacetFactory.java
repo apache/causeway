@@ -52,7 +52,7 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachActionChoicesFacetIfParameterChoicesMethodIsFound(processMethodContext);
     }
 
@@ -64,7 +64,7 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         if (actionParamTypes.length <= 0) {
             return;
         }
-        
+
         Method choicesMethod = null;
         if (choicesMethod == null) {
             choicesMethod = findChoicesMethodReturning(processMethodContext, Object[][].class);
@@ -91,25 +91,23 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
     protected Method findChoicesMethodReturning(final ProcessMethodContext processMethodContext,
         final Class<?> returnType2) {
         Method choicesMethod;
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
 
         final Method actionMethod = processMethodContext.getMethod();
         final MethodScope methodScope = MethodScope.scopeFor(actionMethod);
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
-        String name = MethodPrefixConstants.CHOICES_PREFIX + capitalizedName;
-        choicesMethod =
-            MethodFinderUtils.findMethod(cls, methodScope, name, returnType2, new Class[0]);
+        final String name = MethodPrefixConstants.CHOICES_PREFIX + capitalizedName;
+        choicesMethod = MethodFinderUtils.findMethod(cls, methodScope, name, returnType2, new Class[0]);
         return choicesMethod;
     }
-
 
     // ///////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

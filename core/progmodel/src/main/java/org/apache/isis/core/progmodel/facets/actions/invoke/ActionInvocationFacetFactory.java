@@ -40,13 +40,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 /**
- * Sets up {@link ActionInvocationFacet}, along with a number of supporting facets
- * that are based on the action's name.
+ * Sets up {@link ActionInvocationFacet}, along with a number of supporting facets that are based on the action's name.
  * 
  * <p>
- * The supporting methods are: {@link ExecutedFacet}, {@link ExplorationFacet} and
- * {@link DebugFacet}.  In addition a {@link NamedFacet} is inferred from the name
- * (taking into account the above well-known prefixes).
+ * The supporting methods are: {@link ExecutedFacet}, {@link ExplorationFacet} and {@link DebugFacet}. In addition a
+ * {@link NamedFacet} is inferred from the name (taking into account the above well-known prefixes).
  */
 public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
@@ -70,9 +68,9 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
-        // InvocationFacet 
+        // InvocationFacet
         attachInvocationFacet(processMethodContext);
 
         // DebugFacet, ExplorationFacet, ExecutedFacet
@@ -86,7 +84,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
 
     }
 
-    private void attachInvocationFacet(ProcessMethodContext processMethodContext) {
+    private void attachInvocationFacet(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
 
@@ -97,11 +95,12 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
                 return;
             }
 
-            Class<?> cls = processMethodContext.getCls();
+            final Class<?> cls = processMethodContext.getCls();
             final ObjectSpecification typeSpec = getSpecificationLookup().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
-            
-            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterMap()));
+
+            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder,
+                getAdapterMap()));
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
@@ -111,9 +110,9 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
      * Adds the {@link ExecutedFacet} (indicating where the action should be executed, either {@link Where#LOCALLY
      * locally} or {@link Where#REMOTELY remotely}.
      */
-    private void attachExecutedFacetIfActionMethodNamePrefixed(ProcessMethodContext processMethodContext) {
+    private void attachExecutedFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
         final Method actionMethod = processMethodContext.getMethod();
-        Where where = Where.lookup(actionMethod);
+        final Where where = Where.lookup(actionMethod);
         if (where == null) {
             return;
         }
@@ -121,7 +120,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         FacetUtil.addFacet(new ExecutedFacetViaNamingConvention(where, facetedMethod));
     }
 
-    private void attachDebugFacetIfActionMethodNamePrefixed(ProcessMethodContext processMethodContext) {
+    private void attachDebugFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
@@ -132,7 +131,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         FacetUtil.addFacet(new DebugFacetViaNamingConvention(facetedMethod));
     }
 
-    private void attachExplorationFacetIfActionMethodNamePrefixed(ProcessMethodContext processMethodContext) {
+    private void attachExplorationFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
@@ -142,7 +141,6 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new ExplorationFacetViaNamingConvention(facetedMethod));
     }
-
 
     /**
      * Must be called after added the debug, exploration etc facets.
@@ -173,13 +171,12 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 
     private AdapterMap getAdapterMap() {
         return adapterMap;
     }
-
 
 }

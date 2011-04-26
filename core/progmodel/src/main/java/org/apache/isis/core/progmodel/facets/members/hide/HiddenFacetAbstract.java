@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.hide;
 
 import org.apache.isis.applib.events.VisibilityEvent;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-
 
 public abstract class HiddenFacetAbstract extends SingleWhenValueFacetAbstract implements HiddenFacet {
 
@@ -39,6 +37,7 @@ public abstract class HiddenFacetAbstract extends SingleWhenValueFacetAbstract i
         super(type(), holder, value);
     }
 
+    @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return hiddenReason(ic.getTarget());
     }

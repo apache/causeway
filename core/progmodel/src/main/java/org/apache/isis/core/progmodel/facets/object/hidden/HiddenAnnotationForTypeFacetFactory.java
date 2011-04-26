@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.hidden;
-
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 
-
 public class HiddenAnnotationForTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public HiddenAnnotationForTypeFacetFactory() {
@@ -37,7 +34,7 @@ public class HiddenAnnotationForTypeFacetFactory extends AnnotationBasedFacetFac
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Hidden annotation = getAnnotation(processClassContaxt.getCls(), Hidden.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }

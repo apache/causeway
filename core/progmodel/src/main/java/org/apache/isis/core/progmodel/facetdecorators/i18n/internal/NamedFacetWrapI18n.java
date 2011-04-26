@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.i18n.internal;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
-
 
 public class NamedFacetWrapI18n extends NamedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class NamedFacetWrapI18n extends NamedFacetAbstract {
     }
 
 }
-

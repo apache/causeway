@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-
 
 public interface HelpManager extends ApplicationScopedComponent {
 
     /**
      * Returns help text for the specified {@link Identifier}.
      * 
-     * <p>If no help text is available then an empty String
-     * should be returned.
+     * <p>
+     * If no help text is available then an empty String should be returned.
      */
     String getHelpText(Identifier identifier);
 }

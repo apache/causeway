@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.title;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 
-
 public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String TO_STRING = "toString";
@@ -44,14 +42,12 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
     }
 
     /**
-     * If no title or toString can be used then will use Facets provided by {@link FallbackFacetFactory}
-     * instead.
+     * If no title or toString can be used then will use Facets provided by {@link FallbackFacetFactory} instead.
      */
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
 
         Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE, String.class, null);
         if (method != null) {

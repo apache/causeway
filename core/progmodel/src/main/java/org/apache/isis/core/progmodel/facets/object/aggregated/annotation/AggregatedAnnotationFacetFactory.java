@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.aggregated.annotation;
 
 import org.apache.isis.applib.annotation.Aggregated;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 
-
 public class AggregatedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public AggregatedAnnotationFacetFactory() {
@@ -35,7 +33,7 @@ public class AggregatedAnnotationFacetFactory extends AnnotationBasedFacetFactor
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Aggregated annotation = getAnnotation(processClassContaxt.getCls(), Aggregated.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }

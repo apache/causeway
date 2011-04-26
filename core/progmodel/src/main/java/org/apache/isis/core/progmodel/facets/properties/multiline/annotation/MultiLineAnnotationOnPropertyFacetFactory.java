@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.multiline.annotation;
 
 import org.apache.isis.applib.annotation.MultiLine;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 
-
 public class MultiLineAnnotationOnPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MultiLineAnnotationOnPropertyFacetFactory() {
@@ -35,7 +33,7 @@ public class MultiLineAnnotationOnPropertyFacetFactory extends AnnotationBasedFa
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         if (!isString(returnType)) {
             return;
@@ -45,8 +43,8 @@ public class MultiLineAnnotationOnPropertyFacetFactory extends AnnotationBasedFa
     }
 
     private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
-        return (annotation != null) ? new MultiLineFacetAnnotationOnProperty(annotation.numberOfLines(), annotation.preventWrapping(),
-                holder) : null;
+        return (annotation != null) ? new MultiLineFacetAnnotationOnProperty(annotation.numberOfLines(),
+            annotation.preventWrapping(), holder) : null;
     }
 
 }

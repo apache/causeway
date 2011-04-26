@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.modify;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.MODIFY_PREFIX };
@@ -41,27 +39,29 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachPropertyModifyFacetIfModifyMethodIsFound(processMethodContext);
     }
 
-    private void attachPropertyModifyFacetIfModifyMethodIsFound(ProcessMethodContext processMethodContext) {
-        
+    private void attachPropertyModifyFacetIfModifyMethodIsFound(final ProcessMethodContext processMethodContext) {
+
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        
+
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        
-        Class<?> cls = processMethodContext.getCls();
-        final Method modifyMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
-        
+
+        final Class<?> cls = processMethodContext.getCls();
+        final Method modifyMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT,
+                MethodPrefixConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
+
         if (modifyMethod == null) {
             return;
-        } 
+        }
         processMethodContext.removeMethod(modifyMethod);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modifyMethod, property));
     }

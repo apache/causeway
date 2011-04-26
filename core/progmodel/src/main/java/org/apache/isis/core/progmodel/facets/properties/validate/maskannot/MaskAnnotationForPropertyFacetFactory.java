@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate.maskannot;
-
 
 import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -31,7 +29,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskFacet;
 import org.apache.isis.core.progmodel.facets.object.mask.TitleFacetBasedOnMask;
 
-
 public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MaskAnnotationForPropertyFacetFactory() {
@@ -42,34 +39,37 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
      * In readiness for supporting <tt>@Value</tt> in the future.
      */
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Mask annotation = getAnnotation(processClassContaxt.getCls(), Mask.class);
         FacetUtil.addFacet(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         if (processMethodContext.getMethod().getReturnType() == void.class) {
             return;
         }
 
         final Mask annotation = getAnnotation(processMethodContext.getMethod(), Mask.class);
-        addMaskFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation, processMethodContext.getMethod().getReturnType());
+        addMaskFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation, processMethodContext
+            .getMethod().getReturnType());
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         final Class<?>[] parameterTypes = processParameterContext.getMethod().getParameterTypes();
         if (processParameterContext.getParamNum() >= parameterTypes.length) {
             // ignore
             return;
         }
 
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];
-                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation, parameterTypes[i]);
+                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation,
+                    parameterTypes[i]);
                 return;
             }
         }
@@ -79,14 +79,15 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
         return annotation != null ? new MaskFacetAnnotationForProperty(annotation.value(), null, holder) : null;
     }
 
-    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, Class<?> cls) {
+    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation,
+        final Class<?> cls) {
         final MaskFacet maskFacet = createMaskFacet(annotation, holder);
         if (maskFacet == null) {
             return false;
         }
         FacetUtil.addFacet(maskFacet);
 
-        ObjectSpecification type = getSpecificationLookup().loadSpecification(cls);
+        final ObjectSpecification type = getSpecificationLookup().loadSpecification(cls);
         final TitleFacet underlyingTitleFacet = type.getFacet(TitleFacet.class);
         if (underlyingTitleFacet != null) {
             final TitleFacet titleFacet = new TitleFacetBasedOnMask(maskFacet, underlyingTitleFacet);

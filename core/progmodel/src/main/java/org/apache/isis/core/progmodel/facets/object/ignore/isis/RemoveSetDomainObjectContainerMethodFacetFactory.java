@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.isis;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
 
 /**
  * Removes any calls to <tt>setContainer(DomainObjectContainer)</tt>.
@@ -36,10 +34,11 @@ public class RemoveSetDomainObjectContainerMethodFacetFactory extends FacetFacto
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "setContainer", void.class, new Class[] { DomainObjectContainer.class });
-        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class, new Class[] { DomainObjectContainer.class });
+    public void process(final ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "setContainer", void.class,
+            new Class[] { DomainObjectContainer.class });
+        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class,
+            new Class[] { DomainObjectContainer.class });
     }
 
 }
-

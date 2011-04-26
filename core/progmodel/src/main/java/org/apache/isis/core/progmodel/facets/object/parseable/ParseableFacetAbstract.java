@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
-
 public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {
 
     private final Class<?> parserClass;
@@ -38,19 +36,17 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     // to delegate to
     private final ParseableFacetUsingParser parseableFacetUsingParser;
 
-    public ParseableFacetAbstract(
-    		final String candidateParserName, 
-    		final Class<?> candidateParserClass, 
-    		final FacetHolder holder, 
-    		final AuthenticationSessionProvider authenticationSessionProvider,
-    		final DependencyInjector dependencyInjector,
-    		final AdapterMap adapterManager) {
+    public ParseableFacetAbstract(final String candidateParserName, final Class<?> candidateParserClass,
+        final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider,
+        final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
-        
+
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         if (isValid()) {
-            Parser parser = (Parser) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
-            this.parseableFacetUsingParser = new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
+            final Parser parser = (Parser) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
+            this.parseableFacetUsingParser =
+                new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector,
+                    adapterManager);
         } else {
             this.parseableFacetUsingParser = null;
         }
@@ -85,4 +81,3 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
         return parseableFacetUsingParser.parseableTitle(existing);
     }
 }
-

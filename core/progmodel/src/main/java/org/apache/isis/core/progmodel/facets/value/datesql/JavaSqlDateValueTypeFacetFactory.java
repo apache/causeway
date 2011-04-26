@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.datesql;
 
 import java.sql.Date;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
-
 public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Date> {
 
     public JavaSqlDateValueTypeFacetFactory() {
@@ -34,7 +32,7 @@ public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsPr
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

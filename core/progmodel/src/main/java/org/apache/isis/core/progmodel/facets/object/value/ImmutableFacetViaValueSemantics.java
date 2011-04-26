@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
-
 
 public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
 
@@ -32,4 +30,3 @@ public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.bytes;
 
 import java.text.DecimalFormat;
@@ -33,8 +32,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Byte> implements ByteValueFacet {
+public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Byte> implements
+    ByteValueFacet {
 
     private static Class<? extends Facet> type() {
         return ByteValueFacet.class;
@@ -48,12 +47,10 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
 
     private final NumberFormat format;
 
-    public ByteValueSemanticsProviderAbstract(
-    		final FacetHolder holder,
-    		final Class<Byte> adaptedClass,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public ByteValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Byte> adaptedClass,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
         format = determineNumberFormat("value.format.byte");
     }
 
@@ -71,7 +68,7 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return titleString(format, value);
     }
 
@@ -114,7 +111,5 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     public String toString() {
         return "ByteValueSemanticsProvider: " + format;
     }
-
-
 
 }

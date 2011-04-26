@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.timesql;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
-
 
 public class JavaSqlTimeValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.sql.Time> {
 
@@ -32,7 +30,7 @@ public class JavaSqlTimeValueTypeFacetFactory extends ValueUsingValueSemanticsPr
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

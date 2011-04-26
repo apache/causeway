@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.maxlen.annotation;
-
 
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacet;
-
 
 public class MaxLengthAnnotationForTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -39,7 +36,7 @@ public class MaxLengthAnnotationForTypeFacetFactory extends AnnotationBasedFacet
      * In readiness for supporting <tt>@Value</tt> in the future.
      */
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final MaxLength annotation = getAnnotation(processClassContaxt.getCls(), MaxLength.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }

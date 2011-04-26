@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.prototype.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.prototype.PrototypeFacetAbstract;
-
 
 public class PrototypeFacetAnnotation extends PrototypeFacetAbstract {
 
@@ -31,4 +29,3 @@ public class PrototypeFacetAnnotation extends PrototypeFacetAbstract {
     }
 
 }
-

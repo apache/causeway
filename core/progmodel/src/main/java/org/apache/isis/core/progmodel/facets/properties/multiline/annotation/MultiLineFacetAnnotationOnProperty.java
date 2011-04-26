@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.multiline.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacetAbstract;
 
-
 public class MultiLineFacetAnnotationOnProperty extends MultiLineFacetAbstract {
 
-    public MultiLineFacetAnnotationOnProperty(final int numberOfLines, final boolean preventWrapping, final FacetHolder holder) {
+    public MultiLineFacetAnnotationOnProperty(final int numberOfLines, final boolean preventWrapping,
+        final FacetHolder holder) {
         super(numberOfLines, preventWrapping, holder);
     }
 
 }
-

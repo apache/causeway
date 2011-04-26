@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.i18n.resourcebundle.internal;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     private static final String MEMBER_TYPE_COLLECTION = "collection";
     private static final String MEMBER_TYPE_ACTION = "action";
     private static final String MEMBER_TYPE_PARAMETER = "parameter";
-    
+
     private static final String TEXT_TYPE_NAME = "name";
     private static final String TEXT_TYPE_DESCRIPTION = "description";
     private static final String TEXT_TYPE_HELP = "help";
@@ -53,13 +52,13 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     private ResourceBundle bundle;
 
     @SuppressWarnings("unused")
-    private IsisConfiguration configuration;
+    private final IsisConfiguration configuration;
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Contructor, init, shutdown
-    ////////////////////////////////////////////////////////////////
-    
-    public I18nManagerUsingResourceBundle(IsisConfiguration configuration) {
+    // //////////////////////////////////////////////////////////////
+
+    public I18nManagerUsingResourceBundle(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -74,12 +73,12 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     }
 
     @Override
-    public void shutdown() {}
+    public void shutdown() {
+    }
 
-    
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Members
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     @Override
     public String getName(final Identifier identifier) {
@@ -99,26 +98,25 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     private String internalizedTextForClassMember(final Identifier identifier, final String textType) {
         if (bundle == null) {
             return null;
-        } 
+        }
         final List<String> key = buildMemberTypeKey(identifier, textType);
         return lookupTextFromBundle(key);
     }
 
     private static List<String> buildMemberTypeKey(final Identifier identifier, final String textType) {
-    	final List<String> keys = Lists.newArrayList();
-        
-		if (identifier.isPropertyOrCollection()) {
-			keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_PROPERTY));
-			keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_COLLECTION));
-		} else {
-			keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_ACTION));
-		}
-		return keys;
+        final List<String> keys = Lists.newArrayList();
+
+        if (identifier.isPropertyOrCollection()) {
+            keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_PROPERTY));
+            keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_COLLECTION));
+        } else {
+            keys.add(buildMemberTypeKey(identifier, textType, MEMBER_TYPE_ACTION));
+        }
+        return keys;
     }
 
-	private static String buildMemberTypeKey(final Identifier identifier,
-			final String textType, final String memberType) {
-		final StringBuilder sb = new StringBuilder();
+    private static String buildMemberTypeKey(final Identifier identifier, final String textType, final String memberType) {
+        final StringBuilder sb = new StringBuilder();
         sb.append(identifier.getClassName()).append(".");
         sb.append(memberType);
         final String memberName = identifier.getMemberName();
@@ -127,11 +125,11 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
         }
         sb.append(".").append(textType);
         return sb.toString();
-	}
+    }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Parameters
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     @Override
     public List<String> getParameterNames(final Identifier identifier) {
@@ -141,11 +139,12 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     private List<String> internalizedTextForParameter(final Identifier identifier, final String textType) {
         if (bundle == null) {
             return null;
-        } 
+        }
         final List<String> internalizedText = Lists.newArrayList();
         final List<String> memberParameterNames = identifier.getMemberParameterNames();
-        int paramNum=0;
-        for (@SuppressWarnings("unused") String dummy : memberParameterNames) {
+        int paramNum = 0;
+        for (@SuppressWarnings("unused")
+        final String dummy : memberParameterNames) {
             final String key = buildParameterTypeKey(identifier, textType, paramNum);
             internalizedText.add(lookupTextFromBundle(key));
             paramNum++;
@@ -153,34 +152,31 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
         return internalizedText;
     }
 
-    private static String buildParameterTypeKey(final Identifier identifier, final String textType, int paramNum) {
-        return identifier.getClassName() + "." + MEMBER_TYPE_ACTION + "." + identifier.getMemberName() + "." + MEMBER_TYPE_PARAMETER
-                + (paramNum + 1) + "." + textType;
+    private static String buildParameterTypeKey(final Identifier identifier, final String textType, final int paramNum) {
+        return identifier.getClassName() + "." + MEMBER_TYPE_ACTION + "." + identifier.getMemberName() + "."
+            + MEMBER_TYPE_PARAMETER + (paramNum + 1) + "." + textType;
     }
 
-
-    
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Helpers
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     private String lookupTextFromBundle(final List<String> keys) {
-    	for(String key: keys) {
-    		String text = lookupTextFromBundle(key);
-    		if (text != null) {
-    			return text;
-    		}
-    	}
-    	return null;
+        for (final String key : keys) {
+            final String text = lookupTextFromBundle(key);
+            if (text != null) {
+                return text;
+            }
+        }
+        return null;
     }
 
-	private String lookupTextFromBundle(final String key) {
-		try {
+    private String lookupTextFromBundle(final String key) {
+        try {
             return bundle.getString(key);
         } catch (final MissingResourceException e) {
             return null;
         }
-	}
-    
-}
+    }
 
+}

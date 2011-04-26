@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded.markerifc;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.bounded.BoundedFacetImpl;
-
 
 public class BoundedFacetMarkerInterface extends BoundedFacetImpl {
 
@@ -31,4 +29,3 @@ public class BoundedFacetMarkerInterface extends BoundedFacetImpl {
     }
 
 }
-

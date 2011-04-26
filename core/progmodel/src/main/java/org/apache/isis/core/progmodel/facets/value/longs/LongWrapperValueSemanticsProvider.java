@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.longs;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -25,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-
 
 public class LongWrapperValueSemanticsProvider extends LongValueSemanticsProviderAbstract {
 
@@ -36,10 +34,8 @@ public class LongWrapperValueSemanticsProvider extends LongValueSemanticsProvide
         this(null, null, null);
     }
 
-    public LongWrapperValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public LongWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Long.class, configuration, context);
     }
 

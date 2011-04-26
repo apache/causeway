@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.imageawt;
 
 import java.awt.Image;
@@ -28,17 +27,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 
-
 public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
-    public JavaAwtImageValueSemanticsProvider(
-            final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public JavaAwtImageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Image.class, configuration, context);
     }
 
-	@Override
+    @Override
     public int getHeight(final ObjectAdapter object) {
         return image(object).getHeight(null);
     }
@@ -71,7 +67,6 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
         return createImage(pixels);
     }
 
-
     @Override
     public boolean isNoop() {
         return false;
@@ -85,7 +80,6 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
     @Override
     public ObjectAdapter createValue(final Image image) {
         return getAdapterMap().adapterFor(image);
-   }
-    
-}
+    }
 
+}

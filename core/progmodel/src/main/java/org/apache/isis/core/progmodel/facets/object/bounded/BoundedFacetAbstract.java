@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-
 
 public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implements BoundedFacet {
 
@@ -47,6 +45,7 @@ public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implement
      */
     public abstract String disabledReason(ObjectAdapter no);
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof ObjectValidityContext)) {
             return null;
@@ -55,6 +54,7 @@ public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implement
         return disabledReason(target);
     }
 
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> context) {
         final ObjectAdapter target = context.getTarget();
         return disabledReason(target);

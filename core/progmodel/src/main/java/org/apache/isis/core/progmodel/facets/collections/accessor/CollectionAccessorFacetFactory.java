@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.accessor;
 
 import java.lang.reflect.Method;
@@ -32,7 +31,6 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 
-
 public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.GET_PREFIX };
@@ -42,20 +40,19 @@ public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentify
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachAccessorFacetForAccessorMethod(processMethodContext);
     }
 
-    private void attachAccessorFacetForAccessorMethod(ProcessMethodContext processMethodContext) {
+    private void attachAccessorFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
         final Method accessorMethod = processMethodContext.getMethod();
         processMethodContext.removeMethod(accessorMethod);
-        
+
         final FacetHolder holder = processMethodContext.getFacetHolder();
         final Facet facet = new CollectionAccessorFacetViaAccessor(accessorMethod, holder);
         FacetUtil.addFacet(facet);
     }
-
 
     // ///////////////////////////////////////////////////////////////
     // PropertyOrCollectionIdentifyingFacetFactory impl.
@@ -76,8 +73,8 @@ public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentify
     }
 
     /**
-     * The method way well represent a reference property, but this facet factory does not have any opinion on
-     * the matter.
+     * The method way well represent a reference property, but this facet factory does not have any opinion on the
+     * matter.
      */
     @Override
     public boolean isPropertyAccessor(final Method method) {
@@ -85,27 +82,27 @@ public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentify
     }
 
     /**
-     * The method way well represent a value property, but this facet factory does not have any opinion on the
-     * matter.
+     * The method way well represent a value property, but this facet factory does not have any opinion on the matter.
      */
     public boolean isValuePropertyAccessor(final Method method) {
         return false;
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover,
+        final List<Method> methodListToAppendTo) {
         final Class<?>[] collectionClasses = getCollectionTypeRepository().getCollectionType();
-        for (int i = 0; i < collectionClasses.length; i++) {
-            final Class<?> returnType = collectionClasses[i];
-            final List<Method> list = methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX, returnType, false, 0);
+        for (final Class<?> returnType : collectionClasses) {
+            final List<Method> list =
+                methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX, returnType, false, 0);
             methodListToAppendTo.addAll(list);
         }
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-    // does nothing
+    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover,
+        final List<Method> methodListToAppendTo) {
+        // does nothing
     }
 
-    
 }

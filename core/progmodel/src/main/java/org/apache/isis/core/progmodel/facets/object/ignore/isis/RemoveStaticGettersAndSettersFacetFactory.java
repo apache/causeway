@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.isis;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
 
 /**
  * Removes any static getter or setter methods.
@@ -35,10 +33,9 @@ public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstr
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         processClassContext.removeMethods(MethodScope.CLASS, "get", null, false, 0);
         processClassContext.removeMethods(MethodScope.CLASS, "set", null, false, 0);
     }
 
 }
-

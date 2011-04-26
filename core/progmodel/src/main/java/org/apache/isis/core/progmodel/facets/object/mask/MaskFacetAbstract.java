@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.mask;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-
 
 public abstract class MaskFacetAbstract extends SingleStringValueFacetAbstract implements MaskFacet {
 
@@ -39,6 +37,7 @@ public abstract class MaskFacetAbstract extends SingleStringValueFacetAbstract i
         super(type(), holder, value);
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof ProposedHolder)) {
             return null;

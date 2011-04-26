@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.choices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,10 +24,10 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-
 public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetNone(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetNone(final FacetHolder holder, final SpecificationLookup specificationLookup,
+        final AdapterMap adapterManager) {
         super(holder, specificationLookup, adapterManager);
     }
 
@@ -43,6 +42,3 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
     }
 
 }
-
-
-

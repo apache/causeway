@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.disable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
-
 
 public class DisabledFacetImpl extends DisabledFacetAbstract {
 
@@ -31,6 +29,7 @@ public class DisabledFacetImpl extends DisabledFacetAbstract {
         super(value, holder);
     }
 
+    @Override
     public String disabledReason(final ObjectAdapter targetAdapter) {
         if (value() == When.ALWAYS) {
             return "Always disabled";
@@ -52,4 +51,3 @@ public class DisabledFacetImpl extends DisabledFacetAbstract {
     }
 
 }
-

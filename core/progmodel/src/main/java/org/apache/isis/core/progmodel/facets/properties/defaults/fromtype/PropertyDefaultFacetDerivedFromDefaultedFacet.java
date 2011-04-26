@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.defaults.fromtype;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,16 +26,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 
-
 public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract implements PropertyDefaultFacet {
 
     private final DefaultedFacet typeFacet;
     private final AdapterMap adapterMap;
-    
-    public PropertyDefaultFacetDerivedFromDefaultedFacet(
-    		final DefaultedFacet typeFacet, 
-    		final FacetHolder holder,
-    		final AdapterMap adapterManager) {
+
+    public PropertyDefaultFacetDerivedFromDefaultedFacet(final DefaultedFacet typeFacet, final FacetHolder holder,
+        final AdapterMap adapterManager) {
         super(PropertyDefaultFacet.class, holder, false);
         this.typeFacet = typeFacet;
         this.adapterMap = adapterManager;
@@ -45,23 +41,21 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         if (getIdentified() == null) {
-			return null;
-		}
-		Object typeFacetDefault = typeFacet.getDefault();
-		if (typeFacetDefault == null) {
-			return null;
-		}
-		return getAdapterMap().adapterFor(typeFacetDefault);
+            return null;
+        }
+        final Object typeFacetDefault = typeFacet.getDefault();
+        if (typeFacetDefault == null) {
+            return null;
+        }
+        return getAdapterMap().adapterFor(typeFacetDefault);
     }
 
-
-	///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     public AdapterMap getAdapterMap() {
         return adapterMap;
     }
 
 }
-

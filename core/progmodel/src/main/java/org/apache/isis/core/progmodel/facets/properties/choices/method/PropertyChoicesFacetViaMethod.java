@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.choices.method;
 
 import java.lang.reflect.Method;
@@ -35,20 +34,15 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.progmodel.facets.CollectionUtils;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
-
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesClass;
 
-    private final AdapterMap adapterMap; 
+    private final AdapterMap adapterMap;
 
-    public PropertyChoicesFacetViaMethod(
-    		final Method method, 
-    		final Class<?> choicesClass, 
-    		final FacetHolder holder,
-    		final SpecificationLookup specificationLookup,
-    		final AdapterMap adapterManager) {
+    public PropertyChoicesFacetViaMethod(final Method method, final Class<?> choicesClass, final FacetHolder holder,
+        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup);
         this.method = method;
         this.choicesClass = choicesClass;
@@ -56,24 +50,24 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
     @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	@Override
+    @Override
     public boolean impliesResolve() {
-		return true;
-	}
+        return true;
+    }
 
-	@Override
+    @Override
     public boolean impliesObjectChanged() {
-		return false;
-	}
+        return false;
+    }
 
-	@Override
+    @Override
     public Object[] getChoices(final ObjectAdapter owningAdapter, final SpecificationLookup specificationLookup) {
         final Object options = AdapterInvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
@@ -86,18 +80,17 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
     }
 
-	@Override
+    @Override
     protected String toStringValues() {
         return "method=" + method + ",class=" + choicesClass;
     }
 
-	//////////////////////////////////////////////
-	// Dependencies
-    //////////////////////////////////////////////
-	
+    // ////////////////////////////////////////////
+    // Dependencies
+    // ////////////////////////////////////////////
+
     protected AdapterMap getAdapterMap() {
         return adapterMap;
     }
 
 }
-

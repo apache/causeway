@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.plural.staticmethod;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
-
 public class PluralMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PLURAL_NAME = "pluralName";
@@ -42,11 +40,12 @@ public class PluralMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(type, MethodScope.CLASS, PLURAL_NAME, String.class, NO_PARAMETERS_TYPES);
+        final Method method =
+            MethodFinderUtils.findMethod(type, MethodScope.CLASS, PLURAL_NAME, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             final String name = (String) InvokeUtils.invokeStatic(method);
             processClassContext.removeMethod(method);

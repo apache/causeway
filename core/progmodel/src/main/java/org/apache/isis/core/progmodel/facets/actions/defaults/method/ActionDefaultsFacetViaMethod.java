@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.defaults.method;
 
 import java.lang.reflect.Method;
@@ -33,17 +32,14 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
 
-
 public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
 
     private final Method defaultMethod;
-    
-    @SuppressWarnings("unused")
-	private final Method actionMethod;
 
-    public ActionDefaultsFacetViaMethod(
-    		final Method defaultMethod, 
-    		final FacetHolder holder) {
+    @SuppressWarnings("unused")
+    private final Method actionMethod;
+
+    public ActionDefaultsFacetViaMethod(final Method defaultMethod, final FacetHolder holder) {
         super(holder, false);
         this.defaultMethod = defaultMethod;
         this.actionMethod = determineActionMethod(holder);
@@ -53,7 +49,8 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
         Method method2;
         final Facet actionInvocationFacet = holder.getFacet(ActionInvocationFacet.class);
         if (actionInvocationFacet instanceof ActionInvocationFacetViaMethod) {
-            final ActionInvocationFacetViaMethod facetViaMethod = (ActionInvocationFacetViaMethod) actionInvocationFacet;
+            final ActionInvocationFacetViaMethod facetViaMethod =
+                (ActionInvocationFacetViaMethod) actionInvocationFacet;
             method2 = facetViaMethod.getMethods().get(0);
         } else {
             method2 = null;
@@ -62,23 +59,22 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
     @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(defaultMethod);
+        return Collections.singletonList(defaultMethod);
     }
 
     @Override
     public boolean impliesResolve() {
-    	return true;
+        return true;
     }
-    
+
     @Override
     public boolean impliesObjectChanged() {
-    	return false;
+        return false;
     }
-    
 
     @Override
     public Object[] getDefaults(final ObjectAdapter owningAdapter) {
@@ -90,6 +86,4 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
         return "method=" + defaultMethod;
     }
 
-
 }
-

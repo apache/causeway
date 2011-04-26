@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.notinservicemenu;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class NotInServiceMenuFacetAnnotation extends NotInServiceMenuFacetAbstract {
 
@@ -30,4 +28,3 @@ public class NotInServiceMenuFacetAnnotation extends NotInServiceMenuFacetAbstra
     }
 
 }
-

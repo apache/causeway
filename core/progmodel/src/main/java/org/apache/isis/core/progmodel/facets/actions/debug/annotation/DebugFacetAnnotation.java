@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.debug.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.debug.DebugFacetAbstract;
-
 
 public class DebugFacetAnnotation extends DebugFacetAbstract {
 
@@ -31,4 +29,3 @@ public class DebugFacetAnnotation extends DebugFacetAbstract {
     }
 
 }
-

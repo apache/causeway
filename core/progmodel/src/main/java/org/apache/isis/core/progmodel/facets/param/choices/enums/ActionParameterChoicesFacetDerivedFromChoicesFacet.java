@@ -30,19 +30,20 @@ import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoice
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(FacetHolder holder,
+    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder,
         final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup, adapterManager);
     }
 
     @Override
-    public Object[] getChoices(ObjectAdapter adapter) {
-        FacetHolder facetHolder = getFacetHolder();
-        TypedHolder paramPeer = (TypedHolder) facetHolder;
-        ObjectSpecification noSpec = getSpecification(paramPeer.getType());
-        ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
-        if (choicesFacet == null)
+    public Object[] getChoices(final ObjectAdapter adapter) {
+        final FacetHolder facetHolder = getFacetHolder();
+        final TypedHolder paramPeer = (TypedHolder) facetHolder;
+        final ObjectSpecification noSpec = getSpecification(paramPeer.getType());
+        final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
+        if (choicesFacet == null) {
             return new Object[0];
+        }
         return choicesFacet.getChoices(adapter);
     }
 

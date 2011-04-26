@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
 
@@ -36,6 +34,7 @@ public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
      * <p>
      * Subclasses should override as required.
      */
+    @Override
     public String invalidReason(final ObjectAdapter inObject, final ObjectAdapter value) {
         return null;
     }
@@ -46,4 +45,3 @@ public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.password;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -31,8 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements PasswordValueFacet {
+public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
+    PasswordValueFacet {
 
     public static Class<? extends Facet> type() {
         return PasswordValueFacet.class;
@@ -50,11 +49,10 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
         this(null, null, null);
     }
 
-    public PasswordValueSemanticsProvider(
-    		final FacetHolder holder,
-    		final IsisConfiguration configuration,
-    		final ValueSemanticsProviderContext context) {
-        super(type(), holder, Password.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public PasswordValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, Password.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
+            configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -67,7 +65,7 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
     }
 
     @Override
-    public String titleString(final Object object, Localization localization) {
+    public String titleString(final Object object, final Localization localization) {
         return object == null ? "" : password(object).toString();
     }
 
@@ -113,7 +111,6 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
         return (Password) object;
     }
 
-
     // /////// toString ///////
 
     @Override
@@ -121,6 +118,4 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
         return "PasswordValueSemanticsProvider";
     }
 
-
 }
-

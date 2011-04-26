@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.image;
 
 import org.apache.isis.applib.value.Image;
@@ -27,13 +26,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
 public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
-    public ImageValueSemanticsProvider(
-            final FacetHolder holder,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    public ImageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Image.class, configuration, context);
     }
 
@@ -79,7 +75,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
      * Not required because {@link #alwaysReplace()} is <tt>false</tt>.
      */
     @Override
-    public void setUnderlyingFacet(Facet underlyingFacet) {
+    public void setUnderlyingFacet(final Facet underlyingFacet) {
         throw new UnsupportedOperationException();
     }
 
@@ -101,6 +97,6 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     @Override
     public ObjectAdapter createValue(final java.awt.Image image) {
         return getAdapterMap().adapterFor(new Image(grabPixels(image)));
-   }
+    }
 
 }

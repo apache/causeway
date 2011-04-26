@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -28,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements PropertyDefaultFacet {
+public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements
+    PropertyDefaultFacet {
 
     private static final Boolean DEFAULT_VALUE = Boolean.FALSE;
 
@@ -40,10 +39,8 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
         this(null, null, null);
     }
 
-    public BooleanPrimitiveValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    public BooleanPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, boolean.class, DEFAULT_VALUE, configuration, context);
     }
 
@@ -76,6 +73,5 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
         final boolean toggled = !current;
         object.replacePojo(Boolean.valueOf(toggled));
     }
-
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.choices.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,14 +25,15 @@ import org.apache.isis.core.metamodel.facets.choices.ChoicesFacetAbstract;
 
 public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 
-    private Object[] choices;
+    private final Object[] choices;
 
     public ChoicesFacetEnum(final FacetHolder holder, final Object[] choices) {
         super(holder);
         this.choices = choices;
     }
 
-    public Object[] getChoices(ObjectAdapter adapter) {
+    @Override
+    public Object[] getChoices(final ObjectAdapter adapter) {
         return choices;
     }
 

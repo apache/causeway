@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate.regexannot;
 
 import org.apache.isis.applib.annotation.RegEx;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.TitleFacetFormattedByRegex;
 
-
 public class RegExFacetAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public RegExFacetAnnotationForPropertyFacetFactory() {
@@ -37,7 +35,7 @@ public class RegExFacetAnnotationForPropertyFacetFactory extends AnnotationBased
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         if (!isString(returnType)) {
             return;

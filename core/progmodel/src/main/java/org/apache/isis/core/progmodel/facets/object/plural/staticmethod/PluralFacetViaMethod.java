@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.plural.staticmethod;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
-
 
 public class PluralFacetViaMethod extends PluralFacetAbstract {
 
@@ -31,4 +29,3 @@ public class PluralFacetViaMethod extends PluralFacetAbstract {
     }
 
 }
-

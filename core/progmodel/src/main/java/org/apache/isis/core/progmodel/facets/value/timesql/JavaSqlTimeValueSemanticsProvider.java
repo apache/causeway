@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.timesql;
 
 import java.sql.Time;
@@ -25,10 +24,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-
-import com.google.inject.internal.Maps;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -38,10 +33,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProviderAbstract;
 
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
- *
+ * 
  */
 public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract<java.sql.Time> {
     private static Map<String, DateFormat> formats = Maps.newHashMap();
@@ -58,15 +56,14 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
         this(null, null, null);
     }
 
-    public JavaSqlTimeValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, java.sql.Time.class, configuration, context);
     }
 
     @Override
-    public Time add(final Time original, final int years, final int months, final int days, final int hours, final int minutes) {
+    public Time add(final Time original, final int years, final int months, final int days, final int hours,
+        final int minutes) {
         final java.sql.Time time = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(time);

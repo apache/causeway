@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.exploration.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.exploration.ExplorationFacetAbstract;
-
 
 public class ExplorationFacetAnnotation extends ExplorationFacetAbstract {
 
@@ -31,4 +29,3 @@ public class ExplorationFacetAnnotation extends ExplorationFacetAbstract {
     }
 
 }
-

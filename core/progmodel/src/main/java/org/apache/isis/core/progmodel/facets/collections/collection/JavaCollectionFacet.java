@@ -17,39 +17,34 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.collection;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.collections.CollectionUtils;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
-
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
     private final AdapterMap adapterMap;
 
-	public JavaCollectionFacet(
-			final FacetHolder holder, 
-			final AdapterMap adapterManager) {
+    public JavaCollectionFacet(final FacetHolder holder, final AdapterMap adapterManager) {
         super(holder);
         this.adapterMap = adapterManager;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Collection<ObjectAdapter> collection(ObjectAdapter wrappedCollection) {
-        Collection<?> collectionOfUnderlying = collectionOfUnderlying(wrappedCollection);
+    public Collection<ObjectAdapter> collection(final ObjectAdapter wrappedCollection) {
+        final Collection<?> collectionOfUnderlying = collectionOfUnderlying(wrappedCollection);
         return CollectionUtils.collect(collectionOfUnderlying, new ObjectToAdapterTransformer(getAdapterMap()));
     }
 
-	@Override
+    @Override
     public ObjectAdapter firstElement(final ObjectAdapter collection) {
         final Iterator<ObjectAdapter> iterator = iterator(collection);
         return iterator.hasNext() ? iterator.next() : null;
@@ -65,8 +60,8 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
         final Collection javaCollection = collectionOfUnderlying(collection);
         javaCollection.clear();
-        for (int i = 0; i < initData.length; i++) {
-            javaCollection.add(initData[i].getObject());
+        for (final ObjectAdapter element : initData) {
+            javaCollection.add(element.getObject());
         }
     }
 
@@ -77,15 +72,12 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
         return (Collection<?>) wrappedCollection.getObject();
     }
 
-
-
-    ////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////////////
+
     private AdapterMap getAdapterMap() {
-		return adapterMap;
-	}
+        return adapterMap;
+    }
 
 }
-

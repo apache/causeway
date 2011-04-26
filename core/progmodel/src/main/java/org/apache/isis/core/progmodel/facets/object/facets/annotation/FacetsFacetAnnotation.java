@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.facets.annotation;
 
 import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.facets.FacetsFacetAbstract;
-
 
 public class FacetsFacetAnnotation extends FacetsFacetAbstract {
 
@@ -32,4 +30,3 @@ public class FacetsFacetAnnotation extends FacetsFacetAbstract {
     }
 
 }
-

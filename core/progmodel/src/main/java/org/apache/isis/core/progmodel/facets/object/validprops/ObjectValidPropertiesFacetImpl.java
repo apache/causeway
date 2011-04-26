@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validprops;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,18 +26,18 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-
 public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAbstract {
 
     public ObjectValidPropertiesFacetImpl(final FacetHolder holder) {
         super(holder);
     }
 
+    @Override
     public String invalidReason(final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter adapter = context.getTarget();
         for (final ObjectAssociation property : adapter.getSpecification().getAssociations(
-                ObjectAssociationFilters.PROPERTIES)) {
+            ObjectAssociationFilters.PROPERTIES)) {
             // ignore hidden properties
             if (property.isVisible(context.getSession(), adapter).isVetoed()) {
                 continue;
@@ -63,4 +62,3 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
     }
 
 }
-

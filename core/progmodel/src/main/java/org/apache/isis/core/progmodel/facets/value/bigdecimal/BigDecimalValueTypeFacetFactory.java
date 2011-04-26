@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.bigdecimal;
 
 import java.math.BigDecimal;
@@ -25,16 +24,14 @@ import java.math.BigDecimal;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-
 public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigDecimal> {
 
-
-	public BigDecimalValueTypeFacetFactory() {
+    public BigDecimalValueTypeFacetFactory() {
         super(BigDecimalValueFacet.class);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
         if (type != BigDecimal.class) {
@@ -43,6 +40,5 @@ public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsPro
         addFacets(new BigDecimalValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return;
     }
-
 
 }

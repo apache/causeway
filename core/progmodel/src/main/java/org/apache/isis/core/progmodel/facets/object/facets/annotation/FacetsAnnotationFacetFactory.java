@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.facets.annotation;
 
 import org.apache.isis.applib.annotation.Facets;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
 
-
 public class FacetsAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public FacetsAnnotationFacetFactory() {
@@ -35,14 +33,14 @@ public class FacetsAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Facets annotation = getAnnotation(processClassContaxt.getCls(), Facets.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     /**
-     * Returns a {@link FacetsFacet} impl provided that at least one valid
-     * {@link FacetsFacet#facetFactories() factory} was specified.
+     * Returns a {@link FacetsFacet} impl provided that at least one valid {@link FacetsFacet#facetFactories() factory}
+     * was specified.
      */
     private FacetsFacet create(final Facets annotation, final FacetHolder holder) {
         if (annotation == null) {

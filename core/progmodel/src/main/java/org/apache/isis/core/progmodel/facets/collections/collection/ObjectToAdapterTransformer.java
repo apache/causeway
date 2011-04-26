@@ -17,32 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.collection;
 
 import org.apache.commons.collections.Transformer;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 
 /**
- * Uses the Commons Collection API to transform {@link Object}s into
- * {@link ObjectAdapter} adapters.
+ * Uses the Commons Collection API to transform {@link Object}s into {@link ObjectAdapter} adapters.
  * 
  */
 public final class ObjectToAdapterTransformer implements Transformer {
-	
-	private final AdapterMap adapterMap;
 
-	public ObjectToAdapterTransformer(final AdapterMap adapterManager) {
-		this.adapterMap = adapterManager;
-	}
-    
+    private final AdapterMap adapterMap;
+
+    public ObjectToAdapterTransformer(final AdapterMap adapterManager) {
+        this.adapterMap = adapterManager;
+    }
+
     @Override
-    public Object transform(Object object) {
+    public Object transform(final Object object) {
         return getAdapterMap().adapterFor(object);
     }
-    
+
     // //////////////////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
@@ -50,6 +47,5 @@ public final class ObjectToAdapterTransformer implements Transformer {
     public AdapterMap getAdapterMap() {
         return adapterMap;
     }
-
 
 }

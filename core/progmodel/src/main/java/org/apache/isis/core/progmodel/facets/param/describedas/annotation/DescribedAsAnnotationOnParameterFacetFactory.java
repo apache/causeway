@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.describedas.annotation;
 
 import java.lang.annotation.Annotation;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public class DescribedAsAnnotationOnParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public DescribedAsAnnotationOnParameterFacetFactory() {
@@ -38,14 +36,15 @@ public class DescribedAsAnnotationOnParameterFacetFactory extends AnnotationBase
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
 
         final int paramNum = processParameterContext.getParamNum();
         final Class<?> parameterType = processParameterContext.getMethod().getParameterTypes()[paramNum];
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[paramNum];
-        for (int j = 0; j < parameterAnnotations.length; j++) {
-            if (parameterAnnotations[j] instanceof DescribedAs) {
-                FacetUtil.addFacet(create((DescribedAs) parameterAnnotations[j], processParameterContext.getFacetHolder()));
+        final Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[paramNum];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof DescribedAs) {
+                FacetUtil.addFacet(create((DescribedAs) parameterAnnotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
@@ -53,7 +52,8 @@ public class DescribedAsAnnotationOnParameterFacetFactory extends AnnotationBase
         // otherwise, fall back to a description on the parameter's type, if available
         final DescribedAsFacet parameterTypeDescribedAsFacet = getDescribedAsFacet(parameterType);
         if (parameterTypeDescribedAsFacet != null) {
-            FacetUtil.addFacet(new DescribedAsFacetForParameterDerivedFromType(parameterTypeDescribedAsFacet, processParameterContext.getFacetHolder()));
+            FacetUtil.addFacet(new DescribedAsFacetForParameterDerivedFromType(parameterTypeDescribedAsFacet,
+                processParameterContext.getFacetHolder()));
             return;
         }
 

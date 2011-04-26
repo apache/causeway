@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.defaults.method;
 
 import java.lang.reflect.Method;
@@ -33,7 +32,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class PropertyDefaultFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DEFAULT_PREFIX };
@@ -45,34 +43,37 @@ public class PropertyDefaultFacetFactory extends MethodPrefixBasedFacetFactoryAb
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachPropertyDefaultFacetIfDefaultMethodIsFound(processMethodContext);
     }
 
-    private void attachPropertyDefaultFacetIfDefaultMethodIsFound(ProcessMethodContext processMethodContext) {
-        
+    private void attachPropertyDefaultFacetIfDefaultMethodIsFound(final ProcessMethodContext processMethodContext) {
+
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        
-        Class<?> cls = processMethodContext.getCls();
+
+        final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName, returnType, NO_PARAMETERS_TYPES);
+        final Method method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX
+                + capitalizedName, returnType, NO_PARAMETERS_TYPES);
         if (method == null) {
             return;
-        } 
+        }
         processMethodContext.removeMethod(method);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLookup(), getAdapterMap()));
+        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLookup(),
+            getAdapterMap()));
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Dependencies (injected)
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
+
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         this.adapterMap = adapterManager;
     }
 

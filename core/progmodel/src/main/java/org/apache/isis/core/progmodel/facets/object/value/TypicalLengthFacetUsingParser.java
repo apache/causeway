@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.Parser;
@@ -26,13 +25,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
-
 public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {
 
     private final Parser<?> parser;
-	private final DependencyInjector dependencyInjector;
-	
-    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    private final DependencyInjector dependencyInjector;
+
+    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder,
+        final DependencyInjector dependencyInjector) {
         super(TypicalLengthFacet.class, holder, false);
         this.parser = parser;
         this.dependencyInjector = dependencyInjector;
@@ -40,13 +39,13 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
 
     @Override
     protected String toStringValues() {
-    	getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectDependenciesInto(parser);
         return parser.toString();
     }
 
     @Override
     public int value() {
-    	getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectDependenciesInto(parser);
         return parser.typicalLength();
     }
 
@@ -55,11 +54,9 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
         return "typicalLength=" + value();
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
 
     /**
      * @return the dependencyInjector
@@ -69,4 +66,3 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
     }
 
 }
-

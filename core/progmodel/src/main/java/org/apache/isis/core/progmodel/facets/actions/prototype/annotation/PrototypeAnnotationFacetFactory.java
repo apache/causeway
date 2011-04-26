@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.prototype.annotation;
-
 
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 
-
 public class PrototypeAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public PrototypeAnnotationFacetFactory() {
@@ -36,7 +33,7 @@ public class PrototypeAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Prototype annotation = getAnnotation(processMethodContext.getMethod(), Prototype.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }

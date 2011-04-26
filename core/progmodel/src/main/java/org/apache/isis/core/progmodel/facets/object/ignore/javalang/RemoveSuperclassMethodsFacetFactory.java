@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
@@ -28,21 +27,20 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-
 /**
  * Removes all superclass methods of the class, but doesn't add any {@link Facet}s.
  */
 public class RemoveSuperclassMethodsFacetFactory extends FacetFactoryAbstract {
 
     @SuppressWarnings("unused")
-	private static final String JAVA_CLASS_PREFIX = "java.";
+    private static final String JAVA_CLASS_PREFIX = "java.";
 
     public RemoveSuperclassMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);
     }
 
@@ -57,12 +55,10 @@ public class RemoveSuperclassMethodsFacetFactory extends FacetFactoryAbstract {
         }
 
         final Method[] methods = type.getMethods();
-        for (int j = 0; j < methods.length; j++) {
-            final Method method = methods[j];
+        for (final Method method : methods) {
             methodRemover.removeMethod(method);
         }
 
     }
 
 }
-

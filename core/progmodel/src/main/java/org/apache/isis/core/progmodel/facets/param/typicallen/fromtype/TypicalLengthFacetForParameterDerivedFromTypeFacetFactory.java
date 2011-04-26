@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.typicallen.fromtype;
-
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -29,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public class TypicalLengthFacetForParameterDerivedFromTypeFacetFactory extends FacetFactoryAbstract {
 
     public TypicalLengthFacetForParameterDerivedFromTypeFacetFactory() {
@@ -37,8 +34,9 @@ public class TypicalLengthFacetForParameterDerivedFromTypeFacetFactory extends F
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
-        final Class<?> type = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
+    public void processParams(final ProcessParameterContext processParameterContext) {
+        final Class<?> type =
+            processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
         final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
         addFacetDerivedFromTypeIfPresent(facetHolder, type);
     }

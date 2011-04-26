@@ -40,10 +40,10 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
+    AdapterMapAware {
 
-
-    private static final String[] PREFIXES = {  };
+    private static final String[] PREFIXES = {};
 
     private AdapterMap adapterMap;
 
@@ -59,7 +59,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
         final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
@@ -93,8 +93,8 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsDoOpFacet(ActionDefaultsFacet.class)) {
-                throw new MetaModelException(cls
-                    + " uses both old and new default syntax for " + actionMethod.getName() + "(...) - must use one or other");
+                throw new MetaModelException(cls + " uses both old and new default syntax for "
+                    + actionMethod.getName() + "(...) - must use one or other");
             }
 
             // add facets directly to parameters, not to actions
@@ -103,13 +103,12 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
         }
     }
 
-
     // ///////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

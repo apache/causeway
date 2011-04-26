@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.describedas.annotation;
 
 import org.apache.isis.applib.annotation.DescribedAs;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 
-
 public class DescribedAsAnnotationOnTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public DescribedAsAnnotationOnTypeFacetFactory() {
@@ -35,11 +33,10 @@ public class DescribedAsAnnotationOnTypeFacetFactory extends AnnotationBasedFace
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final DescribedAs annotation = getAnnotation(processClassContaxt.getCls(), DescribedAs.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
-
 
     private DescribedAsFacet create(final DescribedAs annotation, final FacetHolder holder) {
         return annotation == null ? null : new DescribedAsFacetAnnotationOnType(annotation.value(), holder);

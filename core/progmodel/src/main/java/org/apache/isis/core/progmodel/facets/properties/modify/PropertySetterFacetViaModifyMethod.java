@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.modify;
 
 import java.lang.reflect.Method;
@@ -30,33 +29,34 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacetAbstract;
 
-
 public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstract implements ImperativeFacet {
 
     private final Method method;
 
-    public PropertySetterFacetViaModifyMethod(
-    		final Method method, 
-    		final FacetHolder holder) {
+    public PropertySetterFacetViaModifyMethod(final Method method, final FacetHolder holder) {
         super(holder);
         this.method = method;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	public boolean impliesObjectChanged() {
-		return true;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return true;
+    }
 
+    @Override
     public void setProperty(final ObjectAdapter adapter, final ObjectAdapter valueAdapter) {
         AdapterInvokeUtils.invoke(method, adapter, valueAdapter);
     }
@@ -67,4 +67,3 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
     }
 
 }
-

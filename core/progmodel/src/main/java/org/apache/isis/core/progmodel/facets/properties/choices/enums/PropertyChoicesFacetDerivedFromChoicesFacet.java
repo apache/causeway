@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.choices.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,24 +29,25 @@ import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesF
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetDerivedFromChoicesFacet(FacetHolder holder, SpecificationLookup specificationLookup) {
+    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder,
+        final SpecificationLookup specificationLookup) {
         super(holder, specificationLookup);
     }
 
     @Override
-    public Object[] getChoices(ObjectAdapter adapter, SpecificationLookup specificationLookup) {
-        FacetHolder facetHolder = getFacetHolder();
-        FacetedMethod noap = (FacetedMethod) facetHolder;
-        ObjectSpecification noSpec = getSpecification(noap.getType());
-        ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
-        if (choicesFacet == null)
+    public Object[] getChoices(final ObjectAdapter adapter, final SpecificationLookup specificationLookup) {
+        final FacetHolder facetHolder = getFacetHolder();
+        final FacetedMethod noap = (FacetedMethod) facetHolder;
+        final ObjectSpecification noSpec = getSpecification(noap.getType());
+        final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
+        if (choicesFacet == null) {
             return new Object[0];
+        }
         return choicesFacet.getChoices(adapter);
     }
-    
-    public ObjectSpecification getSpecification(Class<?> type) {
+
+    public ObjectSpecification getSpecification(final Class<?> type) {
         return type == null ? null : getSpecificationLoader().loadSpecification(type);
     }
-
 
 }

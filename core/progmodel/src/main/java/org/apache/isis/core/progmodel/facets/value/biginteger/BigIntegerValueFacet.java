@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.biginteger;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-
 
 public interface BigIntegerValueFacet extends Facet {
 

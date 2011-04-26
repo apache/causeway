@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacetAbstract;
-
 
 public class ExecutedFacetAtDefault extends ExecutedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class ExecutedFacetAtDefault extends ExecutedFacetAbstract {
     }
 
 }
-

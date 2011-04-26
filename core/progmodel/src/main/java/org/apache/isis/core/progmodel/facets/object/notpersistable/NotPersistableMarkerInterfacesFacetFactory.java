@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-
 
 public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {
 
@@ -41,8 +39,8 @@ public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbst
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
-        InitiatedBy initiatedBy = InitiatedBy.forCorrespondingMarkerSubType(processClassContaxt.getCls());
+    public void process(final ProcessClassContext processClassContaxt) {
+        final InitiatedBy initiatedBy = InitiatedBy.forCorrespondingMarkerSubType(processClassContaxt.getCls());
         FacetUtil.addFacet(create(initiatedBy, processClassContaxt.getFacetHolder()));
     }
 

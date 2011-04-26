@@ -17,16 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.timestamp;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
-
-import com.google.inject.internal.Maps;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -37,6 +32,9 @@ import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryExcept
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<TimeStamp> {
 
@@ -44,7 +42,7 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
         return PropertyDefaultFacet.class.isAssignableFrom(TimeStampValueSemanticsProvider.class);
     }
 
-    private static Map<String,DateFormat> formats = Maps.newHashMap();
+    private static Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -58,10 +56,8 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
         this(null, null, null);
     }
 
-    public TimeStampValueSemanticsProvider(
-            final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public TimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, TimeStamp.class, configuration, context);
     }
 
@@ -90,4 +86,3 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
     }
 
 }
-

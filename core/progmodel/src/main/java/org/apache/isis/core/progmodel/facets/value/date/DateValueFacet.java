@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.date;
 
 import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-
 
 public interface DateValueFacet extends Facet {
     public static final int DATE = 0x01;

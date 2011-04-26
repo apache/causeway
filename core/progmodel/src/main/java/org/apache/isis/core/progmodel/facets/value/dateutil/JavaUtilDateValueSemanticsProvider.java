@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.dateutil;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -35,10 +32,11 @@ import org.apache.isis.core.progmodel.facets.value.DateAndTimeValueSemanticsProv
 import org.apache.isis.core.progmodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time component.
- *
+ * 
  * @see JavaSqlDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */
@@ -55,10 +53,8 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
         this(null, null, null);
     }
 
-    public JavaUtilDateValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
     }
 
@@ -68,13 +64,8 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
     }
 
     @Override
-    protected Date add(
-            final Date original,
-            final int years,
-            final int months,
-            final int days,
-            final int hours,
-            final int minutes) {
+    protected Date add(final Date original, final int years, final int months, final int days, final int hours,
+        final int minutes) {
         final Date date = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(date);

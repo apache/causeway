@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.chars;
 
 import java.text.DecimalFormat;
@@ -31,8 +30,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryExcept
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character> implements CharValueFacet {
+public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character>
+    implements CharValueFacet {
 
     private static Class<? extends Facet> type() {
         return CharValueFacet.class;
@@ -43,12 +42,10 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     private static final boolean EQUAL_BY_CONTENT = true;
     private static final int TYPICAL_LENGTH = 1;
 
-    public CharValueSemanticsProviderAbstract(
-    		final FacetHolder holder, 
-    		final Class<Character> adaptedClass, 
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public CharValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Character> adaptedClass,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -65,7 +62,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return value == null ? "" : value.toString();
     }
 
@@ -101,7 +98,6 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     public ObjectAdapter createValue(final Character value) {
         return getAdapterMap().adapterFor(value);
     }
-
 
     // /////// toString ///////
 

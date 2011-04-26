@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.defaults.annotation;
 
 import org.apache.isis.applib.annotation.Defaulted;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultsProviderUtil;
-
 
 public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
 
@@ -45,21 +43,14 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
         return annotation.defaultsProviderClass();
     }
 
-    public DefaultedFacetAnnotation(
-            final Class<?> annotatedClass,
-            final IsisConfiguration configuration,
-            final FacetHolder holder, 
-            final DependencyInjector dependencyInjector) {
+    public DefaultedFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration,
+        final FacetHolder holder, final DependencyInjector dependencyInjector) {
         this(providerName(annotatedClass, configuration), providerClass(annotatedClass), holder, dependencyInjector);
     }
 
-    private DefaultedFacetAnnotation(
-            final String candidateProviderName,
-            final Class<?> candidateProviderClass,
-            final FacetHolder holder, 
-            final DependencyInjector dependencyInjector) {
+    private DefaultedFacetAnnotation(final String candidateProviderName, final Class<?> candidateProviderClass,
+        final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(candidateProviderName, candidateProviderClass, holder, dependencyInjector);
     }
 
 }
-

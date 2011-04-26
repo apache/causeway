@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
@@ -26,7 +25,6 @@ import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-
 
 public abstract class DefaultedFacetAbstract extends FacetAbstract implements DefaultedFacet {
 
@@ -37,24 +35,23 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
 
     private final DependencyInjector dependencyInjector;
 
-    public DefaultedFacetAbstract(
-            final String candidateEncoderDecoderName,
-            final Class<?> candidateEncoderDecoderClass,
-            final FacetHolder holder, 
-            final DependencyInjector dependencyInjector) {
+    public DefaultedFacetAbstract(final String candidateEncoderDecoderName,
+        final Class<?> candidateEncoderDecoderClass, final FacetHolder holder,
+        final DependencyInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
 
-        this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass,
-                candidateEncoderDecoderName);
+        this.defaultsProviderClass =
+            DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         this.dependencyInjector = dependencyInjector;
         if (isValid()) {
-            DefaultsProvider defaultsProvider = (DefaultsProvider) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
-            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
+            final DefaultsProvider defaultsProvider =
+                (DefaultsProvider) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
+            this.defaultedFacetUsingDefaultsProvider =
+                new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
         } else {
             this.defaultedFacetUsingDefaultsProvider = null;
         }
     }
-
 
     /**
      * Discover whether either of the candidate defaults provider name or class is valid.
@@ -80,13 +77,12 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
         return defaultsProviderClass.getName();
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
     private DependencyInjector getDependencyInjector() {
         return dependencyInjector;
     }
 
 }
-

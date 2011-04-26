@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Help API, utilizing the {@link org.apache.isis.core.metamodel.facetdecorator.FacetDecorator} mechanism..
  * 

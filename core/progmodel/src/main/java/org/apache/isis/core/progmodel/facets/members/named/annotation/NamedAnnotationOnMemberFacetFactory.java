@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.named.annotation;
 
 import org.apache.isis.applib.annotation.Named;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 
-
 public class NamedAnnotationOnMemberFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public NamedAnnotationOnMemberFacetFactory() {
@@ -35,7 +33,7 @@ public class NamedAnnotationOnMemberFacetFactory extends AnnotationBasedFacetFac
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Named annotation = getAnnotation(processMethodContext.getMethod(), Named.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }

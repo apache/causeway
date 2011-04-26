@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -27,9 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-
 public abstract class CollectionValidateRemoveFromFacetAbstract extends FacetAbstract implements
-        CollectionValidateRemoveFromFacet {
+    CollectionValidateRemoveFromFacet {
 
     public static Class<? extends Facet> type() {
         return CollectionValidateRemoveFromFacet.class;
@@ -39,6 +37,7 @@ public abstract class CollectionValidateRemoveFromFacetAbstract extends FacetAbs
         super(type(), holder, false);
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof CollectionRemoveFromContext)) {
             return null;
@@ -47,4 +46,3 @@ public abstract class CollectionValidateRemoveFromFacetAbstract extends FacetAbs
         return invalidReason(context.getTarget(), collectionRemoveFromContext.getProposed());
     }
 }
-

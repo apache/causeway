@@ -41,7 +41,8 @@ import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFac
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
+    AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
 
@@ -59,7 +60,7 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
         final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
@@ -77,15 +78,15 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
-        Method namesMethod =
+        final Class<?> cls = processMethodContext.getCls();
+        final Method namesMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName,
                 String[].class, new Class[0]);
         if (namesMethod == null) {
             return;
         }
         try {
-            String[] names = invokeNamesMethod(namesMethod, parameters.size());
+            final String[] names = invokeNamesMethod(namesMethod, parameters.size());
             for (int i = 0; i < names.length; i++) {
                 // add facets directly to parameters, not to actions
                 FacetUtil.addFacet(new NamedFacetViaMethod(names[i], namesMethod, parameters.get(i)));
@@ -95,27 +96,26 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
         }
     }
 
-    private static String[] invokeNamesMethod(Method namesMethod, final int numElementsRequired) {
+    private static String[] invokeNamesMethod(final Method namesMethod, final int numElementsRequired) {
         String[] names = null;
         try {
             names = (String[]) InvokeUtils.invokeStatic(namesMethod, new Object[0]);
-        } catch(ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             // ignore
         }
-        if(names==null || names.length != numElementsRequired) {
-            throw new MetaModelException(namesMethod + " must return an String[] array of same size as number of parameters of action");
+        if (names == null || names.length != numElementsRequired) {
+            throw new MetaModelException(namesMethod
+                + " must return an String[] array of same size as number of parameters of action");
         }
         return names;
     }
-
-
 
     // ///////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

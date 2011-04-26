@@ -41,10 +41,10 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
+    AdapterMapAware {
 
-
-    private static final String[] PREFIXES = {  };
+    private static final String[] PREFIXES = {};
 
     private AdapterMap adapterMap;
 
@@ -60,7 +60,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
         final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
@@ -80,7 +80,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
         final Class<?>[] params = actionMethod.getParameterTypes();
 
         for (int i = 0; i < params.length; i++) {
-            
+
             final Class<?> arrayOfParamType = (Array.newInstance(params[i], 0)).getClass();
 
             Method choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, arrayOfParamType);
@@ -94,9 +94,8 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsDoOpFacet(ActionChoicesFacet.class)) {
-                Class<?> cls = processMethodContext.getCls();
-                throw new MetaModelException(cls
-                    + " uses both old and new choices syntax - must use one or other");
+                final Class<?> cls = processMethodContext.getCls();
+                throw new MetaModelException(cls + " uses both old and new choices syntax - must use one or other");
             }
 
             // add facets directly to parameters, not to actions
@@ -106,23 +105,22 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
         }
     }
 
-    private Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, int i,
+    private Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int i,
         final Class<?> arrayOfParamType) {
-        
-        Class<?> cls = processMethodContext.getCls();
+
+        final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
-        String name = MethodPrefixConstants.CHOICES_PREFIX + i + capitalizedName;
+        final String name = MethodPrefixConstants.CHOICES_PREFIX + i + capitalizedName;
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, arrayOfParamType, new Class[0]);
     }
-
 
     // ///////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

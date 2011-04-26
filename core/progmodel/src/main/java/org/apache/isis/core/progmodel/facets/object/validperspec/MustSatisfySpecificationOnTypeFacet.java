@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validperspec;
 
 import java.util.List;
@@ -46,15 +45,16 @@ public class MustSatisfySpecificationOnTypeFacet extends FacetAbstract implement
         this.specifications = specifications;
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> validityContext) {
         if (!(validityContext instanceof ProposedHolder)) {
             return null;
         }
-        ProposedHolder proposedHolder = (ProposedHolder) validityContext;
+        final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
         final ObjectAdapter targetNO = proposedHolder.getProposed();
         final Object targetObject = targetNO.getObject();
-        ReasonBuffer buf = new ReasonBuffer();
-        for(Specification specification: specifications) {
+        final ReasonBuffer buf = new ReasonBuffer();
+        for (final Specification specification : specifications) {
             buf.append(specification.satisfies(targetObject));
         }
         return buf.getReason();

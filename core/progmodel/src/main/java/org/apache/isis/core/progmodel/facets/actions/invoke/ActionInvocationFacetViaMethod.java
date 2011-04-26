@@ -24,8 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
@@ -36,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProvider
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
+import org.apache.log4j.Logger;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
 
@@ -47,7 +46,6 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification returnType;
 
     private final AdapterMap adapterMap;
-    
 
     public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType,
         final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterManager) {
@@ -91,7 +89,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
             final Object object = unwrap(inObject);
             final Object result = method.invoke(object, executionParameters);
-            if(LOG.isDebugEnabled()) {
+            if (LOG.isDebugEnabled()) {
                 LOG.debug(" action result " + result);
             }
             if (result == null) {
@@ -100,7 +98,8 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
             final ObjectAdapter resultAdapter = getAdapterMap().adapterFor(result);
             final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet
+                .createFrom(typeOfFacet));
             return resultAdapter;
 
         } catch (final IllegalArgumentException e) {

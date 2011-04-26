@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.hide;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class HideForContextFacetNone extends HideForContextFacetAbstract {
 
@@ -33,6 +31,7 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
     /**
      * Always returns <tt>null</tt>.
      */
+    @Override
     public String hiddenReason(final ObjectAdapter object) {
         return null;
     }
@@ -43,4 +42,3 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
     }
 
 }
-

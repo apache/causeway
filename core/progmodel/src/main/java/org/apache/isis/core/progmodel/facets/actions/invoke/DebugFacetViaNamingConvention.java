@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.invoke;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.debug.DebugFacetAbstract;
-
 
 public class DebugFacetViaNamingConvention extends DebugFacetAbstract {
 
@@ -31,4 +29,3 @@ public class DebugFacetViaNamingConvention extends DebugFacetAbstract {
     }
 
 }
-

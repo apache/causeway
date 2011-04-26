@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-
 
 public abstract class ActionValidationFacetAbstract extends FacetAbstract implements ActionValidationFacet {
 
@@ -38,6 +36,7 @@ public abstract class ActionValidationFacetAbstract extends FacetAbstract implem
         super(type(), holder, false);
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof ActionInvocationContext)) {
             return null;

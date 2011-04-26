@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;

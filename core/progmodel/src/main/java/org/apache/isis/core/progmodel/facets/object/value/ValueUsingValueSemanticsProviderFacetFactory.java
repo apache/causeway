@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -33,9 +32,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
 
-
-public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements 
-        IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware  {
+public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements
+    IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
 
     private IsisConfiguration configuration;
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -51,7 +49,8 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
     }
 
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
-        ValueFacetUsingSemanticsProvider facet = new ValueFacetUsingSemanticsProvider(adapter, adapter, getContext());
+        final ValueFacetUsingSemanticsProvider facet =
+            new ValueFacetUsingSemanticsProvider(adapter, adapter, getContext());
         FacetUtil.addFacet(facet);
     }
 
@@ -64,29 +63,31 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
     }
 
     public ValueSemanticsProviderContext getContext() {
-        if(context == null) {
-            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(), adapterManager, dependencyInjector);
+        if (context == null) {
+            context =
+                new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(),
+                    adapterManager, dependencyInjector);
         }
         return context;
     }
 
     @Override
-    public void setIsisConfiguration(IsisConfiguration configuration) {
+    public void setIsisConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
     @Override
-    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         this.adapterManager = adapterManager;
     }
 
     @Override
-    public void setDependencyInjector(DependencyInjector dependencyInjector) {
+    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
     }
 

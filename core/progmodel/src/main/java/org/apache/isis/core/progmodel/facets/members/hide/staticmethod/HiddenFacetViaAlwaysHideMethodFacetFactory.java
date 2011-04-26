@@ -49,7 +49,7 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         // alwaysHideXxx()
         attachHiddenFacetIfAlwaysHideMethodIsFound(processMethodContext);
 
@@ -57,20 +57,20 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
 
     public static void attachHiddenFacetIfAlwaysHideMethodIsFound(final ProcessMethodContext processMethodContext) {
 
-        Class<?> type = processMethodContext.getCls();
+        final Class<?> type = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
 
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Method alwaysHideMethod =
-            MethodFinderUtils.findMethod(type, MethodScope.CLASS,
-                MethodPrefixConstants.ALWAYS_HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
+            MethodFinderUtils.findMethod(type, MethodScope.CLASS, MethodPrefixConstants.ALWAYS_HIDE_PREFIX
+                + capitalizedName, boolean.class, new Class[] {});
         if (alwaysHideMethod == null) {
             return;
         }
 
         processMethodContext.removeMethod(alwaysHideMethod);
-        Boolean alwaysHideMethodReturnValue = invokeAlwaysHideMethod(alwaysHideMethod);
+        final Boolean alwaysHideMethodReturnValue = invokeAlwaysHideMethod(alwaysHideMethod);
         if (!alwaysHideMethodReturnValue.booleanValue()) {
             return;
         }
@@ -83,14 +83,13 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
         Boolean alwaysHideMethodReturnValue = null;
         try {
             alwaysHideMethodReturnValue = (Boolean) InvokeUtils.invokeStatic(alwaysHideMethod);
-        } catch (ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             // ignore
         }
-        if(alwaysHideMethodReturnValue == null) {
+        if (alwaysHideMethodReturnValue == null) {
             throw new MetaModelException("method " + alwaysHideMethod + "must return a boolean");
         }
         return alwaysHideMethodReturnValue;
     }
-
 
 }

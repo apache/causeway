@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import java.util.IllegalFormatException;
@@ -42,25 +41,20 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 /**
  * TODO: need to fix genericity of using Parser<?>, for now suppressing warnings.
  */
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
     @SuppressWarnings("unchecked")
-	private final Parser parser;
+    private final Parser parser;
     private final DependencyInjector dependencyInjector;
     private final AdapterMap adapterMap;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
-    public ParseableFacetUsingParser(
-    	    @SuppressWarnings("unchecked")
-    		final Parser parser, 
-    		final FacetHolder holder, 
-    		final AuthenticationSessionProvider authenticationSessionProvider,
-    		final DependencyInjector dependencyInjector,
-    		final AdapterMap adapterManager) {
+    public ParseableFacetUsingParser(@SuppressWarnings("unchecked") final Parser parser, final FacetHolder holder,
+        final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector,
+        final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
         this.parser = parser;
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -76,68 +70,69 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
     @Override
     public ObjectAdapter parseTextEntry(final ObjectAdapter contextAdapter, final String entry) {
-		if (entry == null) {
+        if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
         }
-		
-		// check string is valid
-		// (eg pick up any @RegEx on value type)
-		if (getFacetHolder().containsFacet(ValueFacet.class)) {
-			ObjectAdapter entryAdapter = getAdapterMap().adapterFor(entry);
-			ParseValueContext parseValueContext = new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
-			validate(parseValueContext);
-		}
 
-        Object context = AdapterUtils.unwrap(contextAdapter);
+        // check string is valid
+        // (eg pick up any @RegEx on value type)
+        if (getFacetHolder().containsFacet(ValueFacet.class)) {
+            final ObjectAdapter entryAdapter = getAdapterMap().adapterFor(entry);
+            final ParseValueContext parseValueContext =
+                new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(),
+                    InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
+            validate(parseValueContext);
+        }
+
+        final Object context = AdapterUtils.unwrap(contextAdapter);
 
         getDependencyInjector().injectDependenciesInto(parser);
 
         try {
-    		final Object parsed = parser.parseTextEntry(context, entry);
+            final Object parsed = parser.parseTextEntry(context, entry);
             if (parsed == null) {
-    			return null;
-    		}
-            
+                return null;
+            }
+
             // check resultant object is also valid
             // (eg pick up any validate() methods on it)
-            ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
-            ObjectSpecification specification = adapter.getSpecification();
-            ObjectValidityContext validateContext = 
-                specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
+            final ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
+            final ObjectSpecification specification = adapter.getSpecification();
+            final ObjectValidityContext validateContext =
+                specification.createValidityInteractionContext(getAuthenticationSessionProvider()
+                    .getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
             validate(validateContext);
-            
+
             return adapter;
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new TextEntryParseException(e.getMessage(), e);
-        } catch (IllegalFormatException e) {
+        } catch (final IllegalFormatException e) {
             throw new TextEntryParseException(e.getMessage(), e);
-        } catch (ParsingException e) {
+        } catch (final ParsingException e) {
             throw new TextEntryParseException(e.getMessage(), e);
         }
-	}
+    }
 
-	private void validate(ValidityContext<?> validityContext) {
-		InteractionResultSet resultSet = new InteractionResultSet();
-		InteractionUtils.isValidResultSet(getFacetHolder(), validityContext, resultSet);
-		if (resultSet.isVetoed()) {
-			throw new IllegalArgumentException(resultSet.getInteractionResult().getReason());
-		}
-	}
+    private void validate(final ValidityContext<?> validityContext) {
+        final InteractionResultSet resultSet = new InteractionResultSet();
+        InteractionUtils.isValidResultSet(getFacetHolder(), validityContext, resultSet);
+        if (resultSet.isVetoed()) {
+            throw new IllegalArgumentException(resultSet.getInteractionResult().getReason());
+        }
+    }
 
     @Override
     @SuppressWarnings("unchecked")
-	public String parseableTitle(final ObjectAdapter contextAdapter) {
-        Object pojo = AdapterUtils.unwrap(contextAdapter);
-        
-        getDependencyInjector().injectDependenciesInto(parser);
-		return parser.parseableTitleOf(pojo);
-	}
+    public String parseableTitle(final ObjectAdapter contextAdapter) {
+        final Object pojo = AdapterUtils.unwrap(contextAdapter);
 
-    
-    
-    ///////////////////////////////////////////////////////////
+        getDependencyInjector().injectDependenciesInto(parser);
+        return parser.parseableTitleOf(pojo);
+    }
+
+    // /////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     /**
      * @return the dependencyInjector
@@ -152,7 +147,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider;
     }
-    
+
     /**
      * @return the adapterManager
      */
@@ -160,4 +155,3 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         return adapterMap;
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -26,13 +25,13 @@ import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-
 public class NotPersistableFacetImpl extends NotPersistableFacetAbstract {
 
     public NotPersistableFacetImpl(final InitiatedBy value, final FacetHolder holder) {
         super(value, holder);
     }
 
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         final InitiatedBy initiatedBy = value();
         if (initiatedBy == InitiatedBy.USER_OR_PROGRAM) {
@@ -50,4 +49,3 @@ public class NotPersistableFacetImpl extends NotPersistableFacetAbstract {
     }
 
 }
-

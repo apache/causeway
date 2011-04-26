@@ -33,7 +33,8 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
+    AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
 
@@ -51,7 +52,7 @@ public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBased
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachDisabledFacetIfDisabledMethodIsFound(processMethodContext);
     }
 
@@ -60,8 +61,8 @@ public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBased
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
-        Class<?> cls = processMethodContext.getCls();
-        Method disableMethod =
+        final Class<?> cls = processMethodContext.getCls();
+        final Method disableMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX
                 + capitalizedName, String.class, new Class[] {});
         if (disableMethod == null) {
@@ -69,19 +70,17 @@ public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBased
         }
 
         processMethodContext.removeMethod(disableMethod);
-        
+
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new DisableForContextFacetViaMethod(disableMethod, facetHolder));
     }
-
-
 
     // ///////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

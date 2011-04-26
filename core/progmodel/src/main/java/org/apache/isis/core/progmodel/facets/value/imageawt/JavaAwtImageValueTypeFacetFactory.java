@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.imageawt;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.image.ImageValueFacet;
-
 
 public class JavaAwtImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.awt.Image> {
 
@@ -32,7 +30,7 @@ public class JavaAwtImageValueTypeFacetFactory extends ValueUsingValueSemanticsP
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

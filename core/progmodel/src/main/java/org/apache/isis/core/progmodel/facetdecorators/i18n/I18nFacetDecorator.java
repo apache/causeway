@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.i18n;
 
 import org.apache.isis.applib.Identifier;
@@ -32,7 +31,6 @@ import org.apache.isis.core.progmodel.facetdecorators.i18n.internal.DescribedAsF
 import org.apache.isis.core.progmodel.facetdecorators.i18n.internal.HelpFacetWrapI18n;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.internal.NamedFacetWrapI18n;
 
-
 public class I18nFacetDecorator extends FacetDecoratorAbstract {
     private final I18nManager i18nManager;
 
@@ -41,12 +39,12 @@ public class I18nFacetDecorator extends FacetDecoratorAbstract {
     }
 
     @Override
-    public Facet decorate(final Facet facet, FacetHolder facetHolder) {
-    	if (!(facetHolder instanceof IdentifiedHolder)) {
+    public Facet decorate(final Facet facet, final FacetHolder facetHolder) {
+        if (!(facetHolder instanceof IdentifiedHolder)) {
             return null;
         }
-        
-        IdentifiedHolder identifiedHolder = (IdentifiedHolder) facetHolder;
+
+        final IdentifiedHolder identifiedHolder = (IdentifiedHolder) facetHolder;
 
         final Class<?> facetType = facet.facetType();
         if (facetType == NamedFacet.class) {
@@ -61,47 +59,44 @@ public class I18nFacetDecorator extends FacetDecoratorAbstract {
         return null;
     }
 
-	private Facet decorateWithNamedFacet(final Facet facet,
-			IdentifiedHolder identifiedHolder) {
+    private Facet decorateWithNamedFacet(final Facet facet, final IdentifiedHolder identifiedHolder) {
 
         final Identifier identifier = identifiedHolder.getIdentifier();
-		final String i18nName = i18nManager.getName(identifier);
-		if (i18nName == null) {
-		    return null;
-		}
-		NamedFacetWrapI18n decoratingFacet = new NamedFacetWrapI18n(i18nName, facet.getFacetHolder());
-		identifiedHolder.addFacet(decoratingFacet);
-		return decoratingFacet;
-	}
+        final String i18nName = i18nManager.getName(identifier);
+        if (i18nName == null) {
+            return null;
+        }
+        final NamedFacetWrapI18n decoratingFacet = new NamedFacetWrapI18n(i18nName, facet.getFacetHolder());
+        identifiedHolder.addFacet(decoratingFacet);
+        return decoratingFacet;
+    }
 
-	private Facet decorateWithDescribedAsFacet(final Facet facet,
-			IdentifiedHolder identifiedHolder) {
+    private Facet decorateWithDescribedAsFacet(final Facet facet, final IdentifiedHolder identifiedHolder) {
         final Identifier identifier = identifiedHolder.getIdentifier();
-		final String i18nDescription = i18nManager.getDescription(identifier);
-		if (i18nDescription == null) {
-		    return null;
-		}
-		DescribedAsFacetWrapI18n decoratingFacet = new DescribedAsFacetWrapI18n(i18nDescription, facet.getFacetHolder());
-		identifiedHolder.addFacet(decoratingFacet);
-		return decoratingFacet;
-	}
+        final String i18nDescription = i18nManager.getDescription(identifier);
+        if (i18nDescription == null) {
+            return null;
+        }
+        final DescribedAsFacetWrapI18n decoratingFacet =
+            new DescribedAsFacetWrapI18n(i18nDescription, facet.getFacetHolder());
+        identifiedHolder.addFacet(decoratingFacet);
+        return decoratingFacet;
+    }
 
-	private Facet decorateWithHelpFacet(final Facet facet,
-			IdentifiedHolder identifiedHolder) {
+    private Facet decorateWithHelpFacet(final Facet facet, final IdentifiedHolder identifiedHolder) {
         final Identifier identifier = identifiedHolder.getIdentifier();
-		final String i18nHelp = i18nManager.getHelp(identifier);
-		if (i18nHelp == null) {
-		    return null;
-		}
-		HelpFacetWrapI18n decoratingFacet = new HelpFacetWrapI18n(i18nHelp, facet.getFacetHolder());
-		identifiedHolder.addFacet(decoratingFacet);
-		return decoratingFacet;
-	}
+        final String i18nHelp = i18nManager.getHelp(identifier);
+        if (i18nHelp == null) {
+            return null;
+        }
+        final HelpFacetWrapI18n decoratingFacet = new HelpFacetWrapI18n(i18nHelp, facet.getFacetHolder());
+        identifiedHolder.addFacet(decoratingFacet);
+        return decoratingFacet;
+    }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return new Class[] { NamedFacet.class, DescribedAsFacet.class, HelpFacet.class };
     }
 }
-

@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.password;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-
-public class PasswordValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Password> {
+public class PasswordValueTypeFacetFactory extends
+    ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Password> {
 
     public PasswordValueTypeFacetFactory() {
         super(PasswordValueFacet.class);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

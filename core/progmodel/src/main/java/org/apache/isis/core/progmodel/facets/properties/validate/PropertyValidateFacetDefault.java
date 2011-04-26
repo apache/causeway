@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -26,12 +25,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-
 /**
  * Non checking property validation facet that provides default behaviour for all properties.
  */
 public class PropertyValidateFacetDefault extends FacetAbstract implements PropertyValidateFacet {
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
         return null;
     }
@@ -40,9 +39,9 @@ public class PropertyValidateFacetDefault extends FacetAbstract implements Prope
         super(PropertyValidateFacet.class, holder, false);
     }
 
+    @Override
     public String invalidReason(final ObjectAdapter target, final ObjectAdapter proposedValue) {
         return null;
     }
 
 }
-

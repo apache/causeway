@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
 
@@ -33,6 +31,7 @@ public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
     /**
      * Provides a default of <tt>null</tt>.
      */
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return null;
     }
@@ -43,4 +42,3 @@ public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
     }
 
 }
-

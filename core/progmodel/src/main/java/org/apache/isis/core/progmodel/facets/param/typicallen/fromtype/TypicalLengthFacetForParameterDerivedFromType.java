@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.typicallen.fromtype;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -25,16 +24,17 @@ import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacetAbstract;
 
-
 public class TypicalLengthFacetForParameterDerivedFromType extends TypicalLengthFacetAbstract {
 
     private final TypicalLengthFacet typicalLengthFacet;
 
-	public TypicalLengthFacetForParameterDerivedFromType(final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
+    public TypicalLengthFacetForParameterDerivedFromType(final TypicalLengthFacet typicalLengthFacet,
+        final FacetHolder holder) {
         super(holder, true);
         this.typicalLengthFacet = typicalLengthFacet;
     }
 
+    @Override
     public int value() {
         final MultiLineFacet facet = getFacetHolder().getFacet(MultiLineFacet.class);
         return facet.numberOfLines() * typicalLengthFacet.value();

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.named.staticmethod;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
-
 
 public class NamedFacetViaSingularNameStaticMethod extends NamedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class NamedFacetViaSingularNameStaticMethod extends NamedFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.choices.method;
 
 import java.lang.reflect.Method;
@@ -33,7 +32,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CHOICES_PREFIX };
@@ -45,35 +43,37 @@ public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAb
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachPropertyChoicesFacetIfChoicesMethodIsFound(processMethodContext);
     }
 
-    private void attachPropertyChoicesFacetIfChoicesMethodIsFound(ProcessMethodContext processMethodContext) {
-        
+    private void attachPropertyChoicesFacetIfChoicesMethodIsFound(final ProcessMethodContext processMethodContext) {
+
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        
-        Class<?> cls = processMethodContext.getCls();
+
+        final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method choicesMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX + capitalizedName, null, NO_PARAMETERS_TYPES);
+        final Method choicesMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX
+                + capitalizedName, null, NO_PARAMETERS_TYPES);
         if (choicesMethod == null) {
             return;
-        } 
+        }
         processMethodContext.removeMethod(choicesMethod);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLookup(), getAdapterMap()));
+        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property,
+            getSpecificationLookup(), getAdapterMap()));
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Dependencies (injected)
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
+
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         this.adapterMap = adapterManager;
     }
 

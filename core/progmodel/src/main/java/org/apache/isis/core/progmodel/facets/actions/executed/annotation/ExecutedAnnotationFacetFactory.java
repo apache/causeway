@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.executed.annotation;
-
 
 import org.apache.isis.applib.annotation.Executed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,13 +27,11 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
-
 /**
  * Creates an {@link ExecutedFacet} based on the presence of an {@link Executed} annotation.
  * 
  * <p>
- * {@link ExecutedFacet} can also be installed via a naming convention, see
- * {@link ActionInvocationFacetFactory}.
+ * {@link ExecutedFacet} can also be installed via a naming convention, see {@link ActionInvocationFacetFactory}.
  */
 public class ExecutedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -44,7 +40,7 @@ public class ExecutedAnnotationFacetFactory extends AnnotationBasedFacetFactoryA
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Executed annotation = getAnnotation(processMethodContext.getMethod(), Executed.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }

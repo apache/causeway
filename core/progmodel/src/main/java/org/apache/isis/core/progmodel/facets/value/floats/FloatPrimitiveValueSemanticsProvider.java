@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.floats;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -28,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsProviderAbstract implements PropertyDefaultFacet {
+public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsProviderAbstract implements
+    PropertyDefaultFacet {
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
@@ -38,10 +37,8 @@ public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsPro
         this(null, null, null);
     }
 
-    public FloatPrimitiveValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    public FloatPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, float.class, configuration, context);
     }
 
@@ -54,5 +51,4 @@ public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsPro
         return createAdapter(float.class, new Float(0.0f));
     }
 
-    
 }

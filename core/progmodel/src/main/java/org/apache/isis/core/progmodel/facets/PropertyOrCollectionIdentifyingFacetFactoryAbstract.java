@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.util.List;
@@ -28,15 +27,13 @@ import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFace
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-
-public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extends MethodPrefixBasedFacetFactoryAbstract implements
-        PropertyOrCollectionIdentifyingFacetFactory, CollectionTypeRegistryAware {
+public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extends MethodPrefixBasedFacetFactoryAbstract
+    implements PropertyOrCollectionIdentifyingFacetFactory, CollectionTypeRegistryAware {
 
     private CollectionTypeRegistry collectionTypeRegistry;
 
-    public PropertyOrCollectionIdentifyingFacetFactoryAbstract(
-            final List<FeatureType> featureTypes,
-            final String... prefixes) {
+    public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes,
+        final String... prefixes) {
         super(featureTypes, prefixes);
     }
 
@@ -53,8 +50,8 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
     }
 
     /**
-     * Injected so can propogate to any {@link #registerFactory(FacetFactory) registered} {@link FacetFactory}
-     * s that are also {@link CollectionTypeRegistryAware}.
+     * Injected so can propogate to any {@link #registerFactory(FacetFactory) registered} {@link FacetFactory} s that
+     * are also {@link CollectionTypeRegistryAware}.
      */
     @Override
     public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
@@ -62,4 +59,3 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
     }
 
 }
-

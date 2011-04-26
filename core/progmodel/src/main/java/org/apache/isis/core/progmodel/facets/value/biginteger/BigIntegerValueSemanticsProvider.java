@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.biginteger;
 
 import java.math.BigInteger;
@@ -34,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigInteger> implements BigIntegerValueFacet {
+public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigInteger> implements
+    BigIntegerValueFacet {
 
     private static final int TYPICAL_LENGTH = 19;
 
@@ -56,12 +55,11 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
         this(null, null, null);
     }
 
-    public BigIntegerValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    public BigIntegerValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
 
-        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
+            configuration, context);
         format = determineNumberFormat("value.format.int");
     }
 
@@ -79,7 +77,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object object, Localization localization) {
+    public String titleString(final Object object, final Localization localization) {
         return titleString(format, object);
     }
 

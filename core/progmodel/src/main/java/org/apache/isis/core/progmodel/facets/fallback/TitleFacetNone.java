@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.applib.adapters.Localization;
@@ -25,14 +24,14 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
-
 public class TitleFacetNone extends TitleFacetAbstract {
 
     public TitleFacetNone(final FacetHolder holder) {
         super(holder);
     }
 
-    public String title(final ObjectAdapter object, Localization localization) {
+    @Override
+    public String title(final ObjectAdapter object, final Localization localization) {
         return null;
     }
 
@@ -42,4 +41,3 @@ public class TitleFacetNone extends TitleFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.regex;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-
 
 public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract implements RegExFacet {
 
@@ -39,27 +37,32 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
     private final String format;
     private final boolean caseSensitive;
 
-    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
+    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive,
+        final FacetHolder holder) {
         super(type(), holder);
         this.validation = validation;
         this.format = format;
         this.caseSensitive = caseSensitive;
     }
 
+    @Override
     public String validation() {
         return validation;
     }
 
+    @Override
     public String format() {
         return format;
     }
 
+    @Override
     public boolean caseSensitive() {
         return caseSensitive;
     }
 
     // //////////////////////////////////////////////////////////
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof ProposedHolder)) {
             return null;

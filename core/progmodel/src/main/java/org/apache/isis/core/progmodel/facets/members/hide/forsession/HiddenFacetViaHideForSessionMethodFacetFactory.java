@@ -36,7 +36,6 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
 
     private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
 
-
     /**
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
      */
@@ -49,7 +48,7 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         // hideXxx(UserMemento)
         attachHideFacetIfHideMethodForSessionIsFound(processMethodContext);
 
@@ -60,11 +59,10 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
-        Class<?> cls = processMethodContext.getCls();
-        Method hideForSessionMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS,
-                MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class,
-                new Class[] { UserMemento.class });
+        final Class<?> cls = processMethodContext.getCls();
+        final Method hideForSessionMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.HIDE_PREFIX + capitalizedName,
+                boolean.class, new Class[] { UserMemento.class });
 
         if (hideForSessionMethod == null) {
             return;
@@ -75,6 +73,5 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new HideForSessionFacetViaMethod(hideForSessionMethod, facetedMethod));
     }
-
 
 }

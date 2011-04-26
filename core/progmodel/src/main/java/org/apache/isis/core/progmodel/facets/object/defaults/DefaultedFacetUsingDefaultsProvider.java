@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
@@ -25,13 +24,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
-
 public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implements DefaultedFacet {
 
     private final DefaultsProvider<?> defaultsProvider;
-	private final DependencyInjector dependencyInjector;
+    private final DependencyInjector dependencyInjector;
 
-    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder,
+        final DependencyInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
         this.defaultsProvider = parser;
         this.dependencyInjector = dependencyInjector;
@@ -39,25 +38,22 @@ public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implement
 
     @Override
     protected String toStringValues() {
-    	getDependencyInjector().injectDependenciesInto(defaultsProvider);
+        getDependencyInjector().injectDependenciesInto(defaultsProvider);
         return defaultsProvider.toString();
     }
 
     @Override
     public Object getDefault() {
-    	getDependencyInjector().injectDependenciesInto(defaultsProvider);
+        getDependencyInjector().injectDependenciesInto(defaultsProvider);
         return defaultsProvider.getDefaultValue();
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
     public DependencyInjector getDependencyInjector() {
         return dependencyInjector;
     }
-    
 
 }
-

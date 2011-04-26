@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.accessor;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 
-
 public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.GET_PREFIX, MethodPrefixConstants.IS_PREFIX };
@@ -41,24 +39,23 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachPropertyAccessFacetForAccessorMethod(processMethodContext);
     }
 
-    private static void attachPropertyAccessFacetForAccessorMethod(ProcessMethodContext processMethodContext) {
-        
+    private static void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
+
         final Method accessorMethod = processMethodContext.getMethod();
-        
+
         processMethodContext.removeMethod(accessorMethod);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessorMethod, property));
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // PropertyOrCollectionIdentifying
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
@@ -73,8 +70,7 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
     }
 
     /**
-     * The method way well represent a collection, but this facet factory does not have any opinion on the
-     * matter.
+     * The method way well represent a collection, but this facet factory does not have any opinion on the matter.
      */
     @Override
     public boolean isCollectionAccessor(final Method method) {
@@ -91,7 +87,8 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover,
+        final List<Method> methodListToAppendTo) {
         appendMatchingMethods(methodRemover, MethodPrefixConstants.IS_PREFIX, boolean.class, methodListToAppendTo);
         appendMatchingMethods(methodRemover, MethodPrefixConstants.GET_PREFIX, Object.class, methodListToAppendTo);
     }
@@ -102,12 +99,9 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(
-    		final MethodRemover methodRemover, 
-    		final List<Method> methodListToAppendTo) {
+    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover,
+        final List<Method> methodListToAppendTo) {
         // does nothing
     }
-
-
 
 }

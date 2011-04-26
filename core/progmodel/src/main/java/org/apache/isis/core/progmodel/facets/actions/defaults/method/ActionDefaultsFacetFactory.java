@@ -39,7 +39,6 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
  */
 public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
-
     private static final String[] PREFIXES = { MethodPrefixConstants.DEFAULT_PREFIX };
 
     private AdapterMap adapterMap;
@@ -56,25 +55,22 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(processMethodContext);
     }
 
-
     private static void attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(
         final ProcessMethodContext processMethodContext) {
 
-        Method defaultsMethod =
-                findDefaultsMethodReturning(processMethodContext, Object[].class);
+        Method defaultsMethod = findDefaultsMethodReturning(processMethodContext, Object[].class);
         if (defaultsMethod == null) {
-            defaultsMethod =
-                findDefaultsMethodReturning(processMethodContext, List.class);
+            defaultsMethod = findDefaultsMethodReturning(processMethodContext, List.class);
         }
         if (defaultsMethod == null) {
             return;
         }
-        
+
         processMethodContext.removeMethod(defaultsMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
@@ -82,13 +78,14 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         FacetUtil.addFacet(facet);
     }
 
-    private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType) {
+    private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext,
+        final Class<?> returnType) {
 
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
-        String name = MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName;
+        final String name = MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName;
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, new Class[0]);
     }
 
@@ -97,7 +94,7 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

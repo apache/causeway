@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.choices.enums;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface EnumFacet extends Facet {
-
 
 }

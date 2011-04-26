@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.choices;
 
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-
 public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract implements ActionParameterChoicesFacet {
 
     public static Class<? extends Facet> type() {
@@ -38,30 +36,27 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterMap;
 
-    public ActionParameterChoicesFacetAbstract(
-        final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLookup specificationLookup,
+        final AdapterMap adapterManager) {
         super(type(), holder, false);
         this.specificationLookup = specificationLookup;
         this.adapterMap = adapterManager;
     }
 
-    protected ObjectSpecification getSpecification(Class<?> type) {
-        return type != null? getSpecificationLookup().loadSpecification(type): null;
+    protected ObjectSpecification getSpecification(final Class<?> type) {
+        return type != null ? getSpecificationLookup().loadSpecification(type) : null;
     }
-    
-    
-    ///////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////
     // Dependencies
-    ///////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////
+
     protected SpecificationLookup getSpecificationLookup() {
         return specificationLookup;
     }
-    
+
     protected AdapterMap getAdapterMap() {
         return adapterMap;
     }
-    
+
 }
-
-

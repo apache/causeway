@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class ActionParameterDefaultsFacetNone extends ActionParameterDefaultsFacetAbstract {
 
@@ -30,6 +28,7 @@ public class ActionParameterDefaultsFacetNone extends ActionParameterDefaultsFac
         super(holder);
     }
 
+    @Override
     public Object getDefault(final ObjectAdapter inObject) {
         return null;
     }
@@ -40,4 +39,3 @@ public class ActionParameterDefaultsFacetNone extends ActionParameterDefaultsFac
     }
 
 }
-

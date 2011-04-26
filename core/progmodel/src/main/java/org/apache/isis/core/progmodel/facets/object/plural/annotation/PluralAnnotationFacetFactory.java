@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.plural.annotation;
 
 import org.apache.isis.applib.annotation.Plural;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 
-
 public class PluralAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public PluralAnnotationFacetFactory() {
@@ -35,7 +33,7 @@ public class PluralAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Plural annotation = getAnnotation(processClassContaxt.getCls(), Plural.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class PropertyValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
@@ -41,26 +39,28 @@ public class PropertyValidateFacetFactory extends MethodPrefixBasedFacetFactoryA
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         attachValidateFacetIfValidateMethodIsFound(processMethodContext);
     }
 
-    private void attachValidateFacetIfValidateMethodIsFound(ProcessMethodContext processMethodContext) {
-        
+    private void attachValidateFacetIfValidateMethodIsFound(final ProcessMethodContext processMethodContext) {
+
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        
+
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        
-        Class<?> cls = processMethodContext.getCls();
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName, String.class, paramTypes);
+
+        final Class<?> cls = processMethodContext.getCls();
+        final Method method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_PREFIX
+                + capitalizedName, String.class, paramTypes);
         if (method == null) {
             return;
-        } 
+        }
         processMethodContext.removeMethod(method);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyValidateFacetViaMethod(method, property));
     }

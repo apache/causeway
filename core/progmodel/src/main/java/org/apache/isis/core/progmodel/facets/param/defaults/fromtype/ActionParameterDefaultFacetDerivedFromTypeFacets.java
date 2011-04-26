@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.defaults.fromtype;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,12 +24,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 
-
 public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefaultsFacetAbstract {
 
     private final DefaultedFacet[] defaultedFacets;
 
-    public ActionParameterDefaultFacetDerivedFromTypeFacets(final DefaultedFacet[] defaultedFacets, final FacetHolder holder) {
+    public ActionParameterDefaultFacetDerivedFromTypeFacets(final DefaultedFacet[] defaultedFacets,
+        final FacetHolder holder) {
         super(holder, true);
         this.defaultedFacets = defaultedFacets;
     }
@@ -41,6 +40,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
      * <p>
      * Note that we get the defaults fresh each time in case the defaults might conceivably change.
      */
+    @Override
     public Object[] getDefaults(final ObjectAdapter inObject) {
         final Object[] defaults = new Object[defaultedFacets.length];
         for (int i = 0; i < defaults.length; i++) {
@@ -52,4 +52,3 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
     }
 
 }
-

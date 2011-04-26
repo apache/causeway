@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.annotation;
 
 import java.lang.reflect.Method;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
-
 public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public RemoveIgnoreAnnotationMethodsFacetFactory() {
@@ -35,7 +33,7 @@ public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFa
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         removeIgnoredMethods(processClassContext.getCls(), processClassContext);
     }
 
@@ -45,8 +43,7 @@ public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFa
         }
 
         final Method[] methods = cls.getMethods();
-        for (int j = 0; j < methods.length; j++) {
-            final Method method = methods[j];
+        for (final Method method : methods) {
             final Ignore annotation = getAnnotation(method, Ignore.class);
             if (annotation != null) {
                 methodRemover.removeMethod(method);

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.image;
 
 import java.awt.Image;
@@ -37,18 +36,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
+public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T>
+    implements ImageValueFacet {
 
-public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements ImageValueFacet {
-    
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 18;
 
-    private static final char[] BASE_64_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-            'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            '+', '/', };
+    private static final char[] BASE_64_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', '+', '/', };
 
     protected static final byte[] REVERSE_BASE_64_CHARS = new byte[0x100];
 
@@ -64,13 +63,11 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     private FacetHolder facetHolder;
 
     @SuppressWarnings("unchecked")
-    public ImageValueSemanticsProviderAbstract(final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
-        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T)DEFAULT_VALUE, configuration, context);
+    public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT,
+            (T) DEFAULT_VALUE, configuration, context);
     }
-    
 
     /**
      * Returns null to indicate that this value does not parse entry strings
@@ -81,7 +78,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     }
 
     @Override
-    protected T doParse(Object original, String entry) {
+    protected T doParse(final Object original, final String entry) {
         throw new UnexpectedCallException();
     }
 
@@ -121,7 +118,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
      * Not required because {@link #alwaysReplace()} is <tt>false</tt>.
      */
     @Override
-    public void setUnderlyingFacet(Facet underlyingFacet) {
+    public void setUnderlyingFacet(final Facet underlyingFacet) {
         throw new UnsupportedOperationException();
     }
 
@@ -168,7 +165,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     }
 
     @Override
-    protected String doEncode(Object object) {
+    protected String doEncode(final Object object) {
         final int[][] image = getPixels(object);
         final int lines = image.length;
         final int width = image[0].length;
@@ -202,7 +199,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
         for (int i = 0; i < 4; i++) {
             final char c = data.charAt(offset + i);
             final byte b = REVERSE_BASE_64_CHARS[c];
-            if (i== 0 && b >= 32) {
+            if (i == 0 && b >= 32) {
                 pixel = 0xff;
             }
             pixel = (pixel << 6) + b;
@@ -214,7 +211,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
         // TODO the encoding is poor as the negative numbers are not dealt with properly because the 6 MSBs
         // are not included.
         if (pixel > 0x7FFFFF || pixel < -0x7FFFFF) {
-    //        throw new IsisException("" + pixel);
+            // throw new IsisException("" + pixel);
         }
         for (int i = 3; i >= 0; i--) {
             final int bitsToShift = i * 6;
@@ -243,8 +240,8 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
                 for (int line = 0; line < lines; line++) {
                     array[line] = new int[width];
                     System.arraycopy(pixels, srcPos, array[line], 0, width);
-                    for (int pixel = 0; pixel < array[line].length; pixel++ ) {
-                        array[line][pixel] =array[line][pixel] | 0xFF000000; 
+                    for (int pixel = 0; pixel < array[line].length; pixel++) {
+                        array[line][pixel] = array[line][pixel] | 0xFF000000;
                     }
                     srcPos += width;
                 }
@@ -266,27 +263,28 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
         for (int line = 0; line < lines; line++) {
             for (int pixel = 0; pixel < width; pixel++) {
                 imageData[line][pixel] = decodePixel(data, offset++);
-                imageData[line][pixel] =imageData[line][pixel] | 0xFF000000; 
+                imageData[line][pixel] = imageData[line][pixel] | 0xFF000000;
             }
         }
         final T image = setPixels(imageData);
         return image;
-   }
+    }
 
     protected abstract T setPixels(int[][] pixels);
 
-    public void setMask(final String mask) {}
+    public void setMask(final String mask) {
+    }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return "image";
     }
 
     @Override
-    public String titleStringWithMask(Object value, String usingMask) {
+    public String titleStringWithMask(final Object value, final String usingMask) {
         return "image";
     }
-    
+
     @Override
     public FacetHolder getFacetHolder() {
         return facetHolder;
@@ -296,7 +294,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.facetHolder = facetHolder;
     }
-    
+
     // /////// toString ///////
 
     @Override

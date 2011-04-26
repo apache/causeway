@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.shortint;
 
 import java.text.DecimalFormat;
@@ -33,8 +32,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements ShortValueFacet {
+public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements
+    ShortValueFacet {
 
     public static Class<? extends Facet> type() {
         return ShortValueFacet.class;
@@ -47,12 +46,10 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     private final NumberFormat format;
 
-    public ShortValueSemanticsProviderAbstract(
-    		final FacetHolder holder, 
-    		final Class<Short> adaptedClass, 
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public ShortValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Short> adaptedClass,
+        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
         format = determineNumberFormat("value.format.short");
     }
 
@@ -70,7 +67,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return titleString(format, value);
     }
 
@@ -113,6 +110,5 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     public String toString() {
         return "ShortValueSemanticsProvider: " + format;
     }
-
 
 }

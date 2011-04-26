@@ -23,36 +23,31 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public final class MethodFinderUtils {
-    
-    private MethodFinderUtils(){}
 
-    public static Method findMethodWithOrWithoutParameters(
-            final Class<?> type,
-            final MethodScope classMethod,
-            final String name,
-            final Class<?> returnType,
-            final Class<?>[] paramTypes) {
+    private MethodFinderUtils() {
+    }
+
+    public static Method findMethodWithOrWithoutParameters(final Class<?> type, final MethodScope classMethod,
+        final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
         Method method = MethodFinderUtils.findMethod(type, classMethod, name, returnType, paramTypes);
         if (method == null) {
-            method = MethodFinderUtils.findMethod(type, classMethod, name, returnType, MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
+            method =
+                MethodFinderUtils.findMethod(type, classMethod, name, returnType,
+                    MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
         }
         return method;
     }
 
     /**
-     * Returns a specific public methods that: have the specified prefix; have the specified return type, or
-     * void, if canBeVoid is true; and has the specified number of parameters. If the returnType is specified
-     * as null then the return type is ignored.
+     * Returns a specific public methods that: have the specified prefix; have the specified return type, or void, if
+     * canBeVoid is true; and has the specified number of parameters. If the returnType is specified as null then the
+     * return type is ignored.
      * 
      * @param paramTypes
      *            the set of parameters the method should have, if null then is ignored
      */
-    public static Method findMethod(
-            final Class<?> type,
-            final MethodScope methodScope,
-            final String name,
-            final Class<?> returnType,
-            final Class<?>[] paramTypes) {
+    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name,
+        final Class<?> returnType, final Class<?>[] paramTypes) {
         Method method;
         try {
             method = type.getMethod(name, paramTypes);
@@ -61,75 +56,72 @@ public final class MethodFinderUtils {
         } catch (final NoSuchMethodException e) {
             return null;
         }
-    
+
         final int modifiers = method.getModifiers();
-    
+
         // check for public modifier
         if (!Modifier.isPublic(modifiers)) {
             return null;
         }
-    
+
         // check for scope modifier
         if (!methodScope.matchesScopeOf(method)) {
             return null;
         }
-    
+
         // check for name
         if (!method.getName().equals(name)) {
             return null;
         }
-    
+
         // check for return type
         if (returnType != null && returnType != method.getReturnType()) {
             return null;
         }
-    
+
         // check params (if required)
         if (paramTypes != null) {
             final Class<?>[] parameterTypes = method.getParameterTypes();
             if (paramTypes.length != parameterTypes.length) {
                 return null;
             }
-    
+
             for (int c = 0; c < paramTypes.length; c++) {
                 if ((paramTypes[c] != null) && (paramTypes[c] != parameterTypes[c])) {
                     return null;
                 }
             }
         }
-    
+
         return method;
     }
 
-    protected static boolean doesNotMatchScope(final MethodScope methodScope, Method method) {
+    protected static boolean doesNotMatchScope(final MethodScope methodScope, final Method method) {
         return methodScope.doesNotMatchScope(method);
     }
 
-    public static Method findMethod(
-    		final Class<?> type, 
-    		final MethodScope methodScope, 
-    		final String name, 
-    		final Class<?> returnType) {
+    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name,
+        final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
-            for (int i = 0; i < methods.length; i++) {
-                final Method method = methods[i];
+            for (final Method method2 : methods) {
+                final Method method = method2;
                 final int modifiers = method.getModifiers();
                 // check for public modifier
                 if (!Modifier.isPublic(modifiers)) {
                     continue;
                 }
-    
+
                 // check correct scope (static vs instance)
-                if(!methodScope.matchesScopeOf(method)) {
+                if (!methodScope.matchesScopeOf(method)) {
                     continue;
                 }
-    
+
                 // check for name
                 if (!method.getName().equals(name)) {
                     continue;
                 }
-    
+
                 // check for return type
                 if (returnType != null && returnType != method.getReturnType()) {
                     continue;
@@ -161,6 +153,5 @@ public final class MethodFinderUtils {
         }
         return true;
     }
-
 
 }

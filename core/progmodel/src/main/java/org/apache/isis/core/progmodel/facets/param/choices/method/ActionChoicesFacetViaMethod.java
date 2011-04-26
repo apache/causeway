@@ -71,7 +71,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     @Override
     public Object[][] getChoices(final ObjectAdapter owningAdapter) {
-        Object invoke = AdapterInvokeUtils.invoke(method, owningAdapter);
+        final Object invoke = AdapterInvokeUtils.invoke(method, owningAdapter);
         if (!(invoke instanceof Object[])) {
             throw new DomainModelException(
                 "Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke
@@ -86,8 +86,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                 results[i] = ArrayUtil.getObjectAsObjectArray(options[i]);
             } else {
                 final ObjectSpecification specification = getSpecificationLookup().loadSpecification(choicesType);
-                results[i] =
-                    CollectionUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
+                results[i] = CollectionUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
             }
         }
         return results;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.named.staticmethod;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class NamedFacetViaSingularNameStaticMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.SINGULAR_NAME, };
@@ -41,11 +39,13 @@ public class NamedFacetViaSingularNameStaticMethodFacetFactory extends MethodPre
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.SINGULAR_NAME, String.class, NO_PARAMETERS_TYPES);
+        final Method method =
+            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.SINGULAR_NAME, String.class,
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             final String name = (String) InvokeUtils.invokeStatic(method);
             processClassContext.removeMethod(method);

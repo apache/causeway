@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validprops;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-
 
 public class ObjectValidPropertiesFacetFactory extends FacetFactoryAbstract {
 
@@ -32,7 +30,7 @@ public class ObjectValidPropertiesFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         FacetUtil.addFacet(new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
     }
 }

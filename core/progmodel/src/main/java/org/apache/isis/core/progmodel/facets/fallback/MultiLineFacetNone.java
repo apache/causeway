@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacetAbstract;
-
 
 public class MultiLineFacetNone extends MultiLineFacetAbstract {
 
@@ -36,4 +34,3 @@ public class MultiLineFacetNone extends MultiLineFacetAbstract {
     }
 
 }
-

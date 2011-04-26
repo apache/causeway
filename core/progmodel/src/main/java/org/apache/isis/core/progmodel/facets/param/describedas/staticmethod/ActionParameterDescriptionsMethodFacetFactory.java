@@ -38,7 +38,8 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaMethod;
 
-public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
+    AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DESCRIPTION_PREFIX };
 
@@ -56,7 +57,7 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
         final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
@@ -75,7 +76,7 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
 
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Method descriptionMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX
                 + capitalizedName, String[].class, new Class[0]);
@@ -84,7 +85,7 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
         }
         processMethodContext.removeMethod(descriptionMethod);
 
-        String[] descriptions = invokeDescriptionsMethod(descriptionMethod, parameters.size());
+        final String[] descriptions = invokeDescriptionsMethod(descriptionMethod, parameters.size());
         for (int i = 0; i < descriptions.length; i++) {
             // add facets directly to parameters, not to actions
             FacetUtil.addFacet(new DescribedAsFacetViaMethod(descriptions[i], descriptionMethod, parameters.get(i)));
@@ -95,23 +96,22 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
         String[] descriptions = null;
         try {
             descriptions = (String[]) InvokeUtils.invokeStatic(descriptionMethod, new Object[0]);
-        } catch(ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             // ignore
         }
-        if(descriptions==null || descriptions.length != numElementsRequired) {
-            throw new MetaModelException(descriptionMethod + " must return an String[] array of same size as number of parameters of action");
+        if (descriptions == null || descriptions.length != numElementsRequired) {
+            throw new MetaModelException(descriptionMethod
+                + " must return an String[] array of same size as number of parameters of action");
         }
         return descriptions;
     }
-
-
 
     // ///////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

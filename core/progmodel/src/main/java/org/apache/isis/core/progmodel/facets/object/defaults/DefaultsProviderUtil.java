@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
@@ -26,25 +25,28 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
 public final class DefaultsProviderUtil {
 
-    private DefaultsProviderUtil() {}
+    private DefaultsProviderUtil() {
+    }
 
     public static final String DEFAULTS_PROVIDER_NAME_KEY_PREFIX = "isis.reflector.java.facets.defaulted.";
     public static final String DEFAULTS_PROVIDER_NAME_KEY_SUFFIX = ".providerName";
 
-    public static String defaultsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
-        final String key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
+    public static String defaultsProviderNameFromConfiguration(final Class<?> type,
+        final IsisConfiguration configuration) {
+        final String key =
+            DEFAULTS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
         final String defaultsProviderName = configuration.getString(key);
         return !StringUtils.isNullOrEmpty(defaultsProviderName) ? defaultsProviderName : null;
     }
 
     public static Class<?> defaultsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        final Class<?> type = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
+        final Class<?> type =
+            candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
                 DefaultsProvider.class, FacetHolder.class) : null;
-        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, DefaultsProvider.class, FacetHolder.class);
+        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, DefaultsProvider.class,
+            FacetHolder.class);
     }
 
 }
-

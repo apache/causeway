@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validate.method;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-
 
 public class ValidateObjectViaValidateMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -41,11 +39,12 @@ public class ValidateObjectViaValidateMethodFacetFactory extends MethodPrefixBas
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
+
+        final Method method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             FacetUtil.addFacet(new ValidateObjectFacetViaValidateMethod(method, facetHolder));
             processClassContext.removeMethod(method);

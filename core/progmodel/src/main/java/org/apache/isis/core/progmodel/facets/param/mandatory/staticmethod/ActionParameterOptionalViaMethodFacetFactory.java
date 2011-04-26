@@ -50,7 +50,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
         final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
@@ -69,16 +69,16 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Method optionalMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS,
-                MethodPrefixConstants.OPTIONAL_PREFIX + capitalizedName, boolean[].class, new Class[0]);
+            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX
+                + capitalizedName, boolean[].class, new Class[0]);
         if (optionalMethod == null) {
             return;
         }
         try {
-            boolean[] optionals = invokeOptionalsMethod(optionalMethod, parameters.size());
-            
+            final boolean[] optionals = invokeOptionalsMethod(optionalMethod, parameters.size());
+
             for (int i = 0; i < optionals.length; i++) {
                 if (optionals[i]) {
                     // add facets directly to parameters, not to actions
@@ -94,14 +94,14 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
         boolean[] optionals = null;
         try {
             optionals = (boolean[]) InvokeUtils.invokeStatic(optionalMethod, new Object[0]);
-        } catch(ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             // ignore, test below
         }
-        if(optionals==null || optionals.length != numElementsRequired) {
-            throw new MetaModelException(optionalMethod + " must return an boolean[] array of same size as number of parameters of action");
+        if (optionals == null || optionals.length != numElementsRequired) {
+            throw new MetaModelException(optionalMethod
+                + " must return an boolean[] array of same size as number of parameters of action");
         }
         return optionals;
     }
-
 
 }

@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.debug.annotation;
-
 
 import org.apache.isis.applib.annotation.Debug;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,10 +27,8 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
-
 /**
- * {@link DebugFacet} can also be installed via a naming convention, see
- * {@link ActionInvocationFacetFactory}.
+ * {@link DebugFacet} can also be installed via a naming convention, see {@link ActionInvocationFacetFactory}.
  */
 public class DebugAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -41,7 +37,7 @@ public class DebugAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbst
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Debug annotation = getAnnotation(processMethodContext.getMethod(), Debug.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }

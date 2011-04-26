@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks.remove;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
-
 public class RemovingCallbackFacetViaMethod extends RemovingCallbackFacetAbstract implements ImperativeFacet {
 
     private final List<Method> methods = new ArrayList<Method>();
@@ -40,25 +38,29 @@ public class RemovingCallbackFacetViaMethod extends RemovingCallbackFacetAbstrac
         addMethod(method);
     }
 
-	public void addMethod(Method method) {
-		methods.add(method);
-	}
+    @Override
+    public void addMethod(final Method method) {
+        methods.add(method);
+    }
 
-	public boolean impliesResolve() {
-		return false;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return false;
+    }
 
-	public boolean impliesObjectChanged() {
-		return false;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
 
+    @Override
     public List<Method> getMethods() {
-    	return Collections.unmodifiableList(methods);
+        return Collections.unmodifiableList(methods);
     }
 
     @Override
     public void invoke(final ObjectAdapter adapter) {
-    	AdapterInvokeUtils.invoke(methods, adapter);
+        AdapterInvokeUtils.invoke(methods, adapter);
     }
 
     @Override
@@ -67,4 +69,3 @@ public class RemovingCallbackFacetViaMethod extends RemovingCallbackFacetAbstrac
     }
 
 }
-

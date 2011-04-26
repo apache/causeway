@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.mandatory.annotation;
 
 import java.lang.annotation.Annotation;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
-
 public class OptionalAnnotationForParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public OptionalAnnotationForParameterFacetFactory() {
@@ -35,7 +33,7 @@ public class OptionalAnnotationForParameterFacetFactory extends AnnotationBasedF
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         final Class<?>[] parameterTypes = processParameterContext.getMethod().getParameterTypes();
         if (processParameterContext.getParamNum() >= parameterTypes.length) {
             // ignore
@@ -44,10 +42,12 @@ public class OptionalAnnotationForParameterFacetFactory extends AnnotationBasedF
         if (parameterTypes[processParameterContext.getParamNum()].isPrimitive()) {
             return;
         }
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
-        for (int j = 0; j < parameterAnnotations.length; j++) {
-            if (parameterAnnotations[j] instanceof Optional) {
-                FacetUtil.addFacet(new MandatoryFacetInvertedByOptionalForParameter(processParameterContext.getFacetHolder()));
+        final Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Optional) {
+                FacetUtil.addFacet(new MandatoryFacetInvertedByOptionalForParameter(processParameterContext
+                    .getFacetHolder()));
                 return;
             }
         }

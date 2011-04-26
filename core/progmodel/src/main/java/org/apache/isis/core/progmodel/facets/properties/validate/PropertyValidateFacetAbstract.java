@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-
 
 public abstract class PropertyValidateFacetAbstract extends FacetAbstract implements PropertyValidateFacet {
 
@@ -38,6 +36,7 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
         super(type(), holder, false);
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof PropertyModifyContext)) {
             return null;
@@ -46,4 +45,3 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
         return invalidReason(propertyModifyContext.getTarget(), propertyModifyContext.getProposed());
     }
 }
-

@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.image;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-
-public class ImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Image> {
+public class ImageValueTypeFacetFactory extends
+    ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Image> {
 
     public ImageValueTypeFacetFactory() {
         super(ImageValueFacet.class);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

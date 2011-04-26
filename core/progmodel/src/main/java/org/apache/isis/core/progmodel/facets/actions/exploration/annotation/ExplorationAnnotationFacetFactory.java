@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.exploration.annotation;
-
 
 import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,10 +27,8 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
-
 /**
- * {@link ExplorationFacet} can also be installed via a naming convention, see
- * {@link ActionInvocationFacetFactory}.
+ * {@link ExplorationFacet} can also be installed via a naming convention, see {@link ActionInvocationFacetFactory}.
  */
 public class ExplorationAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -41,7 +37,7 @@ public class ExplorationAnnotationFacetFactory extends AnnotationBasedFacetFacto
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final Exploration annotation = getAnnotation(processMethodContext.getMethod(), Exploration.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }

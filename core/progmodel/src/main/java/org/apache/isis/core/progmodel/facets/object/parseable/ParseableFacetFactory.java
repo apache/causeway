@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.annotation.Parseable;
@@ -35,21 +34,21 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
 
-
-public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware,
+    AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
 
     private IsisConfiguration configuration;
 
-    private AuthenticationSessionProvider authenticationSessionProvider; 
+    private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterMap adapterManager;
     private DependencyInjector dependencyInjector;
-    
+
     public ParseableFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
@@ -58,7 +57,9 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
 
         // create from annotation, if present
         if (annotation != null) {
-            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider, adapterManager, dependencyInjector);
+            final ParseableFacetAnnotation facet =
+                new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider,
+                    adapterManager, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -67,7 +68,9 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
         // otherwise, try to create from configuration, if present
         final String parserName = ParserUtil.parserNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(parserName)) {
-            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
+            final ParseableFacetFromConfiguration facet =
+                new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider,
+                    dependencyInjector, adapterManager);
             if (facet.isValid()) {
                 return facet;
             }
@@ -76,14 +79,14 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
         return null;
     }
 
-
-	// ////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // Dependencies (injected via setters since *Aware)
     // ////////////////////////////////////////////////////////////////////
 
     public IsisConfiguration getIsisConfiguration() {
         return configuration;
     }
+
     /**
      * Injected since {@link IsisConfigurationAware}.
      */
@@ -93,16 +96,18 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
     }
 
     @Override
-    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
+
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         this.adapterManager = adapterManager;
     }
+
     @Override
-    public void setDependencyInjector(DependencyInjector dependencyInjector) {
+    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
     }
-	
+
 }

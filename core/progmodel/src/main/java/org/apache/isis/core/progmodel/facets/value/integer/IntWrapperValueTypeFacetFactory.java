@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.integer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
-
 
 public class IntWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Integer> {
 
@@ -31,7 +29,7 @@ public class IntWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsPro
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

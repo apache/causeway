@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.money;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Currency;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Localization;
@@ -41,8 +38,10 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
-public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
+public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements
+    MoneyValueFacet {
 
     private static Class<? extends Facet> type() {
         return MoneyValueFacet.class;
@@ -56,7 +55,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     private static final boolean EQUAL_BY_CONTENT = true;
     private static final Money DEFAULT_VALUE = null; // no default
 
-    private String defaultCurrencyCode;
+    private final String defaultCurrencyCode;
 
     static {
         DEFAULT_NUMBER_FORMAT = NumberFormat.getNumberInstance();
@@ -73,11 +72,10 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     private static String getDefaultCurrencyCode() {
         try {
             return DEFAULT_CURRENCY_FORMAT.getCurrency().getCurrencyCode();
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             return "";
         }
     }
-
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
@@ -87,11 +85,10 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         this(null, null, null);
     }
 
-    public MoneyValueSemanticsProvider(
-            final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, Money.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public MoneyValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, Money.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
 
         final String property = ConfigurationConstants.ROOT + "value.money.currency";
         defaultCurrencyCode = configuration.getString(property, LOCAL_CURRENCY_CODE);
@@ -115,8 +112,9 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     private boolean endsWithCurrencyCode(final String entry, final int pos) {
-        String suffix = entry.substring(pos + 1);
-        boolean isCurrencyCode = suffix.length() == 3 && Character.isLetter(suffix.charAt(0)) && Character.isLetter(suffix.charAt(1))
+        final String suffix = entry.substring(pos + 1);
+        final boolean isCurrencyCode =
+            suffix.length() == 3 && Character.isLetter(suffix.charAt(0)) && Character.isLetter(suffix.charAt(1))
                 && Character.isLetter(suffix.charAt(2));
         return isCurrencyCode;
     }
@@ -128,7 +126,8 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
                 final double value = DEFAULT_CURRENCY_FORMAT.parse(entry).doubleValue();
                 money = new Money(value, LOCAL_CURRENCY_CODE);
                 return money;
-            } catch (final ParseException ignore) { }
+            } catch (final ParseException ignore) {
+            }
         }
 
         try {
@@ -145,7 +144,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         final String currencyCode = code.toUpperCase();
         try {
             Currency.getInstance(currencyCode.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             throw new TextEntryParseException("Invalid currency code " + currencyCode, e);
         }
         try {
@@ -154,11 +153,10 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         } catch (final ParseException e) {
             throw new TextEntryParseException("Invalid money entry", e);
         }
-     }
-
+    }
 
     @Override
-    public String titleString(final Object object, Localization localization) {
+    public String titleString(final Object object, final Localization localization) {
         if (object == null) {
             return "";
         }

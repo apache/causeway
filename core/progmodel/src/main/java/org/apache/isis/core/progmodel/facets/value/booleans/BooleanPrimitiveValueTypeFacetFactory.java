@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
-
 
 public class BooleanPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Boolean> {
 
@@ -31,7 +29,7 @@ public class BooleanPrimitiveValueTypeFacetFactory extends ValueUsingValueSemant
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate;
-
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -28,14 +26,13 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
-
 /**
  * Simply installs a {@link PropertyValidateFacet} onto all properties.
  * 
  * <p>
- * The idea is that this {@link FacetFactory} is included early on in the {@link FacetProcessor}, but
- * other {@link PropertyValidateFacet} implementations will potentially replace these where the property is
- * annotated or otherwise provides a validation mechanism.
+ * The idea is that this {@link FacetFactory} is included early on in the {@link FacetProcessor}, but other
+ * {@link PropertyValidateFacet} implementations will potentially replace these where the property is annotated or
+ * otherwise provides a validation mechanism.
  */
 public class PropertyValidateDefaultFacetFactory extends FacetFactoryAbstract {
 
@@ -44,12 +41,12 @@ public class PropertyValidateDefaultFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         FacetUtil.addFacet(create(processMethodContext.getFacetHolder()));
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         FacetUtil.addFacet(create(processParameterContext.getFacetHolder()));
     }
 

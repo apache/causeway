@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.describedas.annotation;
 
 import org.apache.isis.applib.annotation.DescribedAs;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public class DescribedAsAnnotationOnMemberFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public DescribedAsAnnotationOnMemberFacetFactory() {
@@ -36,7 +34,7 @@ public class DescribedAsAnnotationOnMemberFacetFactory extends AnnotationBasedFa
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         // look for annotation on the property
         final DescribedAs annotation = getAnnotation(processMethodContext.getMethod(), DescribedAs.class);
@@ -50,7 +48,9 @@ public class DescribedAsAnnotationOnMemberFacetFactory extends AnnotationBasedFa
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
         if (returnTypeDescribedAsFacet != null) {
-            facet = new DescribedAsFacetForMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder());
+            facet =
+                new DescribedAsFacetForMemberDerivedFromType(returnTypeDescribedAsFacet,
+                    processMethodContext.getFacetHolder());
             FacetUtil.addFacet(facet);
         }
     }

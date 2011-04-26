@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import java.text.DecimalFormat;
@@ -47,9 +46,8 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-
-public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>,
-        Parser<T>, DefaultsProvider<T> {
+public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements
+    ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
@@ -61,27 +59,21 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * Lazily looked up per {@link #getSpecification()}.
      */
     private ObjectSpecification specification;
-    
-	private final IsisConfiguration configuration;
-	private final ValueSemanticsProviderContext context;
 
-    public ValueSemanticsProviderAndFacetAbstract(
-            final Class<? extends Facet> adapterFacetType,
-            final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final int typicalLength,
-            final boolean immutable,
-            final boolean equalByContent,
-            final T defaultValue, 
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
+    private final IsisConfiguration configuration;
+    private final ValueSemanticsProviderContext context;
+
+    public ValueSemanticsProviderAndFacetAbstract(final Class<? extends Facet> adapterFacetType,
+        final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable,
+        final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(adapterFacetType, holder, false);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
         this.immutable = immutable;
         this.equalByContent = equalByContent;
         this.defaultValue = defaultValue;
-        
+
         this.configuration = configuration;
         this.context = context;
     }
@@ -93,13 +85,12 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         return specification;
     }
 
-
     /**
      * The underlying class that has been adapted.
      * 
      * <p>
-     * Used to determine whether an empty string can be parsed, (for primitive types a non-null entry is
-     * required, see {@link #mustHaveEntry()}), and potentially useful for debugging.
+     * Used to determine whether an empty string can be parsed, (for primitive types a non-null entry is required, see
+     * {@link #mustHaveEntry()}), and potentially useful for debugging.
      */
     public final Class<T> getAdaptedClass() {
         return adaptedClass;
@@ -183,7 +174,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     @Override
-    public String displayTitleOf(final Object object, Localization localization) {
+    public String displayTitleOf(final Object object, final Localization localization) {
         if (object == null) {
             return "";
         }
@@ -254,14 +245,12 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * Hook method to perform the actual restoring.
      */
     protected abstract T doRestore(String data);
-    
 
-    
     // ///////////////////////////////////////////////////////////////////////////
     // Helper: Locale handling
     // ///////////////////////////////////////////////////////////////////////////
 
-    protected NumberFormat determineNumberFormat(String suffix) {
+    protected NumberFormat determineNumberFormat(final String suffix) {
         final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + suffix);
         if (formatRequired != null) {
             return new DecimalFormat(formatRequired);
@@ -271,32 +260,28 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     private Locale findLocale() {
-        final String localeStr = getConfiguration().getString(
-                ConfigurationConstants.ROOT + "locale");
+        final String localeStr = getConfiguration().getString(ConfigurationConstants.ROOT + "locale");
 
-        Locale findLocale = LocaleUtils.findLocale(localeStr);
-        return findLocale != null? findLocale: Locale.getDefault();
+        final Locale findLocale = LocaleUtils.findLocale(localeStr);
+        return findLocale != null ? findLocale : Locale.getDefault();
     }
 
-
-    
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // Helper: createAdapter
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
     protected ObjectAdapter createAdapter(final Class<?> type, final Object object) {
-	    final ObjectSpecification specification = getSpecificationLookup().loadSpecification(type);
-	    if (specification.isNotCollection()) {
-	        return getAdapterMap().adapterFor(object);
-	    } else {
-	        throw new UnknownTypeException("not an object, is this a collection?");
-	    }
-	}
+        final ObjectSpecification specification = getSpecificationLookup().loadSpecification(type);
+        if (specification.isNotCollection()) {
+            return getAdapterMap().adapterFor(object);
+        } else {
+            throw new UnknownTypeException("not an object, is this a collection?");
+        }
+    }
 
-
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
     protected IsisConfiguration getConfiguration() {
         return configuration;
@@ -305,7 +290,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     protected ValueSemanticsProviderContext getContext() {
         return context;
     }
-    
+
     /**
      * From {@link #getContext() context.}
      */
@@ -326,16 +311,17 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     protected DependencyInjector getDependencyInjector() {
         return context.getDependencyInjector();
     }
-    
+
     /**
      * From {@link #getContext() context.}
      */
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return context.getAuthenticationSessionProvider();
     }
-    ////////////////////////////////////////////////////////////
+
+    // //////////////////////////////////////////////////////////
     // Dependencies (from singleton)
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
     protected static Clock getClock() {
         return Clock.getInstance();

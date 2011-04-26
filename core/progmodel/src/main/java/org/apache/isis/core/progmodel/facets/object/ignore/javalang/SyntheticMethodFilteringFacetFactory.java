@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
-
 
 /**
  * Designed to simply filter out any synthetic methods.
@@ -51,7 +49,8 @@ public class SyntheticMethodFilteringFacetFactory extends FacetFactoryAbstract i
         try {
             final Class<?> type = method.getClass();
             try {
-                return ((Boolean) type.getMethod("isSynthetic", (Class[]) null).invoke(method, (Object[]) null)).booleanValue();
+                return ((Boolean) type.getMethod("isSynthetic", (Class[]) null).invoke(method, (Object[]) null))
+                    .booleanValue();
             } catch (final NoSuchMethodException nsm) {
                 // pre java 5
                 return false;
@@ -62,4 +61,3 @@ public class SyntheticMethodFilteringFacetFactory extends FacetFactoryAbstract i
     }
 
 }
-

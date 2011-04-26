@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.validate.regexannot;
 
 import java.lang.annotation.Annotation;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.TitleFacetFormattedByRegex;
 
-
 public class RegExFacetAnnotationForParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public RegExFacetAnnotationForParameterFacetFactory() {
@@ -39,7 +37,7 @@ public class RegExFacetAnnotationForParameterFacetFactory extends AnnotationBase
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         final Class<?>[] parameterTypes = processParameterContext.getMethod().getParameterTypes();
         if (processParameterContext.getParamNum() >= parameterTypes.length) {
             // ignore
@@ -49,10 +47,11 @@ public class RegExFacetAnnotationForParameterFacetFactory extends AnnotationBase
             return;
         }
 
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
-        for (int j = 0; j < parameterAnnotations.length; j++) {
-            if (parameterAnnotations[j] instanceof RegEx) {
-                final RegEx annotation = (RegEx) parameterAnnotations[j];
+        final Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof RegEx) {
+                final RegEx annotation = (RegEx) parameterAnnotation;
                 addRegexFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation);
                 return;
             }

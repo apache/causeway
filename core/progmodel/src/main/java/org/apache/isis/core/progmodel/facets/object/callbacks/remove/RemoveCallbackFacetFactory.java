@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks.remove;
 
 import java.lang.reflect.Method;
@@ -35,17 +34,17 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.REMOVED_PREFIX, MethodPrefixConstants.REMOVING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.REMOVED_PREFIX,
+        MethodPrefixConstants.REMOVING_PREFIX, };
 
     public RemoveCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
@@ -53,25 +52,29 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVING_PREFIX, void.class,
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
-            RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
+            final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
             if (facet == null) {
-            	facets.add(new RemovingCallbackFacetViaMethod(method, facetHolder));
+                facets.add(new RemovingCallbackFacetViaMethod(method, facetHolder));
             } else {
-            	facet.addMethod(method);
+                facet.addMethod(method);
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVED_PREFIX, void.class,
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
-            RemovedCallbackFacet facet = facetHolder.getFacet(RemovedCallbackFacet.class);
+            final RemovedCallbackFacet facet = facetHolder.getFacet(RemovedCallbackFacet.class);
             if (facet == null) {
-            	facets.add(new RemovedCallbackFacetViaMethod(method, facetHolder));
+                facets.add(new RemovedCallbackFacetViaMethod(method, facetHolder));
             } else {
-            	facet.addMethod(method);
+                facet.addMethod(method);
             }
         }
 

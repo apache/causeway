@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.bigdecimal;
 
 import java.math.BigDecimal;
@@ -36,8 +35,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements BigDecimalValueFacet {
+public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements
+    BigDecimalValueFacet {
 
     private static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
@@ -57,18 +56,16 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
         this(null, null, null);
     }
 
-    public BigDecimalValueSemanticsProvider(
-    		final FacetHolder holder, 
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public BigDecimalValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
+            configuration, context);
         format = determineNumberFormat("value.format.decimal");
     }
 
-
-    public void setLocale(Locale l) {
+    public void setLocale(final Locale l) {
         // TODO Auto-generated method stub
-        
+
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -85,7 +82,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object object, Localization localization) {
+    public String titleString(final Object object, final Localization localization) {
         return titleString(format, object);
     }
 
@@ -125,6 +122,5 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     public String toString() {
         return "BigDecimalValueSemanticsProvider: " + format;
     }
-
 
 }

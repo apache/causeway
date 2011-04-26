@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.mandatory.dflt;
-
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -30,14 +28,13 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
-
 /**
  * Simply installs a {@link MandatoryFacetDefault} onto all properties and parameters.
  * 
  * <p>
- * The idea is that this {@link FacetFactory} is included early on in the {@link FacetProcessor}, but
- * other {@link MandatoryFacet} implementations which don't require mandatory semantics will potentially
- * replace these where the property or parameter is annotated or otherwise indicated as being optional.
+ * The idea is that this {@link FacetFactory} is included early on in the {@link FacetProcessor}, but other
+ * {@link MandatoryFacet} implementations which don't require mandatory semantics will potentially replace these where
+ * the property or parameter is annotated or otherwise indicated as being optional.
  */
 public class MandatoryDefaultForParametersFacetFactory extends FacetFactoryAbstract {
 
@@ -46,7 +43,7 @@ public class MandatoryDefaultForParametersFacetFactory extends FacetFactoryAbstr
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         FacetUtil.addFacet(create(processParameterContext.getFacetHolder()));
     }
 

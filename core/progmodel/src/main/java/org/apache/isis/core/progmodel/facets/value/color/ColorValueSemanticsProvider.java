@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.color;
 
 import java.text.DecimalFormat;
@@ -34,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Color> implements ColorValueFacet {
+public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Color> implements
+    ColorValueFacet {
 
     public static Class<? extends Facet> type() {
         return ColorValueFacet.class;
@@ -53,11 +52,10 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         this(null, null, null);
     }
 
-    public ColorValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, Color.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public ColorValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, Color.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -80,11 +78,11 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public String titleString(final Object object, Localization localization) {
+    public String titleString(final Object object, final Localization localization) {
         final Color color = (Color) object;
         return color.title();
     }
-    
+
     @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
         final Color color = (Color) object;
@@ -130,5 +128,4 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         return "ColorValueSemanticsProvider";
     }
 
-    
 }

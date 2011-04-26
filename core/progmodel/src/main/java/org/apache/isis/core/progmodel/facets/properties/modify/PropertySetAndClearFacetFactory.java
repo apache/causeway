@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.modify;
 
 import java.lang.reflect.Method;
@@ -34,7 +33,6 @@ import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlways;
 import org.apache.isis.core.progmodel.facets.properties.derived.inferred.DerivedFacetInferred;
 
-
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.SET_PREFIX, MethodPrefixConstants.CLEAR_PREFIX };
@@ -44,30 +42,31 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
-        Method setMethod = attachPropertyModifyFacetIfSetterIsFound(processMethodContext);
-        Method clearMethod = attachPropertyClearFacetIfClearMethodIsFound(processMethodContext);
+        final Method setMethod = attachPropertyModifyFacetIfSetterIsFound(processMethodContext);
+        final Method clearMethod = attachPropertyClearFacetIfClearMethodIsFound(processMethodContext);
 
         attachPropertyClearFacetUsingSetterIfRequired(processMethodContext, setMethod, clearMethod);
     }
 
     /**
-     * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the property's setter if available,
-     * but if none then marks the property as {@link DerivedFacet derived} and {@link DisabledFacet disabled}
-     * otherwise.
+     * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the property's setter if available, but if none
+     * then marks the property as {@link DerivedFacet derived} and {@link DisabledFacet disabled} otherwise.
      */
-    private static Method attachPropertyModifyFacetIfSetterIsFound(ProcessMethodContext processMethodContext) {
-        
+    private static Method attachPropertyModifyFacetIfSetterIsFound(final ProcessMethodContext processMethodContext) {
+
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        
-        Class<?> cls = processMethodContext.getCls();
+
+        final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        Method setMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method setMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SET_PREFIX + capitalizedName,
+                void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
         if (setMethod != null) {
             FacetUtil.addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));
@@ -76,40 +75,41 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
             FacetUtil.addFacet(new DerivedFacetInferred(property));
             FacetUtil.addFacet(new DisabledFacetAlways(property));
         }
-        
+
         return setMethod;
     }
 
-    private Method attachPropertyClearFacetIfClearMethodIsFound(ProcessMethodContext processMethodContext) {
-        Class<?> cls = processMethodContext.getCls();
+    private Method attachPropertyClearFacetIfClearMethodIsFound(final ProcessMethodContext processMethodContext) {
+        final Class<?> cls = processMethodContext.getCls();
         final Method getMethod = processMethodContext.getMethod();
         final FacetHolder property = processMethodContext.getFacetHolder();
 
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
-        
+        final Method clearMethod =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName,
+                void.class, NO_PARAMETERS_TYPES);
+
         if (clearMethod == null) {
             return null;
-        } 
+        }
         processMethodContext.removeMethod(clearMethod);
-        
+
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clearMethod, property));
-        
+
         return clearMethod;
     }
 
-    private static void attachPropertyClearFacetUsingSetterIfRequired(ProcessMethodContext processMethodContext, Method setMethod,
-        Method clearMethod) {
-        
+    private static void attachPropertyClearFacetUsingSetterIfRequired(final ProcessMethodContext processMethodContext,
+        final Method setMethod, final Method clearMethod) {
+
         if (clearMethod != null) {
             return;
         }
         if (setMethod == null) {
             return;
-        } 
+        }
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyClearFacetViaSetterMethod(setMethod, property));
     }
-
 
 }

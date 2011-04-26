@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.order;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class MemberOrderFacetAnnotation extends MemberOrderFacetAbstract {
 
@@ -30,4 +28,3 @@ public class MemberOrderFacetAnnotation extends MemberOrderFacetAbstract {
     }
 
 }
-

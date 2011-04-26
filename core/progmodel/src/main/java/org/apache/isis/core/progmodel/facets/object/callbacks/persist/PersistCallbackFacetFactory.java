@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks.persist;
 
 import java.lang.reflect.Method;
@@ -35,17 +34,17 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
 public class PersistCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.PERSISTED_PREFIX, MethodPrefixConstants.PERSISTING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.PERSISTED_PREFIX,
+        MethodPrefixConstants.PERSISTING_PREFIX, };
 
     public PersistCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
@@ -53,25 +52,29 @@ public class PersistCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.PERSISTING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.PERSISTING_PREFIX, void.class,
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
-            PersistingCallbackFacet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
+            final PersistingCallbackFacet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
             if (facet == null) {
-            	facets.add(new PersistingCallbackFacetViaMethod(method, facetHolder));
+                facets.add(new PersistingCallbackFacetViaMethod(method, facetHolder));
             } else {
-            	facet.addMethod(method);
+                facet.addMethod(method);
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.PERSISTED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.PERSISTED_PREFIX, void.class,
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
-            PersistedCallbackFacet facet = facetHolder.getFacet(PersistedCallbackFacet.class);
+            final PersistedCallbackFacet facet = facetHolder.getFacet(PersistedCallbackFacet.class);
             if (facet == null) {
-            	facets.add(new PersistedCallbackFacetViaMethod(method, facetHolder));
+                facets.add(new PersistedCallbackFacetViaMethod(method, facetHolder));
             } else {
-            	facet.addMethod(method);
+                facet.addMethod(method);
             }
         }
 

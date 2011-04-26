@@ -51,14 +51,13 @@ public class ActionValidationFacetViaValidateMethodFacetFactory extends MethodPr
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachValidatingAdvisorFacetForValidateMethodIfFound(processMethodContext);
     }
 
+    private void attachValidatingAdvisorFacetForValidateMethodIfFound(final ProcessMethodContext processMethodContext) {
 
-    private void attachValidatingAdvisorFacetForValidateMethodIfFound(ProcessMethodContext processMethodContext) {
-
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
 
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
@@ -76,8 +75,5 @@ public class ActionValidationFacetViaValidateMethodFacetFactory extends MethodPr
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new ActionValidationFacetViaMethod(validateMethod, facetedMethod));
     }
-
-
-
 
 }

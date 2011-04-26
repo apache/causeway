@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.derived.inferred;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -25,20 +24,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-
 public class DerivedFacetInferred extends NotPersistedFacetAbstract {
 
     public DerivedFacetInferred(final FacetHolder holder) {
         super(holder);
     }
-    
+
     /**
      * Always returns <i>Derived</i>.
      */
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return "Derived";
     }
 
-
 }
-

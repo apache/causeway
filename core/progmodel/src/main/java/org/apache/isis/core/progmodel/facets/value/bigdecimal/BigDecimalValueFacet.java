@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.bigdecimal;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-
 
 public interface BigDecimalValueFacet extends Facet {
 

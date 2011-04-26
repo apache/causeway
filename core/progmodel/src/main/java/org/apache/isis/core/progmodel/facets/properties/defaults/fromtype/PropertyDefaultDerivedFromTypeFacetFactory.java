@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.defaults.fromtype;
-
 
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
@@ -30,25 +28,25 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 
-
-public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract implements AdapterMapAware {
+public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract implements
+    AdapterMapAware {
 
     private AdapterMap adapterMap;
 
-	public PropertyDefaultDerivedFromTypeFacetFactory() {
+    public PropertyDefaultDerivedFromTypeFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
-
     /**
-     * If there is a {@link DefaultedFacet} on the properties return type, then installs a
-     * {@link PropertyDefaultFacet} for the property with the same default.
+     * If there is a {@link DefaultedFacet} on the properties return type, then installs a {@link PropertyDefaultFacet}
+     * for the property with the same default.
      */
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         // don't overwrite any defaults that might already picked up
-        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder().getFacet(PropertyDefaultFacet.class);
-		if (existingDefaultFacet != null && !existingDefaultFacet.isNoop()) {
+        final PropertyDefaultFacet existingDefaultFacet =
+            processMethodContext.getFacetHolder().getFacet(PropertyDefaultFacet.class);
+        if (existingDefaultFacet != null && !existingDefaultFacet.isNoop()) {
             return;
         }
 
@@ -56,15 +54,15 @@ public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedF
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(
-                    returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), getAdapterMap());
+            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet =
+                new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet,
+                    processMethodContext.getFacetHolder(), getAdapterMap());
             FacetUtil.addFacet(propertyFacet);
         }
     }
 
     private DefaultedFacet getDefaultedFacet(final Class<?> paramType) {
-        final ObjectSpecification paramTypeSpec = 
-            getSpecificationLookup().loadSpecification(paramType);
+        final ObjectSpecification paramTypeSpec = getSpecificationLookup().loadSpecification(paramType);
         return paramTypeSpec.getFacet(DefaultedFacet.class);
     }
 
@@ -75,9 +73,9 @@ public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedF
     public AdapterMap getAdapterMap() {
         return adapterMap;
     }
-    
+
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 

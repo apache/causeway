@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.defaults.fromtype;
-
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -28,20 +26,18 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 
-
 public class ParameterDefaultDerivedFromTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
-	public ParameterDefaultDerivedFromTypeFacetFactory() {
+    public ParameterDefaultDerivedFromTypeFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 
-
-	/**
+    /**
      * If there is a {@link DefaultedFacet} on any of the action's parameter types, then installs a
      * {@link ActionDefaultsFacet} for the action.
      */
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         // don't overwrite any defaults already picked up
         if (processParameterContext.getFacetHolder().getFacet(ActionDefaultsFacet.class) != null) {
             return;
@@ -57,13 +53,13 @@ public class ParameterDefaultDerivedFromTypeFacetFactory extends AnnotationBased
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
+            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets,
+                processParameterContext.getFacetHolder()));
         }
     }
 
     private DefaultedFacet getDefaultedFacet(final Class<?> paramType) {
-        final ObjectSpecification paramTypeSpec = 
-            getSpecificationLookup().loadSpecification(paramType);
+        final ObjectSpecification paramTypeSpec = getSpecificationLookup().loadSpecification(paramType);
         return paramTypeSpec.getFacet(DefaultedFacet.class);
     }
 

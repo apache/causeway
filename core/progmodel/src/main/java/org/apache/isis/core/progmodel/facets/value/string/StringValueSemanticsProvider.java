@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.string;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -30,8 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements StringValueFacet {
+public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements
+    StringValueFacet {
 
     public static Class<? extends Facet> type() {
         return StringValueFacet.class;
@@ -49,11 +48,10 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
         this(null, null, null);
     }
 
-    public StringValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, String.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public StringValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, String.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
+            context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -70,7 +68,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     }
 
     @Override
-    public String titleString(final Object object, Localization localization) {
+    public String titleString(final Object object, final Localization localization) {
         final String string = (String) (object == null ? "" : object);
         return string;
     }
@@ -125,13 +123,11 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
         return getAdapterMap().adapterFor(value);
     }
 
-
     // /////// toString ///////
 
     @Override
     public String toString() {
         return "StringValueSemanticsProvider";
     }
-
 
 }

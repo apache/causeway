@@ -17,21 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 
-
 public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
 
-    public ValueFacetUsingSemanticsProvider(
-            final ValueSemanticsProvider<?> adapter, 
-            final Facet underlyingValueTypeFacet, 
-            final ValueSemanticsProviderContext context 
-            ) {
+    public ValueFacetUsingSemanticsProvider(final ValueSemanticsProvider<?> adapter,
+        final Facet underlyingValueTypeFacet, final ValueSemanticsProviderContext context) {
         super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, underlyingValueTypeFacet.getFacetHolder(), context);
 
         // add the adapter in as its own facet (eg StringFacet).

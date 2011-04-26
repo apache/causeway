@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.disable.staticmethod;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
-
 
 public class DisabledFacetAlways extends DisabledFacetAbstract {
 
@@ -35,9 +33,9 @@ public class DisabledFacetAlways extends DisabledFacetAbstract {
     /**
      * Always returns <i>Always disabled</i>.
      */
+    @Override
     public String disabledReason(final ObjectAdapter target) {
         return "Always disabled";
     }
 
 }
-

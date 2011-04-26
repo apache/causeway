@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validprops;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -25,10 +24,9 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
- * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that all {@link MandatoryFacet
- * mandatory} properties are entered prior to persisting the object.
+ * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that all {@link MandatoryFacet mandatory}
+ * properties are entered prior to persisting the object.
  */
 public interface ObjectValidPropertiesFacet extends Facet, ValidatingInteractionAdvisor {
 

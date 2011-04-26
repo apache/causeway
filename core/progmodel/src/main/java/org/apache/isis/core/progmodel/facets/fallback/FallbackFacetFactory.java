@@ -68,15 +68,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
-        
+
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final NotPersistableFacetNull notPersistableFacet = new NotPersistableFacetNull(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
-        
-        final Facet[] facets = new Facet[] { 
-            describedAsFacet,
+
+        final Facet[] facets = new Facet[] { describedAsFacet,
             // commenting these out, think this whole isNoop business is a little bogus
             // new ImmutableFacetNever(holder),
             notPersistableFacet, titleFacet, };
@@ -84,15 +83,15 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final List<Facet> facets = new ArrayList<Facet>();
 
         if (processMethodContext.getFacetHolder() instanceof FacetedMethod) {
             facets.add(new NamedFacetNone(processMethodContext.getFacetHolder()));
             facets.add(new DescribedAsFacetNone(processMethodContext.getFacetHolder()));
             facets.add(new HelpFacetNone(processMethodContext.getFacetHolder()));
-            
-            FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+
+            final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             final FeatureType featureType = facetedMethod.getFeatureType();
             if (featureType.isProperty()) {
                 facets.add(new MaxLengthFacetUnlimited(processMethodContext.getFacetHolder()));
@@ -109,18 +108,18 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         final List<Facet> facets = new ArrayList<Facet>();
 
         if (processParameterContext.getFacetHolder() instanceof TypedHolder) {
 
-            TypedHolder typedHolder = processParameterContext.getFacetHolder();
+            final TypedHolder typedHolder = processParameterContext.getFacetHolder();
             if (typedHolder.getFeatureType().isActionParameter()) {
                 facets.add(new NamedFacetNone(processParameterContext.getFacetHolder()));
                 facets.add(new DescribedAsFacetNone(processParameterContext.getFacetHolder()));
                 facets.add(new HelpFacetNone(processParameterContext.getFacetHolder()));
                 facets.add(new MultiLineFacetNone(false, processParameterContext.getFacetHolder()));
-                
+
                 facets.add(new MaxLengthFacetUnlimited(processParameterContext.getFacetHolder()));
             }
         }

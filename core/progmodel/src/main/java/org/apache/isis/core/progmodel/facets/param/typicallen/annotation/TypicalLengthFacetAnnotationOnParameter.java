@@ -17,26 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.typicallen.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacetAbstract;
 
-
 public class TypicalLengthFacetAnnotationOnParameter extends TypicalLengthFacetAbstract {
 
     private final int value;
 
-	public TypicalLengthFacetAnnotationOnParameter(final int value, final FacetHolder holder) {
+    public TypicalLengthFacetAnnotationOnParameter(final int value, final FacetHolder holder) {
         super(holder, false);
         this.value = value;
     }
 
-	@Override
-	public int value() {
-		return value;
-	}
+    @Override
+    public int value() {
+        return value;
+    }
 
 }
-

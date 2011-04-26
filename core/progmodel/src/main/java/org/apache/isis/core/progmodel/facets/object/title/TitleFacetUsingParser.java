@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.title;
 
 import org.apache.isis.applib.adapters.Localization;
@@ -28,13 +27,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
-
 public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
 
     private final Parser parser;
-	private final DependencyInjector dependencyInjector;
-	
-    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    private final DependencyInjector dependencyInjector;
+
+    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder,
+        final DependencyInjector dependencyInjector) {
         super(TitleFacet.class, holder, false);
         this.parser = parser;
         this.dependencyInjector = dependencyInjector;
@@ -42,12 +41,12 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
 
     @Override
     protected String toStringValues() {
-    	getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectDependenciesInto(parser);
         return parser.toString();
     }
 
     @Override
-    public String title(final ObjectAdapter adapter, Localization localization) {
+    public String title(final ObjectAdapter adapter, final Localization localization) {
         if (adapter == null) {
             return null;
         }
@@ -55,11 +54,11 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (object == null) {
             return null;
         }
-    	getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectDependenciesInto(parser);
         return parser.displayTitleOf(object, localization);
     }
 
-    public String title(final ObjectAdapter adapter, String usingMask) {
+    public String title(final ObjectAdapter adapter, final String usingMask) {
         if (adapter == null) {
             return null;
         }
@@ -71,11 +70,10 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         return parser.displayTitleOf(object, usingMask);
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
     /**
      * @return the dependencyInjector
      */
@@ -84,4 +82,3 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     }
 
 }
-

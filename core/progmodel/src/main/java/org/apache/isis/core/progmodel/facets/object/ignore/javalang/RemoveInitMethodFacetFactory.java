@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
 
 /**
  * Removes any calls to <tt>init</tt>.
@@ -35,9 +33,8 @@ public class RemoveInitMethodFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
     }
 
 }
-

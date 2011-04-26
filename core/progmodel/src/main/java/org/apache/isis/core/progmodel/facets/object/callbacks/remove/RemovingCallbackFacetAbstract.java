@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callbacks.remove;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.object.callbacks.CallbackFacetAbstract;
-
 
 public abstract class RemovingCallbackFacetAbstract extends CallbackFacetAbstract implements RemovingCallbackFacet {
 
@@ -37,4 +35,3 @@ public abstract class RemovingCallbackFacetAbstract extends CallbackFacetAbstrac
     }
 
 }
-

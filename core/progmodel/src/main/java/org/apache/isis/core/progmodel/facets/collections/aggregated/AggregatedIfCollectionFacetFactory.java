@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.aggregated;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -29,12 +28,11 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.progmodel.facets.collections.collection.CollectionFacetFactory;
 
-
 /**
  * All {@link CollectionTypeRegistry collection types} are intrinsically {@link AggregatedFacet aggregeted}.
  * 
  * 
- * Must be registered in the  {@link ProgrammingModel} after {@link CollectionFacetFactory}.
+ * Must be registered in the {@link ProgrammingModel} after {@link CollectionFacetFactory}.
  */
 public class AggregatedIfCollectionFacetFactory extends FacetFactoryAbstract {
 
@@ -43,7 +41,7 @@ public class AggregatedIfCollectionFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         if (!processClassContaxt.getFacetHolder().containsFacet(CollectionFacet.class)) {
             return;
         }

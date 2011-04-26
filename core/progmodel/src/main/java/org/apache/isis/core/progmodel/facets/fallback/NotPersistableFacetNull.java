@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-
 
 /**
  * Installed by the {@link FallbackFacetFactory}, and means that this class <i>is</i> persistable (ie not
@@ -40,9 +38,9 @@ public class NotPersistableFacetNull extends NotPersistableFacetAbstract {
     /**
      * Always returns <tt>null</tt> (that is, does <i>not</i> disable).
      */
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return null;
     }
 
 }
-

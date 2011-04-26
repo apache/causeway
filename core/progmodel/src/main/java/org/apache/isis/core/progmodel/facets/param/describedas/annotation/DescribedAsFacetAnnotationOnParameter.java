@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.describedas.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
-
 
 public class DescribedAsFacetAnnotationOnParameter extends DescribedAsFacetAbstract {
 
@@ -31,4 +29,3 @@ public class DescribedAsFacetAnnotationOnParameter extends DescribedAsFacetAbstr
     }
 
 }
-

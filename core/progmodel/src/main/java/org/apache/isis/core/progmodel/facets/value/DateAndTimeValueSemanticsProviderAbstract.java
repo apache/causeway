@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import java.text.DateFormat;
 import java.util.Map;
-
-import com.google.inject.internal.Maps;
 
 import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -31,11 +28,12 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
+import com.google.inject.internal.Maps;
 
 public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static Map<String,DateFormat> formats = Maps.newHashMap();
-    
+    private static Map<String, DateFormat> formats = Maps.newHashMap();
+
     static {
         formats.put("iso", createDateFormat("yyyy-MM-dd HH:mm"));
         formats.put("iso_short", createDateFormat("yyyyMMdd'T'HHmm"));
@@ -53,19 +51,14 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 18;
 
-
     @SuppressWarnings("unchecked")
-    public DateAndTimeValueSemanticsProviderAbstract(
-            final FacetHolder holder,
-            final Class<T> adaptedClass,
-            final boolean immutable,
-            final boolean equalByContent,
-            final IsisConfiguration configuration, 
-            final ValueSemanticsProviderContext context) {
-        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, (T) DEFAULT_VALUE, configuration, context);
+    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
+        final boolean immutable, final boolean equalByContent, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, (T) DEFAULT_VALUE,
+            configuration, context);
 
-        final String formatRequired = configuration.getString(
-                ConfigurationConstants.ROOT + "value.format.datetime");
+        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.datetime");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {
@@ -95,9 +88,11 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     protected Map<String, DateFormat> formats() {
         return formats;
     }
-    
-    protected DateFormat format(Localization localization) {
-        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, localization.getLocale());
+
+    @Override
+    protected DateFormat format(final Localization localization) {
+        final DateFormat dateFormat =
+            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, localization.getLocale());
         dateFormat.setTimeZone(localization.getTimeZone());
         return dateFormat;
     }

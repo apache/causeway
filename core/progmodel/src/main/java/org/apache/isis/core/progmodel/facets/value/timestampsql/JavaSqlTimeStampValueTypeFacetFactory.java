@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.timestampsql;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
-
-public class JavaSqlTimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.sql.Timestamp> {
+public class JavaSqlTimeStampValueTypeFacetFactory extends
+    ValueUsingValueSemanticsProviderFacetFactory<java.sql.Timestamp> {
 
     public JavaSqlTimeStampValueTypeFacetFactory() {
         super(DateValueFacet.class); // as per inherited DateTimeValueSemanticsProvider#facetType
@@ -33,7 +32,7 @@ public class JavaSqlTimeStampValueTypeFacetFactory extends ValueUsingValueSemant
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

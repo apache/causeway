@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.orderfields;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.orderfields.FieldOrderFacet;
-
 
 public abstract class FieldOrderFacetAbstract extends SingleStringValueFacetAbstract implements FieldOrderFacet {
 

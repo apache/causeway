@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.executed.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacetAbstract;
-
 
 public class ExecutedFacetAnnotation extends ExecutedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class ExecutedFacetAnnotation extends ExecutedFacetAbstract {
     }
 
 }
-

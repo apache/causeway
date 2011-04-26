@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.orderactions;
 
 import org.apache.isis.applib.annotation.ActionOrder;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.orderactions.ActionOrderFacet;
 
-
 public class ActionOrderAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public ActionOrderAnnotationFacetFactory() {
@@ -35,7 +33,7 @@ public class ActionOrderAnnotationFacetFactory extends AnnotationBasedFacetFacto
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final ActionOrder annotation = getAnnotation(processClassContaxt.getCls(), ActionOrder.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }

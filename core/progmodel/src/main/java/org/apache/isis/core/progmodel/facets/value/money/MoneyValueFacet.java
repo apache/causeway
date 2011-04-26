@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.money;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-
 
 public interface MoneyValueFacet extends Facet {
 
@@ -33,4 +31,3 @@ public interface MoneyValueFacet extends Facet {
     ObjectAdapter createValue(float amount, String currencyCode);
 
 }
-

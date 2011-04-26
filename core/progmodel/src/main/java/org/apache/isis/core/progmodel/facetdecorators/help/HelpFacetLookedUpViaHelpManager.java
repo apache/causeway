@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.help.HelpFacetAbstract;
-
 
 /**
  * Looked up via the {@link HelpManager}.
@@ -34,4 +32,3 @@ public class HelpFacetLookedUpViaHelpManager extends HelpFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.util.Arrays;
@@ -28,14 +27,13 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 
-
-public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements MethodPrefixBasedFacetFactory {
+public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements
+    MethodPrefixBasedFacetFactory {
 
     private final List<String> prefixes;
 
     protected static final Object[] NO_PARAMETERS = new Object[0];
     protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
-
 
     public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
         super(featureTypes);

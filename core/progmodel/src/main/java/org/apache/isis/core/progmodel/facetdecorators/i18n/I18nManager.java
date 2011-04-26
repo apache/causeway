@@ -33,7 +33,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 public interface I18nManager extends ApplicationScopedComponent {
 
     /**
-     * Get the localized name for the specified identified action/property. 
+     * Get the localized name for the specified identified action/property.
      * 
      * <p>
      * Returns null if no name available.
@@ -49,7 +49,7 @@ public interface I18nManager extends ApplicationScopedComponent {
     String getDescription(Identifier identifier);
 
     /**
-     * Get the localized help text for the specified identified action/property. 
+     * Get the localized help text for the specified identified action/property.
      * 
      * <p>
      * Returns null if no help text available.

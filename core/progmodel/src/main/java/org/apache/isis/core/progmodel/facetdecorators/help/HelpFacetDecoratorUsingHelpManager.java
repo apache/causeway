@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.applib.Identifier;
@@ -27,43 +26,43 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 
-
-public class HelpFacetDecoratorUsingHelpManager  extends FacetDecoratorAbstract implements HelpFacetDecorator {
+public class HelpFacetDecoratorUsingHelpManager extends FacetDecoratorAbstract implements HelpFacetDecorator {
     private final HelpManager helpManager;
 
     public HelpFacetDecoratorUsingHelpManager(final HelpManager manager) {
         helpManager = manager;
     }
 
-    public Facet decorate(final Facet facet, FacetHolder facetHolder) {
+    @Override
+    public Facet decorate(final Facet facet, final FacetHolder facetHolder) {
         if (facet.facetType() != HelpFacet.class) {
-        	return facet;
-        } 
+            return facet;
+        }
 
         if (!(facetHolder instanceof IdentifiedHolder)) {
-    		return null;
-    	} 
+            return null;
+        }
 
-    	IdentifiedHolder identifiedHolder = (IdentifiedHolder) facetHolder;
-		return decorateWithHelpFacet(facet, identifiedHolder);
+        final IdentifiedHolder identifiedHolder = (IdentifiedHolder) facetHolder;
+        return decorateWithHelpFacet(facet, identifiedHolder);
     }
 
-	private Facet decorateWithHelpFacet(final Facet facet,
-			IdentifiedHolder identifiedHolder) {
-		final Identifier identifier = identifiedHolder.getIdentifier();
-		
-        final String helpText = helpManager.getHelpText(identifier);
-		if (helpText != null) {
-		    HelpFacetLookedUpViaHelpManager decoratingFacet = new HelpFacetLookedUpViaHelpManager(helpText, facet.getFacetHolder());
-		    identifiedHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
-		}
-		return null;
-	}
+    private Facet decorateWithHelpFacet(final Facet facet, final IdentifiedHolder identifiedHolder) {
+        final Identifier identifier = identifiedHolder.getIdentifier();
 
+        final String helpText = helpManager.getHelpText(identifier);
+        if (helpText != null) {
+            final HelpFacetLookedUpViaHelpManager decoratingFacet =
+                new HelpFacetLookedUpViaHelpManager(helpText, facet.getFacetHolder());
+            identifiedHolder.addFacet(decoratingFacet);
+            return decoratingFacet;
+        }
+        return null;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-	public Class<? extends Facet>[] getFacetTypes() {
+    public Class<? extends Facet>[] getFacetTypes() {
         return new Class[] { HelpFacet.class };
     }
 }
-

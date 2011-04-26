@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validperspec;
 
 import java.util.ArrayList;
@@ -31,18 +30,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
-public class MustSatisfySpecificationOnTypeFacetFactory  extends AnnotationBasedFacetFactoryAbstract {
+public class MustSatisfySpecificationOnTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MustSatisfySpecificationOnTypeFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
-    private Facet create(Class<?> clazz, FacetHolder holder) {
+    private Facet create(final Class<?> clazz, final FacetHolder holder) {
         return create(getAnnotation(clazz, MustSatisfy.class), holder);
     }
 
@@ -50,10 +49,10 @@ public class MustSatisfySpecificationOnTypeFacetFactory  extends AnnotationBased
         if (annotation == null) {
             return null;
         }
-        Class<?>[] values = annotation.value();
-        List<Specification> specifications = new ArrayList<Specification>();
-        for(Class<?> value: values) {
-            Specification specification = newSpecificationElseNull(value);
+        final Class<?>[] values = annotation.value();
+        final List<Specification> specifications = new ArrayList<Specification>();
+        for (final Class<?> value : values) {
+            final Specification specification = newSpecificationElseNull(value);
             if (specification != null) {
                 specifications.add(specification);
             }
@@ -61,15 +60,15 @@ public class MustSatisfySpecificationOnTypeFacetFactory  extends AnnotationBased
         return specifications.size() > 0 ? new MustSatisfySpecificationOnTypeFacet(specifications, holder) : null;
     }
 
-    private static Specification newSpecificationElseNull(Class<?> value) {
+    private static Specification newSpecificationElseNull(final Class<?> value) {
         if (!(Specification.class.isAssignableFrom(value))) {
             return null;
         }
         try {
             return (Specification) value.newInstance();
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             return null;
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             return null;
         }
     }

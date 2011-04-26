@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.percentage;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Localization;
@@ -40,8 +37,10 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatingPointValueFacet;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
-public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements FloatingPointValueFacet {
+public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements
+    FloatingPointValueFacet {
 
     private static final NumberFormat PERCENTAGE_FORMAT = NumberFormat.getPercentInstance();
     private static final NumberFormat DECIMAL_FORMAT = NumberFormat.getNumberInstance();
@@ -65,14 +64,12 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
         this(null, null, null);
     }
 
-    public PercentageValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(type(), holder, Percentage.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public PercentageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
+            configuration, context);
 
-        final String formatRequired = configuration.getString(
-                ConfigurationConstants.ROOT + "value.format.percentage");
+        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.percentage");
         if (formatRequired == null) {
             format = PERCENTAGE_FORMAT;
         } else {
@@ -103,7 +100,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object value, Localization localization) {
+    public String titleString(final Object value, final Localization localization) {
         return titleString(format, value);
     }
 
@@ -161,7 +158,4 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
         return "PercentageValueSemanticsProvider: " + format;
     }
 
-
-
 }
-

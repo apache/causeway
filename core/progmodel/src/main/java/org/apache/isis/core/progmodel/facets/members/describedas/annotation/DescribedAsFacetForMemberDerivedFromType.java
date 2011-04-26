@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.describedas.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
-
 
 public class DescribedAsFacetForMemberDerivedFromType extends DescribedAsFacetAbstract {
 

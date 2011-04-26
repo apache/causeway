@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-
 
 public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
 
@@ -46,4 +44,3 @@ public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
     }
 
 }
-

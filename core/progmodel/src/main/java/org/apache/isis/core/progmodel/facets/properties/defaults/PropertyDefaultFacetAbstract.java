@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.defaults;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-
 
 public abstract class PropertyDefaultFacetAbstract extends FacetAbstract implements PropertyDefaultFacet {
 
@@ -37,4 +35,3 @@ public abstract class PropertyDefaultFacetAbstract extends FacetAbstract impleme
     }
 
 }
-

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.biginteger;
 
 import java.math.BigInteger;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
-
 
 public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigInteger> {
 
@@ -33,7 +31,7 @@ public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsPro
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
         if (type != BigInteger.class) {

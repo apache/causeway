@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.help.HelpFacetAbstract;
-
 
 /**
  * Has a description of <tt>null</tt>.
@@ -44,4 +42,3 @@ public class HelpFacetNone extends HelpFacetAbstract {
     }
 
 }
-

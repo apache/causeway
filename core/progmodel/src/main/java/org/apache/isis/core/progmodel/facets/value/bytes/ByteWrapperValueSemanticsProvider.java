@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.bytes;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -25,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-
 
 public class ByteWrapperValueSemanticsProvider extends ByteValueSemanticsProviderAbstract {
 
@@ -36,10 +34,8 @@ public class ByteWrapperValueSemanticsProvider extends ByteValueSemanticsProvide
         this(null, null, null);
     }
 
-    public ByteWrapperValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public ByteWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Byte.class, configuration, context);
     }
 

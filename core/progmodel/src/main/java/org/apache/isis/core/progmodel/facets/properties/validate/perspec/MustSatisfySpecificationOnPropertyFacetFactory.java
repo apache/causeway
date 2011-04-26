@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.validate.perspec;
 
 import java.lang.reflect.Method;
@@ -32,30 +31,29 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
-public class MustSatisfySpecificationOnPropertyFacetFactory  extends AnnotationBasedFacetFactoryAbstract {
+public class MustSatisfySpecificationOnPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MustSatisfySpecificationOnPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         FacetUtil.addFacet(create(processMethodContext.getMethod(), processMethodContext.getFacetHolder()));
     }
 
-    private Facet create(Method method, FacetHolder holder) {
+    private Facet create(final Method method, final FacetHolder holder) {
         return create(getAnnotation(method, MustSatisfy.class), holder);
     }
-
 
     private Facet create(final MustSatisfy annotation, final FacetHolder holder) {
         if (annotation == null) {
             return null;
         }
-        Class<?>[] values = annotation.value();
-        List<Specification> specifications = new ArrayList<Specification>();
-        for(Class<?> value: values) {
-            Specification specification = newSpecificationElseNull(value);
+        final Class<?>[] values = annotation.value();
+        final List<Specification> specifications = new ArrayList<Specification>();
+        for (final Class<?> value : values) {
+            final Specification specification = newSpecificationElseNull(value);
             if (specification != null) {
                 specifications.add(specification);
             }
@@ -63,15 +61,15 @@ public class MustSatisfySpecificationOnPropertyFacetFactory  extends AnnotationB
         return specifications.size() > 0 ? new MustSatisfySpecificationOnPropertyFacet(specifications, holder) : null;
     }
 
-    private static Specification newSpecificationElseNull(Class<?> value) {
+    private static Specification newSpecificationElseNull(final Class<?> value) {
         if (!(Specification.class.isAssignableFrom(value))) {
             return null;
         }
         try {
             return (Specification) value.newInstance();
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             return null;
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             return null;
         }
     }

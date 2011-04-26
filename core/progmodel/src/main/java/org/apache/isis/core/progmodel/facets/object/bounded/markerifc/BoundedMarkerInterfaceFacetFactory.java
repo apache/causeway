@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded.markerifc;
 
 import java.lang.reflect.Method;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 
-
 public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
 
     public BoundedMarkerInterfaceFacetFactory() {
@@ -37,7 +35,7 @@ public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final boolean implementsMarker = Bounded.class.isAssignableFrom(processClassContaxt.getCls());
         FacetUtil.addFacet(create(implementsMarker, processClassContaxt.getFacetHolder()));
     }

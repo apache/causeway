@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.hide;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
-
 
 public class HiddenFacetImpl extends HiddenFacetAbstract {
 
@@ -31,6 +29,7 @@ public class HiddenFacetImpl extends HiddenFacetAbstract {
         super(value, holder);
     }
 
+    @Override
     public String hiddenReason(final ObjectAdapter targetAdapter) {
         if (value() == When.ALWAYS) {
             return "Always hidden";
@@ -52,4 +51,3 @@ public class HiddenFacetImpl extends HiddenFacetAbstract {
     }
 
 }
-

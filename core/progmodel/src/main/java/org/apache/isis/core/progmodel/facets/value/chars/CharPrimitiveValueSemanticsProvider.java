@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.chars;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -28,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-
-public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProviderAbstract implements PropertyDefaultFacet {
+public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProviderAbstract implements
+    PropertyDefaultFacet {
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
@@ -38,10 +37,8 @@ public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProvi
         this(null, null, null);
     }
 
-    public CharPrimitiveValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public CharPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, char.class, configuration, context);
     }
 
@@ -53,6 +50,5 @@ public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProvi
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return createAdapter(char.class, Character.valueOf(' '));
     }
-
 
 }

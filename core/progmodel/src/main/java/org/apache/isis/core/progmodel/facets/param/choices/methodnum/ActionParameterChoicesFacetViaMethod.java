@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.choices.methodnum;
 
 import java.lang.reflect.Method;
@@ -35,42 +34,36 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.progmodel.facets.CollectionUtils;
 import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 
-
-
-public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
+public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements
+    ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
 
-    public ActionParameterChoicesFacetViaMethod(
-    		final Method method, 
-    		final Class<?> choicesType, 
-    		final FacetHolder holder, 
-    		final SpecificationLookup specificationLookup,
-    		final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetViaMethod(final Method method, final Class<?> choicesType,
+        final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
     @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	@Override
+    @Override
     public boolean impliesResolve() {
-		return true;
-	}
+        return true;
+    }
 
-	@Override
+    @Override
     public boolean impliesObjectChanged() {
-		return false;
-	}
-	
+        return false;
+    }
 
     @Override
     public Object[] getChoices(final ObjectAdapter owningAdapter) {
@@ -80,19 +73,15 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         }
         if (options.getClass().isArray()) {
             return ArrayUtil.getObjectAsObjectArray(options);
-        }
-        else {
+        } else {
             final ObjectSpecification specification = getSpecification(choicesType);
             return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
         }
     }
 
-	@Override
+    @Override
     protected String toStringValues() {
         return "method=" + method + ",type=" + choicesType;
     }
 
 }
-
-
-

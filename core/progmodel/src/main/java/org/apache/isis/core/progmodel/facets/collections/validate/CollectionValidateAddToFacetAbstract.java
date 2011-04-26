@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -27,8 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-
-public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract implements CollectionValidateAddToFacet {
+public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract implements
+    CollectionValidateAddToFacet {
 
     public static Class<? extends Facet> type() {
         return CollectionValidateAddToFacet.class;
@@ -38,6 +37,7 @@ public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract
         super(type(), holder, false);
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof CollectionAddToContext)) {
             return null;
@@ -47,4 +47,3 @@ public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract
     }
 
 }
-

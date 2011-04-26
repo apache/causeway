@@ -17,17 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.timestampsql;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
-
-import com.google.inject.internal.Maps;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -38,6 +33,9 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueSemanticsProviderAbstract;
 
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
@@ -45,7 +43,7 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
         return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);
     }
 
-    private static Map<String,DateFormat> formats = Maps.newHashMap();
+    private static Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -59,10 +57,8 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
         this(null, null, null);
     }
 
-    public JavaSqlTimeStampValueSemanticsProvider(
-            final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, java.sql.Timestamp.class, configuration, context);
     }
 
@@ -91,4 +87,3 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
     }
 
 }
-

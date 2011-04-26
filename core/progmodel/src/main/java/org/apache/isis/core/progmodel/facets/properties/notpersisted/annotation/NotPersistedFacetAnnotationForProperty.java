@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-
 
 public class NotPersistedFacetAnnotationForProperty extends NotPersistedFacetAbstract {
 
@@ -35,9 +33,9 @@ public class NotPersistedFacetAnnotationForProperty extends NotPersistedFacetAbs
     /**
      * Always returns <i>Not Persisted</i>.
      */
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return "Not Persisted";
     }
 
 }
-

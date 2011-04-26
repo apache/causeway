@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.collection;
 
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
@@ -32,20 +31,19 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGener
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-
-public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterMapAware {
+public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware,
+    AdapterMapAware {
 
     private CollectionTypeRegistry collectionTypeRegistry;
-	private AdapterMap adapterMap;
+    private AdapterMap adapterMap;
 
     public CollectionFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
-
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
-        
+    public void process(final ProcessClassContext processClassContaxt) {
+
         if (collectionTypeRegistry.isCollectionType(processClassContaxt.getCls())) {
             processCollectionType(processClassContaxt);
         } else if (collectionTypeRegistry.isArrayType(processClassContaxt.getCls())) {
@@ -54,15 +52,14 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
 
     }
 
-
-
-    private void processCollectionType(ProcessClassContext processClassContaxt) {
+    private void processCollectionType(final ProcessClassContext processClassContaxt) {
         final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
         final TypeOfFacet typeOfFacet = facetHolder.getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
-            Class<?> collectionElementType = collectionElementType(processClassContaxt.getCls());
+            final Class<?> collectionElementType = collectionElementType(processClassContaxt.getCls());
             facetHolder.addFacet(collectionElementType != Object.class ? new TypeOfFacetInferredFromGenerics(
-                    collectionElementType, facetHolder, getSpecificationLookup()) : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLookup()));
+                collectionElementType, facetHolder, getSpecificationLookup()) : new TypeOfFacetDefaultToObject(
+                facetHolder, getSpecificationLookup()));
         } else {
             // nothing
         }
@@ -70,21 +67,20 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
         return;
     }
 
-    private void processAsArrayType(ProcessClassContext processClassContaxt) {
+    private void processAsArrayType(final ProcessClassContext processClassContaxt) {
         final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
         facetHolder.addFacet(new JavaArrayFacet(facetHolder, getAdapterMap()));
-        facetHolder.addFacet(new TypeOfFacetInferredFromArray(processClassContaxt.getCls().getComponentType(), facetHolder, getSpecificationLookup()));
+        facetHolder.addFacet(new TypeOfFacetInferredFromArray(processClassContaxt.getCls().getComponentType(),
+            facetHolder, getSpecificationLookup()));
     }
-
 
     private Class<?> collectionElementType(final Class<?> cls) {
         return Object.class;
     }
 
-
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Dependencies (injected)
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     /**
      * Injected since {@link CollectionTypeRegistryAware}.
@@ -97,9 +93,9 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
     public AdapterMap getAdapterMap() {
         return adapterMap;
     }
-    
+
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         this.adapterMap = adapterManager;
     }
 

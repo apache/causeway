@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.disable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-
 
 public abstract class DisabledFacetAbstract extends SingleWhenValueFacetAbstract implements DisabledFacet {
 
@@ -39,15 +37,16 @@ public abstract class DisabledFacetAbstract extends SingleWhenValueFacetAbstract
         super(type(), holder, value);
     }
 
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         final ObjectAdapter target = ic.getTarget();
-        String disabledReason = disabledReason(target);
+        final String disabledReason = disabledReason(target);
         if (disabledReason != null) {
-        	return disabledReason;
+            return disabledReason;
         }
         if (getUnderlyingFacet() != null) {
-        	DisabledFacet underlyingFacet = (DisabledFacet) getUnderlyingFacet();
-        	return underlyingFacet.disabledReason(target);
+            final DisabledFacet underlyingFacet = (DisabledFacet) getUnderlyingFacet();
+            return underlyingFacet.disabledReason(target);
         }
         return null;
     }

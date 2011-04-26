@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.defaults;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -25,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 
-
-public abstract class ActionParameterDefaultsFacetAbstract extends FacetAbstract implements ActionParameterDefaultsFacet {
+public abstract class ActionParameterDefaultsFacetAbstract extends FacetAbstract implements
+    ActionParameterDefaultsFacet {
 
     public static Class<? extends Facet> type() {
         return ActionParameterDefaultsFacet.class;
@@ -37,4 +36,3 @@ public abstract class ActionParameterDefaultsFacetAbstract extends FacetAbstract
     }
 
 }
-

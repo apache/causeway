@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help.file.internal;
 
 import java.io.BufferedReader;
@@ -26,11 +25,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.progmodel.facetdecorators.help.HelpManagerAbstract;
-
+import org.apache.log4j.Logger;
 
 public class HelpManagerUsingFiles extends HelpManagerAbstract {
 
@@ -48,7 +46,7 @@ public class HelpManagerUsingFiles extends HelpManagerAbstract {
     @SuppressWarnings("unused")
     private final IsisConfiguration configuration;
 
-    public HelpManagerUsingFiles(IsisConfiguration configuration) {
+    public HelpManagerUsingFiles(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -127,7 +125,8 @@ public class HelpManagerUsingFiles extends HelpManagerAbstract {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
             }
         }
     }

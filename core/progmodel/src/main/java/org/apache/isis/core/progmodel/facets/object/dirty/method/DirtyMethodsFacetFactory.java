@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.dirty.method;
 
 import java.lang.reflect.Method;
@@ -31,8 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-
-
 
 public class DirtyMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -48,25 +45,28 @@ public class DirtyMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         final Class<?> cls = processClassContext.getCls();
 
         final List<Facet> facets = new ArrayList<Facet>();
 
-        Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, IS_DIRTY_PREFIX, boolean.class, NO_PARAMETERS_TYPES);
+        Method method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, IS_DIRTY_PREFIX, boolean.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new IsDirtyObjectFacetViaMethod(method, facetHolder));
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, CLEAR_DIRTY_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, CLEAR_DIRTY_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new ClearDirtyObjectFacetViaMethod(method, facetHolder));
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MARK_DIRTY_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MARK_DIRTY_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new MarkDirtyObjectFacetViaMethod(method, facetHolder));

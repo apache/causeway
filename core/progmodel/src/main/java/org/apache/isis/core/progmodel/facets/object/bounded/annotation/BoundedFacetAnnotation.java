@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.bounded.BoundedFacetImpl;
-
 
 public class BoundedFacetAnnotation extends BoundedFacetImpl {
 
@@ -31,4 +29,3 @@ public class BoundedFacetAnnotation extends BoundedFacetImpl {
     }
 
 }
-

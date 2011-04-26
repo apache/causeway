@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties.accessor;
 
 import java.lang.reflect.Method;
@@ -31,38 +30,39 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacetAbstract;
 
-
-public class PropertyAccessorFacetViaAccessor extends PropertyOrCollectionAccessorFacetAbstract implements ImperativeFacet {
+public class PropertyAccessorFacetViaAccessor extends PropertyOrCollectionAccessorFacetAbstract implements
+    ImperativeFacet {
 
     private final Method method;
 
-    public PropertyAccessorFacetViaAccessor(
-    		final Method method, 
-    		final FacetHolder holder) {
+    public PropertyAccessorFacetViaAccessor(final Method method, final FacetHolder holder) {
         super(holder);
         this.method = method;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	/**
-	 * Bytecode cannot automatically call {@link DomainObjectContainer#objectChanged(Object)}
-	 * because cannot distinguish whether interacting with accessor to read it or to modify its contents.
-	 */
-	public boolean impliesObjectChanged() {
-		return false;
-	}
+    /**
+     * Bytecode cannot automatically call {@link DomainObjectContainer#objectChanged(Object)} because cannot distinguish
+     * whether interacting with accessor to read it or to modify its contents.
+     */
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
 
-	@Override
+    @Override
     public Object getProperty(final ObjectAdapter owningAdapter) {
         return AdapterInvokeUtils.invoke(method, owningAdapter);
     }

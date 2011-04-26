@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.param.named.annotation;
 
 import java.lang.annotation.Annotation;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 
-
 public class NamedAnnotationOnParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public NamedAnnotationOnParameterFacetFactory() {
@@ -37,11 +35,12 @@ public class NamedAnnotationOnParameterFacetFactory extends AnnotationBasedFacet
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
-        for (int j = 0; j < parameterAnnotations.length; j++) {
-            if (parameterAnnotations[j] instanceof Named) {
-                final Named annotation = (Named) parameterAnnotations[j];
+    public void processParams(final ProcessParameterContext processParameterContext) {
+        final Annotation[] parameterAnnotations =
+            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Named) {
+                final Named annotation = (Named) parameterAnnotation;
                 FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }

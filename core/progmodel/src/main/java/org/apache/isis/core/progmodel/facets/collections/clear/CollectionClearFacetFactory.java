@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections.clear;
 
 import java.lang.reflect.Method;
@@ -36,9 +35,8 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-
-public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-        AdapterMapAware, ObjectDirtierAware {
+public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware,
+    ObjectDirtierAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CLEAR_PREFIX };
 
@@ -50,7 +48,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         attachCollectionClearFacets(processMethodContext);
 
     }
@@ -60,7 +58,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
 
-        Class<?> cls = processMethodContext.getCls();
+        final Class<?> cls = processMethodContext.getCls();
         final Method method =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName,
                 void.class, null);
@@ -79,8 +77,6 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         }
     }
 
-
-
     // ///////////////////////////////////////////////////////
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
@@ -90,17 +86,17 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     }
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 
     protected ObjectDirtier getObjectDirtier() {
         return objectDirtier;
     }
-    
+
     @Override
-    public void setObjectDirtier(ObjectDirtier objectDirtier) {
+    public void setObjectDirtier(final ObjectDirtier objectDirtier) {
         this.objectDirtier = objectDirtier;
     }
-    
+
 }

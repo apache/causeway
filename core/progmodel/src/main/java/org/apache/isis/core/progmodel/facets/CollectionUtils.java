@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,17 +25,18 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public final class CollectionUtils {
-    private CollectionUtils() {}
+    private CollectionUtils() {
+    }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, AdapterMap adapterMap) {
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec,
+        final AdapterMap adapterMap) {
         final ObjectAdapter collection = adapterMap.adapterFor(option);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-    	final Object[] optionArray = new Object[facet.size(collection)];
-    	int j = 0;
-        for(ObjectAdapter nextElement: facet.iterable(collection)) {
-			optionArray[j++] = nextElement.getObject();
+        final Object[] optionArray = new Object[facet.size(collection)];
+        int j = 0;
+        for (final ObjectAdapter nextElement : facet.iterable(collection)) {
+            optionArray[j++] = nextElement.getObject();
         }
         return optionArray;
     }

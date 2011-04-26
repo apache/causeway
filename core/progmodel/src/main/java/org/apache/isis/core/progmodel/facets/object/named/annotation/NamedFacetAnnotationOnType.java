@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.named.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
-
 
 public class NamedFacetAnnotationOnType extends NamedFacetAbstract {
 
@@ -31,4 +29,3 @@ public class NamedFacetAnnotationOnType extends NamedFacetAbstract {
     }
 
 }
-

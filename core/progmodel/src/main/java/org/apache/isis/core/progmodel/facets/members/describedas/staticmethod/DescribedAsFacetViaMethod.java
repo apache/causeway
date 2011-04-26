@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.members.describedas.staticmethod;
 
 import java.lang.reflect.Method;
@@ -28,31 +27,28 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 
-
 public class DescribedAsFacetViaMethod extends DescribedAsFacetAbstract implements ImperativeFacet {
 
     private final Method method;
 
-    public DescribedAsFacetViaMethod(
-    		final String value, 
-    		final Method method, 
-    		final FacetHolder holder) {
+    public DescribedAsFacetViaMethod(final String value, final Method method, final FacetHolder holder) {
         super(value, holder);
         this.method = method;
     }
 
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
+    @Override
+    public boolean impliesResolve() {
+        return false;
+    }
 
-	public boolean impliesResolve() {
-		return false;
-	}
-
-	public boolean impliesObjectChanged() {
-		return false;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
 
 }
-

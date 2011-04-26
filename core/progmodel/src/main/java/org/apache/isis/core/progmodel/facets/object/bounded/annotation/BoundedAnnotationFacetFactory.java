@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded.annotation;
 
 import org.apache.isis.applib.annotation.Bounded;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 
-
 public class BoundedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public BoundedAnnotationFacetFactory() {
@@ -35,7 +33,7 @@ public class BoundedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAb
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
         final Bounded annotation = getAnnotation(processClassContaxt.getCls(), Bounded.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }

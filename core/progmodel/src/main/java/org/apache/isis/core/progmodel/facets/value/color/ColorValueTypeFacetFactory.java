@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.color;
 
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
-
 
 public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Color> {
 
@@ -32,7 +30,7 @@ public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProvider
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 

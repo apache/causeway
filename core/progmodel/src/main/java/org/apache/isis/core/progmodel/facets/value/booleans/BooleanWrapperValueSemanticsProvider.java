@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -26,7 +25,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-
 
 public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract {
 
@@ -39,10 +37,8 @@ public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsP
         this(null, null, null);
     }
 
-    public BooleanWrapperValueSemanticsProvider(
-    		final FacetHolder holder,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+    public BooleanWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
         super(holder, Boolean.class, DEFAULT_PROVIDER, configuration, context);
     }
 
