@@ -17,22 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import junit.framework.TestCase;
-
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LifeCycleEvent;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-
 
 public class LifeCycleEventTest extends TestCase {
 
@@ -84,4 +71,3 @@ public class LifeCycleEventTest extends TestCase {
     }
 
 }
-

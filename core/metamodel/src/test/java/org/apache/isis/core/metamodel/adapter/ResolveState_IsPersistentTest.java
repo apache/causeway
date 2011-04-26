@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
@@ -46,33 +45,19 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ResolveState_IsPersistentTest  {
+public class ResolveState_IsPersistentTest {
 
-    
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {true, GHOST},
-                {false, NEW},
-                {true, PART_RESOLVED},
-                {true, RESOLVED},
-                {true, RESOLVING},
-                {true, RESOLVING_PART},
-                {false, TRANSIENT},
-                {false, DESTROYED},
-                {true, UPDATING},
-                {false, SERIALIZING_TRANSIENT},
-                {true, SERIALIZING_GHOST},
-                {true, SERIALIZING_PART_RESOLVED},
-                {true, SERIALIZING_RESOLVED},
-                {false, VALUE},
-        });
+        return Arrays.asList(new Object[][] { { true, GHOST }, { false, NEW }, { true, PART_RESOLVED },
+            { true, RESOLVED }, { true, RESOLVING }, { true, RESOLVING_PART }, { false, TRANSIENT },
+            { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT }, { true, SERIALIZING_GHOST },
+            { true, SERIALIZING_PART_RESOLVED }, { true, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
-    
 
     private final boolean whetherIs;
     private final ResolveState state;
-    
+
     public ResolveState_IsPersistentTest(final boolean whetherIs, final ResolveState state) {
         this.whetherIs = whetherIs;
         this.state = state;

@@ -17,18 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public class OidWithNonStaticDestringMethod extends DirectlyStringableOidAbstract implements DirectlyStringableOid {
 
-	public Oid deString(String oidStr) {
-		return new OidWithNonStaticDestringMethod();
-	}
-	
-	public String enString() {
-		return "CUS|1234567A";
-	}
+    public Oid deString(final String oidStr) {
+        return new OidWithNonStaticDestringMethod();
+    }
+
+    @Override
+    public String enString() {
+        return "CUS|1234567A";
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
@@ -46,33 +45,20 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ResolveState_SerializeFromTest  {
+public class ResolveState_SerializeFromTest {
 
-    
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {GHOST, SERIALIZING_GHOST},
-                {NEW, null},
-                {PART_RESOLVED, SERIALIZING_PART_RESOLVED},
-                {RESOLVED, SERIALIZING_RESOLVED},
-                {RESOLVING, null},
-                {RESOLVING_PART, null},
-                {TRANSIENT, SERIALIZING_TRANSIENT},
-                {DESTROYED, null},
-                {UPDATING, null},
-                {SERIALIZING_TRANSIENT, null},
-                {SERIALIZING_GHOST, null},
-                {SERIALIZING_PART_RESOLVED, null},
-                {SERIALIZING_RESOLVED, null},
-                {VALUE, null},
-        });
+        return Arrays.asList(new Object[][] { { GHOST, SERIALIZING_GHOST }, { NEW, null },
+            { PART_RESOLVED, SERIALIZING_PART_RESOLVED }, { RESOLVED, SERIALIZING_RESOLVED }, { RESOLVING, null },
+            { RESOLVING_PART, null }, { TRANSIENT, SERIALIZING_TRANSIENT }, { DESTROYED, null }, { UPDATING, null },
+            { SERIALIZING_TRANSIENT, null }, { SERIALIZING_GHOST, null }, { SERIALIZING_PART_RESOLVED, null },
+            { SERIALIZING_RESOLVED, null }, { VALUE, null }, });
     }
-    
 
     private final ResolveState state;
     private final ResolveState serializeFrom;
-    
+
     public ResolveState_SerializeFromTest(final ResolveState state, final ResolveState serializeFrom) {
         this.serializeFrom = serializeFrom;
         this.state = state;

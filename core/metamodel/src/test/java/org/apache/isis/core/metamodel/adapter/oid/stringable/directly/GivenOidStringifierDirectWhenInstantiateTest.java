@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,24 +28,24 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 public class GivenOidStringifierDirectWhenInstantiateTest {
-	
-	@Test
-	public void withConformantOidClassThenCorrectlyInitialized() {
-		OidStringifierDirect oidStringifier = new OidStringifierDirect(OidConformant.class);
-		assertThat(oidStringifier.getDestringMethod(), is(not(nullValue())));
-		assertThat(oidStringifier.getDestringMethod().getName(), is("deString"));
-		assertThat(oidStringifier.getOidClass(), is(not(nullValue())));
-		assertEquals(OidConformant.class, oidStringifier.getOidClass());
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void withOidClassWithNonPublicDestringMethodThenFails() {
-		new OidStringifierDirect(OidWithNonPublicDestringMethod.class);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void withOidClassWithNonStaticDestringMethodThenFails() {
-		new OidStringifierDirect(OidWithNonStaticDestringMethod.class);
-	}
+
+    @Test
+    public void withConformantOidClassThenCorrectlyInitialized() {
+        final OidStringifierDirect oidStringifier = new OidStringifierDirect(OidConformant.class);
+        assertThat(oidStringifier.getDestringMethod(), is(not(nullValue())));
+        assertThat(oidStringifier.getDestringMethod().getName(), is("deString"));
+        assertThat(oidStringifier.getOidClass(), is(not(nullValue())));
+        assertEquals(OidConformant.class, oidStringifier.getOidClass());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void withOidClassWithNonPublicDestringMethodThenFails() {
+        new OidStringifierDirect(OidWithNonPublicDestringMethod.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void withOidClassWithNonStaticDestringMethodThenFails() {
+        new OidStringifierDirect(OidWithNonStaticDestringMethod.class);
+    }
 
 }

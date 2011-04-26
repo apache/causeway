@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
@@ -46,33 +45,19 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ResolveState_IsNewTest  {
+public class ResolveState_IsNewTest {
 
-    
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {false, GHOST},
-                {true, NEW},
-                {false, PART_RESOLVED},
-                {false, RESOLVED},
-                {false, RESOLVING},
-                {false, RESOLVING_PART},
-                {false, TRANSIENT},
-                {false, DESTROYED},
-                {false, UPDATING},
-                {false, SERIALIZING_TRANSIENT},
-                {false, SERIALIZING_GHOST},
-                {false, SERIALIZING_PART_RESOLVED},
-                {false, SERIALIZING_RESOLVED},
-                {false, VALUE},
-        });
+        return Arrays.asList(new Object[][] { { false, GHOST }, { true, NEW }, { false, PART_RESOLVED },
+            { false, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT },
+            { false, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT }, { false, SERIALIZING_GHOST },
+            { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
-    
 
     private final boolean whetherIs;
     private final ResolveState state;
-    
+
     public ResolveState_IsNewTest(final boolean whetherIs, final ResolveState state) {
         this.whetherIs = whetherIs;
         this.state = state;

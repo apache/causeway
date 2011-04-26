@@ -17,20 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -47,98 +37,107 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ObjectAssociationAbstractTest {
 
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
-    
-    private Mockery context = new JUnit4Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+
+    private final Mockery context = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
     public static class Customer {
         private String firstName;
+
         public String getFirstName() {
             return firstName;
         }
     }
+
     @Before
     public void setup() {
         facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
-        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY,
-            new TestProxySpecification("test"), new ObjectMemberContext(null, null, null, null)) {
+        objectAssociation =
+            new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, new TestProxySpecification("test"),
+                new ObjectMemberContext(null, null, null, null)) {
 
-            @Override
-            public ObjectAdapter get(ObjectAdapter fromObject) {
-                return null;
-            }
+                @Override
+                public ObjectAdapter get(final ObjectAdapter fromObject) {
+                    return null;
+                }
 
-            @Override
-            public boolean isEmpty(ObjectAdapter adapter) {
-                return false;
-            }
+                @Override
+                public boolean isEmpty(final ObjectAdapter adapter) {
+                    return false;
+                }
 
-            @Override
-            public ObjectAdapter[] getChoices(ObjectAdapter object) {
-                return null;
-            }
+                @Override
+                public ObjectAdapter[] getChoices(final ObjectAdapter object) {
+                    return null;
+                }
 
-            @Override
-            public ObjectAdapter getDefault(ObjectAdapter adapter) {
-                return null;
-            }
+                @Override
+                public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+                    return null;
+                }
 
-            @Override
-            public void toDefault(ObjectAdapter target) {}
+                @Override
+                public void toDefault(final ObjectAdapter target) {
+                }
 
-            @Override
-            public UsabilityContext<?> createUsableInteractionContext(
-                    AuthenticationSession session,
-                    InteractionInvocationMethod invocationMethod,
-                    ObjectAdapter target) {
-                return null;
-            }
+                @Override
+                public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+                    final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+                    return null;
+                }
 
-            @Override
-            public VisibilityContext<?> createVisibleInteractionContext(
-                    AuthenticationSession session,
-                    InteractionInvocationMethod invocationMethod,
-                    ObjectAdapter targetObjectAdapter) {
-                return null;
-            }
+                @Override
+                public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+                    final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+                    return null;
+                }
 
-            @Override
-            public String debugData() {
-                return null;
-            }
+                @Override
+                public String debugData() {
+                    return null;
+                }
 
-            @Override
-            public Instance getInstance(ObjectAdapter adapter) {
-                return null;
-            }
+                @Override
+                public Instance getInstance(final ObjectAdapter adapter) {
+                    return null;
+                }
 
-            @Override
-            public boolean containsDoOpFacet(Class<? extends Facet> facetType) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-        };
+                @Override
+                public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+                    // TODO Auto-generated method stub
+                    return false;
+                }
+            };
     }
 
     @Test
     public void notPersistedWhenDerived() throws Exception {
-    	// TODO: ISIS-5, need to reinstate DerivedFacet
+        // TODO: ISIS-5, need to reinstate DerivedFacet
         final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-		facetedMethod.addFacet(mockFacet);
+        facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-    	NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
+        final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
@@ -155,7 +154,7 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void hidden() throws Exception {
-    	HiddenFacet mockFacet = mockFacetIgnoring(HiddenFacet.class);
+        final HiddenFacet mockFacet = mockFacetIgnoring(HiddenFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isAlwaysHidden());
     }
@@ -167,7 +166,7 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void mandatory() throws Exception {
-    	MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
+        final MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isMandatory());
     }
@@ -179,22 +178,20 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void hasChoices() throws Exception {
-    	PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
+        final PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.hasChoices());
     }
 
-
-	private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
-		final T facet = context.mock(typeToMock);
-		context.checking(new Expectations() {
-			{
-				allowing(facet).facetType();
-				will(returnValue(typeToMock));
-				ignoring(facet);
-			}
-		});
-		return facet;
-	}
+    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
+        final T facet = context.mock(typeToMock);
+        context.checking(new Expectations() {
+            {
+                allowing(facet).facetType();
+                will(returnValue(typeToMock));
+                ignoring(facet);
+            }
+        });
+        return facet;
+    }
 }
-

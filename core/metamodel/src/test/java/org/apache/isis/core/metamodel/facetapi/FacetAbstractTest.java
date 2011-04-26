@@ -17,22 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-
-
 public class FacetAbstractTest extends TestCase {
 
-    public static interface FooFacet extends Facet {}
+    public static interface FooFacet extends Facet {
+    }
 
-    public static interface BarFacet extends Facet {}
+    public static interface BarFacet extends Facet {
+    }
 
     public static class ConcreteFacet extends FacetAbstract {
         public ConcreteFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
@@ -40,7 +35,6 @@ public class FacetAbstractTest extends TestCase {
         }
 
     }
-
 
     private FacetAbstract fooFacet;
     private FacetHolder facetHolder, facetHolder2;
@@ -80,4 +74,3 @@ public class FacetAbstractTest extends TestCase {
     }
 
 }
-

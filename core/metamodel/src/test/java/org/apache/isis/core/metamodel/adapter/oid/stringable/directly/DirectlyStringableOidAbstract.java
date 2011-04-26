@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
@@ -25,28 +24,35 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public abstract class DirectlyStringableOidAbstract implements DirectlyStringableOid {
 
-	public void clearPrevious() {
-	}
+    @Override
+    public void clearPrevious() {
+    }
 
-	public void copyFrom(Oid oid) {
-	}
+    @Override
+    public void copyFrom(final Oid oid) {
+    }
 
-	public Oid getPrevious() {
-		return null;
-	}
+    @Override
+    public Oid getPrevious() {
+        return null;
+    }
 
-	public boolean hasPrevious() {
-		return false;
-	}
+    @Override
+    public boolean hasPrevious() {
+        return false;
+    }
 
-	public boolean isTransient() {
-		return false;
-	}
+    @Override
+    public boolean isTransient() {
+        return false;
+    }
 
-	public void makePersistent() {
-	}
+    @Override
+    public void makePersistent() {
+    }
 
-	public void encode(DataOutputExtended outputStream) {
-	}
+    @Override
+    public void encode(final DataOutputExtended outputStream) {
+    }
 
 }

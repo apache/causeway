@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import junit.framework.TestCase;
-
 
 public class EnumerationAbstractTest extends TestCase {
 
@@ -93,4 +91,3 @@ public class EnumerationAbstractTest extends TestCase {
     }
 
 }
-

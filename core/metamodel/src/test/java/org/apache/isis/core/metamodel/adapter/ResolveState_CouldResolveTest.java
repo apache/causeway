@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
@@ -46,33 +45,19 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ResolveState_CouldResolveTest  {
+public class ResolveState_CouldResolveTest {
 
-    
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {false, NEW},
-                {true, GHOST},
-                {true, PART_RESOLVED},
-                {false, RESOLVED},
-                {true, RESOLVING},
-                {true, RESOLVING_PART},
-                {false, TRANSIENT},
-                {false, DESTROYED},
-                {true, UPDATING},
-                {false, SERIALIZING_TRANSIENT},
-                {true, SERIALIZING_GHOST},
-                {true, SERIALIZING_PART_RESOLVED},
-                {false, SERIALIZING_RESOLVED},
-                {false, VALUE},
-        });
+        return Arrays.asList(new Object[][] { { false, NEW }, { true, GHOST }, { true, PART_RESOLVED },
+            { false, RESOLVED }, { true, RESOLVING }, { true, RESOLVING_PART }, { false, TRANSIENT },
+            { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT }, { true, SERIALIZING_GHOST },
+            { true, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
-    
 
     private final boolean couldResolve;
     private final ResolveState state;
-    
+
     public ResolveState_CouldResolveTest(final boolean couldResolve, final ResolveState state) {
         this.couldResolve = couldResolve;
         this.state = state;

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import junit.framework.TestCase;
-
 
 public class PersistableTest extends TestCase {
 
@@ -53,4 +51,3 @@ public class PersistableTest extends TestCase {
     }
 
 }
-

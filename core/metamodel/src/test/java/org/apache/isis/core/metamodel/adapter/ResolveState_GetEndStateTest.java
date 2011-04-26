@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
@@ -46,32 +45,19 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ResolveState_GetEndStateTest  {
+public class ResolveState_GetEndStateTest {
 
-    
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {NEW, null},
-                {GHOST, null},
-                {TRANSIENT, null},
-                {RESOLVING_PART, PART_RESOLVED},
-                {PART_RESOLVED, null},
-                {RESOLVING, RESOLVED},
-                {RESOLVED, null},
-                {UPDATING, RESOLVED},
-                {SERIALIZING_TRANSIENT, TRANSIENT},
-                {SERIALIZING_PART_RESOLVED, PART_RESOLVED},
-                {SERIALIZING_RESOLVED, RESOLVED},
-                {SERIALIZING_GHOST, GHOST},
-                {VALUE, null},
-                {DESTROYED, null},
-        });
+        return Arrays.asList(new Object[][] { { NEW, null }, { GHOST, null }, { TRANSIENT, null },
+            { RESOLVING_PART, PART_RESOLVED }, { PART_RESOLVED, null }, { RESOLVING, RESOLVED }, { RESOLVED, null },
+            { UPDATING, RESOLVED }, { SERIALIZING_TRANSIENT, TRANSIENT }, { SERIALIZING_PART_RESOLVED, PART_RESOLVED },
+            { SERIALIZING_RESOLVED, RESOLVED }, { SERIALIZING_GHOST, GHOST }, { VALUE, null }, { DESTROYED, null }, });
     }
-    
+
     private final ResolveState from;
     private final ResolveState to;
-    
+
     public ResolveState_GetEndStateTest(final ResolveState from, final ResolveState to) {
         this.from = from;
         this.to = to;

@@ -17,20 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
-
 
 public class InteractionResultTest {
 
@@ -85,6 +81,4 @@ public class InteractionResultTest {
         assertEquals(null, result.getReason());
     }
 
-
 }
-

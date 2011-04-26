@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 import org.jmock.Expectations;
@@ -28,42 +27,41 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 @RunWith(JMock.class)
 public class ClassSubstitutorComposite_lifecycle {
 
-	private Mockery context = new JUnit4Mockery();
+    private final Mockery context = new JUnit4Mockery();
 
-	final ClassSubstitutor mockSubstitutor = context.mock(ClassSubstitutor.class, "one");
-	final ClassSubstitutor mockSubstitutor2 = context.mock(ClassSubstitutor.class, "two");
+    final ClassSubstitutor mockSubstitutor = context.mock(ClassSubstitutor.class, "one");
+    final ClassSubstitutor mockSubstitutor2 = context.mock(ClassSubstitutor.class, "two");
 
-	private ClassSubstitutorComposite classSubstitutorComposite;
+    private ClassSubstitutorComposite classSubstitutorComposite;
 
-	@Before
-	public void setUp() throws Exception {
-		classSubstitutorComposite = new ClassSubstitutorComposite(mockSubstitutor, mockSubstitutor2);
-	}
-	
-	@Test
-	public void whenInitThenShouldPropogate() throws Exception {
-		context.checking(new Expectations() {
-			{
-				one(mockSubstitutor).init();
-				one(mockSubstitutor2).init();
-			}
-		});
-		classSubstitutorComposite.init();
-	}
+    @Before
+    public void setUp() throws Exception {
+        classSubstitutorComposite = new ClassSubstitutorComposite(mockSubstitutor, mockSubstitutor2);
+    }
 
-	@Test
-	public void whenShutdownThenShouldPropogate() throws Exception {
-		context.checking(new Expectations() {
-			{
-				one(mockSubstitutor).shutdown();
-				one(mockSubstitutor2).shutdown();
-			}
-		});
-		classSubstitutorComposite.shutdown();
-	}
+    @Test
+    public void whenInitThenShouldPropogate() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(mockSubstitutor).init();
+                one(mockSubstitutor2).init();
+            }
+        });
+        classSubstitutorComposite.init();
+    }
+
+    @Test
+    public void whenShutdownThenShouldPropogate() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(mockSubstitutor).shutdown();
+                one(mockSubstitutor2).shutdown();
+            }
+        });
+        classSubstitutorComposite.shutdown();
+    }
 
 }

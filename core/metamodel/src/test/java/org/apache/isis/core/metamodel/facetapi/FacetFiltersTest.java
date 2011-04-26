@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
-
 
 import junit.framework.TestCase;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-
 
 public class FacetFiltersTest extends TestCase {
 
@@ -160,4 +157,3 @@ public class FacetFiltersTest extends TestCase {
     }
 
 }
-

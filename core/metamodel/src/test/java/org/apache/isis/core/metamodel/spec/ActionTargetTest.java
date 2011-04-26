@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import junit.framework.TestCase;
-
-import org.apache.isis.core.metamodel.spec.Target;
-
 
 public class ActionTargetTest extends TestCase {
 
@@ -34,6 +30,5 @@ public class ActionTargetTest extends TestCase {
     public void testHashCode() {
         assertEquals(Target.LOCAL.hashCode(), Target.LOCAL.hashCode());
     }
-
 
 }

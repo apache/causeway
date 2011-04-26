@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.testspec;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Localization;
@@ -53,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import com.google.common.collect.Lists;
 
 public class TestProxySpecification extends FacetHolderImpl implements ObjectSpecification {
 
@@ -65,18 +63,18 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     private Persistability persistable;
     private boolean isEncodeable;
     private boolean hasNoIdentity;
-	private RuntimeContextNoRuntime runtimeContext;
+    private RuntimeContextNoRuntime runtimeContext;
 
     public TestProxySpecification(final Class<?> type) {
         this(type.getName());
-		runtimeContext = new RuntimeContextNoRuntime();
+        runtimeContext = new RuntimeContextNoRuntime();
     }
 
     @Override
     public Class<?> getCorrespondingClass() {
         try {
             return Class.forName(name);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -93,14 +91,16 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public void clearDirty(final ObjectAdapter object) {}
+    public void clearDirty(final ObjectAdapter object) {
+    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
-    public void debugData(final DebugBuilder debug) {}
+    public void debugData(final DebugBuilder debug) {
+    }
 
     public String debugInterface() {
         return null;
@@ -110,10 +110,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
         return "";
     }
 
-    public ObjectAction getClassAction(
-            final ActionType type,
-            final String name,
-            final ObjectSpecification[] parameters) {
+    public ObjectAction getClassAction(final ActionType type, final String name, final ObjectSpecification[] parameters) {
         return null;
     }
 
@@ -155,7 +152,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties() {
         @SuppressWarnings("rawtypes")
-        List list = getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List list = getAssociations(ObjectAssociationFilters.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
     }
 
@@ -163,7 +160,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     @SuppressWarnings("unchecked")
     public List<OneToManyAssociation> getCollections() {
         @SuppressWarnings("rawtypes")
-        List list = getAssociations(ObjectAssociationFilters.COLLECTIONS);
+        final List list = getAssociations(ObjectAssociationFilters.COLLECTIONS);
         return new ArrayList<OneToManyAssociation>(list);
     }
 
@@ -192,10 +189,8 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectAction getObjectAction(
-            final ActionType type,
-            final String name,
-            final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name,
+        final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;
         }
@@ -204,7 +199,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
-    	int openBracket = id.indexOf('(');
+        final int openBracket = id.indexOf('(');
         return getObjectAction(type, id.substring(0, openBracket), null);
     }
 
@@ -232,13 +227,14 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     public String getDescription() {
         return getSingularName();
     }
-    
+
+    @Override
     public String getHelp() {
         return null;
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter, Localization localization) {
+    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
         return title;
     }
 
@@ -252,7 +248,8 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
         return Collections.emptyList();
     }
 
-    public void introspect() {}
+    public void introspect() {
+    }
 
     @Override
     public boolean isDirty(final ObjectAdapter object) {
@@ -290,7 +287,8 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public void markDirty(final ObjectAdapter object) {}
+    public void markDirty(final ObjectAdapter object) {
+    }
 
     public Object newInstance() {
         return InstanceUtil.createInstance(name);
@@ -361,21 +359,21 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public Object createObject(CreationMode creationMode) {
+    public Object createObject(final CreationMode creationMode) {
         try {
             final Class<?> cls = Class.forName(name);
             return cls.newInstance();
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new IsisException(e);
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             throw new IsisException(e);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new IsisException(e);
         }
     }
-    
+
     @Override
-    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+    public Object createAggregatedObject(final ObjectAdapter parent, final CreationMode creationMode) {
         return createObject(creationMode);
     }
 
@@ -404,18 +402,14 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectValidityContext createValidityInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -429,15 +423,14 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getInstance(ObjectAdapter adapter) {
+    public ObjectAdapter getInstance(final ObjectAdapter adapter) {
         return adapter;
     }
 
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    public RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
 
-	
     // /////////////////////////////////////////////////////////////
     // introspection
     // /////////////////////////////////////////////////////////////
@@ -459,7 +452,9 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
         return false;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer#getObjectActionsAll()
      */
     @Override
@@ -468,6 +463,4 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
         return null;
     }
 
-
 }
-

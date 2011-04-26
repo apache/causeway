@@ -17,18 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public class OidConformant extends DirectlyStringableOidAbstract {
 
-	public static Oid deString(String oidStr) {
-		return new OidConformant();
-	}
-	
-	public String enString() {
-		return "CUS|1234567A";
-	}
+    public static Oid deString(final String oidStr) {
+        return new OidConformant();
+    }
+
+    @Override
+    public String enString() {
+        return "CUS|1234567A";
+    }
 }

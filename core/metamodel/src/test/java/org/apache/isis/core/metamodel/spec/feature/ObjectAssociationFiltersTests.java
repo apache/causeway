@@ -17,9 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -29,20 +32,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
-
 @RunWith(JMock.class)
 public class ObjectAssociationFiltersTests {
 
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private AuthenticationSession mockSession;
     private ObjectAdapter mockTarget;
     private ObjectAssociation mockAssociation;
-
 
     @Before
     public void setUp() throws Exception {
@@ -55,16 +52,17 @@ public class ObjectAssociationFiltersTests {
     public void tearDown() throws Exception {
     }
 
-
     @Test
     public void shouldNotJustCheckIfAssociationContainsHiddenFacet() {
-        mockery.checking(new Expectations(){{
-            never(mockAssociation).containsFacet(HiddenFacet.class);
-            allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)));
-        }});
-        Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget);
+        mockery.checking(new Expectations() {
+            {
+                never(mockAssociation).containsFacet(HiddenFacet.class);
+                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)),
+                    with(any(ObjectAdapter.class)));
+            }
+        });
+        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget);
         filter.accept(mockAssociation);
     }
 
 }
-
