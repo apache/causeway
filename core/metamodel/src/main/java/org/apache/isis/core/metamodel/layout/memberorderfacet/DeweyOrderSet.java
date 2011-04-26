@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.Iterator;
@@ -32,14 +31,12 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 
-
 /**
  * Represents a nested hierarchy of ordered members.
  * 
  * <p>
- * At each level the elements are either {@link FacetedMethod}s or they are instances of
- * {@link OrderSet} represent a group of {@link FacetedMethod}s that have a {@link MemberOrderFacet}
- * of the same name.
+ * At each level the elements are either {@link FacetedMethod}s or they are instances of {@link OrderSet} represent a
+ * group of {@link FacetedMethod}s that have a {@link MemberOrderFacet} of the same name.
  * 
  * <p>
  * With no name, (ie <tt>name=""</tt> is the default), at the top level
@@ -74,7 +71,7 @@ public class DeweyOrderSet extends OrderSet {
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (FacetedMethod member : members) {
+        for (final FacetedMethod member : members) {
             final MemberOrderFacet memberOrder = member.getFacet(MemberOrderFacet.class);
             if (memberOrder == null) {
                 nonAnnotatedGroup.add(member);
@@ -115,8 +112,8 @@ public class DeweyOrderSet extends OrderSet {
     }
 
     /**
-     * Recursively creates parents all the way up to root (<tt>""</tt>), along the way associating each child
-     * with its parent and adding the child as an element of its parent.
+     * Recursively creates parents all the way up to root (<tt>""</tt>), along the way associating each child with its
+     * parent and adding the child as an element of its parent.
      * 
      * @param orderSetsByGroup
      * @param deweyOrderSet
@@ -167,14 +164,13 @@ public class DeweyOrderSet extends OrderSet {
     /**
      * Format is: <tt>abc,def:XXel/YYm/ZZch</tt>
      * <p>
-     * where <tt>abc,def</tt> is group name, <tt>XX</tt> is number of elements,
-     * <tt>YY is number of members, and 
+     * where <tt>abc,def</tt> is group name, <tt>XX</tt> is number of elements, <tt>YY is number of members, and 
      * <tt>ZZ</tt> is number of child order sets.
      */
     @Override
     public String toString() {
-        return getGroupFullName() + ":" + size() + "el/" + (size() - childOrderSets.size()) + "m/" + childOrderSets.size() + "ch";
+        return getGroupFullName() + ":" + size() + "el/" + (size() - childOrderSets.size()) + "m/"
+            + childOrderSets.size() + "ch";
     }
 
 }
-

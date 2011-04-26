@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.layout.ordermethod;
 
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.StringTokenizer;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
-
 
 public class SimpleOrderSet extends OrderSet {
     public static SimpleOrderSet createOrderSet(final String order, final List<FacetedMethod> members) {
@@ -67,11 +65,8 @@ public class SimpleOrderSet extends OrderSet {
         parent = null;
     }
 
-    private SimpleOrderSet(
-            final SimpleOrderSet set,
-            final String groupName,
-            final String name,
-            final List<FacetedMethod> members) {
+    private SimpleOrderSet(final SimpleOrderSet set, final String groupName, final String name,
+        final List<FacetedMethod> members) {
         super(groupName);
         parent = set;
         parent.addElement(this);
@@ -89,7 +84,7 @@ public class SimpleOrderSet extends OrderSet {
     private void addAnyRemainingMember() {
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i) != null) {
-                FacetedMethod member = members.get(i);
+                final FacetedMethod member = members.get(i);
                 addElement(member);
             }
         }
@@ -116,4 +111,3 @@ public class SimpleOrderSet extends OrderSet {
     }
 
 }
-

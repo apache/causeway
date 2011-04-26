@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.io.Serializable;
@@ -25,14 +24,12 @@ import java.util.Comparator;
 
 import org.apache.isis.core.metamodel.layout.OrderSet;
 
-
-
 /**
  * Compares by (simple) group name of each {@link OrderSet}.
- *
+ * 
  * <p>
- * Note that it only makes sense to use this comparator for {@link OrderSet}s that are known to have the same
- * parent {@link OrderSet}s.
+ * Note that it only makes sense to use this comparator for {@link OrderSet}s that are known to have the same parent
+ * {@link OrderSet}s.
  */
 public class OrderSetGroupNameComparator implements Comparator<OrderSet>, Serializable {
 
@@ -44,6 +41,7 @@ public class OrderSetGroupNameComparator implements Comparator<OrderSet>, Serial
 
     private final boolean ensureInSameGroupPath;
 
+    @Override
     public int compare(final OrderSet o1, final OrderSet o2) {
         if (ensureInSameGroupPath && !o1.getGroupPath().equals(o2.getGroupPath())) {
             throw new IllegalArgumentException("OrderSets being compared do not have the same group path");

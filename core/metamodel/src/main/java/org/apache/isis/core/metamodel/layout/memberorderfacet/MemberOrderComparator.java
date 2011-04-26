@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.Comparator;
@@ -28,17 +27,16 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 
-
 /**
  * Compares by {@link MemberOrderFacet} obtained from each {@link FacetedMethod}).
- *
+ * 
  * <p>
- * Will also compare {@link OrderSet}s; these are put after any {@link FacetedMethod}s. If there is
- * more than one OrderSet then these are compared by an {@link OrderSetGroupNameComparator}.
- *
+ * Will also compare {@link OrderSet}s; these are put after any {@link FacetedMethod}s. If there is more than one
+ * OrderSet then these are compared by an {@link OrderSetGroupNameComparator}.
+ * 
  * <p>
  * If there is no annotation on either member, then will compare the members by name instead.
- *
+ * 
  * <p>
  * Can specify if requires that members are in the same (group) name.
  */
@@ -47,7 +45,7 @@ public class MemberOrderComparator implements Comparator {
     private final boolean ensureInSameGroup;
 
     /**
-     *
+     * 
      * @param ensureGroupIsSame
      */
     public MemberOrderComparator(final boolean ensureGroupIsSame) {
@@ -57,12 +55,13 @@ public class MemberOrderComparator implements Comparator {
     private final MemberIdentifierComparator fallbackComparator = new MemberIdentifierComparator();
     private final OrderSetGroupNameComparator orderSetComparator = new OrderSetGroupNameComparator(true);
 
+    @Override
     public int compare(final Object o1, final Object o2) {
         if (o1 instanceof FacetedMethod && o2 instanceof FacetedMethod) {
             return compare((FacetedMethod) o1, (FacetedMethod) o2);
         }
         if (o1 instanceof OrderSet && o2 instanceof OrderSet) {
-            return orderSetComparator.compare((OrderSet)o1, (OrderSet)o2);
+            return orderSetComparator.compare((OrderSet) o1, (OrderSet) o2);
         }
         if (o1 instanceof FacetedMethod && o2 instanceof OrderSet) {
             return -1; // members before OrderSets.

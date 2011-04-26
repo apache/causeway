@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.io.Serializable;
@@ -26,15 +25,15 @@ import java.util.Comparator;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
-
 /**
  * Compares {@link FacetedMethod}) by {@link FacetedMethod#getIdentifier()}
- *
+ * 
  */
 public class MemberIdentifierComparator implements Comparator<FacetedMethod>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
     public int compare(final FacetedMethod o1, final FacetedMethod o2) {
         final Identifier identifier1 = o1.getIdentifier();
         final Identifier identifier2 = o2.getIdentifier();
