@@ -17,23 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
-
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 
+import com.google.common.collect.ImmutableList;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLookupAware {
 
     private final List<FeatureType> featureTypes;
-    
+
     private SpecificationLookup specificationLookup;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
@@ -46,22 +43,21 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     }
 
     @Override
-    public void process(ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContaxt) {
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
     }
 
-    
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (injected)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
     protected SpecificationLookup getSpecificationLookup() {
         return specificationLookup;
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.traverser;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -33,61 +32,58 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 public class SpecificationTraverserDefault implements SpecificationTraverser, SpecificationLoaderAware {
 
-	private SpecificationLoader specificationLoader;
-	
+    private SpecificationLoader specificationLoader;
 
-	//////////////////////////////////////////////////////////////////////
-	// init, shutdown
-	//////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
+    // init, shutdown
+    // ////////////////////////////////////////////////////////////////////
 
-	public void init() {
-		ensureThatState(specificationLoader, is(notNullValue()));
-	}
+    @Override
+    public void init() {
+        ensureThatState(specificationLoader, is(notNullValue()));
+    }
 
-	public void shutdown() {
-	}
+    @Override
+    public void shutdown() {
+    }
 
-	
-	//////////////////////////////////////////////////////////////////////
-	// Traverse API
-	//////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
+    // Traverse API
+    // ////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Traverses the return types of each method.
-	 * 
-	 * <p>
-	 * It's possible for there to be multiple return types: the generic type, and the parameterized type.
-	 */
-	public void traverseTypes(Method method, List<Class<?>> discoveredTypes) {
-		TypeExtractorMethodReturn returnTypes = new TypeExtractorMethodReturn(method);
-		for (Class<?> returnType : returnTypes) {
-			discoveredTypes.add(returnType);
-		}
-	}
+    /**
+     * Traverses the return types of each method.
+     * 
+     * <p>
+     * It's possible for there to be multiple return types: the generic type, and the parameterized type.
+     */
+    @Override
+    public void traverseTypes(final Method method, final List<Class<?>> discoveredTypes) {
+        final TypeExtractorMethodReturn returnTypes = new TypeExtractorMethodReturn(method);
+        for (final Class<?> returnType : returnTypes) {
+            discoveredTypes.add(returnType);
+        }
+    }
 
+    /**
+     * Does nothing.
+     */
+    @Override
+    public void traverseReferencedClasses(final ObjectSpecification noSpec, final List<Class<?>> discoveredTypes)
+        throws ClassNotFoundException {
+    }
 
-	/**
-	 * Does nothing.
-	 */
-	public void traverseReferencedClasses(ObjectSpecification noSpec,
-			List<Class<?>> discoveredTypes)
-			throws ClassNotFoundException {
-	}
+    // ////////////////////////////////////////////////////////////////////
+    // Dependencies (due to *Aware)
+    // ////////////////////////////////////////////////////////////////////
 
+    public SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
+    }
 
-	
-	//////////////////////////////////////////////////////////////////////
-	// Dependencies (due to *Aware)
-	//////////////////////////////////////////////////////////////////////
-	
-	public SpecificationLoader getSpecificationLoader() {
-		return specificationLoader;
-	}
-
-	public void setSpecificationLoader(SpecificationLoader specificationLoader) {
-		this.specificationLoader = specificationLoader;
-	}
-	
-
+    @Override
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
+    }
 
 }

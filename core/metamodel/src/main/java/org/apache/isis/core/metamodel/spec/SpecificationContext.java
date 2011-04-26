@@ -20,15 +20,15 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 
 public class SpecificationContext {
-    
+
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLookup specificationLookup;
 
-    public SpecificationContext(AuthenticationSessionProvider authenticationSessionProvider,
-        ServicesProvider servicesProvider, ObjectInstantiator objectInstantiator,
-        SpecificationLookup specificationLookup) {
+    public SpecificationContext(final AuthenticationSessionProvider authenticationSessionProvider,
+        final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator,
+        final SpecificationLookup specificationLookup) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;

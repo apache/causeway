@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 
 import java.util.List;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectList;
-
 
 public class CollectionFacetForObjectList extends CollectionFacetAbstract {
 
@@ -42,14 +40,13 @@ public class CollectionFacetForObjectList extends CollectionFacetAbstract {
         return (ObjectList) wrappedObjectList.getObject();
     }
 
-    
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping a {@link ObjectList}.
      */
     @Override
     public ObjectAdapter firstElement(final ObjectAdapter wrappedInstanceCollectionVector) {
-        List<ObjectAdapter> icv = collection(wrappedInstanceCollectionVector);
-        return icv.size() > 0? icv.get(0): null;
+        final List<ObjectAdapter> icv = collection(wrappedInstanceCollectionVector);
+        return icv.size() > 0 ? icv.get(0) : null;
     }
 
     /**
@@ -64,8 +61,7 @@ public class CollectionFacetForObjectList extends CollectionFacetAbstract {
      * Does nothing.
      */
     @Override
-    public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {}
-
+    public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
+    }
 
 }
-

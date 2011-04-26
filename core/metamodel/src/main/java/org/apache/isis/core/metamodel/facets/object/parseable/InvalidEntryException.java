@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 
-
 /**
- * Indicates that a value entry is not valid. Note the entry may still parse correctly, but is does fulfil
- * other other entry requirements.
+ * Indicates that a value entry is not valid. Note the entry may still parse correctly, but is does fulfil other other
+ * entry requirements.
  */
 public class InvalidEntryException extends IsisApplicationException {
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 public abstract class EnumerationAbstract implements Enumeration {
@@ -32,14 +31,17 @@ public abstract class EnumerationAbstract implements Enumeration {
         this.friendlyName = friendlyName;
     }
 
+    @Override
     public int getNum() {
         return num;
     }
 
+    @Override
     public String getNameInCode() {
         return nameInCode;
     }
 
+    @Override
     public String getFriendlyName() {
         return friendlyName;
     }
@@ -53,16 +55,20 @@ public abstract class EnumerationAbstract implements Enumeration {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        EnumerationAbstract other = (EnumerationAbstract) obj;
-        if (num != other.num)
+        }
+        final EnumerationAbstract other = (EnumerationAbstract) obj;
+        if (num != other.num) {
             return false;
+        }
         return true;
     }
 

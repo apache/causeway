@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.collectiontyperegistry;
 
 public interface CollectionTypeRegistryAware {
 
     void setCollectionTypeRegistry(CollectionTypeRegistry collectionTypeRegistry);
 }
-

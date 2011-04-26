@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -39,7 +38,6 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-
 public abstract class ServicesInjectorAbstract implements ServicesInjector {
 
     private static final Logger LOG = Logger.getLogger(ServicesInjectorAbstract.class);
@@ -50,20 +48,25 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
     /**
      * Ensure that all services are wired into each other.
      */
+    @Override
     public void open() {
         autowireServicesAndContainer();
     }
 
-    public void close() {}
+    @Override
+    public void close() {
+    }
 
     // /////////////////////////////////////////////////////////
     // Container
     // /////////////////////////////////////////////////////////
 
+    @Override
     public DomainObjectContainer getContainer() {
         return container;
     }
 
+    @Override
     public void setContainer(final DomainObjectContainer container) {
         ensureThatArg(container, is(not(nullValue())));
         this.container = container;
@@ -73,12 +76,14 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
     // Services
     // /////////////////////////////////////////////////////////
 
+    @Override
     public void setServices(final List<Object> services) {
         this.services.clear();
         addServices(services);
         autowireServicesAndContainer();
     }
 
+    @Override
     public List<Object> getRegisteredServices() {
         return Collections.unmodifiableList(services);
     }
@@ -102,15 +107,17 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
     // Inject Dependencies
     // /////////////////////////////////////////////////////////
 
+    @Override
     public void injectDependencies(final Object object) {
         Assert.assertNotNull("no container", container);
         Assert.assertNotNull("no services", services);
-        
-        List<Object> servicesCopy = Lists.newArrayList(services);
+
+        final List<Object> servicesCopy = Lists.newArrayList(services);
         servicesCopy.add(container);
         injectServices(object, servicesCopy);
     }
 
+    @Override
     public void injectDependencies(final List<Object> objects) {
         for (final Object object : objects) {
             injectDependencies(object);
@@ -124,9 +131,10 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
     /**
      * That is, injecting this injector...
      */
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {
-            ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
+            final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
             cast.setServicesInjector(this);
         }
     }
@@ -146,12 +154,12 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
                 }
                 final Class<?>[] parameterTypes = methods[j].getParameterTypes();
                 if (parameterTypes.length != 1 || parameterTypes[0] == Object.class
-                        || !parameterTypes[0].isAssignableFrom(serviceClass)) {
+                    || !parameterTypes[0].isAssignableFrom(serviceClass)) {
                     continue;
                 }
-                
+
                 methods[j].setAccessible(true);
-                
+
                 invokeSetMethod(methods[j], object, service);
             }
         }
@@ -161,13 +169,13 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
         try {
             method.invoke(target, parameters);
         } catch (final SecurityException e) {
-            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass()
-                    .getName()));
+            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target
+                .getClass().getName()));
         } catch (final IllegalArgumentException e1) {
             throw new MetaModelException(e1);
         } catch (final IllegalAccessException e1) {
-            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass()
-                    .getName()));
+            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target
+                .getClass().getName()));
         } catch (final InvocationTargetException e) {
             final Throwable targetException = e.getTargetException();
             if (targetException instanceof RuntimeException) {
@@ -192,4 +200,3 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
     }
 
 }
-

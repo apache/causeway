@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
@@ -26,8 +25,6 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
-
-
 public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAbstract {
 
     public AnnotationBasedFacetFactoryAbstract(final List<FeatureType> featureTypes) {
@@ -35,8 +32,8 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
     }
 
     /**
-     * Always returns <tt>false</tt>; {@link FacetFactory}s that look for annotations won't recognize methods
-     * with prefixes.
+     * Always returns <tt>false</tt>; {@link FacetFactory}s that look for annotations won't recognize methods with
+     * prefixes.
      */
     public boolean recognizes(final Method method) {
         return false;
@@ -51,194 +48,190 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
 
     /**
      * Searches for annotation on provided class, and if not found for the superclass.
-     *
+     * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected static <T extends Annotation> T getAnnotation(final Class<?> cls, Class<T> annotationClass) {
-		if (cls == null) {
-			return null;
-		}
-		T annotation = cls.getAnnotation(annotationClass);
-		if (annotation != null) {
-			return annotation;
-		}
+    protected static <T extends Annotation> T getAnnotation(final Class<?> cls, final Class<T> annotationClass) {
+        if (cls == null) {
+            return null;
+        }
+        final T annotation = cls.getAnnotation(annotationClass);
+        if (annotation != null) {
+            return annotation;
+        }
 
-		// search superclasses
-		Class<?> superclass = cls.getSuperclass();
-		if (superclass != null) {
-			try {
-				T annotationFromSuperclass = getAnnotation(superclass, annotationClass);
-				if (annotationFromSuperclass != null) {
-					return annotationFromSuperclass;
-				}
-			} catch (SecurityException e) {
-				// fall through
-			}
-		}
+        // search superclasses
+        final Class<?> superclass = cls.getSuperclass();
+        if (superclass != null) {
+            try {
+                final T annotationFromSuperclass = getAnnotation(superclass, annotationClass);
+                if (annotationFromSuperclass != null) {
+                    return annotationFromSuperclass;
+                }
+            } catch (final SecurityException e) {
+                // fall through
+            }
+        }
 
-		// search implemented interfaces
-		Class<?>[] interfaces = cls.getInterfaces();
-		for(Class<?> iface: interfaces) {
-			T annotationFromInterface = getAnnotation(iface, annotationClass);
-			if (annotationFromInterface != null) {
-				return annotationFromInterface;
-			}
-		}
-		return null;
-	}
-
+        // search implemented interfaces
+        final Class<?>[] interfaces = cls.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            final T annotationFromInterface = getAnnotation(iface, annotationClass);
+            if (annotationFromInterface != null) {
+                return annotationFromInterface;
+            }
+        }
+        return null;
+    }
 
     /**
-     * Searches for annotation on provided method, and if not found for any inherited methods up
-     * from the superclass.
-     *
+     * Searches for annotation on provided method, and if not found for any inherited methods up from the superclass.
+     * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected static <T extends Annotation> T getAnnotation(final Method method, Class<T> annotationClass) {
-		if (method == null) {
-			return null;
-		}
-		T annotation = method.getAnnotation(annotationClass);
-		if (annotation != null) {
-			return annotation;
-		}
+    protected static <T extends Annotation> T getAnnotation(final Method method, final Class<T> annotationClass) {
+        if (method == null) {
+            return null;
+        }
+        final T annotation = method.getAnnotation(annotationClass);
+        if (annotation != null) {
+            return annotation;
+        }
 
-		Class<?> methodDeclaringClass = method.getDeclaringClass();
+        final Class<?> methodDeclaringClass = method.getDeclaringClass();
 
-		// search superclasses
-		Class<?> superclass = methodDeclaringClass.getSuperclass();
-		if (superclass != null) {
-			try {
-				Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
-				return getAnnotation(parentClassMethod, annotationClass);
-			} catch (SecurityException e) {
-				// fall through
-			} catch (NoSuchMethodException e) {
-				// fall through
-			}
-		}
+        // search superclasses
+        final Class<?> superclass = methodDeclaringClass.getSuperclass();
+        if (superclass != null) {
+            try {
+                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
+                return getAnnotation(parentClassMethod, annotationClass);
+            } catch (final SecurityException e) {
+                // fall through
+            } catch (final NoSuchMethodException e) {
+                // fall through
+            }
+        }
 
-		// search implemented interfaces
-		Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
-		for(Class<?> iface: interfaces) {
-			try {
-				Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
-				return getAnnotation(ifaceMethod, annotationClass);
-			} catch (SecurityException e) {
-				// fall through
-			} catch (NoSuchMethodException e) {
-				// fall through
-			}
-		}
-		return null;
-	}
+        // search implemented interfaces
+        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            try {
+                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+                return getAnnotation(ifaceMethod, annotationClass);
+            } catch (final SecurityException e) {
+                // fall through
+            } catch (final NoSuchMethodException e) {
+                // fall through
+            }
+        }
+        return null;
+    }
 
     /**
-     * Searches for annotation on provided method, and if not found for any inherited methods up
-     * from the superclass.
-     *
+     * Searches for annotation on provided method, and if not found for any inherited methods up from the superclass.
+     * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected static boolean isAnnotationPresent(final Method method, Class<? extends Annotation> annotationClass) {
-		if (method == null) {
-			return false;
-		}
-		boolean present = method.isAnnotationPresent(annotationClass);
-		if (present) {
-			return true;
-		}
+    protected static boolean isAnnotationPresent(final Method method, final Class<? extends Annotation> annotationClass) {
+        if (method == null) {
+            return false;
+        }
+        final boolean present = method.isAnnotationPresent(annotationClass);
+        if (present) {
+            return true;
+        }
 
-		Class<?> methodDeclaringClass = method.getDeclaringClass();
+        final Class<?> methodDeclaringClass = method.getDeclaringClass();
 
-		// search superclasses
-		Class<?> superclass = methodDeclaringClass.getSuperclass();
-		if (superclass != null) {
-			try {
-				Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
-				return isAnnotationPresent(parentClassMethod, annotationClass);
-			} catch (SecurityException e) {
-				// fall through
-			} catch (NoSuchMethodException e) {
-				// fall through
-			}
-		}
+        // search superclasses
+        final Class<?> superclass = methodDeclaringClass.getSuperclass();
+        if (superclass != null) {
+            try {
+                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
+                return isAnnotationPresent(parentClassMethod, annotationClass);
+            } catch (final SecurityException e) {
+                // fall through
+            } catch (final NoSuchMethodException e) {
+                // fall through
+            }
+        }
 
-		// search implemented interfaces
-		Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
-		for(Class<?> iface: interfaces) {
-			try {
-				Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
-				return isAnnotationPresent(ifaceMethod, annotationClass);
-			} catch (SecurityException e) {
-				// fall through
-			} catch (NoSuchMethodException e) {
-				// fall through
-			}
-		}
-		return false;
-	}
-
+        // search implemented interfaces
+        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            try {
+                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+                return isAnnotationPresent(ifaceMethod, annotationClass);
+            } catch (final SecurityException e) {
+                // fall through
+            } catch (final NoSuchMethodException e) {
+                // fall through
+            }
+        }
+        return false;
+    }
 
     /**
-     * Searches for parameter annotations on provided method, and if not found for any inherited methods up
-     * from the superclass.
-     *
+     * Searches for parameter annotations on provided method, and if not found for any inherited methods up from the
+     * superclass.
+     * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected static Annotation[][] getParameterAnnotations(final Method method) {
-		if (method == null) {
-			return new Annotation[0][0];
-		}
-		Annotation[][] allParamAnnotations = method.getParameterAnnotations();
+    protected static Annotation[][] getParameterAnnotations(final Method method) {
+        if (method == null) {
+            return new Annotation[0][0];
+        }
+        final Annotation[][] allParamAnnotations = method.getParameterAnnotations();
 
-		boolean foundAnnotationsForAnyParameter = false;
-		for(Annotation[] singleParamAnnotations: allParamAnnotations) {
-			if (singleParamAnnotations.length > 0) {
-				foundAnnotationsForAnyParameter = true;
-				break;
-			}
-		}
-		if (foundAnnotationsForAnyParameter) {
-			return allParamAnnotations;
-		}
+        boolean foundAnnotationsForAnyParameter = false;
+        for (final Annotation[] singleParamAnnotations : allParamAnnotations) {
+            if (singleParamAnnotations.length > 0) {
+                foundAnnotationsForAnyParameter = true;
+                break;
+            }
+        }
+        if (foundAnnotationsForAnyParameter) {
+            return allParamAnnotations;
+        }
 
-		Class<?> methodDeclaringClass = method.getDeclaringClass();
+        final Class<?> methodDeclaringClass = method.getDeclaringClass();
 
-		// search superclasses
-		Class<?> superclass = methodDeclaringClass.getSuperclass();
-		if (superclass != null) {
-			try {
-				Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
-				return getParameterAnnotations(parentClassMethod);
-			} catch (SecurityException e) {
-				// fall through
-			} catch (NoSuchMethodException e) {
-				// fall through
-			}
-		}
+        // search superclasses
+        final Class<?> superclass = methodDeclaringClass.getSuperclass();
+        if (superclass != null) {
+            try {
+                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
+                return getParameterAnnotations(parentClassMethod);
+            } catch (final SecurityException e) {
+                // fall through
+            } catch (final NoSuchMethodException e) {
+                // fall through
+            }
+        }
 
-		// search implemented interfaces
-		Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
-		for(Class<?> iface: interfaces) {
-			try {
-				Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
-				return getParameterAnnotations(ifaceMethod);
-			} catch (SecurityException e) {
-				// fall through
-			} catch (NoSuchMethodException e) {
-				// fall through
-			}
-		}
+        // search implemented interfaces
+        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            try {
+                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+                return getParameterAnnotations(ifaceMethod);
+            } catch (final SecurityException e) {
+                // fall through
+            } catch (final NoSuchMethodException e) {
+                // fall through
+            }
+        }
 
-		return noParamAnnotationsFor(method);
-	}
+        return noParamAnnotationsFor(method);
+    }
 
-	private static Annotation[][] noParamAnnotationsFor(final Method method) {
-	    return new Annotation[method.getParameterTypes().length][0];
-	}
+    private static Annotation[][] noParamAnnotationsFor(final Method method) {
+        return new Annotation[method.getParameterTypes().length][0];
+    }
 
 }

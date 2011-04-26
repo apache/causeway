@@ -17,18 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
-
-
 public enum ActionType {
-	DEBUG,
-	SET,
-	EXPLORATION,
-	PROTOTYPE,
-	USER;
-	
+    DEBUG, SET, EXPLORATION, PROTOTYPE, USER;
+
     public String getName() {
         return name();
     }

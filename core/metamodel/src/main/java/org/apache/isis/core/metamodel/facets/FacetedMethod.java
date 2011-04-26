@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.inject.internal.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -33,54 +30,57 @@ import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
+import com.google.inject.internal.Lists;
 
 /**
  * non-final only so it can be mocked if need be.
  */
 public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolder, Debuggable {
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Factory methods
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
-    public static FacetedMethod createPropertyFacetedMethod(Class<?> declaringType, Method method) {
-        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
+    public static FacetedMethod createPropertyFacetedMethod(final Class<?> declaringType, final Method method) {
+        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(),
+            emptyParameterList());
     }
 
     /**
      * Principally for testing purposes.
      */
-    public static FacetedMethod createProperty(Class<?> owningClass, final String name) {
+    public static FacetedMethod createProperty(final Class<?> owningClass, final String name) {
         try {
             final Method method = owningClass.getMethod("get" + StringUtils.pascal(name));
             return FacetedMethod.createPropertyFacetedMethod(owningClass, method);
-        } catch (SecurityException e) {
+        } catch (final SecurityException e) {
             throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static FacetedMethod createCollectionFacetedMethod(Class<?> declaringType, Method method) {
+    public static FacetedMethod createCollectionFacetedMethod(final Class<?> declaringType, final Method method) {
         return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
     }
 
-    public static FacetedMethod createActionFacetedMethod(Class<?> declaringType, Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(method));
+    public static FacetedMethod createActionFacetedMethod(final Class<?> declaringType, final Method method) {
+        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(),
+            getParameters(method));
     }
 
     private static List<FacetedMethodParameter> getParameters(final Method actionMethod) {
         final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
         final List<FacetedMethodParameter> actionParams = Lists.newArrayList();
-        for (Class<?> parameterType : parameterTypes) {
+        for (final Class<?> parameterType : parameterTypes) {
             actionParams.add(new FacetedMethodParameter(parameterType));
         }
         return Collections.unmodifiableList(actionParams);
     }
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Constructor
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     private final Class<?> owningType;
     private final Method method;
@@ -96,7 +96,8 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         return Collections.unmodifiableList(emptyList);
     }
 
-    private FacetedMethod(final FeatureType featureType, final Class<?> declaringType, final Method method, Class<?> type, final List<FacetedMethodParameter> parameters) {
+    private FacetedMethod(final FeatureType featureType, final Class<?> declaringType, final Method method,
+        final Class<?> type, final List<FacetedMethodParameter> parameters) {
         super(featureType, type);
         this.owningType = declaringType;
         this.method = method;
@@ -105,21 +106,19 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     /**
-     * The {@link Class} that owns this {@link Method} (as per
-     * {@link Class#getMethods()}, returning the {@link Method}s both of this
-     * class and of its superclasses).
+     * The {@link Class} that owns this {@link Method} (as per {@link Class#getMethods()}, returning the {@link Method}s
+     * both of this class and of its superclasses).
      * 
      * <p>
-     * Note: we don't call this the 'declaring type' because {@link Class#getDeclaredMethods()}
-     * does not return methods from superclasses.
+     * Note: we don't call this the 'declaring type' because {@link Class#getDeclaredMethods()} does not return methods
+     * from superclasses.
      */
     public Class<?> getOwningType() {
         return owningType;
     }
 
     /**
-     * A {@link Method} obtained from the {@link #getOwningType() owning type}
-     * using {@link Class#getMethods()}.
+     * A {@link Method} obtained from the {@link #getOwningType() owning type} using {@link Class#getMethods()}.
      */
     public Method getMethod() {
         return method;
@@ -130,14 +129,14 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         return identifier;
     }
 
-
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // toString, debug
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
-        return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName() + " ]";
+        return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName()
+            + " ]";
     }
 
     @Override
@@ -145,6 +144,5 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         // TODO: reinstate
         // debug.appendln("Identifier", identifier.toString());
     }
-
 
 }

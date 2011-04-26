@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.actions.choices;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public abstract class ActionChoicesFacetAbstract extends FacetAbstract implements ActionChoicesFacet {
 
@@ -36,4 +34,3 @@ public abstract class ActionChoicesFacetAbstract extends FacetAbstract implement
     }
 
 }
-

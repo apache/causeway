@@ -25,11 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Perspective;
@@ -79,13 +74,17 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
     private final static Logger LOG = Logger.getLogger(ObjectSpecificationDefault.class);
 
     private static String determineShortName(final Class<?> introspectedClass) {
-        String name = introspectedClass.getName();
+        final String name = introspectedClass.getName();
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
@@ -93,10 +92,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // fields
     // //////////////////////////////////////////////////////////////
 
-
     private boolean isService;
 
-    
     /**
      * Lazily built by {@link #getMember(Method)}.
      */
@@ -108,30 +105,23 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private FacetedMethodsBuilder facetedMethodsBuilder;
 
-    
     // //////////////////////////////////////////////////////////////////////
     // Constructor
     // //////////////////////////////////////////////////////////////////////
 
-
-    public ObjectSpecificationDefault(
-        final Class<?> correspondingClass, 
+    public ObjectSpecificationDefault(final Class<?> correspondingClass,
         final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
-        final IntrospectionContext introspectionContext,
-        final SpecificationContext specContext, 
-        final ObjectMemberContext objectMemberContext,
-        final CreateObjectContext createObjectContext 
-        ) {
+        final IntrospectionContext introspectionContext, final SpecificationContext specContext,
+        final ObjectMemberContext objectMemberContext, final CreateObjectContext createObjectContext) {
         super(correspondingClass, determineShortName(correspondingClass), specContext);
-        
+
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
-        
+
         this.introspectionContext = introspectionContext;
         this.createObjectContext = createObjectContext;
         this.objectMemberContext = objectMemberContext;
     }
 
-    
     @Override
     public void introspectTypeHierarchyAndMembers() {
         if (facetedMethodsBuilder == null) {
@@ -168,11 +158,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         // the interface type... needs some tests around it, though, before
         // making that refactoring.
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
-        List<ObjectSpecification> interfaceSpecList = Lists.newArrayList();
-        for (Class<?> interfaceType : interfaceTypes) {
-            Class<?> substitutedInterfaceType = getClassSubstitutor().getClass(interfaceType);
+        final List<ObjectSpecification> interfaceSpecList = Lists.newArrayList();
+        for (final Class<?> interfaceType : interfaceTypes) {
+            final Class<?> substitutedInterfaceType = getClassSubstitutor().getClass(interfaceType);
             if (substitutedInterfaceType != null) {
-                ObjectSpecification interfaceSpec =
+                final ObjectSpecification interfaceSpec =
                     getSpecificationLookup().loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);
             }
@@ -186,19 +176,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
 
         // ordering
-        final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
+        final OrderSet associationOrderSet =
+            getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
         addAssociations(asAssociations(associationOrderSet));
 
-        OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
+        final OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
         addObjectActions(asObjectActions(actionOrderSet));
 
         updateFromFacetValues();
-        
+
         facetedMethodsBuilder = null;
         setIntrospected(true);
     }
-
-
 
     private void addNamedFacetAndPluralFacetIfRequired() {
         NamedFacet namedFacet = getFacet(NamedFacet.class);
@@ -217,18 +206,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     /**
      * TODO: review this, should be more general and check for value facet, surely?
      */
-    private boolean isAppLibValue(Class<?> type) {
+    private boolean isAppLibValue(final Class<?> type) {
         return type.getName().startsWith("org.apache.isis.applib.value.");
     }
 
     private List<ObjectAssociation> asAssociations(final OrderSet orderSet) {
-        if(orderSet == null) {
+        if (orderSet == null) {
             return null;
         }
         final List<ObjectAssociation> associations = Lists.newArrayList();
-        for (Object element : orderSet) {
+        for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
-                FacetedMethod facetMethod = (FacetedMethod) element;
+                final FacetedMethod facetMethod = (FacetedMethod) element;
                 if (facetMethod.getFeatureType().isCollection()) {
                     associations.add(createCollection(facetMethod));
                 } else if (facetMethod.getFeatureType().isProperty()) {
@@ -245,11 +234,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private List<ObjectAction> asObjectActions(final OrderSet orderSet) {
-        if(orderSet == null) {
+        if (orderSet == null) {
             return null;
         }
         final List<ObjectAction> actions = Lists.newArrayList();
-        for (Object element : orderSet) {
+        for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetedMethod = (FacetedMethod) element;
                 if (facetedMethod.getFeatureType().isAction()) {
@@ -280,7 +269,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private ObjectActionSet createObjectActionSet(final OrderSet set) {
         return new ObjectActionSet("", set.getGroupFullName(), asObjectActions(set));
     }
-
 
     /**
      * Added to try to track down a race condition.
@@ -317,8 +305,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private void ensureServiceHasNoAssociations() {
         final List<ObjectAssociation> associations = getAssociations();
-        StringBuilder buf = new StringBuilder();
-        for (ObjectAssociation association : associations) {
+        final StringBuilder buf = new StringBuilder();
+        for (final ObjectAssociation association : associations) {
             final String name = association.getId();
             // services are allowed to have one association, called 'id'
             if (!isValidAssociationForService(name)) {
@@ -341,7 +329,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return "id".indexOf(associationId) != -1;
     }
 
-    private void appendAssociationName(StringBuilder fieldNames, final String name) {
+    private void appendAssociationName(final StringBuilder fieldNames, final String name) {
         fieldNames.append(fieldNames.length() > 0 ? ", " : "");
         fieldNames.append(name);
     }
@@ -434,22 +422,22 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public Object createObject(CreationMode creationMode) {
+    public Object createObject(final CreationMode creationMode) {
         return createObject(null, creationMode);
     }
-      
+
     @Override
-    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+    public Object createAggregatedObject(final ObjectAdapter parent, final CreationMode creationMode) {
         return createObject(parent, creationMode);
     }
 
-    private Object createObject(ObjectAdapter parent, CreationMode creationMode) {
+    private Object createObject(final ObjectAdapter parent, final CreationMode creationMode) {
         if (getCorrespondingClass().isArray()) {
             return Array.newInstance(getCorrespondingClass().getComponentType(), 0);
         }
 
         try {
-            Object object = getObjectInstantiator().instantiate(getCorrespondingClass());
+            final Object object = getObjectInstantiator().instantiate(getCorrespondingClass());
 
             if (creationMode == CreationMode.INITIALIZE) {
                 final ObjectAdapter adapter;
@@ -489,14 +477,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
-        Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
+        final Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
         final List<ObjectAssociation> fields = getAssociations(noop);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
             final List<Facet> facets = field.getFacets(ImperativeFacet.FILTER);
-            for (final Facet facet: facets) {
+            for (final Facet facet : facets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
-                for (Method imperativeFacetMethod : imperativeFacet.getMethods()) {
+                for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, field);
                 }
             }
@@ -508,9 +496,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction userAction = userActions.get(i);
             final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);
-            for (final Facet facet: facets) {
+            for (final Facet facet : facets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
-                for (Method imperativeFacetMethod : imperativeFacet.getMethods()) {
+                for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, userAction);
                 }
             }
@@ -525,7 +513,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public void debugData(final DebugBuilder debug) {
         debug.blankLine();
         debug.appendln("Title", getFacet(TitleFacet.class));
-        IconFacet iconFacet = getFacet(IconFacet.class);
+        final IconFacet iconFacet = getFacet(IconFacet.class);
         if (iconFacet != null) {
             debug.appendln("Icon", iconFacet);
         }

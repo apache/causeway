@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-
 public class TypeOfFacetDefaultToObject extends TypeOfFacetAbstract {
 
-    public TypeOfFacetDefaultToObject(
-            final FacetHolder holder, 
-            final SpecificationLookup specificationLookup) {
+    public TypeOfFacetDefaultToObject(final FacetHolder holder, final SpecificationLookup specificationLookup) {
         super(Object.class, holder, specificationLookup);
     }
-    
 
 }
-

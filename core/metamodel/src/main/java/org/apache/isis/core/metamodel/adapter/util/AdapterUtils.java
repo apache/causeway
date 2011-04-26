@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.util;
 
 import java.util.ArrayList;
@@ -25,11 +24,10 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
-
 public class AdapterUtils {
 
-    private AdapterUtils() {}
+    private AdapterUtils() {
+    }
 
     public static boolean exists(final ObjectAdapter adapter) {
         return adapter != null && adapter.getObject() != null;
@@ -66,15 +64,14 @@ public class AdapterUtils {
         return unwrappedObjects;
     }
 
-	@SuppressWarnings("unchecked")
-	public static <T> List<T> unwrap(List<ObjectAdapter> adapters) {
-		List<T> list = new ArrayList<T>();
-		for(ObjectAdapter adapter: adapters) {
-			list.add((T) unwrap(adapter));
-		}
-		return list;
-	}
-
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> unwrap(final List<ObjectAdapter> adapters) {
+        final List<T> list = new ArrayList<T>();
+        for (final ObjectAdapter adapter : adapters) {
+            list.add((T) unwrap(adapter));
+        }
+        return list;
+    }
 
     public static String titleString(final ObjectAdapter adapter) {
         return adapter != null ? adapter.titleString() : "";
@@ -98,6 +95,4 @@ public class AdapterUtils {
         return false;
     }
 
-    
 }
-

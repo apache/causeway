@@ -20,9 +20,9 @@ import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ElementSpecificationProviderFromTypeOfFacet implements ElementSpecificationProvider {
-    
+
     public static ElementSpecificationProvider createFrom(final TypeOfFacet typeOfFacet) {
-        if(typeOfFacet==null) {
+        if (typeOfFacet == null) {
             return null;
         }
         final ObjectSpecification spec = typeOfFacet.valueSpec();
@@ -31,10 +31,10 @@ public class ElementSpecificationProviderFromTypeOfFacet implements ElementSpeci
 
     private final ObjectSpecification spec;
 
-    public ElementSpecificationProviderFromTypeOfFacet(ObjectSpecification spec) {
+    public ElementSpecificationProviderFromTypeOfFacet(final ObjectSpecification spec) {
         this.spec = spec;
     }
-    
+
     @Override
     public ObjectSpecification getElementType() {
         return spec;

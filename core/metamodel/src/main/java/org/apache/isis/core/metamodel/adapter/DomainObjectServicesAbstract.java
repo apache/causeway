@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
-
 public abstract class DomainObjectServicesAbstract implements DomainObjectServices {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (DomainObjectServicesAware.class.isAssignableFrom(candidate.getClass())) {
-            DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
+            final DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
             cast.setDomainObjectServices(this);
         }
     }

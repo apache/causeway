@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-
 /**
  * Represents the mechanism to inform the object that it has been updated in the object store.
  * 

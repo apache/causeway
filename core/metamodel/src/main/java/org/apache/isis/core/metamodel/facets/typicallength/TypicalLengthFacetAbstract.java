@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.typicallength;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public abstract class TypicalLengthFacetAbstract extends FacetAbstract implements TypicalLengthFacet {
 
@@ -31,12 +29,13 @@ public abstract class TypicalLengthFacetAbstract extends FacetAbstract implement
         return TypicalLengthFacet.class;
     }
 
-    public TypicalLengthFacetAbstract(final FacetHolder holder, boolean derived) {
+    public TypicalLengthFacetAbstract(final FacetHolder holder, final boolean derived) {
         super(type(), holder, false);
     }
 
+    @Override
     public abstract int value();
-    
+
     @Override
     protected String toStringValues() {
         final int val = value();

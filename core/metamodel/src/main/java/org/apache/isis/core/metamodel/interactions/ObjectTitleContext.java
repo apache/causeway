@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link ObjectTitleEvent}.
  */
@@ -37,12 +35,8 @@ public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
 
     private final String title;
 
-    public ObjectTitleContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier identifier,
-            final String title) {
+    public ObjectTitleContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod,
+        final ObjectAdapter target, final Identifier identifier, final String title) {
         super(InteractionContextType.OBJECT_TITLE, session, invocationMethod, identifier, target);
         this.title = title;
     }

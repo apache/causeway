@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.runtimecontext;
 
 public interface DependencyInjectorAware {
-	
-	public void setDependencyInjector(DependencyInjector dependencyInjector);
+
+    public void setDependencyInjector(DependencyInjector dependencyInjector);
 
 }

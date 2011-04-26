@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
@@ -53,17 +52,14 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import com.google.common.collect.Lists;
 
-
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
     private final int number;
     private final ObjectActionImpl parentAction;
     private final TypedHolder peer;
 
-    protected ObjectActionParameterAbstract(
-            final int number,
-            final ObjectActionImpl objectAction,
-            final TypedHolder peer) {
+    protected ObjectActionParameterAbstract(final int number, final ObjectActionImpl objectAction,
+        final TypedHolder peer) {
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
@@ -159,7 +155,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public List<Facet> getFacets(final Filter<Facet> filter) {
-        return peer != null ? peer.getFacets(filter) : Lists.<Facet>newArrayList();
+        return peer != null ? peer.getFacets(filter) : Lists.<Facet> newArrayList();
     }
 
     @Override
@@ -195,49 +191,48 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // //////////////////////////////////////////////////////////
 
     @Override
-    public ActionArgumentContext createProposedArgumentInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObject,
-            final ObjectAdapter[] proposedArguments,
-            final int position) {
+    public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject,
+        final ObjectAdapter[] proposedArguments, final int position) {
         return new ActionArgumentContext(getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(),
-                proposedArguments, position);
+            proposedArguments, position);
     }
 
     @Override
-    public ObjectAdapter[] getChoices(ObjectAdapter adapter) {
+    public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
         final List<ObjectAdapter> parameterChoices = new ArrayList<ObjectAdapter>();
         final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
 
         if (choicesFacet != null) {
-            Object[] choices = choicesFacet.getChoices(parentAction.realTarget(adapter));
+            final Object[] choices = choicesFacet.getChoices(parentAction.realTarget(adapter));
             checkChoicesType(getSpecificationLookup(), choices, getSpecification());
-            for (Object choice : choices) {
+            for (final Object choice : choices) {
                 parameterChoices.add(getAdapterMap().adapterFor(choice));
             }
         }
         if (parameterChoices.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
-            Query query = new QueryFindAllInstances(getSpecification().getFullIdentifier());
-			final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-            for (ObjectAdapter choiceAdapter: allInstancesAdapter) {
+            final Query query = new QueryFindAllInstances(getSpecification().getFullIdentifier());
+            final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
+            for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
                 parameterChoices.add(choiceAdapter);
             }
         }
         return parameterChoices.toArray(new ObjectAdapter[0]);
     }
 
-    protected static void checkChoicesType(SpecificationLookup specificationLookup, Object[] objects, ObjectSpecification paramSpec) {
-        for (Object object : objects) {
-            ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
+    protected static void checkChoicesType(final SpecificationLookup specificationLookup, final Object[] objects,
+        final ObjectSpecification paramSpec) {
+        for (final Object object : objects) {
+            final ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
             if (!componentSpec.isOfType(paramSpec)) {
-                throw new DomainModelException("Choice type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
+                throw new DomainModelException("Choice type incompatible with parameter type; expected "
+                    + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
             }
         }
     }
-    
+
     @Override
-    public ObjectAdapter getDefault(ObjectAdapter adapter) {
+    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         if (parentAction.isContributed() && adapter != null) {
             if (adapter.getSpecification().isOfType(getSpecification())) {
                 return adapter;
@@ -245,17 +240,16 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            Object dflt = defaultsFacet.getDefault(parentAction.realTarget(adapter));
+            final Object dflt = defaultsFacet.getDefault(parentAction.realTarget(adapter));
             if (dflt == null) {
-            	// it's possible that even though there is a default facet, when invoked it
-            	// is unable to return a default.
-            	return null;
+                // it's possible that even though there is a default facet, when invoked it
+                // is unable to return a default.
+                return null;
             }
-			return getAdapterMap().adapterFor(dflt);
+            return getAdapterMap().adapterFor(dflt);
         }
         return null;
     }
-    
 
     protected AuthenticationSession getAuthenticationSession() {
         return getAuthenticationSessionProvider().getAuthenticationSession();
@@ -280,7 +274,5 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     protected QuerySubmitter getQuerySubmitter() {
         return parentAction.getQuerySubmitter();
     }
-
-    
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 public class ObjectInstantiationException extends Exception {
@@ -27,15 +26,15 @@ public class ObjectInstantiationException extends Exception {
     public ObjectInstantiationException() {
     }
 
-    public ObjectInstantiationException(String message) {
+    public ObjectInstantiationException(final String message) {
         super(message);
     }
 
-    public ObjectInstantiationException(Throwable cause) {
+    public ObjectInstantiationException(final Throwable cause) {
         super(cause);
     }
 
-    public ObjectInstantiationException(String message, Throwable cause) {
+    public ObjectInstantiationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

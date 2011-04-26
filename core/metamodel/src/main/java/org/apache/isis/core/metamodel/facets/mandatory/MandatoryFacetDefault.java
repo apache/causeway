@@ -59,5 +59,4 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
         return false;
     }
 
-
 }

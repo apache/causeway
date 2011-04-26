@@ -20,7 +20,6 @@ import org.apache.isis.core.commons.components.Injectable;
 
 public interface ObjectDirtier extends Injectable {
 
-
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      */

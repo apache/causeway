@@ -23,8 +23,7 @@ public class IntrospectionContext {
     private final ClassSubstitutor classSubstitutor;
     private final MemberLayoutArranger memberLayoutArranger;
 
-    public IntrospectionContext(ClassSubstitutor classSubstitutor,
-        MemberLayoutArranger memberLayoutArranger) {
+    public IntrospectionContext(final ClassSubstitutor classSubstitutor, final MemberLayoutArranger memberLayoutArranger) {
         this.classSubstitutor = classSubstitutor;
         this.memberLayoutArranger = memberLayoutArranger;
     }

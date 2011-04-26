@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services.container.query;
 
-
 public enum QueryCardinality {
-	/**
-	 * Query can return multiple instances.
-	 */
-	MULTIPLE,
-	/**
-	 * Query should return only a single instance (or possible none).
-	 */
-	SINGLE
+    /**
+     * Query can return multiple instances.
+     */
+    MULTIPLE,
+    /**
+     * Query should return only a single instance (or possible none).
+     */
+    SINGLE
 }

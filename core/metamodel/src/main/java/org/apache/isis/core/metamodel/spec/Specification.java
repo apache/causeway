@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,16 +31,14 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * Base interface for elements of the metamodel.
  * 
  * <p>
- * The most significant subinterfaces of this are {@link ObjectSpecification} and
- * {@link ObjectFeature} (which brings in {@link ObjectMember} and
- * {@link ObjectActionParameter}.
+ * The most significant subinterfaces of this are {@link ObjectSpecification} and {@link ObjectFeature} (which brings in
+ * {@link ObjectMember} and {@link ObjectActionParameter}.
  * 
  * <p>
  * Introduces so that viewers can deal with abstract Instances of said.
  * 
  */
 public interface Specification extends IdentifiedHolder {
-    
 
     FeatureType getFeatureType();
 
@@ -53,23 +50,20 @@ public interface Specification extends IdentifiedHolder {
     String getDescription();
 
     /**
-     * Return an {@link Instance} of this {@link Specification} with respect
-     * to the provided {@link ObjectAdapter}.
-     *
-     * <p>
-     * For example, if the {@link Specification} is a {@link OneToOneAssociation},
-     * then is an {@link Instance} implementation representing the { {@link ObjectAdapter}/ {@link OneToOneAssociation} } tuple.
+     * Return an {@link Instance} of this {@link Specification} with respect to the provided {@link ObjectAdapter}.
      * 
      * <p>
-     * Implementations are expected to use a double-dispatch back to the provided
-     * {@link ObjectAdapter} (passing themselves as a parameter), using
-     * {@link ObjectAdapter#getInstance(Specification)}.  
+     * For example, if the {@link Specification} is a {@link OneToOneAssociation}, then is an {@link Instance}
+     * implementation representing the { {@link ObjectAdapter}/ {@link OneToOneAssociation} tuple.
      * 
      * <p>
-     * Note: this method may throw an {@link UnsupportedOperationException};
-     * see {@link ObjectAdapter#getInstance(Specification)} for details.
+     * Implementations are expected to use a double-dispatch back to the provided {@link ObjectAdapter} (passing
+     * themselves as a parameter), using {@link ObjectAdapter#getInstance(Specification)}.
+     * 
+     * <p>
+     * Note: this method may throw an {@link UnsupportedOperationException}; see
+     * {@link ObjectAdapter#getInstance(Specification)} for details.
      */
     Instance getInstance(final ObjectAdapter adapter);
 
-
-}    
+}

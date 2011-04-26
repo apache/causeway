@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.traverser;
 
 import java.lang.reflect.Method;
@@ -28,10 +27,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface SpecificationTraverser extends ApplicationScopedComponent {
 
-	void traverseTypes(Method method, List<Class<?>> discoveredTypes);
+    void traverseTypes(Method method, List<Class<?>> discoveredTypes);
 
-	void traverseReferencedClasses(
-			ObjectSpecification noSpec,
-			List<Class<?>> discoveredTypes) throws ClassNotFoundException;
+    void traverseReferencedClasses(ObjectSpecification noSpec, List<Class<?>> discoveredTypes)
+        throws ClassNotFoundException;
 
 }

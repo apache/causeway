@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.mandatory;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-
 public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract implements MandatoryFacet {
 
     public static Class<? extends Facet> type() {
@@ -40,6 +38,7 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
         super(type(), holder);
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof PropertyModifyContext) && !(context instanceof ActionArgumentContext)) {
             return null;

@@ -17,20 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.bounded;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
-
 public class BoundedFacetUtils {
 
-
-    private BoundedFacetUtils() {}
+    private BoundedFacetUtils() {
+    }
 
     public static boolean isBoundedSet(final ObjectSpecification specification) {
         return specification.getFacet(BoundedFacet.class) != null;
     }
 }
-

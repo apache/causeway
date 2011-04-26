@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.methodutils;
 
 import java.lang.reflect.Method;
@@ -28,32 +27,31 @@ import java.lang.reflect.Modifier;
  */
 public enum MethodScope {
     CLASS, OBJECT;
-    
+
     public boolean isClass() {
-        return this==CLASS;
-    }
-    
-    public boolean isObject() {
-        return this==OBJECT;
+        return this == CLASS;
     }
 
-    public boolean doesNotMatchScope(Method method) {
+    public boolean isObject() {
+        return this == OBJECT;
+    }
+
+    public boolean doesNotMatchScope(final Method method) {
         return !matchesScopeOf(method);
     }
 
-    public boolean matchesScopeOf(Method method) {
+    public boolean matchesScopeOf(final Method method) {
         return isStatic(method) == this.isClass();
     }
 
-    public static MethodScope scopeFor(Method method) {
-        return isStatic(method)?CLASS:OBJECT;
+    public static MethodScope scopeFor(final Method method) {
+        return isStatic(method) ? CLASS : OBJECT;
     }
 
-    private static boolean isStatic(Method method) {
+    private static boolean isStatic(final Method method) {
         final int modifiers = method.getModifiers();
         final boolean isStatic = Modifier.isStatic(modifiers);
         return isStatic;
     }
-
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -29,10 +28,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -72,11 +67,13 @@ import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCacheDef
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForObjectList;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 /**
  * Builds the meta-model.
@@ -84,41 +81,33 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
  * <p>
  * The implementation provides for a degree of pluggability:
  * <ul>
- * <li>The most important plug-in point is {@link ProgrammingModel} that
- * specifies the set of {@link Facet} that make up programming model. If not
- * specified then defaults to {@link ProgrammingModelFacetsJava5} (which should
- * be used as a starting point for your own customizations).
- * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which
- * allows the class to be loaded to be substituted if required. This is used in
- * conjunction with some <tt>PersistenceMechanism</tt>s that do class
+ * <li>The most important plug-in point is {@link ProgrammingModel} that specifies the set of {@link Facet} that make up
+ * programming model. If not specified then defaults to {@link ProgrammingModelFacetsJava5} (which should be used as a
+ * starting point for your own customizations).
+ * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which allows the class to be loaded to be
+ * substituted if required. This is used in conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
- * <li>The {@link CollectionTypeRegistry} specifies the types that should be
- * considered as collections. If not specified then will
- * {@link CollectionTypeRegistryDefault default}. (Note: this extension point
- * has not been tested, so should be considered more of a &quot;statement of
- * intent&quot; than actual API. Also, we may use annotations (similar to the
+ * <li>The {@link CollectionTypeRegistry} specifies the types that should be considered as collections. If not specified
+ * then will {@link CollectionTypeRegistryDefault default}. (Note: this extension point has not been tested, so should
+ * be considered more of a &quot;statement of intent&quot; than actual API. Also, we may use annotations (similar to the
  * way in which Values are specified) as an alternative mechanism).
  * </ul>
  * 
  * <p>
- * In addition, the {@link RuntimeContext} can optionally be injected, but will
- * default to {@link RuntimeContextNoRuntime} if not provided prior to
- * {@link #init() initialization}. The purpose of {@link RuntimeContext} is to
- * allow the metamodel to be used standalone, for example in a Maven plugin. The
- * {@link RuntimeContextNoRuntime} implementation will through an exception for
- * any methods (such as finding an {@link ObjectAdapter adapter}) because there is
- * no runtime session. In the case of the metamodel being used by the framework
- * (that is, when there <i>is</i> a runtime), then the framework injects an
- * implementation of {@link RuntimeContext} that acts like a bridge to its
- * <tt>IsisContext</tt>.
+ * In addition, the {@link RuntimeContext} can optionally be injected, but will default to
+ * {@link RuntimeContextNoRuntime} if not provided prior to {@link #init() initialization}. The purpose of
+ * {@link RuntimeContext} is to allow the metamodel to be used standalone, for example in a Maven plugin. The
+ * {@link RuntimeContextNoRuntime} implementation will through an exception for any methods (such as finding an
+ * {@link ObjectAdapter adapter}) because there is no runtime session. In the case of the metamodel being used by the
+ * framework (that is, when there <i>is</i> a runtime), then the framework injects an implementation of
+ * {@link RuntimeContext} that acts like a bridge to its <tt>IsisContext</tt>.
  */
 
 public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTitle {
 
     private final static Logger LOG = Logger.getLogger(ObjectReflectorDefault.class);
 
-
-   /**
+    /**
      * Injected in the constructor.
      */
     private final IsisConfiguration configuration;
@@ -141,24 +130,20 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     private final FacetProcessor facetProcessor;
 
     /**
-     * Defaulted in the constructor, so can be added to via
-     * {@link #setFacetDecorators(FacetDecoratorSet)} or
+     * Defaulted in the constructor, so can be added to via {@link #setFacetDecorators(FacetDecoratorSet)} or
      * {@link #addFacetDecorator(FacetDecorator)}.
      * 
      * <p>
-     * {@link FacetDecorator}s must be added prior to {@link #init()
-     * initialization.}
+     * {@link FacetDecorator}s must be added prior to {@link #init() initialization.}
      */
     private final FacetDecoratorSet facetDecoratorSet;
 
     /**
-     * Can optionally be injected, but will default (to
-     * {@link RuntimeContextNoRuntime}) otherwise.
+     * Can optionally be injected, but will default (to {@link RuntimeContextNoRuntime}) otherwise.
      * 
      * <p>
-     * Should be injected when used by framework, but will default to a no-op
-     * implementation if the metamodel is being used standalone (eg for a
-     * code-generator).
+     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is being
+     * used standalone (eg for a code-generator).
      */
     private RuntimeContext runtimeContext;
 
@@ -170,28 +155,22 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
      */
     private List<Class<?>> serviceClasses = Lists.newArrayList();
 
-    private MetaModelValidator metaModelValidator;
+    private final MetaModelValidator metaModelValidator;
 
     /**
      * Defaulted in the constructor.
      */
     private final SpecificationCache cache;
 
-    
     // /////////////////////////////////////////////////////////////
     // Constructor
     // /////////////////////////////////////////////////////////////
 
-    public ObjectReflectorDefault(
-            final IsisConfiguration configuration,
-            final ClassSubstitutor classSubstitutor,
-            final CollectionTypeRegistry collectionTypeRegistry,
-            final SpecificationTraverser specificationTraverser,
-            final MemberLayoutArranger memberLayoutArranger,
-            final ProgrammingModel programmingModel, 
-            final Set<FacetDecorator> facetDecorators, 
-            final MetaModelValidator metaModelValidator) {
-        
+    public ObjectReflectorDefault(final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor,
+        final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser,
+        final MemberLayoutArranger memberLayoutArranger, final ProgrammingModel programmingModel,
+        final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
+
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(classSubstitutor, is(notNullValue()));
         ensureThatArg(collectionTypeRegistry, is(notNullValue()));
@@ -207,17 +186,16 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         this.programmingModel = programmingModel;
         this.specificationTraverser = specificationTraverser;
         this.memberLayoutArranger = memberLayoutArranger;
-        
+
         this.facetDecoratorSet = new FacetDecoratorSet();
         for (final FacetDecorator facetDecorator : facetDecorators) {
             this.facetDecoratorSet.add(facetDecorator);
         }
 
         this.metaModelValidator = metaModelValidator;
-        
-        this.facetProcessor = new FacetProcessor(configuration, collectionTypeRegistry,
-                programmingModel);
-        
+
+        this.facetProcessor = new FacetProcessor(configuration, collectionTypeRegistry, programmingModel);
+
         this.cache = new SpecificationCacheDefault();
     }
 
@@ -232,8 +210,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Initializes and wires up, and primes the cache based on
-     * any service classes that may have been {@link #setServiceClasses(List) injected}.
+     * Initializes and wires up, and primes the cache based on any service classes that may have been
+     * {@link #setServiceClasses(List) injected}.
      */
     @Override
     public void init() {
@@ -261,18 +239,18 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         facetProcessor.init();
         programmingModel.init();
         metaModelValidator.init();
-        
+
         // prime cache and validate
         primeCache();
         metaModelValidator.validate();
     }
 
     /**
-     * load the service specifications and then, using the {@link #getSpecificationTraverser() traverser},
-     * keep loading all referenced specifications until we can find no more.
+     * load the service specifications and then, using the {@link #getSpecificationTraverser() traverser}, keep loading
+     * all referenced specifications until we can find no more.
      */
     private void primeCache() {
-        for (Class<?> serviceClass : serviceClasses) {
+        for (final Class<?> serviceClass : serviceClasses) {
             internalLoadSpecification(serviceClass);
         }
         loadAllSpecifications();
@@ -280,9 +258,9 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
 
     private void loadAllSpecifications() {
         List<Class<?>> newlyDiscoveredClasses = newlyDiscoveredClasses();
-        
-        while(newlyDiscoveredClasses.size() > 0) {
-            for(Class<?> newClass: newlyDiscoveredClasses) {
+
+        while (newlyDiscoveredClasses.size() > 0) {
+            for (final Class<?> newClass : newlyDiscoveredClasses) {
                 internalLoadSpecification(newClass);
             }
             newlyDiscoveredClasses = newlyDiscoveredClasses();
@@ -290,20 +268,18 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     private List<Class<?>> newlyDiscoveredClasses() {
-        List<Class<?>> newlyDiscoveredClasses = new ArrayList<Class<?>>();
-        
-        Collection<ObjectSpecification> noSpecs = allSpecifications();
+        final List<Class<?>> newlyDiscoveredClasses = new ArrayList<Class<?>>();
+
+        final Collection<ObjectSpecification> noSpecs = allSpecifications();
         try {
-            for(ObjectSpecification noSpec: noSpecs) {
+            for (final ObjectSpecification noSpec : noSpecs) {
                 getSpecificationTraverser().traverseReferencedClasses(noSpec, newlyDiscoveredClasses);
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (final ClassNotFoundException ex) {
             throw new IsisException(ex);
         }
         return newlyDiscoveredClasses;
     }
-
-
 
     @Override
     public void shutdown() {
@@ -320,10 +296,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
      * API: Return the specification for the specified class of object.
      */
     @Override
-    public final ObjectSpecification loadSpecification(
-            final String className) {
-        ensureThatArg(className, is(notNullValue()),
-                "specification class name must be specified");
+    public final ObjectSpecification loadSpecification(final String className) {
+        ensureThatArg(className, is(notNullValue()), "specification class name must be specified");
 
         try {
             final Class<?> cls = loadBuiltIn(className);
@@ -331,8 +305,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         } catch (final ClassNotFoundException e) {
             final ObjectSpecification spec = getCache().get(className);
             if (spec == null) {
-                throw new IsisException(
-                        "No such class available: " + className);
+                throw new IsisException("No such class available: " + className);
             }
             return spec;
         }
@@ -347,105 +320,96 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        Class<?> substitutedType = getClassSubstitutor().getClass(type);
-        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType)
-                : null;
+        final Class<?> substitutedType = getClassSubstitutor().getClass(type);
+        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType) : null;
     }
 
-    private ObjectSpecification loadSpecificationForSubstitutedClass(
-            final Class<?> type) {
+    private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type) {
         Assert.assertNotNull(type);
-        String typeName = type.getName();
-        
-        SpecificationCache specificationCache = getCache();
+        final String typeName = type.getName();
+
+        final SpecificationCache specificationCache = getCache();
         synchronized (specificationCache) {
             final ObjectSpecification spec = specificationCache.get(typeName);
             if (spec != null) {
                 return spec;
             }
-            ObjectSpecification specification = createSpecification(type);
+            final ObjectSpecification specification = createSpecification(type);
             if (specification == null) {
-                throw new IsisException(
-                        "Failed to create specification for class "
-                                + typeName);
+                throw new IsisException("Failed to create specification for class " + typeName);
             }
 
             // put into the cache prior to introspecting, to prevent
             // infinite loops
             specificationCache.cache(typeName, specification);
-            
+
             introspectSpecificationIfRequired(specification);
 
             return specification;
         }
     }
 
-
     /**
-     * Loads the specifications of the specified types except the one specified
-     * (to prevent an infinite loop).
+     * Loads the specifications of the specified types except the one specified (to prevent an infinite loop).
      */
     @Override
-    public boolean loadSpecifications(List<Class<?>> typesToLoad,
-            final Class<?> typeToIgnore) {
+    public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
         boolean anyLoadedAsNull = false;
-        for (Class<?> typeToLoad: typesToLoad) {
+        for (final Class<?> typeToLoad : typesToLoad) {
             if (typeToLoad != typeToIgnore) {
-                ObjectSpecification noSpec = internalLoadSpecification(typeToLoad);
-                boolean loadedAsNull = (noSpec == null);
+                final ObjectSpecification noSpec = internalLoadSpecification(typeToLoad);
+                final boolean loadedAsNull = (noSpec == null);
                 anyLoadedAsNull = loadedAsNull || anyLoadedAsNull;
             }
         }
         return anyLoadedAsNull;
     }
-    
+
     /**
      * Loads the specifications of the specified types.
      */
     @Override
-    public boolean loadSpecifications(List<Class<?>> typesToLoad) {
+    public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return loadSpecifications(typesToLoad, null);
     }
-
 
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        final AuthenticationSessionProvider authenticationSessionProvider = getRuntimeContext().getAuthenticationSessionProvider();
+        final AuthenticationSessionProvider authenticationSessionProvider =
+            getRuntimeContext().getAuthenticationSessionProvider();
         final SpecificationLookup specificationLookup = getRuntimeContext().getSpecificationLookup();
         final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
-        
-        final SpecificationContext specContext = new SpecificationContext(authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup);
-        
+
+        final SpecificationContext specContext =
+            new SpecificationContext(authenticationSessionProvider, servicesProvider, objectInstantiator,
+                specificationLookup);
+
         if (ObjectList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationForObjectList(specContext);
         } else {
-            SpecificationLoader specificationLoader = this;
+            final SpecificationLoader specificationLoader = this;
             final AdapterMap adapterMap = getRuntimeContext().getAdapterMap();
-            final ObjectMemberContext objectMemberContext = new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter());
-            final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
+            final ObjectMemberContext objectMemberContext =
+                new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap,
+                    getRuntimeContext().getQuerySubmitter());
+            final IntrospectionContext introspectionContext =
+                new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
             final DependencyInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = 
-                new FacetedMethodsBuilderContext(specificationLoader , classSubstitutor, specificationTraverser, facetProcessor);
-            return new ObjectSpecificationDefault(cls,
-                facetedMethodsBuilderContext,
-                introspectionContext,
-                specContext, 
-                objectMemberContext,
-                createObjectContext);
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
+                new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser,
+                    facetProcessor);
+            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, introspectionContext, specContext,
+                objectMemberContext, createObjectContext);
         }
     }
 
-
-
-
-    private Class<?> loadBuiltIn(final String className)
-            throws ClassNotFoundException {
-        Class<?> builtIn = JavaClassUtils.getBuiltIn(className);
+    private Class<?> loadBuiltIn(final String className) throws ClassNotFoundException {
+        final Class<?> builtIn = JavaClassUtils.getBuiltIn(className);
         if (builtIn != null) {
             return builtIn;
         }
@@ -461,51 +425,46 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     @Override
-    public boolean loaded(Class<?> cls) {
+    public boolean loaded(final Class<?> cls) {
         return loaded(cls.getName());
     }
 
     @Override
-    public boolean loaded(String fullyQualifiedClassName) {
+    public boolean loaded(final String fullyQualifiedClassName) {
         return getCache().get(fullyQualifiedClassName) != null;
     }
 
-    
-    private ObjectSpecification introspectSpecificationIfRequired(ObjectSpecification spec) {
-        if(!spec.isIntrospected()) {
+    private ObjectSpecification introspectSpecificationIfRequired(final ObjectSpecification spec) {
+        if (!spec.isIntrospected()) {
             spec.introspectTypeHierarchyAndMembers();
             facetDecoratorSet.decorate(spec);
             spec.updateFromFacetValues();
         }
-        return spec;        
+        return spec;
     }
-
 
     // ////////////////////////////////////////////////////////////////////
     // injectInto
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * Injects self into candidate if required, and instructs its subcomponents
-     * to do so also.
+     * Injects self into candidate if required, and instructs its subcomponents to do so also.
      */
     @Override
-    public void injectInto(Object candidate) {
-        Class<?> candidateClass = candidate.getClass();
+    public void injectInto(final Object candidate) {
+        final Class<?> candidateClass = candidate.getClass();
         if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
-            SpecificationLoaderAware cast = SpecificationLoaderAware.class
-                    .cast(candidate);
+            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
             cast.setSpecificationLoader(this);
         }
         if (SpecificationLookupAware.class.isAssignableFrom(candidateClass)) {
-            SpecificationLookupAware cast = SpecificationLookupAware.class
-                    .cast(candidate);
+            final SpecificationLookupAware cast = SpecificationLookupAware.class.cast(candidate);
             cast.setSpecificationLookup(this);
         }
 
         getClassSubstitutor().injectInto(candidate);
         getCollectionTypeRegistry().injectInto(candidate);
-        
+
     }
 
     // /////////////////////////////////////////////////////////////
@@ -520,11 +479,10 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         str.appendTitle("Specifications");
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications());
         Collections.sort(specs, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
-        for (ObjectSpecification spec : specs) {
+        for (final ObjectSpecification spec : specs) {
             str.append(spec.isAbstract() ? "A" : ".");
             str.append(spec.isService() ? "S" : ".");
-            str.append(BoundedFacetUtils.isBoundedSet(spec) ? "B"
-                : ".");
+            str.append(BoundedFacetUtils.isBoundedSet(spec) ? "B" : ".");
             str.append(spec.isCollection() ? "C" : ".");
             str.append(spec.isNotCollection() ? "O" : ".");
             str.append("."); // placeholder for future support of maps
@@ -562,7 +520,6 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         return cache;
     }
 
-
     // ////////////////////////////////////////////////////////////////////
     // Dependencies (injected by setter due to *Aware)
     // ////////////////////////////////////////////////////////////////////
@@ -578,7 +535,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
      * Due to {@link RuntimeContextAware}.
      */
     @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
+    public void setRuntimeContext(final RuntimeContext runtimeContext) {
         this.runtimeContext = runtimeContext;
     }
 
@@ -589,13 +546,11 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     public List<Class<?>> getServiceClasses() {
         return Collections.unmodifiableList(serviceClasses);
     }
-    
+
     @Override
-    public void setServiceClasses(List<Class<?>> serviceClasses) {
+    public void setServiceClasses(final List<Class<?>> serviceClasses) {
         this.serviceClasses = serviceClasses;
     }
-
-    
 
     // ////////////////////////////////////////////////////////////////////
     // Dependencies (injected from constructor)
@@ -608,7 +563,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     protected CollectionTypeRegistry getCollectionTypeRegistry() {
         return collectionTypeRegistry;
     }
-    
+
     protected ClassSubstitutor getClassSubstitutor() {
         return classSubstitutor;
     }
@@ -616,11 +571,11 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     protected SpecificationTraverser getSpecificationTraverser() {
         return specificationTraverser;
     }
-    
+
     protected ProgrammingModel getProgrammingModelFacets() {
         return programmingModel;
     }
-    
+
     protected MemberLayoutArranger getMemberLayoutArranger() {
         return memberLayoutArranger;
     }
@@ -632,5 +587,5 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     protected Set<FacetDecorator> getFacetDecoratorSet() {
         return facetDecoratorSet.getFacetDecorators();
     }
-    
+
 }

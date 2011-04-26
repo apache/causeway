@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -54,8 +52,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     boolean isNotPersisted();
 
     /**
-     * Returns <code>true</code> if this field on the specified object is deemed to be empty, or has no
-     * content.
+     * Returns <code>true</code> if this field on the specified object is deemed to be empty, or has no content.
      */
     boolean isEmpty(ObjectAdapter target);
 

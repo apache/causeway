@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
-
 /**
  * Provides reflective access to an action or a field on a domain object.
  */
@@ -41,8 +39,8 @@ public interface ObjectMember extends ObjectFeature {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Returns the identifier of the member, which must not change. This should be all camel-case with no
-     * spaces: so if the member is called 'Return Date' then the a suitable id would be 'ReturnDate'.
+     * Returns the identifier of the member, which must not change. This should be all camel-case with no spaces: so if
+     * the member is called 'Return Date' then the a suitable id would be 'ReturnDate'.
      */
     String getId();
 
@@ -60,25 +58,23 @@ public interface ObjectMember extends ObjectFeature {
     // /////////////////////////////////////////////////////////////
     // Hidden (or visible)
     // /////////////////////////////////////////////////////////////
-    
+
     /**
      * Determines if a member is always hidden.
      */
     boolean isAlwaysHidden();
 
     /**
-     * Create an {@link InteractionContext} to represent an attempt to view this member (that is, to check if
-     * it is visible or not).
+     * Create an {@link InteractionContext} to represent an attempt to view this member (that is, to check if it is
+     * visible or not).
      * 
      * <p>
      * Typically it is easier to just call {@link #isVisible(AuthenticationSession, ObjectAdapter)} or
-     * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is provided as API for symmetry with interactions
-     * (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is provided as API for symmetry with
+     * interactions (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    VisibilityContext<?> createVisibleInteractionContext(
-            AuthenticationSession session,
-            InteractionInvocationMethod invocationMethod,
-            ObjectAdapter targetObjectAdapter);
+    VisibilityContext<?> createVisibleInteractionContext(AuthenticationSession session,
+        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
 
     /**
      * Determines if this member is visible, represented as a {@link Consent}.
@@ -95,18 +91,16 @@ public interface ObjectMember extends ObjectFeature {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Create an {@link InteractionContext} to represent an attempt to {@link InteractionContextType#MEMBER_USABLE
-     * use this member} (that is, to check if it is usable or not).
+     * Create an {@link InteractionContext} to represent an attempt to {@link InteractionContextType#MEMBER_USABLE use
+     * this member} (that is, to check if it is usable or not).
      * 
      * <p>
      * Typically it is easier to just call {@link #isUsable(AuthenticationSession, ObjectAdapter)} or
-     * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is provided as API for symmetry with interactions
-     * (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is provided as API for symmetry with
+     * interactions (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    UsabilityContext<?> createUsableInteractionContext(
-            AuthenticationSession session,
-            InteractionInvocationMethod invocationMethod,
-            ObjectAdapter target);
+    UsabilityContext<?> createUsableInteractionContext(AuthenticationSession session,
+        InteractionInvocationMethod invocationMethod, ObjectAdapter target);
 
     /**
      * Determines whether this member is usable, represented as a {@link Consent}.
@@ -118,7 +112,6 @@ public interface ObjectMember extends ObjectFeature {
      */
     Consent isUsable(AuthenticationSession session, ObjectAdapter target);
 
-    
     // /////////////////////////////////////////////////////////////
     // isAssociation, isAction
     // /////////////////////////////////////////////////////////////
@@ -154,15 +147,11 @@ public interface ObjectMember extends ObjectFeature {
      * If so, can be safely downcast to {@link ObjectAction}.
      */
     boolean isAction();
-    
 
     // /////////////////////////////////////////////////////////////
     // Debugging
     // /////////////////////////////////////////////////////////////
 
     String debugData();
-
-
-    
 
 }

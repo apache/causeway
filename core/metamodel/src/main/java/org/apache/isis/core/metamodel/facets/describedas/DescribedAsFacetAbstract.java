@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.describedas;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
-
 
 public abstract class DescribedAsFacetAbstract extends SingleStringValueFacetAbstract implements DescribedAsFacet {
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
@@ -29,17 +28,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link CollectionVisibilityEvent}.
  */
 public class CollectionVisibilityContext extends VisibilityContext<CollectionVisibilityEvent> {
 
-    public CollectionVisibilityContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier identifier) {
+    public CollectionVisibilityContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.COLLECTION_VISIBLE, session, invocationMethod, identifier, target);
     }
 

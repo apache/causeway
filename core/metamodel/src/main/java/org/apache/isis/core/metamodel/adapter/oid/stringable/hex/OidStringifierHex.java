@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid.stringable.hex;
 
 import java.io.ByteArrayInputStream;
@@ -26,28 +25,28 @@ import java.io.IOException;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 
-
 public class OidStringifierHex implements OidStringifier {
 
+    @Override
     public String enString(final Oid oid) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(baos);
         try {
-			outputImpl.writeEncodable(oid);
-			final byte[] byteArray = baos.toByteArray();
-			return new String(Hex.encodeHex(byteArray));
-		} catch (IOException e) {
-			throw new IsisException("Failed to write object", e);
-		}
+            outputImpl.writeEncodable(oid);
+            final byte[] byteArray = baos.toByteArray();
+            return new String(Hex.encodeHex(byteArray));
+        } catch (final IOException e) {
+            throw new IsisException("Failed to write object", e);
+        }
     }
 
+    @Override
     public Oid deString(final String oidStr) {
         final char[] oidCharArray = oidStr.toCharArray();
         byte[] oidBytes;
@@ -56,11 +55,11 @@ public class OidStringifierHex implements OidStringifier {
             final ByteArrayInputStream bais = new ByteArrayInputStream(oidBytes);
             final DataInputStreamExtended inputImpl = new DataInputStreamExtended(bais);
             return inputImpl.readEncodable(Oid.class);
-        } catch (IOException ex) {
-        	throw new IsisException("Failed to read object", ex);
-		} catch (DecoderException ex) {
-			throw new IsisException("Failed to hex decode object", ex);
-		}
+        } catch (final IOException ex) {
+            throw new IsisException("Failed to read object", ex);
+        } catch (final DecoderException ex) {
+            throw new IsisException("Failed to hex decode object", ex);
+        }
     }
 
 }

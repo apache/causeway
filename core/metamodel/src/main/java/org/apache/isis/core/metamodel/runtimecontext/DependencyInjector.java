@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.core.commons.components.Injectable;
 
-
 public interface DependencyInjector extends Injectable {
 
     /**

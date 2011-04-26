@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.map;
 
-
 public interface AdapterMapAware {
-	
-	public void setAdapterMap(final AdapterMap adapterManager);
+
+    public void setAdapterMap(final AdapterMap adapterManager);
 
 }

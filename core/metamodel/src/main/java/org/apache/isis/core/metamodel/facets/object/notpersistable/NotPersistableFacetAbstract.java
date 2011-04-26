@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.notpersistable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
-
 
 public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstract implements NotPersistableFacet {
 
@@ -38,6 +36,7 @@ public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstra
         this.value = value;
     }
 
+    @Override
     public InitiatedBy value() {
         return value;
     }

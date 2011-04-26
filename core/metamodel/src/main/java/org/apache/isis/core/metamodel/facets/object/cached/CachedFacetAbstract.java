@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.cached;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-
 
 public abstract class CachedFacetAbstract extends MarkerFacetAbstract implements CachedFacet {
 

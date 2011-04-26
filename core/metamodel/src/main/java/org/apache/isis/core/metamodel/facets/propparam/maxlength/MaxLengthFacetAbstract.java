@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.propparam.maxlength;
 
 import org.apache.isis.applib.events.ValidityEvent;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
-
 
 public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract implements MaxLengthFacet {
 
@@ -71,7 +69,5 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
         final int val = value();
         return val == 0 ? "unlimited" : String.valueOf(val);
     }
-    
-
 
 }

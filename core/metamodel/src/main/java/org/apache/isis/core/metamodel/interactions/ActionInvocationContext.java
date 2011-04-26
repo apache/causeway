@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link ActionInvocationEvent}.
  */
@@ -37,12 +35,9 @@ public class ActionInvocationContext extends ValidityContext<ActionInvocationEve
 
     private final ObjectAdapter[] args;
 
-    public ActionInvocationContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier id,
-            final ObjectAdapter[] args) {
+    public ActionInvocationContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id,
+        final ObjectAdapter[] args) {
         super(InteractionContextType.ACTION_INVOKE, session, invocationMethod, id, target);
         this.args = args;
     }

@@ -48,7 +48,7 @@
     forth. The collection of programming conventions is termed a "programming
     model", and is pluggable.</para>
 
-    <para>This documentation describes how to use and customize the default
+    <para>This guide describes how to use and customize the default
     programming models, or to use other available programming models (for
     example, for other JVM-based languages).</para>
 
@@ -79,8 +79,12 @@
           <listitem>
             <para>Wrapper Programming Model</para>
 
-            <para>This part of the guide (see <xref
-            linkend="prt.Wrapper" />)</para>
+            <para>The wrapper programming model enables a domain object to be
+            "wrapped" by a proxy so that interactions with it by other domain
+            objects are "as if" through the viewer. This part of the guide
+            (see <xref linkend="prt.Wrapper" />) describes how to configure
+            your application in order that your domain objects can take
+            advantage of this capabilities.</para>
           </listitem>
         </itemizedlist></para>
     </sect1>
@@ -142,7 +146,7 @@
       <emphasis>applib</emphasis> <package>[oai:applib]</package> module. If
       using the <emphasis>default runtime</emphasis>
       <package>[oai.runtimes:dflt]</package> then the Java 5 programming model
-      is configured by default . </para>
+      is configured by default .</para>
 
       <para>The chapters in this part of the guide describe:</para>
 
@@ -374,7 +378,7 @@
           <para>writing domain objects in Groovy</para>
 
           <para>Guidance on how to follow the <emphasis>Apache Isis</emphasis>
-          coding conventions while programming in Groovy. </para>
+          coding conventions while programming in Groovy.</para>
         </listitem>
 
         <listitem>

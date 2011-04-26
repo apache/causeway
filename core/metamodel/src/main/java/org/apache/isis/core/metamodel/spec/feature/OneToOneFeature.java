@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
-
 
 /**
  * Common to {@link OneToOneAssociation} and {@link OneToOneActionParameter}.

@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
-
 
 public interface SpecificationLoaderAware {
 
     public void setSpecificationLoader(SpecificationLoader specificationLoader);
 }
-
-

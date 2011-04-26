@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
-
 
 /**
  * A Class that provides multiple facet implementations, either directly or through a delegate.
  * 
  * <p>
- * The client of this interface should use {@link #getFacet(Class)} to obtain the facet implementation for
- * each of the {@link #facetTypes() facets types}.
+ * The client of this interface should use {@link #getFacet(Class)} to obtain the facet implementation for each of the
+ * {@link #facetTypes() facets types}.
  */
 public interface MultiTypedFacet extends Facet {
 
@@ -38,4 +36,3 @@ public interface MultiTypedFacet extends Facet {
 
     public <T extends Facet> T getFacet(Class<T> facet);
 }
-

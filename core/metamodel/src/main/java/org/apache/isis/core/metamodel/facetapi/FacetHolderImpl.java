@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.filter.Filter;
-
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -53,8 +51,8 @@ public class FacetHolderImpl implements FacetHolder {
     @Override
     public void addFacet(final MultiTypedFacet facet) {
         final Class<? extends Facet>[] facetTypes = facet.facetTypes();
-        for (int i = 0; i < facetTypes.length; i++) {
-            addFacet(facetTypes[i], facet.getFacet(facetTypes[i]));
+        for (final Class<? extends Facet> facetType : facetTypes) {
+            addFacet(facetType, facet.getFacet(facetType));
         }
     }
 
@@ -65,12 +63,12 @@ public class FacetHolderImpl implements FacetHolder {
             return;
         }
         if (!facet.alwaysReplace()) {
-        	return;
+            return;
         }
         if (facet.isDerived() && !existingFacet.isDerived()) {
-        	return;
+            return;
         }
-    	facet.setUnderlyingFacet(existingFacet);
+        facet.setUnderlyingFacet(existingFacet);
         facetsByClass.put(facetType, facet);
     }
 
@@ -99,6 +97,5 @@ public class FacetHolderImpl implements FacetHolder {
     public List<Facet> getFacets(final Filter<Facet> filter) {
         return FacetUtil.getFacets(facetsByClass, filter);
     }
-
 
 }

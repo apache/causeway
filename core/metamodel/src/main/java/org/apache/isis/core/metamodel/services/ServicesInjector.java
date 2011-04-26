@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services;
 
 import java.util.List;
@@ -26,16 +25,14 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 
-
 /**
  * The repository of services, also able to inject into any object.
- *
+ * 
  * <p>
- * The {@link #getContainer() domain object container} is always injected but
- * is not a {@link #getRegisteredServices() registered service}.
+ * The {@link #getContainer() domain object container} is always injected but is not a {@link #getRegisteredServices()
+ * registered service}.
  */
 public interface ServicesInjector extends SessionScopedComponent, Injectable {
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // Container
@@ -45,12 +42,11 @@ public interface ServicesInjector extends SessionScopedComponent, Injectable {
 
     /**
      * Container to inject.
-     *
+     * 
      * <p>
      * This itself is injected.
      */
     public void setContainer(final DomainObjectContainer container);
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // Services
@@ -58,24 +54,21 @@ public interface ServicesInjector extends SessionScopedComponent, Injectable {
 
     /**
      * Services to be injected.
-     *
+     * 
      * <p>
-     * Should automatically inject all services into each other (though calling
-     * {@link #open()} will also do this).
-     *
+     * Should automatically inject all services into each other (though calling {@link #open()} will also do this).
+     * 
      * @param services
      */
     void setServices(List<Object> services);
 
-
     /**
      * All registered services, as an immutable {@link List}.
-     *
+     * 
      * <p>
      * Does not include the {@link #getContainer() container}.
      */
     List<Object> getRegisteredServices();
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // Injection (into contained objects)
@@ -91,8 +84,4 @@ public interface ServicesInjector extends SessionScopedComponent, Injectable {
      */
     void injectDependencies(List<Object> objects);
 
-
-
-
 }
-

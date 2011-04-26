@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
 
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
@@ -57,8 +56,7 @@ public enum InteractionContextType {
      */
     COLLECTION_VISIBLE("View collection"),
     /**
-     * Determining whether the collection of the object is either readable or modifiable (or has been
-     * disabled).
+     * Determining whether the collection of the object is either readable or modifiable (or has been disabled).
      */
     COLLECTION_USABLE("Use collection"),
     /**
@@ -82,8 +80,7 @@ public enum InteractionContextType {
      */
     ACTION_USABLE("Use action"),
     /**
-     * Whether this particular proposed argument for an action invocation is valid (or if it is in fact
-     * invalid).
+     * Whether this particular proposed argument for an action invocation is valid (or if it is in fact invalid).
      * 
      * <p>
      * For example, ensuring that a regular expression match or number range is correct.
@@ -93,9 +90,8 @@ public enum InteractionContextType {
      * Invoking (or attempting to invoke) an action.
      * 
      * <p>
-     * Even if each of the {@link #ACTION_PROPOSED_ARGUMENT proposed arguments} are valid, it may not be
-     * possible to invoke the action if there the arguments together are invalid (for example,
-     * <tt>startDate &gt; endDate</tt>).
+     * Even if each of the {@link #ACTION_PROPOSED_ARGUMENT proposed arguments} are valid, it may not be possible to
+     * invoke the action if there the arguments together are invalid (for example, <tt>startDate &gt; endDate</tt>).
      */
     ACTION_INVOKE("Invoke action"),
 
@@ -115,4 +111,3 @@ public enum InteractionContextType {
     }
 
 }
-

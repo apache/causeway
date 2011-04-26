@@ -17,22 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-
 public enum LifeCycleEvent {
-    CREATED(CreatedCallbackFacet.class),
-    DELETED(RemovedCallbackFacet.class),
-    DELETING(RemovingCallbackFacet.class),
-    LOADED(LoadedCallbackFacet.class),
-    LOADING(LoadingCallbackFacet.class),
-    SAVED(PersistedCallbackFacet.class),
-    SAVING(PersistingCallbackFacet.class),
-    UPDATED(UpdatedCallbackFacet.class),
-    UPDATING(UpdatingCallbackFacet.class);
+    CREATED(CreatedCallbackFacet.class), DELETED(RemovedCallbackFacet.class), DELETING(RemovingCallbackFacet.class),
+    LOADED(LoadedCallbackFacet.class), LOADING(LoadingCallbackFacet.class), SAVED(PersistedCallbackFacet.class),
+    SAVING(PersistingCallbackFacet.class), UPDATED(UpdatedCallbackFacet.class), UPDATING(UpdatingCallbackFacet.class);
 
     private final Class<? extends Facet> cls;
 
@@ -45,4 +37,3 @@ public enum LifeCycleEvent {
     }
 
 }
-

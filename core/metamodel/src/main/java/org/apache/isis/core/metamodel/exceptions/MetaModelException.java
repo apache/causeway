@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.exceptions;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class MetaModelException extends IsisException {
     private static final long serialVersionUID = 1L;

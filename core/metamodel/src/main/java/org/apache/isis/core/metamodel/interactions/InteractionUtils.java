@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import java.util.List;
@@ -28,32 +27,30 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
 public final class InteractionUtils {
 
-    private InteractionUtils() {}
+    private InteractionUtils() {
+    }
 
     public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
         final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(HidingInteractionAdvisor.class));
-        for (final Facet facet: facets) {
+        for (final Facet facet : facets) {
             final HidingInteractionAdvisor advisor = (HidingInteractionAdvisor) facet;
             result.advise(advisor.hides(context), advisor);
         }
         return result;
     }
 
-    public static InteractionResultSet isVisibleResultSet(
-            final FacetHolder facetHolder,
-            final VisibilityContext<?> context,
-            final InteractionResultSet resultSet) {
+    public static InteractionResultSet isVisibleResultSet(final FacetHolder facetHolder,
+        final VisibilityContext<?> context, final InteractionResultSet resultSet) {
         return resultSet.add(isVisibleResult(facetHolder, context));
     }
 
     public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
         final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(DisablingInteractionAdvisor.class));
-        for (final Facet facet: facets) {
+        for (final Facet facet : facets) {
             final DisablingInteractionAdvisor advisor = (DisablingInteractionAdvisor) facet;
             final String disables = advisor.disables(context);
             result.advise(disables, advisor);
@@ -61,29 +58,24 @@ public final class InteractionUtils {
         return result;
     }
 
-    public static InteractionResultSet isUsableResultSet(
-            final FacetHolder facetHolder,
-            final UsabilityContext<?> context,
-            final InteractionResultSet resultSet) {
+    public static InteractionResultSet isUsableResultSet(final FacetHolder facetHolder,
+        final UsabilityContext<?> context, final InteractionResultSet resultSet) {
         return resultSet.add(isUsableResult(facetHolder, context));
     }
 
     public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
         final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(ValidatingInteractionAdvisor.class));
-        for (final Facet facet: facets) {
+        for (final Facet facet : facets) {
             final ValidatingInteractionAdvisor advisor = (ValidatingInteractionAdvisor) facet;
             result.advise(advisor.invalidates(context), advisor);
         }
         return result;
     }
 
-    public static InteractionResultSet isValidResultSet(
-            final FacetHolder facetHolder,
-            final ValidityContext<?> context,
-            final InteractionResultSet resultSet) {
+    public static InteractionResultSet isValidResultSet(final FacetHolder facetHolder,
+        final ValidityContext<?> context, final InteractionResultSet resultSet) {
         return resultSet.add(isValidResult(facetHolder, context));
     }
 
 }
-

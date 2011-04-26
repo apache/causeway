@@ -17,22 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.commons.components.Installer;
-
 
 /**
  * Installs a {@link ObjectReflector}during system start up.
  */
 public interface ObjectReflectorInstaller extends Installer {
 
-	static String TYPE = "reflector";
+    static String TYPE = "reflector";
 
     ObjectReflector createReflector();
-    
-    void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller);
 
+    void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller);
 
 }

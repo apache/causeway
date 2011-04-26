@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 public interface ObjectInstantiatorAware {
-	
-	public void setObjectInstantiator(final ObjectInstantiator objectInstantiator);
+
+    public void setObjectInstantiator(final ObjectInstantiator objectInstantiator);
 
 }

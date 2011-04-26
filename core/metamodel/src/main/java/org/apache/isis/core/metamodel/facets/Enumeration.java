@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 public interface Enumeration {
@@ -29,4 +28,3 @@ public interface Enumeration {
     public abstract String getFriendlyName();
 
 }
-

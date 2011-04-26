@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.version;
 
 import java.io.IOException;
@@ -26,22 +25,21 @@ import java.util.Date;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 
-
-
 public abstract class VersionUserAndTimeAbstract extends VersionUserAbstract {
+    private static final long serialVersionUID = 1L;
     private final Date time;
 
     public VersionUserAndTimeAbstract(final String user, final Date time) {
-    	super(user);
+        super(user);
         this.time = time;
         initialized();
     }
 
-    public VersionUserAndTimeAbstract(DataInputExtended input) throws IOException {
-    	super(input);
-    	this.time = new Date(input.readLong());
-    	initialized();
-	}
+    public VersionUserAndTimeAbstract(final DataInputExtended input) throws IOException {
+        super(input);
+        this.time = new Date(input.readLong());
+        initialized();
+    }
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
@@ -49,18 +47,17 @@ public abstract class VersionUserAndTimeAbstract extends VersionUserAbstract {
         output.writeLong(time.getTime());
     }
 
-	private void initialized() {
-		// nothing to do
-	}
-
-    /////////////////////////////////////////////////////////
-    //
-    /////////////////////////////////////////////////////////
-
-
-	public Date getTime() {
-        return time;
+    private void initialized() {
+        // nothing to do
     }
 
+    // ///////////////////////////////////////////////////////
+    //
+    // ///////////////////////////////////////////////////////
+
+    @Override
+    public Date getTime() {
+        return time;
+    }
 
 }

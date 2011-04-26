@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.applib.filter.Filter;
-
 
 public class ObjectParameterFilters {
 
@@ -35,6 +33,7 @@ public class ObjectParameterFilters {
         }
     };
 
-    private ObjectParameterFilters() {}
+    private ObjectParameterFilters() {
+    }
 
 }

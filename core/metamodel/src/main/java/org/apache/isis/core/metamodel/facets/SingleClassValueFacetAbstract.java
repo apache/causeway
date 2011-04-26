@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,17 +25,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-
 public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {
 
     private final Class<?> value;
     private final SpecificationLookup specificationLookup;
 
-    public SingleClassValueFacetAbstract(
-            final Class<? extends Facet> facetType,
-            final FacetHolder holder,
-            final Class<?> value,
-            final SpecificationLookup specificationLookup) {
+    public SingleClassValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder,
+        final Class<?> value, final SpecificationLookup specificationLookup) {
         super(facetType, holder, false);
         this.value = value;
         this.specificationLookup = specificationLookup;

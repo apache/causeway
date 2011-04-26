@@ -20,7 +20,6 @@ import org.apache.isis.core.commons.components.Injectable;
 
 public interface ObjectPersistor extends Injectable {
 
-
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
      * 
@@ -31,8 +30,7 @@ public interface ObjectPersistor extends Injectable {
     void makePersistent(ObjectAdapter adapter);
 
     /**
-     * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt>
-     * when used by framework.
+     * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt> when used by framework.
      * 
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.

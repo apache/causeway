@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services.container.query;
 
 import java.io.Serializable;
@@ -26,31 +25,31 @@ import java.text.MessageFormat;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryBuiltInAbstract;
 
-
 /**
- * Although implements {@link Query} and thus is intended to be (and indeed is) {@link Serializable},
- * it will be converted into a <tt>PersistenceQuery</tt> in the runtime for remoting purposes.
+ * Although implements {@link Query} and thus is intended to be (and indeed is) {@link Serializable}, it will be
+ * converted into a <tt>PersistenceQuery</tt> in the runtime for remoting purposes.
  * 
  * <p>
  * See discussion in {@link QueryBuiltInAbstract} for further details.
  */
 public class QueryFindByTitle<T> extends QueryBuiltInAbstract<T> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final String title;
-	
-	public QueryFindByTitle(final Class<T> type, final String title) {
-		super(type);
-		this.title = title;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public String getTitle() {
-		return title;
-	}
-	
-	public String getDescription() {
-		return MessageFormat.format("{0} (matching title: '{1}')", getResultTypeName(), getTitle());
-	}
+    private final String title;
+
+    public QueryFindByTitle(final Class<T> type, final String title) {
+        super(type);
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getDescription() {
+        return MessageFormat.format("{0} (matching title: '{1}')", getResultTypeName(), getTitle());
+    }
 
 }

@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.List;
 
 import org.apache.isis.applib.filter.Filter;
-
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that can be extended.
@@ -68,20 +66,20 @@ public interface FacetHolder {
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
      * 
      * <p>
-     * If there are any facet of the same type, they will be overwritten <i>provided</i> that either the
-     * {@link Facet} specifies to {@link Facet#alwaysReplace() always replace} or if the existing
-     * {@link Facet} is a {@link Facet#isNoop() no-op}.
+     * If there are any facet of the same type, they will be overwritten <i>provided</i> that either the {@link Facet}
+     * specifies to {@link Facet#alwaysReplace() always replace} or if the existing {@link Facet} is a
+     * {@link Facet#isNoop() no-op}.
      */
     void addFacet(Facet facet);
 
     /**
-     * Adds the {@link MultiTypedFacet multi-typed facet}, extracting each of its
-     * {@link MultiTypedFacet#facetTypes() types} as keys.
+     * Adds the {@link MultiTypedFacet multi-typed facet}, extracting each of its {@link MultiTypedFacet#facetTypes()
+     * types} as keys.
      * 
      * <p>
-     * If there are any facet of the same type, they will be overwritten <i>provided</i> that either the
-     * {@link Facet} specifies to {@link Facet#alwaysReplace() always replace} or if the existing
-     * {@link Facet} is a {@link Facet#isNoop() no-op}.
+     * If there are any facet of the same type, they will be overwritten <i>provided</i> that either the {@link Facet}
+     * specifies to {@link Facet#alwaysReplace() always replace} or if the existing {@link Facet} is a
+     * {@link Facet#isNoop() no-op}.
      */
     void addFacet(MultiTypedFacet facet);
 

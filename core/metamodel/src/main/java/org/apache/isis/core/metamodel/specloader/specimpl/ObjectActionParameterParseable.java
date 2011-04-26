@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
@@ -38,14 +37,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
 
-
 public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements
-        ParseableEntryActionParameter {
+    ParseableEntryActionParameter {
 
-    public ObjectActionParameterParseable(
-            final int index,
-            final ObjectActionImpl action,
-            final TypedHolder peer) {
+    public ObjectActionParameterParseable(final int index, final ObjectActionImpl action, final TypedHolder peer) {
         super(index, action, peer);
     }
 
@@ -97,7 +92,8 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
         final ObjectAdapter newValue = p.parseTextEntry(null, proposedString);
 
-        final ValidityContext<?> ic = parameter.createProposedArgumentInteractionContext(getAuthenticationSession(),
+        final ValidityContext<?> ic =
+            parameter.createProposedArgumentInteractionContext(getAuthenticationSession(),
                 InteractionInvocationMethod.BY_USER, adapter, arguments(newValue), getNumber());
 
         final InteractionResultSet buf = new InteractionResultSet();
@@ -110,9 +106,9 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     }
 
     /**
-     * TODO: this is not ideal, because we can only populate the array for single argument, rather than the
-     * entire argument set. Instead, we ought to do this in two passes, one to build up the argument set as a
-     * single unit, and then validate each in turn.
+     * TODO: this is not ideal, because we can only populate the array for single argument, rather than the entire
+     * argument set. Instead, we ought to do this in two passes, one to build up the argument set as a single unit, and
+     * then validate each in turn.
      * 
      * @param proposedValue
      * @return
@@ -124,50 +120,47 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         return arguments;
     }
 
-
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
-        OneToOneActionParameter specification = this;
+    public Instance getInstance(final ObjectAdapter adapter) {
+        final OneToOneActionParameter specification = this;
         return adapter.getInstance(specification);
     }
 
-
-    
     // //////////////////////////////////////////////////////////////////////
     // get, set
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Gets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposed}, wrapping the proposed value into a {@link ObjectAdapter}.
+     * Gets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, wrapping the proposed
+     * value into a {@link ObjectAdapter}.
      */
     @Override
-    public ObjectAdapter get(ObjectAdapter owner) {
-        MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        Object proposed = proposedHolder.getProposed();
+    public ObjectAdapter get(final ObjectAdapter owner) {
+        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+        final Object proposed = proposedHolder.getProposed();
         return getAdapterMap().adapterFor(proposed);
     }
 
     /**
-     * Sets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposed}, unwrapped the proposed value from a {@link ObjectAdapter}.
+     * Sets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, unwrapped the proposed
+     * value from a {@link ObjectAdapter}.
      */
-    public void set(ObjectAdapter owner, ObjectAdapter newValue) {
-        MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        Object newValuePojo = newValue.getObject();
+    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
+        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+        final Object newValuePojo = newValue.getObject();
         proposedHolder.setProposed(newValuePojo);
     }
 
-    private MutableProposedHolder getProposedHolder(ObjectAdapter owner) {
-        Instance instance = getInstance(owner);
-        if(!(instance instanceof MutableProposedHolder)) {
+    private MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
+        final Instance instance = getInstance(owner);
+        if (!(instance instanceof MutableProposedHolder)) {
             throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
         }
-        MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
+        final MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
         return proposedHolder;
     }
 
@@ -175,6 +168,5 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     public FeatureType getFeatureType() {
         return FeatureType.ACTION_PARAMETER;
     }
-
 
 }

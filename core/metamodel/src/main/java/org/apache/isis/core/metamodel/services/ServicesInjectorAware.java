@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services;
 
 public interface ServicesInjectorAware {
-    
+
     public void setServicesInjector(ServicesInjector servicesInjector);
 
 }
-
-

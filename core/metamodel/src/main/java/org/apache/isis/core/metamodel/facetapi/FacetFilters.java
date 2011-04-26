@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 
-
 public final class FacetFilters {
 
-    private FacetFilters() {}
+    private FacetFilters() {
+    }
 
     /**
      * {@link Filter<Facet>#accept(Facet) Accepts} everything.

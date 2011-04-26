@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 public interface QuerySubmitterAware {
-	
-	public void setQuerySubmitter(final QuerySubmitter querySubmitter);
+
+    public void setQuerySubmitter(final QuerySubmitter querySubmitter);
 
 }

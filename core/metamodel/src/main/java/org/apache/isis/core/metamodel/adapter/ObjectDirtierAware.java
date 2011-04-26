@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 public interface ObjectDirtierAware {
-	
-	public void setObjectDirtier(final ObjectDirtier objectDirtier);
+
+    public void setObjectDirtier(final ObjectDirtier objectDirtier);
 
 }

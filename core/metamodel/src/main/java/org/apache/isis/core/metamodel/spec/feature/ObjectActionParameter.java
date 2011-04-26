@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -27,7 +26,7 @@ import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 
 /**
  * Analogous to {@link ObjectAssociation}.
-*/
+ */
 public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     /**
@@ -42,8 +41,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     boolean isObject();
 
     /**
-     * Only for symmetry with {@link ObjectAssociation}, however since the NOF does not support
-     * collections as actions all implementations should return <tt>false</tt>.
+     * Only for symmetry with {@link ObjectAssociation}, however since the NOF does not support collections as actions
+     * all implementations should return <tt>false</tt>.
      */
     boolean isCollection();
 
@@ -62,12 +61,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     int getNumber();
 
-    ActionArgumentContext createProposedArgumentInteractionContext(
-            AuthenticationSession session,
-            InteractionInvocationMethod invocationMethod,
-            ObjectAdapter targetObject,
-            ObjectAdapter[] args,
-            int position);
+    ActionArgumentContext createProposedArgumentInteractionContext(AuthenticationSession session,
+        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] args, int position);
 
     /**
      * Whether proposed value for this parameter is valid.
@@ -78,8 +73,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     String isValid(ObjectAdapter adapter, Object proposedValue);
 
-    
     ObjectAdapter[] getChoices(ObjectAdapter adapter);
-    
+
     ObjectAdapter getDefault(ObjectAdapter adapter);
 }

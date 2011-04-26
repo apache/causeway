@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public interface Dirtiable {
 
     /**
-     * Clear the dirty flag so that a call to <tt>isDirty()</tt>, and before <tt>markDirty()</tt> is called,
-     * will return false;
+     * Clear the dirty flag so that a call to <tt>isDirty()</tt>, and before <tt>markDirty()</tt> is called, will return
+     * false;
      * 
      * @see #isDirty(ObjectAdapter)
      * @see #markDirty(ObjectAdapter)

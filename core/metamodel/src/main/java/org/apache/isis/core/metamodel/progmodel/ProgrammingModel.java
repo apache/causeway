@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.progmodel;
 
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-
 
 public interface ProgrammingModel {
 
@@ -31,7 +29,7 @@ public interface ProgrammingModel {
 
     List<FacetFactory> getList();
 
-	void addFactory(Class<? extends FacetFactory> facetFactoryClass);
-	
-	void removeFactory(Class <? extends FacetFactory> facetFactoryClass);
+    void addFactory(Class<? extends FacetFactory> facetFactoryClass);
+
+    void removeFactory(Class<? extends FacetFactory> facetFactoryClass);
 }

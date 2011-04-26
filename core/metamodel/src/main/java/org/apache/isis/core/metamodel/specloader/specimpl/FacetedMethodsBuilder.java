@@ -27,10 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.ToString;
@@ -39,9 +35,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
@@ -51,6 +47,9 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 public class FacetedMethodsBuilder {
 
@@ -60,11 +59,12 @@ public class FacetedMethodsBuilder {
     private static final String IS_PREFIX = "is";
 
     private static final class FacetedMethodsMethodRemover implements MethodRemover {
-        
+
         private final List<Method> methods;
-        private FacetedMethodsMethodRemover(List<Method> methods) {
+
+        private FacetedMethodsMethodRemover(final List<Method> methods) {
             this.methods = methods;
-        } 
+        }
 
         @Override
         public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
@@ -80,7 +80,7 @@ public class FacetedMethodsBuilder {
 
         @Override
         public void removeMethod(final Method method) {
-            if(method==null) {
+            if (method == null) {
                 return;
             }
             for (int i = 0; i < methods.size(); i++) {
@@ -117,48 +117,45 @@ public class FacetedMethodsBuilder {
     private List<FacetedMethod> associationFacetMethods;
     private List<FacetedMethod> actionFacetedMethods;
 
-    private FacetedMethodsMethodRemover methodRemover;
+    private final FacetedMethodsMethodRemover methodRemover;
 
-    private FacetProcessor facetProcessor;
+    private final FacetProcessor facetProcessor;
 
-    private SpecificationTraverser specificationTraverser;
+    private final SpecificationTraverser specificationTraverser;
 
-    private ClassSubstitutor classSubstitutor;
+    private final ClassSubstitutor classSubstitutor;
 
-    private SpecificationLoader specificationLoader;
+    private final SpecificationLoader specificationLoader;
 
     // ////////////////////////////////////////////////////////////////////////////
     // Constructor & finalize
     // ////////////////////////////////////////////////////////////////////////////
 
-    public FacetedMethodsBuilder(
-        final ObjectSpecificationAbstract spec,
-        FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
-    if (LOG.isDebugEnabled()) {
-        LOG.debug("creating JavaIntrospector for " + spec.getFullIdentifier());
+    public FacetedMethodsBuilder(final ObjectSpecificationAbstract spec,
+        final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("creating JavaIntrospector for " + spec.getFullIdentifier());
+        }
+
+        this.spec = spec;
+        this.introspectedClass = spec.getCorrespondingClass();
+        this.methods = Arrays.asList(introspectedClass.getMethods());
+
+        this.methodRemover = new FacetedMethodsMethodRemover(methods);
+
+        this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
+        this.specificationTraverser = facetedMethodsBuilderContext.specificationTraverser;
+        this.classSubstitutor = facetedMethodsBuilderContext.classSubstitutor;
+        this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
     }
 
-    this.spec = spec;
-    this.introspectedClass = spec.getCorrespondingClass();
-    this.methods = Arrays.asList(introspectedClass.getMethods());
-
-    this.methodRemover = new FacetedMethodsMethodRemover(methods);
-
-    this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
-    this.specificationTraverser = facetedMethodsBuilderContext.specificationTraverser;
-    this.classSubstitutor = facetedMethodsBuilderContext.classSubstitutor;
-    this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
-}
-
-    
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        if(LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("finalizing inspector " + this);
         }
     }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // Class and stuff immediately derived from class
@@ -167,7 +164,6 @@ public class FacetedMethodsBuilder {
     private String getClassName() {
         return introspectedClass.getName();
     }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // introspect class
@@ -187,10 +183,10 @@ public class FacetedMethodsBuilder {
         final FacetsFacet facetsFacet = spec.getFacet(FacetsFacet.class);
         if (facetsFacet != null) {
             final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
-            for (int i = 0; i < facetFactories.length; i++) {
+            for (final Class<? extends FacetFactory> facetFactorie : facetFactories) {
                 FacetFactory facetFactory = null;
                 try {
-                    facetFactory = facetFactories[i].newInstance();
+                    facetFactory = facetFactorie.newInstance();
                 } catch (final InstantiationException e) {
                     throw new IsisException(e);
                 } catch (final IllegalAccessException e) {
@@ -207,36 +203,36 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns a {@link List} of {@link FacetedMethod}s representing object
-     * actions, lazily creating them first if required.
+     * Returns a {@link List} of {@link FacetedMethod}s representing object actions, lazily creating them first if
+     * required.
      */
     public List<FacetedMethod> getAssociationFacetedMethods() {
-        if(associationFacetMethods == null) {
+        if (associationFacetMethods == null) {
             associationFacetMethods = createAssociationFacetedMethods();
         }
         return associationFacetMethods;
     }
 
     private List<FacetedMethod> createAssociationFacetedMethods() {
-        if(LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("introspecting " + getClassName() + ": properties and collections");
         }
-        final Set<Method> associationCandidateMethods = 
+        final Set<Method> associationCandidateMethods =
             getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
-        
+
         // Ensure all return types are known
-        List<Class<?>> typesToLoad = Lists.newArrayList();
+        final List<Class<?>> typesToLoad = Lists.newArrayList();
         for (final Method method : associationCandidateMethods) {
             getSpecificationTraverser().traverseTypes(method, typesToLoad);
         }
         getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass);
-        
+
         // now create FacetedMethods for collections and for properties
         final List<FacetedMethod> associationFacetedMethods = Lists.newArrayList();
-        
+
         findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods);
         findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods);
-        
+
         return Collections.unmodifiableList(associationFacetedMethods);
     }
 
@@ -269,7 +265,8 @@ public class FacetedMethodsBuilder {
             }
 
             // create property and add facets
-            final FacetedMethod facetedMethod = FacetedMethod.createCollectionFacetedMethod(introspectedClass, accessorMethod);
+            final FacetedMethod facetedMethod =
+                FacetedMethod.createCollectionFacetedMethod(introspectedClass, accessorMethod);
             getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod,
                 FeatureType.COLLECTION);
 
@@ -304,7 +301,8 @@ public class FacetedMethodsBuilder {
             }
 
             // create a 1:1 association peer
-            final FacetedMethod facetedMethod = FacetedMethod.createPropertyFacetedMethod(introspectedClass, accessorMethod);
+            final FacetedMethod facetedMethod =
+                FacetedMethod.createPropertyFacetedMethod(introspectedClass, accessorMethod);
 
             // process facets for the 1:1 association
             getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod,
@@ -314,23 +312,20 @@ public class FacetedMethodsBuilder {
         }
     }
 
-
     // ////////////////////////////////////////////////////////////////////////////
     // introspect actions
     // ////////////////////////////////////////////////////////////////////////////
 
-
     /**
-     * Returns a {@link List} of {@link FacetedMethod}s representing object
-     * actions, lazily creating them first if required.
+     * Returns a {@link List} of {@link FacetedMethod}s representing object actions, lazily creating them first if
+     * required.
      */
     public List<FacetedMethod> getActionFacetedMethods() {
-        if(actionFacetedMethods==null) {
+        if (actionFacetedMethods == null) {
             actionFacetedMethods = findActionFacetedMethods(MethodScope.OBJECT);
         }
         return actionFacetedMethods;
     }
-    
 
     private enum RecognisedHelpersStrategy {
         SKIP, DONT_SKIP;
@@ -339,18 +334,17 @@ public class FacetedMethodsBuilder {
         }
     }
 
-
     /**
      * REVIEW: I'm not sure why we do two passes here.
      * 
      * <p>
-     * Perhaps it's important to skip helpers first.  I doubt it, though.
+     * Perhaps it's important to skip helpers first. I doubt it, though.
      */
-    private List<FacetedMethod> findActionFacetedMethods(MethodScope methodScope) {
+    private List<FacetedMethod> findActionFacetedMethods(final MethodScope methodScope) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("introspecting " + getClassName() + ": actions");
         }
-        final List<FacetedMethod> actionFacetedMethods1 = 
+        final List<FacetedMethod> actionFacetedMethods1 =
             findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP);
         final List<FacetedMethod> actionFacetedMethods2 =
             findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
@@ -358,7 +352,7 @@ public class FacetedMethodsBuilder {
     }
 
     private List<FacetedMethod> findActionFacetedMethods(final MethodScope methodScope,
-        RecognisedHelpersStrategy recognisedHelpersStrategy) {
+        final RecognisedHelpersStrategy recognisedHelpersStrategy) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("  looking for action methods");
         }
@@ -366,11 +360,11 @@ public class FacetedMethodsBuilder {
         final List<FacetedMethod> actionFacetedMethods = Lists.newArrayList();
 
         for (int i = 0; i < methods.size(); i++) {
-            Method method = methods.get(i);
+            final Method method = methods.get(i);
             if (method == null) {
                 continue;
             }
-            FacetedMethod actionPeer = findActionMethodPeer(methodScope, recognisedHelpersStrategy, method);
+            final FacetedMethod actionPeer = findActionMethodPeer(methodScope, recognisedHelpersStrategy, method);
             if (actionPeer != null) {
                 methods.set(i, null);
                 actionFacetedMethods.add(actionPeer);
@@ -381,7 +375,7 @@ public class FacetedMethodsBuilder {
     }
 
     private FacetedMethod findActionMethodPeer(final MethodScope methodScope,
-        RecognisedHelpersStrategy recognisedHelpersStrategy, final Method actionMethod) {
+        final RecognisedHelpersStrategy recognisedHelpersStrategy, final Method actionMethod) {
 
         if (!representsAction(actionMethod, methodScope, recognisedHelpersStrategy)) {
             return null;
@@ -399,10 +393,9 @@ public class FacetedMethodsBuilder {
         final FacetedMethod action = FacetedMethod.createActionFacetedMethod(introspectedClass, actionMethod);
 
         // process facets on the action & parameters
-        getFacetProcessor()
-            .process(introspectedClass, actionMethod, methodRemover, action, FeatureType.ACTION);
+        getFacetProcessor().process(introspectedClass, actionMethod, methodRemover, action, FeatureType.ACTION);
 
-        List<FacetedMethodParameter> actionParams = action.getParameters();
+        final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
             getFacetProcessor().processParams(actionMethod, j, actionParams.get(j));
         }
@@ -411,8 +404,8 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean isAllParamTypesValid(final Method actionMethod) {
-        for (Class<?> paramType : actionMethod.getParameterTypes()) {
-            ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(paramType);
+        for (final Class<?> paramType : actionMethod.getParameterTypes()) {
+            final ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(paramType);
             if (paramSpec == null) {
                 return false;
             }
@@ -420,17 +413,17 @@ public class FacetedMethodsBuilder {
         return true;
     }
 
-    private boolean representsAction(final Method actionMethod,
-        final MethodScope methodScope, RecognisedHelpersStrategy recognisedHelpersStrategy) {
+    private boolean representsAction(final Method actionMethod, final MethodScope methodScope,
+        final RecognisedHelpersStrategy recognisedHelpersStrategy) {
 
         if (!MethodFinderUtils.inScope(methodScope, actionMethod)) {
             return false;
         }
 
-        List<Class<?>> typesToLoad = new ArrayList<Class<?>>();
+        final List<Class<?>> typesToLoad = new ArrayList<Class<?>>();
         getSpecificationTraverser().traverseTypes(actionMethod, typesToLoad);
 
-        boolean anyLoadedAsNull = getSpecificationLoader().loadSpecifications(typesToLoad);
+        final boolean anyLoadedAsNull = getSpecificationLoader().loadSpecifications(typesToLoad);
         if (anyLoadedAsNull) {
             return false;
         }
@@ -465,7 +458,7 @@ public class FacetedMethodsBuilder {
     private boolean loadParamSpecs(final Class<?>[] parameterTypes) {
         final int numParameters = parameterTypes.length;
         for (int j = 0; j < numParameters; j++) {
-            ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(parameterTypes[j]);
+            final ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(parameterTypes[j]);
             if (paramSpec == null) {
                 return false;
             }
@@ -501,15 +494,13 @@ public class FacetedMethodsBuilder {
         return MethodFinderUtils.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
     }
 
-
-
     // ////////////////////////////////////////////////////////////////////////////
     // toString
     // ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
-        ToString str = new ToString(this);
+        final ToString str = new ToString(this);
         str.append("class", getClassName());
         return str.toString();
     }
@@ -521,7 +512,7 @@ public class FacetedMethodsBuilder {
     private SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
-    
+
     private SpecificationTraverser getSpecificationTraverser() {
         return specificationTraverser;
     }
@@ -533,6 +524,5 @@ public class FacetedMethodsBuilder {
     private ClassSubstitutor getClassSubstitutor() {
         return classSubstitutor;
     }
-
 
 }

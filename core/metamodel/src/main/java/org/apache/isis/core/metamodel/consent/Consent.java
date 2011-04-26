@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
-
-
 
 public interface Consent {
 
@@ -38,8 +35,8 @@ public interface Consent {
      * Why consent is being vetoed.
      * 
      * <p>
-     * Will be non-<tt>null</tt> and non-empty if vetoed.  Will be <tt>null</tt>
-     * (<i>not</i> the empty string) if this is consent is is allowed.
+     * Will be non-<tt>null</tt> and non-empty if vetoed. Will be <tt>null</tt> (<i>not</i> the empty string) if this is
+     * consent is is allowed.
      * 
      * <p>
      * Will correspond to the {@link InteractionResult#getReason() reason} in the contained
@@ -54,11 +51,9 @@ public interface Consent {
      * May be <tt>null</tt>.
      */
     String getDescription();
-    
 
     /**
-     * Allows the description of the interaction to which this consent relates to be
-     * specified or refined.
+     * Allows the description of the interaction to which this consent relates to be specified or refined.
      * 
      * @param description
      * @return this consent

@@ -25,31 +25,29 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface AdapterMap extends Injectable {
 
-
     /**
      * Gets the {@link ObjectAdapter adapter} for the specified domain object if it exists in the identity map.
      * 
      * <p>
      * Provided by the <tt>AdapterManager</tt> when used by framework.
      * 
-     * @param pojo - must not be <tt>null</tt>
+     * @param pojo
+     *            - must not be <tt>null</tt>
      * @return adapter, or <tt>null</tt> if doesn't exist.
      */
     ObjectAdapter getAdapterFor(Object pojo);
 
     /**
-     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a
-     * transient root or a standalone {@link ObjectAdapter adapter} for the supplied domain object, depending on
-     * its {@link ObjectSpecification}.
+     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a transient
+     * root or a standalone {@link ObjectAdapter adapter} for the supplied domain object, depending on its
+     * {@link ObjectSpecification}.
      * 
      * <p>
-     * The rules for creating a {@link ResolveState#VALUE standalone} vs {@link ResolveState#TRANSIENT
-     * transient} root {@link ObjectAdapter adapter} are as for
-     * {@link #adapterFor(Object, ObjectAdapter, IdentifiedHolder)}.
+     * The rules for creating a {@link ResolveState#VALUE standalone} vs {@link ResolveState#TRANSIENT transient} root
+     * {@link ObjectAdapter adapter} are as for {@link #adapterFor(Object, ObjectAdapter, IdentifiedHolder)}.
      * 
      * <p>
-     * Historical notes: previously called <tt>createAdapterForTransient</tt>, though this name wasn't quite
-     * right.
+     * Historical notes: previously called <tt>createAdapterForTransient</tt>, though this name wasn't quite right.
      * 
      * <p>
      * Provided by the <tt>AdapterManager</tt> when used by framework.
@@ -57,9 +55,8 @@ public interface AdapterMap extends Injectable {
     ObjectAdapter adapterFor(Object domainObject);
 
     /**
-     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a
-     * aggregated {@link ObjectAdapter adapter} for the supplied domain object, depending on
-     * its {@link ObjectSpecification}.
+     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a aggregated
+     * {@link ObjectAdapter adapter} for the supplied domain object, depending on its {@link ObjectSpecification}.
      * 
      * <p>
      * Provided by the <tt>AdapterManager</tt> when used by framework.
@@ -67,23 +64,22 @@ public interface AdapterMap extends Injectable {
     ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent);
 
     /**
-     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a
-     * transient, standalone or aggregated {@link ObjectAdapter adapter} for the supplied domain object,
-     * depending on its {@link ObjectSpecification} and the context arguments provided.
+     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}), otherwise creates either a transient,
+     * standalone or aggregated {@link ObjectAdapter adapter} for the supplied domain object, depending on its
+     * {@link ObjectSpecification} and the context arguments provided.
      * 
      * <p>
-     * If no adapter is found for the provided pojo, then the rules for creating the {@link ObjectAdapter
-     * adapter} are as follows:
+     * If no adapter is found for the provided pojo, then the rules for creating the {@link ObjectAdapter adapter} are
+     * as follows:
      * <ul>
-     * <li>if the pojo's {@link ObjectSpecification specification} indicates that this is an immutable
-     * value, then a {@link ResolveState#VALUE} {@link ObjectAdapter adapter} is created
-     * <li>otherwise, if context <tt>ownerAdapter</tt> and <tt>identified</tt> arguments have both been
-     * provided and also either the {@link IdentifiedHolder} argument indicates that for this particular
-     * property/collection the object is aggregated <i>or</i> that the pojo's own
-     * {@link ObjectSpecification specification} indicates that the pojo is intrinsically aggregated,
-     * then an {@link ObjectAdapter#isAggregated() aggregated} adapter is created. Note that the
-     * {@link ResolveState} of such {@link ObjectAdapter's} is independent of its <tt>ownerAdapter</tt>, but it
-     * has the same {@link ObjectAdapter#setOptimisticLock(Version) optimistic locking version}.
+     * <li>if the pojo's {@link ObjectSpecification specification} indicates that this is an immutable value, then a
+     * {@link ResolveState#VALUE} {@link ObjectAdapter adapter} is created
+     * <li>otherwise, if context <tt>ownerAdapter</tt> and <tt>identified</tt> arguments have both been provided and
+     * also either the {@link IdentifiedHolder} argument indicates that for this particular property/collection the
+     * object is aggregated <i>or</i> that the pojo's own {@link ObjectSpecification specification} indicates that the
+     * pojo is intrinsically aggregated, then an {@link ObjectAdapter#isAggregated() aggregated} adapter is created.
+     * Note that the {@link ResolveState} of such {@link ObjectAdapter's} is independent of its <tt>ownerAdapter</tt>,
+     * but it has the same {@link ObjectAdapter#setOptimisticLock(Version) optimistic locking version}.
      * <li>otherwise, a {@link ResolveState#TRANSIENT} {@link ObjectAdapter adapter} is created.
      * </ul>
      * 
@@ -97,6 +93,7 @@ public interface AdapterMap extends Injectable {
      * @param identifier
      *            - only used if aggregated
      */
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder);
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
+        IdentifiedHolder identifiedHolder);
 
 }

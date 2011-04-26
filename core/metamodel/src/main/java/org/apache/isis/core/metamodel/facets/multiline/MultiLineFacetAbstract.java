@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.multiline;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
-
 
 public abstract class MultiLineFacetAbstract extends MultipleValueFacetAbstract implements MultiLineFacet {
 
@@ -40,10 +38,12 @@ public abstract class MultiLineFacetAbstract extends MultipleValueFacetAbstract 
         this.preventWrapping = preventWrapping;
     }
 
+    @Override
     public int numberOfLines() {
         return numberOfLines;
     }
 
+    @Override
     public boolean preventWrapping() {
         return preventWrapping;
     }

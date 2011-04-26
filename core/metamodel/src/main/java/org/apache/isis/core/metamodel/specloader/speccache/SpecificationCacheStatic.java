@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.speccache;
 
 import java.util.Collection;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public class SpecificationCacheStatic implements SpecificationCache {
-    
+
     private static SpecificationCache cache = new SpecificationCacheDefault();
 
     @Override

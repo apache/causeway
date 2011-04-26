@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-
 
 /**
  * Indicates that the {@link FacetFactory} works by recognizing methods with a certain prefix (or prefixes).
@@ -38,4 +36,3 @@ public interface MethodPrefixBasedFacetFactory extends FacetFactory {
      */
     public List<String> getPrefixes();
 }
-

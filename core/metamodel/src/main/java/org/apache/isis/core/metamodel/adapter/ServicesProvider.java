@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.components.Injectable;
 
-
 public interface ServicesProvider extends Injectable {
 
     /**

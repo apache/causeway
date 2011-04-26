@@ -17,26 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Mix-in interface for {@link ObjectFeature}s that reference or
- * otherwise contain a 'current' value.
+ * Mix-in interface for {@link ObjectFeature}s that reference or otherwise contain a 'current' value.
  * 
  * <p>
- * Examples include {@link OneToOneAssociation properties}, {@link OneToManyAssociation collection}s
- * and {@link OneToOneActionParameter action parameter}s (but not 
- * {@link ObjectAction action}s themselves).
+ * Examples include {@link OneToOneAssociation properties}, {@link OneToManyAssociation collection}s and
+ * {@link OneToOneActionParameter action parameter}s (but not {@link ObjectAction action}s themselves).
  */
 public interface CurrentHolder {
 
-    
     /**
      * Returns the referenced {@link ObjectAdapter} for the owning {@link ObjectAdapter}.
-     *  
+     * 
      * <p>
      * For example, if this is an {@link OneToOneAssociation}, then returns the referenced object.
      */

@@ -19,8 +19,9 @@ package org.apache.isis.core.metamodel.spec;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public final class ObjectAdapterUtils {
-    
-    private ObjectAdapterUtils (){}
+
+    private ObjectAdapterUtils() {
+    }
 
     public static Object unwrapObject(final ObjectAdapter adapter) {
         if (adapter == null) {

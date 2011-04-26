@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid.stringable;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;

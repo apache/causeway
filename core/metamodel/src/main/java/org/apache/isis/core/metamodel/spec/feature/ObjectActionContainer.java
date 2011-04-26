@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 
 public interface ObjectActionContainer {
 
@@ -48,16 +46,13 @@ public interface ObjectActionContainer {
     ObjectAction getObjectAction(ActionType type, String nameAndParmsIdentityString);
 
     /**
-     * Returns an array of actions of the specified type(s), including any
-     * contributed actions.
+     * Returns an array of actions of the specified type(s), including any contributed actions.
      * 
      * <p>
-     * If the type is <tt>null</tt>, then returns all {@link ActionType#USER user},
-     * {@link ActionType#EXPLORATION exploration} and {@link ActionType#DEBUG
-     * debug} actions (but not {@link ActionType#SET action sets}).
+     * If the type is <tt>null</tt>, then returns all {@link ActionType#USER user}, {@link ActionType#EXPLORATION
+     * exploration} and {@link ActionType#DEBUG debug} actions (but not {@link ActionType#SET action sets}).
      */
     List<ObjectAction> getObjectActions(ActionType... type);
-
 
     /**
      * Returns an array of all object actions (excluding any contributed actions).

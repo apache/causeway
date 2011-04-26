@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -28,29 +27,24 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 
-
 public abstract class FacetAbstract implements Facet {
 
-	private Facet underlyingFacet;
-	
+    private Facet underlyingFacet;
+
     private final Class<? extends Facet> facetType;
     private final boolean derived;
     private FacetHolder holder;
-    
+
     /**
-     * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder
-     * implements {@link IdentifiedHolder}.
+     * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder implements {@link IdentifiedHolder}.
      * 
      * <p>
      * Otherwise is <tt>null</tt>.
      */
     private IdentifiedHolder identifiedHolder;
-    
+
     @SuppressWarnings("unchecked")
-    public FacetAbstract(
-    		final Class<? extends Facet> facetType, 
-    		final FacetHolder holder, 
-    		boolean derived) {
+    public FacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final boolean derived) {
         this.facetType = ensureThatArg(facetType, is(not(nullValue(Class.class))));
         setFacetHolder(ensureThatArg(holder, is(not(nullValue(FacetHolder.class)))));
         this.derived = derived;
@@ -65,30 +59,30 @@ public abstract class FacetAbstract implements Facet {
     public FacetHolder getFacetHolder() {
         return holder;
     }
-    
+
     @Override
     public boolean isDerived() {
-    	return derived;
+        return derived;
     }
 
     /**
-     * Convenience method that returns {@link #getFacetHolder()} downcast to
-     * {@link IdentifiedHolder} if the implementation does indeed inherit from
-     * {@link IdentifiedHolder}, otherwise <tt>null</tt>. 
+     * Convenience method that returns {@link #getFacetHolder()} downcast to {@link IdentifiedHolder} if the
+     * implementation does indeed inherit from {@link IdentifiedHolder}, otherwise <tt>null</tt>.
      */
     public IdentifiedHolder getIdentified() {
         return identifiedHolder;
     }
 
-	@Override
+    @Override
     public Facet getUnderlyingFacet() {
-		return underlyingFacet;
-	}
-	@Override
-    public void setUnderlyingFacet(Facet underlyingFacet) {
-		Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
-		this.underlyingFacet = underlyingFacet;
-	}
+        return underlyingFacet;
+    }
+
+    @Override
+    public void setUnderlyingFacet(final Facet underlyingFacet) {
+        Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
+        this.underlyingFacet = underlyingFacet;
+    }
 
     /**
      * Assume implementation is <i>not</i> a no-op.
@@ -102,12 +96,11 @@ public abstract class FacetAbstract implements Facet {
     }
 
     /**
-     * Default implementation of this method that returns <tt>true</tt>, ie should replace (none
-     * {@link #isNoop() no-op} implementations.
+     * Default implementation of this method that returns <tt>true</tt>, ie should replace (none {@link #isNoop() no-op}
+     * implementations.
      * 
      * <p>
-     * Implementations that don't wish to replace none no-op implementations should override and return
-     * <tt>false</tt>.
+     * Implementations that don't wish to replace none no-op implementations should override and return <tt>false</tt>.
      */
     @Override
     public boolean alwaysReplace() {
@@ -117,7 +110,7 @@ public abstract class FacetAbstract implements Facet {
     @Override
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.holder = facetHolder;
-        this.identifiedHolder = holder instanceof IdentifiedHolder? (IdentifiedHolder)holder: null;
+        this.identifiedHolder = holder instanceof IdentifiedHolder ? (IdentifiedHolder) holder : null;
     }
 
     protected String toStringValues() {
@@ -147,7 +140,7 @@ public abstract class FacetAbstract implements Facet {
             details += "type=" + facetType.substring(facetType.lastIndexOf('.') + 1);
         }
         if (!"".equals(stringValues)) {
-        	details += ",";
+            details += ",";
         }
         return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
     }
@@ -155,16 +148,19 @@ public abstract class FacetAbstract implements Facet {
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Hiding {}
+    public static interface Hiding {
+    }
 
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Disabling {}
+    public static interface Disabling {
+    }
 
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Validating {}
+    public static interface Validating {
+    }
 
 }

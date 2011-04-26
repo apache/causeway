@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
-
 public abstract class ObjectPersistorAbstract implements ObjectPersistor {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {
-            ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
+            final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
             cast.setObjectPersistor(this);
         }
     }

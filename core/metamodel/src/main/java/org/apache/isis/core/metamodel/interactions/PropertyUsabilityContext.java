@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
@@ -29,17 +28,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link PropertyUsabilityEvent}.
  */
 public class PropertyUsabilityContext extends UsabilityContext<PropertyUsabilityEvent> {
 
-    public PropertyUsabilityContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier identifier) {
+    public PropertyUsabilityContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.PROPERTY_USABLE, session, invocationMethod, identifier, target);
     }
 

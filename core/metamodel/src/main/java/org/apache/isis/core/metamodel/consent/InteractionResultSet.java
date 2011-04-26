@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class InteractionResultSet {
 
     private final List<InteractionResult> results = new ArrayList<InteractionResult>();
     private InteractionResult firstResult = null;
 
-    public InteractionResultSet() {}
+    public InteractionResultSet() {
+    }
 
     public InteractionResultSet add(final InteractionResult result) {
         if (firstResult == null) {
@@ -64,8 +62,8 @@ public class InteractionResultSet {
     }
 
     /**
-     * Returns the {@link Consent} corresponding to {@link #getInteractionResult()}, or an {@link Allow} if
-     * there have been no {@link InteractionResult}s {@link #add(InteractionResult) added}.
+     * Returns the {@link Consent} corresponding to {@link #getInteractionResult()}, or an {@link Allow} if there have
+     * been no {@link InteractionResult}s {@link #add(InteractionResult) added}.
      * 
      * @return
      */
@@ -97,7 +95,6 @@ public class InteractionResultSet {
 
     @Override
     public String toString() {
-    	return super.toString();
+        return super.toString();
     }
 }
-

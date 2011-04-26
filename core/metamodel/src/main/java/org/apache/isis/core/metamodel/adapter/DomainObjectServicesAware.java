@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 public interface DomainObjectServicesAware {
-	
-	public void setDomainObjectServices(DomainObjectServices domainObjectServices);
+
+    public void setDomainObjectServices(DomainObjectServices domainObjectServices);
 
 }

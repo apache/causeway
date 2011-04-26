@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 public enum Target {
-	
-	DEFAULT("default"),
-	LOCAL("local"),
-	REMOTE("remote");
-	
+
+    DEFAULT("default"), LOCAL("local"), REMOTE("remote");
+
     private String name;
 
     private Target(final String name) {

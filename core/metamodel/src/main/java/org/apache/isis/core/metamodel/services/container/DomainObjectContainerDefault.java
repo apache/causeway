@@ -55,7 +55,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 
 public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware,
-    DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware, AdapterMapAware {
+    DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware,
+    AdapterMapAware {
 
     private ObjectDirtier objectDirtier;
     private ObjectPersistor objectPersistor;
@@ -88,14 +89,17 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
             return (T) adapter.getObject();
         }
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T newAggregatedInstance(Object parent, Class<T> ofClass) {
+    public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
         // TODO check aggregation is supported
         if (!spec.isAggregated()) {
-            throw new IsisException("Cannot instantiate an object unless it is marked as Aggregated using the newAggregatedInstance method"); // TODO proper type
+            throw new IsisException(
+                "Cannot instantiate an object unless it is marked as Aggregated using the newAggregatedInstance method"); // TODO
+                                                                                                                          // proper
+                                                                                                                          // type
         }
         final ObjectAdapter adapter = doCreateAggregatedInstance(spec, parent);
         return (T) adapter.getObject();
@@ -106,7 +110,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
      */
     @Override
     public <T> T newPersistentInstance(final Class<T> ofClass) {
-        T newInstance = newTransientInstance(ofClass);
+        final T newInstance = newTransientInstance(ofClass);
         persist(newInstance);
         return newInstance;
     }
@@ -129,9 +133,9 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
         return getDomainObjectServices().createTransientInstance(spec);
     }
-    
-    private ObjectAdapter doCreateAggregatedInstance(ObjectSpecification spec, Object parent) {
-        ObjectAdapter parentAdapter = getAdapterMap().getAdapterFor(parent);
+
+    private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {
+        final ObjectAdapter parentAdapter = getAdapterMap().getAdapterFor(parent);
         return getDomainObjectServices().createAggregatedInstance(spec, parentAdapter);
     }
 
@@ -201,7 +205,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     public String validate(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterMap().adapterFor(domainObject);
-        InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
+        final InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
         return validityResult.getReason();
     }
 
@@ -251,10 +255,10 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         return user;
     }
 
-    private List<RoleMemento> asRoleMementos(List<String> roles) {
-        List<RoleMemento> mementos = new ArrayList<RoleMemento>();
+    private List<RoleMemento> asRoleMementos(final List<String> roles) {
+        final List<RoleMemento> mementos = new ArrayList<RoleMemento>();
         if (roles != null) {
-            for (String role : roles) {
+            for (final String role : roles) {
                 mementos.add(new RoleMemento(role));
             }
         }
@@ -266,13 +270,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public String getProperty(String name) {
+    public String getProperty(final String name) {
         return getDomainObjectServices().getProperty(name);
     }
 
     @Override
-    public String getProperty(String name, String defaultValue) {
-        String value = getProperty(name);
+    public String getProperty(final String name, final String defaultValue) {
+        final String value = getProperty(name);
         return value == null ? defaultValue : value;
     }
 
@@ -313,7 +317,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     public <T> List<T> allMatches(final Class<T> cls, final Filter<T> filter) {
         final List<T> allInstances = allInstances(cls);
         final List<T> filtered = new ArrayList<T>();
-        for (T instance : allInstances) {
+        for (final T instance : allInstances) {
             if (filter.accept(instance)) {
                 filtered.add(instance);
             }
@@ -334,7 +338,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
+        final List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
         return AdapterUtils.unwrap(allMatching);
     }
 
@@ -345,7 +349,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
         final List<T> allInstances = allInstances(cls);
-        for (T instance : allInstances) {
+        for (final T instance : allInstances) {
             if (filter.accept(instance)) {
                 return instance;
             }
@@ -368,7 +372,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     @SuppressWarnings("unchecked")
     public <T> T firstMatch(final Query<T> query) {
-        ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
+        final ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
         return (T) AdapterUtils.unwrap(firstMatching);
     }
 
@@ -425,7 +429,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setQuerySubmitter(QuerySubmitter querySubmitter) {
+    public void setQuerySubmitter(final QuerySubmitter querySubmitter) {
         this.querySubmitter = querySubmitter;
     }
 
@@ -434,7 +438,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setDomainObjectServices(DomainObjectServices domainObjectServices) {
+    public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
     }
 
@@ -443,7 +447,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
+    public void setSpecificationLookup(final SpecificationLookup specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
 
@@ -452,7 +456,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
@@ -461,7 +465,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         this.adapterMap = adapterManager;
     }
 
@@ -470,7 +474,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setObjectDirtier(ObjectDirtier objectDirtier) {
+    public void setObjectDirtier(final ObjectDirtier objectDirtier) {
         this.objectDirtier = objectDirtier;
     }
 
@@ -479,7 +483,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public void setObjectPersistor(ObjectPersistor objectPersistor) {
+    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
         this.objectPersistor = objectPersistor;
     }
 }

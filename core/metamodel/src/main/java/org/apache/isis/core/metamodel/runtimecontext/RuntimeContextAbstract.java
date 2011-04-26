@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.ArrayList;
@@ -32,27 +31,27 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupDelegator;
 
+public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware,
+    DomainObjectContainerAware {
 
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware, DomainObjectContainerAware {
-    
-	private SpecificationLookupDelegator specificationLookupDelegator;
-	private DomainObjectContainer container;
-	private Properties properties;
+    private final SpecificationLookupDelegator specificationLookupDelegator;
+    private DomainObjectContainer container;
+    private Properties properties;
 
-	public RuntimeContextAbstract() {
-	    this.specificationLookupDelegator = new SpecificationLookupDelegator();
-	}
+    public RuntimeContextAbstract() {
+        this.specificationLookupDelegator = new SpecificationLookupDelegator();
+    }
 
-	@Override
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (RuntimeContextAware.class.isAssignableFrom(candidate.getClass())) {
-        	RuntimeContextAware cast = RuntimeContextAware.class.cast(candidate);
+            final RuntimeContextAware cast = RuntimeContextAware.class.cast(candidate);
             cast.setRuntimeContext(this);
         }
         injectSubcomponentsInto(candidate);
-	}
+    }
 
-    protected void injectSubcomponentsInto(Object candidate) {
+    protected void injectSubcomponentsInto(final Object candidate) {
         getAdapterMap().injectInto(candidate);
         getAuthenticationSessionProvider().injectInto(candidate);
         getDependencyInjector().injectInto(candidate);
@@ -65,59 +64,56 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getSpecificationLookup().injectInto(candidate);
     }
 
-	
-	@Override
+    @Override
     public SpecificationLookup getSpecificationLookup() {
-		return specificationLookupDelegator;
-	}
-	
-	/**
-	 * Is injected into when the reflector is {@link ObjectReflectorAbstract#init() initialized}.
-	 */
-	@Override
+        return specificationLookupDelegator;
+    }
+
+    /**
+     * Is injected into when the reflector is {@link ObjectReflectorAbstract#init() initialized}.
+     */
+    @Override
     public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-		this.specificationLookupDelegator.setDelegate(new SpecificationLookup() {
-            
+        this.specificationLookupDelegator.setDelegate(new SpecificationLookup() {
+
             @Override
-            public void injectInto(Object candidate) {
+            public void injectInto(final Object candidate) {
                 specificationLoader.injectInto(candidate);
             }
-            
+
             @Override
-            public ObjectSpecification loadSpecification(Class<?> cls) {
+            public ObjectSpecification loadSpecification(final Class<?> cls) {
                 return specificationLoader.loadSpecification(cls);
             }
         });
-	}
-	
+    }
 
-	protected DomainObjectContainer getContainer() {
-		return container;
-	}
-	/**
-	 * So that {@link #injectDependenciesInto(Object)} can also inject the {@link DomainObjectContainer}.
-	 */
-	@Override
-    public void setContainer(DomainObjectContainer container) {
-		this.container = container;
-	}
-	
-	public void setProperties(Properties properties) {
+    protected DomainObjectContainer getContainer() {
+        return container;
+    }
+
+    /**
+     * So that {@link #injectDependenciesInto(Object)} can also inject the {@link DomainObjectContainer}.
+     */
+    @Override
+    public void setContainer(final DomainObjectContainer container) {
+        this.container = container;
+    }
+
+    public void setProperties(final Properties properties) {
         this.properties = properties;
     }
 
-    public String getProperty(String name) {
-	    return properties.getProperty(name);
-	}
-	
-    public List<String> getPropertyNames() {
-	    List<String> list= new ArrayList<String>();
-	    for (Object key : properties.keySet()) {
-	        list.add((String) key);
-        }
-	    return list;
-	}
-	
+    public String getProperty(final String name) {
+        return properties.getProperty(name);
+    }
 
+    public List<String> getPropertyNames() {
+        final List<String> list = new ArrayList<String>();
+        for (final Object key : properties.keySet()) {
+            list.add((String) key);
+        }
+        return list;
+    }
 
 }

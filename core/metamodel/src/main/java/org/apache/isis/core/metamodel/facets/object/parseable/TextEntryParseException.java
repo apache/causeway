@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
-
 
 /**
  * Indicates that a text entry could not be satisfactorily parsed into a useful value by the value adapter.

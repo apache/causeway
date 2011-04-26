@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
@@ -29,14 +28,14 @@ import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-
 public final class ImperativeFacetUtils {
 
-    private ImperativeFacetUtils() {}
+    private ImperativeFacetUtils() {
+    }
 
     /**
-     * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if it either is one or if it is
-     * a {@link DecoratingFacet} that in turn wraps an {@link ImperativeFacet}.
+     * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if it either is one or if it is a
+     * {@link DecoratingFacet} that in turn wraps an {@link ImperativeFacet}.
      * 
      * <p>
      * Otherwise, returns <tt>null</tt>.
@@ -60,7 +59,7 @@ public final class ImperativeFacetUtils {
         private boolean impliesResolve;
         private boolean impliesObjectChanged;
 
-        public void apply(ImperativeFacet imperativeFacet) {
+        public void apply(final ImperativeFacet imperativeFacet) {
             this.impliesResolve |= imperativeFacet.impliesResolve();
             this.impliesObjectChanged |= imperativeFacet.impliesObjectChanged();
         }
@@ -79,17 +78,17 @@ public final class ImperativeFacetUtils {
     }
 
     public static ImperativeFacetFlags getImperativeFacetFlags(final ObjectMember member, final Method method) {
-        ImperativeFacetFlags flags = new ImperativeFacetFlags();
+        final ImperativeFacetFlags flags = new ImperativeFacetFlags();
         if (member == null) {
             return flags;
         }
-        List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
-        for (Facet facet : allFacets) {
-            ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+        final List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
+        for (final Facet facet : allFacets) {
+            final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
             if (imperativeFacet == null) {
                 continue;
             }
-            List<Method> methods = imperativeFacet.getMethods();
+            final List<Method> methods = imperativeFacet.getMethods();
             if (!methods.contains(method)) {
                 continue;
             }

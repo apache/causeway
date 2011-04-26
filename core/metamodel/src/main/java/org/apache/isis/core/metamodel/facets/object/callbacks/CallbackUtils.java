@@ -17,21 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public final class CallbackUtils {
-	
-	private CallbackUtils() {}
 
-	public static void callCallback(final ObjectAdapter object, final Class<? extends Facet> cls) {
-	    final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
-	    if (facet != null) {
-	        facet.invoke(object);
-	    }
-	}
+    private CallbackUtils() {
+    }
+
+    public static void callCallback(final ObjectAdapter object, final Class<? extends Facet> cls) {
+        final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
+        if (facet != null) {
+            facet.invoke(object);
+        }
+    }
 
 }

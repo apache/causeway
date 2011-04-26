@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,10 +24,10 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
-
 public final class ServiceUtil {
-	
-	private ServiceUtil(){}
+
+    private ServiceUtil() {
+    }
 
     public static String id(final Object object) {
         final Class<?> cls = object.getClass();
@@ -49,4 +48,3 @@ public final class ServiceUtil {
         }
     }
 }
-

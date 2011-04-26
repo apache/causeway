@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public interface ObjectReflector extends SpecificationLoader, 
-		ApplicationScopedComponent, RuntimeContextAware {
+public interface ObjectReflector extends SpecificationLoader, ApplicationScopedComponent, RuntimeContextAware {
 
 }

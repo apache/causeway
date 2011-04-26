@@ -85,6 +85,7 @@ public interface ObjectAdapter extends ObjectMetaModel {
 
     /**
      * Either itself or its parent adapter (if aggregated).
+     * 
      * @return
      */
     ObjectAdapter getAggregateRoot();

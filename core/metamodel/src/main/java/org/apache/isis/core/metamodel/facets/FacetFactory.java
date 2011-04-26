@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
-
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -30,13 +28,12 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
-
 public interface FacetFactory {
 
     static class AbstractProcessContext<T extends FacetHolder> {
         private final T facetHolder;
 
-        public AbstractProcessContext(T facetHolder) {
+        public AbstractProcessContext(final T facetHolder) {
             this.facetHolder = facetHolder;
         }
 
@@ -45,13 +42,12 @@ public interface FacetFactory {
         }
     }
 
-
     /**
      * The {@link FeatureType feature type}s that this facet factory can create {@link Facet}s for.
      * 
      * <p>
-     * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the number of {@link FacetFactory factory}s that are
-     * queried when building up the meta-model.
+     * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the number of {@link FacetFactory factory}s
+     * that are queried when building up the meta-model.
      */
     List<FeatureType> getFeatureTypes();
 
@@ -59,7 +55,7 @@ public interface FacetFactory {
         private final Class<?> cls;
         private final MethodRemover methodRemover;
 
-        public ProcessClassContext(Class<?> cls, MethodRemover methodRemover, FacetHolder facetHolder) {
+        public ProcessClassContext(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
             super(facetHolder);
             this.cls = cls;
             this.methodRemover = methodRemover;
@@ -70,24 +66,24 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethod(Method method) {
+        public void removeMethod(final Method method) {
             methodRemover.removeMethod(method);
         }
 
         @Override
-        public List<Method> removeMethods(MethodScope methodScope, String prefix, Class<?> returnType,
-            boolean canBeVoid, int paramCount) {
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix,
+            final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
         @Override
-        public void removeMethod(MethodScope methodScope, String methodName, Class<?> returnType,
-            Class<?>[] parameterTypes) {
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
+            final Class<?>[] parameterTypes) {
             methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
         }
 
         @Override
-        public void removeMethods(List<Method> methods) {
+        public void removeMethods(final List<Method> methods) {
             methodRemover.removeMethods(methods);
         }
     }
@@ -102,7 +98,8 @@ public interface FacetFactory {
         private final Method method;
         private final MethodRemover methodRemover;
 
-        public ProcessMethodContext(Class<?> cls, Method method, MethodRemover methodRemover, FacetedMethod facetedMethod) {
+        public ProcessMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover,
+            final FacetedMethod facetedMethod) {
             super(facetedMethod);
             this.cls = cls;
             this.method = method;
@@ -118,24 +115,24 @@ public interface FacetFactory {
         }
 
         @Override
-        public List<Method> removeMethods(MethodScope methodScope, String prefix, Class<?> returnType,
-            boolean canBeVoid, int paramCount) {
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix,
+            final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
         @Override
-        public void removeMethod(MethodScope methodScope, String methodName, Class<?> returnType,
-            Class<?>[] parameterTypes) {
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
+            final Class<?>[] parameterTypes) {
             methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
         }
 
         @Override
-        public void removeMethod(Method method) {
+        public void removeMethod(final Method method) {
             methodRemover.removeMethod(method);
         }
 
         @Override
-        public void removeMethods(List<Method> methods) {
+        public void removeMethods(final List<Method> methods) {
             methodRemover.removeMethods(methods);
         }
     }
@@ -149,7 +146,8 @@ public interface FacetFactory {
         private final Method method;
         private final int paramNum;
 
-        public ProcessParameterContext(Method method, int paramNum, FacetedMethodParameter facetedMethodParameter) {
+        public ProcessParameterContext(final Method method, final int paramNum,
+            final FacetedMethodParameter facetedMethodParameter) {
             super(facetedMethodParameter);
             this.method = method;
             this.paramNum = paramNum;

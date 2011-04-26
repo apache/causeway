@@ -17,24 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-
 public abstract class SingleStringValueFacetAbstract extends FacetAbstract implements SingleStringValueFacet {
     private final String value;
 
-    public SingleStringValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final String value) {
+    public SingleStringValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder,
+        final String value) {
         super(facetType, holder, false);
         this.value = value;
     }
 
-	public String value() {
+    @Override
+    public String value() {
         return value;
     }
 

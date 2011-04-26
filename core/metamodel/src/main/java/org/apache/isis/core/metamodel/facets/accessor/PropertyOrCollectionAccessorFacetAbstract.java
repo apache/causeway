@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.accessor;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbstract implements PropertyOrCollectionAccessorFacet {
+public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbstract implements
+    PropertyOrCollectionAccessorFacet {
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
@@ -36,5 +35,6 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbs
         super(type(), holder, false);
     }
 
+    @Override
     public abstract Object getProperty(ObjectAdapter inObject);
 }

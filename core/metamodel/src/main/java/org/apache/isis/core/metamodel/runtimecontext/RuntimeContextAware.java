@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.runtimecontext;
 
 public interface RuntimeContextAware {
-	
-	public void setRuntimeContext(final RuntimeContext runtimeContext);
+
+    public void setRuntimeContext(final RuntimeContext runtimeContext);
 
 }

@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 public interface ObjectPersistorAware {
-	
-	public void setObjectPersistor(final ObjectPersistor objectPersistor);
+
+    public void setObjectPersistor(final ObjectPersistor objectPersistor);
 
 }

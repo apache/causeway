@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
@@ -27,17 +26,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link CollectionUsabilityEvent}.
  */
 public class CollectionUsabilityContext extends UsabilityContext<CollectionUsabilityEvent> {
 
-    public CollectionUsabilityContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier identifier) {
+    public CollectionUsabilityContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.COLLECTION_USABLE, session, invocationMethod, identifier, target);
     }
 

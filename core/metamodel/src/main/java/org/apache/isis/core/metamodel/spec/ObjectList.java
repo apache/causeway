@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.AbstractList;
@@ -27,13 +26,11 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.commons.collections.iterators.IteratorEnumeration;
-
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public class ObjectList extends AbstractList<ObjectAdapter> {
-    
+
     private final List<ObjectAdapter> instances;
     private final ObjectSpecification instanceSpecification;
 
@@ -46,7 +43,7 @@ public class ObjectList extends AbstractList<ObjectAdapter> {
      * Required implementation of {@link AbstractList}.
      */
     @Override
-    public ObjectAdapter get(int index) {
+    public ObjectAdapter get(final int index) {
         return instances.get(index);
     }
 
@@ -57,7 +54,6 @@ public class ObjectList extends AbstractList<ObjectAdapter> {
     public int size() {
         return instances.size();
     }
-
 
     /**
      * @deprecated - use {@link #iterator()}.
@@ -71,7 +67,6 @@ public class ObjectList extends AbstractList<ObjectAdapter> {
     public ObjectSpecification getElementSpecification() {
         return instanceSpecification;
     }
-
 
     public String titleString() {
         return instanceSpecification.getPluralName() + ", " + size();
@@ -95,6 +90,5 @@ public class ObjectList extends AbstractList<ObjectAdapter> {
 
         return s.toString();
     }
-    
-}
 
+}

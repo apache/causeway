@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.ArrayList;
@@ -29,10 +28,10 @@ import org.apache.isis.applib.filter.Filter;
 
 import com.google.common.collect.Lists;
 
-
 public final class FacetUtil {
 
-    private FacetUtil() {}
+    private FacetUtil() {
+    }
 
     /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet holder}.
@@ -62,8 +61,8 @@ public final class FacetUtil {
      */
     public static boolean addFacets(final Facet[] facets) {
         boolean addedFacets = false;
-        for (int i = 0; i < facets.length; i++) {
-            addedFacets = addFacet(facets[i]) | addedFacets;
+        for (final Facet facet : facets) {
+            addedFacets = addFacet(facet) | addedFacets;
         }
         return addedFacets;
     }
@@ -98,7 +97,8 @@ public final class FacetUtil {
      * @param facetsByClass
      * @return
      */
-    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Filter<Facet> filter) {
+    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass,
+        final Filter<Facet> filter) {
         final List<Facet> filteredFacets = Lists.newArrayList();
         final List<Facet> allFacets = new ArrayList<Facet>(facetsByClass.values());
         for (int i = 0; i < allFacets.size(); i++) {
@@ -114,7 +114,8 @@ public final class FacetUtil {
         removeFacet(facetsByClass, facet.facetType());
     }
 
-    public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Class<? extends Facet> facetType) {
+    public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass,
+        final Class<? extends Facet> facetType) {
         final Facet facet = facetsByClass.get(facetType);
         if (facet == null) {
             return;
@@ -138,8 +139,7 @@ public final class FacetUtil {
     public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder facetHolder) {
         final Hashtable<Class<? extends Facet>, Facet> facetByType = new Hashtable<Class<? extends Facet>, Facet>();
         final Class<? extends Facet>[] facetsFor = facetHolder.getFacetTypes();
-        for (int i = 0; i < facetsFor.length; i++) {
-            final Class<? extends Facet> facetType = facetsFor[i];
+        for (final Class<? extends Facet> facetType : facetsFor) {
             final Facet facet = facetHolder.getFacet(facetType);
             facetByType.put(facetType, facet);
         }

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-
 
 /**
  * Convenience abstract implementation of {@link MultiTypedFacet}.
@@ -33,16 +31,18 @@ public abstract class MultiTypedFacetAbstract extends FacetAbstract implements M
 
     private final Class<? extends Facet>[] facetTypes;
 
-    public MultiTypedFacetAbstract(final Class<? extends Facet> facetType, final Class<? extends Facet>[] facetTypes, final FacetHolder holder) {
+    public MultiTypedFacetAbstract(final Class<? extends Facet> facetType, final Class<? extends Facet>[] facetTypes,
+        final FacetHolder holder) {
         super(facetType, holder, false);
         this.facetTypes = facetTypes;
     }
 
+    @Override
     public final Class<? extends Facet>[] facetTypes() {
         return facetTypes;
     }
 
+    @Override
     public abstract <T extends Facet> T getFacet(Class<T> facetType);
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.choices;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -30,8 +29,7 @@ public abstract class ChoicesFacetAbstract extends FacetAbstract implements Choi
         return ChoicesFacet.class;
     }
 
-
-    public ChoicesFacetAbstract(FacetHolder holder) {
+    public ChoicesFacetAbstract(final FacetHolder holder) {
         super(type(), holder, false);
     }
 

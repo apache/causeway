@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.plural;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class PluralFacetInferred extends PluralFacetAbstract {
 
@@ -30,4 +28,3 @@ public class PluralFacetInferred extends PluralFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.List;
@@ -25,12 +24,9 @@ import java.util.List;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 
-
-
 public interface FacetDecoratorInstaller extends Installer {
 
-	static String TYPE = "facet-decorator";
+    static String TYPE = "facet-decorator";
 
     List<FacetDecorator> createDecorators();
 }
-

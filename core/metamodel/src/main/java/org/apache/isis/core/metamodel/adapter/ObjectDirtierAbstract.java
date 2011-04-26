@@ -16,16 +16,14 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
-
 public abstract class ObjectDirtierAbstract implements ObjectDirtier {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (ObjectDirtierAware.class.isAssignableFrom(candidate.getClass())) {
-            ObjectDirtierAware cast = ObjectDirtierAware.class.cast(candidate);
+            final ObjectDirtierAware cast = ObjectDirtierAware.class.cast(candidate);
             cast.setObjectDirtier(this);
         }
     }
-
 
 }

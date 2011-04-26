@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.util.ArrayList;
@@ -26,9 +25,9 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public final class CollectionFacetUtils {
-    private CollectionFacetUtils() {}
+    private CollectionFacetUtils() {
+    }
 
     public static CollectionFacet getCollectionFacetFromSpec(final ObjectAdapter objectRepresentingCollection) {
         final ObjectSpecification collectionSpec = objectRepresentingCollection.getSpecification();
@@ -50,14 +49,14 @@ public final class CollectionFacetUtils {
      */
     @Deprecated
     public static Object[] convertToArray(final ObjectAdapter collection) {
-    	return convertToList(collection).toArray();
+        return convertToList(collection).toArray();
     }
 
     public static List<Object> convertToList(final ObjectAdapter collection) {
         final CollectionFacet facet = getCollectionFacetFromSpec(collection);
         final List<Object> objects = new ArrayList<Object>();
-        for(ObjectAdapter adapter: facet.iterable(collection)) {
-        	objects.add(adapter.getObject());
+        for (final ObjectAdapter adapter : facet.iterable(collection)) {
+            objects.add(adapter.getObject());
         }
         return objects;
     }
@@ -65,8 +64,8 @@ public final class CollectionFacetUtils {
     public static List<ObjectAdapter> convertToAdapterList(final ObjectAdapter collection) {
         final CollectionFacet facet = getCollectionFacetFromSpec(collection);
         final List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
-        for(ObjectAdapter adapter: facet.iterable(collection)) {
-        	adapters.add(adapter);
+        for (final ObjectAdapter adapter : facet.iterable(collection)) {
+            adapters.add(adapter);
         }
         return adapters;
     }

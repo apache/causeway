@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.help;
 
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
-
 
 /**
  * Provide help about a class, a property, collection or action or a parameter.
  * 
  */
-public interface HelpFacet extends SingleStringValueFacet {}
+public interface HelpFacet extends SingleStringValueFacet {
+}

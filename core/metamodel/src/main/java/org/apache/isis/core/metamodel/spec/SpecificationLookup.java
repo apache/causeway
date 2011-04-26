@@ -18,13 +18,11 @@ package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.commons.components.Injectable;
 
-
 public interface SpecificationLookup extends Injectable {
 
     /**
      * @see #loadSpecification(String)
      */
     ObjectSpecification loadSpecification(Class<?> cls);
-
 
 }

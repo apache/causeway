@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
-
 public interface SpecificationLookupAware {
-	
-	public void setSpecificationLookup(final SpecificationLookup specificationLookup);
+
+    public void setSpecificationLookup(final SpecificationLookup specificationLookup);
 
 }

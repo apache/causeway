@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 
 /**
  * A {@link FacetHolder} that also has a {@link ObjectSpecification type}.
@@ -33,24 +31,21 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface TypedHolder extends FacetHolder {
 
-
     public FeatureType getFeatureType();
 
     /**
-     * The type of a {@link FeatureType#PROPERTY property}, the referenced type
-     * of a {@link FeatureType#COLLECTION collection}, the return type of an
-     * {@link FeatureType#ACTION action} and the type of a {@link FeatureType#ACTION_PARAMETER action parameter}.
+     * The type of a {@link FeatureType#PROPERTY property}, the referenced type of a {@link FeatureType#COLLECTION
+     * collection}, the return type of an {@link FeatureType#ACTION action} and the type of a
+     * {@link FeatureType#ACTION_PARAMETER action parameter}.
      */
     public Class<?> getType();
-
 
     /**
      * Type may not be known initially (eg {@link FeatureType#COLLECTION}s).
      * 
      * <p>
-     * For example, the accessor might return a raw type such as 
-     * <tt>java.util.List</tt>, rather than a generic one such as 
-     * <tt>java.util.List&lt;Customer&gt;</tt>.
+     * For example, the accessor might return a raw type such as <tt>java.util.List</tt>, rather than a generic one such
+     * as <tt>java.util.List&lt;Customer&gt;</tt>.
      */
     public void setType(Class<?> type);
 

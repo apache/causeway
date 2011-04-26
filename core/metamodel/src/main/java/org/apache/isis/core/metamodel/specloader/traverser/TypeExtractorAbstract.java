@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.traverser;
 
 import java.lang.reflect.Method;
@@ -29,38 +28,36 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Abstract base class factoring out common functionality for
- * helper methods that extract parameterized types.
+ * Abstract base class factoring out common functionality for helper methods that extract parameterized types.
  * 
  */
-abstract class TypeExtractorAbstract implements Iterable<Class<?>>{
+abstract class TypeExtractorAbstract implements Iterable<Class<?>> {
     private final Method method;
     private final List<Class<?>> classes = new ArrayList<Class<?>>();
-    
+
     public TypeExtractorAbstract(final Method method) {
         this.method = method;
     }
 
-    protected void addParameterizedTypes(Type... genericTypes) {
-        for(Type genericType: genericTypes) {
+    protected void addParameterizedTypes(final Type... genericTypes) {
+        for (final Type genericType : genericTypes) {
             if (genericType instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                Type[] typeArguments = parameterizedType.getActualTypeArguments();
-                for(Type type: typeArguments) {
+                final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+                final Type[] typeArguments = parameterizedType.getActualTypeArguments();
+                for (final Type type : typeArguments) {
                     if (type instanceof Class) {
-                        Class<?> cls = (Class<?>) type;
+                        final Class<?> cls = (Class<?>) type;
                         add(cls);
                     }
                 }
             }
         }
     }
-    
+
     /**
-     * Adds to {@link #getClasses() list of classes}, provided not
-     * {@link Void}.
+     * Adds to {@link #getClasses() list of classes}, provided not {@link Void}.
      */
-    protected void add(Class<?> cls) {
+    protected void add(final Class<?> cls) {
         if (cls == void.class) {
             return;
         }
@@ -78,8 +75,8 @@ abstract class TypeExtractorAbstract implements Iterable<Class<?>>{
         return Collections.unmodifiableList(classes);
     }
 
+    @Override
     public Iterator<Class<?>> iterator() {
         return getClasses().iterator();
     }
 }
-

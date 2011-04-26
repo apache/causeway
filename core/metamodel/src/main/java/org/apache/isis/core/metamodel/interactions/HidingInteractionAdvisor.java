@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Hiding;
-
 
 /**
  * Mix-in interface for facets that can advise as to whether a member should be hidden.
@@ -36,10 +34,9 @@ public interface HidingInteractionAdvisor extends InteractionAdvisorFacet, Hidin
      * Whether the rule represented by this facet hides the member to which it applies.
      * 
      * <p>
-     * Implementations should use the provided {@link InteractionContext} to determine whether they declare
-     * the object/member is hidden. They must however guard against a <tt>null</tt>
-     * {@link InteractionContext#getTarget() target} and {@link InteractionContext#getSession() session} -
-     * neither are guaranteed to be populated.
+     * Implementations should use the provided {@link InteractionContext} to determine whether they declare the
+     * object/member is hidden. They must however guard against a <tt>null</tt> {@link InteractionContext#getTarget()
+     * target} and {@link InteractionContext#getSession() session} - neither are guaranteed to be populated.
      */
     String hides(final VisibilityContext<? extends VisibilityEvent> ic);
 }

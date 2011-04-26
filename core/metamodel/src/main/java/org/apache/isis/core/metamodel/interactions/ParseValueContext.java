@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link ParseValueEvent}.
  */
@@ -37,24 +35,21 @@ public class ParseValueContext extends ValidityContext<ParseValueEvent> implemen
 
     private final ObjectAdapter proposed;
 
-	public ParseValueContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier identifier,
-            final ObjectAdapter proposed) {
+    public ParseValueContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod,
+        final ObjectAdapter target, final Identifier identifier, final ObjectAdapter proposed) {
         super(InteractionContextType.PARSE_VALUE, session, invocationMethod, identifier, target);
         this.proposed = proposed;
     }
 
-	public ObjectAdapter getProposed() {
-		return proposed;
-	}
+    @Override
+    public ObjectAdapter getProposed() {
+        return proposed;
+    }
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        String proposedPojo = (String)unwrap(getProposed());
-		return new ParseValueEvent(unwrap(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) unwrap(getProposed());
+        return new ParseValueEvent(unwrap(getTarget()), getIdentifier(), proposedPojo);
     }
 
 }

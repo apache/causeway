@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.Collection;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-
 
 public interface SpecificationLoader extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLookup {
 
@@ -38,12 +36,10 @@ public interface SpecificationLoader extends ApplicationScopedComponent, Debugga
     ObjectSpecification loadSpecification(Class<?> cls);
 
     /**
-     * Loads the specifications of the specified types except the one specified
-     * (to prevent an infinite loop).
+     * Loads the specifications of the specified types except the one specified (to prevent an infinite loop).
      */
-    public boolean loadSpecifications(List<Class<?>> typesToLoad,
-        final Class<?> typeToIgnore);
-    
+    public boolean loadSpecifications(List<Class<?>> typesToLoad, final Class<?> typeToIgnore);
+
     /**
      * Return the specification for the specified class of object.
      * 
@@ -66,7 +62,7 @@ public interface SpecificationLoader extends ApplicationScopedComponent, Debugga
     /**
      * Specify the classes of the services to pro-actively prime the cache.
      */
-	void setServiceClasses(List<Class<?>> serviceClasses);
+    void setServiceClasses(List<Class<?>> serviceClasses);
 
     /**
      * Loads the specifications of the specified types.

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
+import org.apache.isis.core.metamodel.facets.ebc.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 

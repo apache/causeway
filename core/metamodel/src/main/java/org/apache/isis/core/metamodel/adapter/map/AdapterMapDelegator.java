@@ -26,25 +26,26 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
  * Provided to allow subclasses to override specific methods if required.
  */
 public abstract class AdapterMapDelegator extends AdapterMapAbstract {
-    
+
     private final AdapterMap underlying;
-    
+
     public AdapterMapDelegator(final AdapterMap underlying) {
         this.underlying = underlying;
     }
 
     @Override
-    public ObjectAdapter getAdapterFor(Object pojo) {
+    public ObjectAdapter getAdapterFor(final Object pojo) {
         return underlying.getAdapterFor(pojo);
     }
 
     @Override
-    public ObjectAdapter adapterFor(Object domainObject) {
+    public ObjectAdapter adapterFor(final Object domainObject) {
         return underlying.adapterFor(domainObject);
     }
 
     @Override
-    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
+        final IdentifiedHolder identifiedHolder) {
         return underlying.adapterFor(pojo, ownerAdapter, identifiedHolder);
     }
 }

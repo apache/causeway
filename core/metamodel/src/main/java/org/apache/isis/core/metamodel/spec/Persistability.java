@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 public enum Persistability {
@@ -41,7 +40,7 @@ public enum Persistability {
         this.name = name;
         this.persistable = persistable;
     }
-    
+
     public boolean isPersistable() {
         return persistable;
     }

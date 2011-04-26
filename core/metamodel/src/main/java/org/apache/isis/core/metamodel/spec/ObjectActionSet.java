@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.Collections;
@@ -42,17 +41,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import com.google.common.collect.Lists;
 
-
 public class ObjectActionSet implements ObjectAction {
 
     private final String name;
     private final String id;
     private final List<ObjectAction> actions;
-	
-    public ObjectActionSet(
-    		final String id, 
-    		final String name, 
-    		final List<ObjectAction> actions) {
+
+    public ObjectActionSet(final String id, final String name, final List<ObjectAction> actions) {
         this.id = id;
         this.name = name;
         this.actions = actions;
@@ -72,7 +67,7 @@ public class ObjectActionSet implements ObjectAction {
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;
     }
-    
+
     // /////////////////////////////////////////////////////////////
     // description, actions
     // /////////////////////////////////////////////////////////////
@@ -185,19 +180,22 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing
      */
     @Override
-    public void addFacet(final Facet facet) {}
+    public void addFacet(final Facet facet) {
+    }
 
     /**
      * Does nothing
      */
     @Override
-    public void addFacet(final MultiTypedFacet facet) {}
+    public void addFacet(final MultiTypedFacet facet) {
+    }
 
     /**
      * Does nothing
      */
     @Override
-    public void removeFacet(final Facet facet) {}
+    public void removeFacet(final Facet facet) {
+    }
 
     /**
      * Does nothing
@@ -219,7 +217,8 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing
      */
     @Override
-    public void removeFacet(final Class<? extends Facet> facetType) {}
+    public void removeFacet(final Class<? extends Facet> facetType) {
+    }
 
     // /////////////////////////////////////////////////////////////
     // parameters
@@ -239,7 +238,6 @@ public class ObjectActionSet implements ObjectAction {
     public List<ObjectSpecification> getParameterTypes() {
         return Collections.emptyList();
     }
-
 
     @Override
     public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
@@ -264,10 +262,8 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing, but shouldn't be called.
      */
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -281,10 +277,8 @@ public class ObjectActionSet implements ObjectAction {
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
@@ -298,11 +292,9 @@ public class ObjectActionSet implements ObjectAction {
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter object,
-            final ObjectAdapter[] candidateArguments) {
+    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter object,
+        final ObjectAdapter[] candidateArguments) {
         return null;
     }
 
@@ -329,7 +321,6 @@ public class ObjectActionSet implements ObjectAction {
         throw new UnexpectedCallException();
     }
 
-    
     // /////////////////////////////////////////////////////////////
     // isAction, isAssociation
     // /////////////////////////////////////////////////////////////
@@ -343,15 +334,16 @@ public class ObjectActionSet implements ObjectAction {
     public boolean isPropertyOrCollection() {
         return false;
     }
+
     @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+
     @Override
     public boolean isOneToOneAssociation() {
         return false;
     }
-
 
     // /////////////////////////////////////////////////////////////
     // debug
@@ -362,14 +354,13 @@ public class ObjectActionSet implements ObjectAction {
         return "";
     }
 
-    
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
-        ObjectAction specification = this;
+    public Instance getInstance(final ObjectAdapter adapter) {
+        final ObjectAction specification = this;
         return adapter.getInstance(specification);
     }
 

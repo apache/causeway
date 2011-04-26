@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.properties.searchable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
-
 
 public abstract class SearchableFacetAbstract extends MultipleValueFacetAbstract implements SearchableFacet {
 
@@ -40,10 +38,12 @@ public abstract class SearchableFacetAbstract extends MultipleValueFacetAbstract
         this.queryByExample = queryByExample;
     }
 
+    @Override
     public Class<?> repository() {
         return repository;
     }
 
+    @Override
     public boolean queryByExample() {
         return queryByExample;
     }

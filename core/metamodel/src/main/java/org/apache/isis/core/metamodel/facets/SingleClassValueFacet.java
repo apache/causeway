@@ -17,20 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 
 public interface SingleClassValueFacet extends Facet {
 
     public Class<?> value();
 
     /**
-     * Convenience to return the {@link ObjectSpecification} corresponding to this facet's
-     * {@link #value() class}.
+     * Convenience to return the {@link ObjectSpecification} corresponding to this facet's {@link #value() class}.
      */
     public ObjectSpecification valueSpec();
 

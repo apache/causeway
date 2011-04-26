@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,9 +25,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * Represents an instance of some element of the meta-model.
  * 
  * <p>
- * Currently the only sub-interface is {@link ObjectAdapter}.  However, 
- * the intention is for associations, actions and action parameters to also
- * inherit from this interface.
+ * Currently the only sub-interface is {@link ObjectAdapter}. However, the intention is for associations, actions and
+ * action parameters to also inherit from this interface.
  */
 public interface Instance {
 
@@ -36,7 +34,7 @@ public interface Instance {
      * Returns the specification that details the structure of this instance.
      */
     Specification getSpecification();
-    
+
     /**
      * The owning {@link ObjectAdapter} of this instance.
      * 
@@ -44,5 +42,5 @@ public interface Instance {
      * In the case of the {@link ObjectAdapter} interface, just returns <tt>null</tt>.
      */
     ObjectAdapter getOwner();
-    
+
 }

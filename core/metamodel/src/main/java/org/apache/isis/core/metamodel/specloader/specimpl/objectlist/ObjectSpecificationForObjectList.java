@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 
 import java.util.Collections;
@@ -36,51 +35,48 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
-
 /**
- * A custom {@link ObjectSpecification} that is designed to treat the
- * {@link ObjectList} class as a "standalone" collection.
+ * A custom {@link ObjectSpecification} that is designed to treat the {@link ObjectList} class as a "standalone"
+ * collection.
  */
 public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstract {
 
     /**
      * Used as {@link #getShortIdentifier()}, {@link #getName()} and {@link #getPluralName()}.
      */
-	private static final String NAME = "Instances";
-	private static final String DESCRIBED_AS = "Typed instances";
-	private static final String ICON_NAME = "instances";
+    private static final String NAME = "Instances";
+    private static final String DESCRIBED_AS = "Typed instances";
+    private static final String ICON_NAME = "instances";
 
-    public ObjectSpecificationForObjectList(
-    		final SpecificationContext specificationContext) {
-		super(ObjectList.class, NAME, specificationContext);
-	}
+    public ObjectSpecificationForObjectList(final SpecificationContext specificationContext) {
+        super(ObjectList.class, NAME, specificationContext);
+    }
 
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Intrinsic to class
-    ///////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////
+
     /**
-     * Review: wouldn't it be better to have a FacetFactory that specifically
-     * recognized {@link ObjectList} as a type and installed a {@link CollectionFacet}
-     * for it.
+     * Review: wouldn't it be better to have a FacetFactory that specifically recognized {@link ObjectList} as a type
+     * and installed a {@link CollectionFacet} for it.
      */
     @Override
     public boolean isCollectionOrIsAggregated() {
         return true;
     }
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Introspection
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     @Override
     public void introspectTypeHierarchyAndMembers() {
         setSuperclass(Object.class);
 
         addFacet(new CollectionFacetForObjectList(this));
-        addFacet(new TypeOfFacetDefaultToObject(this, getSpecificationLookup()) {});
-        
+        addFacet(new TypeOfFacetDefaultToObject(this, getSpecificationLookup()) {
+        });
+
         // ObjectList specific
         FacetUtil.addFacet(new NamedFacetForObjectList(NAME, this));
         FacetUtil.addFacet(new PluralFacetForObjectList(NAME, this));
@@ -88,52 +84,47 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
         // don't install anything for NotPersistableFacet
     }
 
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Override facets
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
-
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Service
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     /**
      * No-op.
-     *
+     * 
      * <p>
-     * Review: is this ever called for an instance of this class?  If not, then
-     * no need to override.
+     * Review: is this ever called for an instance of this class? If not, then no need to override.
      */
     @Override
-    public void markAsService() {}
+    public void markAsService() {
+    }
 
     @Override
     public boolean isService() {
         return false;
     }
 
-
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Associations
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     /**
-     * Review: is this ever called for an instance of this class?  If not, then
-     * no need to override.
+     * Review: is this ever called for an instance of this class? If not, then no need to override.
      */
     @Override
     public ObjectAssociation getAssociation(final String id) {
         return null;
     }
 
-
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Title and Icon
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     @Override
-    public String getTitle(final ObjectAdapter object, Localization localization) {
+    public String getTitle(final ObjectAdapter object, final Localization localization) {
         return ((ObjectList) object.getObject()).titleString();
     }
 
@@ -142,20 +133,16 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
         return ICON_NAME;
     }
 
-
-    
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Object Actions
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     /**
      * Review: is it necessary to override for this subclass?
      */
     @Override
-    public ObjectAction getObjectAction(
-            final ActionType type,
-            final String id,
-            final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String id,
+        final List<ObjectSpecification> parameters) {
         return null;
     }
 
@@ -167,9 +154,9 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
         return null;
     }
 
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Service Actions
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     /**
      * Review: is it necessary to override for this subclass?
@@ -179,6 +166,4 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
         return Collections.emptyList();
     }
 
-
 }
-

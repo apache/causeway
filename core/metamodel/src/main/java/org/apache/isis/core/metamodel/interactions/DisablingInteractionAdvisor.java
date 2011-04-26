@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Disabling;
-
 
 /**
  * Mix-in interface for facets that can advise as to whether a member should be disabled.
@@ -36,10 +34,10 @@ public interface DisablingInteractionAdvisor extends InteractionAdvisorFacet, Di
      * Whether the rule represented by this facet disables the member to which it applies.
      * 
      * <p>
-     * Implementations should use the provided {@link InteractionContext} to determine whether they disable
-     * the member from being modified or used. They must however guard against a <tt>null</tt>
-     * {@link InteractionContext#getTarget() target} and {@link InteractionContext#getSession() session} -
-     * neither are guaranteed to be populated.
+     * Implementations should use the provided {@link InteractionContext} to determine whether they disable the member
+     * from being modified or used. They must however guard against a <tt>null</tt>
+     * {@link InteractionContext#getTarget() target} and {@link InteractionContext#getSession() session} - neither are
+     * guaranteed to be populated.
      */
     String disables(final UsabilityContext<? extends UsabilityEvent> ic);
 

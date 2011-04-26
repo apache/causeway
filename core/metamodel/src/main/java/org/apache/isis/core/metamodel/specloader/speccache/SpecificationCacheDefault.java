@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.speccache;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import com.google.inject.internal.Maps;
-
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import com.google.inject.internal.Maps;
 
 public class SpecificationCacheDefault implements SpecificationCache {
-    private final Map<String,ObjectSpecification> specByClassName = Maps.newHashMap();
+    private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
 
     @Override
     public ObjectSpecification get(final String className) {

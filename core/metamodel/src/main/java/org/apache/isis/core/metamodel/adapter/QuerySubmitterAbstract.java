@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
-
 public abstract class QuerySubmitterAbstract implements QuerySubmitter {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (QuerySubmitterAware.class.isAssignableFrom(candidate.getClass())) {
-            QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
+            final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
             cast.setQuerySubmitter(this);
         }
     }

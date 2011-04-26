@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-
 public abstract class ObjectInstantiatorAbstract implements ObjectInstantiator {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (ObjectInstantiatorAware.class.isAssignableFrom(candidate.getClass())) {
-            ObjectInstantiatorAware cast = ObjectInstantiatorAware.class.cast(candidate);
+            final ObjectInstantiatorAware cast = ObjectInstantiatorAware.class.cast(candidate);
             cast.setObjectInstantiator(this);
         }
     }

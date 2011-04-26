@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.facets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
-
 
 /**
  * Indicates that this class has additional arbitrary facets, to be processed.
@@ -32,18 +30,18 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * Corresponds to the <tt>@Facets</tt> annotation in the applib.
  * 
  * <p>
- * <i>This</i> {@link Facet} allows the {@link FacetFactory}(s) that will create those {@link Facet}s to be
- * accessed. Which, admittedly, is rather confusing.
+ * <i>This</i> {@link Facet} allows the {@link FacetFactory}(s) that will create those {@link Facet}s to be accessed.
+ * Which, admittedly, is rather confusing.
  */
 public interface FacetsFacet extends MultipleValueFacet {
 
     /**
-     * Returns the fully qualified class of the facet factory, which should be
-     * {@link Class#isAssignableFrom(Class)} {@link FacetFactory}.
+     * Returns the fully qualified class of the facet factory, which should be {@link Class#isAssignableFrom(Class)}
+     * {@link FacetFactory}.
      * 
      * <p>
-     * Includes both the named facet factories and those identified directly by class. However, all are
-     * guaranteed to implement {@link FacetFactory}.
+     * Includes both the named facet factories and those identified directly by class. However, all are guaranteed to
+     * implement {@link FacetFactory}.
      */
     public Class<? extends FacetFactory>[] facetFactories();
 }

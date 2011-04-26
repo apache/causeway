@@ -17,26 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.validator;
 
 public class MetaModelInvalidException extends IllegalStateException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public MetaModelInvalidException() {
-	}
+    public MetaModelInvalidException() {
+    }
 
-	public MetaModelInvalidException(String s) {
-		super(s);
-	}
+    public MetaModelInvalidException(final String s) {
+        super(s);
+    }
 
-	public MetaModelInvalidException(Throwable cause) {
-		super(cause);
-	}
+    public MetaModelInvalidException(final Throwable cause) {
+        super(cause);
+    }
 
-	public MetaModelInvalidException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public MetaModelInvalidException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.interactions;
 
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
-
 /**
  * See {@link InteractionContext} for overview; analogous to {@link CollectionRemoveFromEvent}.
  */
@@ -37,12 +35,9 @@ public class CollectionRemoveFromContext extends ValidityContext<CollectionRemov
 
     private final ObjectAdapter proposed;
 
-    public CollectionRemoveFromContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target,
-            final Identifier identifier,
-            final ObjectAdapter proposed) {
+    public CollectionRemoveFromContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier,
+        final ObjectAdapter proposed) {
         super(InteractionContextType.COLLECTION_REMOVE_FROM, session, invocationMethod, identifier, target);
 
         this.proposed = proposed;

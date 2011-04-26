@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public abstract class InstanceAbstract implements Instance {
 
     private final ObjectAdapter owner;
     private Specification specification;
-    
 
     protected InstanceAbstract() {
         this(null, null);
@@ -57,14 +54,13 @@ public abstract class InstanceAbstract implements Instance {
 
     /**
      * Allows the specification to be lazily loaded.
-   */
+     */
     protected Specification loadSpecification() {
         return null;
     }
 
     /**
-     * Allows subclasses to get specification without necessarily
-     * triggering {@link #loadSpecification() loading} if not
+     * Allows subclasses to get specification without necessarily triggering {@link #loadSpecification() loading} if not
      * yet known.
      */
     protected final Specification getSpecificationNoLoad() {

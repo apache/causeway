@@ -17,46 +17,42 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.List;
 
 public interface Hierarchical {
 
+    /**
+     * Returns true if the <tt>subclasses()</tt> method will return an array of one or more elements (ie, not an empty
+     * array).
+     */
+    boolean hasSubclasses();
 
-	/**
-	 * Returns true if the <tt>subclasses()</tt> method will return an array of
-	 * one or more elements (ie, not an empty array).
-	 */
-	boolean hasSubclasses();
+    /**
+     * Get the list of specifications for all the interfaces that the class represented by this specification
+     * implements.
+     */
+    List<ObjectSpecification> interfaces();
 
-	/**
-	 * Get the list of specifications for all the interfaces that the class
-	 * represented by this specification implements.
-	 */
-	List<ObjectSpecification> interfaces();
+    /**
+     * Determines if this specification represents the same specification, or a subclass, of the specified
+     * specification.
+     * 
+     * <p>
+     * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to {@link Class#isAssignableFrom(Class) Java's}
+     * <tt>superType.isAssignableFrom(subType)</tt>.
+     */
+    boolean isOfType(ObjectSpecification specification);
 
-	/**
-	 * Determines if this specification represents the same specification, or a
-	 * subclass, of the specified specification.
-	 * 
-	 * <p>
-	 * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
-	 * {@link Class#isAssignableFrom(Class) Java's}
-	 * <tt>superType.isAssignableFrom(subType)</tt>.
-	 */
-	boolean isOfType(ObjectSpecification specification);
+    /**
+     * Get the list of specifications for the subclasses of the class represented by this specification
+     */
+    List<ObjectSpecification> subclasses();
 
-	/**
-	 * Get the list of specifications for the subclasses of the class
-	 * represented by this specification
-	 */
-	List<ObjectSpecification> subclasses();
-
-	/**
-	 * Get the specification for this specification's class's superclass.
-	 */
-	ObjectSpecification superclass();
+    /**
+     * Get the specification for this specification's class's superclass.
+     */
+    ObjectSpecification superclass();
 
 }

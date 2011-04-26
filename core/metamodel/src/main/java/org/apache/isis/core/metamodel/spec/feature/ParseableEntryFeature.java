@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
-
 
 public interface ParseableEntryFeature extends OneToOneFeature {
 

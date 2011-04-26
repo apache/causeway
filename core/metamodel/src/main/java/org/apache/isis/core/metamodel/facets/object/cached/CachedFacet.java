@@ -37,5 +37,4 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
  */
 public interface CachedFacet extends MarkerFacet {
 
-
 }

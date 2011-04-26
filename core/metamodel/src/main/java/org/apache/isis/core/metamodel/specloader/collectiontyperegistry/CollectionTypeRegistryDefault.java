@@ -17,15 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.collectiontyperegistry;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-
-
 
 public class CollectionTypeRegistryDefault extends CollectionTypeRegistryAbstract {
 
@@ -50,19 +46,19 @@ public class CollectionTypeRegistryDefault extends CollectionTypeRegistryAbstrac
         collectionTypesAsArray = collectionTypes.toArray(new Class[0]);
     }
 
+    @Override
     public boolean isCollectionType(final Class<?> cls) {
         return java.util.Collection.class.isAssignableFrom(cls);
     }
 
+    @Override
     public boolean isArrayType(final Class<?> cls) {
         return cls.isArray();
     }
 
+    @Override
     public Class<?>[] getCollectionType() {
         return collectionTypesAsArray;
     }
 
-    
-
 }
-

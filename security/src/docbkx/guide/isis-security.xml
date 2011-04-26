@@ -53,22 +53,68 @@
   <preface id="preface">
     <title>Preface</title>
 
-    <para><emphasis>*** Apache Isis</emphasis> is designed to allow
-    programmers rapidly develop domain-driven applications following the
-    <ulink url="http://en.wikipedia.org/wiki/Naked_Objects">Naked
-    Objects</ulink> pattern. It is made up of a core framework plus a number
-    of supporting implementations, and supports various viewers and object
-    stores. Apache Isis is hosted at the <ulink
-    url="http://incubator.apache.org/isis">Apache Foundation</ulink>, and is
-    licensed under <ulink
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework that supports supports various
+    viewers, along with <acronym>API</acronym>s and implementations relating
+    to security, the programming model, the runtime (persistence) and profile
+    stores (user preferences). <emphasis>Apache Isis</emphasis> is hosted at
+    the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para>This guide is written for ...</para>
+    <para>The security <acronym>API</acronym> covers authentication and
+    authorization. A number of different security implementations, and this
+    guide explains how to configure them, as well as how to go about
+    implementing your own implementation.</para>
 
-    <para></para>
+    <sect1>
+      <title>Who this Guide is For</title>
 
-    <para></para>
+      <para>This guide is written for deployers looking to configure
+      <emphasis>Isis</emphasis> to run with a specific existing security
+      implementation, and for programmers wishing to develop their own custom
+      implementation. It is divided into the following parts:<itemizedlist>
+          <listitem>
+            <para>Isis Security Implementations</para>
+
+            <para>This part of the guide (see <xref
+            linkend="prt.IsisImplementations" />) covers the default (Java 5)
+            programming model, how to customize it, and how to extend
+            it.</para>
+          </listitem>
+
+          <listitem>
+            <para>Writing a Custom Implementation</para>
+
+            <para>This part of the guide (see <xref
+            linkend="prt.WritingACustomImplementation" />) describes how to go
+            about writing your own custom implementation of the security
+            <acronym>API</acronym>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Configuring the Runtime</para>
+
+            <para>This part of the guide (see <xref
+            linkend="prt.ConfiguringTheRuntime" />) describes how to configure
+            your application to use a specified security
+            implementation.</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect1>
+
+    <sect1>
+      <title>How this Guide relates to other Documentation</title>
+
+      <para>*** todo</para>
+
+      <para>*** x-ref the core docs.</para>
+
+      <para></para>
+    </sect1>
   </preface>
 
   <chapter id="chp.SecurityApi">
@@ -177,24 +223,28 @@
   </chapter>
 
   <part>
-    <title>Default (No-op) Security Implementation</title>
+    <title>Isis Security Implementations</title>
+
+    <partintro>
+      <para>***</para>
+    </partintro>
 
     <chapter>
-      <title></title>
+      <title>Default (No-op) Security Implementation</title>
 
-      <section>
-        <title></title>
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
 
-        <para></para>
-      </section>
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yadat</emphasis></para>
+      </sect1>
     </chapter>
-  </part>
-
-  <part>
-    <title>File Security Implementation</title>
 
     <chapter id="chp.FileIntro">
-      <title>Introduction</title>
+      <title>File Security Implementation</title>
 
       <abstract>
         <para>*** yada yada</para>
@@ -211,20 +261,11 @@
 
         <para><remark></remark></para>
 
-        <para>x-ref Core documentation.</para>
-
-        <para></para>
-
         <para></para>
 
         <para>... also, move into the next chapters</para>
 
         <para></para>
-
-        <para>Starting [[NAME]] requires a user name and password . (The
-        exception is when running in exploration mode, which uses default
-        values). The simplest way to specify the list of user names and
-        passwords is in a passwords file.</para>
 
         <sect2>
           <title>Authentication using a passwords file</title>
@@ -606,13 +647,9 @@ isis.authorization.file.blacklist=disallow  </programlisting>
         </sect2>
       </sect1>
     </chapter>
-  </part>
-
-  <part>
-    <title>LDAP Security Implementation</title>
 
     <chapter>
-      <title>Introduction</title>
+      <title>LDAP Security Implementation</title>
 
       <abstract>
         <para>*** yada yada</para>
@@ -800,6 +837,56 @@ isis.authorization=ldap</programlisting>
           <para></para>
         </sect2>
       </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Configuring the Runtime</title>
+
+    <partintro>
+      <para>***</para>
+
+      <para></para>
+    </partintro>
+
+    <chapter>
+      <title>Configuring the Default Runtime</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <para></para>
+
+      <sect1>
+        <title>Exploration Mode</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Prototype Mode</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Implementing a custom Security Implementation</title>
+
+    <chapter>
+      <title></title>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
     </chapter>
   </part>
 </book>

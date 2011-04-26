@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.applib.events.InteractionEvent;
 
-
 public class InteractionResult {
 
     /**
@@ -34,8 +32,7 @@ public class InteractionResult {
      * {@link #ADVISED}.
      * 
      * <p>
-     * Subsequent attempts to {@link InteractionResult#advise(String, InteractionAdvisor)} will then be
-     * disallowed.
+     * Subsequent attempts to {@link InteractionResult#advise(String, InteractionAdvisor)} will then be disallowed.
      */
     enum State {
         ADVISING, ADVISED
@@ -56,8 +53,8 @@ public class InteractionResult {
      * {@link #advise(String, InteractionAdvisor) advice} of the interactions.
      * 
      * <p>
-     * That is, if still {@link State#ADVISING advising}, then copies over the details from this result into
-     * the contained {@link InteractionEvent}, and flips into {@link State#ADVISED advised (done)}.
+     * That is, if still {@link State#ADVISING advising}, then copies over the details from this result into the
+     * contained {@link InteractionEvent}, and flips into {@link State#ADVISED advised (done)}.
      * 
      * @return
      */
@@ -97,8 +94,8 @@ public class InteractionResult {
     }
 
     /**
-     * Returns the first of the {@link #getAdvisors()} that has been
-     * {@link #advise(String, InteractionAdvisor) advised}, or <tt>null</tt> if none yet.
+     * Returns the first of the {@link #getAdvisors()} that has been {@link #advise(String, InteractionAdvisor) advised}
+     * , or <tt>null</tt> if none yet.
      * 
      * @see #getAdvisorFacets()
      */
@@ -107,8 +104,8 @@ public class InteractionResult {
     }
 
     /**
-     * Returns all {@link InteractionAdvisor advisor} (facet)s that have
-     * {@link #advise(String, InteractionAdvisor) append}ed reasons to the buffer.
+     * Returns all {@link InteractionAdvisor advisor} (facet)s that have {@link #advise(String, InteractionAdvisor)
+     * append}ed reasons to the buffer.
      * 
      * @see #getAdvisor()
      */
@@ -128,16 +125,16 @@ public class InteractionResult {
      * Gets the reason as currently known, but does not change the state.
      * 
      * <p>
-     * If {@link #isNotVetoing()}, then returns <tt>null</tt>.  Otherwise will be a non-empty string.
+     * If {@link #isNotVetoing()}, then returns <tt>null</tt>. Otherwise will be a non-empty string.
      */
     public String getReason() {
-        return isNotVetoing()? null : reasonBuf.toString();
+        return isNotVetoing() ? null : reasonBuf.toString();
     }
 
     @Override
     public String toString() {
-        return String.format("%s: %s: %s (%d facets advised)", interactionEvent, state, toStringInterpret(reasonBuf), advisors
-                .size());
+        return String.format("%s: %s: %s (%d facets advised)", interactionEvent, state, toStringInterpret(reasonBuf),
+            advisors.size());
     }
 
     private String toStringInterpret(final StringBuilder reasonBuf) {
@@ -149,4 +146,3 @@ public class InteractionResult {
     }
 
 }
-

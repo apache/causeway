@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.version;
 
 import java.util.Date;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 
-
 public class NullVersion implements Version {
 
-	
+    private static final long serialVersionUID = 1L;
+
+    @Override
     public boolean different(final Version version) {
         return false;
     }
@@ -36,14 +36,17 @@ public class NullVersion implements Version {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public String getUser() {
         return "";
     }
 
+    @Override
     public Date getTime() {
         return new Date();
     }
 
+    @Override
     public String sequence() {
         return "";
     }

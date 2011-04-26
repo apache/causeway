@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.util.Collection;
@@ -29,15 +28,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 /**
- * Attached to {@link ObjectSpecification}s that represent a 
- * collection.
+ * Attached to {@link ObjectSpecification}s that represent a collection.
  * 
  * <p>
- * Factories of (implementations of this) facet should ensure that a
- * {@link TypeOfFacet} is also attached to the same facet holder.  The
- * {@link #getTypeOfFacet()} is a convenience for this.
+ * Factories of (implementations of this) facet should ensure that a {@link TypeOfFacet} is also attached to the same
+ * facet holder. The {@link #getTypeOfFacet()} is a convenience for this.
  */
 public interface CollectionFacet extends Facet {
 
@@ -52,9 +48,9 @@ public interface CollectionFacet extends Facet {
     Iterable<ObjectAdapter> iterable(ObjectAdapter collectionAdapter);
 
     Iterator<ObjectAdapter> iterator(ObjectAdapter collectionAdapter);
-    
+
     /**
-     * Returns an unmodifiable {@link Collection} of {@link ObjectAdapter}s. 
+     * Returns an unmodifiable {@link Collection} of {@link ObjectAdapter}s.
      */
     Collection<ObjectAdapter> collection(ObjectAdapter collectionAdapter);
 
@@ -63,12 +59,10 @@ public interface CollectionFacet extends Facet {
     boolean contains(ObjectAdapter collectionAdapter, ObjectAdapter element);
 
     void init(ObjectAdapter collectionAdapter, ObjectAdapter[] initData);
-    
+
     /**
-     * Convenience method that returns the {@link TypeOfFacet} on this
-     * facet's {@link #getFacetHolder() holder}.
+     * Convenience method that returns the {@link TypeOfFacet} on this facet's {@link #getFacetHolder() holder}.
      */
     TypeOfFacet getTypeOfFacet();
-    
-}
 
+}

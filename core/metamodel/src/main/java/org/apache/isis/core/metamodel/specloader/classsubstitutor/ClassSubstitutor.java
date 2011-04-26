@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -27,14 +26,11 @@ import org.apache.isis.core.commons.components.Injectable;
  * Provides capability to translate or ignore classes.
  * 
  * <p>
- * The class strategy is typically required when either an underlying object store 
- * (such as Hibernate); it then allows the enhancement artifacts can be ignored or 
- * interpreted correctly.
+ * The class strategy is typically required when either an underlying object store (such as Hibernate); it then allows
+ * the enhancement artifacts can be ignored or interpreted correctly.
  */
 public interface ClassSubstitutor extends Injectable, ApplicationScopedComponent {
 
     Class<?> getClass(Class<?> cls);
 
 }
-
-

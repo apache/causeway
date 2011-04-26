@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
@@ -33,24 +32,22 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 
-
 public interface ObjectAction extends ObjectMember {
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Target, realTarget, getOnType
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
-     * Returns where the action should be executed: explicitly locally on the client; explicitly remotely on
-     * the server; or where it normally should be executed. By default instance methods should execute on the
-     * server, static methods should execute on the client.
+     * Returns where the action should be executed: explicitly locally on the client; explicitly remotely on the server;
+     * or where it normally should be executed. By default instance methods should execute on the server, static methods
+     * should execute on the client.
      */
     Target getTarget();
 
     /**
-     * Determine the real target for this action. If this action represents an object action than the target
-     * is returned. If this action is on a service then that service will be returned.
+     * Determine the real target for this action. If this action represents an object action than the target is
+     * returned. If this action is on a service then that service will be returned.
      */
     ObjectAdapter realTarget(ObjectAdapter target);
 
@@ -71,7 +68,8 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link ActionType type} of action: user, exploration, prototype or debug, or that it is a set of actions.
+     * Returns the {@link ActionType type} of action: user, exploration, prototype or debug, or that it is a set of
+     * actions.
      */
     ActionType getType();
 
@@ -103,44 +101,36 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Creates an {@link ActionInvocationContext interaction context} representing an attempt to invoke this
-     * action.
+     * Creates an {@link ActionInvocationContext interaction context} representing an attempt to invoke this action.
      * 
      * <p>
-     * Typically it is easier to just call {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[])
-     * {@link #isProposedArgumentSetValidResultSet(ObjectAdapter, ObjectAdapter[])}; this is provided as API for
-     * symmetry with interactions (such as {@link AccessContext} accesses) have no corresponding vetoing
-     * methods.
+     * Typically it is easier to just call {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[]) {
+     * @link #isProposedArgumentSetValidResultSet(ObjectAdapter, ObjectAdapter[])}; this is provided as API for
+     * symmetry with interactions (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    public ActionInvocationContext createActionInvocationInteractionContext(
-            AuthenticationSession session,
-            InteractionInvocationMethod invocationMethod,
-            ObjectAdapter targetObject,
-            ObjectAdapter[] proposedArguments);
+    public ActionInvocationContext createActionInvocationInteractionContext(AuthenticationSession session,
+        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] proposedArguments);
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
      */
     Consent isProposedArgumentSetValid(ObjectAdapter object, ObjectAdapter[] proposedArguments);
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Actions (for action set)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
-     * Lists the sub-actions that are available under this name. 
+     * Lists the sub-actions that are available under this name.
      * 
      * <p>
      * If any actions are returned then this action is only a set and not an action itself.
      */
     List<ObjectAction> getActions();
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Parameters (declarative)
-    ////////////////////////////////////////////////////////
-
+    // //////////////////////////////////////////////////////
 
     /**
      * Returns the number of parameters used by this method.
@@ -158,11 +148,10 @@ public interface ObjectAction extends ObjectMember {
     List<ObjectActionParameter> getParameters();
 
     /**
-     * Returns the {@link ObjectSpecification type} of each of the
-     * {@link #getParameters() parameters}.
+     * Returns the {@link ObjectSpecification type} of each of the {@link #getParameters() parameters}.
      */
     List<ObjectSpecification> getParameterTypes();
-    
+
     /**
      * Returns set of parameter information matching the supplied filter.
      * 
@@ -170,10 +159,9 @@ public interface ObjectAction extends ObjectMember {
      */
     List<ObjectActionParameter> getParameters(Filter<ObjectActionParameter> filter);
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Parameters (per instance)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * Returns the defaults references/values to be used for the action.

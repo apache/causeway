@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetMulti;
-
 
 /**
  * A {@link Facet} that represents some type of lifecycle callback on the object (eg about to be persisted).
@@ -33,4 +31,3 @@ public interface CallbackFacet extends Facet, ImperativeFacetMulti {
     public void invoke(ObjectAdapter object);
 
 }
-

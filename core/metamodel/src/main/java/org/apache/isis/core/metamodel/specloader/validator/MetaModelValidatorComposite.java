@@ -17,32 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
-	private List<MetaModelValidator> validators = new ArrayList<MetaModelValidator>();
-	
-	public void validate() throws MetaModelInvalidException {
-		for (MetaModelValidator validator : validators) {
-			validator.validate();
-		}
-	}
-	
-	
-	public void addValidator(MetaModelValidator validator) {
-		validators.add(validator);
-	}
-	
-	public List<MetaModelValidator> getValidators() {
-		return Collections.unmodifiableList(validators);
-	}
+    private final List<MetaModelValidator> validators = new ArrayList<MetaModelValidator>();
 
+    @Override
+    public void validate() throws MetaModelInvalidException {
+        for (final MetaModelValidator validator : validators) {
+            validator.validate();
+        }
+    }
+
+    public void addValidator(final MetaModelValidator validator) {
+        validators.add(validator);
+    }
+
+    public List<MetaModelValidator> getValidators() {
+        return Collections.unmodifiableList(validators);
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.methodutils;
 
 import java.lang.reflect.Method;
@@ -26,11 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.WrapperUtils;
 
+import com.google.common.collect.Maps;
 
 /**
  * TODO: remove duplication with {@link WrapperUtils} and {@link PrimitiveUtils}.
@@ -51,11 +49,12 @@ public final class MethodFinderUtils {
         boxedClasses.put(void.class, Void.class);
     }
 
-    private MethodFinderUtils() {}
+    private MethodFinderUtils() {
+    }
 
     /**
-     * Searches the supplied array of methods for specific method and returns it, also removing it from
-     * supplied array if found (by setting to <tt>null</tt>).
+     * Searches the supplied array of methods for specific method and returns it, also removing it from supplied array
+     * if found (by setting to <tt>null</tt>).
      * 
      * <p>
      * Any methods that do not meet the search criteria are left in the array of methods.
@@ -63,15 +62,11 @@ public final class MethodFinderUtils {
      * <p>
      * The search algorithm is as specified in {@link #findMethodIndex(List, MethodScope, String, Class, Class[])}.
      */
-    public static Method removeMethod(
-            final List<Method> methods,
-            final MethodScope methodScope,
-            final String name,
-            final Class<?> returnType,
-            final Class<?>[] paramTypes) {
-        int idx = findMethodIndex(methods, methodScope, name, returnType, paramTypes);
-        if(idx != -1) {
-            Method method = methods.get(idx);
+    public static Method removeMethod(final List<Method> methods, final MethodScope methodScope, final String name,
+        final Class<?> returnType, final Class<?>[] paramTypes) {
+        final int idx = findMethodIndex(methods, methodScope, name, returnType, paramTypes);
+        if (idx != -1) {
+            final Method method = methods.get(idx);
             methods.set(idx, null);
             return method;
         }
@@ -84,19 +79,14 @@ public final class MethodFinderUtils {
      * <p>
      * The search algorithm is as specified in {@link #findMethodIndex(List, MethodScope, String, Class, Class[])}.
      */
-    public static Method findMethod(
-            final List<Method> methods,
-            final MethodScope methodScope,
-            final String name,
-            final Class<?> returnType,
-            final Class<?>[] paramTypes) {
-        int idx = findMethodIndex(methods, methodScope, name, returnType, paramTypes);
+    public static Method findMethod(final List<Method> methods, final MethodScope methodScope, final String name,
+        final Class<?> returnType, final Class<?>[] paramTypes) {
+        final int idx = findMethodIndex(methods, methodScope, name, returnType, paramTypes);
         return idx != -1 ? methods.get(idx) : null;
     }
 
     /**
-     * Searches the supplied array of methods for specific method and returns 
-     * its index, otherwise returns <tt>-1</tt>.
+     * Searches the supplied array of methods for specific method and returns its index, otherwise returns <tt>-1</tt>.
      * 
      * <p>
      * The search algorithm is:
@@ -163,8 +153,8 @@ public final class MethodFinderUtils {
     }
 
     /**
-     * Searches the supplied array of methods for all specific methods and returns them, also removing them
-     * from supplied array if found.
+     * Searches the supplied array of methods for all specific methods and returns them, also removing them from
+     * supplied array if found.
      * 
      * <p>
      * Any methods that do not meet the search criteria are left in the array of methods.
@@ -185,13 +175,8 @@ public final class MethodFinderUtils {
      *            the set of parameters the method should have, if null then is ignored
      * @return Method
      */
-    public static List<Method> removeMethods(
-            final List<Method> methods,
-            final MethodScope forClass,
-            final String prefix,
-            final Class<?> returnType,
-            final boolean canBeVoid,
-            final int paramCount) {
+    public static List<Method> removeMethods(final List<Method> methods, final MethodScope forClass,
+        final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
 
         final List<Method> validMethods = new ArrayList<Method>();
 
@@ -236,16 +221,16 @@ public final class MethodFinderUtils {
     }
 
     /**
-     * From the supplied method array, finds but <i>does not remove</i> methods that have the required prefix,
-     * and adds to the supplied candidates vector.
+     * From the supplied method array, finds but <i>does not remove</i> methods that have the required prefix, and adds
+     * to the supplied candidates vector.
      */
-    public static void findPrefixedInstanceMethods(final Method[] methods, final String prefix, final List<Method> candidates) {
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i] == null) {
+    public static void findPrefixedInstanceMethods(final Method[] methods, final String prefix,
+        final List<Method> candidates) {
+        for (final Method method : methods) {
+            if (method == null) {
                 continue;
             }
 
-            final Method method = methods[i];
             if (JavaClassUtils.isStatic(method)) {
                 continue;
             }

@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public abstract class SingleIntValueFacetAbstract extends FacetAbstract implements SingleIntValueFacet {
 
@@ -34,6 +32,7 @@ public abstract class SingleIntValueFacetAbstract extends FacetAbstract implemen
         this.value = value;
     }
 
+    @Override
     public int value() {
         return value;
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 import java.util.Collections;
@@ -26,49 +25,47 @@ import java.util.Set;
 
 import org.apache.isis.applib.DomainObjectContainer;
 
-
-
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
     private final Set<Class<?>> classesToIgnore = new HashSet<Class<?>>();
 
-    
     /**
      * Will implicitly ignore the {@link DomainObjectContainer}.
      */
     public ClassSubstitutorAbstract() {
-    	ignore(DomainObjectContainer.class);
+        ignore(DomainObjectContainer.class);
     }
-    
-    
-    ///////////////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////////////
     // init, shutdown
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
     /**
      * Default implementation does nothing.
      */
-    public void init() {}
-    
+    @Override
+    public void init() {
+    }
+
     /**
      * Default implementation does nothing.
      */
-    public void shutdown() {}
-    
+    @Override
+    public void shutdown() {
+    }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // ClassSubstitutor impl.
-    ///////////////////////////////////////////////////////////////////
-
+    // /////////////////////////////////////////////////////////////////
 
     /**
      * Hook method for subclasses to override if required.
      * 
      * <p>
-     * Default implementation will either return the class, unless
-     * has been registered as to be {@link #ignore(Class) ignore}d, in
-     * which case returns <tt>null</tt>.
+     * Default implementation will either return the class, unless has been registered as to be {@link #ignore(Class)
+     * ignore}d, in which case returns <tt>null</tt>.
      */
+    @Override
     public Class<?> getClass(final Class<?> cls) {
         if (shouldIgnore(cls)) {
             return null;
@@ -76,8 +73,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         return cls;
     }
 
-    
-    private boolean shouldIgnore(Class<?> cls) {
+    private boolean shouldIgnore(final Class<?> cls) {
         if (cls.isArray()) {
             return shouldIgnore(cls.getComponentType());
         }
@@ -89,27 +85,26 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * For any classes registered as ignored, {@link #getClass(Class)}
-     * will return <tt>null</tt>. 
+     * For any classes registered as ignored, {@link #getClass(Class)} will return <tt>null</tt>.
      */
-    protected boolean ignore(Class<?> q) {
+    protected boolean ignore(final Class<?> q) {
         return classesToIgnore.add(q);
     }
 
     public Set<Class<?>> getIgnoredClasses() {
-		return Collections.unmodifiableSet(classesToIgnore);
-	}
-    
+        return Collections.unmodifiableSet(classesToIgnore);
+    }
+
     // ////////////////////////////////////////////////////////////////////
     // injectInto
     // ////////////////////////////////////////////////////////////////////
 
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (ClassSubstitutorAware.class.isAssignableFrom(candidate.getClass())) {
-            ClassSubstitutorAware cast = ClassSubstitutorAware.class.cast(candidate);
+            final ClassSubstitutorAware cast = ClassSubstitutorAware.class.cast(candidate);
             cast.setClassInstrumentor(this);
         }
     }
 
-    
 }

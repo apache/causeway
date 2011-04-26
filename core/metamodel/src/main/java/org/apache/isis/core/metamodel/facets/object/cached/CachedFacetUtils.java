@@ -17,20 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.cached;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
-
 public class CachedFacetUtils {
 
-
-    private CachedFacetUtils() {}
+    private CachedFacetUtils() {
+    }
 
     public static boolean isCached(final ObjectSpecification specification) {
         return specification.getFacet(CachedFacet.class) != null;
     }
 }
-

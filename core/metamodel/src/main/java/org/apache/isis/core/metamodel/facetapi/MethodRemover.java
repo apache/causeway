@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.lang.reflect.Method;
@@ -25,31 +24,25 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
-
-
 /**
  * Removes the methods from further processing by subsequent {@link Facet}s.
  */
 public interface MethodRemover {
 
     /**
-     * Locate all methods (that the implementation should somehow know about) that match the criteria and
-     * remove them from the implementation's list so that they are not considered for subsequent scans.
+     * Locate all methods (that the implementation should somehow know about) that match the criteria and remove them
+     * from the implementation's list so that they are not considered for subsequent scans.
      * 
      * @param methodScope
      *            - whether looking for <tt>static</tt> (class) or instance-level methods.
      * @return any methods that were removed.
      */
-    List<Method> removeMethods(
-            final MethodScope methodScope,
-            final String prefix,
-            final Class<?> returnType,
-            final boolean canBeVoid,
-            final int paramCount);
+    List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType,
+        final boolean canBeVoid, final int paramCount);
 
     /**
-     * Locate all methods (that the implementation should somehow know about) that match the criteria and
-     * remove them from the implementation's list so that they are not considered for subsequent scans.
+     * Locate all methods (that the implementation should somehow know about) that match the criteria and remove them
+     * from the implementation's list so that they are not considered for subsequent scans.
      * 
      * @param forClass
      *            - if <tt>true</tt>, then looking for <tt>static</tt> methods (otherwise instance methods).

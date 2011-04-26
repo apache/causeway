@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.runtimecontext.noruntime;
 
 import java.io.IOException;
@@ -27,14 +26,14 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 
 public class AuthenticationSessionNoRuntime extends AuthenticationSessionAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public AuthenticationSessionNoRuntime() {
-		super("metamodel", "dummy");
-	}
+    public AuthenticationSessionNoRuntime() {
+        super("metamodel", "dummy");
+    }
 
-	public AuthenticationSessionNoRuntime(DataInputExtended input) throws IOException {
-		super(input);
-	}
+    public AuthenticationSessionNoRuntime(final DataInputExtended input) throws IOException {
+        super(input);
+    }
 
 }

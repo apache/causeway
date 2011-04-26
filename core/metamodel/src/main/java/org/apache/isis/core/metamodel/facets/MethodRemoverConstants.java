@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
@@ -27,27 +26,26 @@ import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
-
 public class MethodRemoverConstants {
 
     public static MethodRemover NULL = new MethodRemover() {
-        public List<Method> removeMethods(
-                final MethodScope methodScope,
-                final String prefix,
-                final Class<?> returnType,
-                final boolean canBeVoid,
-                final int paramCount) {
+        @Override
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix,
+            final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             return new ArrayList<Method>();
         }
 
-        public void removeMethod(
-                final MethodScope methodScope,
-                final String methodName,
-                final Class<?> returnType,
-                final Class<?>[] parameterTypes) {}
+        @Override
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
+            final Class<?>[] parameterTypes) {
+        }
 
-        public void removeMethod(final Method method) {}
+        @Override
+        public void removeMethod(final Method method) {
+        }
 
-        public void removeMethods(final List<Method> methods) {}
+        @Override
+        public void removeMethods(final List<Method> methods) {
+        }
     };
 }

@@ -17,13 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services.container;
 
 import org.apache.isis.applib.DomainObjectContainer;
 
 public interface DomainObjectContainerAware {
-	
-	void setContainer(DomainObjectContainer container);
+
+    void setContainer(DomainObjectContainer container);
 
 }

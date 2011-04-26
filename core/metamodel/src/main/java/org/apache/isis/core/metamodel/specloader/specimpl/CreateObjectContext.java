@@ -23,7 +23,7 @@ public class CreateObjectContext {
     private final AdapterMap adapterMap;
     private final DependencyInjector dependencyInjector;
 
-    public CreateObjectContext(AdapterMap adapterMap, DependencyInjector dependencyInjector) {
+    public CreateObjectContext(final AdapterMap adapterMap, final DependencyInjector dependencyInjector) {
         this.adapterMap = adapterMap;
         this.dependencyInjector = dependencyInjector;
     }

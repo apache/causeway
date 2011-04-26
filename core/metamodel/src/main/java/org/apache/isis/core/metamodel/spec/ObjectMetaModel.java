@@ -99,14 +99,12 @@ public interface ObjectMetaModel extends Instance {
      */
     void replacePojo(Object pojo);
 
-
     /**
      * For (stand-alone) collections, returns the element type.
      * 
      * <p>
-     * For owned (aggregated) collections, the element type can be determined
-     * from the <tt>TypeOfFacet</tt> associated with the <tt>ObjectAssociation</tt>
-     * representing the collection.
+     * For owned (aggregated) collections, the element type can be determined from the <tt>TypeOfFacet</tt> associated
+     * with the <tt>ObjectAssociation</tt> representing the collection.
      * 
      * @see #setElementSpecificationProvider(ElementSpecificationProvider)
      */
@@ -114,11 +112,9 @@ public interface ObjectMetaModel extends Instance {
 
     /**
      * For (stand-alone) collections, returns the element type.
-     *
+     * 
      * @see #getElementSpecification()
      */
     void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider);
-
-
 
 }

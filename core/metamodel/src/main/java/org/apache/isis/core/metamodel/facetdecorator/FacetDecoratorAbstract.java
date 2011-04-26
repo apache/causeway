@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facetdecorator;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-
 public abstract class FacetDecoratorAbstract implements FacetDecorator {
-    
-	public String getFacetTypeNames() {
-		Class<? extends Facet>[] decoratorFacetTypes = getFacetTypes();
-		StringBuilder buf = new StringBuilder();
+
+    @Override
+    public String getFacetTypeNames() {
+        final Class<? extends Facet>[] decoratorFacetTypes = getFacetTypes();
+        final StringBuilder buf = new StringBuilder();
         for (int i = 0; i < decoratorFacetTypes.length; i++) {
             if (i > 0) {
                 buf.append(", ");
@@ -35,7 +34,6 @@ public abstract class FacetDecoratorAbstract implements FacetDecorator {
             buf.append(decoratorFacetTypes[i].getName());
         }
         return buf.toString();
-	}
+    }
 
 }
-

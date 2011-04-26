@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-
 
 public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstract implements ImmutableFacet {
 
@@ -65,5 +63,4 @@ public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstrac
         return null;
     }
 
-    
 }

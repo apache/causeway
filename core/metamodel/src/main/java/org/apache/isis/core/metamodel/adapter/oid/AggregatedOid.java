@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.io.IOException;
@@ -28,7 +27,6 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 
-
 /**
  * Used as the {@link Oid} for collections, values and <tt>@Aggregated</tt> types.
  */
@@ -38,15 +36,14 @@ public class AggregatedOid implements Oid, Serializable {
 
     private final Oid parentOid;
     private final String id;
-    
+
     private AggregatedOid previous;
 
-	private int cachedHashCode;
+    private int cachedHashCode;
 
-	
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Constructor, Encodeable
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     public AggregatedOid(final Oid oid, final String id) {
         Assert.assertNotNull("ID required", id);
         this.parentOid = oid;
@@ -54,74 +51,80 @@ public class AggregatedOid implements Oid, Serializable {
         initialized();
     }
 
-    public AggregatedOid(DataInputExtended input) throws IOException {
-    	this.parentOid = input.readEncodable(Oid.class);
-    	this.id = input.readUTF();
-    	initialized();
+    public AggregatedOid(final DataInputExtended input) throws IOException {
+        this.parentOid = input.readEncodable(Oid.class);
+        this.id = input.readUTF();
+        initialized();
     }
-    
-    public void encode(DataOutputExtended output) throws IOException {
-    	output.writeEncodable(parentOid);
+
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodable(parentOid);
         output.writeUTF(id);
     }
 
-	private void initialized() {
-		cacheState();
-	}
+    private void initialized() {
+        cacheState();
+    }
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Properties
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     public Oid getParentOid() {
         return parentOid;
     }
+
     public String getId() {
         return id;
     }
-        
-    ///////////////////////////////////////////////////////////
-    // makePersistent
-    ///////////////////////////////////////////////////////////
 
+    // /////////////////////////////////////////////////////////
+    // makePersistent
+    // /////////////////////////////////////////////////////////
+
+    @Override
     public void makePersistent() {
         this.previous = new AggregatedOid(this.parentOid, this.id);
         cacheState();
     }
-    
-    ///////////////////////////////////////////////////////////
-    // Previous
-    ///////////////////////////////////////////////////////////
 
+    // /////////////////////////////////////////////////////////
+    // Previous
+    // /////////////////////////////////////////////////////////
+
+    @Override
     public Oid getPrevious() {
         return previous;
     }
 
+    @Override
     public boolean hasPrevious() {
         return false;
     }
 
-    public void clearPrevious() {}
+    @Override
+    public void clearPrevious() {
+    }
 
-
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Other OID stuff
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
+    @Override
     public void copyFrom(final Oid oid) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public boolean isTransient() {
         return parentOid.isTransient();
     }
 
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Value semantics
-    ///////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////
+
     @Override
     public boolean equals(final Object other) {
         if (other == this) {
@@ -133,11 +136,11 @@ public class AggregatedOid implements Oid, Serializable {
         if (getClass() != other.getClass()) {
             return false;
         }
-        return equals((AggregatedOid)other);
+        return equals((AggregatedOid) other);
     }
-    
+
     public boolean equals(final AggregatedOid other) {
-        return other.parentOid.equals(parentOid) &&  other.id.equals(id);
+        return other.parentOid.equals(parentOid) && other.id.equals(id);
     }
 
     @Override
@@ -146,24 +149,20 @@ public class AggregatedOid implements Oid, Serializable {
         return cachedHashCode;
     }
 
-	private void cacheState() {
-		int hashCode = 17;
+    private void cacheState() {
+        int hashCode = 17;
         hashCode = 37 * hashCode + parentOid.hashCode();
         hashCode = 37 * hashCode + id.hashCode();
         cachedHashCode = hashCode;
-	}
+    }
 
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // toString
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
         return "AOID[" + parentOid + "," + id + "]";
     }
 
-
-
 }
-

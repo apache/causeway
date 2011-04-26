@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
@@ -51,10 +50,10 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
-
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    public static ObjectSpecification getSpecification(final SpecificationLookup specificationLookup, final Class<?> type) {
+    public static ObjectSpecification getSpecification(final SpecificationLookup specificationLookup,
+        final Class<?> type) {
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
@@ -67,10 +66,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final AdapterMap adapterMap;
     private final QuerySubmitter querySubmitter;
 
-    protected ObjectMemberAbstract(
-    		final FacetedMethod facetedMethod, 
-    		final FeatureType featureType, 
-    		ObjectMemberContext objectMembercontext) {
+    protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType,
+        final ObjectMemberContext objectMembercontext) {
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Name must always be set");
@@ -79,13 +76,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.featureType = featureType;
         this.id = id;
         this.defaultName = NameUtils.naturalName(this.id);
-        
+
         this.authenticationSessionProvider = objectMembercontext.getAuthenticationSessionProvider();
         this.specificationLookup = objectMembercontext.getSpecificationLookup();
         this.adapterMap = objectMembercontext.getAdapterManager();
         this.querySubmitter = objectMembercontext.getQuerySubmitter();
     }
-
 
     // /////////////////////////////////////////////////////////////
     // Identifiers
@@ -112,9 +108,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public FeatureType getFeatureType() {
         return featureType;
     }
-    
 
-    
     // /////////////////////////////////////////////////////////////
     // Facets
     // /////////////////////////////////////////////////////////////
@@ -197,15 +191,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // Hidden (or visible)
     // /////////////////////////////////////////////////////////////
 
-
     @Override
     public boolean isAlwaysHidden() {
         return containsFacet(HiddenFacet.class);
     }
-    
+
     /**
-     * Loops over all {@link HidingInteractionAdvisor} {@link Facet}s and returns <tt>true</tt> only if none
-     * hide the member.
+     * Loops over all {@link HidingInteractionAdvisor} {@link Facet}s and returns <tt>true</tt> only if none hide the
+     * member.
      * 
      * <p>
      * TODO: currently this method is hard-coded to assume all interactions are initiated
@@ -217,7 +210,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target) {
-        final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
+        final VisibilityContext<?> ic =
+            createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
         return InteractionUtils.isVisibleResult(this, ic);
     }
 
@@ -226,8 +220,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and returns <tt>true</tt> only if
-     * none disables the member.
+     * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and returns <tt>true</tt> only if none disables
+     * the member.
      * 
      * <p>
      * TODO: currently this method is hard-coded to assume all interactions are initiated
@@ -239,10 +233,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     private InteractionResult isUsableResult(final AuthenticationSession session, final ObjectAdapter target) {
-        final UsabilityContext<?> ic = createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
+        final UsabilityContext<?> ic =
+            createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
         return InteractionUtils.isUsableResult(this, ic);
     }
-
 
     // //////////////////////////////////////////////////////////////////
     // isAssociation, isAction
@@ -273,13 +267,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * The current {@link AuthenticationSession} (can change over time so
-     * do not cache).
+     * The current {@link AuthenticationSession} (can change over time so do not cache).
      */
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSessionProvider.getAuthenticationSession();
     }
-
 
     // //////////////////////////////////////////////////////////////////
     // toString
@@ -290,7 +282,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return String.format("id=%s,name='%s'", getId(), getName());
     }
 
-
     // //////////////////////////////////////////////////////////////////
     // Dependencies
     // //////////////////////////////////////////////////////////////////
@@ -298,11 +289,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider;
     }
-    
+
     public SpecificationLookup getSpecificationLookup() {
         return specificationLookup;
     }
-    
+
     public AdapterMap getAdapterMap() {
         return adapterMap;
     }
@@ -310,7 +301,5 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
     }
-
-
 
 }

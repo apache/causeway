@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 public interface ServicesProviderAware {
-	
-	public void setServicesProvider(final ServicesProvider servicesProvider);
+
+    public void setServicesProvider(final ServicesProvider servicesProvider);
 
 }

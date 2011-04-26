@@ -28,8 +28,9 @@ public class ObjectMemberContext {
     private final AdapterMap adapterManager;
     private final QuerySubmitter querySubmitter;
 
-    public ObjectMemberContext(AuthenticationSessionProvider authenticationSessionProvider,
-        SpecificationLookup specificationLookup, AdapterMap adapterManager, QuerySubmitter querySubmitter) {
+    public ObjectMemberContext(final AuthenticationSessionProvider authenticationSessionProvider,
+        final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
+        final QuerySubmitter querySubmitter) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;

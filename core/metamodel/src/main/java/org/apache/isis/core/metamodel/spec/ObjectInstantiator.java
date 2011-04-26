@@ -29,5 +29,4 @@ public interface ObjectInstantiator extends Injectable {
      */
     Object instantiate(Class<?> cls) throws ObjectInstantiationException;
 
-
 }

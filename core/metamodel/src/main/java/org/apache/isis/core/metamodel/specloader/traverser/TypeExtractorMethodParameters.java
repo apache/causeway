@@ -17,40 +17,39 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.traverser;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
- * Helper that finds all parameter types (including generic types) for the
- * provided {@link Method}.
+ * Helper that finds all parameter types (including generic types) for the provided {@link Method}.
  * 
  * <p>
  * For example,
+ * 
  * <pre>
  * public class CustomerRepository {
- *     public void filterCustomers(List<Customer> customerList) { ... }
+ *     public void filterCustomers(List&lt;Customer&gt; customerList) { ... }
  * }
  * </pre>
  * <p>
- * will find both <tt>List</tt> and <tt>Customer</tt>. 
+ * will find both <tt>List</tt> and <tt>Customer</tt>.
  */
 public class TypeExtractorMethodParameters extends TypeExtractorAbstract {
-    
-    private Class<?>[] parameterTypes;
+
+    private final Class<?>[] parameterTypes;
 
     public TypeExtractorMethodParameters(final Method method) {
         super(method);
-        
+
         parameterTypes = getMethod().getParameterTypes();
-        for(Class<?> parameterType: parameterTypes) {
+        for (final Class<?> parameterType : parameterTypes) {
             add(parameterType);
         }
-        
-        Type[] genericTypes = getMethod().getGenericParameterTypes();
-        for(Type genericType: genericTypes) {
+
+        final Type[] genericTypes = getMethod().getGenericParameterTypes();
+        for (final Type genericType : genericTypes) {
             addParameterizedTypes(genericTypes);
         }
     }
@@ -58,6 +57,5 @@ public class TypeExtractorMethodParameters extends TypeExtractorAbstract {
     public Class<?>[] getParameterTypes() {
         return parameterTypes;
     }
-    
-}
 
+}

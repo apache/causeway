@@ -23,13 +23,12 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public interface DomainObjectServices extends Injectable {
 
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
     // Instantiate
-    /////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////
+
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
      * 
@@ -38,10 +37,7 @@ public interface DomainObjectServices extends Injectable {
      */
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
-
     ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent);
-
-    
 
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
@@ -59,10 +55,9 @@ public interface DomainObjectServices extends Injectable {
      */
     void resolve(Object parent, Object field);
 
-
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
     // flush, commit
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
 
     /**
      * Provided by <tt>TransactionManager</tt> when used by framework.
@@ -80,11 +75,10 @@ public interface DomainObjectServices extends Injectable {
      */
     void commit();
 
-
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // info, warn, error messages
-    ////////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////////
+
     /**
      * Provided by <tt>MessageBroker</tt> when used by framework.
      * 
@@ -109,14 +103,12 @@ public interface DomainObjectServices extends Injectable {
      */
     void raiseError(String message);
 
-
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // properties
-    ////////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////////
+
     /**
-     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
-     * {@link IsisConfiguration}.
+     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from {@link IsisConfiguration}.
      * 
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
@@ -124,13 +116,11 @@ public interface DomainObjectServices extends Injectable {
     String getProperty(String name);
 
     /**
-     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
-     * {@link IsisConfiguration}.
+     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from {@link IsisConfiguration}.
      * 
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     List<String> getPropertyNames();
-
 
 }

@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
-
 public abstract class DependencyInjectorAbstract implements DependencyInjector {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (DependencyInjectorAware.class.isAssignableFrom(candidate.getClass())) {
-            DependencyInjectorAware cast = DependencyInjectorAware.class.cast(candidate);
+            final DependencyInjectorAware cast = DependencyInjectorAware.class.cast(candidate);
             cast.setDependencyInjector(this);
         }
     }

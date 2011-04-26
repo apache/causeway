@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.applib.filter.Filter;
@@ -25,10 +24,10 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 
-
 public class ObjectAssociationFilters {
 
-    private ObjectAssociationFilters() {}
+    private ObjectAssociationFilters() {
+    }
 
     /**
      * Filters only fields that are for properties (ie 1:1 associations)
@@ -61,8 +60,9 @@ public class ObjectAssociationFilters {
     };
 
     /**
-     * Filters only properties that are visible statically, ie have not been unconditionally hidden at compile time.  Note this list will include 
-     * properties marked as hidden once persisted and until persisted, but not those marked hidden always.  
+     * Filters only properties that are visible statically, ie have not been unconditionally hidden at compile time.
+     * Note this list will include properties marked as hidden once persisted and until persisted, but not those marked
+     * hidden always.
      */
     public static final Filter<ObjectAssociation> STATICALLY_VISIBLE_ASSOCIATIONS = new Filter<ObjectAssociation>() {
         @Override
@@ -74,7 +74,8 @@ public class ObjectAssociationFilters {
     /**
      * Filters only properties that are visible statically, ie have not been hidden at compile time.
      */
-    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target) {
+    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session,
+        final ObjectAdapter target) {
         return new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation objectAssociation) {

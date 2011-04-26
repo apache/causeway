@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.util;
 
 import java.lang.reflect.Method;
@@ -25,29 +24,26 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public final class AdapterInvokeUtils {
-	
-	private AdapterInvokeUtils() {}
-	
+
+    private AdapterInvokeUtils() {
+    }
+
     public static Object invoke(final Method method, final ObjectAdapter adapter) {
-    	return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter));
+        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter));
     }
 
     public static void invoke(final List<Method> methods, final ObjectAdapter adapter) {
-    	InvokeUtils.invoke(methods, AdapterUtils.unwrap(adapter));
+        InvokeUtils.invoke(methods, AdapterUtils.unwrap(adapter));
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter arg0Adapter) {
-        return InvokeUtils.invoke(method, 
-        		AdapterUtils.unwrap(adapter), 
-        		new Object[] { AdapterUtils.unwrap(arg0Adapter)});
+        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter),
+            new Object[] { AdapterUtils.unwrap(arg0Adapter) });
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
-        return InvokeUtils.invoke(method, 
-        		AdapterUtils.unwrap(adapter), 
-        		AdapterUtils.unwrap(argumentAdapters));
+        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter), AdapterUtils.unwrap(argumentAdapters));
     }
 
 }

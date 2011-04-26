@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 public interface ClassSubstitutorAware {
 
     public void setClassInstrumentor(ClassSubstitutor classStrategy);
 }
-
-

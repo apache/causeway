@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.named;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public class NamedFacetInferred extends NamedFacetAbstract {
 
@@ -30,4 +28,3 @@ public class NamedFacetInferred extends NamedFacetAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
-
 
 public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {
 
@@ -39,15 +37,14 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
         return FeatureType.ACTION_PARAMETER;
     }
 
-
     @Override
     public boolean isObject() {
         return true;
     }
 
     /**
-     * TODO: need to be able to validate parameters individually, eg if have <tt>RegEx</tt> annotation;
-     * should delegate to the Check framework instead.
+     * TODO: need to be able to validate parameters individually, eg if have <tt>RegEx</tt> annotation; should delegate
+     * to the Check framework instead.
      */
     @Override
     public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
@@ -57,45 +54,44 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
-        OneToOneActionParameter specification = this;
+    public Instance getInstance(final ObjectAdapter adapter) {
+        final OneToOneActionParameter specification = this;
         return adapter.getInstance(specification);
     }
-
 
     // //////////////////////////////////////////////////////////////////////
     // get, set
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Gets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposed}, wrapping the proposed value into a {@link ObjectAdapter}.
+     * Gets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, wrapping the proposed
+     * value into a {@link ObjectAdapter}.
      */
     @Override
-    public ObjectAdapter get(ObjectAdapter owner) {
-        MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        Object proposed = proposedHolder.getProposed();
+    public ObjectAdapter get(final ObjectAdapter owner) {
+        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+        final Object proposed = proposedHolder.getProposed();
         return getAdapterMap().adapterFor(proposed);
     }
 
     /**
-     * Sets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposed}, unwrapped the proposed value from a {@link ObjectAdapter}.
+     * Sets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, unwrapped the proposed
+     * value from a {@link ObjectAdapter}.
      */
-    public void set(ObjectAdapter owner, ObjectAdapter newValue) {
-        MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        Object newValuePojo = newValue.getObject();
+    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
+        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+        final Object newValuePojo = newValue.getObject();
         proposedHolder.setProposed(newValuePojo);
     }
 
-    private MutableProposedHolder getProposedHolder(ObjectAdapter owner) {
-        Instance instance = getInstance(owner);
-        if(!(instance instanceof MutableProposedHolder)) {
+    private MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
+        final Instance instance = getInstance(owner);
+        if (!(instance instanceof MutableProposedHolder)) {
             throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
         }
-        MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
+        final MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
         return proposedHolder;
     }
 

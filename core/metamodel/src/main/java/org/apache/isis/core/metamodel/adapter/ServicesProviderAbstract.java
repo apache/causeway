@@ -16,13 +16,12 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
-
 public abstract class ServicesProviderAbstract implements ServicesProvider {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (ServicesProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            ServicesProviderAware cast = ServicesProviderAware.class.cast(candidate);
+            final ServicesProviderAware cast = ServicesProviderAware.class.cast(candidate);
             cast.setServicesProvider(this);
         }
     }

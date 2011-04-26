@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.actions.defaults;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 
 public abstract class ActionDefaultsFacetAbstract extends FacetAbstract implements ActionDefaultsFacet {
 
@@ -31,9 +29,8 @@ public abstract class ActionDefaultsFacetAbstract extends FacetAbstract implemen
         return ActionDefaultsFacet.class;
     }
 
-    public ActionDefaultsFacetAbstract(final FacetHolder holder, boolean derived) {
+    public ActionDefaultsFacetAbstract(final FacetHolder holder, final boolean derived) {
         super(type(), holder, derived);
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-
 
 public interface ObjectAssociationContainer {
 
@@ -37,16 +35,16 @@ public interface ObjectAssociationContainer {
     ObjectAssociation getAssociation(String id);
 
     /**
-     * Return all the fields that exist in an object of this specification, although they need not all be
-     * accessible or visible.
+     * Return all the fields that exist in an object of this specification, although they need not all be accessible or
+     * visible.
      */
     List<ObjectAssociation> getAssociations();
 
     /**
      * Return all {@link ObjectAssociation}s matching the supplied filter.
      * 
-     * To get the statically visible fields (where any invisible and unauthorised fields have been removed)
-     * use <tt>ObjectAssociationFilters#STATICALLY_VISIBLE_ASSOCIATIONS</tt>
+     * To get the statically visible fields (where any invisible and unauthorised fields have been removed) use
+     * <tt>ObjectAssociationFilters#STATICALLY_VISIBLE_ASSOCIATIONS</tt>
      * 
      * @see Filters
      */
@@ -58,10 +56,10 @@ public interface ObjectAssociationContainer {
     List<OneToOneAssociation> getProperties();
 
     /**
-     * All {@link ObjectAssociation association}s that represents {@link OneToManyAssociation collections}. 
+     * All {@link ObjectAssociation association}s that represents {@link OneToManyAssociation collections}.
+     * 
      * @return
      */
     List<OneToManyAssociation> getCollections();
-
 
 }

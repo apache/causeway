@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.version;
 
 import java.io.IOException;
@@ -27,9 +26,8 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
 
-
 public class SerialNumberVersion extends VersionUserAndTimeAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final long versionNumber;
 
@@ -47,32 +45,34 @@ public class SerialNumberVersion extends VersionUserAndTimeAbstract {
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
-    	super.encode(output);
+        super.encode(output);
         output.writeLong(versionNumber);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     public long getSequence() {
         return versionNumber;
     }
 
+    @Override
     public String sequence() {
         return Long.toString(versionNumber, 16);
     }
 
     // don't think is used
-//    @Override
-//    protected VersionAbstract next() {
-//        return new SerialNumberVersion(versionNumber + 1, null, null);
-//    }
+    // @Override
+    // protected VersionAbstract next() {
+    // return new SerialNumberVersion(versionNumber + 1, null, null);
+    // }
 
+    @Override
     public boolean different(final Version version) {
         if (version instanceof SerialNumberVersion) {
             final SerialNumberVersion other = (SerialNumberVersion) version;
@@ -102,6 +102,5 @@ public class SerialNumberVersion extends VersionUserAndTimeAbstract {
     public String toString() {
         return "SerialNumberVersion#" + versionNumber + " " + ToString.timestamp(getTime());
     }
-
 
 }

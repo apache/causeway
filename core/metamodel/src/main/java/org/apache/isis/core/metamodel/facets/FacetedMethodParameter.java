@@ -20,7 +20,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 public class FacetedMethodParameter extends TypedHolderDefault {
 
-    public FacetedMethodParameter(Class<?> type) {
+    public FacetedMethodParameter(final Class<?> type) {
         super(FeatureType.ACTION_PARAMETER, type);
     }
 

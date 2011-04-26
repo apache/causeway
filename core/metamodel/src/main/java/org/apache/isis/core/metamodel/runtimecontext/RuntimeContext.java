@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -39,41 +38,37 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
  */
 public interface RuntimeContext extends Injectable {
 
-    
     /**
      * A mechanism for returning the <tt>current</tt> {@link AuthenticationSession}.
      * 
      * <p>
-     * Note that the scope of {@link RuntimeContext} is global,
-     * whereas {@link AuthenticationSession} may change over time.
+     * Note that the scope of {@link RuntimeContext} is global, whereas {@link AuthenticationSession} may change over
+     * time.
      */
-	public AuthenticationSessionProvider getAuthenticationSessionProvider();
+    public AuthenticationSessionProvider getAuthenticationSessionProvider();
 
-	public QuerySubmitter getQuerySubmitter();
+    public QuerySubmitter getQuerySubmitter();
 
-	public AdapterMap getAdapterMap();
+    public AdapterMap getAdapterMap();
 
-	public ObjectInstantiator getObjectInstantiator();
+    public ObjectInstantiator getObjectInstantiator();
 
-	public SpecificationLookup getSpecificationLookup();
+    public SpecificationLookup getSpecificationLookup();
 
     public ServicesProvider getServicesProvider();
 
     public DependencyInjector getDependencyInjector();
 
-	
-	
-	public ObjectDirtier getObjectDirtier();
+    public ObjectDirtier getObjectDirtier();
 
-	public ObjectPersistor getObjectPersistor();
-	
+    public ObjectPersistor getObjectPersistor();
+
     public DomainObjectServices getDomainObjectServices();
 
-	
-	/////////////////////////////////////////////
-	// container
-	/////////////////////////////////////////////
+    // ///////////////////////////////////////////
+    // container
+    // ///////////////////////////////////////////
 
-	public void setContainer(DomainObjectContainer container);
-    
+    public void setContainer(DomainObjectContainer container);
+
 }

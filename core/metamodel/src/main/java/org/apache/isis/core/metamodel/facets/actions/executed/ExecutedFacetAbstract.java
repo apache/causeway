@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.actions.executed;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.spec.Target;
-
 
 public abstract class ExecutedFacetAbstract extends SingleValueFacetAbstract implements ExecutedFacet {
 
@@ -39,10 +37,12 @@ public abstract class ExecutedFacetAbstract extends SingleValueFacetAbstract imp
         this.value = value;
     }
 
+    @Override
     public Where value() {
         return value;
     }
 
+    @Override
     public Target getTarget() {
         if (value == Where.LOCALLY) {
             return Target.LOCAL;

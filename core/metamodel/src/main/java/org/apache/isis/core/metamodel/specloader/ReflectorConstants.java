@@ -45,15 +45,16 @@ public final class ReflectorConstants {
      * Key used to lookup implementation of {@link MetaModelValidator} in {@link IsisConfiguration}.
      */
     public static final String META_MODEL_VALIDATOR_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.validator";
-    public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault";
-
+    public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT =
+        "org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault";
 
     /**
      * Key used to lookup implementation of {@link MemberLayoutArrangerDefault} in {@link IsisConfiguration}.
      */
-    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.memberlayoutarranger";
-    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault";
-
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT
+        + "reflector.memberlayoutarranger";
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT =
+        "org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault";
 
     /**
      * Key used to lookup implementation of {@link ClassSubstitutor} in {@link IsisConfiguration}.

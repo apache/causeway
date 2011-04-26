@@ -17,20 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface Oid extends Encodable {
-    
+
     /**
      * Copies the content of the specified oid into this oid.
      * 
      * <p>
-     * After this call the {@link #hashCode()} return by both the specified object and this 
-     * object will be the same, and both objects will be {@link #equals(Object) equal}.
+     * After this call the {@link #hashCode()} return by both the specified object and this object will be the same, and
+     * both objects will be {@link #equals(Object) equal}.
      */
     void copyFrom(Oid oid);
 
@@ -43,17 +42,16 @@ public interface Oid extends Encodable {
     Oid getPrevious();
 
     /**
-     * Returns true if this oid contains a {@link #getPrevious() previous} value, specifically that the {@link Oid} was changed from
-     * transient to persistent.
+     * Returns true if this oid contains a {@link #getPrevious() previous} value, specifically that the {@link Oid} was
+     * changed from transient to persistent.
      * 
      * @see #getPrevious()
      * @see #clearPrevious()
      */
     boolean hasPrevious();
-    
-    
+
     /**
-     * Indicate that the {@link #getPrevious() previous value} has been used to remap the {@link ObjectAdapter adapter} 
+     * Indicate that the {@link #getPrevious() previous value} has been used to remap the {@link ObjectAdapter adapter}
      * and should not been cleared.
      * 
      * @see #getPrevious()

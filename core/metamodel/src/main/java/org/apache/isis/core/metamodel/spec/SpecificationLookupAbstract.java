@@ -16,17 +16,14 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-
-
 public abstract class SpecificationLookupAbstract implements SpecificationLookup {
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (SpecificationLookupAware.class.isAssignableFrom(candidate.getClass())) {
-            SpecificationLookupAware cast = SpecificationLookupAware.class.cast(candidate);
+            final SpecificationLookupAware cast = SpecificationLookupAware.class.cast(candidate);
             cast.setSpecificationLookup(this);
         }
     }
 
-    
 }

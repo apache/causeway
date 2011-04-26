@@ -16,22 +16,20 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-
 /**
- * Allows a SpecificationLookup to be provided even if the 
- * concrete implementation is only available later.
+ * Allows a SpecificationLookup to be provided even if the concrete implementation is only available later.
  */
 public class SpecificationLookupDelegator extends SpecificationLookupAbstract {
 
     private SpecificationLookup specificationLookupDelegate;
-    
-    public void setDelegate(SpecificationLookup specificationLookupDelegate) {
+
+    public void setDelegate(final SpecificationLookup specificationLookupDelegate) {
         this.specificationLookupDelegate = specificationLookupDelegate;
     }
-    
+
     @Override
-    public ObjectSpecification loadSpecification(Class<?> cls) {
-        if(specificationLookupDelegate == null) {
+    public ObjectSpecification loadSpecification(final Class<?> cls) {
+        if (specificationLookupDelegate == null) {
             throw new IllegalStateException("No SpecificationLookup provided");
         }
         return specificationLookupDelegate.loadSpecification(cls);

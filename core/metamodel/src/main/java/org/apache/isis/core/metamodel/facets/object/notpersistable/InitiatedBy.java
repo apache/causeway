@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.annotation.NotPersistable;
-import org.apache.isis.applib.annotation.NotPersistable.By;
 import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
-
 
 public final class InitiatedBy extends EnumerationAbstract {
 
@@ -57,4 +54,3 @@ public final class InitiatedBy extends EnumerationAbstract {
     }
 
 }
-

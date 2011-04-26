@@ -41,7 +41,7 @@ public class InvokeUtils {
     // //////////////////////////////////////////////////////////////
 
     public static void invoke(final List<Method> methods, final Object object) {
-        for (Method method : methods) {
+        for (final Method method : methods) {
             invoke(method, object);
         }
     }
@@ -83,7 +83,7 @@ public class InvokeUtils {
     public static void invocationException(final String error, final InvocationTargetException e) {
         final Throwable targetException = e.getTargetException();
         if (targetException instanceof ApplicationException) {
-            // an application exception from the domain code is re-thrown as an 
+            // an application exception from the domain code is re-thrown as an
             // IsisException with same semantics
             throw new IsisApplicationException(targetException);
         }

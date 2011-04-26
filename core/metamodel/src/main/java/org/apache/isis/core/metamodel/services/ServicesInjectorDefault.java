@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services;
-
-
 
 public class ServicesInjectorDefault extends ServicesInjectorAbstract {
 
@@ -28,4 +25,3 @@ public class ServicesInjectorDefault extends ServicesInjectorAbstract {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.progmodel;
 
 import java.util.ArrayList;
@@ -27,31 +26,33 @@ import java.util.List;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
-
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     private final List<FacetFactory> facetFactories = new ArrayList<FacetFactory>();
-    private final List<Class<? extends FacetFactory>> facetFactoryClasses = new ArrayList<Class<? extends FacetFactory>>();
+    private final List<Class<? extends FacetFactory>> facetFactoryClasses =
+        new ArrayList<Class<? extends FacetFactory>>();
 
+    @Override
     public final List<FacetFactory> getList() {
         return Collections.unmodifiableList(facetFactories);
     }
 
+    @Override
     public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
         facetFactoryClasses.add(factoryClass);
     }
 
+    @Override
     public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
         facetFactoryClasses.remove(factoryClass);
     }
 
-
+    @Override
     public void init() {
-    	for(Class<? extends FacetFactory> factoryClass: facetFactoryClasses) {
-    		FacetFactory facetFactory = 
-    			(FacetFactory) InstanceUtil.createInstance(factoryClass);
-    		facetFactories.add(facetFactory);
-    	}
+        for (final Class<? extends FacetFactory> factoryClass : facetFactoryClasses) {
+            final FacetFactory facetFactory = (FacetFactory) InstanceUtil.createInstance(factoryClass);
+            facetFactories.add(facetFactory);
+        }
     }
 
 }

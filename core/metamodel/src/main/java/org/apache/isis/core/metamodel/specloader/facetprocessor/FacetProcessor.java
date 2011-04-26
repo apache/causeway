@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.facetprocessor;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -26,14 +25,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ListUtils;
@@ -41,29 +36,30 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class FacetProcessor implements RuntimeContextAware {
 
     private final IsisConfiguration configuration;
     private final CollectionTypeRegistry collectionTypeRegistry;
     private final ProgrammingModel programmingModel;
-    
-	private RuntimeContext runtimeContext;
 
+    private RuntimeContext runtimeContext;
 
     /**
      * Class<FacetFactory> => FacetFactory
@@ -71,8 +67,7 @@ public class FacetProcessor implements RuntimeContextAware {
     private final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType = Maps.newHashMap();
 
     /**
-     * {@link FacetFactory Facet factories}, in order they were {@link #registerFactory(FacetFactory)
-     * registered}.
+     * {@link FacetFactory Facet factories}, in order they were {@link #registerFactory(FacetFactory) registered}.
      */
     private final List<FacetFactory> factories = Lists.newArrayList();
 
@@ -99,8 +94,7 @@ public class FacetProcessor implements RuntimeContextAware {
     private List<MethodFilteringFacetFactory> cachedMethodFilteringFactories;
 
     /**
-     * All registered {@link FacetFactory factories} that implement
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}.
+     * All registered {@link FacetFactory factories} that implement {@link PropertyOrCollectionIdentifyingFacetFactory}.
      * 
      * <p>
      * Used within {@link #recognizes(Method)}.
@@ -119,24 +113,21 @@ public class FacetProcessor implements RuntimeContextAware {
      */
     private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
-    
-    public FacetProcessor(
-    		final IsisConfiguration configuration, 
-    		final CollectionTypeRegistry collectionTypeRegistry, 
-    		final ProgrammingModel programmingModel) {
+    public FacetProcessor(final IsisConfiguration configuration, final CollectionTypeRegistry collectionTypeRegistry,
+        final ProgrammingModel programmingModel) {
         ensureThatState(configuration, is(notNullValue()));
         ensureThatState(collectionTypeRegistry, is(notNullValue()));
         ensureThatState(programmingModel, is(notNullValue()));
-    	
-    	this.configuration = configuration;
-    	this.programmingModel = programmingModel;
-    	this.collectionTypeRegistry = collectionTypeRegistry;
+
+        this.configuration = configuration;
+        this.programmingModel = programmingModel;
+        this.collectionTypeRegistry = collectionTypeRegistry;
     }
-    
-    ////////////////////////////////////////////////////
+
+    // //////////////////////////////////////////////////
     // init, shutdown (application scoped)
-    ////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////
+
     public void init() {
         ensureThatState(runtimeContext, is(notNullValue()));
         programmingModel.init();
@@ -146,45 +137,44 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
-	public void shutdown() {
-	}
+    public void shutdown() {
+    }
 
     public void registerFactory(final FacetFactory factory) {
         clearCaches();
         factoryByFactoryType.put(factory.getClass(), factory);
         factories.add(factory);
-        
+
         injectDependenciesInto(factory);
     }
 
     /**
-     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt> processing. 
-     *
+     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt> processing.
+     * 
      * <p>
      * See NOF bug-517.
      */
-	public void injectDependenciesInto(final FacetFactory factory) {
-		getCollectionTypeRepository().injectInto(factory);
+    public void injectDependenciesInto(final FacetFactory factory) {
+        getCollectionTypeRepository().injectInto(factory);
         getIsisConfiguration().injectInto(factory);
-		
-        // cascades all the subcomponents also
-        getRuntimeContext().injectInto(factory); 
-	}
 
-	public FacetFactory getFactoryByFactoryType(final Class<? extends FacetFactory> factoryType) {
+        // cascades all the subcomponents also
+        getRuntimeContext().injectInto(factory);
+    }
+
+    public FacetFactory getFactoryByFactoryType(final Class<? extends FacetFactory> factoryType) {
         return factoryByFactoryType.get(factoryType);
     }
 
     /**
-     * Appends to the supplied {@link Set} all of the {@link Method}s that may represent a property or
-     * collection.
+     * Appends to the supplied {@link Set} all of the {@link Method}s that may represent a property or collection.
      * 
      * <p>
      * Delegates to all known {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
     public Set<Method> findAssociationCandidateAccessors(final List<Method> methods, final Set<Method> candidates) {
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
-        for (Method method: methods) {
+        for (final Method method : methods) {
             if (method == null) {
                 continue;
             }
@@ -198,54 +188,51 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * Use the provided {@link MethodRemover} to have all known
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all property accessors, and append them
-     * to the supplied methodList.
+     * Use the provided {@link MethodRemover} to have all known {@link PropertyOrCollectionIdentifyingFacetFactory}s to
+     * remove all property accessors, and append them to the supplied methodList.
      * 
      * <p>
-     * Intended to be called after {@link #findAndRemoveValuePropertyAccessors(MethodRemover, List)} once only
-     * reference properties remain.
+     * Intended to be called after {@link #findAndRemoveValuePropertyAccessors(MethodRemover, List)} once only reference
+     * properties remain.
      * 
-     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveValuePropertyAccessors(MethodRemover,
-     *      List)
+     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveValuePropertyAccessors(MethodRemover, List)
      */
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-    	cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
+    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover,
+        final List<Method> methodListToAppendTo) {
+        cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
         for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
         }
     }
 
     /**
-     * Use the provided {@link MethodRemover} to have all known
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all property accessors, and append them
-     * to the supplied methodList.
+     * Use the provided {@link MethodRemover} to have all known {@link PropertyOrCollectionIdentifyingFacetFactory}s to
+     * remove all property accessors, and append them to the supplied methodList.
      * 
      * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveCollectionAccessors(MethodRemover, List)
      */
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover,
+        final List<Method> methodListToAppendTo) {
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
         for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
         }
     }
 
-
     /**
      * Whether this {@link Method method} is recognized by any of the {@link FacetFactory}s.
      * 
      * <p>
-     * Typically this is when method has a specific prefix, such as <tt>validate</tt> or <tt>hide</tt>.
-     * Specifically, it checks:
+     * Typically this is when method has a specific prefix, such as <tt>validate</tt> or <tt>hide</tt>. Specifically, it
+     * checks:
      * <ul>
      * <li>the method's prefix against the prefixes supplied by any {@link MethodPrefixBasedFacetFactory}</li>
      * <li>the method against any {@link MethodFilteringFacetFactory}</li>
      * </ul>
      * 
      * <p>
-     * The design of {@link MethodPrefixBasedFacetFactory} (whereby this facet factory set does the work) is a
-     * slight performance optimization for when there are multiple facet factories that search for the same
-     * prefix.
+     * The design of {@link MethodPrefixBasedFacetFactory} (whereby this facet factory set does the work) is a slight
+     * performance optimization for when there are multiple facet factories that search for the same prefix.
      */
     public boolean recognizes(final Method method) {
         cacheMethodPrefixesIfRequired();
@@ -267,8 +254,8 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * Attaches all facets applicable to the provided {@link FeatureType#OBJECT object}) to the
-     * supplied {@link FacetHolder}.
+     * Attaches all facets applicable to the provided {@link FeatureType#OBJECT object}) to the supplied
+     * {@link FacetHolder}.
      * 
      * <p>
      * Delegates to {@link FacetFactory#process(Class, FacetHolder)} for each appropriate factory.
@@ -289,8 +276,8 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * Attaches all facets applicable to the provided {@link FeatureType type of feature} to the
-     * supplied {@link FacetHolder}.
+     * Attaches all facets applicable to the provided {@link FeatureType type of feature} to the supplied
+     * {@link FacetHolder}.
      * 
      * <p>
      * Delegates to {@link FacetFactory#process(Method, FacetHolder)} for each appropriate factory.
@@ -298,7 +285,8 @@ public class FacetProcessor implements RuntimeContextAware {
      * @see FacetFactory#process(Method, FacetHolder)
      * 
      * @param cls
-     *           - class in which introspect; allowing the helper methods to be found is subclasses of that which the method was originally found.
+     *            - class in which introspect; allowing the helper methods to be found is subclasses of that which the
+     *            method was originally found.
      * @param method
      *            - method to process
      * @param facetedMethod
@@ -306,21 +294,18 @@ public class FacetProcessor implements RuntimeContextAware {
      * @param featureType
      *            - what type of feature the method represents (property, action, collection etc)
      */
-    public void process(
-            final Class<?> cls,
-            final Method method,
-            final MethodRemover methodRemover,
-            final FacetedMethod facetedMethod,
-            final FeatureType featureType) {
+    public void process(final Class<?> cls, final Method method, final MethodRemover methodRemover,
+        final FacetedMethod facetedMethod, final FeatureType featureType) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessMethodContext(cls, method, removerElseNullRemover(methodRemover), facetedMethod));
+            facetFactory.process(new ProcessMethodContext(cls, method, removerElseNullRemover(methodRemover),
+                facetedMethod));
         }
     }
 
     /**
-     * Attaches all facets applicable to the provided {@link FeatureType#ACTION_PARAMETER
-     * parameter}), to the supplied {@link FacetHolder}.
+     * Attaches all facets applicable to the provided {@link FeatureType#ACTION_PARAMETER parameter}), to the supplied
+     * {@link FacetHolder}.
      * 
      * <p>
      * Delegates to {@link FacetFactory#processParams(ProcessParameterContext)} for each appropriate factory.
@@ -334,7 +319,8 @@ public class FacetProcessor implements RuntimeContextAware {
      * @param facetedMethodParameter
      *            - holder to attach facets to.
      */
-    public void processParams(final Method method, final int paramNum, final FacetedMethodParameter facetedMethodParameter) {
+    public void processParams(final Method method, final int paramNum,
+        final FacetedMethodParameter facetedMethodParameter) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
         for (final FacetFactory facetFactory : factoryList) {
             facetFactory.processParams(new ProcessParameterContext(method, paramNum, facetedMethodParameter));
@@ -360,7 +346,7 @@ public class FacetProcessor implements RuntimeContextAware {
         factoryListByFeatureType = Maps.newHashMap();
         for (final FacetFactory factory : factories) {
             final List<FeatureType> featureTypes = factory.getFeatureTypes();
-            for (FeatureType featureType: featureTypes) {
+            for (final FeatureType featureType : featureTypes) {
                 final List<FacetFactory> factoryList = getList(factoryListByFeatureType, featureType);
                 factoryList.add(factory);
             }
@@ -374,7 +360,8 @@ public class FacetProcessor implements RuntimeContextAware {
         cachedMethodPrefixes = Lists.newArrayList();
         for (final FacetFactory facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
-                final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
+                final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory =
+                    (MethodPrefixBasedFacetFactory) facetFactory;
                 ListUtils.merge(cachedMethodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
             }
         }
@@ -402,7 +389,8 @@ public class FacetProcessor implements RuntimeContextAware {
         while (iter.hasNext()) {
             final FacetFactory factory = iter.next();
             if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
-                final PropertyOrCollectionIdentifyingFacetFactory identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
+                final PropertyOrCollectionIdentifyingFacetFactory identifyingFacetFactory =
+                    (PropertyOrCollectionIdentifyingFacetFactory) factory;
                 cachedPropertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
             }
         }
@@ -422,7 +410,6 @@ public class FacetProcessor implements RuntimeContextAware {
         return methodRemover != null ? methodRemover : MethodRemoverConstants.NULL;
     }
 
-    
     // ////////////////////////////////////////////////////////////////////
     // Dependencies (injected in constructor)
     // ////////////////////////////////////////////////////////////////////
@@ -430,26 +417,26 @@ public class FacetProcessor implements RuntimeContextAware {
     private IsisConfiguration getIsisConfiguration() {
         return configuration;
     }
+
     private CollectionTypeRegistry getCollectionTypeRepository() {
         return collectionTypeRegistry;
     }
-
 
     // ////////////////////////////////////////////////////////////////////
     // Dependencies (injected via setter due to *Aware)
     // ////////////////////////////////////////////////////////////////////
 
     private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-    /**
-     * Injected so can propogate to any {@link #registerFactory(FacetFactory) registered} {@link FacetFactory}
-     * s that are also {@link RuntimeContextAware}.
-     */
-	@Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-	}
+        return runtimeContext;
+    }
 
+    /**
+     * Injected so can propogate to any {@link #registerFactory(FacetFactory) registered} {@link FacetFactory} s that
+     * are also {@link RuntimeContextAware}.
+     */
+    @Override
+    public void setRuntimeContext(final RuntimeContext runtimeContext) {
+        this.runtimeContext = runtimeContext;
+    }
 
 }

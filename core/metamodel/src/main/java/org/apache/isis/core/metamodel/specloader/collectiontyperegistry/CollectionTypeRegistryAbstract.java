@@ -17,36 +17,30 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader.collectiontyperegistry;
-
-
-
 
 public abstract class CollectionTypeRegistryAbstract implements CollectionTypeRegistry {
 
-
+    /**
+     * Default implementation does nothing.
+     */
+    @Override
+    public void init() {
+    }
 
     /**
      * Default implementation does nothing.
      */
-	public void init() {
-	}
+    @Override
+    public void shutdown() {
+    }
 
-    /**
-     * Default implementation does nothing.
-     */
-	public void shutdown() {
-	}
-
-	
-	
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (CollectionTypeRegistryAware.class.isAssignableFrom(candidate.getClass())) {
-            CollectionTypeRegistryAware cast = CollectionTypeRegistryAware.class.cast(candidate);
+            final CollectionTypeRegistryAware cast = CollectionTypeRegistryAware.class.cast(candidate);
             cast.setCollectionTypeRegistry(this);
         }
     }
 
 }
-

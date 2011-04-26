@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -32,10 +31,11 @@ public class Veto extends ConsentAbstract {
     public static Veto DEFAULT = new Veto("Vetoed by default");
 
     /**
-     * Called by DnD viewer; we should instead find a way to put the calling logic into {@link Facet}s so that
-     * it is available for use by other viewers.
+     * Called by DnD viewer; we should instead find a way to put the calling logic into {@link Facet}s so that it is
+     * available for use by other viewers.
      * 
-     * @param reasonVeteod - must not be <tt>null</tt>
+     * @param reasonVeteod
+     *            - must not be <tt>null</tt>
      */
     public Veto(final String reasonVetoed) {
         super(null, ensureThatArg(reasonVetoed, nonEmptyString()));

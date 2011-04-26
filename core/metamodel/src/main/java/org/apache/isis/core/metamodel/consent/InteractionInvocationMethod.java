@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.consent;
 
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
