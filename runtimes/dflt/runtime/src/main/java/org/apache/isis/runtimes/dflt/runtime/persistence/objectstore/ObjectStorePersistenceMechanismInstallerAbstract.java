@@ -27,7 +27,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.runtimes.dflt.runtime.logging.Logger;
+import org.apache.isis.core.runtime.logging.Logger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;

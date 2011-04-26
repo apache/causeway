@@ -57,7 +57,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerat
 public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements
     PersistenceMechanismInstaller, InstallerLookupAware {
 
-    private static final String LOGGING_PROPERTY = org.apache.isis.runtimes.dflt.runtime.logging.Logger.PROPERTY_ROOT
+    private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT
         + "persistenceSession";
     private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
 

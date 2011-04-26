@@ -46,14 +46,16 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.Maps;
+
 
 public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
 
     private static final Logger LOG = Logger.getLogger(FileAuthorizor.class);
 
     private static final String NONE = "";
-    private static final String RO = "-ro";
-    private static final String RW = "-rw";
+    private static final String ACCESS_QUALIFIER_RO = "-ro";
+    private static final String ACCESS_QUALIFIER_RW = "-rw";
     
     private Map<String,List<String>> whiteListMap;
     private Map<String,List<String>> blackListMap;
@@ -79,7 +81,7 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     	this.learn = getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
         whiteListResourceName = getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
         Assert.assertTrue(whiteListResourceName.length() > 0);
-        blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
+        blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
         
         findResources();
     }
@@ -113,8 +115,8 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (learn) {
             return;
         }
-        whiteListMap = new HashMap<String,List<String>>();
-        blackListMap = new HashMap<String,List<String>>();
+        whiteListMap = Maps.newHashMap();
+        blackListMap = Maps.newHashMap();
         cacheAuthorizationDetails(whiteListMap, whiteListInputResource);
         if (blackListInputResource != null) {
             cacheAuthorizationDetails(blackListMap, blackListInputResource);
@@ -124,8 +126,8 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     }
 
     public void reload() {
-        Map<String,List<String>> whiteListMap = new HashMap<String,List<String>>();
-        Map<String,List<String>> blackListMap = new HashMap<String,List<String>>();
+        Map<String,List<String>> whiteListMap = Maps.newHashMap();
+        Map<String,List<String>> blackListMap = Maps.newHashMap();
 
         findResources();
         cacheAuthorizationDetails(whiteListMap, whiteListInputResource);
@@ -198,15 +200,15 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
 
     @Override
     public boolean isUsableInRole(final String role, final Identifier member) {
-        return isAuthorized(role, member, new String[] { NONE, RW });
+        return isAuthorized(role, member, Arrays.asList(NONE, ACCESS_QUALIFIER_RW));
     }
 
     @Override
     public boolean isVisibleInRole(final String role, final Identifier member) {
-        return isAuthorized(role, member, new String[] { NONE, RO, RW });
+        return isAuthorized(role, member, Arrays.asList(NONE, ACCESS_QUALIFIER_RO, ACCESS_QUALIFIER_RW));
     }
 
-    private boolean isAuthorized(final String role, final Identifier member, final String[] qualifiers) {
+    private boolean isAuthorized(final String role, final Identifier member, final List<String> qualifiers) {
         if (learn) {
             return learn(role, member);
         }
@@ -214,15 +216,15 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
               !isBlackListed(role, member, qualifiers);
     }
 
-    private boolean isWhiteListed(final String role, final Identifier member, final String[] qualifiers) {
+    private boolean isWhiteListed(final String role, final Identifier member, final List<String> qualifiers) {
         return isListed(whiteListMap, role, member, qualifiers);
     }
 
-    private boolean isBlackListed(final String role, final Identifier member, final String[] qualifiers) {
+    private boolean isBlackListed(final String role, final Identifier member, final List<String> qualifiers) {
         return isListed(blackListMap, role, member, qualifiers);
     }
 
-    private boolean isListed(final Map<String,List<String>> map, final String role, final Identifier identifier, final String[] qualifiers) {
+    private boolean isListed(final Map<String,List<String>> map, final String role, final Identifier identifier, final List<String> qualifiers) {
         if (map.isEmpty()) {// quick fail
             return false;
         }
@@ -238,11 +240,11 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         return false;
     }
 
-    private boolean isQualifiedMatch(final Map<String,List<String>> map, final String role, final String key, final String[] qualifiers) {
+    private boolean isQualifiedMatch(final Map<String,List<String>> map, final String role, final String key, final List<String> qualifiers) {
         if (map.containsKey(key)) {
             final List<String> roles = map.get(key);
-            for (int i = 0; i < qualifiers.length; i++) {
-                final String qualifiedRole = role + qualifiers[i];
+            for (final String qualifier: qualifiers) {
+                final String qualifiedRole = role + qualifier;
                 if (roles.contains(qualifiedRole)) {
                     return true;
                 }

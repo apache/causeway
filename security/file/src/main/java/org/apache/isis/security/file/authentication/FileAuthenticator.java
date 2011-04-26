@@ -36,6 +36,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 
 public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
@@ -51,7 +52,7 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
     public final boolean isValid(final AuthenticationRequest request) {
         final AuthenticationRequestPassword passwordRequest = (AuthenticationRequestPassword) request;
         final String username = passwordRequest.getName();
-        if (username == null || username.equals("")) {
+        if (Strings.isNullOrEmpty(username)) {
             return false;
         }
         final String password = passwordRequest.getPassword();
@@ -79,13 +80,13 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
                 
                 return isPasswordValidForUser(request, password, line);
             }
+            return false;
         } catch (final IOException e) {
             throw new IsisException("Failed to read password file: " + FileAuthenticationConstants.PASSWORDS_FILE + " from " + resourceStreamSource.getName());
         } finally {
         	IoUtils.closeSafely(reader);
         }
 
-        return false;
     }
 
 	private boolean commentedOutOrEmpty(String line) {

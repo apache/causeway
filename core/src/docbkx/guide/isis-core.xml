@@ -2553,6 +2553,292 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
     }
 }</programlisting>
     </sect1>
+
+    <sect1>
+      <title>Logging Support</title>
+
+      <sect2>
+        <title>Snapshot appenders</title>
+
+        <para>The framework provides a number of appenders that create a
+        snapshot of the recently logged events instead of capturing all events
+        since the system started. The benefits here are twofold. First,
+        writing to the appenders is minimised as they are only written when
+        errors occur or the user demands it. Second, the partial log can be
+        automatically sent over the network to someone who needs to know when
+        things have gone wrong.</para>
+
+        <para>All the snapshot appends support the same basic
+        properties:-</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis> <methodname>addInfo</methodname>
+            </emphasis></para>
+
+            <para>(boolean) indicates whether to prepend details about the
+            machine, os and Java to log, eg</para>
+
+            <programlisting format="linespecific">Snapshot:- Thu Dec 01 14:34:24 GMT 2005
+  R Matthews
+  Windows XP (x86) 5.1
+  Java HotSpot(TM) Client VM 1.4.2_04-b05
+  Version  000000</programlisting>
+          </listitem>
+
+          <listitem>
+            <para><emphasis> <methodname>bufferSize</methodname>
+            </emphasis></para>
+
+            <para>(integer) the number of events to write out to the snapshot.
+            Defaults to 512 events.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis> <methodname>locationInfo</methodname>
+            </emphasis></para>
+
+            <para>(boolean) whether to capture the details of where in the
+            code the event was generated. Note - capturing this information
+            can be quite expensive.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis> <methodname>evaluatorClass</methodname>
+            </emphasis></para>
+
+            <para>(<classname>org.apache.log4j.spi.TriggeringEventEvaluator</classname>)
+            a trigger that determines when a snapshot should be created. The
+            trigger object is given each event that is logged and flags when
+            to produce a snapsho.</para>
+
+            <para>When not trigger is specified a default trigger is applied
+            that triggers a snapshot when an event of level ERROR or FATAL
+            occurs.</para>
+          </listitem>
+        </itemizedlist>
+
+        <sect3>
+          <title>File snapshot appender</title>
+
+          <para>The <classname>FileSnapshotAppender</classname> writes the
+          snapshot to timestamped file. The following properties can be
+          specified:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis><methodname>directory</methodname></emphasis></para>
+
+              <para>The directory path where the files are to be created. If
+              none is specified then the working directory will be
+              used.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>extension</methodname></emphasis></para>
+
+              <para>The extension type to append to the file name.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>fileName</methodname></emphasis></para>
+
+              <para>The base name of the log file, which will have timestamp
+              appended. Defaults to 'log-snapshot-'.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The following example writes xml snapshots to the logs
+          directory to files ending with '.xml'.</para>
+
+          <programlisting format="linespecific">log4j.appender.Snapshot=org.apache.isis.utility.logging.FileSnapshotAppender
+log4j.appender.Snapshot.bufferSize=1024
+log4j.appender.Snapshot.addInfo=true
+log4j.appender.Snapshot.locationInfo=true
+log4j.appender.Snapshot.directory=logs
+log4j.appender.Snapshot.extension=xml
+log4j.appender.Snapshot.layout=org.apache.log4j.xml.XMLLayout</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Popup snapshot appender</title>
+
+          <para>The <classname>PopupSnapshotAppender</classname> displays a
+          popup dialog showing the snapshot. Do not use this on a server as
+          there will be no one sitting in front of it to see it. It has no
+          properties so its configuration is short.</para>
+
+          <programlisting format="linespecific">log4j.appender.Popup=org.apache.isis.utility.logging.PopupSnapshotAppender
+log4j.appender.Popup.layout=org.apache.log4j.PatternLayout
+log4j.appender.Popup.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  %m%n
+</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Email snapshot appender</title>
+
+          <para>The <classname>SmtpSnapshotAppender</classname> generates an
+          email with the snapshot in it and sends it to a specified recipient.
+          The following properties can be specified:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis><methodname>server</methodname></emphasis></para>
+
+              <para>Address of the email server</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>port</methodname></emphasis></para>
+
+              <para>The port the server listen on for SMTP requests. Defaults
+              to port 25.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>recipient</methodname></emphasis></para>
+
+              <para>Email address to send the snapshot to.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>domain</methodname></emphasis></para>
+
+              <para>The address that client connects to the server with. Some
+              email servers validate the sender's address in the MAIL FROM
+              command so you may need to specify a real address here.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The following example sends a short HTML snapshot logs to
+          logs@support.acme.com, via the email server at my.emailserver.com
+          using port 25.</para>
+
+          <programlisting format="linespecific">log4j.appender.EmailSnapshot=org.apache.isis.utility.logging.SmtpSnapshotAppender
+log4j.appender.EmailSnapshot.bufferSize=50
+log4j.appender.EmailSnapshot.addInfo=true
+log4j.appender.EmailSnapshot.server=my.emailserver.com
+log4j.appender.EmailSnapshot.port=25
+log4j.appender.EmailSnapshot.recipient=logs@support.acme.com
+log4j.appender.EmailSnapshot.layout=org.apache.log4j.HTMLLayout</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Socket snapshot appender</title>
+
+          <para>The <classname>SocketSnapshotAppender</classname> establishes
+          a socket connection to a server and passes across the the snapshot.
+          This is designed to be used with
+          <classname>SnapshotServer</classname>, which collects collects
+          snapshots from multiple clients.</para>
+
+          <para>The following example sends an XML snapshot to a server on a
+          private network.</para>
+
+          <programlisting format="linespecific">log4j.appender.SocketSnapshot=org.apache.isis.utility.logging.SocketSnapshotAppender
+log4j.appender.SocketSnapshot.bufferSize=1024
+log4j.appender.SocketSnapshot.addInfo=true
+log4j.appender.SocketSnapshot.server=191.168.1.1
+log4j.appender.SocketSnapshot.port=12345
+log4j.appender.SocketSnapshot.layout=org.apache.log4j.xml.XMLLayout</programlisting>
+
+          <para>The snaphot server should be directed to a maching running the
+          server. The server is run using the following command:</para>
+
+          <screen format="linespecific">java -cp isis.jar org.apache.isis.utility.logging.SnapshotServer</screen>
+
+          <para>The server needs a properties file with the following
+          properties defined (with the prefix
+          <methodname>isis.snapshotserver.</methodname>):-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis><methodname>server</methodname></emphasis></para>
+
+              <para>Address of the server.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>port</methodname></emphasis></para>
+
+              <para>The port the server listens on for logging requests.
+              Defaults to port 9289.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>directory</methodname></emphasis></para>
+
+              <para>The directory path where the transferred files are to be
+              saved. If none is specified then the working directory will be
+              used.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>fileName</methodname></emphasis></para>
+
+              <para>The base name of the log file, which will have timestamp
+              appended. Defaults to 'log-snapshot-'.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>extension</methodname></emphasis></para>
+
+              <para>The extension type to append to the file name.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>An example configuration would be:-</para>
+
+          <programlisting format="linespecific">isis.snapshotserver.port=12345
+isis.snapshotserver.directory=logs
+isis.snapshotserver.filename=log
+isis.snapshotserver.extension=xml</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Web snapshot appender</title>
+
+          <para>The <classname>WebSnapshotAppender</classname> sends the
+          snapshot to a web server. The following properties can be
+          specified:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis><methodname>url</methodname></emphasis></para>
+
+              <para>URL of server to post data to (including the protocol
+              'http').</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>proxyAddress</methodname></emphasis></para>
+
+              <para>Address of web proxy if one is being used.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis><methodname>proxyPort</methodname></emphasis></para>
+
+              <para>Port of proxy server.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The following example sends a default length snapshot to the
+          webserver.</para>
+
+          <programlisting format="linespecific">log4j.appender.Remote=org.apache.isis.utility.logging.WebSnapshotAppender
+log4j.appender.Remote.addInfo=true
+log4j.appender.Remote.locationInfo=true
+log4j.appender.Remote.url=http://192.168.1.3/support/test.php
+log4j.appender.Remote.layout=org.apache.log4j.HTMLLayout</programlisting>
+
+          <para>This appender use the HTTP POST method to upload the data. It
+          passes up a message and the snapshot as two parameters to the
+          request: <varname>error</varname> and
+          <varname>trace</varname>.</para>
+        </sect3>
+      </sect2>
+    </sect1>
   </chapter>
 
   <chapter>

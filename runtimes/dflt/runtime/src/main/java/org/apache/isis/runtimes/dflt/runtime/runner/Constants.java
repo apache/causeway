@@ -21,6 +21,7 @@
 package org.apache.isis.runtimes.dflt.runtime.runner;
 
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.runtime.logging.LoggingConstants;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.remoting.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -76,9 +77,10 @@ public final class Constants {
 
     public static final String DIAGNOSTICS_OPT = "diagnostics";
     public static final String VERSION_OPT = "version";
-    public static final String DEBUG_OPT = "debug";
-    public static final String VERBOSE_OPT = "verbose";
-    public static final String QUIET_OPT = "quiet";
+    
+    public static final String DEBUG_OPT = LoggingConstants.DEBUG_OPT;
+    public static final String VERBOSE_OPT = LoggingConstants.VERBOSE_OPT;
+    public static final String QUIET_OPT = LoggingConstants.QUIET_OPT;
     
     public static final String ADDITIONAL_PROPERTY = "D";
 

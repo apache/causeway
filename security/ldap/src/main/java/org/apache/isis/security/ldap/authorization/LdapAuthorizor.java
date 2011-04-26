@@ -49,7 +49,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
     private static final Logger LOG = Logger.getLogger(LdapAuthorizor.class);
     
     private static final String FILTER = "(&(uniquemember={0}) (|(cn={1}) (cn={2}) (cn={3})))";
-    private static final String RW = "RW";
+    private static final String ACCESS_QUALIFIER_RW = "RW";
     
     private final String ldapProvider;
     @SuppressWarnings("unused")
@@ -85,7 +85,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
     //////////////////////////////////////////////////////////
 
     public boolean isUsableInRole(final String role, final Identifier member) {
-        return isAuthorised(role, member, RW);
+        return isAuthorised(role, member, ACCESS_QUALIFIER_RW);
     }
 
     public boolean isVisibleInRole(final String role, final Identifier member) {

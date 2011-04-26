@@ -18,12 +18,27 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.runtime.logging;
+package org.apache.isis.security.dflt.authorization;
 
-public final class LoggingConstants {
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+
+public class AuthorizorNoop implements Authorizor {
+
+	public void init() {
+		// does nothing
+	}
 	
-	public static final String LOGGING_CONFIG_FILE = "logging.properties";
+	public void shutdown() {
+		// does nothing
+	}
+	
+	public boolean isUsableInRole(String role, Identifier identifier) {
+		return true;
+	}
 
-	private LoggingConstants() {}
+	public boolean isVisibleInRole(String user, Identifier identifier) {
+		return true;
+	}
 
 }

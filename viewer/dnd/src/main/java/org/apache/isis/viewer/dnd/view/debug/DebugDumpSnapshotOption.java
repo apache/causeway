@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.runtimes.dflt.runtime.logging.SnapshotAppender;
+import org.apache.isis.core.runtime.logging.SnapshotAppender;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;

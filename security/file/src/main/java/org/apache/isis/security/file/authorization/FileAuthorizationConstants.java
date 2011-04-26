@@ -32,7 +32,7 @@ public final class FileAuthorizationConstants {
 	public static final String WHITELIST_RESOURCE_KEY = ROOT + "whitelist";
 	public static final String WHITELIST_RESOURCE_DEFAULT = "security_file.allow";
 	
-	public static final String BLACKLIST_RESOURCE = ROOT + "blacklist";
+	public static final String BLACKLIST_RESOURCE_KEY = ROOT + "blacklist";
 	public static final String BLACKLIST_RESOURCE_DEFAULT = "";
 	
 	public static final String LEARN = AuthorizationConstants.LEARN;

@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.runtime.logging;
+package org.apache.isis.core.runtime.logging;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -36,7 +36,7 @@ public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
     }
 
     public boolean isValid(AuthenticationRequest request) {
-        return false;
+        return true;
     }
 
 }

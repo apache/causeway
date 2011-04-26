@@ -18,13 +18,14 @@
  */
 
 
-package org.apache.isis.runtimes.dflt.runtime.logging;
+package org.apache.isis.core.runtime.logging;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
@@ -33,9 +34,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
-
-import org.apache.isis.core.commons.lang.IoUtils;
-import org.apache.isis.runtimes.dflt.runtime.runner.Constants;
 
 
 public class IsisLoggingConfigurer {
@@ -118,13 +116,13 @@ public class IsisLoggingConfigurer {
     private static Level loggingLevel(final String[] args) {
         Level level = null;
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-" + Constants.DEBUG_OPT)) {
+            if (args[i].equals("-" + LoggingConstants.DEBUG_OPT)) {
                 level = Level.DEBUG;
                 break;
-            } else if (args[i].equals("-" + Constants.QUIET_OPT)) {
+            } else if (args[i].equals("-" + LoggingConstants.QUIET_OPT)) {
                 level = Level.ERROR;
                 break;
-            } else if (args[i].equals("-" + Constants.VERBOSE_OPT)) {
+            } else if (args[i].equals("-" + LoggingConstants.VERBOSE_OPT)) {
                 level = Level.INFO;
                 break;
             }

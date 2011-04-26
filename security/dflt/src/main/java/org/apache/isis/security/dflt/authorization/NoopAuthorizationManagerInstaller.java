@@ -33,7 +33,7 @@ public class NoopAuthorizationManagerInstaller extends
  
 	@Override
 	protected Authorizor createAuthorizor(IsisConfiguration configuration) {
-		return new NoopAuthorizor();
+		return new AuthorizorNoop();
 	}
 
 }
