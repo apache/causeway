@@ -146,8 +146,8 @@
       <title>Mappers</title>
 
       <para>The mappers take care of mapping a value type onto a SQL data
-      type. Default mappers are provided by JdbcFieldMappingFactoryInstaller.
-      </para>
+      type. Default mappers are provided by
+      JdbcFieldMappingFactoryInstaller.</para>
 
       <sect2>
         <title>Modifiable values</title>
@@ -228,6 +228,17 @@
         the default value mappers are written assuming the default values.
         Data parsing uses prepared statements and reads/writes values as
         objects.</para>
+      </sect2>
+
+      <sect2>
+        <title>Floating Point Value Limits</title>
+
+        <para><emphasis>Caution:</emphasis> Testing on certain database
+        servers (MySQL and PostgreSQL) has shown that <code>float</code>s and
+        <code>double</code>s (stored as <code>FLOAT</code> or <code>DOUBLE
+        PRECISION</code> respectively) are not stored to the same resolution
+        as supported by Java. The tested range of float is 1E-37 to 1E38, and
+        the tested range of double is 1E-307 to 1E308.</para>
       </sect2>
 
       <sect2>
@@ -378,9 +389,11 @@
         replaced with the following properties file entries:</para>
 
         <blockquote>
-          <para>isis.persistor.sql.datatypes.timestamp=TIMESTAMP </para>
+          <para>isis.persistor.sql.datatypes.timestamp=TIMESTAMP</para>
 
           <para>isis.persistor.sql.datatypes.datetime=TIMESTAMP</para>
+
+          <para>isis.persistor.sql.datatypes.double=DOUBLE PRECISION</para>
         </blockquote>
 
         <para></para>
@@ -392,12 +405,21 @@
         <para>There was an issue with storing and correctly retrieving date
         (time) values - a special "try .. catch" has been used to ensure that
         UTC temporal values are correctly retrieved.</para>
+
+        <para>The following data type overrides may be required:</para>
+
+        <blockquote>
+          <para>isis.persistor.sql.datatypes.double=DOUBLE PRECISION</para>
+        </blockquote>
+
+        <para></para>
       </sect2>
 
       <sect2>
         <title>Microsoft SQL Server 2008</title>
 
-        <para></para>
+        <para>Missing. Tested at the office, documentation at home!
+        Argh.</para>
       </sect2>
 
       <sect2>
@@ -560,7 +582,7 @@
     <sect1>
       <title>Edit History</title>
 
-      <para>Last editted: Kevin, 21/04/2011.<!--dd/mm/yyyy--></para>
+      <para>Last editted: Kevin, 27/04/2011.<!--dd/mm/yyyy--></para>
     </sect1>
   </appendix>
 </book>
