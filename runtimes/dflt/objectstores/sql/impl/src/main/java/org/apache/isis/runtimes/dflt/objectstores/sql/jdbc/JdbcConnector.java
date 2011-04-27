@@ -267,7 +267,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             return updateCount;
         } catch (final SQLException e) {
             LOG.error("failed to execute " + sql, e);
-            throw new SqlObjectStoreException("SQL error", e);
+            throw new SqlObjectStoreException("SQL error: " + e.toString(), e);
         } finally {
             clearPreparedValues();
         }

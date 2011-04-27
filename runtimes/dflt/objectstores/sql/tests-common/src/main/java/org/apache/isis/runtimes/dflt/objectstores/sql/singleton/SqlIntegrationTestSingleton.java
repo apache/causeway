@@ -174,11 +174,11 @@ public class SqlIntegrationTestSingleton {
 		}
 	}
 	
-	public static void setPerson(SqlDataClass person) {
+	public static void setDataClass(SqlDataClass person) {
 		getInstance().setSqlDataClass(person);
 		
 	}
-	public static SqlDataClass getPerson() {
+	public static SqlDataClass getDataClass() {
 		return getInstance().getSqlDataClass();
 		
 	}

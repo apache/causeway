@@ -24,75 +24,65 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem;
 
 import java.util.List;
 
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.NumericTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
-import org.apache.isis.applib.AbstractFactoryAndRepository;
 
 /**
  * @author Kevin
  * 
  */
 public class SqlDataClassFactory extends AbstractFactoryAndRepository {
-	public List<SqlDataClass> allDataClasses() {
-		return allInstances(SqlDataClass.class);
-	}
+    public List<SqlDataClass> allDataClasses() {
+        return allInstances(SqlDataClass.class);
+    }
 
-	public SqlDataClass newDataClass() {
-		SqlDataClass object = newTransientInstance(SqlDataClass.class);
-		return object;
-	}
+    public SqlDataClass newDataClass() {
+        SqlDataClass object = newTransientInstance(SqlDataClass.class);
+        return object;
+    }
 
-	public void save(SqlDataClass sqlDataClass) {
-		persist(sqlDataClass);
-	}
+    // SimpleClass
+    public List<SimpleClass> allSimpleClasses() {
+        return allInstances(SimpleClass.class);
+    }
 
-	public void delete(SqlDataClass sqlDataClass) {
-		remove(sqlDataClass);
-	}
+    public SimpleClass newSimpleClass() {
+        SimpleClass object = newTransientInstance(SimpleClass.class);
+        return object;
+    }
 
-	// SimpleClass
-	public List<SimpleClass> allSimpleClasses() {
-		return allInstances(SimpleClass.class);
-	}
+    // SimpleClassTwo
+    public List<SimpleClassTwo> allSimpleClassTwos() {
+        return allInstances(SimpleClassTwo.class);
+    }
 
-	public SimpleClass newSimpleClass() {
-		SimpleClass object = newTransientInstance(SimpleClass.class);
-		return object;
-	}
+    public SimpleClassTwo newSimpleClassTwo() {
+        SimpleClassTwo object = newTransientInstance(SimpleClassTwo.class);
+        return object;
+    }
 
-	public void save(SimpleClass simpleClass) {
-		persist(simpleClass);
-	}
+    public NumericTestClass newNumericTestClass() {
+        NumericTestClass object = newTransientInstance(NumericTestClass.class);
+        return object;
+    }
 
-	public void delete(SimpleClass simpleClass) {
-		remove(simpleClass);
-	}
+    public void save(Object sqlDataClass) {
+        persistIfNotAlready(sqlDataClass);
+    }
 
-	// SimpleClassTwo
-	public List<SimpleClassTwo> allSimpleClassTwos() {
-		return allInstances(SimpleClassTwo.class);
-	}
+    public void delete(Object sqlDataClass) {
+        remove(sqlDataClass);
+    }
 
-	public SimpleClassTwo newSimpleClassTwo() {
-		SimpleClassTwo object = newTransientInstance(SimpleClassTwo.class);
-		return object;
-	}
+    public void update(final Object object) {
+        getContainer().objectChanged(object);
+    }
 
-	public void save(SimpleClassTwo simpleClassTwo) {
-		persistIfNotAlready(simpleClassTwo);
-	}
-
-	public void update(SimpleClassTwo simpleClassTwo) {
-		getContainer().objectChanged(simpleClassTwo);
-	}
-
-	public void delete(SimpleClassTwo simpleClassTwo) {
-		remove(simpleClassTwo);
-	}
-
-	public void resolve(final Object domainObject) {
-		getContainer().resolve(domainObject);
-	}
+    public void resolve(final Object domainObject) {
+        getContainer().resolve(domainObject);
+    }
 
 }

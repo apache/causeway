@@ -49,6 +49,7 @@ import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.NumericTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
@@ -107,11 +108,17 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     private static final Money money = new Money(99.99, "ZAR");
 
     // Standard values
-    private static final int intValue = Integer.MIN_VALUE;
-    private static final short shortValue = Short.MAX_VALUE;
-    private static final long longValue = Long.MAX_VALUE;
-    private static final double doubleValue = Double.MAX_VALUE;
-    private static final float floatValue = Float.MIN_VALUE;
+    private static final int intMaxValue = Integer.MAX_VALUE;
+    private static final short shortMaxValue = Short.MAX_VALUE;
+    private static final long longMaxValue = Long.MAX_VALUE;
+    private static final double doubleMaxValue = 1e308;// Double.MAX_VALUE;
+    private static final float floatMaxValue = (float) 1e37;// Float.MAX_VALUE;
+
+    private static final int intMinValue = Integer.MIN_VALUE;
+    private static final short shortMinValue = Short.MIN_VALUE;
+    private static final long longMinValue = Long.MIN_VALUE;
+    private static final double doubleMinValue = 1e-307;// Double.MIN_VALUE;
+    private static final float floatMinValue = (float) 1e-37;// Float.MIN_VALUE;
 
     // Collection mapper tests
     private static final List<String> stringList1 = Arrays.asList("Baking", "Bakery", "Canned", "Dairy");
@@ -122,6 +129,9 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
     private static SimpleClassTwo simpleClassTwoA;
     // private static SimpleClassTwo simpleClassTwoB;
+
+    private static NumericTestClass numericTestClassMax;
+    private static NumericTestClass numericTestClassMin;
 
     IsisConfigurationBuilderFileSystem loader;
 
@@ -242,13 +252,6 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         sqlDataClass.setPassword(password);
         sqlDataClass.setPercentage(percentage);
 
-        // standard value types
-        sqlDataClass.setIntValue(intValue);
-        sqlDataClass.setShortValue(shortValue);
-        sqlDataClass.setLongValue(longValue);
-        sqlDataClass.setDoubleValue(doubleValue);
-        sqlDataClass.setFloatValue(floatValue);
-
         // Setup SimpleClassTwo
         simpleClassTwoA = factory.newSimpleClassTwo();
         simpleClassTwoA.setText("A");
@@ -258,6 +261,28 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         // simpleClassTwoB.setString("A");
 
         sqlDataClass.setSimpleClassTwo(simpleClassTwoA);
+
+        // NumericClasses
+        // standard min types
+        numericTestClassMin = factory.newNumericTestClass();
+        LOG.log(Level.INFO, "Bits to represent Double: " + Double.SIZE);
+        numericTestClassMin.setIntValue(intMinValue);
+        numericTestClassMin.setShortValue(shortMinValue);
+        numericTestClassMin.setLongValue(longMinValue);
+        numericTestClassMin.setDoubleValue(doubleMinValue);
+        numericTestClassMin.setFloatValue(floatMinValue);
+
+        sqlDataClass.setNumericTestClassMin(numericTestClassMin);
+
+        // standard max types
+        numericTestClassMax = factory.newNumericTestClass();
+        numericTestClassMax.setIntValue(intMaxValue);
+        numericTestClassMax.setShortValue(shortMaxValue);
+        numericTestClassMax.setLongValue(longMaxValue);
+        numericTestClassMax.setDoubleValue(doubleMaxValue);
+        numericTestClassMax.setFloatValue(floatMaxValue);
+
+        sqlDataClass.setNumericTestClassMax(numericTestClassMax);
 
         // Initialise collection1
         boolean bMustAdd = false;
@@ -303,15 +328,15 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     public void testLoad() throws Exception {
         SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        List<SqlDataClass> people = factory.allDataClasses();
-        assertEquals(1, people.size());
-        SqlDataClass sqlDataClass = people.get(0);
-        SqlIntegrationTestSingleton.setPerson(sqlDataClass);
+        List<SqlDataClass> dataClasses = factory.allDataClasses();
+        assertEquals(1, dataClasses.size());
+        SqlDataClass sqlDataClass = dataClasses.get(0);
+        SqlIntegrationTestSingleton.setDataClass(sqlDataClass);
         getSingletonInstance().setState(1);
     }
 
     public void testSimpleClassCollection1Lazy() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         List<SimpleClass> collection = sqlDataClass.simpleClasses1;
 
         assertEquals("collection size is not equal!", collection.size(), simpleClassList1.size());
@@ -323,7 +348,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * @throws Exception
      */
     public void testString() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals("Test String", sqlDataClass.getString());
     }
 
@@ -333,17 +358,18 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * @throws Exception
      */
     public void testApplibDate() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
-        LOG.log(Level.INFO, "Test: testDate() '2010-3-5' = 1267747200000");
-
-        // 2010-3-5 = 1267747200000
-        LOG.log(Level.INFO, "applibDate.dateValue() as String: " + applibDate);
-        LOG.log(Level.INFO, "applibDate.dateValue() as Long: " + applibDate.getMillisSinceEpoch());
+        // LOG.log(Level.INFO, "Test: testDate() '2010-3-5' = 1267747200000");
 
         // 2010-3-5 = 1267747200000
-        LOG.log(Level.INFO, "sqlDataClass.getDate() as String: " + sqlDataClass.getDate());
-        LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: " + sqlDataClass.getDate().getMillisSinceEpoch());
+        // LOG.log(Level.INFO, "applibDate.dateValue() as String: " + applibDate);
+        // LOG.log(Level.INFO, "applibDate.dateValue() as Long: " + applibDate.getMillisSinceEpoch());
+
+        // 2010-3-5 = 1267747200000
+        // LOG.log(Level.INFO, "sqlDataClass.getDate() as String: " + sqlDataClass.getDate());
+        // LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: " +
+        // sqlDataClass.getDate().getMillisSinceEpoch());
 
         if (!applibDate.isEqualTo(sqlDataClass.getDate())) {
             fail("Applib date: Test '2010-3-5', expected " + applibDate.toString() + ", but got "
@@ -351,7 +377,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
             // LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
             // + sqlDataClass.getDate().toString()+". Check log for more info.");
         } else {
-            LOG.log(Level.INFO, "SQL applib.value.date: test passed! Woohoo!");
+            // LOG.log(Level.INFO, "SQL applib.value.date: test passed! Woohoo!");
         }
 
     }
@@ -364,17 +390,18 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     /* */
     @Test
     public void testSqlDate() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
-        LOG.log(Level.INFO, "Test: testSqlDate() '2011-4-8' == 1302220800000");
-
-        // 2011-4-8 = 1302220800000
-        LOG.log(Level.INFO, "sqlDate.toString() as String:" + sqlDate); // shows as 2011-04-07
-        LOG.log(Level.INFO, "sqlDate.getTime() as Long:" + sqlDate.getTime());
+        // LOG.log(Level.INFO, "Test: testSqlDate() '2011-4-8' == 1302220800000");
 
         // 2011-4-8 = 1302220800000
-        LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:" + sqlDataClass.getSqlDate()); // shows as 2011-04-07
-        LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:" + sqlDataClass.getSqlDate().getTime());
+        // LOG.log(Level.INFO, "sqlDate.toString() as String:" + sqlDate); // shows as 2011-04-07
+        // LOG.log(Level.INFO, "sqlDate.getTime() as Long:" + sqlDate.getTime());
+
+        // 2011-4-8 = 1302220800000
+        // LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:" + sqlDataClass.getSqlDate()); // shows as
+        // 2011-04-07
+        // LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:" + sqlDataClass.getSqlDate().getTime());
 
         if (sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0) {
             fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got "
@@ -382,7 +409,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
             // LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", and got "
             // + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
         } else {
-            LOG.log(Level.INFO, "SQL date: test passed! Woohoo!");
+            // LOG.log(Level.INFO, "SQL date: test passed! Woohoo!");
         }
 
     }/**/
@@ -417,7 +444,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
 
     public void testMoney() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(money, sqlDataClass.getMoney());
         // assertTrue("Money " + money.toString() + " is not equal to " + sqlDataClass.getMoney().toString(),
         // money.equals(sqlDataClass.getMoney()));
@@ -427,7 +454,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link DateTime} type.
      */
     public void testDateTime() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
         LOG.log(Level.INFO, "Test: testDateTime()");
         LOG.log(Level.INFO, "sqlDataClass.getDateTime() as String:" + sqlDataClass.getDateTime());
@@ -446,7 +473,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link TimeStamp} type.
      */
     public void testTimeStamp() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertTrue("TimeStamp " + timeStamp.toString() + " is not equal to " + sqlDataClass.getTimeStamp().toString(),
             timeStamp.isEqualTo(sqlDataClass.getTimeStamp()));
     }
@@ -456,7 +483,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     /**/
     public void testTime() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertNotNull("sqlDataClass is null", sqlDataClass);
         assertNotNull("getTime() is null", sqlDataClass.getTime());
         assertTrue("Time 14h56: expected " + time.toString() + ", but got " + sqlDataClass.getTime().toString(),
@@ -469,7 +496,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link Color} type.
      */
     public void testColor() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(color, sqlDataClass.getColor());
         // assertTrue("Color Black, expected " + color.toString() + " but got " + sqlDataClass.getColor().toString(),
         // color.isEqualTo(sqlDataClass.getColor()));
@@ -495,7 +522,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link Password} type.
      */
     public void testPassword() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(password, sqlDataClass.getPassword());
     }
 
@@ -503,17 +530,30 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link Percentage} type.
      */
     public void testPercentage() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(percentage, sqlDataClass.getPercentage());
     }
 
-    public void testStandardValueTypes() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-        assertEquals(shortValue, sqlDataClass.getShortValue());
-        assertEquals(intValue, sqlDataClass.getIntValue());
-        assertEquals(longValue, sqlDataClass.getLongValue());
-        assertEquals(doubleValue, sqlDataClass.getDoubleValue());
-        assertEquals(floatValue, sqlDataClass.getFloatValue());
+    public void testStandardValueTypesMaxima() {
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        NumericTestClass numericTestMaxClass = sqlDataClass.getNumericTestClassMax();
+
+        assertEquals(shortMaxValue, numericTestMaxClass.getShortValue());
+        assertEquals(intMaxValue, numericTestMaxClass.getIntValue());
+        assertEquals(longMaxValue, numericTestMaxClass.getLongValue());
+        assertEquals(doubleMaxValue, numericTestMaxClass.getDoubleValue()); // fails in MySQL = infinity
+        assertEquals(floatMaxValue, numericTestMaxClass.getFloatValue());
+    }
+
+    public void testStandardValueTypesMinima() {
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        NumericTestClass numericTestMinClass = sqlDataClass.getNumericTestClassMin();
+
+        assertEquals(shortMinValue, numericTestMinClass.getShortValue());
+        assertEquals(intMinValue, numericTestMinClass.getIntValue());
+        assertEquals(longMinValue, numericTestMinClass.getLongValue());
+        assertEquals(doubleMinValue, numericTestMinClass.getDoubleValue()); // fails in MySQL = infinity
+        assertEquals(floatMinValue, numericTestMinClass.getFloatValue());
     }
 
     /**
@@ -526,7 +566,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
 
     public void testSingleReferenceLazy() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
         if (getProperties().getProperty("isis.persistor") != "in-memory") {
             assertEquals(null, a.text); // must check direct value, as
@@ -538,7 +578,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test a collection of {@link SimpleClass} type.
      */
     public void testSimpleClassCollection1() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
 
         assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList1.size(),
@@ -555,7 +595,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     /**/
     public void testSimpleClassCollection2() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         List<SimpleClass> collection = sqlDataClass.getSimpleClasses2();
 
         assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList2.size(),
@@ -568,7 +608,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     }
 
     public void testSimpleClassTwoReferenceLazy() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
         if (getProperties().getProperty("isis.persistor") != "in-memory") {
             for (SimpleClass simpleClass : collection) {
@@ -582,7 +622,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
     public void testSingleReferenceResolve() {
         SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
         factory.resolve(a);
         assertEquals(simpleClassTwoA.getText(), a.getText());
@@ -590,7 +630,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
     public void testSimpleClassTwoReferenceResolve() {
         SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
         for (SimpleClass simpleClass : collection) {
             SimpleClassTwo a = simpleClass.getSimpleClassTwoA();

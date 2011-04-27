@@ -208,72 +208,6 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // Basic value types
-    // {{ IntValue
-    private int intValue;
-
-    public int getIntValue() {
-        return intValue;
-    }
-
-    public void setIntValue(final int value) {
-        this.intValue = value;
-    }
-
-    // }}
-
-    // {{ ShortValue
-    private short shortValue;
-
-    public short getShortValue() {
-        return shortValue;
-    }
-
-    public void setShortValue(final short value) {
-        this.shortValue = value;
-    }
-
-    // }}
-
-    // {{ LongValue
-    private long longValue;
-
-    public long getLongValue() {
-        return longValue;
-    }
-
-    public void setLongValue(final long value) {
-        this.longValue = value;
-    }
-
-    // }}
-
-    // {{ FloatValue
-    private Float floatValue;
-
-    public Float getFloatValue() {
-        return floatValue;
-    }
-
-    public void setFloatValue(final Float value) {
-        this.floatValue = value;
-    }
-
-    // }}
-
-    // {{ DoubleValue
-    private double doubleValue;
-
-    public double getDoubleValue() {
-        return doubleValue;
-    }
-
-    public void setDoubleValue(final double value) {
-        this.doubleValue = value;
-    }
-
-    // }}
-
     // References to other entities
     // {{ SimpleClasses
     public List<SimpleClass> simpleClasses1 = new ArrayList<SimpleClass>();
@@ -371,6 +305,34 @@ public class SqlDataClass extends AbstractDomainObject {
     public void setSimpleClassTwo(final SimpleClassTwo simpleClassTwo) {
         this.simplyClassTwo = simpleClassTwo;
     }
+
     // }}
+
+    // {{ NumericTestClassMax
+    private NumericTestClass numericTestClassMax;
+
+    public NumericTestClass getNumericTestClassMax() {
+        return numericTestClassMax;
+    }
+
+    public void setNumericTestClassMax(final NumericTestClass numericClassMax) {
+        this.numericTestClassMax = numericClassMax;
+    }
+
+    // }}
+
+    // {{ NumericTestClassMin
+    private NumericTestClass numericTestClassMin;
+
+    public NumericTestClass getNumericTestClassMin() {
+        return numericTestClassMin;
+    }
+
+    public void setNumericTestClassMin(final NumericTestClass numericClassMin) {
+        this.numericTestClassMin = numericClassMin;
+    }
+
+    // }}
+
 }
 // Copyright (c) Kevin Meyer, www.kmz.co.za.
