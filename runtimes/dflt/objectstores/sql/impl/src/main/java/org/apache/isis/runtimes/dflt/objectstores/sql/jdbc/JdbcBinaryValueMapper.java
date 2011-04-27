@@ -113,7 +113,7 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
 
     }
 
-    private boolean checkIfIsClass(Class expected, Class couldBe1, Class couldBe2) {
+    private boolean checkIfIsClass(Class<?> expected, Class<?> couldBe1, Class<?> couldBe2) {
         return (expected == couldBe1 || expected == couldBe2);
     }
 }
