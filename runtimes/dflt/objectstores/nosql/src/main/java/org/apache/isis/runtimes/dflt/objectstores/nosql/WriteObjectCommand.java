@@ -103,11 +103,13 @@ class WriteObjectCommand implements PersistenceCommand {
             KeyCreator keyCreator) {
         if (field == null) {
             writer.writeField(association.getId(), null);
-        } else {
+        } else if (field.getOid() instanceof AggregatedOid) {
             String specName = field.getSpecification().getFullIdentifier();
             StateWriter aggregateWriter = writer.addAggregate(association.getId());
             aggregateWriter.writeId(((AggregatedOid) field.getOid()).getId());
             writeFields(aggregateWriter, specName, field);
+        } else {
+            throw new NoSqlStoreException("Object type is inconsistent with it OID - it should have an AggregatedOid: " + field);
         }
     }
 

@@ -92,6 +92,9 @@ public class NoSqlObjectStore implements ObjectStore {
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
         // TODO should this be done at a higher level so it is applicable for all OSes
         final ObjectAdapter rootAdapter = aggregateRootAdapterFor(adapter);
+        if (rootAdapter.getOid() instanceof AggregatedOid) {
+            throw new NoSqlStoreException("Unexpected aggregated object to save: " + rootAdapter + " (" + adapter + ")");
+        }
         return new NoSqlSaveObjectCommand(keyCreator, versionCreator, rootAdapter);
     }
 

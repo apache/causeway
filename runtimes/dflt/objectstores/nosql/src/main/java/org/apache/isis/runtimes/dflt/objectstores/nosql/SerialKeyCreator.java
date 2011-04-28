@@ -32,12 +32,20 @@ public class SerialKeyCreator implements KeyCreator {
         if (oid.isTransient()) {
             throw new NoSqlStoreException("Oid is not for a persistent object: " + oid);
         }
-        long serialNo = ((SerialOid) oid).getSerialNo();
-        return Long.toString(serialNo, 16);
+        if (oid instanceof SerialOid) {
+            long serialNo = ((SerialOid) oid).getSerialNo();
+            return Long.toString(serialNo, 16);
+        } else {
+            throw new NoSqlStoreException("Oid is not a SerialOid: " + oid);            
+        }
     }
 
     public String reference(ObjectAdapter object) {
-        return object.getSpecification().getFullIdentifier() + "@" + key(object.getOid());
+        try {
+            return object.getSpecification().getFullIdentifier() + "@" + key(object.getOid());
+        } catch (NoSqlStoreException e) {
+            throw new NoSqlStoreException("Failed to create refence for " + object, e);
+        }
     }
     
     public SerialOid oid(String id) {
