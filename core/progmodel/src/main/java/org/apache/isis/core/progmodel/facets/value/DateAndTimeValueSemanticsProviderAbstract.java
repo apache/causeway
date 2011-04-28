@@ -92,7 +92,7 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     @Override
     protected DateFormat format(final Localization localization) {
         final DateFormat dateFormat =
-            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, localization.getLocale());
+            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, localization.getLocale());
         dateFormat.setTimeZone(localization.getTimeZone());
         return dateFormat;
     }
