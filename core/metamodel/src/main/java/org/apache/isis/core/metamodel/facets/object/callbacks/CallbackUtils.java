@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.DomainModelException;
 
 public final class CallbackUtils {
 
@@ -30,7 +31,11 @@ public final class CallbackUtils {
     public static void callCallback(final ObjectAdapter object, final Class<? extends Facet> cls) {
         final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
         if (facet != null) {
-            facet.invoke(object);
+            try {
+                facet.invoke(object);
+            } catch (RuntimeException e) {
+                throw new DomainModelException("Callback failed.  Calling " + facet + " on " + object, e);
+            }
         }
     }
 
