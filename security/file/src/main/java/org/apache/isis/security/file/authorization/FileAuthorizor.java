@@ -110,13 +110,13 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     
     @Override
     public void init() {
+        whiteListMap = Maps.newHashMap();
+        blackListMap = Maps.newHashMap();
         
         // initialize
         if (learn) {
             return;
         }
-        whiteListMap = Maps.newHashMap();
-        blackListMap = Maps.newHashMap();
         cacheAuthorizationDetails(whiteListMap, whiteListInputResource);
         if (blackListInputResource != null) {
             cacheAuthorizationDetails(blackListMap, blackListInputResource);
@@ -159,16 +159,31 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (line.trim().startsWith("#") || line.trim().length() == 0) {
             return;
         }
-        final StringTokenizer tokens = new StringTokenizer(line.trim(), ":", false);
-        if (tokens.countTokens() != 2) {
-            throw new IsisConfigurationException("Invalid line: " + line);
+        int pos = line.trim().indexOf(">");
+        if (pos == -1) {
+            final StringTokenizer tokens = new StringTokenizer(line.trim(), ":", false);
+            if (tokens.countTokens() != 2) {
+                throw new IsisConfigurationException("Invalid line: " + line);
+            }
+            final String token1 = tokens.nextToken();
+            final String token2 = tokens.nextToken();
+            final Identifier identifier = memberFromString(token1.trim());
+            final List<String> roles = tokenizeRoles(token2);
+            String identityString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
+            map.put(identityString, roles);
+        } else {
+            Map<String,List<String>> newRules = new HashMap<String,List<String>>(); 
+            for (String name: map.keySet()) {
+                String originalName = line.trim().substring(0, pos);
+                String redirectedName = line.trim().substring(pos + 1);
+                if (name.startsWith(redirectedName)) {
+                    String id = originalName + name.substring(redirectedName.length());
+                    List<String> roles = map.get(name);
+                    newRules.put(id, roles);
+                }
+            }
+            map.putAll(newRules);
         }
-        final String token1 = tokens.nextToken();
-        final String token2 = tokens.nextToken();
-        final Identifier identifier = memberFromString(token1.trim());
-        final List<String> roles = tokenizeRoles(token2);
-        String identityString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
-        map.put(identityString, roles);
     }
 
     private Identifier memberFromString(final String identifier) {
@@ -224,33 +239,42 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         return isListed(blackListMap, role, member, qualifiers);
     }
 
+    /*
+     * Work through the available entries from most specific to least.  When one exists then determine the result of this method
+     * by looking for a compatible role between the entry and required role.
+     */
     private boolean isListed(final Map<String,List<String>> map, final String role, final Identifier identifier, final List<String> qualifiers) {
         if (map.isEmpty()) {// quick fail
             return false;
         }
-        if (isQualifiedMatch(map, role, identifier.toIdentityString(Identifier.CLASS), qualifiers)) {
-        	return true;
+        List<String> roles;
+        roles = rolesFor(map, identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS));
+        if (roles == null) {
+            roles = rolesFor(map, identifier.toIdentityString(Identifier.CLASS_MEMBERNAME));
         }
-        if (isQualifiedMatch(map, role, identifier.toIdentityString(Identifier.CLASS_MEMBERNAME), qualifiers)) {
-        	return true;
+        if (roles == null) {
+            roles = rolesFor(map, identifier.toIdentityString(Identifier.CLASS));
         }
-        if (isQualifiedMatch(map, role, identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS), qualifiers)) {
-        	return true;
+        if (roles == null) {
+            roles = rolesFor(map, "*#" + identifier.toIdentityString(Identifier.MEMBERNAME_ONLY));
         }
-        return false;
-    }
-
-    private boolean isQualifiedMatch(final Map<String,List<String>> map, final String role, final String key, final List<String> qualifiers) {
-        if (map.containsKey(key)) {
-            final List<String> roles = map.get(key);
-            for (final String qualifier: qualifiers) {
-                final String qualifiedRole = role + qualifier;
-                if (roles.contains(qualifiedRole)) {
+        if (roles != null) {
+        for (final String qualifier: qualifiers) {
+            final String qualifiedRole = role + qualifier;
+            if (roles.contains(qualifiedRole)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private List<String> rolesFor(Map<String, List<String>> map, String key) {
+        if (map.containsKey(key)) {
+           return map.get(key);
+        } else {
+            return null;
+        }
     }
 
     private boolean learn(final String role, final Identifier member) {
