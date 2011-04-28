@@ -225,7 +225,11 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public StringBuilder toClassAndNameIdentityString(final StringBuilder buf) {
-        return toClassIdentityString(buf).append("#").append(memberName);
+        StringBuilder builder = toClassIdentityString(buf).append("#").append(memberName);
+        if (type == Type.ACTION) {
+            builder.append("()");
+        }
+        return builder;
     }
 
     public String toParmsIdentityString() {
@@ -261,7 +265,7 @@ public class Identifier implements Comparable<Identifier> {
                 identityString = toClassIdentityString();
             } else {
                 final StringBuilder buf = new StringBuilder();
-                toClassAndNameIdentityString(buf);
+                toClassIdentityString(buf).append("#").append(memberName);
                 toParmsIdentityString(buf);
                 identityString = buf.toString();
             }
