@@ -42,6 +42,11 @@ public class DebugString implements DebugBuilder {
     private final StringBuffer string = new StringBuffer();
     private boolean newLine = true;
 
+    @Override
+    public void concat(final DebugBuilder debug) {
+        string.append(debug.toString());
+    }
+
     /**
      * Append the specified number within a space (number of spaces) specified by the width. E.g. "15 " where number is
      * 15 and width is 4.
@@ -112,6 +117,11 @@ public class DebugString implements DebugBuilder {
         string.append('\n');
         newLine = true;
     }
+    
+    @Override
+    public void appendPreformatted(final String text) {
+        appendln(text);
+    }
 
     /**
      * Append the specified text, then start a new line.
@@ -148,6 +158,11 @@ public class DebugString implements DebugBuilder {
         appendln(label, String.valueOf(value));
     }
 
+    @Override
+    public void appendPreformatted(String label, String text) {
+        appendln(label, text);
+    };
+    
     /**
      * Append the specified object with the specified label, then start a new line.
      */

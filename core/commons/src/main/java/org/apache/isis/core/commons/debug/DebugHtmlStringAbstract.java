@@ -32,6 +32,10 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
+    public void concat(final DebugBuilder debug) {
+        appendHtml(debug.toString());
+    }
+    
     public void append(final int number, final int width) {
     }
 
@@ -82,6 +86,11 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     @Override
+    public void appendPreformatted(final String label, final String object) {
+        String value = object == null ? "null" : object.toString();
+        appendln(label, "<pre>" + value + "</pre>");
+    };
+
     public void appendln(final String label, final Object object) {
         final String value = object == null ? "null" : object.toString();
         appendln(label, value);
@@ -214,6 +223,11 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
             appendHtml("</table>");
             tableLevel--;
         }
+    }
+    
+    @Override
+    public void appendPreformatted(String text) {
+        appendln("<pre>" + text + "</pre>");
     }
 
     @Override

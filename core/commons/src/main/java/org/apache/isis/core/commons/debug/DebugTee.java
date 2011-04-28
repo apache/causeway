@@ -29,6 +29,11 @@ public class DebugTee implements DebugBuilder {
     }
 
     @Override
+    public void concat(final DebugBuilder debug) {
+        builder1.concat(debug);
+        builder2.concat(debug);
+    }
+    
     public void append(final int number, final int width) {
         builder1.append(number, width);
         builder2.append(number, width);
@@ -65,6 +70,12 @@ public class DebugTee implements DebugBuilder {
     }
 
     @Override
+    public void appendPreformatted(final String text) {
+        builder1.appendPreformatted(text);
+        builder2.appendPreformatted(text);
+    }
+    
+    @Override
     public void appendln(final String text) {
         builder1.appendln(text);
         builder2.appendln(text);
@@ -86,6 +97,12 @@ public class DebugTee implements DebugBuilder {
     public void appendln(final String label, final long value) {
         builder1.appendln(label, value);
         builder2.appendln(label, value);
+    }
+    
+    @Override
+    public void appendPreformatted(final String label, final String text) {
+        builder1.appendPreformatted(label, text);
+        builder2.appendPreformatted(label, text);
     }
 
     @Override

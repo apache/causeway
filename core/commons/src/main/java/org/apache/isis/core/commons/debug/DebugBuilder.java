@@ -19,6 +19,11 @@
 package org.apache.isis.core.commons.debug;
 
 public interface DebugBuilder {
+    
+    /**
+     * Concatenate the contents of the specified debug builder to the current builder.
+     */
+    void concat(DebugBuilder debug);
 
     /**
      * Append the specified number within a space (number of spaces) specified by the width. E.g. "15 " where number is
@@ -59,6 +64,11 @@ public interface DebugBuilder {
     void appendln(final String text);
 
     /**
+     * Append the specified text without any formatting.
+     */
+    void appendPreformatted(final String text);
+
+    /**
      * Append the specified value, displayed as true or false, with the specified label, then start a new line.
      */
     void appendln(final String label, final boolean value);
@@ -72,6 +82,11 @@ public interface DebugBuilder {
      * Append the specified number, displayed in hexadecimal notation, with the specified label, then start a new line.
      */
     void appendln(final String label, final long value);
+
+    /**
+     * Append the specified preformatted text with the specified label, then start a new line.
+     */
+    void appendPreformatted(final String label, final String text);
 
     /**
      * Append the specified object with the specified label, then start a new line.

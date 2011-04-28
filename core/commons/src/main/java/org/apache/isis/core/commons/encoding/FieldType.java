@@ -1207,8 +1207,8 @@ public abstract class FieldType<T> {
         final byte fieldTypeIdx = (byte) (fieldTypeIdxAndNullability - (isNull ? NULL_BIT : 0));
         try {
             final FieldType<?> fieldType = FieldType.get(fieldTypeIdx);
-            if (fieldType.checksStream() && fieldType != this) {
-                throw new IllegalStateException("Mismatch in stream: expected " + this + " but got " + fieldType);
+            if (fieldType == null || (fieldType.checksStream() && fieldType != this)) {
+                throw new IllegalStateException("Mismatch in stream: expected " + this + " but got " + fieldType + " (" + fieldTypeIdx + ")");
             }
 
             if (isNull && LOG.isDebugEnabled()) {
