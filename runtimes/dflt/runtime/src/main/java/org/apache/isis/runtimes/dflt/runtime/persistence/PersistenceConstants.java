@@ -22,19 +22,19 @@ package org.apache.isis.runtimes.dflt.runtime.persistence;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 public final class PersistenceConstants {
 
     /**
-     * Key used to lookup implementation of {@link AdapterFactory} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link ObjectAdapterFactory} in {@link IsisConfiguration}.
      */
     public static final String ADAPTER_FACTORY_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.adapter-factory";
     public static final String ADAPTER_FACTORY_CLASS_NAME_DEFAULT = PojoAdapterFactory.class.getName();

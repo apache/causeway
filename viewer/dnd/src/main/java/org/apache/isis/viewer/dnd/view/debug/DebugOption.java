@@ -20,13 +20,13 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.service.PerspectiveContent;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -34,6 +34,8 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
+
+import com.google.common.collect.Lists;
 
 
 /**
@@ -49,10 +51,10 @@ public class DebugOption extends UserActionAbstract {
         final Content content = view.getContent();
         final ObjectAdapter object = content == null ? null : content.getAdapter();
 
-        List<DebuggableWithTitle> debug = new ArrayList<DebuggableWithTitle>();
+        List<DebuggableWithTitle> debug = Lists.newArrayList();
         if (content instanceof PerspectiveContent) {
-            PerspectiveEntry perspective = ((PerspectiveContent)content).getPerspective();
-            debug.add(perspective);
+            PerspectiveEntry perspectiveEntry = ((PerspectiveContent)content).getPerspective();
+            debug.add(UserProfilesDebugUtil.asDebuggableWithTitle(perspectiveEntry));
         } else {
             debug.add(new DebugObjectSpecification(content.getSpecification()));
         }

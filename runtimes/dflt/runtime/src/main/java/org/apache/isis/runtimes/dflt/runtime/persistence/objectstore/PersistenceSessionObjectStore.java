@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
@@ -46,28 +47,27 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class PersistenceSessionObjectStore extends PersistenceSessionAbstract implements ToPersistObjectSet {
@@ -81,7 +81,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
      * the object that are saved.
      */
     public PersistenceSessionObjectStore(final PersistenceSessionFactory persistenceSessionFactory,
-        final AdapterFactory adapterFactory, final ObjectFactory objectFactory,
+        final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory,
         final ServicesInjector servicesInjector, final OidGenerator oidGenerator,
         final AdapterManagerExtended identityMap, final PersistAlgorithm persistAlgorithm,
         final ObjectStorePersistence objectStore) {

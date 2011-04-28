@@ -19,7 +19,7 @@
 
 
 /**
- * These interfaces are extended by {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession}
+ * These interfaces are extended by {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession}
  * and not intended to be implemented directly.
  */
 package org.apache.isis.runtimes.dflt.runtime.transaction;

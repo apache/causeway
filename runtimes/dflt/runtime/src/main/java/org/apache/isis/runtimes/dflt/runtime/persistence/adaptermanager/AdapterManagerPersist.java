@@ -23,8 +23,9 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 
 /**

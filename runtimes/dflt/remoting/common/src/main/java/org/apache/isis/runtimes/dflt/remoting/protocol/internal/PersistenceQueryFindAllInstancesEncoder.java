@@ -23,8 +23,8 @@ package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindAllInstancesData;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindAllInstancesEncoder extends PersistenceQueryEncoderAbstract {
 

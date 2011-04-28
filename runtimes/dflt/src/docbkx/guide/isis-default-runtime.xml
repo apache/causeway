@@ -75,21 +75,28 @@
       the supported configurations. It is divided into the following
       parts:<itemizedlist>
           <listitem>
-            <para>***</para>
+            <para>Core Concepts</para>
 
-            <para>This part of the guide ***</para>
+            <para>The chapters in this part of the guide <xref
+            linkend="prt.CoreConcepts" /> describe the core concepts
+            underpinning the design of the <emphasis>default
+            runtime</emphasis>.</para>
           </listitem>
 
           <listitem>
-            <para>***</para>
+            <para>Runtime Modules</para>
 
-            <para>This part of the guide ***</para>
+            <para>This part of the guide *** has chapters for each of the
+            modules that make up the <emphasis>default
+            runtime</emphasis>.</para>
           </listitem>
 
           <listitem>
-            <para>***</para>
+            <para>Deployment</para>
 
-            <para>This part of the guide ***</para>
+            <para>The chapters in this part of the guide *** describe
+            different ways to deploy an Isis application using the
+            <emphasis>default runtime</emphasis>.</para>
           </listitem>
         </itemizedlist></para>
     </sect1>
@@ -106,111 +113,145 @@
     </sect1>
   </preface>
 
-  <chapter>
+  <part id="prt.CoreConcepts">
     <title>Core Concepts</title>
 
-    <para></para>
-
-    <sect1>
-      <title>IsisContext</title>
-
-      <para><emphasis>Context</emphasis></para>
-
-      <para>The ObjectAdapterContext provide access to the main components of
-      the NOF. If the system is started in a multi-user mode then the context
-      will hold specific components for specific execution contexts, allowing
-      the same process to access the same components and different processes
-      to access unique instances.</para>
-
-      <para>Each execution context will have its own Persistor, Message Broker
-      and Update Notifier.</para>
-
-      <para>The Reflector and Configuration are shared among all execution
-      contexts.</para>
-
-      <para><emphasis>Persistor</emphasis></para>
-
-      <para>During startup the persistor is given a set of service objects.
-      During intialisation the persistor must determine the OIDs for these
-      service objects. If the persistor does not know about a service (by its
-      ID) from a previous run then it must generate an OID for the service and
-      persist that with the ID of the service. This allows references to be
-      held persistently to service objects despite the fact that they are
-      singletons.</para>
+    <chapter>
+      <title>Core Concepts</title>
 
       <para></para>
 
-      <para><emphasis>Identity map</emphasis></para>
+      <sect1>
+        <title>IsisContext</title>
 
-      <para>Any object that has identity (whether it is persisted or not) must
-      be registered with the identity map. This maps two relationships: domain
-      objects to proxies and OIDs to proxies.</para>
+        <para><emphasis>Context</emphasis></para>
 
-      <para>Whenever a domain object is handled by the system, and before a
-      proxy is created, it must be checked against the identity map and if it
-      exists the proxy already in the identity map must be used instead of
-      creating a new proxy.</para>
+        <para>The ObjectAdapterContext provide access to the main components
+        of the NOF. If the system is started in a multi-user mode then the
+        context will hold specific components for specific execution contexts,
+        allowing the same process to access the same components and different
+        processes to access unique instances.</para>
 
-      <para></para>
+        <para>Each execution context will have its own Persistor, Message
+        Broker and Update Notifier.</para>
 
-      <para></para>
-    </sect1>
+        <para>The Reflector and Configuration are shared among all execution
+        contexts.</para>
 
-    <sect1>
-      <title>Bootstrapping using installer-registry.properties</title>
+        <para><emphasis>Persistor</emphasis></para>
 
-      <para></para>
+        <para>During startup the persistor is given a set of service objects.
+        During intialisation the persistor must determine the OIDs for these
+        service objects. If the persistor does not know about a service (by
+        its ID) from a previous run then it must generate an OID for the
+        service and persist that with the ID of the service. This allows
+        references to be held persistently to service objects despite the fact
+        that they are singletons.</para>
 
-      <para></para>
-    </sect1>
+        <para></para>
 
-    <sect1>
-      <title>Scopes</title>
+        <para><emphasis>Identity map</emphasis></para>
 
-      <para></para>
+        <para>Any object that has identity (whether it is persisted or not)
+        must be registered with the identity map. This maps two relationships:
+        domain objects to proxies and OIDs to proxies.</para>
 
-      <para></para>
+        <para>Whenever a domain object is handled by the system, and before a
+        proxy is created, it must be checked against the identity map and if
+        it exists the proxy already in the identity map must be used instead
+        of creating a new proxy.</para>
 
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/architecture.gif" scale="30" />
-        </imageobject>
-      </mediaobject>
+        <para></para>
 
-      <para></para>
-    </sect1>
+        <para></para>
+      </sect1>
 
-    <sect1>
-      <title>IdentityMap</title>
+      <sect1>
+        <title>Installers and
+        <filename>installer-registry.properties</filename></title>
 
-      <para></para>
+        <para></para>
 
-      <para>A persistor should utilise an object-identity map (see Martin
-      Fowler's Patterns of Enterprise Application Architecture) to manage the
-      mapping of domain objects and adapters, and OIDs and adapters. For each
-      domain object the map should store a single adapter, and an OID to that
-      same adapter. The persitor can then guarantee that the same adapter is
-      always provided for a specific domain object or OID</para>
+        <para></para>
+      </sect1>
 
-      <para></para>
-    </sect1>
+      <sect1>
+        <title>Scopes</title>
 
-    <sect1>
-      <title>Profile Stores</title>
+        <para></para>
 
-      <para></para>
+        <para></para>
 
-      <para></para>
-    </sect1>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/architecture.gif" scale="30" />
+          </imageobject>
+        </mediaobject>
 
-    <sect1>
-      <title>Exploration vs Prototype Modes</title>
+        <para></para>
+      </sect1>
 
-      <para></para>
+      <sect1>
+        <title>Update Notifier (Change Listener)</title>
 
-      <para></para>
-    </sect1>
-  </chapter>
+        <para></para>
+
+        <para>Changes to objects are collected by the
+        <classname>UpdateNotifier</classname> object once they have been
+        persisted. These changes can then be asynchronously accessed by a
+        client to keep it in sync with the underlying model. Once changes are
+        retrieved by client the notifier resets its collection so that changes
+        are only available once.</para>
+
+        <para>Within the framework, specifically the persistor, when objects
+        changes and deletions are persisted the notifier should be informed
+        via its <methodname>addChangedObject(ObjectAdapter)</methodname> and
+        <methodname>addDisposedObject(ObjectAdapter)</methodname>
+        methods.</para>
+
+        <para>Clients should use the
+        <methodname>allChangedObjects()</methodname> and
+        <methodname>allDisposedObjects()</methodname> to get an
+        <classname>Enumeration</classname> of the changes.</para>
+
+        <para>The notifier itself can be got from system context using
+        <methodname>IsisContext.getUpdateNotifer()</methodname>.</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>IdentityMap</title>
+
+        <para></para>
+
+        <para>A persistor should utilise an object-identity map (see Martin
+        Fowler's Patterns of Enterprise Application Architecture) to manage
+        the mapping of domain objects and adapters, and OIDs and adapters. For
+        each domain object the map should store a single adapter, and an OID
+        to that same adapter. The persitor can then guarantee that the same
+        adapter is always provided for a specific domain object or OID</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Profile Stores</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Exploration vs Prototype Modes</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+  </part>
 
   <part>
     <title>Modules</title>
@@ -259,36 +300,15 @@
       <para></para>
 
       <sect1>
-        <title>Bytecode Provider API</title>
+        <title>Package Layering / Dependencies</title>
 
         <para></para>
-
-        <para></para>
-
-        <para>The default runtime for <emphasis>Apache Isis</emphasis>
-        normally performs lazy loading of references and dirty tracking by
-        proxying all domain objects. Two implementations are provided, using
-        either cglib or javassist. The application archetype automatically
-        configures the use of these proxies. However, some object stores
-        (notably, the JPA object store) do not require these proxies (because
-        they add their own proxies instead); in which case these can be
-        disabled. Alternatively, you may not want to use the bytecode support,
-        in which case you can add the appropriate calls for lazy loading and
-        dirty tracking.</para>
-
-        <para>This area is covered in the {{{./applib/index.html}applib}}, but
-        there is also module-specific documentation in the
-        {{{./core/bytecode-cglib/index.html}bytecode-cglib}} and
-        {{{./core/bytecode-javassist/index.html}bytecode-javassist}}
-        modules.</para>
 
         <para></para>
       </sect1>
 
       <sect1>
-        <title>Bootstrapping</title>
-
-        <para></para>
+        <title>Services Installer</title>
 
         <para></para>
 
@@ -431,35 +451,6 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
 
           <para></para>
         </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Update Notifier (Change Listener)</title>
-
-        <para></para>
-
-        <para>Changes to objects are collected by the
-        <classname>UpdateNotifier</classname> object once they have been
-        persisted. These changes can then be asynchronously accessed by a
-        client to keep it in sync with the underlying model. Once changes are
-        retrieved by client the notifier resets its collection so that changes
-        are only available once.</para>
-
-        <para>Within the framework, specifically the persistor, when objects
-        changes and deletions are persisted the notifier should be informed
-        via its <methodname>addChangedObject(ObjectAdapter)</methodname> and
-        <methodname>addDisposedObject(ObjectAdapter)</methodname>
-        methods.</para>
-
-        <para>Clients should use the
-        <methodname>allChangedObjects()</methodname> and
-        <methodname>allDisposedObjects()</methodname> to get an
-        <classname>Enumeration</classname> of the changes.</para>
-
-        <para>The notifier itself can be got from system context using
-        <methodname>IsisContext.getUpdateNotifer()</methodname>.</para>
-
-        <para></para>
       </sect1>
 
       <sect1>
@@ -730,20 +721,6 @@ isis.fixtures=ExpenseTypes, Employees, ExampleClaim, Context</programlisting>
           <programlisting format="linespecific">isis.exploration.show=false</programlisting>
         </sect2>
       </sect1>
-    </chapter>
-
-    <chapter>
-      <title>Runtime Module</title>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
 
       <sect1>
         <title>*** Component loggers</title>
@@ -851,25 +828,6 @@ isis.setObjectPersistor(persistor);</programlisting>
       </sect1>
 
       <sect1>
-        <title>Bytecode Enhancement API</title>
-
-        <para></para>
-
-        <para>The API is defined in {{{../core/runtime/index.html}runtime}}
-        module, with just an in-memory object store provided for prototyping
-        and testing only. The plugins provide a number of other
-        implementations: a simple {{{./xml-persistor/index.html}XML}}
-        persistor (for single user apps), a
-        {{{./sql-persistor/index.html}SQL}} persistor to persist directly to
-        RDBMS (using JDBC), and a
-        {{{./berkeley-persistor/index.html}BerkeleyDB}} persistor. In
-        addition, the {{{http://jpaobjects.sourceforge.net}JPA Objects}}
-        sister projects uses JPA to persist to an RDBMS.</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
         <title>Persistor API</title>
 
         <para></para>
@@ -903,6 +861,33 @@ isis.setObjectPersistor(persistor);</programlisting>
 
           <para></para>
         </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Bytecode Provider API</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para>The default runtime for <emphasis>Apache Isis</emphasis>
+        normally performs lazy loading of references and dirty tracking by
+        proxying all domain objects. Two implementations are provided, using
+        either cglib or javassist. The application archetype automatically
+        configures the use of these proxies. However, some object stores
+        (notably, the JPA object store) do not require these proxies (because
+        they add their own proxies instead); in which case these can be
+        disabled. Alternatively, you may not want to use the bytecode support,
+        in which case you can add the appropriate calls for lazy loading and
+        dirty tracking.</para>
+
+        <para>This area is covered in the {{{./applib/index.html}applib}}, but
+        there is also module-specific documentation in the
+        {{{./core/bytecode-cglib/index.html}bytecode-cglib}} and
+        {{{./core/bytecode-javassist/index.html}bytecode-javassist}}
+        modules.</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -1129,41 +1114,6 @@ isis.setObjectPersistor(persistor);</programlisting>
       <para></para>
 
       <para></para>
-    </chapter>
-  </part>
-
-  <part>
-    <title>Runtime APIs</title>
-
-    <chapter>
-      <title>Bytecode Enhancement API</title>
-
-      <para></para>
-
-      <para></para>
-    </chapter>
-
-    <chapter id="chp.ObjectStoreApi">
-      <title>Persistor API and Object Store API</title>
-
-      <abstract>
-        <para>***</para>
-      </abstract>
-
-      <sect1>
-        <title></title>
-
-        <para></para>
-
-        <para></para>
-
-        <note>
-          <para>TODO: tidy up the following paras, were just copied/pasted in
-          from APT</para>
-        </note>
-
-        <para></para>
-      </sect1>
     </chapter>
   </part>
 
@@ -1562,10 +1512,6 @@ isis.setObjectPersistor(persistor);</programlisting>
 
       <sect1>
         <title>Setting up Security</title>
-
-        <para></para>
-
-        <para></para>
 
         <para></para>
 

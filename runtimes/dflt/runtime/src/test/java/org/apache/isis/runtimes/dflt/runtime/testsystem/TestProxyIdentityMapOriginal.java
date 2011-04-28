@@ -28,15 +28,15 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 
 public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
@@ -151,7 +151,7 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         throw new NotYetImplementedException();
     }
 
-    public void setAdapterFactory(AdapterFactory adapterFactory) {
+    public void setAdapterFactory(ObjectAdapterFactory adapterFactory) {
         throw new NotYetImplementedException();
     }
 

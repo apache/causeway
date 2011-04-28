@@ -23,9 +23,9 @@ package org.apache.isis.runtimes.dflt.webserver.embedded.jetty;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer;
-import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 
 /**

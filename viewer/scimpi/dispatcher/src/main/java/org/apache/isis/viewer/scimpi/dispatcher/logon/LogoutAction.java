@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;

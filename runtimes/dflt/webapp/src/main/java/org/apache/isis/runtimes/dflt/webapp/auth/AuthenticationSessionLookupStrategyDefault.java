@@ -27,10 +27,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 
 /**

@@ -26,8 +26,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.runtimes.dflt.runtime.runner.BootPrinter;
-import org.apache.isis.runtimes.dflt.runtime.runner.options.OptionHandler;
+import org.apache.isis.core.runtime.optionhandler.BootPrinter;
+import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
 
 public final class OptionHandlerResourceBase implements OptionHandler {

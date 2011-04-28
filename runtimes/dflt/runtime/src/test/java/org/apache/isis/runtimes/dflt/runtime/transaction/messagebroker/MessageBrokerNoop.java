@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 
 public class MessageBrokerNoop implements MessageBroker, Noop {
 

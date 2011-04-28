@@ -26,9 +26,12 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.log4j.Logger;
 
 /**

@@ -35,14 +35,14 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 
 /*

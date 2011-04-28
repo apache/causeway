@@ -1,7 +1,6 @@
 package org.apache.isis.runtimes.dflt.runtime;
 import java.io.InputStream;
 
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
 
 /**
  *  Licensed to the Apache Software Foundation (ASF) under one or more
@@ -22,10 +21,12 @@ import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
 
 public final class IsisInstallerRegistry {
     
+    public final static String INSTALLER_REGISTRY_FILE = "installer-registry.properties";
+
     private IsisInstallerRegistry(){}
     
     public static InputStream getPropertiesAsStream() {
-        return IsisInstallerRegistry.class.getResourceAsStream(InstallerLookupDefault.INSTALLER_REGISTRY_FILE);
+        return IsisInstallerRegistry.class.getResourceAsStream(IsisInstallerRegistry.INSTALLER_REGISTRY_FILE);
     }
 
 }

@@ -20,6 +20,9 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+
 
 /**
  * Creates a {@link PersistenceSession} on behalf of a {@link PersistenceSessionFactory}.

@@ -21,14 +21,15 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 
 /**
  * API used solely by the {@link PersistenceSession}.
  */
-public interface AdapterManagerProxy extends AdapterManagerLookup {
+public interface AdapterManagerProxy extends ObjectAdapterLookup {
 
 
     /**

@@ -28,8 +28,10 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
 public abstract class IsisTransactionAbstract implements IsisTransaction {
 

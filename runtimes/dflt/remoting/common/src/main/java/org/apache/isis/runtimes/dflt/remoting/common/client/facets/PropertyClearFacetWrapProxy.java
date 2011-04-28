@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacetAbstract;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 
 /**

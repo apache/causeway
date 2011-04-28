@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransaction;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 
 /**

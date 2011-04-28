@@ -25,9 +25,9 @@ import java.util.Locale;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.wicket.util.convert.IConverter;
 
 

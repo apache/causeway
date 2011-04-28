@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.html.action.misc;
 
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.MultiUserExplorationSession;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.MultiUserExplorationSession;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.ViewPane;

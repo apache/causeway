@@ -39,11 +39,11 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransaction;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 
 
 @RunWith(JMock.class)

@@ -21,8 +21,8 @@
 package org.apache.isis.viewer.dnd.service;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.icon.Icon;

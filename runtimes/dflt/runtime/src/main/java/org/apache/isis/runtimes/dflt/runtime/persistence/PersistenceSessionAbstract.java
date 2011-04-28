@@ -30,6 +30,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
@@ -43,18 +44,19 @@ import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -68,7 +70,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     private static final Logger LOG = Logger.getLogger(PersistenceSessionAbstract.class);
 
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final AdapterFactory adapterFactory;
+    private final ObjectAdapterFactory adapterFactory;
     private final ObjectFactory objectFactory;
     private final ServicesInjector servicesInjector;
     private final OidGenerator oidGenerator;
@@ -95,7 +97,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     
     public PersistenceSessionAbstract(
             final PersistenceSessionFactory persistenceSessionFactory, 
-            final AdapterFactory adapterFactory, 
+            final ObjectAdapterFactory adapterFactory, 
             final ObjectFactory objectFactory, 
             final ServicesInjector servicesInjector, 
             final OidGenerator oidGenerator, 
@@ -672,7 +674,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * Injected in constructor.
      */
     @Override
-    public final AdapterFactory getAdapterFactory() {
+    public final ObjectAdapterFactory getAdapterFactory() {
         return adapterFactory;
     }
     

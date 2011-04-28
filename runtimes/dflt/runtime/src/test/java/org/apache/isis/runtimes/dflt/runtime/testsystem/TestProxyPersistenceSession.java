@@ -34,20 +34,20 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactoryAbstract.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionDefault;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManagerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 
 /**
  * Static mock implementation of {@link PersistenceSession} that provides some partial implementation but also has

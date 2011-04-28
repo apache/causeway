@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.MonitorListenerImpl;
+import org.apache.isis.runtimes.dflt.monitoring.servermonitor.MonitorListenerImpl;
 
 
 public class MonitorServlet extends HttpServlet {

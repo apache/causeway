@@ -45,13 +45,13 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.memento.CollectionData;
 import org.apache.isis.runtimes.dflt.runtime.memento.Data;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 
 public class MementoTest3_Test {

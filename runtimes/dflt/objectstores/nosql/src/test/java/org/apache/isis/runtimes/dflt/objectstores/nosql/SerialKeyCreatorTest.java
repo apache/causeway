@@ -28,8 +28,8 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 
 import static org.junit.Assert.assertEquals;

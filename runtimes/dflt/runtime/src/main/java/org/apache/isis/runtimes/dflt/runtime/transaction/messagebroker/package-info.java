@@ -30,6 +30,6 @@
  * opportunity for more exotic remoting mechanisms to send out warning messages,
  * for example JMS.
  * 
- * @see org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier
+ * @see org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier
  */
 package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;

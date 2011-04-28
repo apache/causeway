@@ -23,8 +23,8 @@ package org.apache.isis.viewer.junit.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.FixturesInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.FixturesInstallerDelegate;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 

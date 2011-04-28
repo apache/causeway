@@ -22,8 +22,9 @@ package org.apache.isis.runtimes.dflt.runtime.viewer;
 
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
-import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 
 public class IsisViewerNoop implements IsisViewer, Noop {
 
@@ -31,19 +32,22 @@ public class IsisViewerNoop implements IsisViewer, Noop {
 
     public void shutdown() {}
 
-	public void setInstallerLookup(InstallerLookup installerLookup) {
-	}
 
 	public void setConfigurationBuilder(IsisConfigurationBuilder configurationLoader) {
 	}
 
-	public boolean bootstrapsSystem() {
+    @Override
+    public void setSystemDependencyInjector(SystemDependencyInjector dependencyInjector) {
+    }
+
+    public boolean bootstrapsSystem() {
 		return false;
 	}
 
 	public WebAppSpecification getWebAppSpecification() {
 	    return null;
 	}
+
 }
 
 

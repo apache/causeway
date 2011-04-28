@@ -23,10 +23,10 @@ package org.apache.isis.runtimes.dflt.remoting.transport.http.server;
 import java.util.List;
 
 import org.apache.isis.runtimes.dflt.runtime.Isis;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
-import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
 
 /**
  * Convenience implementation of a {@link IsisViewer} providing the

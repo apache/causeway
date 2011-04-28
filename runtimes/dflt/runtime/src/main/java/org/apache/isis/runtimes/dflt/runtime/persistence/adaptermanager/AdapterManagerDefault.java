@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -50,15 +51,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactoryAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAware;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware,
     SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebuggableWithTitle {
@@ -77,7 +77,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     /**
      * Injected using dependency injection.
      */
-    private AdapterFactory adapterFactory;
+    private ObjectAdapterFactory adapterFactory;
 
     /**
      * Injected using dependency injection.
@@ -877,9 +877,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // /////////////////////////////////////////////////////////////////
 
     /**
-     * @see #setAdapterFactory(AdapterFactory)
+     * @see #setAdapterFactory(ObjectAdapterFactory)
      */
-    public AdapterFactory getAdapterFactory() {
+    public ObjectAdapterFactory getAdapterFactory() {
         return adapterFactory;
     }
 
@@ -887,7 +887,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Injected.
      */
     @Override
-    public void setAdapterFactory(AdapterFactory adapterFactory) {
+    public void setAdapterFactory(ObjectAdapterFactory adapterFactory) {
         this.adapterFactory = adapterFactory;
     }
 

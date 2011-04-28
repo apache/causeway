@@ -30,12 +30,6 @@ WebApp Support
    {{{http://community.jboss.org/wiki/OpenSessioninView}Open session in View}}
     pattern)
 
- * <<<ResourceServlet>>> which serves up static content from the specified
-   resource
-   
- * <<<StaticContentFilter>>> which decorates static content with headers for
-   caching    
- 
  []
  
  Not every webapp-based viewer is required to use these classes; refer to their
@@ -43,6 +37,6 @@ WebApp Support
  
 Documentation
 
- See the {{{../index.html}core}} documentation 
- ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
- {{{../docbkx/pdf/isis-core.pdf}PDF}}).
+ See the {{{../index.html}default runtime}} documentation 
+ ({{{../docbkx/html/guide/isis-default-runtime.html}HTML}} or 
+ {{{../docbkx/pdf/isis-default-runtime.pdf}PDF}}).

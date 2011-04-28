@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class TestProxyReflector implements ObjectReflector {
 

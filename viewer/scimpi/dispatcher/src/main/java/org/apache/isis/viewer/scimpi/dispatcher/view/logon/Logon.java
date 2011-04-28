@@ -23,7 +23,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;

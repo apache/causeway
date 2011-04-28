@@ -44,9 +44,15 @@
     </reporting>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 		    <artifactId>common</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>monitoring</artifactId>
 		</dependency>
 
         <dependency>

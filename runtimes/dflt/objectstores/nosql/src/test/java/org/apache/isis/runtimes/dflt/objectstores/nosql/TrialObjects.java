@@ -26,6 +26,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestClassSubstitutor;
@@ -48,7 +48,7 @@ import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 
 public class TrialObjects {
 
-    private AdapterFactory factory;
+    private ObjectAdapterFactory factory;
     private ObjectReflectorDefault reflector;
 
     private final Map<Object, ObjectAdapter> adapters = Maps.newHashMap();

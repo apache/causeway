@@ -21,6 +21,7 @@
 package org.apache.isis.runtimes.dflt.runtime.web;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 
 public interface EmbeddedWebServer extends ApplicationScopedComponent {
     

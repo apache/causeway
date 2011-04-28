@@ -35,8 +35,9 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.MultiUserExplorationSession;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
+import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
+import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.MultiUserExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 import static org.junit.Assert.assertThat;

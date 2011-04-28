@@ -20,6 +20,8 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
+
 public interface PersistenceSessionHydratorAware {
     void setHydrator(PersistenceSessionHydrator hydrator);
 }

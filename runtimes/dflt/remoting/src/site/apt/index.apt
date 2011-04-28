@@ -34,3 +34,8 @@ Remoting
    interactions.  The <remoting> component both defines these APIs
    and provides several implementations.
  
+Documentation
+
+ See the {{{../index.html}default runtime}} documentation 
+ ({{{../docbkx/html/guide/isis-default-runtime.html}HTML}} or 
+ {{{../docbkx/pdf/isis-default-runtime.pdf}PDF}}).

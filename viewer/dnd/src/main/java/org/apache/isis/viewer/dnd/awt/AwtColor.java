@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.awt;
 
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.util.Properties;
 

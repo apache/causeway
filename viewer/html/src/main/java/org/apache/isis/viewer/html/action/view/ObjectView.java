@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtil
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentFactory;

@@ -50,6 +50,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
@@ -57,16 +58,15 @@ import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDe
 import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.testspec.MovieSpecification;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
@@ -100,7 +100,7 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
 
     private AdapterManagerExtended adapterManager;
 
-    private AdapterFactory adapterFactory;
+    private ObjectAdapterFactory adapterFactory;
     private ObjectFactory objectFactory;
     private OidGenerator oidGenerator;
 

@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transactio
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public abstract class PersistenceCommandAbstract implements PersistenceCommand {
 	

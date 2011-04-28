@@ -19,22 +19,22 @@
 
 
 /**
- * This interface is used by the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession} and
+ * This interface is used by the {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession} and
  * is generally not intended to be implemented directly.  
  * 
  * <p>
  * The {@link PersistAlgorithm} defines how persistence-by-reachability is enacted.  This only
  * applies to the <tt>ObjectStorePersistor</tt> implementation, but has been brought up into
  * <tt>architecture</tt> module because it is very much a peer of the other helper objects
- * that influence the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession}'s behaviour, such
- * as {@link ClassSubstitutor} and {@link org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator}. 
+ * that influence the {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession}'s behaviour, such
+ * as {@link ClassSubstitutor} and {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator}. 
  * 
  * <p>
- * Since there is a close dependency between the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession}
- * and the {@link PersistAlgorithm} implementation, it is the job of the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller} to
+ * Since there is a close dependency between the {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession}
+ * and the {@link PersistAlgorithm} implementation, it is the job of the {@link org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller} to
  * ensure that the correct {@link PersistAlgorithm} is setup.
  * 
  * @see org.apache.isis.metamodel.specloader.classsubstitutor.classsubstitor.ClassSubstitutor.ClassStrategy
- * @see org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator
+ * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator
  */
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;

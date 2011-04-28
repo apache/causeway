@@ -23,8 +23,8 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;

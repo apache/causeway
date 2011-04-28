@@ -22,10 +22,15 @@ package org.apache.isis.runtimes.dflt.runtime.transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureWithReturn;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerDefault;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifierDefault;
 
 import static org.hamcrest.CoreMatchers.is;

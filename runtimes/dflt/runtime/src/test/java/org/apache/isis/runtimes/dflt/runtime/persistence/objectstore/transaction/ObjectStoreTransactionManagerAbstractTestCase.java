@@ -27,10 +27,10 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 
 
 @RunWith(JMock.class)

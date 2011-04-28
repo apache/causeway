@@ -20,6 +20,9 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+
 /**
  * For {@link PersistenceSessionFactory} implementations that can cache 
  * the {@link PersistenceSession#isFixturesInstalled()} so is only called once per application scope.

@@ -21,7 +21,7 @@
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 /**
  * Serializable representation of {@link PersistenceQuery}.

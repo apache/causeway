@@ -21,8 +21,8 @@ package org.apache.isis.runtimes.dflt.remoting.transport.sockets.server;
 
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.ObjectEncoderDecoderDefault;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract;
 
 public abstract class SocketsViewerInstallerAbstract extends IsisViewerInstallerAbstract {
 

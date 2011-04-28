@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.userprofile;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 public interface UserProfileStoreInstaller extends Installer {
 

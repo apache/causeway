@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public abstract class PerformAbstract implements Perform {
 

@@ -2555,6 +2555,31 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
     </sect1>
 
     <sect1>
+      <title>Command Line Flag (<classname>OptionHandler</classname>)
+      API</title>
+
+      <para>*** to document.</para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Sysout (SystemPrinter) Utility</title>
+
+      <para>*** to document.</para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Profiler Utility</title>
+
+      <para>*** to document.</para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
       <title>Logging Support</title>
 
       <sect2>

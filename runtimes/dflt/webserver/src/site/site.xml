@@ -14,7 +14,9 @@
         <menu name="Default Runtime">
             <item name="Implementation" href="../runtime/index.html" />
             <item name="Objectstores" href="../objectstores/index.html" />
+            <item name="Profilestores" href="../profilestores/index.html" />
             <item name="Bytecode" href="../bytecode/index.html" />
+            <item name="Monitoring" href="../monitoring/index.html" />
             <item name="Webapp Support" href="../webapp/index.html" />
             <item name="Webserver" href="../webserver/index.html" />
             <item name="Remoting" href="../remoting/index.html" />

@@ -51,14 +51,14 @@ import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidator
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestClassSubstitutor;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoader;
 
 @RunWith(JMock.class)
 public abstract class JavaReflectorTestAbstract {

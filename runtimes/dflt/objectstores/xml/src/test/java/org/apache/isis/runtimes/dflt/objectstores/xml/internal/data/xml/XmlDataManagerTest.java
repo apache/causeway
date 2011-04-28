@@ -30,8 +30,8 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Team;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 

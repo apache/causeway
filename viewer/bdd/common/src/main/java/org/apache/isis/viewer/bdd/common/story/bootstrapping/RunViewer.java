@@ -1,8 +1,8 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.viewer.bdd.common.Scenario;
 
 public class RunViewer extends AbstractHelper {

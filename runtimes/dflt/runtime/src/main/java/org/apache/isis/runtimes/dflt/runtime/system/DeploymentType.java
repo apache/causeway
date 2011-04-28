@@ -24,9 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 import com.google.common.collect.Lists;
 
@@ -35,7 +33,7 @@ import com.google.common.collect.Lists;
  * 
  * <p>
  * Previously this was an <tt>enum</tt>, but it is now a regular class.  The change has been made to provide 
- * more flexibility in setting up the {@link IsisContext} lookup.
+ * more flexibility in setting up the <tt>IsisContext</tt> lookup.
  * 
  * 
  * implementation can be created, specifying in turn a custom {@link ContextCategory} (also now a regular class) can be specified, allowing different was of setting up the
@@ -44,9 +42,9 @@ import com.google.common.collect.Lists;
  * <p>
  * To use this capability:
  * <ul>
- * <li>Write your new implementation of {@link IsisContext}, along with a static factory method (cf {@link IsisContextStatic#createInstance(IsisSessionFactory)})
+ * <li>Write your new implementation of <tt>IsisContext</tt>, along with a static factory method (cf <tt>IsisContextStatic#createInstance(IsisSessionFactory)</tt>)
  * <li>Create a new subclass of {@link ContextCategory} (also now a regular class rather than an <tt>enum</tt>); this
- * is where your code goes to instantiate your {@link IsisContext} implementation</li>
+ * is where your code goes to instantiate your <tt>IsisContext</tt> implementation</li>
  * <li>Create a new subclass of {@link DeploymentType}, passing in the custom {@link ContextCategory} in its constructor</li>
  * <li>In your bootstrap code, instantiate your new {@link DeploymentType} subclass</li>
  * <li>When you run your app, don't forget to specify your custom {@link DeploymentType}, eg using the <tt>--type</tt> command line arg</li>

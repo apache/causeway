@@ -21,9 +21,10 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-public abstract class AdapterFactoryAbstract implements AdapterFactory {
+public abstract class AdapterFactoryAbstract implements ObjectAdapterFactory {
 
     public abstract ObjectAdapter createAdapter(Object pojo, Oid oid);
 

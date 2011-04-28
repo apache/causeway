@@ -26,7 +26,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyContent;
 import org.apache.isis.viewer.dnd.DummyView;

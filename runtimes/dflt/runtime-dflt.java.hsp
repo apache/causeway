@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.4.1223" flavor="j2se">
+  <property name="hide-externals" value="true" />
+  <property name="show-needs-to-compile" value="false" />
+  <property name="detail-mode" value="false" />
+  <classpath>
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\runtime\target\classes" />
+  </classpath>
+  <restructuring>
+    <set version="1" name="Sandbox 1" hiview="Codemap" active="true" todo="false" />
+    <set version="1" name="Flattened to classes" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="true">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+    <set version="1" name="Flattened to leaf packages" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="false">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+  </restructuring>
+  <grid-set sep="." version="3.4.1223">
+    <grid name="Diagram 1" enforce="true" strict="false">
+      <row>
+        <cell name="authorization.standard" pattern="org.apache.isis.runtimes.dflt.runtime.authorization.standard.?" vexpanded="false" visibility="public" />
+        <cell name="bytecode" pattern="org.apache.isis.runtimes.dflt.runtime.bytecode.?" vexpanded="false" visibility="public" />
+        <cell name="memento" pattern="org.apache.isis.runtimes.dflt.runtime.memento.?" vexpanded="false" visibility="public" />
+        <cell name="snapshot" pattern="org.apache.isis.runtimes.dflt.runtime.snapshot.?" vexpanded="false" visibility="public" />
+      </row>
+      <row>
+        <cell name="profiler" pattern="org.apache.isis.runtimes.dflt.runtime.profiler.?" vexpanded="false" visibility="public" />
+        <cell name="Tangle of 16" pattern="" vexpanded="true" visibility="public">
+          <grid>
+            <row>
+              <cell name="installers" pattern="org.apache.isis.runtimes.dflt.runtime.installers.?" vexpanded="false" visibility="public" />
+              <cell name="options.standard" pattern="org.apache.isis.runtimes.dflt.runtime.options.standard.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="web" pattern="org.apache.isis.runtimes.dflt.runtime.web.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="viewer" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisViewerInstallerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisViewerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract" vexpanded="false" visibility="public" />
+                    <cell name="IsisViewerInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller" vexpanded="false" visibility="public" />
+                    <cell name="IsisViewerNoop" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerNoop" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisViewer" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="runtime" pattern="org.apache.isis.runtimes.dflt.runtime.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="fixturesinstaller" pattern="org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.*" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="fixture" pattern="org.apache.isis.runtimes.dflt.runtime.fixture.?" vexpanded="false" visibility="public" />
+              <cell name="remoting" pattern="org.apache.isis.runtimes.dflt.runtime.remoting.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="authentication.standard" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.standard.*" vexpanded="false" visibility="public" />
+              <cell name="persistence" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.*" vexpanded="false" visibility="public" />
+              <cell name="transaction" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.*" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="context" pattern="org.apache.isis.runtimes.dflt.runtime.context.?" vexpanded="false" visibility="public" />
+              <cell name="runner" pattern="org.apache.isis.runtimes.dflt.runtime.runner.*" vexpanded="false" visibility="public" />
+              <cell name="session" pattern="org.apache.isis.runtimes.dflt.runtime.session.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="system" pattern="org.apache.isis.runtimes.dflt.runtime.system.*" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="userprofile" pattern="org.apache.isis.runtimes.dflt.runtime.userprofile.?" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+    </grid>
+  </grid-set>
+</local-project>
+

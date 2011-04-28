@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.dialog.ActionDialogSpecification;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.interaction.ContentDragImpl;

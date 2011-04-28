@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator;
 
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 
 

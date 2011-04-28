@@ -20,6 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier;
 
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 

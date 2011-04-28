@@ -38,7 +38,7 @@ import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;

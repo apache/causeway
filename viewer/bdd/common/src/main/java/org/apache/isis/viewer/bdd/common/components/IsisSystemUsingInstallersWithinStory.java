@@ -1,9 +1,9 @@
 package org.apache.isis.viewer.bdd.common.components;
 
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.installers.IsisSystemUsingInstallers;
+import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemUsingInstallers;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;

@@ -20,9 +20,10 @@
 
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerDefault;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifierDefault;
 
 public class IsisTransactionDefault extends IsisTransactionAbstract {

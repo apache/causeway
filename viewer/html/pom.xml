@@ -107,6 +107,11 @@
         <!-- TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
+			<artifactId>monitoring</artifactId>
+		</dependency>
+        <!-- TODO: remove this dependency -->
+		<dependency>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>webapp</artifactId>
 		</dependency>
 

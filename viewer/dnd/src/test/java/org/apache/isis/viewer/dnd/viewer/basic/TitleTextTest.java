@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyCanvas;

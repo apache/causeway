@@ -22,9 +22,9 @@ package org.apache.isis.runtimes.dflt.runtime.system;
 
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextThreadLocal;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextThreadLocal;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 /**
  * @see DeploymentType

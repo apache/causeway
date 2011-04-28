@@ -15,9 +15,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration.ExplorationSession;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
 

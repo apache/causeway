@@ -20,10 +20,10 @@
 
 package org.apache.isis.runtimes.dflt.webapp.monitor;
 
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
-import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
 
 
 public class WebServerMonitorInstaller extends IsisViewerInstallerAbstract {

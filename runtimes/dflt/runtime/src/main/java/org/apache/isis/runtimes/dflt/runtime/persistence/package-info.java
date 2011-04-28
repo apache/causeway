@@ -45,3 +45,4 @@
  * are passed to the {@link PersistenceSession} implementation. 
  */
 package org.apache.isis.runtimes.dflt.runtime.persistence;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;

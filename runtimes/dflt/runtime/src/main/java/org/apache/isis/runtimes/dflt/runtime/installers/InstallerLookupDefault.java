@@ -56,15 +56,18 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.runtimes.dflt.runtime.IsisInstallerRegistry;
-import org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.FixturesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServicesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.remoting.ClientConnectionInstaller;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.services.ServicesInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerInstaller;
 
 
 /**
@@ -84,8 +87,6 @@ import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerInstaller;
 public class InstallerLookupDefault implements InstallerLookup {
 
     private static final Logger LOG = Logger.getLogger(InstallerLookupDefault.class);
-
-    public final static String INSTALLER_REGISTRY_FILE = "installer-registry.properties";
 
     private final List<Installer> installerList = new ArrayList<Installer>();
     
@@ -112,7 +113,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     }
 
     private void loadInstallers() {
-        final InputStream in = getInstallerRegistryStream(INSTALLER_REGISTRY_FILE);
+        final InputStream in = getInstallerRegistryStream(IsisInstallerRegistry.INSTALLER_REGISTRY_FILE);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try {
             String line;
@@ -321,7 +322,7 @@ public class InstallerLookupDefault implements InstallerLookup {
             }
             return installer;
         } catch (final InstanceCreationException e) {
-            throw new InstanceCreationException("Specification error in " + INSTALLER_REGISTRY_FILE, e);
+            throw new InstanceCreationException("Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
         } catch (final UnavailableClassException e) {
             return null;
         }
@@ -338,7 +339,7 @@ public class InstallerLookupDefault implements InstallerLookup {
             }
             return installer;
         } catch (final InstanceCreationException e) {
-            throw new InstanceCreationException("Specification error in " + INSTALLER_REGISTRY_FILE, e);
+            throw new InstanceCreationException("Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
         } catch (final UnavailableClassException e) {
             return null;
         }
@@ -408,6 +409,10 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     @Override
     public void injectInto(Object candidate) {
+        if (SystemDependencyInjectorAware.class.isAssignableFrom(candidate.getClass())) {
+            SystemDependencyInjectorAware cast = SystemDependencyInjectorAware.class.cast(candidate);
+            cast.setSystemDependencyInjector(this);
+        }
         if (InstallerLookupAware.class.isAssignableFrom(candidate.getClass())) {
             InstallerLookupAware cast = InstallerLookupAware.class.cast(candidate);
             cast.setInstallerLookup(this);

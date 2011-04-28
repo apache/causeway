@@ -26,6 +26,7 @@ import java.util.Vector;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetDefaultToObject;
@@ -36,26 +37,25 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.noop.TemplateImageLoaderNoop;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerPersist;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerTestSupport;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionDefault;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionDefault;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifierDefault;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoaderDefault;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoaderDefault.Mode;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;
 
 //TODO replace with TestProxySystemII
 public class TestProxySystem {
@@ -238,7 +238,7 @@ public class TestProxySystem {
     /**
      * Created automatically by the persistor.
      */
-    public AdapterFactory getAdapterFactory() {
+    public ObjectAdapterFactory getAdapterFactory() {
         return persistenceSession.getAdapterFactory();
     }
 

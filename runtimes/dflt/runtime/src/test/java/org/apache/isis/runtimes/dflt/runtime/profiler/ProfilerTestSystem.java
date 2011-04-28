@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.profiler;
 
-import org.apache.isis.runtimes.dflt.runtime.profiler.ProfilerSystem;
+import org.apache.isis.core.runtime.profiler.ProfilerSystem;
 
 
 

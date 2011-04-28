@@ -24,7 +24,9 @@ import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 
 /**
@@ -44,7 +46,7 @@ public interface AdapterManagerExtended
                 Resettable, 
                 AdapterManager, 
                 AdapterManagerPersist, 
-                AdapterManagerLookup, 
+                ObjectAdapterLookup, 
                 AdapterManagerProxy, 
                 AdapterManagerTestSupport, 
                 AdapterManagerBackdoor, 

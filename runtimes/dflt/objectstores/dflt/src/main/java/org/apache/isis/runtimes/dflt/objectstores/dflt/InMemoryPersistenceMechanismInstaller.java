@@ -21,12 +21,12 @@
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 
 /**
@@ -59,7 +59,7 @@ public class InMemoryPersistenceMechanismInstaller extends ObjectStorePersistenc
      */
     protected ObjectStore createObjectStore(
             final IsisConfiguration configuration, 
-            final AdapterFactory adapterFactory, 
+            final ObjectAdapterFactory adapterFactory, 
             final AdapterManager adapterManager) {
         return new InMemoryObjectStore();
     }

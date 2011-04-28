@@ -24,15 +24,15 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collections;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dummy.DummyPersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
@@ -62,7 +62,7 @@ public class PersistenceSessionObjectStoreTest {
 
     private AdapterManagerExtended adapterManager;
 
-    private AdapterFactory adapterFactory;
+    private ObjectAdapterFactory adapterFactory;
 
     @Before
     public void setUp() throws Exception {

@@ -22,13 +22,13 @@ package org.apache.isis.runtimes.dflt.bytecode.javassist.objectfactory;
 
 import org.apache.isis.runtimes.dflt.bytecode.javassist.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactoryAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class JavassistObjectFactory extends ObjectFactoryAbstract {
 

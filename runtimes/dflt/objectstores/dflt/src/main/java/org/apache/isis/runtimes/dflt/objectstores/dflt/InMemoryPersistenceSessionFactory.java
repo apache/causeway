@@ -20,12 +20,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;

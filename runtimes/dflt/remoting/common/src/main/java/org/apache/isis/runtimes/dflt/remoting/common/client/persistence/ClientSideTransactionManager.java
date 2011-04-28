@@ -34,14 +34,14 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerProxy;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTransactionManagement;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManagerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class ClientSideTransactionManager extends IsisTransactionManagerAbstract<ClientSideTransaction> {

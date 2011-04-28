@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.dnd;
 
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstallerAbstract;
 
 
 public class DndViewerInstaller extends IsisViewerInstallerAbstract {

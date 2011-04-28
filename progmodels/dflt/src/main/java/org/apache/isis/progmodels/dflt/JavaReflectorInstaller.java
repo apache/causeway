@@ -48,8 +48,8 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupAware;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 
 
 public class JavaReflectorInstaller extends InstallerAbstract implements ObjectReflectorInstaller, InstallerLookupAware {

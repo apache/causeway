@@ -40,7 +40,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlMetaData;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);

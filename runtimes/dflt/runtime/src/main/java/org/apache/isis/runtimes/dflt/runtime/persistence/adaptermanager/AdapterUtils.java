@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 
 public final class AdapterUtils {

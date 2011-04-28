@@ -29,10 +29,10 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionAbstract;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifier;
 
 
 public class ObjectStoreTransaction extends IsisTransactionAbstract  {

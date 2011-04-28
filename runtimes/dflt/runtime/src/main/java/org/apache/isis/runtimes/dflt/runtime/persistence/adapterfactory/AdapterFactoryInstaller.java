@@ -21,12 +21,13 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory;
 
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 
 
 public interface AdapterFactoryInstaller extends Installer {
 
 	static String TYPE = "adapter-factory";
 
-    AdapterFactory createAdapterFactory();
+    ObjectAdapterFactory createAdapterFactory();
 }
 

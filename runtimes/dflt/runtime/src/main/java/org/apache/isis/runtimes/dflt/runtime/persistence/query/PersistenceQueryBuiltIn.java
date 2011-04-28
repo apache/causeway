@@ -23,6 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public interface PersistenceQueryBuiltIn extends PersistenceQuery {
 

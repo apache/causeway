@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.remoting.transport.sockets.server;
 
 import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.SocketTransportConstants;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 
 
 public final class SocketsViewerConstants {

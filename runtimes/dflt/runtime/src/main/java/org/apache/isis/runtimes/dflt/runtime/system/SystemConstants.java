@@ -29,16 +29,16 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
-import org.apache.isis.runtimes.dflt.runtime.fixturesinstaller.FixturesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServicesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.remoting.ClientConnectionInstaller;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStore;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.services.ServicesInstaller;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerInstaller;
 
 
 public final class SystemConstants {

@@ -25,8 +25,8 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQuery
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindByPatternData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindByPatternEncoder extends PersistenceQueryEncoderAbstract {
 

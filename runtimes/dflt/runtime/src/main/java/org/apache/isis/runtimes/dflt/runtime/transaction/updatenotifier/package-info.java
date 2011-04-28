@@ -31,6 +31,6 @@
  * opportunity for more exotic remoting mechanisms to send out notifications
  * of changes, for example JMS.
  * 
- * @see org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker
+ * @see org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker
  */
 package org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier;

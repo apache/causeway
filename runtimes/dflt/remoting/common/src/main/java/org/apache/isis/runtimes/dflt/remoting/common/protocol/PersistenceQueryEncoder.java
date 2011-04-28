@@ -21,7 +21,7 @@ package org.apache.isis.runtimes.dflt.remoting.common.protocol;
 
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 /**
  * TODO: this would be a good candidate for genericizing.

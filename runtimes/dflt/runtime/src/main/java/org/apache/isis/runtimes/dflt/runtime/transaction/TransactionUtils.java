@@ -23,6 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.transaction;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.facets.CollectionClearFacetWrapTransaction;
 
 

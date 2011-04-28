@@ -23,7 +23,7 @@ package org.apache.isis.viewer.junit.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.services.ServicesInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.services.ServicesInstallerAbstract;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 

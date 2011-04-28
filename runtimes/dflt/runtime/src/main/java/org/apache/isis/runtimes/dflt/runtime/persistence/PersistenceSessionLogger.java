@@ -26,6 +26,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
@@ -33,12 +34,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.logging.Logger;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 
 public class PersistenceSessionLogger extends Logger implements PersistenceSession, DebuggableWithTitle {
@@ -182,7 +184,7 @@ public class PersistenceSessionLogger extends Logger implements PersistenceSessi
         return underlying.getOidGenerator();
     }
 
-    public AdapterFactory getAdapterFactory() {
+    public ObjectAdapterFactory getAdapterFactory() {
         return underlying.getAdapterFactory();
     }
 

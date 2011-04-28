@@ -23,8 +23,8 @@ package org.apache.isis.viewer.dnd.view;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.OptionsAware;
+import org.apache.isis.core.runtime.userprofile.OptionsClient;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -33,7 +33,7 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.util.Properties;
 
 
-public interface View extends Cloneable, OptionsAware {
+public interface View extends Cloneable, OptionsClient {
     /** Horizontal padding (||) between two components */
     public static final int HPADDING = IsisContext.getConfiguration()
             .getInteger(Properties.PROPERTY_BASE + "hpadding", 3);

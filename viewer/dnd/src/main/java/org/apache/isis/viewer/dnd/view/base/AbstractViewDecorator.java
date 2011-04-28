@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.view.base;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.Options;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Location;

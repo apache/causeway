@@ -20,6 +20,8 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator;
 
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+
 
 public interface OidGeneratorAware {
 

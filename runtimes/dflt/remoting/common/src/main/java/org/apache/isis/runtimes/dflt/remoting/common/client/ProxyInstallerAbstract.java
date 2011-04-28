@@ -40,22 +40,22 @@ import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecod
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionTransactionManagement;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerProxy;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.remoting.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTransactionManagement;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 
 public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstallerAbstract implements
@@ -158,7 +158,7 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
 
     @Override
     protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory,
-        final AdapterManagerExtended adapterManager, final AdapterFactory adapterFactory,
+        final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory,
         final ObjectFactory objectFactory, final OidGenerator oidGenerator, final ServicesInjector servicesInjector) {
 
         final PersistenceSessionProxy persistenceSession =

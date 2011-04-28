@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -34,10 +32,11 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Dump;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.internal.monitor.Monitor;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.action.ChangeContext;
@@ -67,6 +66,7 @@ import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.InvokeMethod;
 import org.apache.isis.viewer.html.task.TaskLookupException;
 import org.apache.isis.viewer.html.task.TaskStep;
+import org.apache.log4j.Logger;
 
 
 
@@ -96,7 +96,7 @@ public class WebController {
             final UserProfile userProfile = IsisContext.getUserProfile();
             debug.appendTitle("User profile");
             if (userProfile != null) {
-                userProfile.debugData(debug);
+                UserProfilesDebugUtil.asDebuggableWithTitle(userProfile).debugData(debug);
             } else {
                 debug.appendln("none");
             }

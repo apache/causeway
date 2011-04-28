@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerInstaller;
 
 

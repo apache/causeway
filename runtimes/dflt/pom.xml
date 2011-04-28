@@ -43,6 +43,7 @@
 
 	<modules>
 		<module>runtime</module>
+		<module>monitoring</module>
 		<module>webapp</module>
 		<module>webserver</module>
         <module>bytecode</module>
@@ -93,6 +94,12 @@
                 <artifactId>runtime</artifactId>
                 <version>0.1.2-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>monitoring</artifactId>
+                <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>

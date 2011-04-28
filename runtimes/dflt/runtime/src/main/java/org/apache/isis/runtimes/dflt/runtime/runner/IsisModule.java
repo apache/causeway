@@ -26,14 +26,15 @@ import java.util.List;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFactory;
+import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
+import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerInstaller;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;

@@ -32,9 +32,7 @@ WebServer (Jetty)
    
 Documentation
 
- See the {{{../index.html}core}} documentation 
- ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
- {{{../docbkx/pdf/isis-core.pdf}PDF}}).
- 
-
+ See the {{{../index.html}default runtime}} documentation 
+ ({{{../docbkx/html/guide/isis-default-runtime.html}HTML}} or 
+ {{{../docbkx/pdf/isis-default-runtime.pdf}PDF}}).
  

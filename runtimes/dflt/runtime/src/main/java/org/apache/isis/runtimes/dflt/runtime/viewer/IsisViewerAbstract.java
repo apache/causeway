@@ -28,13 +28,15 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookup;
-import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupAware;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
-import org.apache.isis.runtimes.dflt.runtime.web.WebAppSpecification;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
+import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -48,7 +50,7 @@ public abstract class IsisViewerAbstract implements IsisViewer {
      */
     private DeploymentType deploymentType;
 
-    private InstallerLookup installerLookup;
+    private SystemDependencyInjector systemDependencyInjector;
     private IsisConfigurationBuilder isisConfigurationBuilder;
     private IsisSystem system; // never written to!!!
 
@@ -118,15 +120,15 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     // ////////////////////////////////////////////////////////////////
 
     protected void ensureDependenciesInjected() {
-        Ensure.ensureThatState(installerLookup, is(not(nullValue())));
+        Ensure.ensureThatState(systemDependencyInjector, is(not(nullValue())));
         Ensure.ensureThatState(isisConfigurationBuilder, is(not(nullValue())));
     }
 
     /**
-     * Injected by virtue of being {@link InstallerLookupAware}.
+     * Injected by virtue of being {@link SystemDependencyInjectorAware}.
      */
-    public void setInstallerLookup(final InstallerLookup installerLookup) {
-        this.installerLookup = installerLookup;
+    public void setSystemDependencyInjector(SystemDependencyInjector dependencyInjector) {
+        this.systemDependencyInjector = dependencyInjector;
     }
 
     protected IsisConfigurationBuilder getConfigurationBuilder() {

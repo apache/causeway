@@ -25,8 +25,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 interface Mapping {
     ObjectAdapter getObject();

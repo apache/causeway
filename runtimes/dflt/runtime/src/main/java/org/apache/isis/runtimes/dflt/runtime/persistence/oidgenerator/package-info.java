@@ -18,7 +18,7 @@
  */
 
 /**
- * This interface is used by the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession} and
+ * This interface is used by the {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession} and
  * is generally not intended to be implemented directly.  
  * 
  * <p>
@@ -29,11 +29,12 @@
  * for Hibernate will hook into Hibernate's own identity generators.
  * 
  * <p>
- * Since there is a close dependency between the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSession}
- * and the {@link ClassSubstitutor} implementation, it is the job of the {@link org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceMechanismInstaller} to
+ * Since there is a close dependency between the {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession}
+ * and the {@link ClassSubstitutor} implementation, it is the job of the {@link org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller} to
  * ensure that the correct {@link OidGenerator} is setup.
  * 
  * @see org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm
  * @see org.apache.isis.metamodel.specloader.classsubstitutor.classsubstitor.ClassSubstitutor.ClassStrategy
  */
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
