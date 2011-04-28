@@ -50,7 +50,7 @@ public abstract class RequestContext {
     private static final Logger LOG = Logger.getLogger(RequestContext.class);
 
     public enum Scope {
-        GLOBAL, SESSION, INTERACTION, REQUEST
+        GLOBAL, SESSION, INTERACTION, REQUEST, ERROR
     };
 
     public enum Debug {
@@ -87,7 +87,7 @@ public abstract class RequestContext {
     public static final String ERROR = "_error";
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
-    private static final Scope[] SCOPES = new Scope[] { Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
+    private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
     private static DebugMode debugMode = null;
 
     private ObjectMapping objectMapping;
@@ -117,6 +117,7 @@ public abstract class RequestContext {
         variables.put(Scope.SESSION, new HashMap<String, Object>());
         variables.put(Scope.INTERACTION, new HashMap<String, Object>());
         variables.put(Scope.REQUEST, new HashMap<String, Object>());
+        variables.put(Scope.ERROR, new HashMap<String, Object>());
     }
 
     public void endHttpSession() {
@@ -253,29 +254,34 @@ public abstract class RequestContext {
     // ////////////////////////////
     // Debug
     // ////////////////////////////
-    public void append(DebugBuilder view) {
-        view.appendTitle("User");
+    public void append(DebugBuilder debug) {
+        debug.startSection("Request");
+        debug.appendTitle("User");
         AuthenticationSession session = getSession();
-        view.appendln("Session", session);
+        debug.appendln("Session", session);
         if (session != null) {
-            view.appendln("Name", session.getUserName());
-            view.appendln("Roles", session.getRoles());
+            debug.appendln("Name", session.getUserName());
+            debug.appendln("Roles", session.getRoles());
         }
 
-        view.appendTitle("context");
-        view.appendln("Parent request path", requestedParentPath);
-        view.appendln("Requested file", requestedFile);
-        view.appendln("Parent resource path", resourceParentPath);
-        view.appendln("Resource file", resourceFile);
+        debug.appendTitle("context");
+        debug.appendln("Parent request path", requestedParentPath);
+        debug.appendln("Requested file", requestedFile);
+        debug.appendln("Parent resource path", resourceParentPath);
+        debug.appendln("Resource file", resourceFile);
+        debug.endSection();
+        
+        debug.startSection("Variables");
+        append(debug, Scope.GLOBAL);
+        append(debug, Scope.SESSION);
+        append(debug, Scope.INTERACTION);
+        append(debug, Scope.REQUEST);
+        append(debug, Scope.ERROR);
+        debug.endSection();
 
-        append(view, Scope.GLOBAL);
-        append(view, Scope.SESSION);
-        append(view, Scope.INTERACTION);
-        append(view, Scope.REQUEST);
-        view.endSection();
-
-        view.startSection("Object Mapping");
-        objectMapping.append(view);
+        debug.startSection("Object Mapping");
+        objectMapping.append(debug);
+        debug.endSection();
     }
 
     private void append(DebugBuilder view, Scope scope) {
@@ -301,6 +307,8 @@ public abstract class RequestContext {
             appendVariables(content, Scope.INTERACTION);
             content.blankLine();
             appendVariables(content, Scope.REQUEST);
+            content.blankLine();
+            appendVariables(content, Scope.ERROR);
         } else if (list.equals("mappings")) {
             objectMapping.appendMappings(content);
         }
@@ -503,6 +511,7 @@ public abstract class RequestContext {
     public void endRequest() throws IOException {
         getWriter().close();
         objectMapping.clear();
+        variables.get(Scope.ERROR).clear();
         variables.get(Scope.REQUEST).clear();
         variables.get(Scope.INTERACTION).clear();
     }
@@ -709,6 +718,8 @@ public abstract class RequestContext {
 
     public abstract String imagePath(ObjectSpecification specification);
 
+    public abstract void forward(String view);
+
     public abstract void redirectTo(String view);
 
     public abstract String getContextPath();
@@ -792,4 +803,6 @@ public abstract class RequestContext {
     public void clearTransientVariables() {
         objectMapping.endSession();
     }
+
+    public void reset() {}
 }

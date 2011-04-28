@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -219,6 +220,26 @@ public class ServletRequestContext extends RequestContext {
         return null;
     }
     
+    public void reset() {
+        try {
+            response.getWriter().print("<h1>RESET</h1>");
+        } catch (IOException e) {
+            throw new DispatchException(e);
+        }
+        response.reset();
+    }
+    
+    public void forward(String view) {
+        try {
+            isAborted = true;
+            getRequest().getRequestDispatcher(view).forward(getRequest(), getResponse());
+        } catch (IOException e) {
+            throw new DispatchException(e);
+        } catch (ServletException e) {
+            throw new DispatchException(e);
+        }
+    }
+
     public void redirectTo(String view) {
         try {
             isAborted = true;

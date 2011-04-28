@@ -88,8 +88,8 @@ public class DebugAction implements Action {
             view.appendln("<div class=\"links\">");
             view.appendln("<a href=\"debug.app?action=system\">System</a>");
             view.appendln(" | <a href=\"debug.app?action=specifications\">List specifications</a>");
-            view.appendln(" | <a href=\"debug.app?action=i18n\">I18N File</a>");
-            view.appendln(" | <a href=\"debug.app?action=authorization\">Authorization File</a>");
+            view.appendln(" | <a href=\"debug.app?action=list-i18n\">I18N File</a>");
+            view.appendln(" | <a href=\"debug.app?action=list-authorization\">Authorization File</a>");
             view.appendln(" | <a href=\"debug.app?action=context\">Context</a>");
             view.appendln(" | <a href=\"debug.app?action=dispatcher\">Dispatcher</a>");
             view.appendln("</div>");

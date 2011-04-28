@@ -25,8 +25,10 @@ import java.util.List;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
@@ -77,12 +79,23 @@ public class RemoveElement extends AbstractElementProcessor {
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
         }
+        if (!field.isOneToManyAssociation()) {
+            throw new ScimpiException("Field " + fieldName + " not a collection, in " + adapter.getSpecification().getFullIdentifier());
+        }
         if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         IsisContext.getPersistenceSession().resolveField(adapter, field);
 
-        if (field.isUsable(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
+        
+        Consent usable = field.isUsable(IsisContext.getAuthenticationSession(), adapter);
+        if (usable.isAllowed()) {
+            usable = ((OneToManyAssociation) field).isValidToRemove(adapter, element);
+        }
+        
+        if (usable.isVetoed()) {
+            request.appendHtml("<span class=\"veto\">" + usable.getReason() + "</span>");
+        } else {
             if (valid(request, adapter)) {
                 String classSegment = " class=\"" + cssClass + "\"";
     
@@ -115,6 +128,8 @@ public class RemoveElement extends AbstractElementProcessor {
         if (visibleFields.size() == 0) {
             return false;
         }
+        
+        
         
         return true;
     }

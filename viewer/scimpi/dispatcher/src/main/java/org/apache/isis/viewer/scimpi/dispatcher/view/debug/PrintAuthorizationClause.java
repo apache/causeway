@@ -19,8 +19,8 @@ public class PrintAuthorizationClause extends AbstractElementProcessor {
             return;
         }
         
-        Identifier identifier = (Identifier) context.getVariable("_security_identifier");
-        List<String> roles =  (List<String>) context.getVariable("_security_roles");
+        Identifier identifier = (Identifier) context.getVariable("_security-identifier");
+        List<String> roles =  (List<String>) context.getVariable("_security-roles");
         StringBuffer roleList = new StringBuffer();
         for (String role : roles) {
             if (roleList.length() > 0) {
@@ -31,7 +31,8 @@ public class PrintAuthorizationClause extends AbstractElementProcessor {
         
         request.appendHtml("<pre>" );
         request.appendHtml(identifier.toClassIdentityString() + ":" + roleList + "\n");
-        request.appendHtml(identifier.toString() + ":" + roleList);
+        request.appendHtml(identifier.toClassAndNameIdentityString() + ":" + roleList + "\n");
+        request.appendHtml(identifier.toFullIdentityString() + ":" + roleList + "\n");
         request.appendHtml( "</pre>");
     }
 

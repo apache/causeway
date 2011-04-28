@@ -54,7 +54,7 @@ public class ForbiddenException extends ScimpiException {
 
     private ForbiddenException(Identifier identifier, AuthenticationSession session, boolean isVisibleAndUsabable) {
         super((identifier.getType() == Identifier.Type.PROPERTY_OR_COLLECTION ? "Field" : "Action") + " '"
-                + identifier.getMemberName() + "' in " + identifier.getClassNaturalName() + " is not "
+                + identifier.getMemberName() + "' in " + identifier.getClassName() + " is not "
                 + (isVisibleAndUsabable ? "visible/usable " : "visible") + " for " + session.getUserName() + " "
                 + session.getRoles());
         this.identifier = identifier;
