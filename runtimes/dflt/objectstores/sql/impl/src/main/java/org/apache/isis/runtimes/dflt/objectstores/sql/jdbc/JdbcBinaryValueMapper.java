@@ -96,11 +96,11 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
                 resultObject = results.getDouble(columnName);
             } else if (checkIfIsClass(correspondingClass, Float.class, float.class)) {
                 resultObject = results.getFloat(columnName);
-            } else if (checkIfIsClass(correspondingClass, short.class, Short.class)) {
+            } else if (checkIfIsClass(correspondingClass, Short.class, short.class)) {
                 resultObject = results.getShort(columnName);
-            } else if (checkIfIsClass(correspondingClass, long.class, Long.class)) {
+            } else if (checkIfIsClass(correspondingClass, Long.class, long.class)) {
                 resultObject = results.getLong(columnName);
-            } else if (checkIfIsClass(correspondingClass, boolean.class, Boolean.class)) {
+            } else if (checkIfIsClass(correspondingClass, Boolean.class, boolean.class)) {
                 resultObject = results.getBoolean(columnName);
             } else {
                 throw new IsisApplicationException("Unhandled type: " + correspondingClass.getCanonicalName());
