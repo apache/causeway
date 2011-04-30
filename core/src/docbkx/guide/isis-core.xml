@@ -2449,17 +2449,84 @@ com.mycompany.myapp.dom.Contact.action.CreatePhone.parameter2.name=Nombre</progr
       <acronym>API</acronym> used by client-side applications for loading
       <classname>java.awt.Image</classname>s from the classpath or from files.
       Two of its uses are to render the initial splash window, and to load
-      images and icons for the DnD viewer.</para>
+      images and icons for the <emphasis>DnD</emphasis> viewer.</para>
 
       <para>Viewers are not compelled to use this <acronym>API</acronym>, and
       indeed the web-based viewers tend to use their own mechanism.</para>
 
       <para><note>
-          <para>It's not clear that this API is really significant enough to
-          be factored out. It may be better to just duplicate the code for the
-          splash window and move the main implementation to the DnD
-          viewer.</para>
+          <para>It's not clear that this <acronym>API</acronym> is really
+          significant enough to be factored out. It may be better to just
+          duplicate the code for the splash window and move the main
+          implementation to the <emphasis>DnD</emphasis> viewer.</para>
         </note></para>
+
+      <para>There are a number of generic images that are used by the
+      framework, and that can be changed to create a different look. These
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>empty-field.png</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>logo.jpg</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>small-logo.png</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>transient.png</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>unknown.png</literal></para>
+        </listitem>
+      </itemizedlist>
+
+      <sect2>
+        <title>Typical Usage by Viewers</title>
+
+        <para>Typically viewers ae expected to load images for viewers based
+        on the domain object's class, following the convention <filename
+        class="directory"
+        moreinfo="none">&lt;ClassName&gt;.&lt;extension</filename>&gt;, but in
+        general corresponding to the value returned by the
+        <classname>IconFacet</classname> facet:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>This will be case sensitive on Unix/Linux, but case
+            insensitive on Windows:</para>
+          </listitem>
+
+          <listitem>
+            <para>It is the viewer's responsibility to specify which
+            extensions are supported; typically all of <filename
+            class="directory" moreinfo="none">.gif</filename>, <filename
+            class="directory" moreinfo="none">.png</filename>, <filename
+            class="directory" moreinfo="none">.jpg</filename> and <filename
+            class="directory" moreinfo="none">.jpeg</filename> would be
+            supported.</para>
+          </listitem>
+
+          <listitem>
+            <para>It is the viewer's responsibility to specify the form of the
+            class name; typically both the short form or the fully qualified
+            name of the class would be supported.</para>
+          </listitem>
+
+          <listitem>
+            <para>When loading images based on class, if no image is found for
+            the current class then the process is repeated using the name of
+            the class's immediate superclass. This process repeats until there
+            are no more superclasses.</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -2558,25 +2625,141 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
       <title>Command Line Flag (<classname>OptionHandler</classname>)
       API</title>
 
-      <para>*** to document.</para>
+      <para>*** to document. (moved from runtimes:dflt)</para>
 
       <para></para>
     </sect1>
 
     <sect1>
-      <title>Sysout (SystemPrinter) Utility</title>
+      <title>User Profiles</title>
 
-      <para>*** to document.</para>
+      <para>*** to tidy up (moved from runtimes:dflt)</para>
 
       <para></para>
+
+      <para>Information about a user of the system (rather that a user of the
+      application domain model) is stored in a
+      <classname>UserProfile</classname> object which is got from the
+      <classname>UserProfileService</classname>, which in turn is accessible
+      from <classname>IsisSession</classname>. There is also convienence
+      methods on <classname>IsisContext</classname> to get both the
+      <classname>UserProfile</classname> and the
+      <classname>UserProfileService</classname>. The user profile details the
+      perspectives the user has set up and options that have been specified,
+      typically for the user interfaces. The user profile service provides a
+      way to create, save and retrieve the user profiles, specifically the
+      profile of the current user. The service in turn has a
+      <classname>UserProfilePersistor</classname> that is used to do the
+      actual persistence.</para>
+
+      <para>Setting up profiles</para>
+
+      <para>Profiles can be created at start up by creating
+      <classname>UserProfileFixture</classname> subclasses. Theses are only
+      ever loaded once as the fixture installer checks with
+      <methodname>UserProfileSevice.isInitialized()</methodname> to see if the
+      service is already set up. The profile fixture (which is defined in the
+      application library and is therefore not part of the Isis framework)
+      loads the profiles into Isis by passing in an implementation of
+      ProfilePersistor that provides a way for the perspective to make
+      requests of the framework.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>To store profiles (during exploration) for users the a profile
+      store must be specified.</para>
+
+      <para>On the command line use -e xml to store them in an XML.</para>
+
+      <para>Without this the profile will simply be kept in memory, and lost
+      on exit.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect2>
+        <title>Setting up Perspectives (Profile Fixtures)</title>
+
+        <para>*** to tidy up (moved from runtimes:dflt)</para>
+
+        <para></para>
+
+        <para>Perspectives allow the set of services available to a user (eg
+        as icons in the DnD viewer) to be customized for that user. Since
+        these services represent the "start points" for the user to interact
+        with the domain model, they in a sense define an application on a
+        per-user basis.</para>
+
+        <para>The perspectives are stored in user-profiles, which are a
+        persistence mechanism independent of the object store. (The intent is
+        for user profiles to store additional information for use by viewers,
+        for example allowing a user to reskin an application or change colors
+        or fonts. As of NOF 4.0 the functionality provided is still limited,
+        however).</para>
+
+        <para>The key here is that if a user logs in and no perspective exists
+        for that user then one will be created for them. The new perspective
+        will be a copy of the 'template' perspective, or, if none was defined,
+        a perspective containing all the known services. To create a template
+        perspective add a perspective fixture that calls
+        <methodname>saveAsDefault()</methodname>, rather than
+        <methodname>saveForUser()</methodname> for a named user, as shown
+        below.</para>
+
+        <programlisting>public class PerspectivesFixture extends UserProfileFixture {
+    @Override
+    protected void installProfiles() {
+        Profile profile = newUserProfile();
+        Perspective perspective = profile.newPerspective("ECS");
+        perspective.addToServices(LocationFactory.class);
+        perspective.addToServices(CustomerRepository.class);
+        perspective.addToServices(PaymentMethodFactory.class);
+        
+        saveAsDefault(profile);
+    }
+}
+</programlisting>
+
+        <para>With that set up, when a new user now logs in they will see
+        three service icons on the screen for locations, customers and payment
+        methods. On the drag and drop user interface the user can add and
+        remove services from their perspective. To remove a service icon
+        right-click on the grey border and select the close option. To add a
+        service select the Services... option from the application menu
+        (accessed by right-clicking on the application background) and drag
+        the required service onto the desktop. Unfortunately there is no
+        similar mechanism available on the HTML user interface so you will
+        need to modify the created perspectives via the DND UI.</para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
     </sect1>
 
     <sect1>
-      <title>Profiler Utility</title>
+      <title>Utility Classes</title>
 
-      <para>*** to document.</para>
+      <para>*** to document. (moved from runtimes:dflt)</para>
 
       <para></para>
+
+      <sect2>
+        <title>Sysout (SystemPrinter) Utility</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Profiler Utility</title>
+
+        <para></para>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -2584,6 +2767,12 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
 
       <sect2>
         <title>Snapshot appenders</title>
+
+        <para>*** to tidy up (moved from runtimes:dflt)</para>
+
+        <para></para>
+
+        <para></para>
 
         <para>The framework provides a number of appenders that create a
         snapshot of the recently logged events instead of capturing all events

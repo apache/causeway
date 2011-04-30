@@ -305,159 +305,45 @@
         <para></para>
 
         <para></para>
-      </sect1>
 
-      <sect1>
-        <title>Services Installer</title>
-
-        <para></para>
-
-        <para>The first thing that happens is the logging is set up so that
-        everything can be logged. This attempts to load
-        <filename>logging.properties</filename> from the
-        <filename>config</filename> directory on the filesystem and if that
-        cannot be found it will look for the same file in the same directory
-        on the classpath. If neither of these are found then a default logging
-        configuration will be programmatically installed that writes to the
-        console.</para>
-
-        <para>Now that logging is initialised the container can prepare for
-        bootstrapping the system. The first task is load up all the component
-        installers, which is done by the InstallerLookupDefault class. This
-        reads the <filename>installer-registry.properties</filename> file from
-        classpath and attempts to load each class listed. Any class not found
-        is logged so it is easy to determine if a component should be
-        available. Each installer simply knows how to install a component; the
-        component is not loaded at this stage.</para>
-
-        <para>Now the container knows what components are available a series
-        of option handlers (<classname>OptionHandler</classname>) are
-        intialise, with addtional one provided by the Isis container and web
-        server subclasses. These interact with the Apache CLI library to
-        provide details about the command line parameters and will lookup the
-        available components so they can be listed on the command line help.
-        With the handlers set up the command line is parsed using the Apache
-        library. If this parse fails then the library generates a error
-        message with an option summary and displays via the console and the
-        startup process terminates.</para>
-
-        <para>The last step before bootstrapping starts is to prepare the
-        ground for using congfiguration properties. Configuration details are
-        loaded by a <classname>ConfigurationBuilder</classname> object and
-        will be subsequently placed in an immutable
-        <classname>IsisConfiguration</classname> object. Immediately after
-        this has been created each handler is visited so that it can, via its
-        <methodname>primeConfigurationBuilder</methodname> method, add it
-        properties to the builder. This way each command line option is
-        converted to one or more properties of the same form as can be
-        specified in the properties files, hence we only need one way to
-        determine how the system is to be run.</para>
-
-        <para>Now that the ground has been prepared it is time for the
-        bootstrapping to begin. This is done via a call to the
-        <methodname>bootstrapIsis</methodname> method, which is where the
-        process differs for the Isis container and the web server.</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/package-dependencies.png"
+                       scale="60" />
+          </imageobject>
+        </mediaobject>
 
         <para></para>
 
-        <para>Services are registered with the Framework at startup via the
-        properties file, using the services properties. The
-        <methodname>services</methodname> property itself dictates which
-        service classes are to be instantiated at startup, for example:</para>
+        <para></para>
 
-        <programlisting format="linespecific">isis.services = com.mycompany.myapp.dom.BookingFactory,\
-                com.mycompany.myapp.dom.CustomerFactoryAndRepository, \
-                com.mycompany.myapp.dom.LocationFactoryAndRepository</programlisting>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
 
-        <para>The <methodname>prefix</methodname> property allows you to
-        specify the common package once and, hence omit them from the classes
-        in the list. The following set of properties is therefore equivalent
-        to the previous example:</para>
+        <para></para>
 
-        <programlisting format="linespecific">isis.services.prefix = com.mycompany.myapp.dom
-isis.services = BookingFactory, CustomerFactoryAndRepository, LocationFactoryAndRepository</programlisting>
+        <para></para>
 
         <para></para>
       </sect1>
 
       <sect1>
-        <title>Fixtures Installer</title>
-
-        <para>Fixtures are simple classes that are used to set up a adapter
-        objects system. The code for a fixture should be placed in the
-        <methodname>install</methodname> method, which is run when the system
-        installs the fixtures. Fixtures are only installed if the
-        <classname>ObjectAdapterPersistor</classname> flags that it is
-        uninitialised via its <methodname>isInitialized</methodname> method.
-        For the in memory object store this will be every time it is started,
-        and for other object stores will only be when they detect they have no
-        persistent data.</para>
-
-        <para></para>
-
-        <para>Fixtures are registered with the Framework at startup via the
-        properties file, using the fixtures properties. The
-        <methodname>fixtures</methodname> property itself dictates which
-        fixture classes are to be instantiated at startup, for example:</para>
-
-        <programlisting format="linespecific">isis.fixtures = fixture.BookingsFixture, fixture.PerspectivesFixture</programlisting>
-
-        <para>The <methodname>prefix</methodname> property allows you specify
-        the common package name once and, hence omit them from the classes in
-        the list. The following set of properties is therefore equivalent to
-        the previous example.</para>
-
-        <programlisting format="linespecific">isis.fixtures.prefix = fixture
-isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
-      </sect1>
-
-      <sect1>
-        <title>Persistor</title>
-
-        <para></para>
-
-        <para>The persistor is tasked with managing all of the domain objects
-        and ensuring that they can be retrieved in the futures. In addition to
-        it more obvious role in the storing of objects the persistor must also
-        manage the object that are memory. This second task is known a
-        identity mapping and is required to ensure that any domain object only
-        ever has one adapter for it. If more than one adapter exists for an
-        object then there will be risk that the system has .......</para>
+        <title>Runtime, Runner, Installers</title>
 
         <para></para>
 
         <para></para>
 
-        <sect2>
-          <title>Creating Adapters</title>
-
-          <para>Numerous methods exist in the persistor (see
-          <classname>ObjectAdapterManager</classname>) for creating adapters.
-          These methods do three things. First, they insure that there is no
-          existing adapter for a domain object or OID, and if there is one
-          then that adapter is returned to the caller immediately. Assuming
-          there is no existing adapter then a new one is created for the
-          domain object and the adapter's OID and resolved state are
-          initialised. The OID is typically set to the one provided during the
-          reuqest except when a new domain object is being created, in which
-          case a new transient OID is created for it. The resolved state
-          reflects the type of object and its persistent state. Newly created
-          objects end up with <constant>TRANSIENT</constant>, persistent ones
-          with <constant>GHOST</constant> and for objects that are aggregated
-          the state is intialised to <constant>AGGREGATED (see
-          ResolvedState)</constant></para>
-
-          <para></para>
-
-          <para></para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Configuration Loading</title>
-
-        <para>*** explain the principle, how we construct from the "id" of the
-        installer.</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-1.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
 
         <para></para>
 
@@ -508,60 +394,82 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
         moreinfo="none">mysettings.properties</filename></para>
 
         <para></para>
+      </sect1>
+
+      <sect1>
+        <title>SystemUsingInstallers, and InstallerRegisterry</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-2.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Web and Viewers</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-3.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Authentication and Authorization</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-4.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
 
         <sect2>
-          <title>Properties file contents</title>
+          <title>Exploration</title>
 
-          <para>Each properties file can contain lists of services and
-          fixtures as well as any specific settings (e.g. Hibernate setting).
-          Services are defined using the
-          <methodname>isis.services</methodname> property, fixtures by the
-          <methodname>isis.fixtures</methodname> property.</para>
+          <para>*** this is also mentioned in isis-security.file...</para>
 
           <para></para>
 
-          <para>As a shortcut you can specify the prefix for all classes
-          listed in the <methodname>services</methodname> property using
-          <methodname>services.prefix</methodname> and the
-          <methodname>fixtures</methodname> property using
-          <methodname>fixtures.prefix</methodname>.</para>
+          <para>The list of users that can be switched between during
+          exploration can be listed, separated by commas, with the following
+          property. If no users are specified the default user "exploration"
+          will be used and switching between users will not be
+          possible.</para>
 
-          <programlisting format="linespecific"># uncomment to hide splash
-#isis.nosplash
-isis.locale=en_GB
-isis.services.prefix = org.apache.isis.example.expenses
-isis.services = resources.ExpenseTypeFactory \
-                       , resources.naive.NaiveClaimRepository\
-                       , resources.naive.NaiveEmployeeRepository\
-                       , resources.naive.NaiveExpenseTypeRepository\
-                       , resources.naive.NaiveItemRepository
+          <programlisting format="linespecific">isis.exploration.users=sven, dick, bob</programlisting>
 
-isis.fixtures.prefix=org.apache.isis.example.expenses.fixture
-isis.fixtures=ExpenseTypes, Employees, ExampleClaim, Context</programlisting>
+          <para>To disable the showing of exploration menu items set the
+          following property to false (by default exploration options are
+          shown).</para>
 
-          <para>Other settings that can be set include</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>isis.nosplash</para>
-            </listitem>
-
-            <listitem>
-              <para>isis.locale (e.g. en_GB)</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>See the relevant section for details of settings specific to
-          persistence, web viewer etc.</para>
-
-          <para>The <filename class="directory"
-          moreinfo="none">logging.properties</filename> file allows control
-          over the logging settings. The NOF uses log4j for logging so please
-          refer to <ulink
-          url="http://logging.apache.org/log4j/docs/documentation.html">Apache</ulink>
-          log4j documentation.</para>
-
-          <para></para>
+          <programlisting format="linespecific">isis.exploration.show=false</programlisting>
 
           <para></para>
 
@@ -570,7 +478,378 @@ isis.fixtures=ExpenseTypes, Employees, ExampleClaim, Context</programlisting>
       </sect1>
 
       <sect1>
-        <title>Other Properties</title>
+        <title>Bytecode Enhancement</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-5.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <para></para>
+
+        <para>The default runtime for <emphasis>Apache Isis</emphasis>
+        normally performs lazy loading of references and dirty tracking by
+        proxying all domain objects. Two implementations are provided, using
+        either cglib or javassist. The application archetype automatically
+        configures the use of these proxies. However, some object stores
+        (notably, the JPA object store) do not require these proxies (because
+        they add their own proxies instead); in which case these can be
+        disabled. Alternatively, you may not want to use the bytecode support,
+        in which case you can add the appropriate calls for lazy loading and
+        dirty tracking.</para>
+
+        <para>This area is covered in the {{{./applib/index.html}applib}}, but
+        there is also module-specific documentation in the
+        {{{./core/bytecode-cglib/index.html}bytecode-cglib}} and
+        {{{./core/bytecode-javassist/index.html}bytecode-javassist}}
+        modules.</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title></title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-6.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Fixtures and Services</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-7.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <sect2>
+          <title>Services</title>
+
+          <para></para>
+
+          <para>The first thing that happens is the logging is set up so that
+          everything can be logged. This attempts to load
+          <filename>logging.properties</filename> from the
+          <filename>config</filename> directory on the filesystem and if that
+          cannot be found it will look for the same file in the same directory
+          on the classpath. If neither of these are found then a default
+          logging configuration will be programmatically installed that writes
+          to the console.</para>
+
+          <para>Now that logging is initialised the container can prepare for
+          bootstrapping the system. The first task is load up all the
+          component installers, which is done by the InstallerLookupDefault
+          class. This reads the
+          <filename>installer-registry.properties</filename> file from
+          classpath and attempts to load each class listed. Any class not
+          found is logged so it is easy to determine if a component should be
+          available. Each installer simply knows how to install a component;
+          the component is not loaded at this stage.</para>
+
+          <para>Now the container knows what components are available a series
+          of option handlers (<classname>OptionHandler</classname>) are
+          intialise, with addtional one provided by the Isis container and web
+          server subclasses. These interact with the Apache CLI library to
+          provide details about the command line parameters and will lookup
+          the available components so they can be listed on the command line
+          help. With the handlers set up the command line is parsed using the
+          Apache library. If this parse fails then the library generates a
+          error message with an option summary and displays via the console
+          and the startup process terminates.</para>
+
+          <para>The last step before bootstrapping starts is to prepare the
+          ground for using congfiguration properties. Configuration details
+          are loaded by a <classname>ConfigurationBuilder</classname> object
+          and will be subsequently placed in an immutable
+          <classname>IsisConfiguration</classname> object. Immediately after
+          this has been created each handler is visited so that it can, via
+          its <methodname>primeConfigurationBuilder</methodname> method, add
+          it properties to the builder. This way each command line option is
+          converted to one or more properties of the same form as can be
+          specified in the properties files, hence we only need one way to
+          determine how the system is to be run.</para>
+
+          <para>Now that the ground has been prepared it is time for the
+          bootstrapping to begin. This is done via a call to the
+          <methodname>bootstrapIsis</methodname> method, which is where the
+          process differs for the Isis container and the web server.</para>
+
+          <para></para>
+
+          <para>Services are registered with the Framework at startup via the
+          properties file, using the services properties. The
+          <methodname>services</methodname> property itself dictates which
+          service classes are to be instantiated at startup, for
+          example:</para>
+
+          <programlisting format="linespecific">isis.services = com.mycompany.myapp.dom.BookingFactory,\
+                com.mycompany.myapp.dom.CustomerFactoryAndRepository, \
+                com.mycompany.myapp.dom.LocationFactoryAndRepository</programlisting>
+
+          <para>The <methodname>prefix</methodname> property allows you to
+          specify the common package once and, hence omit them from the
+          classes in the list. The following set of properties is therefore
+          equivalent to the previous example:</para>
+
+          <programlisting format="linespecific">isis.services.prefix = com.mycompany.myapp.dom
+isis.services = BookingFactory, CustomerFactoryAndRepository, LocationFactoryAndRepository</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Fixtures</title>
+
+          <para></para>
+
+          <para></para>
+
+          <para>Fixtures are simple classes that are used to set up a adapter
+          objects system. The code for a fixture should be placed in the
+          <methodname>install</methodname> method, which is run when the
+          system installs the fixtures. Fixtures are only installed if the
+          <classname>ObjectAdapterPersistor</classname> flags that it is
+          uninitialised via its <methodname>isInitialized</methodname> method.
+          For the in memory object store this will be every time it is
+          started, and for other object stores will only be when they detect
+          they have no persistent data.</para>
+
+          <para></para>
+
+          <para>Fixtures are registered with the Framework at startup via the
+          properties file, using the fixtures properties. The
+          <methodname>fixtures</methodname> property itself dictates which
+          fixture classes are to be instantiated at startup, for
+          example:</para>
+
+          <programlisting format="linespecific">isis.fixtures = fixture.BookingsFixture, fixture.PerspectivesFixture</programlisting>
+
+          <para>The <methodname>prefix</methodname> property allows you
+          specify the common package name once and, hence omit them from the
+          classes in the list. The following set of properties is therefore
+          equivalent to the previous example.</para>
+
+          <programlisting format="linespecific">isis.fixtures.prefix = fixture
+isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Persistence</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-8.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <para></para>
+
+        <para>The persistor is tasked with managing all of the domain objects
+        and ensuring that they can be retrieved in the futures. In addition to
+        it more obvious role in the storing of objects the persistor must also
+        manage the object that are memory. This second task is known a
+        identity mapping and is required to ensure that any domain object only
+        ever has one adapter for it. If more than one adapter exists for an
+        object then there will be risk that the system has .......</para>
+
+        <para></para>
+
+        <para></para>
+
+        <sect2>
+          <title>Creating Adapters</title>
+
+          <para>Numerous methods exist in the persistor (see
+          <classname>ObjectAdapterManager</classname>) for creating adapters.
+          These methods do three things. First, they insure that there is no
+          existing adapter for a domain object or OID, and if there is one
+          then that adapter is returned to the caller immediately. Assuming
+          there is no existing adapter then a new one is created for the
+          domain object and the adapter's OID and resolved state are
+          initialised. The OID is typically set to the one provided during the
+          reuqest except when a new domain object is being created, in which
+          case a new transient OID is created for it. The resolved state
+          reflects the type of object and its persistent state. Newly created
+          objects end up with <constant>TRANSIENT</constant>, persistent ones
+          with <constant>GHOST</constant> and for objects that are aggregated
+          the state is intialised to <constant>AGGREGATED (see
+          ResolvedState)</constant></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>(Sub-)Component loggers</title>
+
+          <para></para>
+
+          <para>The framework provides a set of component loggers that
+          specifically log the use of a component, adding additional log
+          messages to the Log4j log or write out to a separate file.
+          Additional logger can also be defined for other components. These
+          logger are designed to log the parameters passed to and the the
+          results return from the requests to a component and tend to be more
+          verbose than the general logging just discussed. At present the
+          following components have loggers available:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The object persistor -
+              <classname>ObjectPersistorLogger</classname></para>
+            </listitem>
+
+            <listitem>
+              <para>The object store -
+              <classname>ObjectStoreLogger</classname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>To set up a logger create an instance of it passing in the
+          object you are logging. Then use the logger instance in place of the
+          original component. The constructors for each of the loggers are
+          overloaded so they take a component to decorate and possibly a file
+          name. If the filename is specified then the logging is done to that
+          file. If there is no file name then the events are logged via Log4j.
+          For example the object store persistor would logged by
+          replacing:</para>
+
+          <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
+isis.setObjectPersistor(persistor);</programlisting>
+
+          <para>with this, which will log request to the persistor the
+          <filename class="directory"
+          moreinfo="none">sever-persistor.log</filename> file:</para>
+
+          <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
+persistor = new ObjectManagerLogger(persistor, "server-persistor.log");
+isis.setObjectPersistor(persistor);</programlisting>
+
+          <para>Please note that the log files, when used, are created when
+          the logger is instantiated and will overwrite any exsiting file.
+          This is not normally a problem as we are interested in the
+          activities during an entire session. However on a stateless server
+          where the component is being recreated each time the continual
+          recreation of the file could be a problem.</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Writing your own Object Store</title>
+
+          <para>*** do we want to include this section ... it'll be somewhat
+          long!</para>
+
+          <para></para>
+
+          <para>When a object is persisted the object store's
+          <methodname>createCreateObjectCommand</methodname> method is called.
+          This create a command object (see GoF Patterns books), which will
+          later be processed when the transaction is be commited. All
+          persistence actions (create, destroy and save) are collected
+          together until this point. This way when a transaction is aborted
+          all commands can be thrown away without recourse to the database.
+          Specifically it is the <methodname>execute</methodname> method that
+          is called on the command, and this command runs an insert command
+          agains the the database.</para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>User Profile Store Support</title>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-8a.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Transactions</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-9.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>System</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/architectural-layers-A.png"
+                       scale="80" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
 
         <sect2 id="locale">
           <title>Locale</title>
@@ -622,379 +901,16 @@ isis.fixtures=ExpenseTypes, Employees, ExampleClaim, Context</programlisting>
           <para>Alternatively the time zone can be specified in relative
           format of the form <emphasis>GMT-8:00</emphasis> where the relative
           number of hours and minutes can be specified.</para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Image Loading</title>
-
-        <para>All images must be held in a directory called <filename
-        class="directory" moreinfo="none">images</filename> in the working
-        directory, or on the classpath.</para>
-
-        <para>Images for objects are picked up by class name in the form of
-        <filename class="directory"
-        moreinfo="none">&lt;ClassName&gt;.&lt;extension</filename>&gt; and
-        will be case sensitive on Unix/Linux, but case insensitive on
-        Windows.</para>
-
-        <para>The names of the images can be overriden by the reflector, which
-        can pass back a name of an image that is found from the domain object.
-        This provides a mechanism for objects to be shown with images that
-        they themselves specify.</para>
-
-        <para><emphasis>Extensions</emphasis> that are currently supported are
-        <filename class="directory" moreinfo="none">.gif</filename>, <filename
-        class="directory" moreinfo="none">.png</filename>, <filename
-        class="directory" moreinfo="none">.jpg</filename> and <filename
-        class="directory" moreinfo="none">.jpeg</filename>.</para>
-
-        <para><emphasis>ClassName</emphasis> is either the short form or the
-        fully qualified name of the class, and case can be important depending
-        on the platform.</para>
-
-        <para>When loading images based on class, if no image is found for the
-        current class using the above variations then the process is repeated
-        using the name (both short and fully qualified) of the class's
-        immediate superclass. This process repeats until there are no more
-        superclasses.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>There are a number of generic images that are used by the
-        framework, and that can be changed to create a different look. These
-        are:-</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>empty-field.png</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>logo.jpg</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>small-logo.png</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>transient.png</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>unknown.png</literal></para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Exploration Properties</title>
-
-        <sect2>
-          <title>Users</title>
-
-          <para>*** this is also mentioned in isis-security.file...</para>
-
-          <para></para>
-
-          <para>The list of users that can be switched between during
-          exploration can be listed, separated by commas, with the following
-          property. If no users are specified the default user "exploration"
-          will be used and switching between users will not be
-          possible.</para>
-
-          <programlisting format="linespecific">isis.exploration.users=sven, dick, bob</programlisting>
-        </sect2>
-
-        <sect2>
-          <title>Exploration options</title>
-
-          <para>To disable the showing of exploration menu items set the
-          following property to false (by default exploration options are
-          shown).</para>
-
-          <programlisting format="linespecific">isis.exploration.show=false</programlisting>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>*** Component loggers</title>
-
-        <para>*** split this out to the respective modules.</para>
-
-        <para>The framework provides a set of component loggers that
-        specifically log the use of a component, adding additional log
-        messages to the Log4j log or write out to a separate file. Additional
-        logger can also be defined for other components. These logger are
-        designed to log the parameters passed to and the the results return
-        from the requests to a component and tend to be more verbose than the
-        general logging just discussed. At present the following components
-        have loggers available:-</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>The object persistor -
-            <classname>ObjectPersistorLogger</classname></para>
-          </listitem>
-
-          <listitem>
-            <para>The object store -
-            <classname>ObjectStoreLogger</classname></para>
-          </listitem>
-
-          <listitem>
-            <para>The distibution interface -
-            <classname>DistributionLogger</classname></para>
-          </listitem>
-        </itemizedlist>
-
-        <para>To set up a logger create an instance of it passing in the
-        object you are logging. Then use the logger instance in place of the
-        original component. The constructors for each of the loggers are
-        overloaded so they take a component to decorate and possibly a file
-        name. If the filename is specified then the logging is done to that
-        file. If there is no file name then the events are logged via Log4j.
-        For example the object store persistor would logged by
-        replacing:</para>
-
-        <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
-isis.setObjectPersistor(persistor);</programlisting>
-
-        <para>with this, which will log request to the persistor the <filename
-        class="directory" moreinfo="none">sever-persistor.log</filename>
-        file:</para>
-
-        <programlisting format="linespecific">ObjectAdapterPersistor persistor = new ObjectStorePersistor();
-persistor = new ObjectManagerLogger(persistor, "server-persistor.log");
-isis.setObjectPersistor(persistor);</programlisting>
-
-        <para>Please note that the log files, when used, are created when the
-        logger is instantiated and will overwrite any exsiting file. This is
-        not normally a problem as we are interested in the activities during
-        an entire session. However on a stateless server where the component
-        is being recreated each time the continual recreation of the file
-        could be a problem.</para>
-
-        <sect2>
-          <title>Defining a logger</title>
-
-          <para>To define a logger extend the Logger class, providing a
-          suitable constructor, and implement the
-          <methodname>getDecoratedClass</methodname> so it passes back the
-          <classname>Class</classname> object of the class being decorated
-          (this allows the Log4j logger to log messages as that class rather
-          than as a separate class). Within the subclass you can use the
-          following methods:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><emphasis> <methodname>void log(String
-              message)</methodname> </emphasis></para>
-
-              <para>output a log entry with the specified message.</para>
-            </listitem>
-
-            <listitem>
-              <para><emphasis> <methodname>void log(String message, Object
-              result)</methodname> </emphasis></para>
-
-              <para>output a log entry with the specified message and the
-              specified result. This is useful when needing to show both the
-              entry and exit states, or the paramters and the return
-              value.</para>
-            </listitem>
-
-            <listitem>
-              <para><emphasis> <methodname>void close()</methodname>
-              </emphasis></para>
-
-              <para>closes the file that is being written to.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
 
           <para></para>
         </sect2>
       </sect1>
+    </chapter>
 
-      <sect1>
-        <title>Persistor API</title>
+    <chapter>
+      <title>Monitoring Module</title>
 
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Object Store API</title>
-
-        <para></para>
-
-        <para></para>
-
-        <sect2>
-          <title>Writing your own Object Store</title>
-
-          <para>*** do we want to include this section ... it'll be somewhat
-          long!</para>
-
-          <para></para>
-
-          <para>When a object is persisted the object store's
-          <methodname>createCreateObjectCommand</methodname> method is called.
-          This create a command object (see GoF Patterns books), which will
-          later be processed when the transaction is be commited. All
-          persistence actions (create, destroy and save) are collected
-          together until this point. This way when a transaction is aborted
-          all commands can be thrown away without recourse to the database.
-          Specifically it is the <methodname>execute</methodname> method that
-          is called on the command, and this command runs an insert command
-          agains the the database.</para>
-
-          <para></para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Bytecode Provider API</title>
-
-        <para></para>
-
-        <para></para>
-
-        <para>The default runtime for <emphasis>Apache Isis</emphasis>
-        normally performs lazy loading of references and dirty tracking by
-        proxying all domain objects. Two implementations are provided, using
-        either cglib or javassist. The application archetype automatically
-        configures the use of these proxies. However, some object stores
-        (notably, the JPA object store) do not require these proxies (because
-        they add their own proxies instead); in which case these can be
-        disabled. Alternatively, you may not want to use the bytecode support,
-        in which case you can add the appropriate calls for lazy loading and
-        dirty tracking.</para>
-
-        <para>This area is covered in the {{{./applib/index.html}applib}}, but
-        there is also module-specific documentation in the
-        {{{./core/bytecode-cglib/index.html}bytecode-cglib}} and
-        {{{./core/bytecode-javassist/index.html}bytecode-javassist}}
-        modules.</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Profile Store API</title>
-
-        <para></para>
-
-        <para></para>
-
-        <para>Information about a user of the system (rather that a user of
-        the application domain model) is stored in a
-        <classname>UserProfile</classname> object which is got from the
-        <classname>UserProfileService</classname>, which in turn is accessible
-        from <classname>IsisSession</classname>. There is also convienence
-        methods on <classname>IsisContext</classname> to get both the
-        <classname>UserProfile</classname> and the
-        <classname>UserProfileService</classname>. The user profile details
-        the perspectives the user has set up and options that have been
-        specified, typically for the user interfaces. The user profile service
-        provides a way to create, save and retrieve the user profiles,
-        specifically the profile of the current user. The service in turn has
-        a <classname>UserProfilePersistor</classname> that is used to do the
-        actual persistence.</para>
-
-        <para>Setting up profiles</para>
-
-        <para>Profiles can be created at start up by creating
-        <classname>UserProfileFixture</classname> subclasses. Theses are only
-        ever loaded once as the fixture installer checks with
-        <methodname>UserProfileSevice.isInitialized()</methodname> to see if
-        the service is already set up. The profile fixture (which is defined
-        in the application library and is therefore not part of the Isis
-        framework) loads the profiles into Isis by passing in an
-        implementation of ProfilePersistor that provides a way for the
-        perspective to make requests of the framework.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>To store profiles (during exploration) for users the a profile
-        store must be specified.</para>
-
-        <para>On the command line use -e xml to store them in an XML.</para>
-
-        <para>Without this the profile will simply be kept in memory, and lost
-        on exit.</para>
-
-        <para></para>
-
-        <sect2>
-          <title>Setting up Perspectives (Profile Fixtures)</title>
-
-          <para></para>
-
-          <para></para>
-
-          <para>Perspectives allow the set of services available to a user (eg
-          as icons in the DnD viewer) to be customized for that user. Since
-          these services represent the "start points" for the user to interact
-          with the domain model, they in a sense define an application on a
-          per-user basis.</para>
-
-          <para>The perspectives are stored in user-profiles, which are a
-          persistence mechanism independent of the object store. (The intent
-          is for user profiles to store additional information for use by
-          viewers, for example allowing a user to reskin an application or
-          change colors or fonts. As of NOF 4.0 the functionality provided is
-          still limited, however).</para>
-
-          <para>The key here is that if a user logs in and no perspective
-          exists for that user then one will be created for them. The new
-          perspective will be a copy of the 'template' perspective, or, if
-          none was defined, a perspective containing all the known services.
-          To create a template perspective add a perspective fixture that
-          calls <methodname>saveAsDefault()</methodname>, rather than
-          <methodname>saveForUser()</methodname> for a named user, as shown
-          below.</para>
-
-          <programlisting>public class PerspectivesFixture extends UserProfileFixture {
-    @Override
-    protected void installProfiles() {
-        Profile profile = newUserProfile();
-        Perspective perspective = profile.newPerspective("ECS");
-        perspective.addToServices(LocationFactory.class);
-        perspective.addToServices(CustomerRepository.class);
-        perspective.addToServices(PaymentMethodFactory.class);
-        
-        saveAsDefault(profile);
-    }
-}
-</programlisting>
-
-          <para>With that set up, when a new user now logs in they will see
-          three service icons on the screen for locations, customers and
-          payment methods. On the drag and drop user interface the user can
-          add and remove services from their perspective. To remove a service
-          icon right-click on the grey border and select the close option. To
-          add a service select the Services... option from the application
-          menu (accessed by right-clicking on the application background) and
-          drag the required service onto the desktop. Unfortunately there is
-          no similar mechanism available on the HTML user interface so you
-          will need to modify the created perspectives via the DND UI.</para>
-        </sect2>
-      </sect1>
+      <para></para>
     </chapter>
 
     <chapter>
