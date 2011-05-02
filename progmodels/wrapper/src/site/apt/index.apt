@@ -26,5 +26,20 @@ Wrapper Programming Model
  The wrapper programming model is provided as an implementation of Isis' <<<DomainObjectContainer>>> interface (in the
  {{{../../../applib/index.html}applib}}.  
  This can be downcast into a <<<WrapperFactory>>>, from which the domain object is wrapped using a {{{http://cglib.sourceforge.net/}CgLib}} proxy.  
- This proxy implements the checks to ensure that the wrapped object is visible, is not disabled, and the interactoin is
+ This proxy implements the checks to ensure that the wrapped object is visible, is not disabled, and the interaction is
  valid ("see it, use it, do it").
+
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}Default}} programming model.
+  
+  * the {{{../groovy/index.html}wrapper}} programming model.
+  
+    For domain objects written with Groovy.
+
+  []
+  
+  Note that these are <i>not</i> necessarily mutually exclusive (they can be combined). 
+ 

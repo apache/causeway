@@ -25,16 +25,16 @@ Default Security (No-op)
  
  This makes the default security implementation only suitable for prototyping and unit testing,
  when security is not of concern.  For deployment you will typically need to configure one of 
- the {{{../../alternatives/security/index.html}alternative}} implementations. 
+ the alternative implementations. 
  
 
 Alternatives
 
   Alternatives include:
   
-  * the {{{../../alternatives/security/file/index.html}file-based}} security (reading from simple flat files)
+  * the {{{../file/index.html}file-based}} security (reading from simple flat files)
 
-  * the {{{../../alternatives/security/ldap/index.html}LDAP}} security
+  * the {{{../ldap/index.html}LDAP}} security
 
-
+  []
  

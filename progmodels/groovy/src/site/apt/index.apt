@@ -15,11 +15,30 @@
 ~~  specific language governing permissions and limitations
 ~~  under the License.
 
-Overview
+Groovy Programming Model
+ 
+ The <groovy progmodel> configures Apache Isis to allow you to write your domain objects 
+ in {{{http://groovy.codehaus.org}Groovy}}.
+ 
+ The conventions are based on the <default programming> model; the purposes of this 
+ programming model is to instruct Isis to ignore synthetic methods created by the
+ Groovy compiler.
+ 
+Alternatives
 
-  This module configures Apache Isis to allow you to write your domain objects in {{{http://groovy.codehaus.org}Groovy}}.
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}Default}} programming model.
+  
+    For domain objects written with Java.
 
-Getting Started
+  * the {{{../wrapper/index.html}wrapper}} programming model.
+  
+    This extends the default programming model by providing the ability for domain objects to
+    interact with each other <as if> through the user interface (that is, obeying any business
+    rules that would otherwise be enforced at the application layer).
 
-  Full instructions on how to configure Isis to support Groovy are provided in the users' guide.
-
+  []
+  
+  Note that these are <i>not</i> necessarily mutually exclusive (they can be combined). 
+  

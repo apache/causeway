@@ -30,12 +30,17 @@ Alternatives
 
   Alternatives include:
   
-  * the {{{../../alternatives/progmodel/wrapper/index.html}wrapper}} programming model.
+  * the {{{../wrapper/index.html}wrapper}} programming model.
   
     This extends the default programming model by providing the ability for domain objects to
     interact with each other <as if> through the user interface (that is, obeying any business
     rules that would otherwise be enforced at the application layer).
 
-  * the {{{../../alternatives/progmodel/groovy/index.html}Groovy}} programming model.
+  * the {{{../groovy/index.html}Groovy}} programming model.
   
     This provides the ability to write domain objects using {{{http://groovy.codehaus.org}Groovy}}.
+
+  []
+
+  Note that these are <i>not</i> necessarily mutually exclusive (they can be combined). 
+  
