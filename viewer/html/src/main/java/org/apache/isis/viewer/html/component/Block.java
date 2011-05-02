@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 public interface Block extends Component {
@@ -25,4 +24,3 @@ public interface Block extends Component {
     void add(Component component);
 
 }
-

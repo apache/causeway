@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
-
 
 public class Submenu implements Component {
 
@@ -35,14 +33,14 @@ public class Submenu implements Component {
         this.items = items;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.println("<div class=\"submenu-item\">");
         writer.println(menuName);
-        for (int j = 0; j < items.length; j++) {
-            items[j].write(writer);
+        for (final Component item : items) {
+            item.write(writer);
         }
         writer.println("</div>");
     }
 
 }
-

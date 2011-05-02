@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.task;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -32,24 +31,15 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
 public final class TaskStep implements Action {
-    private void addSelector(
-            final Context context,
-            final Form form,
-            final String currentEntry,
-            final String fieldId,
-            final String fieldLabel,
-            final String fieldDescription,
-            final boolean required,
-            final String errorMessage,
-            final Task task,
-            final ObjectAdapter[] objects) {
+    private void addSelector(final Context context, final Form form, final String currentEntry, final String fieldId,
+        final String fieldLabel, final String fieldDescription, final boolean required, final String errorMessage,
+        final Task task, final ObjectAdapter[] objects) {
         task.checkInstances(context, objects);
 
         int size = 0;
-        for (int i = 0; i < objects.length; i++) {
-            if (objects[i] != null) {
+        for (final ObjectAdapter object : objects) {
+            if (object != null) {
                 size++;
             }
         }
@@ -72,50 +62,29 @@ public final class TaskStep implements Action {
         form.addLookup(fieldLabel, fieldDescription, fieldId, selectedIndex, instances, ids, required, errorMessage);
     }
 
-    private void addSelectorForKnownReferences(
-            final Context context,
-            final Form form,
-            final ObjectSpecification type,
-            final String currentEntry,
-            final String fieldId,
-            final String fieldLabel,
-            final String fieldDescription,
-            final boolean required,
-            final String errorMessage,
-            final Task task) {
+    private void addSelectorForKnownReferences(final Context context, final Form form, final ObjectSpecification type,
+        final String currentEntry, final String fieldId, final String fieldLabel, final String fieldDescription,
+        final boolean required, final String errorMessage, final Task task) {
 
         final ObjectAdapter[] objects = context.getKnownInstances(type);
-        addSelector(context, form, currentEntry, fieldId, fieldLabel, fieldDescription, required, errorMessage, task, objects);
+        addSelector(context, form, currentEntry, fieldId, fieldLabel, fieldDescription, required, errorMessage, task,
+            objects);
     }
 
-    private void addSelectorForObjectOptions(
-            final Context context,
-            final Form form,
-            final String currentEntry,
-            final String fieldId,
-            final String fieldLabel,
-            final String fieldDescription,
-            final ObjectAdapter[] options,
-            final boolean required,
-            final String errorMessage,
-            final Task task) {
+    private void addSelectorForObjectOptions(final Context context, final Form form, final String currentEntry,
+        final String fieldId, final String fieldLabel, final String fieldDescription, final ObjectAdapter[] options,
+        final boolean required, final String errorMessage, final Task task) {
         final ObjectAdapter[] objects = new ObjectAdapter[options.length];
         for (int i = 0; i < options.length; i++) {
             objects[i] = options[i];
         }
-        addSelector(context, form, currentEntry, fieldId, fieldLabel, fieldDescription, required, errorMessage, task, objects);
+        addSelector(context, form, currentEntry, fieldId, fieldLabel, fieldDescription, required, errorMessage, task,
+            objects);
     }
 
-    private void addSelectorForValueOptions(
-            final Form form,
-            final String currentEntry,
-            final String fieldId,
-            final String fieldLabel,
-            final String fieldDescription,
-            final ObjectAdapter[] options,
-            final boolean required,
-            final String errorMessage,
-            final Task task) {
+    private void addSelectorForValueOptions(final Form form, final String currentEntry, final String fieldId,
+        final String fieldLabel, final String fieldDescription, final ObjectAdapter[] options, final boolean required,
+        final String errorMessage, final Task task) {
         int selectedIndex = -1;
         final String[] instances = new String[options.length];
         for (int i = 0; i < options.length; i++) {
@@ -124,24 +93,16 @@ public final class TaskStep implements Action {
                 selectedIndex = i;
             }
         }
-        form.addLookup(fieldLabel, fieldDescription, fieldId, selectedIndex, instances, instances, required, errorMessage);
+        form.addLookup(fieldLabel, fieldDescription, fieldId, selectedIndex, instances, instances, required,
+            errorMessage);
     }
 
-    private void addTextFieldForParseable(
-            final Form form,
-            final ObjectSpecification type,
-            final String currentEntryText,
-            final String fieldId,
-            final String fieldLabel,
-            final String fieldDescription,
-            final int noLines,
-            final boolean wrap,
-            final int maxLength,
-            final int typicalLength,
-            final boolean required,
-            final String errorMessage) {
-        form.addField(type, fieldLabel, fieldDescription, fieldId, currentEntryText, noLines, wrap, maxLength, typicalLength,
-                required, errorMessage);
+    private void addTextFieldForParseable(final Form form, final ObjectSpecification type,
+        final String currentEntryText, final String fieldId, final String fieldLabel, final String fieldDescription,
+        final int noLines, final boolean wrap, final int maxLength, final int typicalLength, final boolean required,
+        final String errorMessage) {
+        form.addField(type, fieldLabel, fieldDescription, fieldId, currentEntryText, noLines, wrap, maxLength,
+            typicalLength, required, errorMessage);
     }
 
     private void displayTask(final Context context, final Page page, final Task task) {
@@ -162,9 +123,9 @@ public final class TaskStep implements Action {
 
         final StringBuffer crumbs = new StringBuffer();
         final String[] trail = task.getTrail();
-        for (int i = 0; i < trail.length; i++) {
+        for (final String element : trail) {
             crumbs.append(" : ");
-            crumbs.append(trail[i]);
+            crumbs.append(element);
         }
 
         final Component[] action = new Component[1];
@@ -175,7 +136,8 @@ public final class TaskStep implements Action {
             content.add(context.getComponentFactory().createInlineBlock("error", task.getError(), null));
         }
 
-        final Form form = context.getComponentFactory().createForm(task.getId(), name(), task.getStep(), task.numberOfSteps(),
+        final Form form =
+            context.getComponentFactory().createForm(task.getId(), name(), task.getStep(), task.numberOfSteps(),
                 task.isEditing());
         final String[] parameterLabels = task.getNames();
         final String[] parameterDescriptions = task.getFieldDescriptions();
@@ -201,16 +163,16 @@ public final class TaskStep implements Action {
                 addReadOnlyField(form, fieldLabel, currentEntryTitle, fieldDescription);
             } else if (paramSpec.isParseable() && options[i] != null && options[i].length > 0) {
                 addSelectorForValueOptions(form, currentEntryTitle, fieldId, fieldLabel, fieldDescription, options[i],
-                        !optional[i], error, task);
+                    !optional[i], error, task);
             } else if (paramSpec.isParseable()) {
-                addTextFieldForParseable(form, paramSpec, currentEntryTitle, fieldId, fieldLabel, fieldDescription, noLines[i],
-                        canWrap[i], maxLength[i], typicalLength[i], !optional[i], error);
+                addTextFieldForParseable(form, paramSpec, currentEntryTitle, fieldId, fieldLabel, fieldDescription,
+                    noLines[i], canWrap[i], maxLength[i], typicalLength[i], !optional[i], error);
             } else if (paramSpec.isNotCollection() && options[i] != null && options[i].length > 0) {
-                addSelectorForObjectOptions(context, form, currentEntryTitle, fieldId, fieldLabel, fieldDescription, options[i],
-                        !optional[i], error, task);
+                addSelectorForObjectOptions(context, form, currentEntryTitle, fieldId, fieldLabel, fieldDescription,
+                    options[i], !optional[i], error, task);
             } else if (paramSpec.isNotCollection()) {
-                addSelectorForKnownReferences(context, form, paramSpec, currentEntryTitle, fieldId, fieldLabel, fieldDescription,
-                        !optional[i], error, task);
+                addSelectorForKnownReferences(context, form, paramSpec, currentEntryTitle, fieldId, fieldLabel,
+                    fieldDescription, !optional[i], error, task);
             } else {
                 throw new IsisException();
             }
@@ -222,6 +184,7 @@ public final class TaskStep implements Action {
         form.addReadOnlyField(fieldLabel, title, description);
     }
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final String taskId = request.getTaskId();
         final Task task = context.getTask(taskId);
@@ -274,16 +237,16 @@ public final class TaskStep implements Action {
             return true;
         }
         final String[] errors = task.getErrors();
-        for (int i = 0; i < errors.length; i++) {
-            if (errors[i] != null) {
+        for (final String error : errors) {
+            if (error != null) {
                 return true;
             }
         }
         return false;
     }
 
+    @Override
     public String name() {
         return Request.TASK_COMMAND;
     }
 }
-

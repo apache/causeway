@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.crumb;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -25,8 +24,6 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public class CollectionCrumb implements Crumb {
     private final String collectionId;
@@ -37,12 +34,14 @@ public class CollectionCrumb implements Crumb {
         title = collection.titleString();
     }
 
+    @Override
     public void debug(final DebugBuilder string) {
         string.appendln("Collection Crumb");
         string.appendln("object", collectionId);
         string.appendln("title", title);
     }
 
+    @Override
     public String title() {
         return title;
     }
@@ -52,8 +51,8 @@ public class CollectionCrumb implements Crumb {
         return new ToString(this).append(title()).toString();
     }
 
+    @Override
     public Request changeContext() {
         return ForwardRequest.listCollection(collectionId);
     }
 }
-

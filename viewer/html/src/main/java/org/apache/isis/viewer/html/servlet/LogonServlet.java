@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.servlet;
 
 import java.io.IOException;
@@ -43,32 +42,30 @@ import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.log4j.Logger;
 
-
 public class LogonServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(LogonServlet.class);
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-            IOException {
+        IOException {
         doPost(request, response);
     }
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-            IOException {
-       
-        
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
+
         AuthenticationSession authSession = new AuthenticationSessionLookupStrategyDefault().lookup(request, response);
         if (authSession != null) {
-            boolean sessionValid = IsisContext.getAuthenticationManager().isSessionValid(authSession);
+            final boolean sessionValid = IsisContext.getAuthenticationManager().isSessionValid(authSession);
             if (sessionValid) {
                 loggedIn(response, authSession.getUserName());
                 return;
             }
         }
 
-        String user = request.getParameter("username");
+        final String user = request.getParameter("username");
         final String password = request.getParameter("password");
 
         if (user == null && !IsisContext.getDeploymentType().isExploring()) {
@@ -93,18 +90,18 @@ public class LogonServlet extends HttpServlet {
         loggedIn(response, user);
     }
 
-    private AuthenticationSession authenticate(String user, String password) {
+    private AuthenticationSession authenticate(final String user, final String password) {
         AuthenticationRequest request;
-        if (IsisContext.getDeploymentType() == DeploymentType.EXPLORATION) { 
+        if (IsisContext.getDeploymentType() == DeploymentType.EXPLORATION) {
             request = new AuthenticationRequestExploration();
-        }else {
+        } else {
             request = new AuthenticationRequestPassword(user, password);
         }
         return getAuthenticationManager().authenticate(request);
     }
 
-    private void prompt(final HttpServletResponse response, final String user, final String password, final String message)
-            throws IOException {
+    private void prompt(final HttpServletResponse response, final String user, final String password,
+        final String message) throws IOException {
         response.setContentType("text/html");
         final HtmlComponentFactory factory = new HtmlComponentFactory();
         final LogonFormPage page = factory.createLogonPage(user, password);
@@ -125,4 +122,3 @@ public class LogonServlet extends HttpServlet {
     }
 
 }
-

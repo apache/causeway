@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.inject.internal.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -34,6 +31,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.context.Context;
 
+import com.google.inject.internal.Lists;
 
 public class MenuUtil {
 
@@ -47,21 +45,15 @@ public class MenuUtil {
         return menuItems;
     }
 
-	private static List<ObjectAction> concat(
-			final List<ObjectAction> actions1,
-			final List<ObjectAction> actions2) {
-		final List<ObjectAction> actions = Lists.newArrayList();
-		actions.addAll(actions1);
-		actions.addAll(actions2);
-		return actions;
-	}
+    private static List<ObjectAction> concat(final List<ObjectAction> actions1, final List<ObjectAction> actions2) {
+        final List<ObjectAction> actions = Lists.newArrayList();
+        actions.addAll(actions1);
+        actions.addAll(actions2);
+        return actions;
+    }
 
-    private static Component[] createMenu(
-            final String menuName,
-            final ObjectAdapter target,
-            final List<ObjectAction> actions,
-            final Context context,
-            final String targetObjectId) {
+    private static Component[] createMenu(final String menuName, final ObjectAdapter target,
+        final List<ObjectAction> actions, final Context context, final String targetObjectId) {
         final List<Component> menuItems = new ArrayList<Component>();
         for (int j = 0; j < actions.size(); j++) {
             final ObjectAction action = actions.get(j);
@@ -74,30 +66,30 @@ public class MenuUtil {
                 if (!action.isVisible(IsisContext.getAuthenticationSession(), target).isAllowed()) {
                     continue;
                 }
-                
+
                 if (action.getType() == ActionType.USER) {
-                	// carry on, process this action
+                    // carry on, process this action
                 } else if (action.getType() == ActionType.EXPLORATION) {
-                	boolean isExploring = IsisContext.getDeploymentType().isExploring();
-					if (isExploring) {
-                		// carry on, process this action
-                	} else {
-                    	// ignore this action, skip onto next
-                		continue;
-                	}
+                    final boolean isExploring = IsisContext.getDeploymentType().isExploring();
+                    if (isExploring) {
+                        // carry on, process this action
+                    } else {
+                        // ignore this action, skip onto next
+                        continue;
+                    }
                 } else if (action.getType() == ActionType.PROTOTYPE) {
-                	boolean isPrototyping = IsisContext.getDeploymentType().isPrototyping();
-					if (isPrototyping) {
-                		// carry on, process this action
-                	} else {
-                    	// ignore this action, skip onto next
-                		continue;
-                	}
+                    final boolean isPrototyping = IsisContext.getDeploymentType().isPrototyping();
+                    if (isPrototyping) {
+                        // carry on, process this action
+                    } else {
+                        // ignore this action, skip onto next
+                        continue;
+                    }
                 } else if (action.getType() == ActionType.DEBUG) {
-                	// TODO: show if debug "gesture" present
+                    // TODO: show if debug "gesture" present
                 } else {
-                	// ignore this action, skip onto next
-                	continue;
+                    // ignore this action, skip onto next
+                    continue;
                 }
 
                 final String actionId = context.mapAction(action);
@@ -106,23 +98,22 @@ public class MenuUtil {
                     collectParameters = false;
                     // TODO use new promptForParameters method instead of all this
                 } else if (action.getParameterCount() == 1 && action.isContributed()
-                        && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+                    && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
                     collectParameters = false;
                 } else {
                     collectParameters = true;
                 }
                 final Consent consent = action.isUsable(IsisContext.getAuthenticationSession(), target);
                 final String consentReason = consent.getReason();
-                menuItem = context.getComponentFactory().createMenuItem(
-                        actionId, action.getName(), action.getDescription(),
+                menuItem =
+                    context.getComponentFactory().createMenuItem(actionId, action.getName(), action.getDescription(),
                         consentReason, action.getType(), collectParameters, targetObjectId);
             }
             if (menuItem != null) {
                 menuItems.add(menuItem);
             }
         }
-        return menuItems.toArray(new Component[]{});
+        return menuItems.toArray(new Component[] {});
     }
 
 }
-

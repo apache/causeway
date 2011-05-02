@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 import java.io.PrintWriter;
-
-
 
 public abstract class ComponentAbstract implements Component {
     private String id;
@@ -57,4 +54,3 @@ public abstract class ComponentAbstract implements Component {
     }
 
 }
-

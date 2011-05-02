@@ -17,25 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action;
 
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class ChangeContext implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final int id = Integer.valueOf(request.getObjectId()).intValue();
         request.forward(context.changeContext(id));
     }
 
+    @Override
     public String name() {
         return "context";
     }
 
 }
-

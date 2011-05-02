@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-
 
 public interface ComponentFactory {
     Component createAddOption(String id, String id2);
@@ -50,14 +48,8 @@ public interface ComponentFactory {
 
     Component createSubmenu(String menuName, Component[] items);
 
-    Component createMenuItem(
-            String actionId,
-            String name,
-            String description,
-            String reasonDisabled,
-            ActionType type,
-            boolean hasParameters,
-            String targetObjectId);
+    Component createMenuItem(String actionId, String name, String description, String reasonDisabled, ActionType type,
+        boolean hasParameters, String targetObjectId);
 
     Component createCollectionIcon(ObjectAdapter object, String collectionId);
 
@@ -78,8 +70,8 @@ public interface ComponentFactory {
     /**
      * 
      * @param field
-     * @param value -
-     *            may be <tt>null</tt> so subclass should handle.
+     * @param value
+     *            - may be <tt>null</tt> so subclass should handle.
      * @param isEditable
      * @return
      */
@@ -87,4 +79,3 @@ public interface ComponentFactory {
 
     Component createLink(String link, String name, String description);
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.task;
 
 import java.util.List;
@@ -32,8 +31,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
-
-
 
 public final class MethodTask extends Task {
     private final ObjectAction action;
@@ -82,9 +79,8 @@ public final class MethodTask extends Task {
                 initialState[i] = defaultParameterValues[i];
             }
             /*
-             * noLines[i] = action.getParameterNoLines()[i]; wraps[i] = action.canParametersWrap()[i];
-             * maxLength[i] = action.getParameterMaxLengths()[i]; typicalLength[i] =
-             * action.getParameterTypicalLengths()[i];
+             * noLines[i] = action.getParameterNoLines()[i]; wraps[i] = action.canParametersWrap()[i]; maxLength[i] =
+             * action.getParameterMaxLengths()[i]; typicalLength[i] = action.getParameterTypicalLengths()[i];
              */
         }
 
@@ -133,4 +129,3 @@ public final class MethodTask extends Task {
         return action.getParameterCount() == expectedNoParameters;
     }
 }
-

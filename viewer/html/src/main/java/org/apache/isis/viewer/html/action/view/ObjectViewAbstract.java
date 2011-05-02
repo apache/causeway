@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,17 +29,16 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public abstract class ObjectViewAbstract implements Action {
 
+    @Override
     public final void execute(final Request request, final Context context, final Page page) {
         final String idString = request.getObjectId();
         final ObjectAdapter adapter = context.getMappedObject(idString);
         if (adapter == null) {
             throw new ActionException("No such object: " + idString);
         }
-        
+
         IsisContext.getPersistenceSession().resolveImmediately(adapter);
 
         page.setTitle(adapter.titleString());
@@ -71,10 +69,11 @@ public abstract class ObjectViewAbstract implements Action {
         context.clearMessagesAndWarnings();
     }
 
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {}
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object,
+        final String field) {
+    }
 
     protected boolean addObjectToHistory() {
         return false;
     }
 }
-

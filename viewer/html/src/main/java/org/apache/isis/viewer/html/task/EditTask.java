@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.task;
 
 import java.util.List;
@@ -40,10 +39,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 
-
 public class EditTask extends Task {
     private static int size(final ObjectAdapter object) {
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
+        final List<ObjectAssociation> fields =
+            object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
         return fields.size();
     }
@@ -58,7 +57,8 @@ public class EditTask extends Task {
     public EditTask(final Context context, final ObjectAdapter object) {
         super(context, "Edit", "", object, size(object));
 
-        final List<ObjectAssociation> allFields = object.getSpecification().getAssociations(
+        final List<ObjectAssociation> allFields =
+            object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
 
         fields = new ObjectAssociation[names.length];
@@ -104,7 +104,8 @@ public class EditTask extends Task {
         final ObjectAdapter target = getTarget(context);
         final ObjectAdapter[][] options = new ObjectAdapter[len][];
         for (int i = from, j = 0; j < len; i++, j++) {
-            if (skipField(target, fields[i])) {} else {
+            if (skipField(target, fields[i])) {
+            } else {
                 options[j] = fields[i].getChoices(target);
             }
         }
@@ -132,10 +133,10 @@ public class EditTask extends Task {
                 }
             }
         }
-        
+
         if (target.isTransient()) {
             saveState(target, entries);
-            Consent isValid = target.getSpecification().isValid(target);
+            final Consent isValid = target.getSpecification().isValid(target);
             error = isValid.isVetoed() ? isValid.getReason() : null;
         }
     }
@@ -146,8 +147,9 @@ public class EditTask extends Task {
         final ObjectAdapter[] entryAdapters = getEntries(context);
 
         if (targetAdapter.isTransient()) {
-            final ObjectAction action = 
-                targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
+            final ObjectAction action =
+                targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save",
+                    ObjectSpecification.EMPTY_LIST);
             if (action == null) {
                 getPersistenceSession().makePersistent(targetAdapter);
             } else {
@@ -165,11 +167,11 @@ public class EditTask extends Task {
             final ObjectAssociation fld = fields[i];
             final ObjectAdapter entryAdapter = entryAdapters[i];
             final boolean isReadOnly = readOnly[i];
-            
+
             if (isReadOnly) {
-            	continue;
+                continue;
             }
-            
+
             if (fld.isOneToOneAssociation()) {
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) fld);
                 final Object entryPojo = AdapterUtils.unwrap(entryAdapter);
@@ -206,16 +208,13 @@ public class EditTask extends Task {
             return "New " + newType;
         }
     }
-    
-    
-    ///////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////
- 
+    // /////////////////////////////////////////////////////
+
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-

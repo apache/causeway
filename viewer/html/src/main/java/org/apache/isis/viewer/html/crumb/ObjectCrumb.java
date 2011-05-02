@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.crumb;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -25,8 +24,6 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public class ObjectCrumb implements Crumb {
     private final String objectId;
@@ -39,6 +36,7 @@ public class ObjectCrumb implements Crumb {
         isService = object.getSpecification().isService();
     }
 
+    @Override
     public void debug(final DebugBuilder string) {
         string.appendln("Object Crumb");
         string.appendln("object", objectId);
@@ -46,6 +44,7 @@ public class ObjectCrumb implements Crumb {
         string.appendln("for service", isService);
     }
 
+    @Override
     public String title() {
         return title;
     }
@@ -55,6 +54,7 @@ public class ObjectCrumb implements Crumb {
         return new ToString(this).append(title()).toString();
     }
 
+    @Override
     public Request changeContext() {
         if (isService) {
             return ForwardRequest.viewService(objectId);
@@ -64,4 +64,3 @@ public class ObjectCrumb implements Crumb {
 
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,17 +24,16 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class ServiceView extends ObjectViewAbstract {
     @Override
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object,
+        final String field) {
         context.setObjectCrumb(object);
     }
 
+    @Override
     public String name() {
         return Request.SERVICE_COMMAND;
     }
 
 }
-

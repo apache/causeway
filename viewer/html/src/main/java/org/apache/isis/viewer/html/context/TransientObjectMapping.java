@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,7 +29,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-
 public class TransientObjectMapping implements ObjectMapping {
     private final Oid oid;
     private final Memento memento;
@@ -42,14 +40,17 @@ public class TransientObjectMapping implements ObjectMapping {
         memento = new Memento(adapter);
     }
 
+    @Override
     public void debug(final DebugBuilder debug) {
         memento.debug(debug);
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public ObjectAdapter getObject() {
         return getAdapterManager().getAdapterFor(oid);
     }
@@ -72,25 +73,28 @@ public class TransientObjectMapping implements ObjectMapping {
         return "TRANSIENT : " + oid + " : " + memento;
     }
 
+    @Override
     public Version getVersion() {
         return null;
     }
 
-    public void checkVersion(final ObjectAdapter object) {}
+    @Override
+    public void checkVersion(final ObjectAdapter object) {
+    }
 
+    @Override
     public void restoreToLoader() {
         memento.recreateObject();
     }
 
-    public void updateVersion() {}
+    @Override
+    public void updateVersion() {
+    }
 
-
-    
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////
-    
-    
+    // ////////////////////////////////////////////////////////////
+
     private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -99,6 +103,4 @@ public class TransientObjectMapping implements ObjectMapping {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-

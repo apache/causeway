@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 import java.io.PrintWriter;
-
 
 public interface Component {
 
     void write(PrintWriter writer);
 }
-

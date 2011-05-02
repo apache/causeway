@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -26,7 +25,6 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
-
 
 final class Checkbox implements Component {
     private final boolean set;
@@ -38,6 +36,7 @@ final class Checkbox implements Component {
         this.editable = editable;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<input class=\"value\" type=\"checkbox\"");
         if (set) {

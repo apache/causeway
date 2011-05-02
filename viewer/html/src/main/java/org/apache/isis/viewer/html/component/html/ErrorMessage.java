@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
-
 
 public class ErrorMessage implements Component {
 
@@ -35,6 +33,7 @@ public class ErrorMessage implements Component {
         this.isDebug = isDebug;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.println("<div class=\"error\">");
         writer.println(e.getMessage());
@@ -47,4 +46,3 @@ public class ErrorMessage implements Component {
     }
 
 }
-

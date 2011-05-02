@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.request;
 
 /**
- * The Request object represents all the information collected from the user when requesting the server do
- * something.
+ * The Request object represents all the information collected from the user when requesting the server do something.
  */
 public interface Request {
     public static final String EDIT_COMMAND = "edit";
@@ -71,4 +69,3 @@ public interface Request {
     String getName();
 
 }
-

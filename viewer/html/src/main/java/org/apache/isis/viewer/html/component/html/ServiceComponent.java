@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
-
 
 public class ServiceComponent implements Component {
 
@@ -38,6 +36,7 @@ public class ServiceComponent implements Component {
         this.iconName = iconName;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<div class=\"item\">");
 
@@ -54,4 +53,3 @@ public class ServiceComponent implements Component {
     }
 
 }
-

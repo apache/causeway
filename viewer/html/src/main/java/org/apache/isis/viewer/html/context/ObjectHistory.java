@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -32,7 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
-
+import org.apache.log4j.Logger;
 
 public class ObjectHistory {
     private static final Logger LOG = Logger.getLogger(ObjectHistory.class);
@@ -60,25 +58,25 @@ public class ObjectHistory {
         final Block taskBar = context.getComponentFactory().createBlock("history", null);
         taskBar.add(context.getComponentFactory().createHeading("History"));
         for (int i = history.size() - 1; i >= 0; i--) {
-        	try {
-	            final HistoryEntry item = history.get(i);
-	            Component icon;
-	            if (item.type == HistoryEntry.OBJECT) {
-	                final ObjectAdapter object = context.getMappedObject(item.id);
-	                
-					IsisContext.getPersistenceSession().resolveImmediately(object);
-					
-	                icon = context.getComponentFactory().createObjectIcon(object, item.id, "item");
-	            } else if (item.type == HistoryEntry.COLLECTION) {
-	                final ObjectAdapter object = context.getMappedCollection(item.id);
-	                icon = context.getComponentFactory().createCollectionIcon(object, item.id);
-	            } else {
-	                throw new UnknownTypeException(item);
-	            }
-	            taskBar.add(icon);
-        	} catch (IsisException e){ // Catch resolveImmediately exception when object is deleted.
-        		
-        	}
+            try {
+                final HistoryEntry item = history.get(i);
+                Component icon;
+                if (item.type == HistoryEntry.OBJECT) {
+                    final ObjectAdapter object = context.getMappedObject(item.id);
+
+                    IsisContext.getPersistenceSession().resolveImmediately(object);
+
+                    icon = context.getComponentFactory().createObjectIcon(object, item.id, "item");
+                } else if (item.type == HistoryEntry.COLLECTION) {
+                    final ObjectAdapter object = context.getMappedCollection(item.id);
+                    icon = context.getComponentFactory().createCollectionIcon(object, item.id);
+                } else {
+                    throw new UnknownTypeException(item);
+                }
+                taskBar.add(icon);
+            } catch (final IsisException e) { // Catch resolveImmediately exception when object is deleted.
+
+            }
         }
         navigation.add(taskBar);
     }
@@ -95,14 +93,13 @@ public class ObjectHistory {
         return history.iterator();
     }
 
-    public void remove(String existingId) {
-        for (HistoryEntry entry : history) {
+    public void remove(final String existingId) {
+        for (final HistoryEntry entry : history) {
             if (entry.id.equals(existingId)) {
                 history.remove(entry);
                 break;
             }
         }
-        
+
     }
 }
-

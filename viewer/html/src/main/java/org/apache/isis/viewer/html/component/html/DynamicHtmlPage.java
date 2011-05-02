@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -27,7 +26,6 @@ import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.DebugPane;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.ViewPane;
-
 
 public class DynamicHtmlPage extends AbstractHtmlPage implements Page {
     private Component crumbs;
@@ -39,18 +37,22 @@ public class DynamicHtmlPage extends AbstractHtmlPage implements Page {
         super(styleSheet, header, footer);
     }
 
+    @Override
     public Block getNavigation() {
         return navigation;
     }
 
+    @Override
     public ViewPane getViewPane() {
         return viewPane;
     }
 
+    @Override
     public void setCrumbs(final Component crumbs) {
         this.crumbs = crumbs;
     }
 
+    @Override
     public void setDebug(final DebugPane debugPane) {
         this.debugPane = debugPane;
     }
@@ -72,4 +74,3 @@ public class DynamicHtmlPage extends AbstractHtmlPage implements Page {
         }
     }
 }
-

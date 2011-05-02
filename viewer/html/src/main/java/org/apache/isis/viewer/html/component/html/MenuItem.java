@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.html.component.Component;
-
 
 public class MenuItem implements Component {
     private final String actionId;
@@ -35,14 +33,8 @@ public class MenuItem implements Component {
     private final boolean takesParameters;
     private final ActionType type;
 
-    public MenuItem(
-            final String actionId,
-            final String actionName,
-            final String actionDescription,
-            final String reasonDisabled,
-            final ActionType type,
-            final boolean takesParameters,
-            final String objectId) {
+    public MenuItem(final String actionId, final String actionName, final String actionDescription,
+        final String reasonDisabled, final ActionType type, final boolean takesParameters, final String objectId) {
         this.actionId = actionId;
         this.actionName = actionName;
         this.actionDescription = actionDescription;
@@ -52,6 +44,7 @@ public class MenuItem implements Component {
         this.objectId = objectId;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<div class=\"menu-item\">");
         if (isEmpty(reasonDisabled)) {
@@ -100,4 +93,3 @@ public class MenuItem implements Component {
     }
 
 }
-

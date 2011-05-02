@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
 
 public class PersistentObjectMapping implements ObjectMapping {
     private final Oid oid;
@@ -102,13 +100,11 @@ public class PersistentObjectMapping implements ObjectMapping {
         final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, specification);
         adapter.setOptimisticLock(getVersion());
     }
-    
-    
-    
-    ///////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////
+
     private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -117,6 +113,4 @@ public class PersistentObjectMapping implements ObjectMapping {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-

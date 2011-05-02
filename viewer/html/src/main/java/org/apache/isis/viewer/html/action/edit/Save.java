@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.edit;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,28 +29,25 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class Save implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
-    	
+
         final ObjectAdapter adapter = context.getMappedObject(request.getObjectId());
-        
+
         // xactn mgmt now done by PersistenceSession#makePersistent()
         // getTransactionManager().startTransaction();
         getPersistenceSession().makePersistent(adapter);
         // getTransactionManager().endTransaction();
-        
+
         // return to view
         request.forward(ForwardRequest.viewObject(request.getObjectId()));
     }
 
-    
-    
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
@@ -61,9 +57,9 @@ public class Save implements Action {
         return IsisContext.getPersistenceSession();
     }
 
+    @Override
     public String name() {
         return "save";
     }
 
 }
-

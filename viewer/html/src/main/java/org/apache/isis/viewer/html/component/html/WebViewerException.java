@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class WebViewerException extends IsisException {
     private static final long serialVersionUID = 1L;
@@ -43,4 +41,3 @@ public class WebViewerException extends IsisException {
     }
 
 }
-

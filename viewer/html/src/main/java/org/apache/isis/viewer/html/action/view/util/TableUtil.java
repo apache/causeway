@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view.util;
 
 import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;
@@ -40,15 +39,10 @@ import org.apache.isis.viewer.html.component.ComponentFactory;
 import org.apache.isis.viewer.html.component.Table;
 import org.apache.isis.viewer.html.context.Context;
 
-
-
 public class TableUtil {
 
-    public static Table createTable(
-            final Context context,
-            final String id,
-            final ObjectAdapter object,
-            final OneToManyAssociation collectionField) {
+    public static Table createTable(final Context context, final String id, final ObjectAdapter object,
+        final OneToManyAssociation collectionField) {
 
         final ObjectAdapter collection = collectionField.get(object);
         final String name = collectionField.getName();
@@ -58,79 +52,73 @@ public class TableUtil {
         return createTable(context, collectionField != null, collection, summary, type);
     }
 
-    public static Table createTable(
-            final Context context,
-            final boolean addSelector,
-            final ObjectAdapter collection,
-            final String summary,
-            final ObjectSpecification elementType) {
+    public static Table createTable(final Context context, final boolean addSelector, final ObjectAdapter collection,
+        final String summary, final ObjectSpecification elementType) {
 
-    	final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAssociation> columnAssociations = 
-        	elementType.getAssociations(Filters.and(STATICALLY_VISIBLE_ASSOCIATIONS, PROPERTIES));
-        
-        int len = columnAssociations.size();
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final List<ObjectAssociation> columnAssociations =
+            elementType.getAssociations(Filters.and(STATICALLY_VISIBLE_ASSOCIATIONS, PROPERTIES));
 
-        ComponentFactory factory = context.getComponentFactory();
+        final int len = columnAssociations.size();
+
+        final ComponentFactory factory = context.getComponentFactory();
         final Table table = factory.createTable(len, addSelector);
         table.setSummary(summary);
 
-        for (ObjectAssociation columnAssociation : columnAssociations) {
-        	table.addColumnHeader(columnAssociation.getName());
-		}
+        for (final ObjectAssociation columnAssociation : columnAssociations) {
+            table.addColumnHeader(columnAssociation.getName());
+        }
 
-        for(ObjectAdapter rowAdapter: facet.iterable(collection)) {
-		    getPersistenceSession().resolveImmediately(rowAdapter);
-		    final String elementId = context.mapObject(rowAdapter);
-		    table.addRowHeader(factory.createObjectIcon(rowAdapter, elementId, "icon"));
-		    
-	        for (ObjectAssociation columnAssociation : columnAssociations) {
-		        final ObjectAdapter columnAdapter = columnAssociation.get(rowAdapter);
-		
-		        ObjectSpecification columnSpec = columnAssociation.getSpecification();
-				if (!columnAssociation.isVisible(getAuthenticationSession(), rowAdapter).isAllowed()) {
-		            table.addEmptyCell();
-		        } else if (columnSpec.isParseable()) {
-		            final MultiLineFacet multiline = columnSpec.getFacet(MultiLineFacet.class);
-		            final boolean shouldTruncate = multiline != null && multiline.numberOfLines() > 1;
-		            final String titleString = columnAdapter != null ? columnAdapter.titleString() : "";
-		            table.addCell(titleString, shouldTruncate);
-		        } else if (columnAdapter == null) {
-		            table.addEmptyCell();
-		        } else {
-		            getPersistenceSession().resolveImmediately(columnAdapter);	            
-		            final String objectId = context.mapObject(columnAdapter);
+        for (final ObjectAdapter rowAdapter : facet.iterable(collection)) {
+            getPersistenceSession().resolveImmediately(rowAdapter);
+            final String elementId = context.mapObject(rowAdapter);
+            table.addRowHeader(factory.createObjectIcon(rowAdapter, elementId, "icon"));
+
+            for (final ObjectAssociation columnAssociation : columnAssociations) {
+                final ObjectAdapter columnAdapter = columnAssociation.get(rowAdapter);
+
+                final ObjectSpecification columnSpec = columnAssociation.getSpecification();
+                if (!columnAssociation.isVisible(getAuthenticationSession(), rowAdapter).isAllowed()) {
+                    table.addEmptyCell();
+                } else if (columnSpec.isParseable()) {
+                    final MultiLineFacet multiline = columnSpec.getFacet(MultiLineFacet.class);
+                    final boolean shouldTruncate = multiline != null && multiline.numberOfLines() > 1;
+                    final String titleString = columnAdapter != null ? columnAdapter.titleString() : "";
+                    table.addCell(titleString, shouldTruncate);
+                } else if (columnAdapter == null) {
+                    table.addEmptyCell();
+                } else {
+                    getPersistenceSession().resolveImmediately(columnAdapter);
+                    final String objectId = context.mapObject(columnAdapter);
                     table.addCell(factory.createObjectIcon(columnAssociation, columnAdapter, objectId, "icon"));
                 }
-		    }
-		    /*
-		     * if (addSelector) { table.addCell(context.getFactory().createRemoveOption(id, elementId,
-		     * collectionField.getId())); }
-		     */
-		    // TODO add selection box
-		    // table.addCell();
-		    /*
-		     * if (collectionField != null) { if (collectionField.isValidToRemove(object,
-		     * element).isAllowed()) { table.addCell(context.getFactory().createRemoveOption(id, elementId,
-		     * collectionField.getId())); } else { table.addEmptyCell(); } }
-		     */
-		
-		}
+            }
+            /*
+             * if (addSelector) { table.addCell(context.getFactory().createRemoveOption(id, elementId,
+             * collectionField.getId())); }
+             */
+            // TODO add selection box
+            // table.addCell();
+            /*
+             * if (collectionField != null) { if (collectionField.isValidToRemove(object, element).isAllowed()) {
+             * table.addCell(context.getFactory().createRemoveOption(id, elementId, collectionField.getId())); } else {
+             * table.addEmptyCell(); } }
+             */
+
+        }
         return table;
     }
 
-    
-    //////////////////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////////////////////////
-    
-	private static PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    // ////////////////////////////////////////////////////////////////////////////////
 
-	private static AuthenticationSession getAuthenticationSession() {
-		return IsisContext.getAuthenticationSession();
-	}
+    private static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    private static AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
 }
-

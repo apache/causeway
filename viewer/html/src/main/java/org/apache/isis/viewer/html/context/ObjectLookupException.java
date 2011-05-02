@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import org.apache.isis.viewer.html.action.ActionException;
 
-
 public class ObjectLookupException extends ActionException {
     private static final long serialVersionUID = 1L;
 
-    public ObjectLookupException() {}
+    public ObjectLookupException() {
+    }
 
     public ObjectLookupException(final String msg, final Throwable cause) {
         super(msg, cause);
@@ -41,4 +40,3 @@ public class ObjectLookupException extends ActionException {
     }
 
 }
-

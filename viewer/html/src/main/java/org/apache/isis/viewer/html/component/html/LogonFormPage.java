@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -27,17 +26,12 @@ import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.DebugPane;
 import org.apache.isis.viewer.html.component.ViewPane;
 
-
 public class LogonFormPage extends AbstractHtmlPage {
     private final String user;
     private final String password;
 
-    public LogonFormPage(
-            final String styleSheet,
-            final String header,
-            final String footer,
-            final String user,
-            final String password) {
+    public LogonFormPage(final String styleSheet, final String header, final String footer, final String user,
+        final String password) {
         super(styleSheet, header, footer);
         this.user = user;
         this.password = password;
@@ -56,10 +50,10 @@ public class LogonFormPage extends AbstractHtmlPage {
         writer.println("<FORM ACTION=\"logon.app\" METHOD=\"post\">");
         writer.println("<div id=\"content\">");
         writer.println("<div class=\"field\"><span class=\"label\">User name</span>"
-                + "<span class=\"separator\">: </span><INPUT NAME=\"username\" value=\"" + user + "\"></DIV>");
+            + "<span class=\"separator\">: </span><INPUT NAME=\"username\" value=\"" + user + "\"></DIV>");
         writer.println("<div class=\"field\"><span class=\"label\">Password</span>"
-                + "<span class=\"separator\">: </span><INPUT TYPE=\"password\" NAME=\"password\" value=\"" + password
-                + "\"></DIV>");
+            + "<span class=\"separator\">: </span><INPUT TYPE=\"password\" NAME=\"password\" value=\"" + password
+            + "\"></DIV>");
         writer.println("<div class=\"action-button\"><INPUT TYPE=\"submit\" VALUE=\"Log in\" NAME=\"Log in\"></div>");
         writer.println("</div>");
         writer.println("</FORM>");
@@ -67,17 +61,22 @@ public class LogonFormPage extends AbstractHtmlPage {
 
     }
 
+    @Override
     public Block getNavigation() {
         return null;
     }
 
+    @Override
     public ViewPane getViewPane() {
         return null;
     }
 
-    public void setCrumbs(final Component component) {}
+    @Override
+    public void setCrumbs(final Component component) {
+    }
 
-    public void setDebug(final DebugPane debugPane) {}
+    @Override
+    public void setDebug(final DebugPane debugPane) {
+    }
 
 }
-

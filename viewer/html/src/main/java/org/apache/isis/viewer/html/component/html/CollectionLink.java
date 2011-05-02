@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -29,8 +28,6 @@ import org.apache.isis.viewer.html.component.ComponentAbstract;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 class CollectionLink extends ComponentAbstract {
     private final String objectId;
     private final String fieldId;
@@ -38,11 +35,8 @@ class CollectionLink extends ComponentAbstract {
     private final String title;
     private final String description;
 
-    public CollectionLink(
-            final ObjectAssociation field,
-            final ObjectAdapter collection,
-            final String description,
-            final String objectId) {
+    public CollectionLink(final ObjectAssociation field, final ObjectAdapter collection, final String description,
+        final String objectId) {
         this.description = description;
         this.objectId = objectId;
         fieldId = field.getId();
@@ -50,6 +44,7 @@ class CollectionLink extends ComponentAbstract {
         specification = field.getSpecification();
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<span class=\"value\"");
         if (description != null) {
@@ -75,4 +70,3 @@ class CollectionLink extends ComponentAbstract {
     }
 
 }
-

@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.crumb;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public interface Crumb {
     // TODO add icons to crumbs
@@ -34,4 +31,3 @@ public interface Crumb {
 
     Request changeContext();
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,18 +29,17 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class FieldCollectionView extends ObjectViewAbstract {
     @Override
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object,
+        final String field) {
         final String id = context.mapObject(object);
         final ObjectSpecification specification = object.getSpecification();
 
         final OneToManyAssociation collection = (OneToManyAssociation) specification.getAssociation(field);
-        
+
         IsisContext.getPersistenceSession().resolveField(object, collection);
-        
+
         context.addCollectionFieldCrumb(collection.getName());
         content.add(context.getComponentFactory().createHeading(collection.getName()));
         final Table table = TableUtil.createTable(context, id, object, collection);
@@ -51,9 +49,9 @@ public class FieldCollectionView extends ObjectViewAbstract {
         }
     }
 
+    @Override
     public String name() {
         return Request.FIELD_COLLECTION_COMMAND;
     }
 
 }
-

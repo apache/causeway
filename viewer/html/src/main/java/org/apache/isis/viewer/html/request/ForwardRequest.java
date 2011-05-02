@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.request;
 
 import org.apache.isis.viewer.html.task.Task;
-
 
 public class ForwardRequest implements Request {
 
@@ -74,46 +72,57 @@ public class ForwardRequest implements Request {
         this.fieldName = fieldName;
     }
 
+    @Override
     public void forward(final Request forwardedRequest) {
         this.forwardedRequest = forwardedRequest;
     }
 
+    @Override
     public String getActionId() {
         return null;
     }
 
+    @Override
     public String getElementId() {
         return null;
     }
 
+    @Override
     public String getName() {
         return null;
     }
 
+    @Override
     public String getRequestType() {
         return actionName;
     }
 
+    @Override
     public String getButtonName() {
         return submitName;
     }
 
+    @Override
     public String getProperty() {
         return fieldName;
     }
 
+    @Override
     public String getFieldEntry(final int i) {
         return null;
     }
 
+    @Override
     public String getTaskId() {
         return taskId;
     }
 
+    @Override
     public Request getForward() {
         return forwardedRequest;
     }
 
+    @Override
     public String getObjectId() {
         return objectId;
     }
@@ -127,4 +136,3 @@ public class ForwardRequest implements Request {
         return new ForwardRequest("logon", null);
     }
 }
-

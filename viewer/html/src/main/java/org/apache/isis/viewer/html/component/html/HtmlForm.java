@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.Form;
-
 
 public class HtmlForm extends ComponentComposite implements Form {
     private final boolean confirm;
@@ -39,13 +37,8 @@ public class HtmlForm extends ComponentComposite implements Form {
         this(id, action, page, noOfPages, false, isEditing);
     }
 
-    private HtmlForm(
-            final String id,
-            final String action,
-            final int page,
-            final int noOfPages,
-            final boolean confirm,
-            final boolean isEditing) {
+    private HtmlForm(final String id, final String action, final int page, final int noOfPages, final boolean confirm,
+        final boolean isEditing) {
         this.id = id;
         this.confirm = confirm;
         this.isEditing = isEditing;
@@ -53,13 +46,8 @@ public class HtmlForm extends ComponentComposite implements Form {
         hasNext = page < noOfPages - 1;
     }
 
-    private void addField(
-            final String label,
-            final String field,
-            final String description,
-            final boolean readOnly,
-            final boolean required,
-            final String errorMessage) {
+    private void addField(final String label, final String field, final String description, final boolean readOnly,
+        final boolean required, final String errorMessage) {
         String error = "";
         if (errorMessage != null) {
             error = "<span class=\"error\"> " + errorMessage + "</span>";
@@ -73,48 +61,44 @@ public class HtmlForm extends ComponentComposite implements Form {
             }
         }
         add(new Html("<div class=\"field\" title=\"" + description + "\"><span class=\"label\">" + label
-                + "</span><span class=\"separator\">: </span> " + field + optional + error + "</div>"));
+            + "</span><span class=\"separator\">: </span> " + field + optional + error + "</div>"));
     }
 
-    public void addField(
-            final ObjectSpecification spec,
-            final String label,
-            final String title,
-            final String field,
-            final String value,
-            final int noLines,
-            final boolean wrap,
-            final int maxLength,
-            final int typicalLength,
-            final boolean required,
-            final String error) {
+    @Override
+    public void addField(final ObjectSpecification spec, final String label, final String title, final String field,
+        final String value, final int noLines, final boolean wrap, final int maxLength, final int typicalLength,
+        final boolean required, final String error) {
         String inputField;
         /*
-         * REVIEW the following qualification are a bit limited - it's the simplest thing than will work - we
-         * need to determine from the specification whether something is boolean type or a password.
+         * REVIEW the following qualification are a bit limited - it's the simplest thing than will work - we need to
+         * determine from the specification whether something is boolean type or a password.
          * 
          * Also see the note in the Form I/F.
          */
         boolean ignoreMandatory = false;
         if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+            || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
             final String selected = (value != null && value.toLowerCase().equals("true")) ? "checked " : "";
-            inputField = "<input class=\"value\" type=\"checkbox\" name=\"" + field + "\"" + selected + " value=\"true\"/>";
+            inputField =
+                "<input class=\"value\" type=\"checkbox\" name=\"" + field + "\"" + selected + " value=\"true\"/>";
             ignoreMandatory = true;
         } else if (spec.getFullIdentifier().endsWith(".Password")) {
             final String typicalLengthStr = typicalLength == 0 ? "" : (" size=\"" + typicalLength + "\"");
             final String maxLengthStr = maxLength == 0 ? "" : (" maxlength=\"" + maxLength + "\"");
-            inputField = "<input class=\"value\" type=\"password\" name=\"" + field + "\"" + typicalLengthStr + maxLengthStr
+            inputField =
+                "<input class=\"value\" type=\"password\" name=\"" + field + "\"" + typicalLengthStr + maxLengthStr
                     + "value=\"" + value + "\"/>";
 
         } else if (noLines > 1) {
             final int w = typicalLength > 0 ? typicalLength / noLines : 50;
-            inputField = "<textarea class=\"value\" type=\"text\" name=\"" + field + "\" rows=\"" + noLines + "\" cols=\"" + w
+            inputField =
+                "<textarea class=\"value\" type=\"text\" name=\"" + field + "\" rows=\"" + noLines + "\" cols=\"" + w
                     + "\" wrap=\"" + (wrap ? "hard" : "off") + "\">" + value + "</textarea>";
         } else {
             final String typicalLengthStr = typicalLength == 0 ? "" : (" size=\"" + typicalLength + "\"");
             final String maxLengthStr = maxLength == 0 ? "" : (" maxlength=\"" + maxLength + "\"");
-            inputField = "<input class=\"value\" type=\"text\" name=\"" + field + "\"" + typicalLengthStr + maxLengthStr
+            inputField =
+                "<input class=\"value\" type=\"text\" name=\"" + field + "\"" + typicalLengthStr + maxLengthStr
                     + "value=\"" + value + "\"/>";
         }
         addField(label, inputField, title, ignoreMandatory, required, error);
@@ -124,15 +108,10 @@ public class HtmlForm extends ComponentComposite implements Form {
         add(new Heading(fieldLabel, 4));
     }
 
-    public void addLookup(
-            final String fieldLabel,
-            final String description,
-            final String fieldId,
-            final int selectedIndex,
-            final String[] instances,
-            final String[] ids,
-            final boolean required,
-            final String errorMessage) {
+    @Override
+    public void addLookup(final String fieldLabel, final String description, final String fieldId,
+        final int selectedIndex, final String[] instances, final String[] ids, final boolean required,
+        final String errorMessage) {
         final StringBuffer testInputField = new StringBuffer();
         testInputField.append("<select class=\"value\" name=\"" + fieldId + "\">");
         if (!required) {
@@ -160,6 +139,7 @@ public class HtmlForm extends ComponentComposite implements Form {
         addField(fieldLabel, testInputField.toString(), description, false, required, errorMessage);
     }
 
+    @Override
     public void addReadOnlyField(final String fieldLabel, final String title, final String description) {
         addField(fieldLabel, "<span class=\"value\">" + title + "</span>", description, true, false, null);
     }
@@ -207,4 +187,3 @@ public class HtmlForm extends ComponentComposite implements Form {
         writer.println("<input type=\"hidden\" name=\"id\" value=\"" + id + "\"/>");
     }
 }
-

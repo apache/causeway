@@ -17,26 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public interface Form extends Component {
 
-    void addField(
-            ObjectSpecification type,
-            String fieldLabel,
-            String fieldDescription,
-            String fieldId,
-            String currentEntryTitle,
-            int noLines,
-            boolean wrap,
-            int maxLength,
-            int typicalLength,
-            boolean required,
-            String error);
+    void addField(ObjectSpecification type, String fieldLabel, String fieldDescription, String fieldId,
+        String currentEntryTitle, int noLines, boolean wrap, int maxLength, int typicalLength, boolean required,
+        String error);
 
     /*
      * REVIEW the form should be asked to create specific types, like see HTMLForm.addForm()
@@ -48,17 +37,9 @@ public interface Form extends Component {
      * void addMultilineField(....)
      */
 
-    void addLookup(
-            String fieldLabel,
-            String fieldDescription,
-            String fieldId,
-            int selectedIndex,
-            String[] options,
-            String[] ids,
-            boolean required,
-            String errorMessage);
+    void addLookup(String fieldLabel, String fieldDescription, String fieldId, int selectedIndex, String[] options,
+        String[] ids, boolean required, String errorMessage);
 
     void addReadOnlyField(String fieldLabel, String title, String fieldDescription);
 
 }
-

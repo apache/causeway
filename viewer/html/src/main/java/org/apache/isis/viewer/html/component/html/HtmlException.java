@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
-
 public class HtmlException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public HtmlException() {}
+    public HtmlException() {
+    }
 
     public HtmlException(final String msg) {
         super(msg);
@@ -41,4 +40,3 @@ public class HtmlException extends IsisException {
     }
 
 }
-

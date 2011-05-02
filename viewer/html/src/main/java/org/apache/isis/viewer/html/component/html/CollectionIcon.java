@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -29,8 +28,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public class CollectionIcon implements Component {
     private final ObjectAdapter collection;
@@ -47,7 +44,8 @@ public class CollectionIcon implements Component {
     public void write(final PrintWriter writer) {
         final TypeOfFacet facet = collection.getSpecification().getFacet(TypeOfFacet.class);
         final Class<?> elementType = facet.value();
-        final ObjectSpecification elementSpecification = IsisContext.getSpecificationLoader().loadSpecification(elementType);
+        final ObjectSpecification elementSpecification =
+            IsisContext.getSpecificationLoader().loadSpecification(elementType);
 
         writer.print("<div class=\"item\">");
         writer.print("<a href=\"");
@@ -73,4 +71,3 @@ public class CollectionIcon implements Component {
     }
 
 }
-

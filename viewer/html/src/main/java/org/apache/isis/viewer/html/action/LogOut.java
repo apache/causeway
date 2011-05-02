@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -27,26 +26,25 @@ import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class LogOut implements Action {
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
-    	AuthenticationSession authSession = IsisContext.getAuthenticationSession();
-    	if (authSession != null) {
-    		getAuthenticationManager().closeSession(authSession);
-    	}
+        final AuthenticationSession authSession = IsisContext.getAuthenticationSession();
+        if (authSession != null) {
+            getAuthenticationManager().closeSession(authSession);
+        }
         context.setSession(null); // setSession is probably redundant since now always available via IsisContext
-                                  // can't rely on it being set because Filter may set httpSession 
-                                  // (if in exploration mode) rather than ever hitting the LogonServlet 
+                                  // can't rely on it being set because Filter may set httpSession
+                                  // (if in exploration mode) rather than ever hitting the LogonServlet
         context.invalidate();
     }
 
-	private static AuthenticationManager getAuthenticationManager() {
-		return IsisContext.getAuthenticationManager();
-	}
+    private static AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
+    }
 
+    @Override
     public String name() {
         return "logout";
     }
 }
-

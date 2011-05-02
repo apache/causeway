@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.servlet.internal;
 
 import java.util.HashMap;
@@ -68,13 +67,12 @@ import org.apache.isis.viewer.html.task.TaskLookupException;
 import org.apache.isis.viewer.html.task.TaskStep;
 import org.apache.log4j.Logger;
 
-
-
 public class WebController {
     private static final String ERROR_REASON = "This error occurs when you go back to a page "
-            + "using the browsers back button.  To avoid this error in the future please avoid using the back button";
+        + "using the browsers back button.  To avoid this error in the future please avoid using the back button";
 
     private class DebugView implements Action {
+        @Override
         public void execute(final Request request, final Context context, final Page page) {
             page.setTitle("Debug");
 
@@ -83,8 +81,7 @@ public class WebController {
 
             final DebugString debug = new DebugString();
 
-
-            AuthenticationSession authenticationSession = IsisContext.getAuthenticationSession();
+            final AuthenticationSession authenticationSession = IsisContext.getAuthenticationSession();
             debug.appendTitle("Session");
             if (authenticationSession != null) {
                 debug.appendln("user", authenticationSession.getUserName());
@@ -117,12 +114,14 @@ public class WebController {
             debugPane.appendln("<pre>" + debug.toString() + "</pre>");
         }
 
+        @Override
         public String name() {
             return "debug";
         }
     }
 
     private class DebugSpecification implements Action {
+        @Override
         public void execute(final Request request, final Context context, final Page page) {
             final DebugPane debugPane = context.getComponentFactory().createDebugPane();
             page.setDebug(debugPane);
@@ -132,12 +131,14 @@ public class WebController {
             debugPane.appendln(Dump.specification(object));
         }
 
+        @Override
         public String name() {
             return "spec";
         }
     }
 
     private class DebugObject implements Action {
+        @Override
         public void execute(final Request request, final Context context, final Page page) {
             final DebugPane debugPane = context.getComponentFactory().createDebugPane();
             page.setDebug(debugPane);
@@ -149,38 +150,43 @@ public class WebController {
             debugPane.appendln(Dump.graph(object, IsisContext.getAuthenticationSession()));
         }
 
+        @Override
         public String name() {
             return "dump";
         }
     }
-    
+
     private class DebugOn implements Action {
         private final WebController controller;
 
-        public DebugOn(WebController controller) {
+        public DebugOn(final WebController controller) {
             this.controller = controller;
         }
-        
-        public void execute(Request request, Context context, Page page) {
-          controller.setDebug(true);
+
+        @Override
+        public void execute(final Request request, final Context context, final Page page) {
+            controller.setDebug(true);
         }
 
+        @Override
         public String name() {
             return "debugon";
         }
     }
-    
+
     private class DebugOff implements Action {
         private final WebController controller;
 
-        public DebugOff(WebController controller) {
+        public DebugOff(final WebController controller) {
             this.controller = controller;
         }
-        
-        public void execute(Request request, Context context, Page page) {
-          controller.setDebug(false);
+
+        @Override
+        public void execute(final Request request, final Context context, final Page page) {
+            controller.setDebug(false);
         }
 
+        @Override
         public String name() {
             return "debugoff";
         }
@@ -222,7 +228,7 @@ public class WebController {
             page.addDebug("<a href=\"spec.app?id=" + id + "\">Spec</a>");
         }
         page.addDebug("<a href=\"about.app\">About</a>");
-        page.addDebug("<a href=\"debugoff.app\">Debug off</a>");        
+        page.addDebug("<a href=\"debugoff.app\">Debug off</a>");
     }
 
     public Page generatePage(final Context context, final Request request) {
@@ -244,9 +250,9 @@ public class WebController {
         block.add(option);
         optionBar.add(block);
 
-        //boolean isExploring = SessionAccess.inExplorationMode();
-        boolean isExploring = IsisContext.getDeploymentType().isExploring();
-		if (isExploring) {
+        // boolean isExploring = SessionAccess.inExplorationMode();
+        final boolean isExploring = IsisContext.getDeploymentType().isExploring();
+        if (isExploring) {
             block = context.getComponentFactory().createBlock("item", null);
             option = context.getComponentFactory().createLink("swapuser", "Swap User", "Swap the exploration user");
             block.add(option);
@@ -262,9 +268,8 @@ public class WebController {
         addCrumbs(context, page);
 
         // The web viewer has no views of other objects, so changes can be ignored
-        if (IsisContext.inSession() && 
-            IsisContext.inTransaction()) {
-        	IsisContext.getUpdateNotifier().clear();
+        if (IsisContext.inSession() && IsisContext.inTransaction()) {
+            IsisContext.getUpdateNotifier().clear();
         }
         // TODO deal with disposed objects
 
@@ -291,7 +296,7 @@ public class WebController {
         addAction(new RemoveItemFromCollection());
         addAction(new AddItemToCollection());
         addAction(new ChangeContext());
-        
+
         // TODO allow these to be exclude by configuration so they cannot be run in a real system
         addAction(new DebugOn(this));
         addAction(new DebugOff(this));
@@ -310,13 +315,13 @@ public class WebController {
     private void listServices(final Context context, final Block navigationBar) {
         final Block taskBar = context.getComponentFactory().createBlock("services", null);
         taskBar.add(context.getComponentFactory().createHeading("Services"));
-        AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
-        List<Object> services = getUserProfile().getPerspective().getServices();
-        for (Object service : services) {
-            ObjectAdapter serviceAdapter = adapterManager.adapterFor(service); 
+        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+        final List<Object> services = getUserProfile().getPerspective().getServices();
+        for (final Object service : services) {
+            final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);
             if (serviceAdapter == null) {
-            	LOG.warn("unable to find service Id: " + service + "; skipping");
-            	continue;
+                LOG.warn("unable to find service Id: " + service + "; skipping");
+                continue;
             }
             if (isHidden(serviceAdapter)) {
                 continue;
@@ -327,15 +332,16 @@ public class WebController {
         navigationBar.add(taskBar);
     }
 
-	private Component createServiceComponent(final Context context, final String serviceMapId, final ObjectAdapter serviceNO) {
-		String serviceName = serviceNO.titleString();
-        String serviceIcon = serviceNO.getIconName();
+    private Component createServiceComponent(final Context context, final String serviceMapId,
+        final ObjectAdapter serviceNO) {
+        final String serviceName = serviceNO.titleString();
+        final String serviceIcon = serviceNO.getIconName();
         return context.getComponentFactory().createService(serviceMapId, serviceName, serviceIcon);
     }
 
     private boolean isHidden(final ObjectAdapter serviceNO) {
-        ObjectSpecification serviceNoSpec = serviceNO.getSpecification();
-        boolean isHidden = serviceNoSpec.isHidden();
+        final ObjectSpecification serviceNoSpec = serviceNO.getSpecification();
+        final boolean isHidden = serviceNoSpec.isHidden();
         return isHidden;
     }
 
@@ -356,10 +362,12 @@ public class WebController {
                 try {
                     action.execute(r, context, page);
                 } catch (final ObjectLookupException e) {
-                    final String error = "The object/service you selected has timed out.  Please navigate to the object via the history bar.";
+                    final String error =
+                        "The object/service you selected has timed out.  Please navigate to the object via the history bar.";
                     displayError(context, page, error);
                 } catch (final TaskLookupException e) {
-                    final String error = "The task you went back to has already been completed or cancelled.  Please start the task again.";
+                    final String error =
+                        "The task you went back to has already been completed or cancelled.  Please start the task again.";
                     displayError(context, page, error);
                 }
                 r = r.getForward();
@@ -417,11 +425,10 @@ public class WebController {
         this.isDebug = on;
     }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Dependencies (from singleton)
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
+
     private UserProfile getUserProfile() {
         return IsisContext.getUserProfile();
     }
@@ -430,4 +437,3 @@ public class WebController {
         return IsisContext.getSessionId();
     }
 }
-

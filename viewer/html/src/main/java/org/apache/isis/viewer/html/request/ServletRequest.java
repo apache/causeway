@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.request;
 
 import javax.servlet.http.HttpServletRequest;
-
-
-
 
 public class ServletRequest implements Request {
     private Request forwardRequest;
@@ -39,46 +35,57 @@ public class ServletRequest implements Request {
         requestType = path.substring(from + 1, to);
     }
 
+    @Override
     public void forward(final Request forwardRequest) {
         this.forwardRequest = forwardRequest;
     }
 
+    @Override
     public String getActionId() {
         return request.getParameter("action");
     }
 
+    @Override
     public String getProperty() {
         return request.getParameter("field");
     }
 
+    @Override
     public String getElementId() {
         return request.getParameter("element");
     }
 
+    @Override
     public String getFieldEntry(final int i) {
         return request.getParameter("fld" + i);
     }
 
+    @Override
     public String getTaskId() {
         return request.getParameter("id");
     }
 
+    @Override
     public Request getForward() {
         return forwardRequest;
     }
 
+    @Override
     public String getName() {
         return request.getParameter("name");
     }
 
+    @Override
     public String getObjectId() {
         return request.getParameter("id");
     }
 
+    @Override
     public String getRequestType() {
         return requestType;
     }
 
+    @Override
     public String getButtonName() {
         return request.getParameter("button");
     }
@@ -89,4 +96,3 @@ public class ServletRequest implements Request {
     }
 
 }
-

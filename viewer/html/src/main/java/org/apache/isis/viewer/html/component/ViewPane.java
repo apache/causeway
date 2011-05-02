@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 import java.util.List;
@@ -34,4 +33,3 @@ public interface ViewPane extends Component {
 
     void setWarningsAndMessages(List<String> list, List<String> list2);
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,7 +26,6 @@ import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
 
-
 final class UserSwapLink implements Component {
     private final String name;
 
@@ -35,6 +33,7 @@ final class UserSwapLink implements Component {
         this.name = name;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<a class=\"user\" href=\"setuser.app?name=");
         writer.print(name);

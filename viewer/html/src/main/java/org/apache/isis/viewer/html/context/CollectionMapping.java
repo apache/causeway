@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import java.util.Enumeration;
@@ -32,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
 
 /**
  * Has value semantics based on the value semantics of the underlying list that it wraps.
@@ -79,8 +77,7 @@ public class CollectionMapping {
     }
 
     /**
-     * Value semantics based on the identity of the underlying list that this
-     * wraps. 
+     * Value semantics based on the identity of the underlying list that this wraps.
      */
     @Override
     public int hashCode() {
@@ -93,16 +90,16 @@ public class CollectionMapping {
             return true;
         }
         if (other == null) {
-        	return false;
+            return false;
         }
         if (other.getClass() != this.getClass()) {
-        	return false;
+            return false;
         }
-        return equals((CollectionMapping)other);
+        return equals((CollectionMapping) other);
     }
 
     public boolean equals(final CollectionMapping other) {
-    	return this.list.equals(other.list);
+        return this.list.equals(other.list);
     }
 
     public boolean contains(final String id) {
@@ -119,22 +116,19 @@ public class CollectionMapping {
     public Enumeration elements() {
         return list.elements();
     }
-    
-    public void remove(String existingId) {
-        for (Object entry : list) {
+
+    public void remove(final String existingId) {
+        for (final Object entry : list) {
             if (entry.equals(existingId)) {
                 list.remove(existingId);
                 break;
             }
         }
     }
-    
-    
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (from context)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
@@ -145,4 +139,3 @@ public class CollectionMapping {
     }
 
 }
-

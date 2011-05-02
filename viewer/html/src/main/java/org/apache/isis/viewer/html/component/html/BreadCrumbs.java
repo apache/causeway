@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.ComponentAbstract;
-
 
 public class BreadCrumbs extends ComponentAbstract {
     private final String[] names;
@@ -34,6 +32,7 @@ public class BreadCrumbs extends ComponentAbstract {
         this.isLinked = isLinked;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.println("<div id=\"context\">");
 
@@ -59,4 +58,3 @@ public class BreadCrumbs extends ComponentAbstract {
     }
 
 }
-

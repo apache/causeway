@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.image;
 
 import java.io.File;
@@ -47,6 +46,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
         unknownImageFile = imageFile(UNKNOWN_IMAGE);
     }
 
+    @Override
     public void debug(final DebugBuilder debug) {
         debug.appendTitle("Image Lookup");
         debug.indent();
@@ -61,12 +61,13 @@ public class ImageProviderDirectoryBased implements ImageProvider {
 
     private String imageFile(final String imageName) {
         final String[] files = imageDirectory.list(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                int dot = name.lastIndexOf('.');
+            @Override
+            public boolean accept(final File dir, final String name) {
+                final int dot = name.lastIndexOf('.');
                 if (dot > 0) {
-                    for (int i = 0; i < EXTENSIONS.length; i++) {
+                    for (final String element : EXTENSIONS) {
                         if (name.substring(0, dot).equalsIgnoreCase(imageName)
-                                && name.substring(dot + 1).equalsIgnoreCase(EXTENSIONS[i])) {
+                            && name.substring(dot + 1).equalsIgnoreCase(element)) {
                             return true;
                         }
                     }
@@ -95,12 +96,13 @@ public class ImageProviderDirectoryBased implements ImageProvider {
     }
 
     /**
-     * For an object, the icon name from the object is return if it is not null, otherwise the specification
-     * is used to look up a suitable image name.
+     * For an object, the icon name from the object is return if it is not null, otherwise the specification is used to
+     * look up a suitable image name.
      * 
      * @see ObjectAdapter#getIconName()
      * @see #image(ObjectSpecification)
      */
+    @Override
     public String image(final ObjectAdapter object) {
         final String iconName = object.getIconName();
         if (iconName != null) {
@@ -110,6 +112,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
         }
     }
 
+    @Override
     public String image(final ObjectSpecification specification) {
         final String name = specification.getShortIdentifier();
         final String imageName = (String) images.get(name);
@@ -120,6 +123,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
         }
     }
 
+    @Override
     public String image(final String name) {
         final String imageName = (String) images.get(name);
         if (imageName != null) {
@@ -131,5 +135,3 @@ public class ImageProviderDirectoryBased implements ImageProvider {
     }
 
 }
-
-

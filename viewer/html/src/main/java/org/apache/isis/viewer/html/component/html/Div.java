@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -25,7 +24,6 @@ import java.io.PrintWriter;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
-
 
 public class Div extends ComponentComposite implements Block {
     private final String className;
@@ -85,4 +83,3 @@ public class Div extends ComponentComposite implements Block {
     }
 
 }
-

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
-
 
 class TableHeader extends ComponentComposite {
 
@@ -39,4 +37,3 @@ class TableHeader extends ComponentComposite {
         add(new Html(string));
     }
 }
-

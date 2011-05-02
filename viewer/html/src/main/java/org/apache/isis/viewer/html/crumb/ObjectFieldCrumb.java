@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.crumb;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public class ObjectFieldCrumb implements Crumb {
     private final String fieldName;
@@ -34,11 +31,13 @@ public class ObjectFieldCrumb implements Crumb {
         this.fieldName = fieldName;
     }
 
+    @Override
     public void debug(final DebugBuilder string) {
         string.appendln("Object Field Crumb");
         string.appendln("field name", fieldName);
     }
 
+    @Override
     public String title() {
         return fieldName;
     }
@@ -48,8 +47,8 @@ public class ObjectFieldCrumb implements Crumb {
         return new ToString(this).append(title()).toString();
     }
 
+    @Override
     public Request changeContext() {
         throw new NotYetImplementedException();
     }
 }
-

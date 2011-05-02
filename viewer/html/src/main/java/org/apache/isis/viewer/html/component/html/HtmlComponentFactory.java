@@ -17,8 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
+
+import static org.apache.isis.viewer.html.HtmlViewerConstants.FOOTER;
+import static org.apache.isis.viewer.html.HtmlViewerConstants.FOOTER_FILE;
+import static org.apache.isis.viewer.html.HtmlViewerConstants.HEADER;
+import static org.apache.isis.viewer.html.HtmlViewerConstants.HEADER_FILE;
+import static org.apache.isis.viewer.html.HtmlViewerConstants.STYLE_SHEET;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -41,9 +46,6 @@ import org.apache.isis.viewer.html.component.Form;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.Table;
 
-import static org.apache.isis.viewer.html.HtmlViewerConstants.*;
-
-
 public class HtmlComponentFactory implements ComponentFactory {
 
     private final String footer;
@@ -59,89 +61,100 @@ public class HtmlComponentFactory implements ComponentFactory {
         footer = file == null ? configuration.getString(FOOTER) : loadFile(file);
     }
 
+    @Override
     public Block createBlock(final String style, final String description) {
         return new Div(style, description);
     }
 
+    @Override
     public Component createBreadCrumbs(final String[] names, final boolean[] isLinked) {
         return new BreadCrumbs(names, isLinked);
     }
 
+    @Override
     public Component createCollectionIcon(final ObjectAssociation field, final ObjectAdapter collection, final String id) {
         return new CollectionLink(field, collection, field.getDescription(), id);
     }
 
+    @Override
     public DebugPane createDebugPane() {
         return new HtmlDebug();
     }
 
+    @Override
     public Component createEditOption(final String id) {
         return new ActionComponent("edit", "Edit Object", "Edit the current object", id, null, null);
     }
 
+    @Override
     public Component createRemoveOption(final String id, final String elementId, final String fieldName) {
         return new ActionComponent("remove", "Remove", "Remove item from collection", id, elementId, fieldName);
     }
 
+    @Override
     public Component createAddOption(final String id, final String fieldName) {
         return new ActionComponent("add", "Add Item", "Add item to collection", id, null, fieldName);
     }
 
+    @Override
     public Component createErrorMessage(final Exception e, final boolean isDebug) {
         return new ErrorMessage(e, isDebug);
     }
 
-    public Form createForm(final String id, final String actionName, final int step, final int noOfPages, final boolean isEditing) {
+    @Override
+    public Form createForm(final String id, final String actionName, final int step, final int noOfPages,
+        final boolean isEditing) {
         return new HtmlForm(id, actionName, step, noOfPages, isEditing);
     }
 
+    @Override
     public Component createHeading(final String name) {
         return new Heading(name, 4);
     }
 
+    @Override
     public Component createInlineBlock(final String style, final String text, final String description) {
         return new Span(style, text, description);
     }
 
+    @Override
     public Component createCheckboxBlock(final boolean isEditable, final boolean isSet) {
         return new Checkbox(isSet, isEditable);
     }
 
+    @Override
     public Component createSubmenu(final String menuName, final Component[] items) {
         return new Submenu(menuName, items);
     }
 
+    @Override
     public Component createLink(final String link, final String name, final String description) {
         return new Link(link, name, description);
     }
 
-    public Component createMenuItem(
-            final String actionId,
-            final String name,
-            final String description,
-            final String reasonDisabled,
-            final ActionType type,
-            final boolean hasParameters,
-            final String targetObjectId) {
+    @Override
+    public Component createMenuItem(final String actionId, final String name, final String description,
+        final String reasonDisabled, final ActionType type, final boolean hasParameters, final String targetObjectId) {
         return new MenuItem(actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);
     }
 
+    @Override
     public Component createCollectionIcon(final ObjectAdapter collection, final String collectionId) {
         return new CollectionIcon(collection, collection.getSpecification().getDescription(), collectionId);
     }
 
+    @Override
     public Component createObjectIcon(final ObjectAdapter object, final String objectId, final String style) {
         return new ObjectIcon(object, object.getSpecification().getDescription(), objectId, style);
     }
 
-    public Component createObjectIcon(
-            final ObjectAssociation field,
-            final ObjectAdapter object,
-            final String objectId,
-            final String style) {
+    @Override
+    public Component createObjectIcon(final ObjectAssociation field, final ObjectAdapter object, final String objectId,
+        final String style) {
         return new ObjectIcon(object, field.getDescription(), objectId, style);
     }
 
+    @Override
     public Page createPage() {
         return new DynamicHtmlPage(styleSheet, header, footer);
     }
@@ -150,20 +163,25 @@ public class HtmlComponentFactory implements ComponentFactory {
         return new LogonFormPage(styleSheet, header, footer, user, password);
     }
 
+    @Override
     public Component createService(final String objectId, final String title, final String iconName) {
         return new ServiceComponent(objectId, title, iconName);
     }
 
+    @Override
     public Table createTable(final int noColumns, final boolean withSelectorColumn) {
         return new HtmlTable(noColumns, withSelectorColumn);
     }
 
+    @Override
     public Component createUserSwap(final String name) {
         return new UserSwapLink(name);
 
     }
 
-    public Component createParseableField(final ObjectAssociation field, final ObjectAdapter value, final boolean isEditable) {
+    @Override
+    public Component createParseableField(final ObjectAssociation field, final ObjectAdapter value,
+        final boolean isEditable) {
         final BooleanValueFacet facet = field.getSpecification().getFacet(BooleanValueFacet.class);
         if (facet != null) {
             return createCheckboxBlock(isEditable, facet.isSet(value));
@@ -199,10 +217,10 @@ public class HtmlComponentFactory implements ComponentFactory {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
             }
         }
         return content.toString();
     }
 }
-

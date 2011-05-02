@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -26,8 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public class ObjectIcon implements Component {
     private final ObjectAdapter element;
@@ -72,4 +69,3 @@ public class ObjectIcon implements Component {
     }
 
 }
-

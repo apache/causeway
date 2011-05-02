@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,8 +26,6 @@ import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyCollectionAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
 import org.apache.isis.viewer.html.action.ActionException;
-import org.apache.isis.viewer.html.context.Context;
-
 
 public class ContextTest extends ProxyJunit3TestCase {
 
@@ -45,7 +42,8 @@ public class ContextTest extends ProxyJunit3TestCase {
         try {
             assertNull(context.getMappedCollection("112"));
             fail();
-        } catch (final ActionException expected) {}
+        } catch (final ActionException expected) {
+        }
     }
 
     public void testExceptionThrownWhenNoObjectForIdentity() {
@@ -53,7 +51,8 @@ public class ContextTest extends ProxyJunit3TestCase {
         try {
             assertNull(context.getMappedAction("112"));
             fail();
-        } catch (final ActionException expected) {}
+        } catch (final ActionException expected) {
+        }
     }
 
     public void testExceptionThrownWhenNoActionForIdentity() {
@@ -62,7 +61,8 @@ public class ContextTest extends ProxyJunit3TestCase {
         try {
             assertNull(context.getMappedObject("112"));
             fail();
-        } catch (final ActionException expected) {}
+        } catch (final ActionException expected) {
+        }
     }
 
     /*
@@ -99,8 +99,8 @@ public class ContextTest extends ProxyJunit3TestCase {
     }
 
     /*
-     * REVIEW public void testRegisteredCollectionReturnDifferentIdentityForDifferentCollection() { replay();
-     * String id = context.mapCollection(new DummyCollectionAdapter()); String id2 = context.mapCollection(new
+     * REVIEW public void testRegisteredCollectionReturnDifferentIdentityForDifferentCollection() { replay(); String id
+     * = context.mapCollection(new DummyCollectionAdapter()); String id2 = context.mapCollection(new
      * DummyCollectionAdapter()); assertNotSame(id, id2); verify(); }
      */
 
@@ -120,10 +120,9 @@ public class ContextTest extends ProxyJunit3TestCase {
 
     /*
      * TODO reinstate public void testClearRemovesObject() { replay(); DummyObjectAdapter object = new
-     * DummyObjectAdapter(new DummyOid(13)); String id = context.mapObject(object);
-     * context.clearMappedObject(object); try { context.getMappedObject(id); fail(); } catch
-     * (ObjectAdapterRuntimeException expected) { assertEquals("No object in object map with id " + id,
-     * expected.getMessage()); } verify(); }
+     * DummyObjectAdapter(new DummyOid(13)); String id = context.mapObject(object); context.clearMappedObject(object);
+     * try { context.getMappedObject(id); fail(); } catch (ObjectAdapterRuntimeException expected) {
+     * assertEquals("No object in object map with id " + id, expected.getMessage()); } verify(); }
      */
     public void testRegisteredObjectReturnDifferentIdentityForDifferentObject() {
         final ObjectAdapter dummyObjectAdapter = system.createPersistentTestObject();
@@ -168,4 +167,3 @@ public class ContextTest extends ProxyJunit3TestCase {
     }
 
 }
-

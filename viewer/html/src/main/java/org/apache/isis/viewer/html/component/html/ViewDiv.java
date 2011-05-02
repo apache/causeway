@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -29,16 +28,16 @@ import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.image.ImageLookup;
 
-
 public class ViewDiv extends ComponentComposite implements ViewPane {
     private String iconName;
     private String objectId;
     private Component[] menu = new Component[0];
     private String title;
-    private List<String> messages = new ArrayList<String>();
-    private List<String> warnings = new ArrayList<String>();
+    private final List<String> messages = new ArrayList<String>();
+    private final List<String> warnings = new ArrayList<String>();
     private String description;
 
+    @Override
     public void setIconName(final String iconName) {
         this.iconName = iconName;
     }
@@ -47,15 +46,18 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
         this.objectId = objectId;
     }
 
+    @Override
     public void setMenu(final Component[] menu) {
         this.menu = menu;
     }
 
+    @Override
     public void setTitle(final String title, final String description) {
         this.title = title;
         this.description = description;
     }
 
+    @Override
     public void setWarningsAndMessages(final List<String> messages, final List<String> warnings) {
         this.messages.addAll(messages);
         this.warnings.addAll(warnings);
@@ -79,12 +81,12 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     private void writeMessages(final PrintWriter writer) {
         if (warnings.size() > 0 || messages.size() > 0) {
             writer.print("<div class=\"message-header\">");
-            for (String warning: warnings) {
+            for (final String warning : warnings) {
                 writer.print("<div class=\"warning\">");
                 writer.print(warning);
                 writer.println("</div>");
             }
-            for (String message: messages) {
+            for (final String message : messages) {
                 writer.print("<div class=\"message\">");
                 writer.print(message);
                 writer.println("</div>");
@@ -96,8 +98,8 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     private void writeMenu(final PrintWriter writer) {
         writer.println("<div id=\"menu\">");
         writer.println("<h3>Actions</h3>");
-        for (int j = 0; j < menu.length; j++) {
-            menu[j].write(writer);
+        for (final Component element : menu) {
+            element.write(writer);
         }
         writer.println("</div>");
     }
@@ -130,4 +132,3 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
         writer.println("</div>");
     }
 }
-

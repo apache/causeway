@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import java.util.List;
@@ -42,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-
 
 /**
  * Has no functionality but makes it easier to write tests that require an instance of an {@link Identifier}.
@@ -107,16 +105,20 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public void addFacet(final Facet facet) {}
+    public void addFacet(final Facet facet) {
+    }
 
     @Override
-    public void addFacet(final MultiTypedFacet facet) {}
+    public void addFacet(final MultiTypedFacet facet) {
+    }
 
     @Override
-    public void removeFacet(final Facet facet) {}
+    public void removeFacet(final Facet facet) {
+    }
 
     @Override
-    public void removeFacet(final Class<? extends Facet> facetType) {}
+    public void removeFacet(final Class<? extends Facet> facetType) {
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -194,10 +196,8 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -205,7 +205,7 @@ public class ObjectActionNoop implements ObjectAction {
     public boolean isAlwaysHidden() {
         return false;
     }
-    
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
@@ -232,22 +232,17 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter object,
-            final ObjectAdapter[] candidateArguments) {
+    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter object,
+        final ObjectAdapter[] candidateArguments) {
         return null;
     }
-
 
     // /////////////////////////////////////////////////////////////
     // isAction, isAssociation
@@ -262,24 +257,24 @@ public class ObjectActionNoop implements ObjectAction {
     public boolean isPropertyOrCollection() {
         return false;
     }
-    
+
     @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+
     @Override
     public boolean isOneToOneAssociation() {
         return false;
     }
 
-
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
-        ObjectAction specification = this;
+    public Instance getInstance(final ObjectAdapter adapter) {
+        final ObjectAction specification = this;
         return adapter.getInstance(specification);
     }
 
@@ -288,12 +283,14 @@ public class ObjectActionNoop implements ObjectAction {
         return null;
     }
 
-	public RuntimeContext getRuntimeContext() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public RuntimeContext getRuntimeContext() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
      */
     @Override
@@ -301,7 +298,4 @@ public class ObjectActionNoop implements ObjectAction {
         return FeatureType.ACTION;
     }
 
-
-
 }
-

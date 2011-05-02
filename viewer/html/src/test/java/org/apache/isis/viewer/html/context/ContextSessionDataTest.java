@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,8 +24,6 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
-import org.apache.isis.viewer.html.context.Context;
-
 
 public class ContextSessionDataTest extends ProxyJunit3TestCase {
 
@@ -51,7 +48,6 @@ public class ContextSessionDataTest extends ProxyJunit3TestCase {
         context.restoreAllObjectsToLoader();
         restoredAdapter = getAdapterManager().getAdapterFor(oid);
     }
-
 
     public void testExistsInLoader() {
         assertNotNull("loaders is missing the object", getAdapterManager().getAdapterFor(oid));
@@ -79,4 +75,3 @@ public class ContextSessionDataTest extends ProxyJunit3TestCase {
     }
 
 }
-

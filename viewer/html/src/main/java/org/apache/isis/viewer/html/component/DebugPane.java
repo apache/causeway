@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 public interface DebugPane extends Component {
@@ -31,4 +30,3 @@ public interface DebugPane extends Component {
     void unindent();
 
 }
-

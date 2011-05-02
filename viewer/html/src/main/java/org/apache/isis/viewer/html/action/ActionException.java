@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class ActionException extends IsisException {
     private static final long serialVersionUID = 1L;
@@ -43,4 +41,3 @@ public class ActionException extends IsisException {
     }
 
 }
-

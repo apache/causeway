@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action;
 
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public interface Action {
 
@@ -33,4 +30,3 @@ public interface Action {
     String name();
 
 }
-

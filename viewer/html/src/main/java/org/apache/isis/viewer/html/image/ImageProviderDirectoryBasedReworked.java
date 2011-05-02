@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.image;
 
 import java.io.File;
@@ -28,7 +27,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 public class ImageProviderDirectoryBasedReworked extends ImageProviderAbstract {
 
     private File imageDirectory;
-    
+
     public void setImageDirectory(final String imageDirectory) {
         this.imageDirectory = new File(imageDirectory);
         if (!this.imageDirectory.exists()) {
@@ -36,16 +35,18 @@ public class ImageProviderDirectoryBasedReworked extends ImageProviderAbstract {
         }
     }
 
+    @Override
     protected String findImage(final String imageName, final String[] extensions) {
         final String[] files = imageDirectory.list(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                int dot = name.lastIndexOf('.');
+            @Override
+            public boolean accept(final File dir, final String name) {
+                final int dot = name.lastIndexOf('.');
                 if (dot > 0) {
-                    String nameWithoutExtension = name.substring(0, dot);
-                    String nameExtension = name.substring(dot + 1);
-                    for (int i = 0; i < extensions.length; i++) {
-                        if (nameWithoutExtension.equalsIgnoreCase(imageName) && 
-                            nameExtension.equalsIgnoreCase(extensions[i])) {
+                    final String nameWithoutExtension = name.substring(0, dot);
+                    final String nameExtension = name.substring(dot + 1);
+                    for (final String extension : extensions) {
+                        if (nameWithoutExtension.equalsIgnoreCase(imageName)
+                            && nameExtension.equalsIgnoreCase(extension)) {
                             return true;
                         }
                     }
@@ -58,5 +59,3 @@ public class ImageProviderDirectoryBasedReworked extends ImageProviderAbstract {
     }
 
 }
-
-

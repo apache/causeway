@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.edit;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,10 +28,9 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class RemoveItemFromCollection implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final String objectId = request.getObjectId();
         final String elementId = request.getElementId();
@@ -47,9 +45,9 @@ public class RemoveItemFromCollection implements Action {
         request.forward(ForwardRequest.viewObject(objectId, collectionField));
     }
 
+    @Override
     public String name() {
         return "remove";
     }
 
 }
-

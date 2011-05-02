@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 import java.util.ArrayList;
@@ -26,11 +25,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
-import java.util.Map.Entry;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -52,7 +49,7 @@ import org.apache.isis.viewer.html.crumb.ObjectFieldCrumb;
 import org.apache.isis.viewer.html.crumb.TaskCrumb;
 import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.Task;
-
+import org.apache.log4j.Logger;
 
 public class Context {
     private static final Logger LOG = Logger.getLogger(Context.class);
@@ -61,13 +58,13 @@ public class Context {
     private final ObjectHistory history = new ObjectHistory();
     private boolean isValid;
     private int max;
-    private final Map<String,CollectionMapping> collectionMap = new HashMap<String,CollectionMapping>();
-    private final Map<String,ObjectMapping> objectMap = new HashMap<String,ObjectMapping>();
-    private final Map<String,ObjectMapping> serviceMap = new HashMap<String,ObjectMapping>();
+    private final Map<String, CollectionMapping> collectionMap = new HashMap<String, CollectionMapping>();
+    private final Map<String, ObjectMapping> objectMap = new HashMap<String, ObjectMapping>();
+    private final Map<String, ObjectMapping> serviceMap = new HashMap<String, ObjectMapping>();
     private final Stack<Crumb> crumbs = new Stack<Crumb>();
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();
-    
+
     private AuthenticationSession session;
 
     public Context(final ComponentFactory factory) {
@@ -116,10 +113,10 @@ public class Context {
         debug.appendln("is task", isTask());
 
         debug.appendln("crumbs (" + crumbs.size() + ")");
-        
+
         debug.indent();
         for (int i = 0; i < crumbs.size(); i++) {
-            final Crumb crumb = (Crumb) crumbs.get(i);
+            final Crumb crumb = crumbs.get(i);
             debug.appendln(i + 1 + ". " + crumb);
             debug.indent();
             crumb.debug(debug);
@@ -128,7 +125,7 @@ public class Context {
         debug.unindent();
 
         debug.startSection("Objects");
-        for(String id: objectMap.keySet()) {
+        for (final String id : objectMap.keySet()) {
             final ObjectMapping object = objectMap.get(id);
             debug.appendln(id + " -> " + object.getOid());
             debug.indent();
@@ -138,7 +135,7 @@ public class Context {
         debug.endSection();
 
         debug.startSection("Collections");
-        for(String id: collectionMap.keySet()) {
+        for (final String id : collectionMap.keySet()) {
             final CollectionMapping coll = collectionMap.get(id);
             debug.appendln(id + " -> collection of " + coll.getElementSpecification().getPluralName());
             coll.debug(debug);
@@ -173,27 +170,27 @@ public class Context {
     }
 
     /**
-     * Returns an array of instances of the specified type that are currently known in the current context, ie
-     * have been recently seen by the user.
+     * Returns an array of instances of the specified type that are currently known in the current context, ie have been
+     * recently seen by the user.
      * 
      * <p>
      * These will be resolved if required, with a transaction created (and ended) if required.
      */
     public ObjectAdapter[] getKnownInstances(final ObjectSpecification type) {
-    	
-    	final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
 
-		for(String id: objectMap.keySet()) {
-		    final ObjectAdapter adapter = getMappedObject(id);
-		    IsisContext.getPersistenceSession().resolveImmediately(adapter);
-		    if (adapter.getSpecification().isOfType(type)) {
-		        instances.add(adapter);
-		    }
-		}
-		
-		final ObjectAdapter[] array = new ObjectAdapter[instances.size()];
-		instances.toArray(array);
-		return array;
+        final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
+
+        for (final String id : objectMap.keySet()) {
+            final ObjectAdapter adapter = getMappedObject(id);
+            IsisContext.getPersistenceSession().resolveImmediately(adapter);
+            if (adapter.getSpecification().isOfType(type)) {
+                instances.add(adapter);
+            }
+        }
+
+        final ObjectAdapter[] array = new ObjectAdapter[instances.size()];
+        instances.toArray(array);
+        return array;
     }
 
     private String addToMap(final Map map, final Object object) {
@@ -216,8 +213,8 @@ public class Context {
         return id;
     }
 
-    private String findExistingId(final Map<String,?> map, final Object object) {
-        for(String id: map.keySet()) {
+    private String findExistingId(final Map<String, ?> map, final Object object) {
+        for (final String id : map.keySet()) {
             if (object.equals(map.get(id))) {
                 return id;
             }
@@ -246,7 +243,7 @@ public class Context {
         // ensure resolved if currently a ghost;
         // start/end xactn if required
         if (object.isPersistent() && object.getResolveState().isGhost()) {
-        	IsisContext.getPersistenceSession().resolveImmediately(object);
+            IsisContext.getPersistenceSession().resolveImmediately(object);
         }
 
         try {
@@ -255,7 +252,7 @@ public class Context {
             LOG.info("concurrency conflict: " + e.getMessage());
             messages.clear();
             messages.add(e.getMessage());
-            messages.add("Reloaded object " + object.titleString()); 
+            messages.add("Reloaded object " + object.titleString());
             updateVersion(object);
         }
         return object;
@@ -283,7 +280,7 @@ public class Context {
         }
 
         // REVIEW does this take us back to the right object?
-        final Crumb crumb = (Crumb) crumbs.get(crumbs.size() - 1);
+        final Crumb crumb = crumbs.get(crumbs.size() - 1);
         return crumb.changeContext();
     }
 
@@ -304,7 +301,7 @@ public class Context {
     }
 
     public String mapObject(final ObjectAdapter adapter) {
-        ObjectMapping mapping = objectMapping(adapter);
+        final ObjectMapping mapping = objectMapping(adapter);
         return addToMap(objectMap, mapping);
     }
 
@@ -341,7 +338,7 @@ public class Context {
         final int size = crumbs.size();
         final Crumb[] taskList = new Crumb[size];
         for (int i = 0; i < crumbs.size(); i++) {
-            taskList[i] = (Crumb) crumbs.get(i);
+            taskList[i] = crumbs.get(i);
         }
         return taskList;
     }
@@ -363,7 +360,7 @@ public class Context {
         return messages;
     }
 
-    public String getMessage(int i) {
+    public String getMessage(final int i) {
         return messages.get(i);
     }
 
@@ -371,10 +368,9 @@ public class Context {
         return warnings;
     }
 
-    public String getWarning(int i) {
+    public String getWarning(final int i) {
         return warnings.get(i);
     }
-
 
     public void setMessagesAndWarnings(final List<String> messages, final List<String> warnings) {
         this.messages.clear();
@@ -397,7 +393,7 @@ public class Context {
         while (crumbs.size() - 1 > id) {
             crumbs.pop();
         }
-        final Crumb c = (Crumb) crumbs.lastElement();
+        final Crumb c = crumbs.lastElement();
         return c.changeContext();
     }
 
@@ -415,18 +411,17 @@ public class Context {
 
         final Map newCollectionMap = new HashMap();
         final Map newObjectMap = new HashMap();
-        
 
-        Iterator<HistoryEntry> elements = history.elements();
+        final Iterator<HistoryEntry> elements = history.elements();
         while (elements.hasNext()) {
-            HistoryEntry entry = elements.next();
+            final HistoryEntry entry = elements.next();
             if (entry.type == HistoryEntry.OBJECT) {
                 final Object item = objectMap.get(entry.id);
                 newObjectMap.put(entry.id, item);
                 LOG.debug("copied object map " + entry.id + " for " + item);
                 ((ObjectMapping) item).updateVersion();
             } else if (entry.type == HistoryEntry.COLLECTION) {
-                final CollectionMapping coll = (CollectionMapping) collectionMap.get(entry.id);
+                final CollectionMapping coll = collectionMap.get(entry.id);
                 newCollectionMap.put(entry.id, coll);
                 LOG.debug("copied collection map for " + coll);
                 final Enumeration e1 = coll.elements();
@@ -470,15 +465,15 @@ public class Context {
     }
 
     public void init() {
-        AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
-        List<Object> services = getUserProfile().getPerspective().getServices();
-        for (Object service : services) {
-            ObjectAdapter serviceAdapter = adapterManager.adapterFor(service); 
+        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+        final List<Object> services = getUserProfile().getPerspective().getServices();
+        for (final Object service : services) {
+            final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);
             if (serviceAdapter == null) {
-            	LOG.warn("unable to find service: " + service + "; skipping");
-            	continue;
+                LOG.warn("unable to find service: " + service + "; skipping");
+                continue;
             }
-			mapObject(serviceAdapter);
+            mapObject(serviceAdapter);
         }
         serviceMap.putAll(objectMap);
     }
@@ -496,43 +491,38 @@ public class Context {
             objectMap.put(id, mapping);
         }
     }
-    
+
     public void processChanges() {
-        List<ObjectAdapter> disposedObjects = IsisContext.getUpdateNotifier().getDisposedObjects();
-        for (ObjectAdapter adapter : disposedObjects) {
-            ObjectMapping mapping = objectMapping(adapter);
+        final List<ObjectAdapter> disposedObjects = IsisContext.getUpdateNotifier().getDisposedObjects();
+        for (final ObjectAdapter adapter : disposedObjects) {
+            final ObjectMapping mapping = objectMapping(adapter);
             if (objectMap.containsValue(mapping)) {
-                String existingId = findExistingId(objectMap, mapping);
+                final String existingId = findExistingId(objectMap, mapping);
                 history.remove(existingId);
-                
-                
-                ArrayList<Crumb> relatedCrumbs = new ArrayList<Crumb>();
-                for (Crumb crumb : getCrumbs()) {
-            /*        if (crumb.isFor(existingId)) {
-                        relatedCrumbs.add(crumb);
-                    }
-          */      }
-                for (Crumb crumb : relatedCrumbs) {
+
+                final ArrayList<Crumb> relatedCrumbs = new ArrayList<Crumb>();
+                for (final Crumb crumb : getCrumbs()) {
+                    /*
+                     * if (crumb.isFor(existingId)) { relatedCrumbs.add(crumb); }
+                     */}
+                for (final Crumb crumb : relatedCrumbs) {
                     crumbs.remove(crumb);
                 }
-                
-            
-            for (CollectionMapping collection : collectionMap.values()) {
-                collection.remove(existingId);
-            } 
-            objectMap.remove(existingId);
+
+                for (final CollectionMapping collection : collectionMap.values()) {
+                    collection.remove(existingId);
+                }
+                objectMap.remove(existingId);
             }
         }
     }
-    
-    
-    //////////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////////
 
-	private static UserProfile getUserProfile() {
-		return IsisContext.getUserProfile();
-	}
+    // ////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // ////////////////////////////////////////////////////
+
+    private static UserProfile getUserProfile() {
+        return IsisContext.getUserProfile();
+    }
 
 }
-

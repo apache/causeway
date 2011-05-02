@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.ComponentAbstract;
-
 
 public class Heading extends ComponentAbstract {
     private final String title;
@@ -38,6 +36,7 @@ public class Heading extends ComponentAbstract {
         this.level = level;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writeTag(writer, "h" + level);
         writer.print(title);
@@ -47,4 +46,3 @@ public class Heading extends ComponentAbstract {
     }
 
 }
-

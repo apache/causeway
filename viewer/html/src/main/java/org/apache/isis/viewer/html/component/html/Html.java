@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.ComponentAbstract;
-
 
 class Html extends ComponentAbstract {
 
@@ -33,8 +31,8 @@ class Html extends ComponentAbstract {
         this.code = code;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print(code);
     }
 }
-

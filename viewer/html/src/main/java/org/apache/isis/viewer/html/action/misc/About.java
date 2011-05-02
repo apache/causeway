@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.misc;
 
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -27,10 +26,9 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class About implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final ViewPane content = page.getViewPane();
         content.setTitle("About", null);
@@ -38,17 +36,17 @@ public class About implements Action {
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationName(), null));
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationVersion(), null));
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationCopyrightNotice(),
-                null));
+            null));
 
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkName(), null));
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkVersion(), null));
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkCopyrightNotice(),
-                null));
+            null));
     }
 
+    @Override
     public String name() {
         return "about";
     }
 
 }
-

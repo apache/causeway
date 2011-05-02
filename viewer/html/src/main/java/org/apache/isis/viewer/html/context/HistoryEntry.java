@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.context;
 
 public class HistoryEntry {
@@ -48,4 +47,3 @@ public class HistoryEntry {
     }
 
 }
-

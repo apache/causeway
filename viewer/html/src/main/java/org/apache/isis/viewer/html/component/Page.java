@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 public interface Page extends Component {
@@ -39,4 +38,3 @@ public interface Page extends Component {
     void setTitle(String title);
 
 }
-

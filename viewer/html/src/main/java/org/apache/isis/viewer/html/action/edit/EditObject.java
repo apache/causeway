@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.edit;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,10 +29,9 @@ import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.EditTask;
 
-
-
 public class EditObject implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final String idString = request.getObjectId();
         if (idString == null) {
@@ -48,8 +46,8 @@ public class EditObject implements Action {
         request.forward(ForwardRequest.task(editTask));
     }
 
+    @Override
     public String name() {
         return Request.EDIT_COMMAND;
     }
 }
-

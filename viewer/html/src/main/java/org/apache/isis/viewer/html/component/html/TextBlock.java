@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.ComponentAbstract;
-
 
 class TextBlock extends ComponentAbstract {
     StringBuffer buffer = new StringBuffer();
@@ -32,7 +30,8 @@ class TextBlock extends ComponentAbstract {
         append(text);
     }
 
-    public TextBlock() {}
+    public TextBlock() {
+    }
 
     public void append(final String string) {
         buffer.append(string);
@@ -44,6 +43,7 @@ class TextBlock extends ComponentAbstract {
         buffer.append("</b>");
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writeTag(writer, "p class=\"unknown\"");
         writer.print(buffer.toString());
@@ -51,4 +51,3 @@ class TextBlock extends ComponentAbstract {
     }
 
 }
-

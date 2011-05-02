@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.viewer.html.component.Component;
-
 
 public class Span implements Component {
     private final String className;
@@ -37,6 +35,7 @@ public class Span implements Component {
         this.description = description;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<span class=\"");
         writer.print(className);
@@ -48,9 +47,8 @@ public class Span implements Component {
         }
         writer.print(">");
         if (value != null) {
-            writer.print( StringEscapeUtils.escapeHtml(value) );
+            writer.print(StringEscapeUtils.escapeHtml(value));
         }
         writer.print("</span>");
     }
 }
-

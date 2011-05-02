@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html;
 
 import org.apache.isis.core.commons.lang.MapUtils;
-import org.apache.isis.core.webapp.content.StaticContentFilter;
 import org.apache.isis.core.webapp.content.ResourceServlet;
+import org.apache.isis.core.webapp.content.StaticContentFilter;
 import org.apache.isis.runtimes.dflt.runtime.Isis;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
@@ -33,57 +32,51 @@ import org.apache.isis.viewer.html.servlet.ControllerServlet;
 import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
 import org.apache.isis.viewer.html.servlet.LogonServlet;
 
-
 /**
- * Convenience implementation of a {@link IsisViewer} providing the
- * ability to run a Jetty web server configured for the HTML viewer from the
- * {@link Isis command line}.
+ * Convenience implementation of a {@link IsisViewer} providing the ability to run a Jetty web server configured for the
+ * HTML viewer from the {@link Isis command line}.
  * 
  * <p>
  * To run, use the <tt>--viewer html</tt> flag.
  * 
  * <p>
- * In a production deployment the configuration represented by the
- * {@link WebAppSpecification} would be specified in the <tt>web.xml<tt> file.
+ * In a production deployment the configuration represented by the {@link WebAppSpecification} would be specified in the
+ * <tt>web.xml<tt> file.
  */
 public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
-	
-	private static final String LOGON_PAGE = HtmlServletConstants.LOGON_APP_PAGE;
-	private static final String LOGON_PAGE_MAPPED = "/"+LOGON_PAGE;
-	private static final String ROOT_PAGE_MAPPED = "/";
-	
-	private static final String[] STATIC_CONTENT = new String[]{"*.gif", "*.png", "*.jpg", "*.css"};
-	private static final String DYNAMIC_CONTENT = "*.app";
 
+    private static final String LOGON_PAGE = HtmlServletConstants.LOGON_APP_PAGE;
+    private static final String LOGON_PAGE_MAPPED = "/" + LOGON_PAGE;
+    private static final String ROOT_PAGE_MAPPED = "/";
 
-	public HtmlViewerInstaller() {
-		super("html");
-	}
-	
-	
-	@Override
+    private static final String[] STATIC_CONTENT = new String[] { "*.gif", "*.png", "*.jpg", "*.css" };
+    private static final String DYNAMIC_CONTENT = "*.app";
+
+    public HtmlViewerInstaller() {
+        super("html");
+    }
+
+    @Override
     public IsisViewer doCreateViewer() {
         return new EmbeddedWebViewer() {
             @Override
             public WebAppSpecification getWebAppSpecification() {
 
-                WebAppSpecification webAppSpec = new WebAppSpecification();
-   
+                final WebAppSpecification webAppSpec = new WebAppSpecification();
+
                 webAppSpec.addContextParams("isis.viewers", "html");
-                
-                webAppSpec.addFilterSpecification(
-                		IsisSessionFilter.class, 
-                		MapUtils.asMap(IsisSessionFilter.LOGON_PAGE_KEY, LOGON_PAGE_MAPPED), 
-                		DYNAMIC_CONTENT);
+
+                webAppSpec.addFilterSpecification(IsisSessionFilter.class,
+                    MapUtils.asMap(IsisSessionFilter.LOGON_PAGE_KEY, LOGON_PAGE_MAPPED), DYNAMIC_CONTENT);
                 webAppSpec.addServletSpecification(LogonServlet.class, LOGON_PAGE_MAPPED);
                 webAppSpec.addServletSpecification(ControllerServlet.class, DYNAMIC_CONTENT);
-                
-                webAppSpec.addFilterSpecification(StaticContentFilter.class, 
-                        MapUtils.asMap("CacheTime", "86400"),
-                        STATIC_CONTENT);
-                webAppSpec.addServletSpecification(ResourceServlet.class, STATIC_CONTENT );
 
-                final String resourceBaseDir = getConfiguration().getString(HtmlViewerConstants.VIEWER_HTML_RESOURCE_BASE_KEY);
+                webAppSpec.addFilterSpecification(StaticContentFilter.class, MapUtils.asMap("CacheTime", "86400"),
+                    STATIC_CONTENT);
+                webAppSpec.addServletSpecification(ResourceServlet.class, STATIC_CONTENT);
+
+                final String resourceBaseDir =
+                    getConfiguration().getString(HtmlViewerConstants.VIEWER_HTML_RESOURCE_BASE_KEY);
                 if (resourceBaseDir != null) {
                     webAppSpec.addResourcePath(resourceBaseDir);
                 }
@@ -92,13 +85,11 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
                 webAppSpec.addResourcePath("./web");
                 webAppSpec.addResourcePath(".");
 
-				webAppSpec.setLogHint("open a web browser and browse to logon.app to connect");
+                webAppSpec.setLogHint("open a web browser and browse to logon.app to connect");
 
                 return webAppSpec;
             }
-        };        
+        };
     }
 
 }
-
-

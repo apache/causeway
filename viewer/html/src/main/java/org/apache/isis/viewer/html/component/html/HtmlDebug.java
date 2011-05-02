@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -25,12 +24,12 @@ import java.io.PrintWriter;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.html.component.DebugPane;
 
-
 public class HtmlDebug implements DebugPane {
     private static final String SPACES = "                                    ";
     private final StringBuffer debug = new StringBuffer();
     private int indent;
 
+    @Override
     public void addSection(final String title) {
         if (debug.length() > 0) {
             appendln("</pre>");
@@ -40,12 +39,14 @@ public class HtmlDebug implements DebugPane {
         appendln("</h2><pre>");
     }
 
+    @Override
     public void appendln(final String text) {
         debug.append(SPACES.substring(0, indent * 3));
         debug.append(text);
         debug.append("\n");
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         if (debug.length() > 0) {
             writer.print(debug.toString());
@@ -53,10 +54,12 @@ public class HtmlDebug implements DebugPane {
         }
     }
 
+    @Override
     public void indent() {
         indent++;
     }
 
+    @Override
     public void unindent() {
         if (indent == 0) {
             throw new IsisException();
@@ -64,4 +67,3 @@ public class HtmlDebug implements DebugPane {
         indent--;
     }
 }
-

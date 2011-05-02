@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
-
 
 class ActionComponent implements Component {
     private final String objectId;
@@ -33,13 +31,8 @@ class ActionComponent implements Component {
     private final String action;
     private final String elementId;
 
-    public ActionComponent(
-            final String action,
-            final String name,
-            final String description,
-            final String objectId,
-            final String elementId,
-            final String field) {
+    public ActionComponent(final String action, final String name, final String description, final String objectId,
+        final String elementId, final String field) {
         this.action = action;
         this.name = name;
         this.description = description;
@@ -48,6 +41,7 @@ class ActionComponent implements Component {
         this.field = field;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<div class=\"action-button\">");
         writer.print("<a href=\"");
@@ -71,4 +65,3 @@ class ActionComponent implements Component {
     }
 
 }
-

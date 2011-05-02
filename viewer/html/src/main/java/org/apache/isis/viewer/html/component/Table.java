@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 public interface Table extends Component {
@@ -35,4 +34,3 @@ public interface Table extends Component {
     void addEmptyCell();
 
 }
-

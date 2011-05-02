@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.task;
 
 import java.util.List;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.ForwardRequest;
 import org.apache.isis.viewer.html.request.Request;
-
 
 public final class InvokeMethod implements Action {
 
@@ -59,7 +57,7 @@ public final class InvokeMethod implements Action {
         if (action.getParameterCount() == 0) {
             executeImmediately = true;
         } else if (action.getParameterCount() == 1 && isContributedMethod
-                && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+            && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
             executeImmediately = true;
         }
 
@@ -80,12 +78,8 @@ public final class InvokeMethod implements Action {
         }
     }
 
-    static void displayMethodResult(
-            final Request request,
-            final Context context,
-            final Page page,
-            final ObjectAdapter result,
-            final String targetId) {
+    static void displayMethodResult(final Request request, final Context context, final Page page,
+        final ObjectAdapter result, final String targetId) {
         if (result == null) {
             // TODO ask context for page to display - this will be the most recent object prior to the task
             // null object - so just view service
@@ -100,11 +94,11 @@ public final class InvokeMethod implements Action {
                 }
             } else if (result.getSpecification().isValueOrIsAggregated()) {
                 // TODO deal with this object properly, it might not be just a simple string
-                List<String> messages = context.getMessages();
+                final List<String> messages = context.getMessages();
                 messages.add(0, "Action returned: " + result.titleString());
                 request.forward(ForwardRequest.viewObject(targetId));
             } else if (result.getSpecification().isNotCollection()) {
-                    forwardObjectResult(request, context, result);
+                forwardObjectResult(request, context, result);
             } else {
                 throw new UnknownTypeException(result.getSpecification().getFullIdentifier());
             }
@@ -116,9 +110,10 @@ public final class InvokeMethod implements Action {
         request.forward(ForwardRequest.listCollection(collectionId));
     }
 
-    static void forwardObjectResult(final Request request, final Context context, final ObjectAdapter resultAdapter) {       
+    static void forwardObjectResult(final Request request, final Context context, final ObjectAdapter resultAdapter) {
         final String objectId = context.mapObject(resultAdapter);
-        if (resultAdapter.isTransient() && resultAdapter.getSpecification().persistability() == Persistability.USER_PERSISTABLE) {
+        if (resultAdapter.isTransient()
+            && resultAdapter.getSpecification().persistability() == Persistability.USER_PERSISTABLE) {
             request.forward(ForwardRequest.editObject(objectId));
         } else if (resultAdapter.getSpecification().isService()) {
             request.forward(ForwardRequest.viewService(objectId));
@@ -133,4 +128,3 @@ public final class InvokeMethod implements Action {
     }
 
 }
-

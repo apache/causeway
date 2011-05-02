@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
@@ -25,7 +24,6 @@ import java.io.PrintWriter;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.Table;
-
 
 public class HtmlTable extends ComponentComposite implements Table {
     private String summary;
@@ -47,6 +45,7 @@ public class HtmlTable extends ComponentComposite implements Table {
         return row;
     }
 
+    @Override
     public void setSummary(final String summary) {
         this.summary = summary;
     }
@@ -71,6 +70,7 @@ public class HtmlTable extends ComponentComposite implements Table {
         writer.println("</tr>");
     }
 
+    @Override
     public void addCell(final String value, final boolean truncate) {
         row.addCell(value, truncate);
         cellCount++;
@@ -79,10 +79,12 @@ public class HtmlTable extends ComponentComposite implements Table {
         }
     }
 
+    @Override
     public void addEmptyCell() {
         addCell(new Span("empty-cell", "", null));
     }
 
+    @Override
     public void addCell(final Component component) {
         row.add(component);
         cellCount++;
@@ -91,6 +93,7 @@ public class HtmlTable extends ComponentComposite implements Table {
         }
     }
 
+    @Override
     public void addColumnHeader(final String name) {
         header.addHeader(name);
         cellCount++;
@@ -99,6 +102,7 @@ public class HtmlTable extends ComponentComposite implements Table {
         }
     }
 
+    @Override
     public void addRowHeader(final Component component) {
         row = new Row();
         add(row);
@@ -107,4 +111,3 @@ public class HtmlTable extends ComponentComposite implements Table {
     }
 
 }
-

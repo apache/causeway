@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.misc;
 
 import java.util.StringTokenizer;
@@ -30,16 +29,16 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class SwapUser implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final ViewPane content = page.getViewPane();
         content.setTitle("Swap Exploration User", null);
 
         // TODO pick out users from the perspectives, but only show when in exploration mode
-        final String users = IsisContext.getConfiguration().getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+        final String users =
+            IsisContext.getConfiguration().getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
         if (users != null) {
             final StringTokenizer st = new StringTokenizer(users, ",");
             if (st.countTokens() > 0) {
@@ -58,22 +57,19 @@ public class SwapUser implements Action {
 
         // TODO find user list and interate through them
         /*
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationName(),
-         * null)); content.add(context.getFactory().createInlineBlock("title",
-         * AboutIsis.getApplicationVersion(), null));
-         * content.add(context.getFactory().createInlineBlock("title",
-         * AboutIsis.getApplicationCopyrightNotice(), null));
+         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationName(), null));
+         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationVersion(), null));
+         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationCopyrightNotice(),
+         * null));
          * 
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkName(),
-         * null)); content.add(context.getFactory().createInlineBlock("title",
-         * AboutIsis.getFrameworkVersion(), null));
-         * content.add(context.getFactory().createInlineBlock("title",
-         * AboutIsis.getFrameworkCopyrightNotice(), null));
+         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkName(), null));
+         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkVersion(), null));
+         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkCopyrightNotice(), null));
          */
     }
 
+    @Override
     public String name() {
         return "swapuser";
     }
 }
-

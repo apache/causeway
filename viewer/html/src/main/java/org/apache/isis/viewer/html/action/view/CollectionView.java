@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,8 +31,6 @@ import org.apache.isis.viewer.html.component.Table;
 import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
-
-
 
 public class CollectionView implements Action {
 
@@ -81,4 +78,3 @@ public class CollectionView implements Action {
     }
 
 }
-

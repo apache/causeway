@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
-
 
 public class Link implements Component {
     private final String link;
@@ -36,9 +34,9 @@ public class Link implements Component {
         this.description = description;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<a class=\"link\" title=\"" + description + "\" href=\"" + link + ".app\">" + name + "</a>");
     }
 
 }
-

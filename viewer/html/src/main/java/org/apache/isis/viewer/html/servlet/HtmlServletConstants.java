@@ -17,28 +17,28 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.servlet;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 
 public final class HtmlServletConstants {
-	
-	static final String PROPERTY_BASE = ConfigurationConstants.ROOT + "viewer.html.";
-	
-	static final String DEBUG_KEY = PROPERTY_BASE + "debug";
-	
-	static final String ENCODING_KEY = PROPERTY_BASE + "encoding";
-	static final String ENCODING_DEFAULT = "ISO-8859-1";
 
-	/**
-	 * Binding to the {@link AuthenticationSession}.
-	 */
-	static final String AUTHENTICATION_SESSION_CONTEXT_KEY = "nof-context";
+    static final String PROPERTY_BASE = ConfigurationConstants.ROOT + "viewer.html.";
 
-	public static final String LOGON_APP_PAGE = "logon.app";
-	
-	private HtmlServletConstants() {}
+    static final String DEBUG_KEY = PROPERTY_BASE + "debug";
+
+    static final String ENCODING_KEY = PROPERTY_BASE + "encoding";
+    static final String ENCODING_DEFAULT = "ISO-8859-1";
+
+    /**
+     * Binding to the {@link AuthenticationSession}.
+     */
+    static final String AUTHENTICATION_SESSION_CONTEXT_KEY = "nof-context";
+
+    public static final String LOGON_APP_PAGE = "logon.app";
+
+    private HtmlServletConstants() {
+    }
 
 }

@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class ComponentComposite implements Component {
     private final List<Component> components = new ArrayList<Component>();
 
+    @Override
     public void write(final PrintWriter writer) {
         writeBefore(writer);
-        for(Component component: components) {
+        for (final Component component : components) {
             write(writer, component);
         }
         writeAfter(writer);
@@ -42,13 +40,14 @@ public class ComponentComposite implements Component {
         component.write(writer);
     }
 
-    protected void writeBefore(final PrintWriter writer) {}
+    protected void writeBefore(final PrintWriter writer) {
+    }
 
-    protected void writeAfter(final PrintWriter writer) {}
+    protected void writeAfter(final PrintWriter writer) {
+    }
 
     public void add(final Component component) {
         components.add(component);
     }
 
 }
-

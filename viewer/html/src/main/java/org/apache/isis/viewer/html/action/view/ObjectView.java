@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.action.view;
 
 import java.util.List;
@@ -36,8 +35,6 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
-
-
 public class ObjectView extends ObjectViewAbstract {
     @Override
     protected boolean addObjectToHistory() {
@@ -45,14 +42,16 @@ public class ObjectView extends ObjectViewAbstract {
     }
 
     @Override
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter adapter, final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter adapter,
+        final String field) {
         final String id = context.mapObject(adapter);
         createObjectView(context, adapter, content, id);
         final ObjectSpecification specification = adapter.getSpecification();
 
         // TODO: this test should be done by the ImmutableFacetFactory installing an immutableFacet on every
         // member
-        boolean immutable = ImmutableFacetUtils.isAlwaysImmutable(specification)
+        final boolean immutable =
+            ImmutableFacetUtils.isAlwaysImmutable(specification)
                 || (adapter.isPersistent() && ImmutableFacetUtils.isImmutableOncePersisted(specification));
 
         boolean allFieldUneditable = true;
@@ -69,10 +68,12 @@ public class ObjectView extends ObjectViewAbstract {
         context.setObjectCrumb(adapter);
     }
 
-    private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane, final String id) {
+    private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane,
+        final String id) {
         final ObjectSpecification specification = object.getSpecification();
-        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters
-                .dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+        final List<ObjectAssociation> visibleFields =
+            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
+                IsisContext.getAuthenticationSession(), object));
         for (int i = 0; i < visibleFields.size(); i++) {
             final ObjectAssociation field = visibleFields.get(i);
 
@@ -117,4 +118,3 @@ public class ObjectView extends ObjectViewAbstract {
     }
 
 }
-

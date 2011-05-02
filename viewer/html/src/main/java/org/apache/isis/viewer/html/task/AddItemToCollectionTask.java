@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.task;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,8 +28,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
-
-
 
 public class AddItemToCollectionTask extends Task {
     private final OneToManyAssociation field;
@@ -87,14 +84,12 @@ public class AddItemToCollectionTask extends Task {
         return true;
     }
 
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-

@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.task;
 
 import org.apache.isis.viewer.html.action.ActionException;
 
-
-
-
 public class TaskLookupException extends ActionException {
     private static final long serialVersionUID = 1L;
 
-    public TaskLookupException() {}
+    public TaskLookupException() {
+    }
 
     public TaskLookupException(final String msg, final Throwable cause) {
         super(msg, cause);
@@ -43,4 +40,3 @@ public class TaskLookupException extends ActionException {
     }
 
 }
-

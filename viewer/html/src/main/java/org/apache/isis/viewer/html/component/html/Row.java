@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
-
 
 class Row extends ComponentComposite {
 
@@ -55,4 +53,3 @@ class Row extends ComponentComposite {
     }
 
 }
-
