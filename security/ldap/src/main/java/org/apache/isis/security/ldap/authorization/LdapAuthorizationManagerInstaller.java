@@ -17,25 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.ldap.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
-public class LdapAuthorizationManagerInstaller extends
-		AuthorizationManagerStandardInstallerAbstract {
+public class LdapAuthorizationManagerInstaller extends AuthorizationManagerStandardInstallerAbstract {
 
-	public static String NAME = "ldap";
+    public static String NAME = "ldap";
 
-	public LdapAuthorizationManagerInstaller() {
-		super(NAME);
-	}
+    public LdapAuthorizationManagerInstaller() {
+        super(NAME);
+    }
 
-	@Override
-	protected Authorizor createAuthorizor(IsisConfiguration configuration) {
-		return new LdapAuthorizor(configuration);
-	}
+    @Override
+    protected Authorizor createAuthorizor(final IsisConfiguration configuration) {
+        return new LdapAuthorizor(configuration);
+    }
 
 }

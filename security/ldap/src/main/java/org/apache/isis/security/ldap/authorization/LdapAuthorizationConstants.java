@@ -17,29 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.ldap.authorization;
 
-import org.apache.isis.security.ldap.authentication.LdapAuthenticationConstants;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationConstants;
+import org.apache.isis.security.ldap.authentication.LdapAuthenticationConstants;
 
 public final class LdapAuthorizationConstants {
-	
-	private static final String ROOT = 
-		ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "." + LdapAuthorizationManagerInstaller.NAME + ".";
-	
-	public static final String SERVER_KEY = ROOT + "server";
-	public static final String SERVER_DEFAULT = LdapAuthenticationConstants.SERVER_DEFAULT;
-	
-	public static final String LDAPDN_KEY = ROOT + "dn";
-	
-	public static final String APP_DN_KEY = ROOT + "application.dn";
-	
-	public static final String LEARN_KEY = AuthorizationConstants.LEARN;
-	public static final boolean LEARN_DEFAULT = AuthorizationConstants.LEARN_DEFAULT;
 
-	private LdapAuthorizationConstants() {}
+    private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "."
+        + LdapAuthorizationManagerInstaller.NAME + ".";
+
+    public static final String SERVER_KEY = ROOT + "server";
+    public static final String SERVER_DEFAULT = LdapAuthenticationConstants.SERVER_DEFAULT;
+
+    public static final String LDAPDN_KEY = ROOT + "dn";
+
+    public static final String APP_DN_KEY = ROOT + "application.dn";
+
+    public static final String LEARN_KEY = AuthorizationConstants.LEARN;
+    public static final boolean LEARN_DEFAULT = AuthorizationConstants.LEARN_DEFAULT;
+
+    private LdapAuthorizationConstants() {
+    }
 
 }

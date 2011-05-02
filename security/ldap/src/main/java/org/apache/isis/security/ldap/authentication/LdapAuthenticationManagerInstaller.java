@@ -17,25 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.ldap.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
-
 public class LdapAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
-	
-	public static String NAME = "ldap";
+
+    public static String NAME = "ldap";
 
     public LdapAuthenticationManagerInstaller() {
         super(NAME);
     }
 
     @Override
-    protected Authenticator createAuthenticator(IsisConfiguration configuration) {
+    protected Authenticator createAuthenticator(final IsisConfiguration configuration) {
         return new LdapAuthenticator(configuration);
     }
 }

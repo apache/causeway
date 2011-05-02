@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.ldap.authentication;
 
 import java.util.ArrayList;
@@ -33,43 +32,43 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-
+import org.apache.log4j.Logger;
 
 public class LdapAuthenticator extends AuthenticatorAbstract {
 
-	private static final Logger LOG = Logger.getLogger(LdapAuthenticator.class);
-	
+    private static final Logger LOG = Logger.getLogger(LdapAuthenticator.class);
+
     private final String ldapProvider;
     private final String ldapDn;
-    
+
     public LdapAuthenticator(final IsisConfiguration configuration) {
         super(configuration);
         ldapProvider = getConfiguration().getString(LdapAuthenticationConstants.SERVER_KEY);
         ldapDn = getConfiguration().getString(LdapAuthenticationConstants.LDAPDN_KEY);
     }
 
+    @Override
     public boolean canAuthenticate(final AuthenticationRequest request) {
         return request instanceof AuthenticationRequestPassword;
     }
 
     private void setRoles(final DirContext authContext, final AuthenticationRequest request, final String username)
-            throws NamingException {
+        throws NamingException {
         final List<String> roles = new ArrayList<String>();
         final SearchControls controls = new SearchControls();
         controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         controls.setReturningAttributes(new String[] { "cn" });
         final String name = "uid=" + username + ", " + ldapDn;
-        final NamingEnumeration<SearchResult> answer = authContext.search(name, LdapAuthenticationConstants.FILTER, controls);
+        final NamingEnumeration<SearchResult> answer =
+            authContext.search(name, LdapAuthenticationConstants.FILTER, controls);
         while (answer.hasMore()) {
-            final SearchResult result = (SearchResult) answer.nextElement();
+            final SearchResult result = answer.nextElement();
             final String roleName = (String) result.getAttributes().get("cn").get(0);
             roles.add(roleName);
             LOG.debug("Adding role: " + roleName);
@@ -77,6 +76,7 @@ public class LdapAuthenticator extends AuthenticatorAbstract {
         request.setRoles(roles);
     }
 
+    @Override
     public boolean isValid(final AuthenticationRequest request) {
         final AuthenticationRequestPassword passwordRequest = (AuthenticationRequestPassword) request;
         final String username = passwordRequest.getName();
@@ -88,7 +88,7 @@ public class LdapAuthenticator extends AuthenticatorAbstract {
         final String password = passwordRequest.getPassword();
         Assert.assertNotNull(password);
 
-        final Hashtable<String,String> env = new Hashtable<String,String>(4);
+        final Hashtable<String, String> env = new Hashtable<String, String>(4);
         env.put(Context.INITIAL_CONTEXT_FACTORY, LdapAuthenticationConstants.SERVER_DEFAULT);
         env.put(Context.PROVIDER_URL, ldapProvider);
         env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ", " + ldapDn);
@@ -115,4 +115,3 @@ public class LdapAuthenticator extends AuthenticatorAbstract {
     }
 
 }
-
