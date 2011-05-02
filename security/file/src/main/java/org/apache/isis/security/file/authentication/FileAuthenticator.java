@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.file.authentication;
 
 import java.io.BufferedReader;
@@ -40,15 +39,16 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 
 public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
-	
-	private final ResourceStreamSource resourceStreamSource;
 
-	@Inject
+    private final ResourceStreamSource resourceStreamSource;
+
+    @Inject
     public FileAuthenticator(final IsisConfiguration configuration) {
-    	super(configuration);
+        super(configuration);
         this.resourceStreamSource = configuration.getResourceStreamSource();
     }
 
+    @Override
     public final boolean isValid(final AuthenticationRequest request) {
         final AuthenticationRequestPassword passwordRequest = (AuthenticationRequestPassword) request;
         final String username = passwordRequest.getName();
@@ -60,9 +60,11 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
 
         BufferedReader reader = null;
         try {
-            InputStream readStream = resourceStreamSource.readResource(FileAuthenticationConstants.PASSWORDS_FILE);
+            final InputStream readStream =
+                resourceStreamSource.readResource(FileAuthenticationConstants.PASSWORDS_FILE);
             if (readStream == null) {
-                throw new IsisException("Failed to open password file: " + FileAuthenticationConstants.PASSWORDS_FILE + " from " + resourceStreamSource.getName());
+                throw new IsisException("Failed to open password file: " + FileAuthenticationConstants.PASSWORDS_FILE
+                    + " from " + resourceStreamSource.getName());
             }
             reader = new BufferedReader(new InputStreamReader(readStream));
             String line;
@@ -75,47 +77,46 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
                 }
                 final String name = line.substring(0, line.indexOf(':'));
                 if (!name.equals(username)) {
-                	continue;
+                    continue;
                 }
-                
+
                 return isPasswordValidForUser(request, password, line);
             }
             return false;
         } catch (final IOException e) {
-            throw new IsisException("Failed to read password file: " + FileAuthenticationConstants.PASSWORDS_FILE + " from " + resourceStreamSource.getName());
+            throw new IsisException("Failed to read password file: " + FileAuthenticationConstants.PASSWORDS_FILE
+                + " from " + resourceStreamSource.getName());
         } finally {
-        	IoUtils.closeSafely(reader);
+            IoUtils.closeSafely(reader);
         }
 
     }
 
-	private boolean commentedOutOrEmpty(String line) {
-		return line.startsWith("#") || line.trim().length() == 0;
-	}
+    private boolean commentedOutOrEmpty(final String line) {
+        return line.startsWith("#") || line.trim().length() == 0;
+    }
 
-	private boolean isPasswordValidForUser(
-			final AuthenticationRequest request,
-			final String password, String line) {
-		int posFirstColon = line.indexOf(':');
-		int posPasswordStart = posFirstColon + 1;
-		
-		int posSecondColonIfAny = line.indexOf(':', posPasswordStart);
-		int posPasswordEnd = posSecondColonIfAny == -1 ? line.length() : posSecondColonIfAny;
-		
-		String parsedPassword = line.substring(posPasswordStart, posPasswordEnd);
-		if (parsedPassword.equals(password)) {
-		    if (posSecondColonIfAny != -1) {
-		        setRoles(request, line.substring(posSecondColonIfAny + 1));
-		    }
-		    return true;
-		} else {
-		    return false;
-		}
-	}
+    private boolean isPasswordValidForUser(final AuthenticationRequest request, final String password, final String line) {
+        final int posFirstColon = line.indexOf(':');
+        final int posPasswordStart = posFirstColon + 1;
+
+        final int posSecondColonIfAny = line.indexOf(':', posPasswordStart);
+        final int posPasswordEnd = posSecondColonIfAny == -1 ? line.length() : posSecondColonIfAny;
+
+        final String parsedPassword = line.substring(posPasswordStart, posPasswordEnd);
+        if (parsedPassword.equals(password)) {
+            if (posSecondColonIfAny != -1) {
+                setRoles(request, line.substring(posSecondColonIfAny + 1));
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private final void setRoles(final AuthenticationRequest request, final String line) {
         final StringTokenizer tokens = new StringTokenizer(line, "|", false);
-        String[] roles = new String[tokens.countTokens()];
+        final String[] roles = new String[tokens.countTokens()];
         for (int i = 0; tokens.hasMoreTokens(); i++) {
             roles[i] = tokens.nextToken();
         }
@@ -123,4 +124,3 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
     }
 
 }
-

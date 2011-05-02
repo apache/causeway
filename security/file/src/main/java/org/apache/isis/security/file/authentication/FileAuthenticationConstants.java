@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.file.authentication;
 
 public class FileAuthenticationConstants {
-	
-	public static final String PASSWORDS_FILE = "security_file.passwords";
 
-	private FileAuthenticationConstants() {}
+    public static final String PASSWORDS_FILE = "security_file.passwords";
+
+    private FileAuthenticationConstants() {
+    }
 
 }

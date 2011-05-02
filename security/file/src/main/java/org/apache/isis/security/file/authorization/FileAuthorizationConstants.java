@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.file.authorization;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -25,19 +24,20 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationConstants;
 
 public final class FileAuthorizationConstants {
-	
-	private static final String ROOT = 
-		ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "." + FileAuthorizationManagerInstaller.NAME + ".";
-	
-	public static final String WHITELIST_RESOURCE_KEY = ROOT + "whitelist";
-	public static final String WHITELIST_RESOURCE_DEFAULT = "security_file.allow";
-	
-	public static final String BLACKLIST_RESOURCE_KEY = ROOT + "blacklist";
-	public static final String BLACKLIST_RESOURCE_DEFAULT = "";
-	
-	public static final String LEARN = AuthorizationConstants.LEARN;
-	public static final boolean LEARN_DEFAULT = AuthorizationConstants.LEARN_DEFAULT;
 
-	private FileAuthorizationConstants(){}
+    private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "."
+        + FileAuthorizationManagerInstaller.NAME + ".";
+
+    public static final String WHITELIST_RESOURCE_KEY = ROOT + "whitelist";
+    public static final String WHITELIST_RESOURCE_DEFAULT = "security_file.allow";
+
+    public static final String BLACKLIST_RESOURCE_KEY = ROOT + "blacklist";
+    public static final String BLACKLIST_RESOURCE_DEFAULT = "";
+
+    public static final String LEARN = AuthorizationConstants.LEARN;
+    public static final boolean LEARN_DEFAULT = AuthorizationConstants.LEARN_DEFAULT;
+
+    private FileAuthorizationConstants() {
+    }
 
 }

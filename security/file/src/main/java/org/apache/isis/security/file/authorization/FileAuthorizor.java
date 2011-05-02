@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.file.authorization;
 
 import java.io.BufferedReader;
@@ -48,7 +47,6 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Maps;
 
-
 public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
 
     private static final Logger LOG = Logger.getLogger(FileAuthorizor.class);
@@ -56,63 +54,67 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     private static final String NONE = "";
     private static final String ACCESS_QUALIFIER_RO = "-ro";
     private static final String ACCESS_QUALIFIER_RW = "-rw";
-    
-    private Map<String,List<String>> whiteListMap;
-    private Map<String,List<String>> blackListMap;
-    
+
+    private Map<String, List<String>> whiteListMap;
+    private Map<String, List<String>> blackListMap;
+
     private final ResourceStreamSource resourceStreamSource;
     private final boolean learn;
-    
+
     private final String whiteListResourceName;
     private InputStream whiteListInputResource;
-    
+
     private final String blackListResourceName;
     private InputStream blackListInputResource;
 
     private boolean printedWarning;
     private boolean printedDebug;
 
-    public FileAuthorizor(IsisConfiguration configuration) {
-    	super(configuration);
+    public FileAuthorizor(final IsisConfiguration configuration) {
+        super(configuration);
 
         // read from config
-    	this.resourceStreamSource = getConfiguration().getResourceStreamSource();
-        
-    	this.learn = getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
-        whiteListResourceName = getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
+        this.resourceStreamSource = getConfiguration().getResourceStreamSource();
+
+        this.learn =
+            getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
+        whiteListResourceName =
+            getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,
+                FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
         Assert.assertTrue(whiteListResourceName.length() > 0);
-        blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
-        
+        blackListResourceName =
+            getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY,
+                FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
+
         findResources();
     }
-
 
     private void findResources() {
         whiteListInputResource = resourceStreamSource.readResource(whiteListResourceName);
         if (whiteListInputResource == null) {
             throw new IsisException("Cannot read whitelist authorization file: " + whiteListResourceName);
         }
-        
+
         if (blackListResourceName.length() > 0) {
             this.blackListInputResource = resourceStreamSource.readResource(blackListResourceName);
             if (blackListInputResource == null) {
-                throw new IsisException("Blacklist authorization file exists, but it cannot be read: " + blackListResourceName);
+                throw new IsisException("Blacklist authorization file exists, but it cannot be read: "
+                    + blackListResourceName);
             }
         } else {
-        	blackListInputResource = null;
+            blackListInputResource = null;
         }
     }
 
-    
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // init, shutdown
-    ////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////
+
     @Override
     public void init() {
         whiteListMap = Maps.newHashMap();
         blackListMap = Maps.newHashMap();
-        
+
         // initialize
         if (learn) {
             return;
@@ -121,13 +123,14 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (blackListInputResource != null) {
             cacheAuthorizationDetails(blackListMap, blackListInputResource);
         }
-        
+
         JmxBeanServer.getInstance().register("file-authorizer", this);
     }
 
+    @Override
     public void reload() {
-        Map<String,List<String>> whiteListMap = Maps.newHashMap();
-        Map<String,List<String>> blackListMap = Maps.newHashMap();
+        final Map<String, List<String>> whiteListMap = Maps.newHashMap();
+        final Map<String, List<String>> blackListMap = Maps.newHashMap();
 
         findResources();
         cacheAuthorizationDetails(whiteListMap, whiteListInputResource);
@@ -138,14 +141,12 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         this.whiteListMap = whiteListMap;
     }
 
-
-    private void cacheAuthorizationDetails(final Map<String,List<String>> map, final InputStream inputStream) {
+    private void cacheAuthorizationDetails(final Map<String, List<String>> map, final InputStream inputStream) {
         try {
-        	if (LOG.isInfoEnabled()) {
-        		LOG.info("loading authorization details from " + whiteListResourceName);
-        	}
-            final BufferedReader buffReader = 
-            	new BufferedReader(new InputStreamReader(inputStream));
+            if (LOG.isInfoEnabled()) {
+                LOG.info("loading authorization details from " + whiteListResourceName);
+            }
+            final BufferedReader buffReader = new BufferedReader(new InputStreamReader(inputStream));
             for (String line; (line = buffReader.readLine()) != null;) {
                 tokenizeLine(map, line);
             }
@@ -155,11 +156,11 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         }
     }
 
-    private void tokenizeLine(final Map<String,List<String>> map, final String line) {
+    private void tokenizeLine(final Map<String, List<String>> map, final String line) {
         if (line.trim().startsWith("#") || line.trim().length() == 0) {
             return;
         }
-        int pos = line.trim().indexOf(">");
+        final int pos = line.trim().indexOf(">");
         if (pos == -1) {
             final StringTokenizer tokens = new StringTokenizer(line.trim(), ":", false);
             if (tokens.countTokens() != 2) {
@@ -169,16 +170,16 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
             final String token2 = tokens.nextToken();
             final Identifier identifier = memberFromString(token1.trim());
             final List<String> roles = tokenizeRoles(token2);
-            String identityString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
+            final String identityString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
             map.put(identityString, roles);
         } else {
-            Map<String,List<String>> newRules = new HashMap<String,List<String>>(); 
-            for (String name: map.keySet()) {
-                String originalName = line.trim().substring(0, pos);
-                String redirectedName = line.trim().substring(pos + 1);
+            final Map<String, List<String>> newRules = new HashMap<String, List<String>>();
+            for (final String name : map.keySet()) {
+                final String originalName = line.trim().substring(0, pos);
+                final String redirectedName = line.trim().substring(pos + 1);
                 if (name.startsWith(redirectedName)) {
-                    String id = originalName + name.substring(redirectedName.length());
-                    List<String> roles = map.get(name);
+                    final String id = originalName + name.substring(redirectedName.length());
+                    final List<String> roles = map.get(name);
                     newRules.put(id, roles);
                 }
             }
@@ -187,15 +188,15 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     }
 
     private Identifier memberFromString(final String identifier) {
-    	return Identifier.fromIdentityString(identifier);
+        return Identifier.fromIdentityString(identifier);
     }
 
     private List<String> tokenizeRoles(final String allRoles) {
         final List<String> roles = new ArrayList<String>();
         final StringTokenizer tokens = new StringTokenizer(allRoles, "|", false);
         while (tokens.hasMoreTokens()) {
-            String nextToken = tokens.nextToken();
-            String trimmedNextToken = nextToken.trim();
+            final String nextToken = tokens.nextToken();
+            final String trimmedNextToken = nextToken.trim();
             roles.add(trimmedNextToken);
         }
         return roles;
@@ -208,10 +209,9 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         }
     }
 
-
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // API
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     @Override
     public boolean isUsableInRole(final String role, final Identifier member) {
@@ -227,8 +227,7 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (learn) {
             return learn(role, member);
         }
-        return isWhiteListed(role, member, qualifiers) && 
-              !isBlackListed(role, member, qualifiers);
+        return isWhiteListed(role, member, qualifiers) && !isBlackListed(role, member, qualifiers);
     }
 
     private boolean isWhiteListed(final String role, final Identifier member, final List<String> qualifiers) {
@@ -240,10 +239,11 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     }
 
     /*
-     * Work through the available entries from most specific to least.  When one exists then determine the result of this method
-     * by looking for a compatible role between the entry and required role.
+     * Work through the available entries from most specific to least. When one exists then determine the result of this
+     * method by looking for a compatible role between the entry and required role.
      */
-    private boolean isListed(final Map<String,List<String>> map, final String role, final Identifier identifier, final List<String> qualifiers) {
+    private boolean isListed(final Map<String, List<String>> map, final String role, final Identifier identifier,
+        final List<String> qualifiers) {
         if (map.isEmpty()) {// quick fail
             return false;
         }
@@ -259,9 +259,9 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
             roles = rolesFor(map, "*#" + identifier.toIdentityString(Identifier.MEMBERNAME_ONLY));
         }
         if (roles != null) {
-        for (final String qualifier: qualifiers) {
-            final String qualifiedRole = role + qualifier;
-            if (roles.contains(qualifiedRole)) {
+            for (final String qualifier : qualifiers) {
+                final String qualifiedRole = role + qualifier;
+                if (roles.contains(qualifiedRole)) {
                     return true;
                 }
             }
@@ -269,16 +269,16 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         return false;
     }
 
-    private List<String> rolesFor(Map<String, List<String>> map, String key) {
+    private List<String> rolesFor(final Map<String, List<String>> map, final String key) {
         if (map.containsKey(key)) {
-           return map.get(key);
+            return map.get(key);
         } else {
             return null;
         }
     }
 
     private boolean learn(final String role, final Identifier member) {
-        String identityString = member.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
+        final String identityString = member.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
         if (whiteListMap.containsKey(identityString)) {
             final List<String> roles = whiteListMap.get(identityString);
             if (!roles.contains(role)) {
@@ -287,31 +287,31 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         } else {
             whiteListMap.put(identityString, Arrays.asList(new String[] { role }));
         }
-        
+
         // REVIEW: might be too labour intensive
         writeMap();
         return true;
     }
-    
+
     private void writeMap() {
         try {
-            OutputStream whiteListOutputResource = resourceStreamSource.writeResource(whiteListResourceName);
+            final OutputStream whiteListOutputResource = resourceStreamSource.writeResource(whiteListResourceName);
             if (whiteListOutputResource == null) {
                 if (!printedWarning) {
-                	LOG.warn("unable to write out authorisation details");
-                	printedWarning = true; // just to stop flooding log
+                    LOG.warn("unable to write out authorisation details");
+                    printedWarning = true; // just to stop flooding log
                 }
-            	return;
+                return;
             }
             if (LOG.isDebugEnabled() && !printedDebug) {
-            	LOG.debug("writing authorisation details to " + whiteListResourceName);
-            	printedDebug = true; // just to stop flooding log
+                LOG.debug("writing authorisation details to " + whiteListResourceName);
+                printedDebug = true; // just to stop flooding log
             }
             final OutputStreamWriter fileWriter = new OutputStreamWriter(whiteListOutputResource);
             final BufferedWriter buffWriter = new BufferedWriter(fileWriter);
-            Set<Entry<String, List<String>>> entrySet = whiteListMap.entrySet();
+            final Set<Entry<String, List<String>>> entrySet = whiteListMap.entrySet();
             for (int i = 0; i < entrySet.size(); i++) {
-                final Map.Entry<String,List<String>> entry = (Map.Entry<String,List<String>>) entrySet.toArray()[i];
+                final Map.Entry<String, List<String>> entry = (Map.Entry<String, List<String>>) entrySet.toArray()[i];
                 final StringBuffer buff = new StringBuffer();
                 buff.append(entry.getKey()).append(":");
                 final List<String> roles = entry.getValue();

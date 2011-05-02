@@ -22,4 +22,3 @@ public interface FileAuthorizorMBean {
 
     void reload();
 }
-

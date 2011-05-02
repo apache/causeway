@@ -17,22 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.file.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-
-
 public class FileAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     public static final String NAME = "file";
 
-	public FileAuthenticationManagerInstaller() {
+    public FileAuthenticationManagerInstaller() {
         super(NAME);
     }
 

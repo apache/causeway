@@ -18,5 +18,24 @@
 
 
 Security File Implementation
+ 
+ The <file security> module is a simple implementation of Isis' authentication and
+ authorization APIs, that uses flat files store user/passwords/roles (for authentication)
+ and role-based permissions (for authorization).
+ 
+ Because of critical information stored in flat files, this implementation is unlikely to 
+ be suitable for deployment, but it is valuable both for prototyping and building
+ up roles/permission sets (eg to be imported into some other implementation).  It is
+ also useful as a example implementation that can be enhanced as required.
+ 
+ 
+Alternatives
 
- ...
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}default}} (no-op) security implementation, for prototyping use only
+
+  * the {{{../ldap/index.html}LDAP}} security
+
+  []
+ 

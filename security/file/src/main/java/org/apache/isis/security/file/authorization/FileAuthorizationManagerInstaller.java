@@ -17,24 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.file.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
-
 public class FileAuthorizationManagerInstaller extends AuthorizationManagerStandardInstallerAbstract {
 
     public static final String NAME = "file";
 
-	public FileAuthorizationManagerInstaller() {
+    public FileAuthorizationManagerInstaller() {
         super(NAME);
     }
 
     @Override
-    protected Authorizor createAuthorizor(IsisConfiguration configuration) {
+    protected Authorizor createAuthorizor(final IsisConfiguration configuration) {
         return new FileAuthorizor(configuration);
     }
 
