@@ -19,4 +19,21 @@
 
 Security LDAP Implementation
 
- ...
+ The <ldap security> module provides an implementation of Isis' authentication and
+ authorization APIs where credentials are stored in a well-known LDAP server.
+ 
+ This makes the LDAP security implementation suitable for deployment where an
+ LDAP exists.  Optionally it may be combined with other implementations (for example
+ the authorization might be performed using the file-based implementation).
+ 
+
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}default}} (no-op) security implementation, for prototyping use only
+
+  * the {{{../file/index.html}file-based}} security (reading from simple flat files)
+
+  []
+  
