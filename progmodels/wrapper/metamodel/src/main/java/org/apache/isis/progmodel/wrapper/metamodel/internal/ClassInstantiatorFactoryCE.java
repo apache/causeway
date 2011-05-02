@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 /**
@@ -28,7 +27,9 @@ class ClassInstantiatorFactoryCE {
     private static IClassInstantiatorCE instantiator = new ObjenesisClassInstantiatorCE();
 
     // ///CLOVER:OFF
-    private ClassInstantiatorFactoryCE() {}
+    private ClassInstantiatorFactoryCE() {
+    }
+
     // ///CLOVER:ON
 
     /**

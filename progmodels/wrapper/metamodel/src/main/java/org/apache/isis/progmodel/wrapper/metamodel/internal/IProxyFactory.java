@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.lang.reflect.InvocationHandler;
-
 
 public interface IProxyFactory<T> {
     T createProxy(Class<T> toProxyClass, InvocationHandler handler);

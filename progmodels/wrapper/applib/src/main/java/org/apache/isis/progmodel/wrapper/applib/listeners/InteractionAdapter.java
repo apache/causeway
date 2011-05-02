@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.applib.listeners;
 
 import org.apache.isis.applib.events.ActionArgumentEvent;
@@ -37,43 +36,74 @@ import org.apache.isis.applib.events.PropertyModifyEvent;
 import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
 
-
 /**
- * Provides no-op implementations of each of the methods within {@link InteractionListener}, to simplify the
- * creation of new listeners.
+ * Provides no-op implementations of each of the methods within {@link InteractionListener}, to simplify the creation of
+ * new listeners.
  */
 public class InteractionAdapter implements InteractionListener {
 
-    public void propertyVisible(final PropertyVisibilityEvent ev) {}
+    @Override
+    public void propertyVisible(final PropertyVisibilityEvent ev) {
+    }
 
-    public void propertyUsable(final PropertyUsabilityEvent ev) {}
+    @Override
+    public void propertyUsable(final PropertyUsabilityEvent ev) {
+    }
 
-    public void propertyAccessed(final PropertyAccessEvent ev) {}
+    @Override
+    public void propertyAccessed(final PropertyAccessEvent ev) {
+    }
 
-    public void propertyModified(final PropertyModifyEvent ev) {}
+    @Override
+    public void propertyModified(final PropertyModifyEvent ev) {
+    }
 
-    public void collectionVisible(final CollectionVisibilityEvent ev) {}
+    @Override
+    public void collectionVisible(final CollectionVisibilityEvent ev) {
+    }
 
-    public void collectionUsable(final CollectionUsabilityEvent ev) {}
+    @Override
+    public void collectionUsable(final CollectionUsabilityEvent ev) {
+    }
 
-    public void collectionAccessed(final CollectionAccessEvent ev) {}
+    @Override
+    public void collectionAccessed(final CollectionAccessEvent ev) {
+    }
 
-    public void collectionAddedTo(final CollectionAddToEvent ev) {}
+    @Override
+    public void collectionAddedTo(final CollectionAddToEvent ev) {
+    }
 
-    public void collectionRemovedFrom(final CollectionRemoveFromEvent ev) {}
+    @Override
+    public void collectionRemovedFrom(final CollectionRemoveFromEvent ev) {
+    }
 
-    public void collectionMethodInvoked(final CollectionMethodEvent interactionEvent) {}
+    @Override
+    public void collectionMethodInvoked(final CollectionMethodEvent interactionEvent) {
+    }
 
-    public void actionVisible(final ActionVisibilityEvent interactionEvent) {}
+    @Override
+    public void actionVisible(final ActionVisibilityEvent interactionEvent) {
+    }
 
-    public void actionUsable(final ActionUsabilityEvent ev) {}
+    @Override
+    public void actionUsable(final ActionUsabilityEvent ev) {
+    }
 
-    public void actionArgument(final ActionArgumentEvent ev) {}
+    @Override
+    public void actionArgument(final ActionArgumentEvent ev) {
+    }
 
-    public void actionInvoked(final ActionInvocationEvent ev) {}
+    @Override
+    public void actionInvoked(final ActionInvocationEvent ev) {
+    }
 
-    public void objectPersisted(final ObjectValidityEvent ev) {}
+    @Override
+    public void objectPersisted(final ObjectValidityEvent ev) {
+    }
 
-    public void objectTitleRead(final ObjectTitleEvent ev) {}
+    @Override
+    public void objectTitleRead(final ObjectTitleEvent ev) {
+    }
 
 }

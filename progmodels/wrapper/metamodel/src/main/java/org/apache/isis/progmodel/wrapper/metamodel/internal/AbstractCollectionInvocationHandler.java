@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.applib.events.CollectionMethodEvent;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-
 abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvocationHandlerDefault<C> {
 
     private final List<Method> interceptedMethods = new ArrayList<Method>();
@@ -37,11 +35,8 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
 
-    public AbstractCollectionInvocationHandler(
-            final C collectionOrMapToProxy,
-            final String collectionName,
-            final DomainObjectInvocationHandler<T> handler,
-            final OneToManyAssociation otma) {
+    public AbstractCollectionInvocationHandler(final C collectionOrMapToProxy, final String collectionName,
+        final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
         super(collectionOrMapToProxy, handler.getHeadlessViewer(), handler.getExecutionMode());
         this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
@@ -78,16 +73,18 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
 
         if (interceptedMethods.contains(method)) {
 
-        	resolveIfRequired(domainObject);
-        	
-            final InteractionEvent ev = new CollectionMethodEvent(getDelegate(), getCollection().getIdentifier(),
-                    getDomainObject(), method.getName(), args, returnValueObj);
+            resolveIfRequired(domainObject);
+
+            final InteractionEvent ev =
+                new CollectionMethodEvent(getDelegate(), getCollection().getIdentifier(), getDomainObject(),
+                    method.getName(), args, returnValueObj);
             notifyListeners(ev);
             return returnValueObj;
         }
 
         if (vetoedMethods.contains(method)) {
-            throw new UnsupportedOperationException(String.format("Method '%s' may not be called directly.", method.getName()));
+            throw new UnsupportedOperationException(String.format("Method '%s' may not be called directly.",
+                method.getName()));
         }
 
         return returnValueObj;

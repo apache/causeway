@@ -17,16 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.applib;
 
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 
-
 /**
- * Superclass of exceptions which indicate an attempt to interact with an object or member in a way that is
- * invalid.
+ * Superclass of exceptions which indicate an attempt to interact with an object or member in a way that is invalid.
  * 
  * <p>
  * 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
@@ -26,14 +25,10 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-
 class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {
 
-    public MapInvocationHandler(
-            final C collectionToProxy,
-            final String collectionName,
-            final DomainObjectInvocationHandler<T> handler,
-            final OneToManyAssociation otma) {
+    public MapInvocationHandler(final C collectionToProxy, final String collectionName,
+        final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
         super(collectionToProxy, collectionName, handler, otma);
 
         try {

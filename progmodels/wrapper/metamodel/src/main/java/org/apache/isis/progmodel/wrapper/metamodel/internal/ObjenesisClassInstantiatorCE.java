@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import org.objenesis.ObjenesisHelper;
 
-
 class ObjenesisClassInstantiatorCE implements IClassInstantiatorCE {
 
+    @Override
     public Object newInstance(final Class<?> clazz) throws InstantiationException {
         return ObjenesisHelper.newInstance(clazz);
     }

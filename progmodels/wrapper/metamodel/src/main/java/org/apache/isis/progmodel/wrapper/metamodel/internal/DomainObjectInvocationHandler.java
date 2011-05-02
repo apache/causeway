@@ -61,7 +61,6 @@ import org.apache.isis.progmodel.wrapper.metamodel.internal.util.MethodPrefixFin
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
-
     private final Map<Method, Collection<?>> collectionViewObjectsByMethod = new HashMap<Method, Collection<?>>();
     private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
 
@@ -74,23 +73,21 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      * The <tt>title()</tt> method; may be <tt>null</tt>.
      */
     protected Method titleMethod;
-    
+
     /**
      * The <tt>save()</tt> method from {@link WrapperObject#save()}.
      */
     protected Method saveMethod;
-    
+
     /**
      * The <tt>underlying()</tt> method from {@link WrapperObject#wrapped()}.
      */
     protected Method wrappedMethod;
 
     public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer,
-            final ExecutionMode mode,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final SpecificationLookup specificationLookup,
-            final AdapterMap adapterManager,
-            final ObjectPersistor objectPersistor) {
+        final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider,
+        final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
+        final ObjectPersistor objectPersistor) {
         super(delegate, embeddedViewer, mode);
 
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -607,7 +604,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return nos;
     }
 
-    
     // /////////////////////////////////////////////////////////////////
     // Dependencies
     // /////////////////////////////////////////////////////////////////
@@ -619,11 +615,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider;
     }
-    
+
     protected AuthenticationSession getAuthenticationSession() {
         return getAuthenticationSessionProvider().getAuthenticationSession();
     }
-    
+
     protected AdapterMap getAdapterManager() {
         return adapterManager;
     }

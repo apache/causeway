@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.applib;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.InteractionEvent;
-
 
 public abstract class InteractionException extends ApplicationException {
 
@@ -37,13 +35,12 @@ public abstract class InteractionException extends ApplicationException {
     }
 
     /**
-     * The {@link InteractionEvent event} passed into the
-     * {@link #InteractionException(InteractionEvent) constructor}.
+     * The {@link InteractionEvent event} passed into the {@link #InteractionException(InteractionEvent) constructor}.
      * 
      * <p>
      * Not part of the API, but made available so that subclasses can expose as the appropriate subtype of
-     * {@link InteractionEvent}. This would have been more obvious to see if {@link InteractionException} was
-     * generic, but generic subclasses of {@link Throwable} are (apparently) not allowed.
+     * {@link InteractionEvent}. This would have been more obvious to see if {@link InteractionException} was generic,
+     * but generic subclasses of {@link Throwable} are (apparently) not allowed.
      * 
      * @return
      */
@@ -52,8 +49,8 @@ public abstract class InteractionException extends ApplicationException {
     }
 
     /**
-     * Convenience method that returns the {@link InteractionEvent#getAdvisorClass() advisor class} of the
-     * wrapped {@link #getInteractionEvent() interaction event}.
+     * Convenience method that returns the {@link InteractionEvent#getAdvisorClass() advisor class} of the wrapped
+     * {@link #getInteractionEvent() interaction event}.
      * 
      * @return
      */

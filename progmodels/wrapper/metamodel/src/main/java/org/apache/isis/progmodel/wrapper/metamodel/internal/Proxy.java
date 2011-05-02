@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.util.Collection;
@@ -31,19 +30,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 
-
 public class Proxy {
 
-    public static <T> T proxy(
-            final T domainObject,
-            final WrapperFactory embeddedViewer,
-            final ExecutionMode mode, 
-            final AuthenticationSessionProvider authenticationSessionProvider, 
-            final SpecificationLookup specificationLookup, 
-            final AdapterMap adapterManager,
-            final ObjectPersistor objectPersistor) {
-        final DomainObjectInvocationHandler<T> invocationHandler = 
-        	new DomainObjectInvocationHandler<T>(domainObject, embeddedViewer, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor);
+    public static <T> T proxy(final T domainObject, final WrapperFactory embeddedViewer, final ExecutionMode mode,
+        final AuthenticationSessionProvider authenticationSessionProvider,
+        final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
+        final ObjectPersistor objectPersistor) {
+        final DomainObjectInvocationHandler<T> invocationHandler =
+            new DomainObjectInvocationHandler<T>(domainObject, embeddedViewer, mode, authenticationSessionProvider,
+                specificationLookup, adapterManager, objectPersistor);
 
         final CgLibProxy<T> cglibProxy = new CgLibProxy<T>(invocationHandler);
         return cglibProxy.proxy();
@@ -52,15 +47,11 @@ public class Proxy {
     /**
      * Whether to execute or not will be picked up from the supplied parent handler.
      */
-    public static <T, E> Collection<E> proxy(
-            final Collection<E> collectionToProxy,
-            final String collectionName,
-            final DomainObjectInvocationHandler<T> handler,
-            final OneToManyAssociation otma) {
+    public static <T, E> Collection<E> proxy(final Collection<E> collectionToProxy, final String collectionName,
+        final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
 
-        final CollectionInvocationHandler<T, Collection<E>> collectionInvocationHandler = 
-        	new CollectionInvocationHandler<T, Collection<E>>(
-                collectionToProxy, collectionName, handler, otma);
+        final CollectionInvocationHandler<T, Collection<E>> collectionInvocationHandler =
+            new CollectionInvocationHandler<T, Collection<E>>(collectionToProxy, collectionName, handler, otma);
         collectionInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         final CgLibProxy<Collection<E>> cglibProxy = new CgLibProxy<Collection<E>>(collectionInvocationHandler);
@@ -70,14 +61,11 @@ public class Proxy {
     /**
      * Whether to execute or not will be picked up from the supplied parent handler.
      */
-    public static <T, P, Q> Map<P, Q> proxy(
-            final Map<P, Q> collectionToProxy,
-            final String collectionName,
-            final DomainObjectInvocationHandler<T> handler,
-            final OneToManyAssociation otma) {
+    public static <T, P, Q> Map<P, Q> proxy(final Map<P, Q> collectionToProxy, final String collectionName,
+        final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
 
-        final MapInvocationHandler<T, Map<P, Q>> mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(collectionToProxy,
-                collectionName, handler, otma);
+        final MapInvocationHandler<T, Map<P, Q>> mapInvocationHandler =
+            new MapInvocationHandler<T, Map<P, Q>>(collectionToProxy, collectionName, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         final CgLibProxy<Map<P, Q>> cglibProxy = new CgLibProxy<Map<P, Q>>(mapInvocationHandler);

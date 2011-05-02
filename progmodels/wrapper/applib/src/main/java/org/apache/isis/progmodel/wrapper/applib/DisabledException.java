@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.applib;
 
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.UsabilityEvent;
-
 
 /**
  * Superclass of exceptions which indicate an attempt to interact with a class member that is disabled.

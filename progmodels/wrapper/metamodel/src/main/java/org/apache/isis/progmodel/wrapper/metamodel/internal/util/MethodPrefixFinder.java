@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal.util;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-
-
 
 public final class MethodPrefixFinder {
 

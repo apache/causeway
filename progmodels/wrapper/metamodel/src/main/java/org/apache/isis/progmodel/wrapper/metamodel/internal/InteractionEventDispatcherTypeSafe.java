@@ -17,16 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import org.apache.isis.applib.events.InteractionEvent;
 
-
-public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> implements InteractionEventDispatcher {
+public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> implements
+    InteractionEventDispatcher {
 
     public abstract void dispatchTypeSafe(T interactionEvent);
 
+    @Override
     @SuppressWarnings("unchecked")
     public void dispatch(final InteractionEvent interactionEvent) {
         dispatchTypeSafe((T) interactionEvent);

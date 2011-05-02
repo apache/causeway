@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.util.ArrayList;
@@ -27,11 +26,8 @@ import java.util.List;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.CglibEnhanced;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
-
-
-
+import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.CglibEnhanced;
 
 public class CgLibProxy<T> {
 
@@ -44,42 +40,36 @@ public class CgLibProxy<T> {
     @SuppressWarnings("unchecked")
     public T proxy() {
 
-    	final T toProxy = handler.getDelegate();
-    	
-    	// handle if already proxied using cglib.
-    	if (CglibEnhanced.class.isAssignableFrom(toProxy.getClass())) {
-    		
-    		handler.setResolveObjectChangedEnabled(true);
-    		
-    		Class<? extends Object> enhancedClass = toProxy.getClass();
-    		Class<? extends Object> origSuperclass = toProxy.getClass().getSuperclass();
-    		
-    		List<Class> interfaces = new ArrayList<Class>();
-			interfaces.addAll(Arrays.asList(enhancedClass.getInterfaces()));
-			interfaces.remove(Factory.class); // if there.
-			interfaces.add(WrapperObject.class);
-    		
-			return (T) Enhancer.create(
-					origSuperclass,
-					interfaces.toArray(new Class[]{}),
-					new InvocationHandlerMethodInterceptor(handler));
-    	}
-    	
+        final T toProxy = handler.getDelegate();
+
+        // handle if already proxied using cglib.
+        if (CglibEnhanced.class.isAssignableFrom(toProxy.getClass())) {
+
+            handler.setResolveObjectChangedEnabled(true);
+
+            final Class<? extends Object> enhancedClass = toProxy.getClass();
+            final Class<? extends Object> origSuperclass = toProxy.getClass().getSuperclass();
+
+            final List<Class> interfaces = new ArrayList<Class>();
+            interfaces.addAll(Arrays.asList(enhancedClass.getInterfaces()));
+            interfaces.remove(Factory.class); // if there.
+            interfaces.add(WrapperObject.class);
+
+            return (T) Enhancer.create(origSuperclass, interfaces.toArray(new Class[] {}),
+                new InvocationHandlerMethodInterceptor(handler));
+        }
+
         final Class<T> clazz = (Class<T>) toProxy.getClass();
-        
+
         T proxy = null;
         try {
-            final IProxyFactory<T> proxyFactory = 
-            	clazz.isInterface()?
-					new JavaProxyFactory<T>():
-					new CgLibClassProxyFactory<T>();
+            final IProxyFactory<T> proxyFactory =
+                clazz.isInterface() ? new JavaProxyFactory<T>() : new CgLibClassProxyFactory<T>();
             proxy = proxyFactory.createProxy(clazz, handler);
         } catch (final RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
         }
         return proxy;
     }
-
-
 
 }

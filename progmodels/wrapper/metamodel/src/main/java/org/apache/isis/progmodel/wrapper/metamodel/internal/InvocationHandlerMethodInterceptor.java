@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.lang.reflect.InvocationHandler;
@@ -27,13 +26,15 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 public class InvocationHandlerMethodInterceptor implements MethodInterceptor {
-	private final InvocationHandler handler;
+    private final InvocationHandler handler;
 
-	InvocationHandlerMethodInterceptor(InvocationHandler handler) {
-		this.handler = handler;
-	}
+    InvocationHandlerMethodInterceptor(final InvocationHandler handler) {
+        this.handler = handler;
+    }
 
-	public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-	    return handler.invoke(obj, method, args);
-	}
+    @Override
+    public Object intercept(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)
+        throws Throwable {
+        return handler.invoke(obj, method, args);
+    }
 }

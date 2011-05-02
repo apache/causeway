@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.applib.listeners;
 
 import org.apache.isis.applib.events.ActionArgumentEvent;
@@ -36,7 +35,6 @@ import org.apache.isis.applib.events.PropertyAccessEvent;
 import org.apache.isis.applib.events.PropertyModifyEvent;
 import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
-
 
 public interface InteractionListener {
 
@@ -83,8 +81,7 @@ public interface InteractionListener {
      * A property was modified (or an attempt to modify it was made)
      * 
      * <p>
-     * Use {@link PropertyModifyEvent#getProposed()} to determine whether the property was being set or
-     * cleared.
+     * Use {@link PropertyModifyEvent#getProposed()} to determine whether the property was being set or cleared.
      * 
      * @param ev
      */
@@ -105,8 +102,7 @@ public interface InteractionListener {
      * 
      * <p>
      * Will be fired prior to either {@link #collectionAccessed(CollectionAccessEvent)} or
-     * {@link #collectionAddedTo(CollectionAddToEvent)} or
-     * {@link #collectionRemovedFrom(CollectionRemoveFromEvent)}.
+     * {@link #collectionAddedTo(CollectionAddToEvent)} or {@link #collectionRemovedFrom(CollectionRemoveFromEvent)}.
      * 
      * @param ev
      */
@@ -137,7 +133,7 @@ public interface InteractionListener {
      */
     void collectionRemovedFrom(CollectionRemoveFromEvent ev);
 
-    /**
+/**
      * A method of a collection (such as <tt>isEmpty()</tt> or <tt>size()</tt>) has been invoked.
      * 
      * 

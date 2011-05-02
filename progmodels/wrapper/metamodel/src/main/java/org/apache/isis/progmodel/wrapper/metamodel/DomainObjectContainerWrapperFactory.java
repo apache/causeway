@@ -42,8 +42,7 @@ public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDe
     public DomainObjectContainerWrapperFactory() {
         this.wrapperFactoryDelegate = new WrapperFactoryDefault();
     }
-    
-    
+
     // /////////////////////////////////////////////////////////////
     // Views
     // /////////////////////////////////////////////////////////////
@@ -54,7 +53,7 @@ public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDe
     }
 
     @Override
-    public <T> T wrap(final T domainObject, ExecutionMode mode) {
+    public <T> T wrap(final T domainObject, final ExecutionMode mode) {
         return wrapperFactoryDelegate.wrap(domainObject, mode);
     }
 
@@ -87,31 +86,30 @@ public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDe
         wrapperFactoryDelegate.notifyListeners(interactionEvent);
     }
 
-    
     // /////////////////////////////////////////////////////////////
     // Dependencies
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
+    public void setSpecificationLookup(final SpecificationLookup specificationLookup) {
         super.setSpecificationLookup(specificationLookup);
         wrapperFactoryDelegate.setSpecificationLookup(specificationLookup);
     }
 
     @Override
-    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
         super.setAuthenticationSessionProvider(authenticationSessionProvider);
         wrapperFactoryDelegate.setAuthenticationSessionProvider(authenticationSessionProvider);
     }
-    
+
     @Override
-    public void setAdapterMap(AdapterMap adapterManager) {
+    public void setAdapterMap(final AdapterMap adapterManager) {
         super.setAdapterMap(adapterManager);
         wrapperFactoryDelegate.setAdapterMap(adapterManager);
     }
 
     @Override
-    public void setObjectPersistor(ObjectPersistor objectPersistor) {
+    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
         super.setObjectPersistor(objectPersistor);
         wrapperFactoryDelegate.setObjectPersistor(objectPersistor);
     }

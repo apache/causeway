@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.lang.reflect.InvocationHandler;
-
 
 public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
     T getDelegate();
 
-	public boolean isResolveObjectChangedEnabled();
+    public boolean isResolveObjectChangedEnabled();
+
     public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
 
 }

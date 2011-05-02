@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal.util;
 
-
-
 public final class Constants {
-    private Constants() {}
+    private Constants() {
+    }
 
     public static final String PREFIX_CHOICES = "choices";
     public static final String PREFIX_DEFAULT = "default";
@@ -46,14 +44,14 @@ public final class Constants {
      * Cannot invoke methods with these prefixes.
      */
     public final static String[] INVALID_PREFIXES = { PREFIX_MODIFY, PREFIX_CLEAR, PREFIX_DISABLE, PREFIX_VALIDATE,
-            PREFIX_VALIDATE_ADD_TO, PREFIX_VALIDATE_REMOVE_FROM, PREFIX_HIDE, };
+        PREFIX_VALIDATE_ADD_TO, PREFIX_VALIDATE_REMOVE_FROM, PREFIX_HIDE, };
 
-    public final static String[] PROPERTY_PREFIXES = { PREFIX_GET, PREFIX_SET, PREFIX_MODIFY, PREFIX_CLEAR, PREFIX_DISABLE,
-            PREFIX_VALIDATE, PREFIX_HIDE, PREFIX_DEFAULT, PREFIX_CHOICES };
+    public final static String[] PROPERTY_PREFIXES = { PREFIX_GET, PREFIX_SET, PREFIX_MODIFY, PREFIX_CLEAR,
+        PREFIX_DISABLE, PREFIX_VALIDATE, PREFIX_HIDE, PREFIX_DEFAULT, PREFIX_CHOICES };
     public final static String[] COLLECTION_PREFIXES = { PREFIX_GET, PREFIX_SET, PREFIX_ADD_TO, PREFIX_REMOVE_FROM,
-            PREFIX_DISABLE, PREFIX_VALIDATE_ADD_TO, PREFIX_VALIDATE_REMOVE_FROM, PREFIX_HIDE, PREFIX_DEFAULT, PREFIX_CHOICES };
+        PREFIX_DISABLE, PREFIX_VALIDATE_ADD_TO, PREFIX_VALIDATE_REMOVE_FROM, PREFIX_HIDE, PREFIX_DEFAULT,
+        PREFIX_CHOICES };
     public final static String[] ACTION_PREFIXES = { PREFIX_VALIDATE, PREFIX_DISABLE, PREFIX_HIDE, PREFIX_DEFAULT,
-            PREFIX_CHOICES, };
-
+        PREFIX_CHOICES, };
 
 }

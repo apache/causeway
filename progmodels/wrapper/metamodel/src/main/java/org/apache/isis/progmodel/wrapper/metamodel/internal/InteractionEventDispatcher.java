@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import org.apache.isis.applib.events.InteractionEvent;
-
 
 public interface InteractionEventDispatcher {
 
