@@ -31,26 +31,25 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 public class RunAction extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
-        RequestContext context = request.getContext();
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
 
-        String objectId = request.getOptionalProperty(OBJECT);
-        ObjectAdapter object = MethodsUtils.findObject(context, objectId);
+        final String objectId = request.getOptionalProperty(OBJECT);
+        final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
 
-        String methodName = request.getRequiredProperty(METHOD);
-        ObjectAction action = MethodsUtils.findAction(object, methodName);
+        final String methodName = request.getRequiredProperty(METHOD);
+        final ObjectAction action = MethodsUtils.findAction(object, methodName);
 
-        String variableName = request.getOptionalProperty(RESULT_NAME);
-        String scopeName = request.getOptionalProperty(SCOPE);
+        final String variableName = request.getOptionalProperty(RESULT_NAME);
+        final String scopeName = request.getOptionalProperty(SCOPE);
 
-        ActionContent parameterBlock = new ActionContent(action);
+        final ActionContent parameterBlock = new ActionContent(action);
         request.setBlockContent(parameterBlock);
         request.processUtilCloseTag();
-        ObjectAdapter[] parameters = parameterBlock.getParameters(request);
+        final ObjectAdapter[] parameters = parameterBlock.getParameters(request);
 
         if (!MethodsUtils.isVisibleAndUsable(object, action)) {
             throw new ForbiddenException(action, ForbiddenException.VISIBLE_AND_USABLE);
@@ -60,14 +59,15 @@ public class RunAction extends AbstractElementProcessor {
         if (action.isContributed()) {
             final List<ObjectActionParameter> parameterSpecs = action.getParameters();
             for (int i = 0; i < parameters.length; i++) {
-                if (parameters[i] == null && object.getSpecification().isOfType(parameterSpecs.get(i).getSpecification())) {
+                if (parameters[i] == null
+                    && object.getSpecification().isOfType(parameterSpecs.get(i).getSpecification())) {
                     parameters[i] = object;
                     break;
                 }
             }
         }
 
-        Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
+        final Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
         MethodsUtils.runMethod(context, action, object, parameters, variableName, scope);
         request.popBlockContent();
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -33,7 +32,6 @@ import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 import org.junit.Test;
-
 
 public class MemberModifyTest extends AbstractTest {
 

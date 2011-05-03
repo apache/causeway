@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.internal;
 
 import java.util.ArrayList;
@@ -28,47 +27,43 @@ import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 
+public class FixtureInstallerAnnotatedClass extends FixturesInstallerAbstract {
 
-public class FixtureInstallerAnnotatedClass extends FixturesInstallerAbstract  {
-
-    private List<Object> fixtures = new ArrayList<Object>();
-
+    private final List<Object> fixtures = new ArrayList<Object>();
 
     /**
      * @see #addFixturesAnnotatedOn(Class)
      */
-	public FixtureInstallerAnnotatedClass() {
-		super("annotated");
+    public FixtureInstallerAnnotatedClass() {
+        super("annotated");
     }
 
-	
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
     // Hook method
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
 
-	/**
-	 * Just copies the fixtures added using {@link #addFixturesAnnotatedOn(Class)}
-	 * into the delegate.
-	 */
-	@Override
-	protected void addFixturesTo(FixturesInstallerDelegate delegate) {
-		for(Object fixture: fixtures) {
-			delegate.addFixture(fixture);
-		}
-	}
+    /**
+     * Just copies the fixtures added using {@link #addFixturesAnnotatedOn(Class)} into the delegate.
+     */
+    @Override
+    protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
+        for (final Object fixture : fixtures) {
+            delegate.addFixture(fixture);
+        }
+    }
 
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
     // addFixturesAnnotatedOn (not API)
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
 
-	/**
-	 * Should be called prior to installing; typically called immediately after instantiation.
-	 * 
-	 * <p>
-	 * Note: an alternative design would be to have a 1-arg constructor, but the convention for
-	 * installers is to make them no-arg.
-	 */
-    public void addFixturesAnnotatedOn(Class<?> javaClass) throws InstantiationException, IllegalAccessException {
+    /**
+     * Should be called prior to installing; typically called immediately after instantiation.
+     * 
+     * <p>
+     * Note: an alternative design would be to have a 1-arg constructor, but the convention for installers is to make
+     * them no-arg.
+     */
+    public void addFixturesAnnotatedOn(final Class<?> javaClass) throws InstantiationException, IllegalAccessException {
         final Fixtures fixturesAnnotation = javaClass.getAnnotation(Fixtures.class);
         if (fixturesAnnotation != null) {
             final Fixture[] fixtureAnnotations = fixturesAnnotation.value();
@@ -83,7 +78,8 @@ public class FixtureInstallerAnnotatedClass extends FixturesInstallerAbstract  {
         }
     }
 
-    private void addFixtureRepresentedBy(final Fixture fixtureAnnotation, final List<Object> fixtures) throws InstantiationException, IllegalAccessException {
+    private void addFixtureRepresentedBy(final Fixture fixtureAnnotation, final List<Object> fixtures)
+        throws InstantiationException, IllegalAccessException {
         final Class<?> fixtureClass = fixtureAnnotation.value();
         fixtures.add(fixtureClass.newInstance());
     }

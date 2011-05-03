@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
 import java.util.HashMap;
@@ -114,26 +113,26 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.value.TitleString;
 import org.apache.isis.viewer.scimpi.dispatcher.view.value.Type;
 
 public class ProcessorLookup {
-    private Map<String, ElementProcessor> swfElementProcessors = new HashMap<String, ElementProcessor>();
+    private final Map<String, ElementProcessor> swfElementProcessors = new HashMap<String, ElementProcessor>();
 
     public void init() {
         addElementProcessor(new ActionLink());
         addElementProcessor(new ActionButton());
         addElementProcessor(new ActionForm());
-        addElementProcessor(new ActionName()); 
-        addElementProcessor(new AddMessage());  
-        addElementProcessor(new AddWarning());  
+        addElementProcessor(new ActionName());
+        addElementProcessor(new AddMessage());
+        addElementProcessor(new AddWarning());
         addElementProcessor(new BlockDefine());
         addElementProcessor(new BlockUse());
         addElementProcessor(new History());
         addElementProcessor(new Collection());
-        addElementProcessor(new Commit()); 
-        addElementProcessor(new ContentTag()); 
+        addElementProcessor(new Commit());
+        addElementProcessor(new ContentTag());
         addElementProcessor(new CountElements());
         addElementProcessor(new Diagnostics());
         addElementProcessor(new DebugAccessCheck());
         addElementProcessor(new DebuggerLink());
-        addElementProcessor(new DefaultValue()); 
+        addElementProcessor(new DefaultValue());
         addElementProcessor(new EditLink());
         addElementProcessor(new EditObject());
         addElementProcessor(new ElementType());
@@ -186,7 +185,7 @@ public class ProcessorLookup {
         addElementProcessor(new TableEmpty());
         addElementProcessor(new TableRow());
         addElementProcessor(new TableHeader());
-        addElementProcessor(new TemplateTag()); 
+        addElementProcessor(new TemplateTag());
         addElementProcessor(new Title());
         addElementProcessor(new TitleString());
         addElementProcessor(new ThrowException());
@@ -196,7 +195,7 @@ public class ProcessorLookup {
         addElementProcessor(new Variable());
         addElementProcessor(new Warnings());
         addElementProcessor(new When());
-        
+
         addElementProcessor(new StartSession());
         addElementProcessor(new EndSession());
 
@@ -205,27 +204,22 @@ public class ProcessorLookup {
         addElementProcessor(new SetCookieFromField());
         addElementProcessor(new SetFieldFromCookie());
     }
-    
 
-    public void addElementProcessor(ElementProcessor action) {
+    public void addElementProcessor(final ElementProcessor action) {
         swfElementProcessors.put("SWF:" + action.getName().toUpperCase(), action);
     }
 
-    public void debug(DebugBuilder debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendTitle("Recognised tags");
-        Iterator<String> it2 = new TreeSet<String>(swfElementProcessors.keySet()).iterator();
+        final Iterator<String> it2 = new TreeSet<String>(swfElementProcessors.keySet()).iterator();
         while (it2.hasNext()) {
-            String name = it2.next();
+            final String name = it2.next();
             debug.appendln(name.toLowerCase(), swfElementProcessors.get(name));
         }
     }
 
-    public ElementProcessor getFor(String name) {
+    public ElementProcessor getFor(final String name) {
         return swfElementProcessors.get(name);
     }
 
-
-
 }
-
-

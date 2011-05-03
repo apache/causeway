@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
@@ -27,12 +26,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Messages extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String cls = request.getOptionalProperty(CLASS);
-        StringBuffer buffer = new StringBuffer();
+    @Override
+    public void process(final Request request) {
+        final String cls = request.getOptionalProperty(CLASS);
+        final StringBuffer buffer = new StringBuffer();
         write(cls, buffer);
         if (buffer.length() > 0) {
             request.appendHtml("<div class=\"feedback\">");
@@ -42,20 +41,20 @@ public class Messages extends AbstractElementProcessor {
 
     }
 
-    public static void write(String cls, StringBuffer buffer) {
+    public static void write(String cls, final StringBuffer buffer) {
         if (cls == null) {
             cls = "message";
         }
-        MessageBroker messageBroker = IsisContext.getMessageBroker();
-        List<String> messages = messageBroker.getMessages();
-        for (String message : messages) {
+        final MessageBroker messageBroker = IsisContext.getMessageBroker();
+        final List<String> messages = messageBroker.getMessages();
+        for (final String message : messages) {
             buffer.append("<div class=\"" + cls + "\">" + message + "</div>");
         }
     }
 
+    @Override
     public String getName() {
         return "messages";
     }
 
 }
-

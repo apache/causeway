@@ -23,21 +23,22 @@ import java.io.PrintWriter;
 
 import org.apache.isis.core.commons.debug.DebugHtmlStringAbstract;
 
-
 public class DebugWriter extends DebugHtmlStringAbstract {
 
     private final PrintWriter writer;
 
-    public DebugWriter(PrintWriter writer, boolean createPage) {
+    public DebugWriter(final PrintWriter writer, final boolean createPage) {
         super(createPage);
         this.writer = writer;
         header();
     }
 
-    protected void appendHtml(String html) {
+    @Override
+    protected void appendHtml(final String html) {
         writer.println(html);
     }
 
+    @Override
     protected void doClose() {
         footer();
     }

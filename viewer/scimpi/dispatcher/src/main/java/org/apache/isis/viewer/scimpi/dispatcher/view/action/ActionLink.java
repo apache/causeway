@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.net.URLEncoder;
@@ -30,82 +29,76 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
-
 public class ActionLink extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String objectId = request.getOptionalProperty(OBJECT);
-        String method = request.getOptionalProperty(METHOD);
-        String forwardResultTo = request.getOptionalProperty(VIEW);
-        String forwardVoidTo = request.getOptionalProperty(VOID);
-        String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
-        String resultName = request.getOptionalProperty(RESULT_NAME);
-        String resultNameSegment = resultName == null ? "" : "&amp;" + RESULT_NAME + "=" + resultName;
-        String scope = request.getOptionalProperty(SCOPE);
-        String scopeSegment = scope == null ? "" : "&amp;" + SCOPE + "=" + scope;
-        String confirm = request.getOptionalProperty(CONFIRM);
-        String completionMessage = request.getOptionalProperty(MESSAGE);
-        
+    @Override
+    public void process(final Request request) {
+        final String objectId = request.getOptionalProperty(OBJECT);
+        final String method = request.getOptionalProperty(METHOD);
+        final String forwardResultTo = request.getOptionalProperty(VIEW);
+        final String forwardVoidTo = request.getOptionalProperty(VOID);
+        final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
+        final String resultOverrideSegment =
+            resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
+        final String resultName = request.getOptionalProperty(RESULT_NAME);
+        final String resultNameSegment = resultName == null ? "" : "&amp;" + RESULT_NAME + "=" + resultName;
+        final String scope = request.getOptionalProperty(SCOPE);
+        final String scopeSegment = scope == null ? "" : "&amp;" + SCOPE + "=" + scope;
+        final String confirm = request.getOptionalProperty(CONFIRM);
+        final String completionMessage = request.getOptionalProperty(MESSAGE);
+
         // TODO need a mechanism for globally dealing with encoding; then use the new encode method
-        String confirmSegment = confirm == null ? "" : "&amp;" + "_" + CONFIRM + "=" + URLEncoder.encode(confirm);
-        String messageSegment = completionMessage == null ? "" : "&amp;" + "_" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
+        final String confirmSegment = confirm == null ? "" : "&amp;" + "_" + CONFIRM + "=" + URLEncoder.encode(confirm);
+        final String messageSegment =
+            completionMessage == null ? "" : "&amp;" + "_" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
 
-        RequestContext context = request.getContext();
-        ObjectAdapter object = MethodsUtils.findObject(context, objectId);
-        String version = context.mapVersion(object);
-        ObjectAction action = MethodsUtils.findAction(object, method);
+        final RequestContext context = request.getContext();
+        final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
+        final String version = context.mapVersion(object);
+        final ObjectAction action = MethodsUtils.findAction(object, method);
 
-        ActionContent parameterBlock = new ActionContent(action);
+        final ActionContent parameterBlock = new ActionContent(action);
         request.setBlockContent(parameterBlock);
         request.pushNewBuffer();
         request.processUtilCloseTag();
-        String text = request.popBuffer();
+        final String text = request.popBuffer();
 
         if (MethodsUtils.isVisibleAndUsable(object, action)) {
-            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, scopeSegment, confirmSegment, messageSegment,
-                    context, action, parameterBlock, text);
+            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment,
+                scopeSegment, confirmSegment, messageSegment, context, action, parameterBlock, text);
         }
         request.popBlockContent();
     }
 
-    public static void writeLink(
-            Request request,
-            String objectId,
-            String version,
-            String method,
-            String forwardResultTo,
-            String forwardVoidTo,
-            String resultNameSegment,
-            String scopeSegment,
-            String confirmSegment,
-            String messageSegment,
-            RequestContext context,
-            ObjectAction action,
-            ActionContent parameterBlock,
-            String text) {
+    public static void writeLink(final Request request, final String objectId, final String version,
+        final String method, final String forwardResultTo, final String forwardVoidTo, final String resultNameSegment,
+        final String scopeSegment, final String confirmSegment, final String messageSegment,
+        final RequestContext context, final ObjectAction action, final ActionContent parameterBlock, String text) {
         text = text == null || text.trim().equals("") ? action.getName() : text;
-   
+
         String parameterSegment = "";
-        String[] parameters = parameterBlock.getParameters();
+        final String[] parameters = parameterBlock.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             parameterSegment += "&param" + i + "=" + parameters[i];
         }
-        
-        String interactionParamters = context.encodedInteractionParameters();
-        String forwardResultSegment = forwardResultTo == null ? "" :  "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
-        String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
-        String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
-        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version + "&amp;" + "_" + METHOD + "=" + method
-                + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment + interactionParamters + "\">");
+
+        final String interactionParamters = context.encodedInteractionParameters();
+        final String forwardResultSegment =
+            forwardResultTo == null ? "" : "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
+        final String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
+        final String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
+        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "="
+            + version + "&amp;" + "_" + METHOD + "=" + method + forwardResultSegment + forwardVoidSegment
+            + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment
+            + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");
         HelpLink.append(request, action.getDescription(), action.getHelp());
     }
 
+    @Override
     public String getName() {
         return "action-link";
     }
 
 }
-

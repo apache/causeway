@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.field;
 
 import java.util.HashSet;
@@ -31,31 +30,30 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
 import com.google.common.collect.Lists;
 
-
 public class InclusionList implements BlockContent {
-    private Set<String> includedList = new HashSet<String>();
-    private Set<String> excludedList = new HashSet<String>();
+    private final Set<String> includedList = new HashSet<String>();
+    private final Set<String> excludedList = new HashSet<String>();
 
-    private boolean inIncludedList(String fieldName) {
+    private boolean inIncludedList(final String fieldName) {
         return includedList.size() == 0 || includedList.contains(fieldName) || includedList.contains("all");
     }
 
-    private boolean inExcludedList(String fieldName) {
+    private boolean inExcludedList(final String fieldName) {
         return excludedList.contains(fieldName) || excludedList.contains("all");
     }
 
-    public void include(String field) {
+    public void include(final String field) {
         includedList.add(field);
     }
 
-    public void exclude(String field) {
+    public void exclude(final String field) {
         excludedList.add(field);
     }
 
-    public List<ObjectAssociation> includedFields(List<ObjectAssociation> originalFields) {
-        List<ObjectAssociation> includedFields = Lists.newArrayList();
+    public List<ObjectAssociation> includedFields(final List<ObjectAssociation> originalFields) {
+        final List<ObjectAssociation> includedFields = Lists.newArrayList();
         for (int i = 0; i < originalFields.size(); i++) {
-            String id2 = originalFields.get(i).getId();
+            final String id2 = originalFields.get(i).getId();
             if (includes(id2)) {
                 includedFields.add(originalFields.get(i));
             }
@@ -64,23 +62,23 @@ public class InclusionList implements BlockContent {
         return includedFields;
     }
 
-    public void hideExcludedParameters(InputField[] inputFields) {
-        for (int i = 0; i < inputFields.length; i++) {
-            String id2 = inputFields[i].getName();
+    public void hideExcludedParameters(final InputField[] inputFields) {
+        for (final InputField inputField : inputFields) {
+            final String id2 = inputField.getName();
             if (!includes(id2)) {
-                inputFields[i].setHidden(true);
+                inputField.setHidden(true);
             }
         }
     }
 
-    public boolean includes(String id) {
+    public boolean includes(final String id) {
         return inIncludedList(id) && !inExcludedList(id);
     }
 
-    public List<ObjectAction> includedActions(List<ObjectAction> originalActions) {
-        List<ObjectAction> includedActions = Lists.newArrayList();
+    public List<ObjectAction> includedActions(final List<ObjectAction> originalActions) {
+        final List<ObjectAction> includedActions = Lists.newArrayList();
         for (int i = 0; i < originalActions.size(); i++) {
-            String id2 = originalActions.get(i).getId();
+            final String id2 = originalActions.get(i).getId();
             if (includes(id2)) {
                 includedActions.add(originalActions.get(i));
             }
@@ -89,4 +87,3 @@ public class InclusionList implements BlockContent {
         return includedActions;
     }
 }
-

@@ -23,24 +23,27 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class DebuggerLink extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
 
-        RequestContext context = request.getContext();
-        Object result = context.getVariable(RequestContext.RESULT); 
+        final RequestContext context = request.getContext();
+        final Object result = context.getVariable(RequestContext.RESULT);
         request.appendHtml("<div class=\"debug\">");
-        request.appendHtml("<a class=\"debug-link\" href=\"/debug/debug.shtml\" target=\"debug\" title=\"debug\" >...</a>");
+        request
+            .appendHtml("<a class=\"debug-link\" href=\"/debug/debug.shtml\" target=\"debug\" title=\"debug\" >...</a>");
         if (result != null) {
-            request.appendHtml(" <a href=\"/debug/object.shtml?_result=" + result + "\" target=\"debug\"  title=\"debug instance\">...</a>");
+            request.appendHtml(" <a href=\"/debug/object.shtml?_result=" + result
+                + "\" target=\"debug\"  title=\"debug instance\">...</a>");
         }
         request.appendHtml("</div>");
     }
 
+    @Override
     public String getName() {
         return "debugger";
     }

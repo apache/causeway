@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -25,22 +24,22 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
-
 public class LogLevel extends AbstractElementProcessor {
-    
+
     @Override
-    public void process(Request request) {
-        
+    public void process(final Request request) {
+
         String view = request.getOptionalProperty(VIEW, request.getViewPath());
         view = request.getContext().fullFilePath(view);
-        Level level = LogManager.getRootLogger().getLevel();
-        boolean showSelector = request.isRequested(SHOW_SELECT, true);
+        final Level level = LogManager.getRootLogger().getLevel();
+        final boolean showSelector = request.isRequested(SHOW_SELECT, true);
         if (showSelector) {
             request.appendHtml("<form action=\"log.app\" type=\"post\" >");
             request.appendHtml("<input type=\"hidden\" name=\"view\" value=\"" + view + "\" />");
             request.appendHtml("<select name=\"level\">");
-            for(Level l : new Level[]{ Level.OFF, Level.FATAL, Level.ERROR, Level.WARN, Level.INFO, Level.DEBUG, Level.TRACE }) {
-                String settings = level + "\"" + (level == l ? " selected=\"selected\" " : "");
+            for (final Level l : new Level[] { Level.OFF, Level.FATAL, Level.ERROR, Level.WARN, Level.INFO,
+                Level.DEBUG, Level.TRACE }) {
+                final String settings = level + "\"" + (level == l ? " selected=\"selected\" " : "");
                 request.appendHtml("<option " + settings + ">" + l + "</option>");
             }
             request.appendHtml("<input type=\"submit\" value=\"Change Level\" />");
@@ -50,11 +49,10 @@ public class LogLevel extends AbstractElementProcessor {
             request.appendHtml(level.toString());
         }
     }
-   
+
     @Override
     public String getName() {
         return "log-level";
     }
 
 }
-

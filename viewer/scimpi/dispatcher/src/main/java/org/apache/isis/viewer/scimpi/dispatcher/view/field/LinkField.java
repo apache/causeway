@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.field;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -26,21 +25,21 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class LinkField extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String field = request.getOptionalProperty(NAME);
-        String variable = request.getOptionalProperty(REFERENCE_NAME, RequestContext.RESULT);
-        String scope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
-        String forwardView = request.getOptionalProperty(VIEW, "_generic." + Dispatcher.EXTENSION);
-        LinkedFieldsBlock tag = (LinkedFieldsBlock) request.getBlockContent();
+    @Override
+    public void process(final Request request) {
+        final String field = request.getOptionalProperty(NAME);
+        final String variable = request.getOptionalProperty(REFERENCE_NAME, RequestContext.RESULT);
+        final String scope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
+        final String forwardView = request.getOptionalProperty(VIEW, "_generic." + Dispatcher.EXTENSION);
+        final LinkedFieldsBlock tag = (LinkedFieldsBlock) request.getBlockContent();
         tag.link(field, variable, scope, forwardView);
     }
-    
+
+    @Override
     public String getName() {
         return "link";
     }
 
 }
-

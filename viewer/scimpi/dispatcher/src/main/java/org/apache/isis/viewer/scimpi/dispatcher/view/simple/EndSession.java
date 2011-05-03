@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class EndSession extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         request.getContext().endHttpSession();
     }
 
+    @Override
     public String getName() {
         return "end-session";
     }
 }
-

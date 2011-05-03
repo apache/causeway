@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
@@ -25,17 +24,17 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public class DefaultVersionMapping implements VersionMapping {
 
-    public String mapVersion(Version version) {
-        //SerialNumberVersion v = (SerialNumberVersion) version;
-        //return Long.toHexString(v.getSequence());
-    	return version.sequence();
+    @Override
+    public String mapVersion(final Version version) {
+        // SerialNumberVersion v = (SerialNumberVersion) version;
+        // return Long.toHexString(v.getSequence());
+        return version.sequence();
     }
 
-    public Version getVersion(String id) {
-        Long sequence = Long.valueOf(id, 16);
+    @Override
+    public Version getVersion(final String id) {
+        final Long sequence = Long.valueOf(id, 16);
         return new SerialNumberVersion(sequence, null, null);
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.Iterator;
@@ -31,30 +30,29 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
-
 public class ListView extends AbstractObjectProcessor {
 
-    public String checkFieldType(ObjectAssociation objectField) {
+    @Override
+    public String checkFieldType(final ObjectAssociation objectField) {
         return objectField.isOneToManyAssociation() ? null : "is not a collection";
     }
 
-    public void process(Request request, ObjectAdapter object) {
-        String linkRowView = request.getOptionalProperty(LINK);
-        String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
-        String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
+    @Override
+    public void process(final Request request, final ObjectAdapter object) {
+        final String linkRowView = request.getOptionalProperty(LINK);
+        final String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
+        final String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
         LinkedObject linkedRow = null;
         if (linkRowView != null) {
-            linkedRow = new LinkedObject(linkObjectName, linkObjectScope, request.getContext().fullUriPath(linkRowView));
+            linkedRow =
+                new LinkedObject(linkObjectName, linkObjectScope, request.getContext().fullUriPath(linkRowView));
         }
-        String bulletType = request.getOptionalProperty("type");
+        final String bulletType = request.getOptionalProperty("type");
         write(request, object, linkedRow, bulletType);
     }
 
-    public static void write(
-            Request request,
-            ObjectAdapter collection,
-            LinkedObject linkRow,
-            String bulletType) {
+    public static void write(final Request request, final ObjectAdapter collection, final LinkedObject linkRow,
+        final String bulletType) {
 
         if (bulletType == null) {
             request.appendHtml("<ol>");
@@ -62,17 +60,17 @@ public class ListView extends AbstractObjectProcessor {
             request.appendHtml("<ul type=\"" + bulletType + "\">");
         }
 
-        CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
-        Iterator<ObjectAdapter> iterator = facet.iterator(collection);
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+        final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         while (iterator.hasNext()) {
-            ObjectAdapter element = (ObjectAdapter) iterator.next();
+            final ObjectAdapter element = iterator.next();
 
             request.appendHtml("<li>");
             if (linkRow != null) {
-                Scope scope = linkRow == null ? Scope.INTERACTION : RequestContext.scope(linkRow.getScope());
-                String rowId = request.getContext().mapObject(element, scope);
-                request.appendHtml("<a class=\"item-select\" href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "=" + rowId
-                        + "\">");
+                final Scope scope = linkRow == null ? Scope.INTERACTION : RequestContext.scope(linkRow.getScope());
+                final String rowId = request.getContext().mapObject(element, scope);
+                request.appendHtml("<a class=\"item-select\" href=\"" + linkRow.getForwardView() + "?"
+                    + linkRow.getVariable() + "=" + rowId + "\">");
             }
             request.appendHtml(element.titleString());
             if (linkRow != null) {
@@ -89,9 +87,9 @@ public class ListView extends AbstractObjectProcessor {
 
     }
 
+    @Override
     public String getName() {
         return "list";
     }
 
 }
-

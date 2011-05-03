@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,30 +25,30 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractObjectProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class CountElements extends AbstractObjectProcessor {
 
-    protected void process(Request request, ObjectAdapter collection) {
-        CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
-        int size = facet.size(collection);
+    @Override
+    protected void process(final Request request, final ObjectAdapter collection) {
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+        final int size = facet.size(collection);
         if (size == 0) {
             request.appendHtml(request.getOptionalProperty("none", "0"));
         } else if (size == 1) {
-                request.appendHtml(request.getOptionalProperty("one", "1"));
+            request.appendHtml(request.getOptionalProperty("one", "1"));
         } else {
-            String text = request.getOptionalProperty("many", "" + size);
+            final String text = request.getOptionalProperty("many", "" + size);
             request.appendHtml(String.format(text, size));
         }
     }
-    
-    protected String checkFieldType(ObjectAssociation objectField) {
+
+    @Override
+    protected String checkFieldType(final ObjectAssociation objectField) {
         return objectField.isOneToManyAssociation() ? null : "must be a collection";
     }
 
+    @Override
     public String getName() {
         return "count";
     }
 
-
 }
-

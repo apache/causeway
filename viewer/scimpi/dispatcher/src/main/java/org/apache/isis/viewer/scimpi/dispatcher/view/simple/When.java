@@ -17,26 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class When extends AbstractConditionalBlock {
 
-    protected void processTags(boolean isSet, Request request) {
+    @Override
+    protected void processTags(final boolean isSet, final Request request) {
         if (isSet) {
             request.processUtilCloseTag();
         } else {
-            request.appendDebug("    skipping segment"); 
+            request.appendDebug("    skipping segment");
             request.skipUntilClose();
         }
     }
 
+    @Override
     public String getName() {
         return "when";
     }
 
 }
-

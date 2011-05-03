@@ -21,14 +21,15 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ContentTag implements ElementProcessor {
 
+    @Override
     public String getName() {
         return "content";
     }
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         request.appendHtml("<!--  apply content  -->");
     }
 

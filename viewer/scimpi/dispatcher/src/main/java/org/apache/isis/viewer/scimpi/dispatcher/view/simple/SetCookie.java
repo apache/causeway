@@ -17,27 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class SetCookie extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String name = request.getRequiredProperty("name");
-        String value = request.getRequiredProperty("value");
-        String expiresString = request.getOptionalProperty("expires", "-1");
+    @Override
+    public void process(final Request request) {
+        final String name = request.getRequiredProperty("name");
+        final String value = request.getRequiredProperty("value");
+        final String expiresString = request.getOptionalProperty("expires", "-1");
 
         if (value.length() > 0) {
             request.getContext().addCookie(name, value, Integer.valueOf(expiresString));
         }
     }
 
+    @Override
     public String getName() {
         return "set-cookie";
     }
 }
-

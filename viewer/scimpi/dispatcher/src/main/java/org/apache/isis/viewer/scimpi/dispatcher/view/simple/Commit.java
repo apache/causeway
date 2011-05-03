@@ -25,13 +25,16 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Commit extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "commit";
     }
 
-    public void process(Request request) {
-        // Note - the session will have changed since the earlier call if a user has logged in or out in the action processing above.
-        IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+    @Override
+    public void process(final Request request) {
+        // Note - the session will have changed since the earlier call if a user has logged in or out in the action
+        // processing above.
+        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
         if (transactionManager.getTransaction().getState().canCommit()) {
             transactionManager.endTransaction();
             transactionManager.startTransaction();
@@ -39,4 +42,3 @@ public class Commit extends AbstractElementProcessor {
     }
 
 }
-

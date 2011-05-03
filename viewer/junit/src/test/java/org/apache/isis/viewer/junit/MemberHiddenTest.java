@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
@@ -31,7 +30,6 @@ import org.apache.isis.core.progmodel.facets.members.hide.method.HideForContextF
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.junit.Test;
-
 
 public class MemberHiddenTest extends AbstractTest {
 
@@ -82,7 +80,6 @@ public class MemberHiddenTest extends AbstractTest {
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Country Of Birth"));
         }
     }
-
 
     @Test
     public void whenAssociationHiddenImperativelyForNullThenModifyThrowsException() {
@@ -260,7 +257,6 @@ public class MemberHiddenTest extends AbstractTest {
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Action"));
         }
     }
-
 
     @Test
     public void whenValueHiddenNotAuthorizedThenModifyThrowsException() {

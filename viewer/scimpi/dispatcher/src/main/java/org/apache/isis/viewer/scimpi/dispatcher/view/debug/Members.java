@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import java.util.List;
@@ -42,59 +41,61 @@ public class Members extends AbstractElementProcessor {
     }
 
     @Override
-    public void process(Request request) {
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
-        
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getOptionalProperty(FIELD);
+
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getOptionalProperty(FIELD);
         request.appendHtml("<pre class=\"debug\">");
         try {
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
-        ObjectAssociation field = null;
-        if (fieldName != null) {
-            field = object.getSpecification().getAssociation(fieldName);
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
-                throw new ForbiddenException(field, ForbiddenException.VISIBLE);
-            }
-            object = field.get(object);
-        }
-        request.processUtilCloseTag();
-        
-        ObjectSpecification specification = field == null ? object.getSpecification() : field.getSpecification();
-        
-        request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
-        List<ObjectAssociation> fields = specification.getAssociations();
-        for (ObjectAssociation fld : fields) {
-            if (!fld.isAlwaysHidden()) {
-                request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "+  fld.getSpecification().getSingularName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n" );
-            }
-        }
-        request.appendHtml("   --------------\n");
-        List<ObjectAction> actions = specification.getObjectActions(ActionType.USER);;
-        for (ObjectAction action : actions) {
-            request.appendHtml("   " + action.getId() + " (");
-            boolean first = true;
-            for (ObjectActionParameter parameter : action.getParameters()) {
-                if (!first) {
-                    request.appendHtml(", ");
+            ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+            ObjectAssociation field = null;
+            if (fieldName != null) {
+                field = object.getSpecification().getAssociation(fieldName);
+                if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+                    throw new ForbiddenException(field, ForbiddenException.VISIBLE);
                 }
-                request.appendHtml(parameter.getSpecification().getSingularName());
-                first = false;
+                object = field.get(object);
             }
-            request.appendHtml(")"  + " - '" + action.getName() + "'");
-            if (action.getSpecification() != null) {
-                request.appendHtml(" -> " + action.getSpecification().getSingularName() + ")" );
+            request.processUtilCloseTag();
+
+            final ObjectSpecification specification =
+                field == null ? object.getSpecification() : field.getSpecification();
+
+            request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
+            final List<ObjectAssociation> fields = specification.getAssociations();
+            for (final ObjectAssociation fld : fields) {
+                if (!fld.isAlwaysHidden()) {
+                    request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "
+                        + fld.getSpecification().getSingularName()
+                        + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n");
+                }
             }
-            request.appendHtml("\n" );
-        }
-        } catch (ScimpiException e) {
-           request.appendHtml("Debug failed: " + e.getMessage());
+            request.appendHtml("   --------------\n");
+            final List<ObjectAction> actions = specification.getObjectActions(ActionType.USER);
+            ;
+            for (final ObjectAction action : actions) {
+                request.appendHtml("   " + action.getId() + " (");
+                boolean first = true;
+                for (final ObjectActionParameter parameter : action.getParameters()) {
+                    if (!first) {
+                        request.appendHtml(", ");
+                    }
+                    request.appendHtml(parameter.getSpecification().getSingularName());
+                    first = false;
+                }
+                request.appendHtml(")" + " - '" + action.getName() + "'");
+                if (action.getSpecification() != null) {
+                    request.appendHtml(" -> " + action.getSpecification().getSingularName() + ")");
+                }
+                request.appendHtml("\n");
+            }
+        } catch (final ScimpiException e) {
+            request.appendHtml("Debug failed: " + e.getMessage());
         }
         request.appendHtml("</pre>");
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,18 +25,19 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 /**
- *  <swf:selected name="selected" object="${action}" equals="${subaction}" />
+ * <swf:selected name="selected" object="${action}" equals="${subaction}" />
  */
 public class SelectedObject extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String name = request.getOptionalProperty(NAME, "selected");
-        String objectId = request.getRequiredProperty(OBJECT);
-        String equalsId = request.getOptionalProperty("equals");
-        String title = request.getOptionalProperty(BUTTON_TITLE);
-        
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(objectId);
-        ObjectAdapter other = request.getContext().getMappedObjectOrResult(equalsId);
+    @Override
+    public void process(final Request request) {
+        final String name = request.getOptionalProperty(NAME, "selected");
+        final String objectId = request.getRequiredProperty(OBJECT);
+        final String equalsId = request.getOptionalProperty("equals");
+        final String title = request.getOptionalProperty(BUTTON_TITLE);
+
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(objectId);
+        final ObjectAdapter other = request.getContext().getMappedObjectOrResult(equalsId);
         if (object == other || object.equals(title)) {
             // TODO title is not being used!
             request.getContext().addVariable(ID, " id=\"" + name + "\" ", Scope.INTERACTION);
@@ -46,10 +46,10 @@ public class SelectedObject extends AbstractElementProcessor {
         }
         request.closeEmpty();
     }
-    
+
+    @Override
     public String getName() {
         return "selected";
     }
 
 }
-

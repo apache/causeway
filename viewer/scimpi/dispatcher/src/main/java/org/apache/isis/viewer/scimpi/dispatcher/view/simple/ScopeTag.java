@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -25,28 +24,28 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ScopeTag extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String name = request.getRequiredProperty(NAME);
-        String scopeName = request.getRequiredProperty(SCOPE);
-        Scope scope = RequestContext.scope(scopeName);
-        request.processUtilCloseTag(); 
+    @Override
+    public void process(final Request request) {
+        final String name = request.getRequiredProperty(NAME);
+        final String scopeName = request.getRequiredProperty(SCOPE);
+        final Scope scope = RequestContext.scope(scopeName);
+        request.processUtilCloseTag();
         changeScope(request, name, scope);
     }
 
-    protected static void changeScope(Request request, String name, Scope scope) { 
+    protected static void changeScope(final Request request, final String name, final Scope scope) {
         request.getContext().changeScope(name, scope);
-        Object value = request.getContext().getVariable(name);
-        if (value != null) { 
-            request.getContext().addVariable(name, value, scope); 
-        } 
+        final Object value = request.getContext().getVariable(name);
+        if (value != null) {
+            request.getContext().addVariable(name, value, scope);
+        }
     }
 
+    @Override
     public String getName() {
         return "scope";
     }
 
 }
-

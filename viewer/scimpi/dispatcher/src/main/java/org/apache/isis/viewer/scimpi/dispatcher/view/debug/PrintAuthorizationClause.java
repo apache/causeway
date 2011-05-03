@@ -27,34 +27,33 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class PrintAuthorizationClause extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "print-authorization-clause";
     }
 
-    public void process(Request request) {
-        RequestContext context = request.getContext();
+    @Override
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
         if (context.isDebugDisabled()) {
             return;
         }
-        
-        Identifier identifier = (Identifier) context.getVariable("_security-identifier");
-        List<String> roles =  (List<String>) context.getVariable("_security-roles");
-        StringBuffer roleList = new StringBuffer();
-        for (String role : roles) {
+
+        final Identifier identifier = (Identifier) context.getVariable("_security-identifier");
+        final List<String> roles = (List<String>) context.getVariable("_security-roles");
+        final StringBuffer roleList = new StringBuffer();
+        for (final String role : roles) {
             if (roleList.length() > 0) {
                 roleList.append("|");
             }
             roleList.append(role);
         }
-        
-        request.appendHtml("<pre>" );
+
+        request.appendHtml("<pre>");
         request.appendHtml(identifier.toClassIdentityString() + ":" + roleList + "\n");
         request.appendHtml(identifier.toClassAndNameIdentityString() + ":" + roleList + "\n");
         request.appendHtml(identifier.toFullIdentityString() + ":" + roleList + "\n");
-        request.appendHtml( "</pre>");
+        request.appendHtml("</pre>");
     }
 
 }
-
-
-

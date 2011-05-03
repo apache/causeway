@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,46 +26,44 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class InitializeFromCookie extends AbstractElementProcessor {
     private static final String SEVEN_DAYS = Integer.toString(60 * 24 * 7);
 
-    public void process(Request request) {
-        String name = request.getRequiredProperty(NAME);
+    @Override
+    public void process(final Request request) {
+        final String name = request.getRequiredProperty(NAME);
 
-        RequestContext context = request.getContext();
+        final RequestContext context = request.getContext();
         if (context.getVariable(name) != null) {
             request.skipUntilClose();
         } else {
-            String scopeName = request.getOptionalProperty(SCOPE);
-            Scope scope = RequestContext.scope(scopeName, Scope.SESSION);
+            final String scopeName = request.getOptionalProperty(SCOPE);
+            final Scope scope = RequestContext.scope(scopeName, Scope.SESSION);
 
-            String cookieName = request.getOptionalProperty("cookie", name);
-            String cookieValue = context.getCookie(cookieName);
+            final String cookieName = request.getOptionalProperty("cookie", name);
+            final String cookieValue = context.getCookie(cookieName);
             boolean hasObject;
             if (cookieValue != null) {
                 try {
-                    context.getMappedObject((String) cookieValue);
+                    context.getMappedObject(cookieValue);
                     hasObject = true;
-                } catch (ObjectNotFoundException e) {
+                } catch (final ObjectNotFoundException e) {
                     hasObject = false;
                 }
             } else {
                 hasObject = false;
             }
-            
-            
-            
+
             if (hasObject) {
                 request.skipUntilClose();
                 context.addVariable(name, cookieValue, scope);
             } else {
-                String expiresString = request.getOptionalProperty("expires", SEVEN_DAYS);
+                final String expiresString = request.getOptionalProperty("expires", SEVEN_DAYS);
                 request.pushNewBuffer();
                 request.processUtilCloseTag();
                 request.popBuffer();
-                String id = (String) context.getVariable(RequestContext.RESULT);
-                ObjectAdapter variable = context.getMappedObject(id);
+                final String id = (String) context.getVariable(RequestContext.RESULT);
+                final ObjectAdapter variable = context.getMappedObject(id);
                 if (variable != null) {
                     context.addCookie(cookieName, id, Integer.valueOf(expiresString));
                     context.addVariable(name, id, scope);
@@ -75,9 +72,9 @@ public class InitializeFromCookie extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "initialize-from-cookie";
     }
 
 }
-

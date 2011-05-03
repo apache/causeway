@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,30 +27,29 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ElementType extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
+    public void process(final Request request) {
         ObjectAdapter collection;
-        String field = request.getOptionalProperty(FIELD);
-        RequestContext context = request.getContext();
+        final String field = request.getOptionalProperty(FIELD);
+        final RequestContext context = request.getContext();
         if (field != null) {
-            String id = request.getRequiredProperty(OBJECT);
-            ObjectAdapter object = context.getMappedObjectOrResult(id);
-            ObjectAssociation objectField = object.getSpecification().getAssociation(field);
+            final String id = request.getRequiredProperty(OBJECT);
+            final ObjectAdapter object = context.getMappedObjectOrResult(id);
+            final ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             if (!objectField.isOneToManyAssociation()) {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
-            collection =  objectField.get(object);
+            collection = objectField.get(object);
         } else {
-            String id = request.getOptionalProperty(COLLECTION);
-            collection =  context.getMappedObjectOrResult(id);
+            final String id = request.getOptionalProperty(COLLECTION);
+            collection = context.getMappedObjectOrResult(id);
         }
-        
+
         final ObjectSpecification elementSpecification = collection.getElementSpecification();
-        String name = elementSpecification.getSingularName();
-        
+        final String name = elementSpecification.getSingularName();
+
         request.appendHtml(name);
     }
 
@@ -61,4 +59,3 @@ public class ElementType extends AbstractElementProcessor {
     }
 
 }
-

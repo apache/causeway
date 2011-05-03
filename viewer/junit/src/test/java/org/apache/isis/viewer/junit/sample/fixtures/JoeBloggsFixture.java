@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.fixtures;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-
 
 public class JoeBloggsFixture extends LogonFixture {
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.domain;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.log4j.Logger;
-
 
 @Bounded
 public class Country extends AbstractDomainObject {
@@ -50,6 +48,7 @@ public class Country extends AbstractDomainObject {
         t.append(getName());
         return t.toString();
     }
+
     // }}
 
     // {{ Code
@@ -64,6 +63,7 @@ public class Country extends AbstractDomainObject {
     public void setCode(final String code) {
         this.code = code;
     }
+
     // }}
 
     // {{ Name
@@ -78,6 +78,7 @@ public class Country extends AbstractDomainObject {
     public void setName(final String name) {
         this.name = name;
     }
+
     // }}
 
     // {{ FavouriteHolidayDestination
@@ -91,6 +92,7 @@ public class Country extends AbstractDomainObject {
     public void setFavouriteHolidayDestination(final Country favouriteHolidayDestination) {
         this.favouriteHolidayDestination = favouriteHolidayDestination;
     }
+
     // }}
 
     // {{ Colonies
@@ -112,11 +114,13 @@ public class Country extends AbstractDomainObject {
     public void removeFromColonies(final Country country) {
         getColonies().remove(country);
     }
+
     public String validateAddToColonies;
 
     public String validateAddToColonies(final Country country) {
         return validateAddToColonies;
     }
+
     public String validateRemoveFromColonies;
 
     public String validateRemoveFromColonies(final Country country) {
@@ -141,7 +145,8 @@ public class Country extends AbstractDomainObject {
     /**
      * An action to invoke
      */
-    public void foobar() {}
+    public void foobar() {
+    }
     // }}
 
 }

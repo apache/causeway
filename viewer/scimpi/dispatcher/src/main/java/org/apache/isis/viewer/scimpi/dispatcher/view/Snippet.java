@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view;
 
 public interface Snippet {
 
     String getHtml();
-    
+
     String errorAt();
 }
-
-

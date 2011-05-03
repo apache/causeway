@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
@@ -26,85 +25,81 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.junit.Test;
-
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
+import org.junit.Test;
 
 public class SaveObjectsTest extends AbstractTest {
 
-	private WrapperObject asWrapperObject(final Customer proxiedNewCustomer) {
-		return (WrapperObject) proxiedNewCustomer;
-	}
+    private WrapperObject asWrapperObject(final Customer proxiedNewCustomer) {
+        return (WrapperObject) proxiedNewCustomer;
+    }
 
-	@Test
-	public void invokingSaveThroughProxyMakesTransientObjectPersistent() {
-		final Customer newCustomer = getDomainObjectContainer().newTransientInstance(Customer.class);
-		assertThat(getDomainObjectContainer().isPersistent(newCustomer),is(false));
-		final Customer newCustomerVO = getWrapperFactory().wrap(newCustomer);
-		newCustomerVO.setCustomerNumber(123);
-		newCustomerVO.setLastName("Smith");
-		newCustomerVO.setMandatoryAssociation(countryGbrDO);
-		newCustomerVO.setMandatoryValue("foo");
-		newCustomerVO.setMaxLengthField("abc");
-		newCustomerVO.setRegExCaseInsensitiveField("ABCd");
-		newCustomerVO.setRegExCaseSensitiveField("abcd");
-		final WrapperObject proxyNewCustomer = asWrapperObject(newCustomerVO);
-		proxyNewCustomer.save();
-		assertThat(getDomainObjectContainer().isPersistent(newCustomer),
-				is(true));
-	}
+    @Test
+    public void invokingSaveThroughProxyMakesTransientObjectPersistent() {
+        final Customer newCustomer = getDomainObjectContainer().newTransientInstance(Customer.class);
+        assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false));
+        final Customer newCustomerVO = getWrapperFactory().wrap(newCustomer);
+        newCustomerVO.setCustomerNumber(123);
+        newCustomerVO.setLastName("Smith");
+        newCustomerVO.setMandatoryAssociation(countryGbrDO);
+        newCustomerVO.setMandatoryValue("foo");
+        newCustomerVO.setMaxLengthField("abc");
+        newCustomerVO.setRegExCaseInsensitiveField("ABCd");
+        newCustomerVO.setRegExCaseSensitiveField("abcd");
+        final WrapperObject proxyNewCustomer = asWrapperObject(newCustomerVO);
+        proxyNewCustomer.save();
+        assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(true));
+    }
 
-	@Test
-	public void invokingSaveOnThroughProxyOnAlreadyPersistedObjectJustUpdatesIt() {
-		// just to get into valid state
-		custJsDO.setCustomerNumber(123);
-		custJsDO.setLastName("Smith");
-		custJsDO.setMandatoryAssociation(countryGbrDO);
-		custJsDO.setMandatoryValue("foo");
-		custJsDO.setMaxLengthField("abc");
-		custJsDO.setRegExCaseInsensitiveField("ABCd");
-		custJsDO.setRegExCaseSensitiveField("abcd");
+    @Test
+    public void invokingSaveOnThroughProxyOnAlreadyPersistedObjectJustUpdatesIt() {
+        // just to get into valid state
+        custJsDO.setCustomerNumber(123);
+        custJsDO.setLastName("Smith");
+        custJsDO.setMandatoryAssociation(countryGbrDO);
+        custJsDO.setMandatoryValue("foo");
+        custJsDO.setMaxLengthField("abc");
+        custJsDO.setRegExCaseInsensitiveField("ABCd");
+        custJsDO.setRegExCaseSensitiveField("abcd");
 
-		assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
+        assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
 
-		final WrapperObject newCustomerWO = asWrapperObject(custJsWO);
-		newCustomerWO.save();
+        final WrapperObject newCustomerWO = asWrapperObject(custJsWO);
+        newCustomerWO.save();
 
-		assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
-	}
+        assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
+    }
 
-	@Test
-	public void whenValidateMethodThenCanVetoSave() {
-		final Customer newCustomer = getDomainObjectContainer().newTransientInstance(Customer.class);
+    @Test
+    public void whenValidateMethodThenCanVetoSave() {
+        final Customer newCustomer = getDomainObjectContainer().newTransientInstance(Customer.class);
 
-		// just to get into valid state
-		newCustomer.setCustomerNumber(123);
-		newCustomer.setLastName("Smith");
-		newCustomer.setMandatoryAssociation(countryGbrDO);
-		newCustomer.setMandatoryValue("foo");
-		newCustomer.setMaxLengthField("abc");
-		newCustomer.setRegExCaseInsensitiveField("ABCd");
-		newCustomer.setRegExCaseSensitiveField("abcd");
+        // just to get into valid state
+        newCustomer.setCustomerNumber(123);
+        newCustomer.setLastName("Smith");
+        newCustomer.setMandatoryAssociation(countryGbrDO);
+        newCustomer.setMandatoryValue("foo");
+        newCustomer.setMaxLengthField("abc");
+        newCustomer.setRegExCaseInsensitiveField("ABCd");
+        newCustomer.setRegExCaseSensitiveField("abcd");
 
-		final Customer newCustomerWO = getWrapperFactory().wrap(newCustomer);
-		newCustomer.validate = "No shakes";
+        final Customer newCustomerWO = getWrapperFactory().wrap(newCustomer);
+        newCustomer.validate = "No shakes";
 
-		final WrapperObject newCustomerWrapper = asWrapperObject(newCustomerWO);
-		try {
-			assertThat(getDomainObjectContainer().isPersistent(newCustomer),
-					is(false));
-			newCustomerWrapper.save();
-			fail("An InvalidImperativelyException should have been thrown");
-		} catch (final InvalidException ex) {
+        final WrapperObject newCustomerWrapper = asWrapperObject(newCustomerWO);
+        try {
+            assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false));
+            newCustomerWrapper.save();
+            fail("An InvalidImperativelyException should have been thrown");
+        } catch (final InvalidException ex) {
 
-			assertThat(ex.getAdvisorClass(), classEqualTo(ValidateObjectFacetViaValidateMethod.class));
-			assertThat(getDomainObjectContainer().isPersistent(newCustomer),
-					is(false)); // not saved
-			assertThat(ex.getMessage(), equalTo("No shakes"));
-		}
-	}
+            assertThat(ex.getAdvisorClass(), classEqualTo(ValidateObjectFacetViaValidateMethod.class));
+            assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false)); // not saved
+            assertThat(ex.getMessage(), equalTo("No shakes"));
+        }
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.action;
 
 import java.io.IOException;
@@ -46,7 +45,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 public class ActionAction implements Action {
 
     public static final String ACTION = "action";
@@ -60,100 +58,94 @@ public class ActionAction implements Action {
      * REVIEW - this and EditAction are very similar - refactor out common code.
      */
     @Override
-    public void process(RequestContext context) throws IOException {
-        String objectId = context.getParameter("_" + OBJECT);
-        String version = context.getParameter("_" + VERSION);
-        String formId = context.getParameter("_" + FORM_ID);
-        String methodName = context.getParameter("_" + METHOD);
-        String override = context.getParameter("_" + RESULT_OVERRIDE);
+    public void process(final RequestContext context) throws IOException {
+        final String objectId = context.getParameter("_" + OBJECT);
+        final String version = context.getParameter("_" + VERSION);
+        final String formId = context.getParameter("_" + FORM_ID);
+        final String methodName = context.getParameter("_" + METHOD);
+        final String override = context.getParameter("_" + RESULT_OVERRIDE);
         String resultName = context.getParameter("_" + RESULT_NAME);
-        String message = context.getParameter("_" + MESSAGE);
+        final String message = context.getParameter("_" + MESSAGE);
         resultName = resultName == null ? RequestContext.RESULT : resultName;
-        
+
         FormState entryState = null;
         try {
-            ObjectAdapter object = MethodsUtils.findObject(context, objectId);
-            // FIXME need to find method based on the set of parameters. otherwise overloaded method may be incorrectly selected.
-            ObjectAction action = MethodsUtils.findAction(object, methodName);
+            final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
+            // FIXME need to find method based on the set of parameters. otherwise overloaded method may be incorrectly
+            // selected.
+            final ObjectAction action = MethodsUtils.findAction(object, methodName);
             entryState = validateParameters(context, action, object);
 
-            AuthenticationSession session = context.getSession();
+            final AuthenticationSession session = context.getSession();
             if (session == null && action.isUsable(new UserlessSession(), object).isVetoed()) {
                 throw new NotLoggedInException();
             }
-            
+
             object.checkLock(context.getVersion(version));
-       /*     
-            Version adapterVersion = object.getVersion();
-            if (adapterVersion.different(context.getVersion(version))) {
-                
-                IsisContext.getMessageBroker().addMessage("The " + object.getSpecification().getSingularName() + " was edited " +
-                        "by another user (" + adapterVersion.getUser() +  "). Please  make your changes based on their changes.");
-
-                entryState.setForm(objectId + ":" + methodName);
-                context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
-                context.addVariable(resultName, objectId, Scope.REQUEST);
-                if (override != null) {
-                    context.addVariable(resultName, override, Scope.REQUEST);
-                }   
-                final String error = entryState.getError();
-                if (error != null) {
-                    context.addVariable(RequestContext.ERROR, error, Scope.REQUEST);
-                }
-                
-                String view = context.getParameter(ERRORS);
-                context.setRequestPath(view, Dispatcher.ACTION);
-
-            } else    */         
+            /*
+             * Version adapterVersion = object.getVersion(); if (adapterVersion.different(context.getVersion(version)))
+             * {
+             * 
+             * IsisContext.getMessageBroker().addMessage("The " + object.getSpecification().getSingularName() +
+             * " was edited " + "by another user (" + adapterVersion.getUser() +
+             * "). Please  make your changes based on their changes.");
+             * 
+             * entryState.setForm(objectId + ":" + methodName); context.addVariable(ENTRY_FIELDS, entryState,
+             * Scope.REQUEST); context.addVariable(resultName, objectId, Scope.REQUEST); if (override != null) {
+             * context.addVariable(resultName, override, Scope.REQUEST); } final String error = entryState.getError();
+             * if (error != null) { context.addVariable(RequestContext.ERROR, error, Scope.REQUEST); }
+             * 
+             * String view = context.getParameter(ERRORS); context.setRequestPath(view, Dispatcher.ACTION);
+             * 
+             * } else
+             */
             if (entryState.isValid()) {
-                boolean hasResult = invokeMethod(context, resultName, object, action, entryState);
+                final boolean hasResult = invokeMethod(context, resultName, object, action, entryState);
                 String view = context.getParameter(hasResult ? "_" + VIEW : "_" + VOID);
-                
-             //   context.clearVariables(Scope.REQUEST);
 
-                int questionMark = view == null ? -1 : view.indexOf("?");
+                // context.clearVariables(Scope.REQUEST);
+
+                final int questionMark = view == null ? -1 : view.indexOf("?");
                 if (questionMark > -1) {
-                    String params[] = view.substring(questionMark + 1).split("&"); 
-                    for (String param : params) { 
-                        int equals = param.indexOf("="); 
-                        context.addVariable(param.substring(0, equals), param.substring(equals + 1), Scope.REQUEST); 
-                        view = view.substring(0, questionMark); 
+                    final String params[] = view.substring(questionMark + 1).split("&");
+                    for (final String param : params) {
+                        final int equals = param.indexOf("=");
+                        context.addVariable(param.substring(0, equals), param.substring(equals + 1), Scope.REQUEST);
+                        view = view.substring(0, questionMark);
                     }
                 }
                 context.setRequestPath(view);
                 if (message != null) {
-                    MessageBroker messageBroker = IsisContext.getMessageBroker();
+                    final MessageBroker messageBroker = IsisContext.getMessageBroker();
                     messageBroker.addMessage(message);
                 }
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
-                }                
+                }
                 if (context.getVariable(resultName) == null) {
                     context.addVariable(resultName, objectId, Scope.REQUEST);
-                }                
+                }
             } else {
                 entryState.setForm(formId);
                 context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
                 context.addVariable(resultName, objectId, Scope.REQUEST);
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
-                }   
+                }
                 final String error = entryState.getError();
                 /*
-                if (error != null) {
-                    context.addVariable(RequestContext.ERROR, error, Scope.REQUEST);
-                }
-                */
-                
-                String view = context.getParameter("_" + ERRORS);
+                 * if (error != null) { context.addVariable(RequestContext.ERROR, error, Scope.REQUEST); }
+                 */
+
+                final String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.ACTION);
-                
-                MessageBroker messageBroker = IsisContext.getMessageBroker();
+
+                final MessageBroker messageBroker = IsisContext.getMessageBroker();
                 messageBroker.addWarning(error);
             }
 
-        } catch (ConcurrencyException e) {
-            
+        } catch (final ConcurrencyException e) {
+
             IsisContext.getMessageBroker().addMessage(e.getMessage());
 
             entryState.setForm(formId);
@@ -161,17 +153,16 @@ public class ActionAction implements Action {
             context.addVariable(resultName, objectId, Scope.REQUEST);
             if (override != null) {
                 context.addVariable(resultName, override, Scope.REQUEST);
-            }   
+            }
             final String error = entryState.getError();
             if (error != null) {
                 context.addVariable(RequestContext.ERROR, error, Scope.REQUEST);
             }
-            
-            String view = context.getParameter("_" + ERRORS);
+
+            final String view = context.getParameter("_" + ERRORS);
             context.setRequestPath(view, Dispatcher.ACTION);
-            
-            
-        } catch (RuntimeException e) {
+
+        } catch (final RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
             IsisContext.getUpdateNotifier().clear();
@@ -180,69 +171,65 @@ public class ActionAction implements Action {
         }
     }
 
-    private boolean invokeMethod(
-            RequestContext context,
-            String variable,
-            ObjectAdapter object,
-            ObjectAction action,
-            FormState entryState) {
+    private boolean invokeMethod(final RequestContext context, final String variable, final ObjectAdapter object,
+        final ObjectAction action, final FormState entryState) {
 
-        ObjectAdapter[] parameters = getParameters(action, entryState);
-        String scopeName = context.getParameter("_" + SCOPE);
-        Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
+        final ObjectAdapter[] parameters = getParameters(action, entryState);
+        final String scopeName = context.getParameter("_" + SCOPE);
+        final Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
         return MethodsUtils.runMethod(context, action, object, parameters, variable, scope);
     }
 
-    private ObjectAdapter[] getParameters(ObjectAction action, FormState entryState) {
-        int parameterCount = action.getParameterCount();
-        ObjectAdapter[] parameters = new ObjectAdapter[parameterCount];
+    private ObjectAdapter[] getParameters(final ObjectAction action, final FormState entryState) {
+        final int parameterCount = action.getParameterCount();
+        final ObjectAdapter[] parameters = new ObjectAdapter[parameterCount];
         for (int i = 0; i < parameterCount; i++) {
             parameters[i] = entryState.getField(parameterName(i)).getValue();
         }
         return parameters;
     }
 
-    private FormState validateParameters(RequestContext context, ObjectAction action, ObjectAdapter object) {
-        FormState formState = new FormState();
-        List<ObjectActionParameter> parameters2 = action.getParameters();
-        int parameterCount = action.getParameterCount();
+    private FormState validateParameters(final RequestContext context, final ObjectAction action,
+        final ObjectAdapter object) {
+        final FormState formState = new FormState();
+        final List<ObjectActionParameter> parameters2 = action.getParameters();
+        final int parameterCount = action.getParameterCount();
         for (int i = 0; i < parameterCount; i++) {
-            String fieldName = parameterName(i);
+            final String fieldName = parameterName(i);
             String newEntry = context.getParameter(fieldName);
-            
-            if(newEntry != null && newEntry.equals("-OTHER-")) {
+
+            if (newEntry != null && newEntry.equals("-OTHER-")) {
                 newEntry = context.getParameter(fieldName + "-other");
             }
-            
+
             if (newEntry == null) {
                 // TODO figure out a better way to determine if boolean or a password
-                ObjectSpecification spec = parameters2.get(i).getSpecification();
+                final ObjectSpecification spec = parameters2.get(i).getSpecification();
                 if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                        || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+                    || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
                     newEntry = FALSE;
                 } else {
                     newEntry = "";
                 }
             }
-            FieldEditState fieldState = formState.createField(fieldName, newEntry);
+            final FieldEditState fieldState = formState.createField(fieldName, newEntry);
             Consent consent = null;
 
-            
             if (!parameters2.get(i).isOptional() && newEntry.equals("")) {
                 consent = new Veto(parameters2.get(i).getName() + " required");
                 formState.setError("Not all fields have been set");
 
-            } else  if (parameters2.get(i).getSpecification().getFacet(ParseableFacet.class) != null) {
+            } else if (parameters2.get(i).getSpecification().getFacet(ParseableFacet.class) != null) {
                 try {
-                    ParseableFacet facet = parameters2.get(i).getSpecification().getFacet(ParseableFacet.class);
-                    String message = parameters2.get(i).isValid(object, newEntry); 
-                    if (message != null) { 
-                        consent = new Veto(message); 
+                    final ParseableFacet facet = parameters2.get(i).getSpecification().getFacet(ParseableFacet.class);
+                    final String message = parameters2.get(i).isValid(object, newEntry);
+                    if (message != null) {
+                        consent = new Veto(message);
                         formState.setError("Not all fields are valid");
-                    } 
-                    ObjectAdapter entry = facet.parseTextEntry(null, newEntry);
+                    }
+                    final ObjectAdapter entry = facet.parseTextEntry(null, newEntry);
                     fieldState.setValue(entry);
-                } catch (TextEntryParseException e) {
+                } catch (final TextEntryParseException e) {
                     consent = new Veto(e.getMessage());
                     formState.setError("Not all fields are valid");
                 }
@@ -253,26 +240,27 @@ public class ActionAction implements Action {
                 fieldState.setError(consent.getReason());
             }
         }
-        
+
         if (formState.isValid()) {
-            ObjectAdapter[] parameters = getParameters(action, formState);
-            Consent consent = action.isProposedArgumentSetValid(object, parameters);
+            final ObjectAdapter[] parameters = getParameters(action, formState);
+            final Consent consent = action.isProposedArgumentSetValid(object, parameters);
             if (consent != null && consent.isVetoed()) {
                 formState.setError(consent.getReason());
             }
         }
-        
+
         return formState;
     }
 
-    public static String parameterName(int index) {
+    public static String parameterName(final int index) {
         return PARAMETER + (index + 1);
     }
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     @Override
-    public void debug(DebugBuilder debug) {}
+    public void debug(final DebugBuilder debug) {
+    }
 }
-

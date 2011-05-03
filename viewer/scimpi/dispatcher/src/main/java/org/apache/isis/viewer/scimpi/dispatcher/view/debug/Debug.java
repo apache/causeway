@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,26 +46,27 @@ import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Debug extends AbstractElementProcessor {
 
     private final Dispatcher dispatcher;
 
-    public Debug(Dispatcher dispatcher) {
-        this.dispatcher = dispatcher;}
-    
+    public Debug(final Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
+
     @Override
-    public void process(Request request) {
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
-          
-        //  Application  | System  | Specifications  | Dispatcher  | Context  | Variables  | Object  | I18N File  | Authorization File  | Hide Debug  
-        
-        String type = request.getOptionalProperty(TYPE);
-       
-        boolean alwaysShow = request.isRequested("force", false);
-         if (type != null) {
+
+        // Application | System | Specifications | Dispatcher | Context | Variables | Object | I18N File | Authorization
+        // File | Hide Debug
+
+        final String type = request.getOptionalProperty(TYPE);
+
+        final boolean alwaysShow = request.isRequested("force", false);
+        if (type != null) {
             if (type.equals("system")) {
                 displaySystem(request);
             } else if (type.equals("variables")) {
@@ -76,24 +75,22 @@ public class Debug extends AbstractElementProcessor {
                 displayDispatcher(request);
             } else if (type.equals("context")) {
                 displayContext(request);
-             } else if (type.equals("specifications")) {
+            } else if (type.equals("specifications")) {
                 listSpecifications(request);
-             } else if (type.equals("specification-for")) {
-                 specificationFor(request);
-             } else if (type.equals("specification")) {
-                 specification(request);
-             } else if (type.equals("specification-graph")) {
-                 specificationGraph(request);
-             } else if (type.equals("object-graph")) {
-                 objectGraph(request);
+            } else if (type.equals("specification-for")) {
+                specificationFor(request);
+            } else if (type.equals("specification")) {
+                specification(request);
+            } else if (type.equals("specification-graph")) {
+                specificationGraph(request);
+            } else if (type.equals("object-graph")) {
+                objectGraph(request);
 
-                
-                
             } else if (type.equals("object")) {
-                String value = request.getOptionalProperty(VALUE);
-                RequestContext context = request.getContext();
-                ObjectAdapter object = context.getMappedObject(value);
-                DebugString str = new DebugString();
+                final String value = request.getOptionalProperty(VALUE);
+                final RequestContext context = request.getContext();
+                final ObjectAdapter object = context.getMappedObject(value);
+                final DebugString str = new DebugString();
                 Dump.adapter(object, str);
                 Dump.graph(object, IsisContext.getAuthenticationSession(), str);
                 request.appendHtml("<h2>" + object.getSpecification().getFullIdentifier() + "</h2>");
@@ -104,16 +101,13 @@ public class Debug extends AbstractElementProcessor {
 
         if (alwaysShow || request.getContext().getDebug() == RequestContext.Debug.ON) {
 
-            RequestContext context = request.getContext();
-            
-            
-            
+            final RequestContext context = request.getContext();
 
-            String id = request.getOptionalProperty("object");
+            final String id = request.getOptionalProperty("object");
             if (id != null) {
-                ObjectAdapter object = context.getMappedObject(id);
+                final ObjectAdapter object = context.getMappedObject(id);
                 if (object instanceof DebuggableWithTitle) {
-                    DebugString debug = new DebugString();
+                    final DebugString debug = new DebugString();
                     ((DebuggableWithTitle) object).debugData(debug);
                     request.appendHtml("<pre class=\"debug\">" + debug + "</pre>");
                 } else {
@@ -121,20 +115,20 @@ public class Debug extends AbstractElementProcessor {
                 }
             }
 
-            String variable = request.getOptionalProperty("variable");
+            final String variable = request.getOptionalProperty("variable");
             if (variable != null) {
-                Object object = context.getVariable(variable);
+                final Object object = context.getVariable(variable);
                 request.appendHtml(variable + " => " + (object == null ? "null" : object.toString()));
             }
 
-            String list = request.getOptionalProperty("list");
+            final String list = request.getOptionalProperty("list");
             if (list != null) {
-                DebugString debug = new DebugString();
+                final DebugString debug = new DebugString();
                 context.append(debug, list);
                 request.appendHtml(debug.toString());
             }
 
-            String uri = request.getOptionalProperty("uri");
+            final String uri = request.getOptionalProperty("uri");
             if (uri != null) {
                 request.appendHtml("<pre class=\"debug\">");
                 request.appendHtml(context.getUri());
@@ -143,46 +137,47 @@ public class Debug extends AbstractElementProcessor {
 
         }
     }
-    
-    protected void objectGraph(Request request) {
-        String id = request.getOptionalProperty(VALUE);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+
+    protected void objectGraph(final Request request) {
+        final String id = request.getOptionalProperty(VALUE);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         request.appendHtml("<h1>Object Graph - " + object + "</h1>");
         request.appendHtml("<pre>");
-        DebugBuilder debug = new DebugString();
+        final DebugBuilder debug = new DebugString();
         Dump.graph(object, null, debug);
         request.appendHtml(debug.toString());
         request.appendHtml("</pre>");
     }
-    
 
-    protected void specificationFor(Request request) {
-        String id = request.getOptionalProperty(VALUE);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+    protected void specificationFor(final Request request) {
+        final String id = request.getOptionalProperty(VALUE);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         specification(request, object.getSpecification());
     }
-    
-    protected void specification(Request request) {
-        String name = request.getOptionalProperty(VALUE);
-        ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
+
+    protected void specification(final Request request) {
+        final String name = request.getOptionalProperty(VALUE);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
         specification(request, spec);
     }
 
-    private void specification(Request request, ObjectSpecification spec) {
+    private void specification(final Request request, final ObjectSpecification spec) {
         request.appendHtml("<h1>Specification - " + spec.getFullIdentifier() + "</h1>");
-        request.appendHtml("<p><a href=\"./debug.shtml?type=specification-graph&value=" + spec.getFullIdentifier() + "\">Specification Graph</a></p>");
-        DebugBuilder debug = new DebugHtmlString();
+        request.appendHtml("<p><a href=\"./debug.shtml?type=specification-graph&value=" + spec.getFullIdentifier()
+            + "\">Specification Graph</a></p>");
+        final DebugBuilder debug = new DebugHtmlString();
         specification(spec, debug);
         request.appendHtml(debug.toString());
     }
 
-    protected void specificationGraph(Request request) {
-        String name = request.getOptionalProperty(VALUE);
-        ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
+    protected void specificationGraph(final Request request) {
+        final String name = request.getOptionalProperty(VALUE);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
         request.appendHtml("<h1>Specification Graph - " + spec.getFullIdentifier() + "</h1>");
-        request.appendHtml("<p><a href=\"./debug.shtml?type=specification&value=" + spec.getFullIdentifier() + "\">Full Specification</a></p>");
+        request.appendHtml("<p><a href=\"./debug.shtml?type=specification&value=" + spec.getFullIdentifier()
+            + "\">Full Specification</a></p>");
         request.appendHtml("<pre>");
-        DebugBuilder debug = new DebugString();
+        final DebugBuilder debug = new DebugString();
         debug.appendln(spec.getFullIdentifier());
         debug.indent();
         specificationGraph(spec, debug, new ArrayList<ObjectSpecification>());
@@ -190,61 +185,62 @@ public class Debug extends AbstractElementProcessor {
         request.appendHtml(debug.toString());
         request.appendHtml("</pre>");
     }
-    
-    private void displayContext(Request request) {
+
+    private void displayContext(final Request request) {
         request.appendHtml("<h1>Context</h1>");
-        DebugHtmlString debugString = new DebugHtmlString();
+        final DebugHtmlString debugString = new DebugHtmlString();
         request.getContext().append(debugString);
         request.appendHtml(debugString.toString());
     }
 
-    private void displayDispatcher(Request request) {
+    private void displayDispatcher(final Request request) {
         request.appendHtml("<h1>Dispatcher</h1>");
-        DebugHtmlString debugString = new DebugHtmlString();
+        final DebugHtmlString debugString = new DebugHtmlString();
         dispatcher.debug(debugString);
         request.appendHtml(debugString.toString());
     }
 
-    protected void displayVariables(Request request) {
+    protected void displayVariables(final Request request) {
         request.appendHtml("<h1>Variables</h1>");
-        DebugHtmlString debug = new DebugHtmlString();
-        RequestContext context = request.getContext();
+        final DebugHtmlString debug = new DebugHtmlString();
+        final RequestContext context = request.getContext();
         context.append(debug, "variables");
         request.appendHtml(debug.toString());
     }
 
-    protected void displaySystem(Request request) {
+    protected void displaySystem(final Request request) {
         request.appendHtml("<h1>System</h1>");
-        DebuggableWithTitle[] debug = IsisContext.debugSystem();
-        for (int i = 0; i < debug.length; i++) {
-            DebugHtmlString str = new DebugHtmlString();
-            str.appendTitle(debug[i].debugTitle());
-            debug[i].debugData(str);
+        final DebuggableWithTitle[] debug = IsisContext.debugSystem();
+        for (final DebuggableWithTitle element2 : debug) {
+            final DebugHtmlString str = new DebugHtmlString();
+            str.appendTitle(element2.debugTitle());
+            element2.debugData(str);
             request.appendHtml(str.toString());
         }
     }
 
-    protected void listSpecifications(Request request) {
+    protected void listSpecifications(final Request request) {
         request.appendHtml("<h1>Specifications</h1>");
-        List<ObjectSpecification> fullIdentifierList = new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
+        final List<ObjectSpecification> fullIdentifierList =
+            new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
         Collections.sort(fullIdentifierList, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
-        DebugHtmlString debug = new DebugHtmlString();
-        for (ObjectSpecification spec : fullIdentifierList) {
-            String name = spec.getSingularName();
+        final DebugHtmlString debug = new DebugHtmlString();
+        for (final ObjectSpecification spec : fullIdentifierList) {
+            final String name = spec.getSingularName();
             debug.appendln(name, specificationLink(spec));
         }
         request.appendHtml(debug.toString());
     }
 
-    private String specificationLink(ObjectSpecification specification) {
+    private String specificationLink(final ObjectSpecification specification) {
         if (specification == null) {
             return "none";
         } else {
-            String name = specification.getFullIdentifier();
+            final String name = specification.getFullIdentifier();
             return "<a href=\"./debug.shtml?type=specification&value=" + name + "\">" + name + "</a>";
         }
     }
-    
+
     protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
@@ -254,22 +250,23 @@ public class Debug extends AbstractElementProcessor {
         return "debug";
     }
 
-    private void specificationGraph(ObjectSpecification spec, DebugBuilder view, ArrayList<ObjectSpecification> visited) {
-        List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>(spec.getAssociations());
+    private void specificationGraph(final ObjectSpecification spec, final DebugBuilder view,
+        final ArrayList<ObjectSpecification> visited) {
+        final List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>(spec.getAssociations());
         Collections.sort(fields, new Comparator<ObjectAssociation>() {
-            public int compare(ObjectAssociation o1, ObjectAssociation o2) {
+            public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
         for (int i = 0; i < fields.size(); i++) {
-            ObjectAssociation field = fields.get(i);
-            ObjectSpecification specification = field.getSpecification();
+            final ObjectAssociation field = fields.get(i);
+            final ObjectSpecification specification = field.getSpecification();
             if (!specification.isValue()) {
-                boolean contains = visited.contains(specification);
-                String aggregated = specification.isAggregated() ? "++" : "";
-                view.appendln(aggregated + field.getName() + "  (<a href=\"./debug.shtml?type=specification-graph&value="
-                        + specification.getFullIdentifier() + "\">" + specification.getFullIdentifier() + "</a>"
-                        + (contains ? "..." : "") + ")");
+                final boolean contains = visited.contains(specification);
+                final String aggregated = specification.isAggregated() ? "++" : "";
+                view.appendln(aggregated + field.getName()
+                    + "  (<a href=\"./debug.shtml?type=specification-graph&value=" + specification.getFullIdentifier()
+                    + "\">" + specification.getFullIdentifier() + "</a>" + (contains ? "..." : "") + ")");
                 if (!contains) {
                     visited.add(specification);
                     view.indent();
@@ -280,8 +277,8 @@ public class Debug extends AbstractElementProcessor {
         }
 
     }
-    
-    private void specification(ObjectSpecification spec, DebugBuilder view) {
+
+    private void specification(final ObjectSpecification spec, final DebugBuilder view) {
         view.startSection("Summary");
         view.appendln("Hash code", "#" + Integer.toHexString(spec.hashCode()));
         view.appendln("ID", spec.getIdentifier());
@@ -290,41 +287,42 @@ public class Debug extends AbstractElementProcessor {
         view.appendln("Singular name", spec.getSingularName());
         view.appendln("Plural name", spec.getPluralName());
         view.appendln("Description", spec.getDescription());
-    
+
         view.appendln("Type", "?");
         view.appendln("Value/aggregated", String.valueOf(!spec.isValueOrIsAggregated()));
-    
+
         view.appendln("Parent specification", specificationLink(spec.superclass()));
-        specificationClasses(view, "Child specifications",  spec.subclasses());
+        specificationClasses(view, "Child specifications", spec.subclasses());
         specificationClasses(view, "Implemented interfaces", spec.interfaces());
         speficationFacets(view, spec);
-        
-        List<ObjectAssociation> fields = spec.getAssociations();
+
+        final List<ObjectAssociation> fields = spec.getAssociations();
         specificationMembers(view, "Fields", fields);
-        List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER);
+        final List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER);
         specificationMembers(view, "User Actions", userActions);
         specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION));
         specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE));
         specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG));
         view.endSection();
-        
+
         view.startSection("Fields");
         for (int i = 0; i < fields.size(); i++) {
-            ObjectAssociation field = fields.get(i);
+            final ObjectAssociation field = fields.get(i);
             view.appendTitle("<span id=\"" + field.getId() + "\"><em>Field:</em> " + field.getId() + "</span>");
             view.appendln("ID", field.getIdentifier());
             view.appendln("Short ID", field.getId());
             view.appendln("Name", field.getName());
             view.appendln("Specification", specificationLink(field.getSpecification()));
-    
-            view.appendln("Type",  field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation() ? "Object" : "Unknown");
-            view.appendln("Flags", (field.isAlwaysHidden() ? "": "Visible ") + (field.isNotPersisted() ? "Not-Persisted ": " ")
-                    + (field.isMandatory() ? "Mandatory " : ""));
-    
+
+            view.appendln("Type", field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation()
+                ? "Object" : "Unknown");
+            view.appendln("Flags", (field.isAlwaysHidden() ? "" : "Visible ")
+                + (field.isNotPersisted() ? "Not-Persisted " : " ") + (field.isMandatory() ? "Mandatory " : ""));
+
             speficationFacets(view, field);
         }
         view.endSection();
-        
+
         view.startSection("Actions");
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction action = userActions.get(i);
@@ -333,32 +331,32 @@ public class Debug extends AbstractElementProcessor {
             view.appendln("Short ID", action.getId());
             view.appendln("Name", action.getName());
             view.appendln("Specification", specificationLink(action.getSpecification()));
-    
+
             view.appendln("Target", action.getTarget());
             view.appendln("On type", specificationLink(action.getOnType()));
-    
-            ObjectSpecification returnType = action.getReturnType();
+
+            final ObjectSpecification returnType = action.getReturnType();
             view.appendln("Returns", returnType == null ? "VOID" : specificationLink(returnType));
-            
+
             speficationFacets(view, action);
-    
-            List<ObjectActionParameter> parameters = action.getParameters();
+
+            final List<ObjectActionParameter> parameters = action.getParameters();
             if (parameters.size() == 0) {
                 view.appendln("Parameters", "none");
             } else {
-                StringBuffer buffer = new StringBuffer();
-                List<ObjectActionParameter> p = action.getParameters();
+                final StringBuffer buffer = new StringBuffer();
+                final List<ObjectActionParameter> p = action.getParameters();
                 for (int j = 0; j < parameters.size(); j++) {
                     buffer.append(p.get(j).getName());
                     buffer.append(" (");
                     buffer.append(specificationLink(parameters.get(j).getSpecification()));
                     buffer.append(")");
                     view.appendln("Parameters", buffer.toString());
-                    
+
                     view.indent();
-                    Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
-                    for (int k = 0; k < parameterFacets.length; k++) {
-                        view.append(p.get(j).getFacet(parameterFacets[k]).toString());
+                    final Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
+                    for (final Class<? extends Facet> parameterFacet : parameterFacets) {
+                        view.append(p.get(j).getFacet(parameterFacet).toString());
                     }
                     view.unindent();
                 }
@@ -366,8 +364,9 @@ public class Debug extends AbstractElementProcessor {
         }
     }
 
-    private void specificationClasses(DebugBuilder view, String label, List<ObjectSpecification> subclasses) {
-        StringBuffer buffer = new StringBuffer();
+    private void specificationClasses(final DebugBuilder view, final String label,
+        final List<ObjectSpecification> subclasses) {
+        final StringBuffer buffer = new StringBuffer();
         if (subclasses.size() == 0) {
             buffer.append("none");
         } else {
@@ -378,17 +377,18 @@ public class Debug extends AbstractElementProcessor {
         view.appendln(label, buffer.toString());
     }
 
-    private void specificationMembers(DebugBuilder view, String label, List<? extends ObjectMember> members) {
-        StringBuffer buffer = new StringBuffer();
+    private void specificationMembers(final DebugBuilder view, final String label,
+        final List<? extends ObjectMember> members) {
+        final StringBuffer buffer = new StringBuffer();
         if (members.size() == 0) {
             buffer.append("none");
         } else {
             for (int i = 0; i < members.size(); i++) {
-                ObjectMember member = members.get(i);
+                final ObjectMember member = members.get(i);
                 buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + member.getId() + "</a>   <small>");
-                buffer.append(member.isAlwaysHidden() ? "": "Visible ");
+                buffer.append(member.isAlwaysHidden() ? "" : "Visible ");
                 if (member.isPropertyOrCollection()) {
-                    buffer.append(((ObjectAssociation) member).isNotPersisted() ? "Not-Persisted ": " ");
+                    buffer.append(((ObjectAssociation) member).isNotPersisted() ? "Not-Persisted " : " ");
                     buffer.append(((ObjectAssociation) member).isMandatory() ? "Mandatory " : "");
                 }
                 buffer.append("</small></a><br>");
@@ -397,30 +397,32 @@ public class Debug extends AbstractElementProcessor {
         view.appendln(label, buffer.toString());
     }
 
-    private void speficationFacets(DebugBuilder view, FacetHolder facetHolder) {
-        List<Facet> facets = facetHolder.getFacets(new Filter<Facet>() {
+    private void speficationFacets(final DebugBuilder view, final FacetHolder facetHolder) {
+        final List<Facet> facets = facetHolder.getFacets(new Filter<Facet>() {
             @Override
-            public boolean accept(Facet facet) {
+            public boolean accept(final Facet facet) {
                 return true;
             }
         });
-        StringBuffer buffer = new StringBuffer();
+        final StringBuffer buffer = new StringBuffer();
         if (facets == null || facets.size() == 0) {
             buffer.append("none");
         } else {
             Collections.sort(facets, new Comparator<Facet>() {
-                public int compare(Facet o1, Facet o2) {
-                    String facetType1 = o1.facetType().getName();
-                    String facetType2 = o2.facetType().getName();
-                    return facetType1.substring(facetType1.lastIndexOf('.') + 1).compareTo(facetType2.substring(facetType2.lastIndexOf('.') + 1));
-                }});
-            for (Facet facet: facets) {
-                String facetType = facet.facetType().getName();
-                buffer.append("<span class=\"facet-type\">" + facetType .substring(facetType.lastIndexOf('.') + 1)  + "</span>:  " + facet + "<br>");
+                public int compare(final Facet o1, final Facet o2) {
+                    final String facetType1 = o1.facetType().getName();
+                    final String facetType2 = o2.facetType().getName();
+                    return facetType1.substring(facetType1.lastIndexOf('.') + 1).compareTo(
+                        facetType2.substring(facetType2.lastIndexOf('.') + 1));
+                }
+            });
+            for (final Facet facet : facets) {
+                final String facetType = facet.facetType().getName();
+                buffer.append("<span class=\"facet-type\">" + facetType.substring(facetType.lastIndexOf('.') + 1)
+                    + "</span>:  " + facet + "<br>");
             }
         }
         view.appendln("Facets", buffer.toString());
     }
 
 }
-

@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
-import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
@@ -36,7 +33,7 @@ import org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot.Max
 import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForProperty;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
-
+import org.junit.Test;
 
 public class MemberInvalidTest extends AbstractTest {
 
@@ -145,7 +142,6 @@ public class MemberInvalidTest extends AbstractTest {
         }
     }
 
-
     @Test
     public void whenInvalidMaxLengthThenThrowsException() {
         try {
@@ -156,7 +152,6 @@ public class MemberInvalidTest extends AbstractTest {
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Max Length Field"));
         }
     }
-
 
     @Test
     public void whenInvalidRegExCaseSensitiveThenThrowsException() {

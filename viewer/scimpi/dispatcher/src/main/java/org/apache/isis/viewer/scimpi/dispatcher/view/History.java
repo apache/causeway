@@ -29,7 +29,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 public class History extends AbstractElementProcessor {
 
     private static final String _HISTORY = "_history";
@@ -42,10 +41,10 @@ public class History extends AbstractElementProcessor {
     static class Crumbs implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int MAXIMUM_SIZE = 10;
-        private List<Crumb> crumbs = new ArrayList<Crumb>();
+        private final List<Crumb> crumbs = new ArrayList<Crumb>();
 
-        public void add(String name, String link) {
-            for (Crumb crumb : crumbs) {
+        public void add(final String name, final String link) {
+            for (final Crumb crumb : crumbs) {
                 if (crumb.link.equals(link)) {
                     crumbs.remove(crumb);
                     crumbs.add(crumb);
@@ -53,7 +52,7 @@ public class History extends AbstractElementProcessor {
                 }
             }
 
-            Crumb crumb = new Crumb();
+            final Crumb crumb = new Crumb();
             crumb.name = name;
             crumb.link = link;
             crumbs.add(crumb);
@@ -81,23 +80,25 @@ public class History extends AbstractElementProcessor {
 
     }
 
+    @Override
     public String getName() {
         return "history";
     }
 
-    public void process(Request request) {
-        String action = request.getOptionalProperty("action", "display");
-        Crumbs crumbs = getCrumbs(request);
+    @Override
+    public void process(final Request request) {
+        final String action = request.getOptionalProperty("action", "display");
+        final Crumbs crumbs = getCrumbs(request);
         if (action.equals("display") && crumbs != null) {
             write(crumbs, request);
         } else if (action.equals("link")) {
-            String name = request.getRequiredProperty(NAME);
-            String link = request.getRequiredProperty(LINK);
+            final String name = request.getRequiredProperty(NAME);
+            final String link = request.getRequiredProperty(LINK);
             crumbs.add(name, link);
         } else if (action.equals("object")) {
-            String id = request.getOptionalProperty(OBJECT);
-            ObjectAdapter object =  MethodsUtils.findObject(request.getContext(), id);
-            String name = object.titleString();
+            final String id = request.getOptionalProperty(OBJECT);
+            final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
+            final String name = object.titleString();
             String link = request.getRequiredProperty(LINK);
             link += "?_result=" + id;
             crumbs.add(name, link);
@@ -109,7 +110,7 @@ public class History extends AbstractElementProcessor {
 
     }
 
-    public void write(Crumbs crumbs, final Request request) {
+    public void write(final Crumbs crumbs, final Request request) {
         if (crumbs.isEmpty()) {
             return;
         }
@@ -117,8 +118,8 @@ public class History extends AbstractElementProcessor {
         request.appendHtml("<div id=\"history\">");
         int i = 0;
         final int length = crumbs.size();
-        for (Crumb crumb : crumbs.iterator()) {
-            String link = crumb.link;
+        for (final Crumb crumb : crumbs.iterator()) {
+            final String link = crumb.link;
             if (i > 0) {
                 request.appendHtml("<span class=\"separator\"> | </span>");
             }
@@ -136,8 +137,8 @@ public class History extends AbstractElementProcessor {
         request.appendHtml("</div>");
     }
 
-    private Crumbs getCrumbs(Request request) {
-        RequestContext context = request.getContext();
+    private Crumbs getCrumbs(final Request request) {
+        final RequestContext context = request.getContext();
         Crumbs crumbs = (Crumbs) context.getVariable(_HISTORY);
         if (crumbs == null) {
             crumbs = new Crumbs();
@@ -147,5 +148,3 @@ public class History extends AbstractElementProcessor {
     }
 
 }
-
-

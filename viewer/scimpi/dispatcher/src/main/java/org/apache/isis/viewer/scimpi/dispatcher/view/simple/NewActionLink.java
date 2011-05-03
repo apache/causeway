@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,32 +25,34 @@ import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 public class NewActionLink extends AbstractLink {
 
-    protected boolean valid(Request request, ObjectAdapter object) {
-        String method = request.getRequiredProperty(METHOD);
-        ObjectAction action = MethodsUtils.findAction(object, method);
+    @Override
+    protected boolean valid(final Request request, final ObjectAdapter object) {
+        final String method = request.getRequiredProperty(METHOD);
+        final ObjectAction action = MethodsUtils.findAction(object, method);
         return MethodsUtils.isVisibleAndUsable(object, action);
     }
 
-    protected String linkLabel(String name, ObjectAdapter object) {
+    @Override
+    protected String linkLabel(final String name, final ObjectAdapter object) {
         return "run";
     }
-    
+
+    @Override
     protected String defaultView() {
         return "_generic_action." + Dispatcher.EXTENSION;
     }
 
-    protected String additionalParameters(Request request) {
-        String method = request.getRequiredProperty(METHOD);
+    @Override
+    protected String additionalParameters(final Request request) {
+        final String method = request.getRequiredProperty(METHOD);
         return "method=" + method;
     }
-    
+
+    @Override
     public String getName() {
         return "new-action-link";
     }
-    
 
 }
-

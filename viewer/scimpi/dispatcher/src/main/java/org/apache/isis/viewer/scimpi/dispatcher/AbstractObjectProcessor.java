@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,14 +26,15 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public abstract class AbstractObjectProcessor extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String id = request.getOptionalProperty(OBJECT);
+    @Override
+    public void process(final Request request) {
+        final String id = request.getOptionalProperty(OBJECT);
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
 
-        String field = request.getOptionalProperty(FIELD);
+        final String field = request.getOptionalProperty(FIELD);
         if (field != null) {
-            ObjectAssociation objectField = object.getSpecification().getAssociation(field);
-            String error = checkFieldType(objectField);
+            final ObjectAssociation objectField = object.getSpecification().getAssociation(field);
+            final String error = checkFieldType(objectField);
             if (error != null) {
                 throw new ScimpiException("Field " + objectField.getId() + " " + error);
             }
@@ -44,13 +44,11 @@ public abstract class AbstractObjectProcessor extends AbstractElementProcessor {
 
         process(request, object);
     }
-    
-    protected String checkFieldType(ObjectAssociation objectField) {
+
+    protected String checkFieldType(final ObjectAssociation objectField) {
         return null;
     }
-    
+
     protected abstract void process(Request request, ObjectAdapter object);
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
@@ -32,7 +31,6 @@ import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForCo
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 import org.junit.Test;
-
 
 public class MemberDisabledTest extends AbstractTest {
 
@@ -90,8 +88,8 @@ public class MemberDisabledTest extends AbstractTest {
 
     @Test
     public void whenCollectionDisabledThenAddToThrowsException() {
-        List<Order> orders = custJsWO.getOrders();
-		final Order order = orders.get(0);
+        final List<Order> orders = custJsWO.getOrders();
+        final Order order = orders.get(0);
         try {
             custJsWO.addToMoreOrders(order);
             fail("Should have thrown exception");

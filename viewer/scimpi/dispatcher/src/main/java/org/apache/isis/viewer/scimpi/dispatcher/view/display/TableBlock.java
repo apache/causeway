@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
-
 public class TableBlock implements BlockContent {
-    
+
     private ObjectAdapter collection;
 
-    public void setCollection(ObjectAdapter collection) {
+    public void setCollection(final ObjectAdapter collection) {
         this.collection = collection;
     }
-    
+
     public ObjectAdapter getCollection() {
         return collection;
     }
@@ -43,9 +41,8 @@ public class TableBlock implements BlockContent {
         return marker;
     }
 
-    public void setMarker(RepeatMarker marker) {
+    public void setMarker(final RepeatMarker marker) {
         this.marker = marker;
     }
 
 }
-

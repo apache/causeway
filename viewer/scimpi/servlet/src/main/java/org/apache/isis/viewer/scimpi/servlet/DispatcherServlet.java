@@ -40,32 +40,35 @@ public class DispatcherServlet extends HttpServlet {
     private Dispatcher dispatcher;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
         LOG.info("post " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
+        IOException {
         LOG.info("get  " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
-    private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void process(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
+        IOException {
         try {
-            ServletRequestContext context = new ServletRequestContext();
-            HttpSession httpSession = request.getSession(false);
+            final ServletRequestContext context = new ServletRequestContext();
+            final HttpSession httpSession = request.getSession(false);
             // TODO when using version 3.0 of Servlet API use the HttpOnly setting for improved security
             if (httpSession != null) {
-                HashMap<String, Object> data = (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
+                final HashMap<String, Object> data =
+                    (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
                 if (data != null) {
                     context.setSessionData(data);
                 }
             }
             context.startRequest(request, response, getServletContext());
             dispatcher.process(context, request.getServletPath());
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             LOG.error("servlet exception", e);
             throw e;
         }
@@ -79,13 +82,13 @@ public class DispatcherServlet extends HttpServlet {
         ImageLookup.setImageDirectory(getServletContext(), "images");
 
         dispatcher = new Dispatcher();
-        Enumeration initParameterNames = getInitParameterNames();
+        final Enumeration initParameterNames = getInitParameterNames();
         while (initParameterNames.hasMoreElements()) {
-            String name = (String) initParameterNames.nextElement();
-            String value = getInitParameter(name);
+            final String name = (String) initParameterNames.nextElement();
+            final String value = getInitParameter(name);
             dispatcher.addParameter(name, value);
         }
-        String dir = getServletContext().getRealPath("/WEB-INF");
+        final String dir = getServletContext().getRealPath("/WEB-INF");
         dispatcher.init(dir);
 
         new UserManager(IsisContext.getAuthenticationManager());

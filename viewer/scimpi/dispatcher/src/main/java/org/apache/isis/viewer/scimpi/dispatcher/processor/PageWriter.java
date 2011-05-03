@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
 public interface PageWriter {
@@ -25,5 +24,3 @@ public interface PageWriter {
     void appendHtml(String string);
 
 }
-
-

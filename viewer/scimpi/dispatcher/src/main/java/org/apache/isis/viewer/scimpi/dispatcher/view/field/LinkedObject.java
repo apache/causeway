@@ -17,25 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.field;
 
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-
 
 public class LinkedObject {
     private final String variable;
     private final String scope;
     private String forwardView;
 
-    public LinkedObject(String variable, String scope, String forwardView) {
+    public LinkedObject(final String variable, final String scope, final String forwardView) {
         this.variable = variable;
         this.scope = scope;
         this.forwardView = forwardView;
     }
 
-    public LinkedObject(String forwardView) {
+    public LinkedObject(final String forwardView) {
         this.forwardView = forwardView;
         scope = Scope.INTERACTION.toString();
         variable = RequestContext.RESULT;
@@ -53,9 +51,8 @@ public class LinkedObject {
         return forwardView;
     }
 
-    public void setForwardView(String path) {
+    public void setForwardView(final String path) {
         forwardView = path;
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import java.util.HashMap;
@@ -28,45 +27,42 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
 public class FormFieldBlock extends InclusionList {
-    private Map<String, String> content = new HashMap<String, String>();
-    private Map<String, String> values = new HashMap<String, String>();
+    private final Map<String, String> content = new HashMap<String, String>();
+    private final Map<String, String> values = new HashMap<String, String>();
 
-    public void replaceContent(String field, String htmlString) {
+    public void replaceContent(final String field, final String htmlString) {
         content.put(field, htmlString);
     }
 
-    public boolean hasContent(String name) {
+    public boolean hasContent(final String name) {
         return content.containsKey(name);
     }
 
-    public String getContent(String name) {
+    public String getContent(final String name) {
         return content.get(name);
     }
 
-    public boolean isVisible(String name) {
+    public boolean isVisible(final String name) {
         return true;
     }
-    
-    public boolean isNullable(String name) {
+
+    public boolean isNullable(final String name) {
         return true;
     }
-    
-    public ObjectAdapter getCurrent(String name) {
+
+    public ObjectAdapter getCurrent(final String name) {
         return null;
     }
 
-    public void value(String field, String value) {
+    public void value(final String field, final String value) {
         values.put(field, value);
     }
-    
-    public void setUpValues(InputField[] inputFields) {
-        for (int i = 0; i < inputFields.length; i++) {
-            String name = inputFields[i].getName();
-            inputFields[i].setValue(values.get(name));
+
+    public void setUpValues(final InputField[] inputFields) {
+        for (final InputField inputField : inputFields) {
+            final String name = inputField.getName();
+            inputField.setValue(values.get(name));
         }
     }
 
-    
 }
-
-

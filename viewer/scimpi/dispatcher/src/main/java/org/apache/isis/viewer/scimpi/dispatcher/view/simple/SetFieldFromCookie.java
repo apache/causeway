@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -25,29 +24,25 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class SetFieldFromCookie extends AbstractElementProcessor {
-    
-    public void process(Request request) {
+
+    @Override
+    public void process(final Request request) {
         throw new NotYetImplementedException("3.1");
         /*
-        String name = request.getRequiredProperty(NAME);
-        String cookieString = request.getContext().getCookie(name);
-        ObjectAdapter valueAdapter = IsisContext.getObjectPersistor().createAdapterForValue(cookieString);
-        
-        String objectId = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getRequiredProperty(FIELD);
-        ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(objectId);
-        ObjectAssociation field = object.getSpecification().getField(fieldName);
-        if (field.isValue()) {
-            throw new ScimpiException("Can only set up a value field");
-        }
-
-        ((ValueAssociation) field).setValue(object, valueAdapter);
-        */
+         * String name = request.getRequiredProperty(NAME); String cookieString = request.getContext().getCookie(name);
+         * ObjectAdapter valueAdapter = IsisContext.getObjectPersistor().createAdapterForValue(cookieString);
+         * 
+         * String objectId = request.getOptionalProperty(OBJECT); String fieldName = request.getRequiredProperty(FIELD);
+         * ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(objectId);
+         * ObjectAssociation field = object.getSpecification().getField(fieldName); if (field.isValue()) { throw new
+         * ScimpiException("Can only set up a value field"); }
+         * 
+         * ((ValueAssociation) field).setValue(object, valueAdapter);
+         */
     }
-    
+
+    @Override
     public String getName() {
         return "set-field-from-cookie";
     }
 }
-
-

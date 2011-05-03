@@ -26,36 +26,37 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 /**
  * 
  */
 public class TitleString extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getOptionalProperty(FIELD);
-        int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
-       ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+    @Override
+    public void process(final Request request) {
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getOptionalProperty(FIELD);
+        final int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         String titleString;
         if (fieldName == null) {
             titleString = object.titleString();
         } else {
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+            final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
-            ObjectAdapter fieldReference = field.get(object);
+            final ObjectAdapter fieldReference = field.get(object);
             if (fieldReference != null) {
                 titleString = fieldReference.titleString();
             } else {
                 titleString = "";
             }
         }
-        request.appendDebug("    " + titleString); 
+        request.appendDebug("    " + titleString);
         request.appendTruncated(titleString, truncateTo);
     }
 
+    @Override
     public String getName() {
         return "title-string";
     }

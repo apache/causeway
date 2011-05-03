@@ -23,14 +23,15 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Redirect extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "redirect";
     }
 
-    public void process(Request request) {
-        String view = request.getRequiredProperty(VIEW);
+    @Override
+    public void process(final Request request) {
+        final String view = request.getRequiredProperty(VIEW);
         request.getContext().redirectTo(view);
     }
 
 }
-

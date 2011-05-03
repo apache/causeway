@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,27 +26,26 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Type extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
-        RequestContext context = request.getContext();
-        String showPlural = request.getOptionalProperty(PLURAL);
-        String id = request.getOptionalProperty(OBJECT);
-        String objectId = id != null ? id : (String) context.getVariable(RequestContext.RESULT);
-        
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
+        final String showPlural = request.getOptionalProperty(PLURAL);
+        final String id = request.getOptionalProperty(OBJECT);
+        final String objectId = id != null ? id : (String) context.getVariable(RequestContext.RESULT);
+
         ObjectAdapter object = context.getMappedObjectOrResult(objectId);
-        String field = request.getOptionalProperty(FIELD);
+        final String field = request.getOptionalProperty(FIELD);
         if (field != null) {
-            ObjectAssociation objectField = object.getSpecification().getAssociation(field);
-            object =  objectField.get(object);
+            final ObjectAssociation objectField = object.getSpecification().getAssociation(field);
+            object = objectField.get(object);
         }
-        request.appendDebug(" for " + object); 
-        
-        ObjectSpecification specification = object.getSpecification();
-        String name = showPlural != null ? specification.getPluralName() : specification.getSingularName();
-        
+        request.appendDebug(" for " + object);
+
+        final ObjectSpecification specification = object.getSpecification();
+        final String name = showPlural != null ? specification.getPluralName() : specification.getSingularName();
+
         request.appendHtml(name);
     }
 
@@ -57,4 +55,3 @@ public class Type extends AbstractElementProcessor {
     }
 
 }
-

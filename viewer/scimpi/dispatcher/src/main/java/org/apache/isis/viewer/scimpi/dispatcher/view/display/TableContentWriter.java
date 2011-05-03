@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.PageWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
-
 
 public interface TableContentWriter {
 
@@ -35,4 +33,3 @@ public interface TableContentWriter {
     void writeElement(Request request, RequestContext context, ObjectAdapter element);
 
 }
-

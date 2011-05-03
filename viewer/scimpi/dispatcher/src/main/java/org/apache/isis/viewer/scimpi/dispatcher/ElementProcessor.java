@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
-
 
 public interface ElementProcessor {
 
@@ -30,4 +28,3 @@ public interface ElementProcessor {
     void process(Request request);
 
 }
-

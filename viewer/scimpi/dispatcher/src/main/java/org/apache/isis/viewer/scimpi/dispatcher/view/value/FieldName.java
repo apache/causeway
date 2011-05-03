@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,14 +27,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class FieldName extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getRequiredProperty(FIELD);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
-        ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+    @Override
+    public void process(final Request request) {
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getRequiredProperty(FIELD);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
@@ -45,14 +44,14 @@ public class FieldName extends AbstractElementProcessor {
         request.appendHtml(field.getName());
     }
 
+    @Override
     public String getName() {
         return "field-name";
     }
 
-    public static void write(Request content, ObjectAssociation field) {
+    public static void write(final Request content, final ObjectAssociation field) {
         content.appendHtml("<span class=\"label\" title=\"" + field.getDescription() + "\">");
         content.appendHtml("</span>");
     }
 
 }
-

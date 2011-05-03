@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 
 import java.util.ArrayList;
@@ -30,70 +29,72 @@ import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
-import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HtmlFormBuilder;
-
+import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
 public class Logon extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         String view = request.getOptionalProperty(VIEW);
         if (view == null) {
             view = (String) request.getContext().getVariable("login-path");
         }
 
-        boolean isNotLoggedIn = IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession;
+        final boolean isNotLoggedIn = IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession;
         if (isNotLoggedIn) {
             loginForm(request, view);
         }
     }
 
-    public static void loginForm(Request request, String view) {
-    //    String message = (String) request.getContext().examplegetVariable("login-failure");
-           
-        String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
-        List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
+    public static void loginForm(final Request request, final String view) {
+        // String message = (String) request.getContext().examplegetVariable("login-failure");
+
+        final String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
+        final List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField(ERRORS, error));
         if (view != null) {
             hiddenFields.add(new HiddenInputField(VIEW, view));
         }
 
-        FormState entryState = (FormState) request.getContext().getVariable(ENTRY_FIELDS);
-        InputField nameField = createdField("username", "User Name", InputField.TEXT, entryState);
-        String width = request.getOptionalProperty("width");
+        final FormState entryState = (FormState) request.getContext().getVariable(ENTRY_FIELDS);
+        final InputField nameField = createdField("username", "User Name", InputField.TEXT, entryState);
+        final String width = request.getOptionalProperty("width");
         if (width != null) {
-            int w = Integer.valueOf(width).intValue();
+            final int w = Integer.valueOf(width).intValue();
             nameField.setWidth(w);
         }
-        InputField passwordField = createdField("password", "Password", InputField.PASSWORD, entryState); 
-        InputField[] fields = new InputField[] { nameField, passwordField, };
-   
-        String formTitle = request.getOptionalProperty(FORM_TITLE);
-        String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
-        String className = request.getOptionalProperty(CLASS, "action login full");
-        String  id = request.getOptionalProperty(ID);
-        
-        HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields,
-                className, id, formTitle, null, null, loginButtonTitle, entryState == null ? null : entryState.getError());
+        final InputField passwordField = createdField("password", "Password", InputField.PASSWORD, entryState);
+        final InputField[] fields = new InputField[] { nameField, passwordField, };
+
+        final String formTitle = request.getOptionalProperty(FORM_TITLE);
+        final String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
+        final String className = request.getOptionalProperty(CLASS, "action login full");
+        final String id = request.getOptionalProperty(ID);
+
+        HtmlFormBuilder.createForm(request, "logon.app",
+            hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields, className, id, formTitle, null,
+            null, loginButtonTitle, entryState == null ? null : entryState.getError());
     }
 
-    protected static InputField createdField(String fieldName, String fieldLabel, int type, FormState entryState) {
-        InputField nameField = new InputField(fieldName);
+    protected static InputField createdField(final String fieldName, final String fieldLabel, final int type,
+        final FormState entryState) {
+        final InputField nameField = new InputField(fieldName);
         nameField.setType(type);
         nameField.setLabel(fieldLabel);
         if (entryState != null) {
-            FieldEditState fieldState = entryState.getField(fieldName);
-            String entry = fieldState == null ? "" : fieldState.getEntry();
+            final FieldEditState fieldState = entryState.getField(fieldName);
+            final String entry = fieldState == null ? "" : fieldState.getEntry();
             nameField.setValue(entry);
-            String error =  fieldState == null ? "" : fieldState.getError();
+            final String error = fieldState == null ? "" : fieldState.getError();
             nameField.setErrorText(error);
         }
         return nameField;
     }
 
+    @Override
     public String getName() {
         return "logon";
     }
 
 }
-

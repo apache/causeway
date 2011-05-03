@@ -17,36 +17,35 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view;
 
 public class HtmlSnippet implements Snippet {
-    private StringBuffer html = new StringBuffer();
+    private final StringBuffer html = new StringBuffer();
     private boolean containsVariable;
     private final String lineNumbers;
     private final String path;
 
-    public HtmlSnippet(String lineNumbers, String path) {
+    public HtmlSnippet(final String lineNumbers, final String path) {
         this.lineNumbers = lineNumbers;
         this.path = path;
     }
-    
-    public void append(String html) {
+
+    public void append(final String html) {
         this.html.append(html);
         containsVariable |= html.indexOf("${") >= 0;
     }
 
+    @Override
     public String getHtml() {
         return html.toString();
     }
-    
+
     public boolean isContainsVariable() {
         return containsVariable;
     }
-    
+
+    @Override
     public String errorAt() {
         return path + ":" + lineNumbers;
     }
 }
-
-

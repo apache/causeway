@@ -21,7 +21,6 @@ package org.apache.isis.viewer.scimpi.dispatcher.view;
 
 import org.apache.isis.viewer.scimpi.dispatcher.action.Attributes;
 
-
 public class SwfTag implements Snippet {
 
     public static final int END = 0;
@@ -33,7 +32,8 @@ public class SwfTag implements Snippet {
     private final String lineNumbers;
     private final String path;
 
-    public SwfTag(String tagName, Attributes attributes, int type, String lineNumbers, String path) {
+    public SwfTag(final String tagName, final Attributes attributes, final int type, final String lineNumbers,
+        final String path) {
         this.tagName = tagName;
         this.attributes = attributes;
         this.type = type;
@@ -41,6 +41,7 @@ public class SwfTag implements Snippet {
         this.path = path;
     }
 
+    @Override
     public String getHtml() {
         return tagName;
     }
@@ -57,6 +58,7 @@ public class SwfTag implements Snippet {
         return attributes;
     }
 
+    @Override
     public String errorAt() {
         return path + ":" + lineNumbers;
     }
@@ -64,19 +66,20 @@ public class SwfTag implements Snippet {
     public String debug() {
         return path + ":" + lineNumbers + " - " + getAttributes();
     }
-        
+
+    @Override
     public String toString() {
         String t = null;
         switch (type) {
-        case EMPTY:
-            t = "empty";
-            break;
-        case START:
-            t = "start";
-            break;
-        case END:
-            t = "end";
-            break;
+            case EMPTY:
+                t = "empty";
+                break;
+            case START:
+                t = "start";
+                break;
+            case END:
+                t = "end";
+                break;
         }
         return "SwfTag[name=" + tagName + ",path=" + path + ",line=" + lineNumbers + ",type=" + t + "]";
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.service;
 
 import java.util.List;
@@ -28,7 +27,6 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.log4j.Logger;
-
 
 @Named("Countries")
 public class CountryRepository extends AbstractFactoryAndRepository {
@@ -50,9 +48,9 @@ public class CountryRepository extends AbstractFactoryAndRepository {
     /**
      * Returns the Country with given code
      */
-    public Country findByCode(@Named("Code")
-    final String code) {
+    public Country findByCode(@Named("Code") final String code) {
         return firstMatch(Country.class, new Filter<Country>() {
+            @Override
             public boolean accept(final Country country) {
                 return code.equals(country.getCode());
             }

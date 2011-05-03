@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import java.util.List;
@@ -30,25 +29,25 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ObjectLink extends AbstractLink {
 
     @Override
-    protected boolean valid(Request request, ObjectAdapter object) {
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+    protected boolean valid(final Request request, final ObjectAdapter object) {
+        final AuthenticationSession session = IsisContext.getAuthenticationSession();
+        final List<ObjectAssociation> visibleFields =
+            object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
         return visibleFields.size() > 0;
     }
 
     @Override
-    protected String linkLabel(String name, ObjectAdapter object) {
+    protected String linkLabel(final String name, final ObjectAdapter object) {
         if (name == null) {
             return object.titleString();
         } else {
             return name;
         }
     }
-    
+
     @Override
     protected String defaultView() {
         return Dispatcher.GENERIC + "." + Dispatcher.EXTENSION;
@@ -60,4 +59,3 @@ public class ObjectLink extends AbstractLink {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.io.BufferedReader;
@@ -40,60 +39,61 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
  */
 public class IncludeObject extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String path = request.getOptionalProperty("file");
+    @Override
+    public void process(final Request request) {
+        final String path = request.getOptionalProperty("file");
         String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getOptionalProperty(FIELD);
+        final String fieldName = request.getOptionalProperty(FIELD);
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         if (fieldName != null) {
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+            final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
             object = field.get(object);
             id = request.getContext().mapObject(object, Scope.REQUEST);
         }
-        
+
         if (object != null) {
             IsisContext.getPersistenceSession().resolveImmediately(object);
             request.getContext().addVariable("_object", id, Scope.REQUEST);
-            importFile(request, path); 
+            importFile(request, path);
         }
         request.closeEmpty();
     }
-    
-    private static void importFile(Request request, String path) { 
-    // TODO load in file via HtmlFileParser 
-        File file = new File(path); 
-        BufferedReader reader = null; 
-        try { 
-            if (file.exists()) { 
-                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))); 
-                String line; 
-                while ((line = reader.readLine()) != null) { 
-                    request.appendHtml(line); 
-                } 
-            } else { 
-                request.appendHtml("<P classs=\"error\">File " + path + " not found to import</P>"); 
-            } 
-        } catch (FileNotFoundException e) { 
-            throw new RuntimeException(e); 
-        } catch (IOException e) { 
-            throw new RuntimeException(e); 
+
+    private static void importFile(final Request request, final String path) {
+        // TODO load in file via HtmlFileParser
+        final File file = new File(path);
+        BufferedReader reader = null;
+        try {
+            if (file.exists()) {
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    request.appendHtml(line);
+                }
+            } else {
+                request.appendHtml("<P classs=\"error\">File " + path + " not found to import</P>");
+            }
+        } catch (final FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
-    } 
-    
+    }
+
+    @Override
     public String getName() {
         return "include-object";
     }
 
 }
-

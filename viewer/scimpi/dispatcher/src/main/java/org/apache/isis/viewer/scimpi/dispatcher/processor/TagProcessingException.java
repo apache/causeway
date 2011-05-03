@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -30,17 +29,17 @@ public class TagProcessingException extends ScimpiException {
         super();
     }
 
-    public TagProcessingException(String message, String context, Throwable cause) {
+    public TagProcessingException(final String message, final String context, final Throwable cause) {
         super(message, cause);
         this.context = context;
     }
 
-    public TagProcessingException(String message, String context) {
+    public TagProcessingException(final String message, final String context) {
         super(message);
         this.context = context;
     }
 
-    public TagProcessingException(Throwable cause) {
+    public TagProcessingException(final Throwable cause) {
         super(cause);
     }
 
@@ -58,5 +57,3 @@ public class TagProcessingException extends ScimpiException {
         return super.getMessage() + "<pre>" + getContext() + "</pre>";
     }
 }
-
-

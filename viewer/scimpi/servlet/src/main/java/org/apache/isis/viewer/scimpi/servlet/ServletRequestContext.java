@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.servlet;
 
 import java.io.IOException;
@@ -42,18 +41,16 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
 
-
 public class ServletRequestContext extends RequestContext {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ServletContext servletContext;
     private boolean isAborted;
 
-    public void append(DebugWriter view) {
+    public void append(final DebugWriter view) {
         /*
-        view.divider("System");
-        Runtime.getRuntime().
-		*/
+         * view.divider("System"); Runtime.getRuntime().
+         */
         view.appendTitle("Request");
         view.appendln("Auth type", request.getAuthType());
         view.appendln("Character encoding", request.getCharacterEncoding());
@@ -79,36 +76,36 @@ public class ServletRequestContext extends RequestContext {
         view.appendln("User principle", request.getUserPrincipal());
 
         view.appendTitle("Cookies");
-        Cookie[] cookies = request.getCookies();
-        for (int i = 0; i < cookies.length; i++) {
-            view.appendln(cookies[i].getName(), cookies[i].getValue());
+        final Cookie[] cookies = request.getCookies();
+        for (final Cookie cookie : cookies) {
+            view.appendln(cookie.getName(), cookie.getValue());
         }
 
-        Enumeration attributeNames = request.getAttributeNames();
+        final Enumeration attributeNames = request.getAttributeNames();
         if (attributeNames.hasMoreElements()) {
             view.appendTitle("Attributes");
             while (attributeNames.hasMoreElements()) {
-                String name = (String) attributeNames.nextElement();
+                final String name = (String) attributeNames.nextElement();
                 view.appendln(name, request.getAttribute(name));
             }
         }
 
         view.appendTitle("Headers");
-        Enumeration headerNames = request.getHeaderNames();
+        final Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
-            String name = (String) headerNames.nextElement();
+            final String name = (String) headerNames.nextElement();
             view.appendln(name, request.getHeader(name));
         }
 
         view.appendTitle("Parameters");
-        Enumeration parameterNames = request.getParameterNames();
+        final Enumeration parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
-            String name = (String) parameterNames.nextElement();
+            final String name = (String) parameterNames.nextElement();
             view.appendln(name, request.getParameter(name));
         }
 
         view.appendTitle("Servlet Context");
-        ServletContext context = getServletContext();
+        final ServletContext context = getServletContext();
         view.appendln("Name", context.getServletContextName());
         view.appendln("Server Info", context.getServerInfo());
         view.appendln("Version", context.getMajorVersion() + "." + context.getMinorVersion());
@@ -119,41 +116,40 @@ public class ServletRequestContext extends RequestContext {
         super.append(view);
     }
 
-    private String getAttributes(ServletContext context) {
-        StringBuffer buf = new StringBuffer();
-        Enumeration names = context.getAttributeNames();
+    private String getAttributes(final ServletContext context) {
+        final StringBuffer buf = new StringBuffer();
+        final Enumeration names = context.getAttributeNames();
         while (names.hasMoreElements()) {
-            String name = (String) names.nextElement();
+            final String name = (String) names.nextElement();
             buf.append(name + "=" + context.getAttribute(name));
         }
         return buf.toString();
     }
 
-    private String getParameters(ServletContext context) {
-        StringBuffer buf = new StringBuffer();
-        Enumeration names = context.getInitParameterNames();
+    private String getParameters(final ServletContext context) {
+        final StringBuffer buf = new StringBuffer();
+        final Enumeration names = context.getInitParameterNames();
         while (names.hasMoreElements()) {
-            String name = (String) names.nextElement();
+            final String name = (String) names.nextElement();
             buf.append(name + "=" + context.getInitParameter(name));
         }
         return buf.toString();
     }
 
-    public void startRequest(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
+    public void startRequest(final HttpServletRequest request, final HttpServletResponse response,
+        final ServletContext servletContext) {
         this.request = request;
         this.response = response;
         this.servletContext = servletContext;
-        Enumeration parameterNames = request.getParameterNames();
+        final Enumeration parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
-            String name = (String) parameterNames.nextElement();
+            final String name = (String) parameterNames.nextElement();
             addParameter(name, request.getParameter(name));
         }
-        
-        
-        
+
         // TODO move this
-     //   response.sendError(403);
-     //   response.setContentType("text/html");
+        // response.sendError(403);
+        // response.setContentType("text/html");
     }
 
     public HttpServletRequest getRequest() {
@@ -168,34 +164,37 @@ public class ServletRequestContext extends RequestContext {
         return servletContext;
     }
 
+    @Override
     public PrintWriter getWriter() {
         try {
             return response.getWriter();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ScimpiException(e);
         }
     }
 
-    public String findFile(String fileName) {
+    @Override
+    public String findFile(final String fileName) {
         try {
             if (getServletContext().getResource(fileName) == null) {
                 return null;
             } else {
                 return fileName;
             }
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new ScimpiException(e);
         }
     }
 
-    public InputStream openStream(String path) {
-        InputStream in = servletContext.getResourceAsStream(path);
+    @Override
+    public InputStream openStream(final String path) {
+        final InputStream in = servletContext.getResourceAsStream(path);
 
         if (in == null) {
             servletContext.getResourcePaths("/");
             try {
                 servletContext.getResource(path);
-            } catch (MalformedURLException e) {
+            } catch (final MalformedURLException e) {
                 throw new ScimpiException(e);
             }
 
@@ -203,119 +202,136 @@ public class ServletRequestContext extends RequestContext {
         }
         return in;
     }
-    
+
+    @Override
     public void startHttpSession() {
         addVariable("_auth_session", getSession(), Scope.SESSION);
-        HttpSession httpSession = request.getSession(true);
-        Map<String, Object> sessionData = getSessionData();
+        final HttpSession httpSession = request.getSession(true);
+        final Map<String, Object> sessionData = getSessionData();
         httpSession.setAttribute("scimpi-context", sessionData);
     }
 
+    @Override
     protected String getSessionId() {
         return request.getSession().getId();
     }
 
+    @Override
     public String clearSession() {
         request.getSession().invalidate();
         return null;
     }
-    
+
+    @Override
     public void reset() {
         try {
             response.getWriter().print("<h1>RESET</h1>");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new DispatchException(e);
         }
         response.reset();
     }
-    
-    public void forward(String view) {
+
+    @Override
+    public void forward(final String view) {
         try {
             isAborted = true;
             getRequest().getRequestDispatcher(view).forward(getRequest(), getResponse());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new DispatchException(e);
-        } catch (ServletException e) {
+        } catch (final ServletException e) {
             throw new DispatchException(e);
         }
     }
 
-    public void redirectTo(String view) {
+    @Override
+    public void redirectTo(final String view) {
         try {
             isAborted = true;
             getResponse().sendRedirect(view);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new DispatchException(e);
         }
     }
-    
-    public void raiseError(int status) {
+
+    @Override
+    public void raiseError(final int status) {
         try {
             isAborted = true;
             getResponse().sendError(status);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
         getResponse().setStatus(status);
     }
-    
+
+    @Override
     public boolean isAborted() {
         return isAborted;
     }
-    
-    public void setContentType(String string) {
+
+    @Override
+    public void setContentType(final String string) {
         getResponse().setContentType(string);
     }
 
-    public String imagePath(ObjectAdapter object) {
-        String contextPath = getContextPath();
+    @Override
+    public String imagePath(final ObjectAdapter object) {
+        final String contextPath = getContextPath();
         return ImageLookup.imagePath(object, contextPath);
     }
-    
-    public String imagePath(ObjectSpecification specification) {
-        String contextPath = getContextPath();
+
+    @Override
+    public String imagePath(final ObjectSpecification specification) {
+        final String contextPath = getContextPath();
         return ImageLookup.imagePath(specification, contextPath);
     }
 
+    @Override
     public String getContextPath() {
         return request.getContextPath();
     }
-    
-    public String getHeader(String name) {
+
+    @Override
+    public String getHeader(final String name) {
         return request.getHeader(name);
     }
-    
+
+    @Override
     public String getQueryString() {
         return request.getQueryString();
     }
-    
+
+    @Override
     public String getUri() {
         return request.getRequestURI() + "?" + request.getQueryString();
     }
-    
+
+    @Override
     public String getUrlBase() {
-        //return request.getScheme() + request.getServerName() + request.getServerPort();
-        StringBuffer url = request.getRequestURL();
+        // return request.getScheme() + request.getServerName() + request.getServerPort();
+        final StringBuffer url = request.getRequestURL();
         url.setLength(url.length() - request.getRequestURI().length());
         return url.toString();
     }
-    
-    public void addCookie(String name, String value, int minutesUtilExpires) {
-        Cookie cookie = new Cookie(name, value);
+
+    @Override
+    public void addCookie(final String name, final String value, final int minutesUtilExpires) {
+        final Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(minutesUtilExpires * 60);
         response.addCookie(cookie);
     }
-    
-    public String getCookie(String name) {
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if(cookies[i].getName().equals(name)) {
-                    return cookies[i].getValue();
+
+    @Override
+    public String getCookie(final String name) {
+        final Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (final Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie.getValue();
                 }
             }
         }
         return null;
     }
 }
-

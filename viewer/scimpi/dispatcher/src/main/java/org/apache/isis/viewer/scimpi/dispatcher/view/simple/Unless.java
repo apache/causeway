@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Unless extends AbstractConditionalBlock {
 
-    protected void processTags(boolean isSet, Request request) {
+    @Override
+    protected void processTags(final boolean isSet, final Request request) {
         if (isSet) {
             request.skipUntilClose();
-            request.appendDebug("    skipping segment"); 
-          } else {
+            request.appendDebug("    skipping segment");
+        } else {
             request.processUtilCloseTag();
         }
     }
 
+    @Override
     public String getName() {
         return "unless";
     }

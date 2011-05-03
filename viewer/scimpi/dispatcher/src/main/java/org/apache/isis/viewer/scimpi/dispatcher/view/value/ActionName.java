@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,24 +25,23 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 // TODO do the same for description and help, and for fields
 public class ActionName extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String objectId = request.getOptionalProperty(OBJECT);
-        String methodName = request.getRequiredProperty(METHOD);
-        
-        ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
-        ObjectAction action = MethodsUtils.findAction(object, methodName);
+    @Override
+    public void process(final Request request) {
+        final String objectId = request.getOptionalProperty(OBJECT);
+        final String methodName = request.getRequiredProperty(METHOD);
+
+        final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
+        final ObjectAction action = MethodsUtils.findAction(object, methodName);
 
         request.appendHtml(action.getName());
     }
-    
+
+    @Override
     public String getName() {
         return "action-name";
     }
 
 }
-
-

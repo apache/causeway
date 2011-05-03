@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.service;
 
 import java.util.List;
@@ -29,7 +28,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.apache.log4j.Logger;
-
 
 @Named("Customers")
 public class CustomerRepository extends AbstractFactoryAndRepository {
@@ -56,17 +54,15 @@ public class CustomerRepository extends AbstractFactoryAndRepository {
     /**
      * Returns a list of Customers with given last name.
      */
-    public List<Customer> findAllByName(@Named("Last name")
-    final String lastName) {
+    public List<Customer> findAllByName(@Named("Last name") final String lastName) {
         return allMatches(Customer.class, new FilterLastName(lastName));
     }
 
     /**
      * Returns the first Customer with given last name.
      */
-    public Customer findByName(@Named("Last name")
-    final String lastName) {
-        Customer firstMatch = firstMatch(Customer.class, new FilterLastName(lastName));
+    public Customer findByName(@Named("Last name") final String lastName) {
+        final Customer firstMatch = firstMatch(Customer.class, new FilterLastName(lastName));
         return firstMatch;
     }
 
@@ -77,6 +73,7 @@ public class CustomerRepository extends AbstractFactoryAndRepository {
             this.name = name;
         }
 
+        @Override
         public boolean accept(final Customer customer) {
             return customer.getLastName().toLowerCase().contains(name.toLowerCase());
         }
@@ -103,11 +100,8 @@ public class CustomerRepository extends AbstractFactoryAndRepository {
      * @return
      */
     @Hidden
-    public Customer newCustomer(
-            final String firstName,
-            final String lastName,
-            final int customerNumber,
-            final Country countryOfBirth) {
+    public Customer newCustomer(final String firstName, final String lastName, final int customerNumber,
+        final Country countryOfBirth) {
 
         final Customer customer = newCustomer();
         customer.setFirstName(firstName);

@@ -17,29 +17,30 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class FormEntry extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
-        String field = request.getRequiredProperty(FIELD);
-        String value = request.getRequiredProperty(VALUE);
-        boolean isHidden =  request.isRequested(HIDDEN, true);
+    @Override
+    public void process(final Request request) {
+        final FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
+        final String field = request.getRequiredProperty(FIELD);
+        final String value = request.getRequiredProperty(VALUE);
+        final boolean isHidden = request.isRequested(HIDDEN, true);
         block.exclude(field);
         // TODO this is replaced because the field is marked as hidden!
-        String content = "reference <input type=\"" + (isHidden ? "hidden" : "text") + "\" disabled=\"disabled\" name=\"" + field + "\" value=\"" + value + "\" />";
+        final String content =
+            "reference <input type=\"" + (isHidden ? "hidden" : "text") + "\" disabled=\"disabled\" name=\"" + field
+                + "\" value=\"" + value + "\" />";
         block.replaceContent(field, content);
     }
 
+    @Override
     public String getName() {
         return "form-entry";
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import java.util.List;
@@ -30,17 +29,16 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 public class ParameterName extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
-        String objectId = request.getOptionalProperty(OBJECT);
-        String methodName = request.getRequiredProperty(METHOD);
-        String field = request.getOptionalProperty(PARAMETER_NUMBER);
-        
-        ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
-        ObjectAction action = MethodsUtils.findAction(object, methodName);
+    public void process(final Request request) {
+        final String objectId = request.getOptionalProperty(OBJECT);
+        final String methodName = request.getRequiredProperty(METHOD);
+        final String field = request.getOptionalProperty(PARAMETER_NUMBER);
+
+        final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
+        final ObjectAction action = MethodsUtils.findAction(object, methodName);
         final List<ObjectActionParameter> parameters = action.getParameters();
 
         int index;
@@ -52,7 +50,7 @@ public class ParameterName extends AbstractElementProcessor {
         if (index < 0 || index >= parameters.size()) {
             throw new ScimpiException("Parameter numbers should be between 1 and " + parameters.size() + ": " + index);
         }
-        
+
         request.appendHtml(parameters.get(index).getName());
     }
 
@@ -62,4 +60,3 @@ public class ParameterName extends AbstractElementProcessor {
     }
 
 }
-

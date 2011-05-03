@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -25,19 +24,18 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public abstract class AbstractElementProcessor implements ElementProcessor, Names {
 
     /**
-     * Return the Class for the class specified in the type attribute.  
+     * Return the Class for the class specified in the type attribute.
      */
-    protected Class<?> forClass(Request request) { 
-        Class<?> cls = null; 
-        String className = request.getOptionalProperty(TYPE);
+    protected Class<?> forClass(final Request request) {
+        Class<?> cls = null;
+        final String className = request.getOptionalProperty(TYPE);
         if (className != null) {
             try {
                 cls = Class.forName(className);
-            } catch (ClassNotFoundException e) {
+            } catch (final ClassNotFoundException e) {
                 throw new ScimpiException("No class for " + className, e);
             }
         }
         return cls;
     }
 }
-

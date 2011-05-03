@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,20 +24,21 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
-
 public class ShortFormView extends AbstractFormView {
 
-    protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject) {
+    protected void addField(final Request request, final ObjectAdapter object, final ObjectAssociation field,
+        final LinkedObject linkedObject) {
         FieldValue.write(request, object, field, linkedObject, null, true, 0);
     }
 
-    protected boolean ignoreField(ObjectAssociation field) {
+    @Override
+    protected boolean ignoreField(final ObjectAssociation field) {
         return field.isOneToManyAssociation();
     }
 
+    @Override
     public String getName() {
         return "short-form";
     }
 
 }
-

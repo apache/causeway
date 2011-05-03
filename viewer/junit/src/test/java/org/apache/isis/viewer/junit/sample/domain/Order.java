@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.domain;
 
 import java.util.Date;
@@ -26,7 +25,6 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.log4j.Logger;
-
 
 public class Order extends AbstractDomainObject {
 
@@ -60,6 +58,7 @@ public class Order extends AbstractDomainObject {
         t.append("x", getQuantity());
         return t.toString();
     }
+
     // }}
 
     // {{ OrderDate
@@ -73,6 +72,7 @@ public class Order extends AbstractDomainObject {
     public void setOrderDate(final Date orderDate) {
         this.orderDate = orderDate;
     }
+
     // }}
 
     // {{ Quantity
@@ -97,6 +97,7 @@ public class Order extends AbstractDomainObject {
     public Integer defaultQuantity() {
         return new Integer(1);
     }
+
     // }}
 
     // {{ Customer
@@ -118,6 +119,7 @@ public class Order extends AbstractDomainObject {
     public void clearCustomer() {
         setCustomer(null);
     }
+
     // }}
 
     // {{ Product
@@ -150,6 +152,7 @@ public class Order extends AbstractDomainObject {
     public void clearProduct() {
         setProduct(null);
     }
+
     // }}
 
     // {{ Price

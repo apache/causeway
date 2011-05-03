@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.service;
 
 import java.util.Collections;
@@ -29,7 +28,6 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 import org.apache.log4j.Logger;
-
 
 @Named("Orders")
 public class OrderRepository extends AbstractFactoryAndRepository {
@@ -43,10 +41,10 @@ public class OrderRepository extends AbstractFactoryAndRepository {
     private final static Logger LOGGER = Logger.getLogger(OrderRepository.class);
 
     // {{ findRecentOrders
-    public List<Order> findRecentOrders(final Customer customer, @Named("Number of Orders")
-    final Integer numberOfOrders) {
+    public List<Order> findRecentOrders(final Customer customer, @Named("Number of Orders") final Integer numberOfOrders) {
         final List<Order> orders = customer.getOrders();
         Collections.sort(orders, new Comparator<Order>() {
+            @Override
             public int compare(final Order o1, final Order o2) {
                 final long time1 = o1.getOrderDate().getTime();
                 final long time2 = o2.getOrderDate().getTime();

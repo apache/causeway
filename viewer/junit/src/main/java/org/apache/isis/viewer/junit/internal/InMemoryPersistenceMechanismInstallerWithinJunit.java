@@ -17,13 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.internal;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 
 public class InMemoryPersistenceMechanismInstallerWithinJunit extends InMemoryPersistenceMechanismInstaller {
 
@@ -31,11 +30,8 @@ public class InMemoryPersistenceMechanismInstallerWithinJunit extends InMemoryPe
      * Returns a {@link DomainObjectContainerHeadlessViewer}.
      */
     @Override
-    protected DomainObjectContainer createContainer(
-    		final IsisConfiguration configuration) {
+    protected DomainObjectContainer createContainer(final IsisConfiguration configuration) {
         return new DomainObjectContainerWrapperFactory();
     }
 
 }
-
-

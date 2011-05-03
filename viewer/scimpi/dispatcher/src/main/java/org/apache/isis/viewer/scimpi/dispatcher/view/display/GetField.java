@@ -36,23 +36,23 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class GetField extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getRequiredProperty(FIELD);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+    @Override
+    public void process(final Request request) {
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getRequiredProperty(FIELD);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         if (object == null) {
             throw new ScimpiException("No object to get field for: " + fieldName + " - " + id);
         }
-        ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+        final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        final AuthenticationSession session = IsisContext.getAuthenticationSession();
         if (field.isVisible(session, object).isVetoed()) {
-            throw new ForbiddenException(field, ForbiddenException.VISIBLE); 
+            throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
 
         String pattern = request.getOptionalProperty("decimal-format");
@@ -65,28 +65,30 @@ public class GetField extends AbstractElementProcessor {
             format = new SimpleDateFormat(pattern);
         }
 
-        String name = request.getOptionalProperty(RESULT_NAME, fieldName);
-        String scopeName = request.getOptionalProperty(SCOPE);
-        Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
+        final String name = request.getOptionalProperty(RESULT_NAME, fieldName);
+        final String scopeName = request.getOptionalProperty(SCOPE);
+        final Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
 
         process(request, object, field, format, name, scope);
     }
 
-    protected void process(Request request, ObjectAdapter object, ObjectAssociation field, Format format, String name, Scope scope) {
-        ObjectAdapter fieldReference = field.get(object);
+    protected void process(final Request request, final ObjectAdapter object, final ObjectAssociation field,
+        final Format format, final String name, final Scope scope) {
+        final ObjectAdapter fieldReference = field.get(object);
         if (format != null && fieldReference.getResolveState().isValue()) {
-            DateValueFacet facet = fieldReference.getSpecification().getFacet(DateValueFacet.class);
-            Date date = facet.dateValue(fieldReference);
-            String value = format.format(date);
+            final DateValueFacet facet = fieldReference.getSpecification().getFacet(DateValueFacet.class);
+            final Date date = facet.dateValue(fieldReference);
+            final String value = format.format(date);
             request.appendDebug("    " + object + " -> " + value);
             request.getContext().addVariable(name, value, scope);
         } else {
-            String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, scope);
+            final String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, scope);
             request.appendDebug("    " + object + " -> " + source);
             request.getContext().addVariable(name, source, scope);
         }
     }
 
+    @Override
     public String getName() {
         return "get-field";
     }

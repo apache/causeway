@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,37 +36,38 @@ import org.apache.log4j.Logger;
 public class ActionButton extends AbstractElementProcessor {
     private static final Logger LOG = Logger.getLogger(ActionButton.class);
 
-    public void process(Request request) {
-        String objectId = request.getOptionalProperty(OBJECT);
-        String methodName = request.getRequiredProperty(METHOD);
-        String forwardResultTo = request.getOptionalProperty(VIEW);
-        String forwardVoidTo = request.getOptionalProperty(VOID);
-        String forwardErrorTo = request.getOptionalProperty(ERRORS);
-        String variable = request.getOptionalProperty(RESULT_NAME);
-        String scope = request.getOptionalProperty(SCOPE);
-        String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
-        String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        String idName = request.getOptionalProperty(ID, methodName);
-        String className = request.getOptionalProperty(CLASS);
-        boolean showMessage = request.isRequested(SHOW_MESSAGE, false);
-        String completionMessage = request.getOptionalProperty(MESSAGE);
-        
-        ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
-        String version = request.getContext().mapVersion(object);
-        ObjectAction action = MethodsUtils.findAction(object, methodName);
+    @Override
+    public void process(final Request request) {
+        final String objectId = request.getOptionalProperty(OBJECT);
+        final String methodName = request.getRequiredProperty(METHOD);
+        final String forwardResultTo = request.getOptionalProperty(VIEW);
+        final String forwardVoidTo = request.getOptionalProperty(VOID);
+        final String forwardErrorTo = request.getOptionalProperty(ERRORS);
+        final String variable = request.getOptionalProperty(RESULT_NAME);
+        final String scope = request.getOptionalProperty(SCOPE);
+        final String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
+        final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
+        final String idName = request.getOptionalProperty(ID, methodName);
+        final String className = request.getOptionalProperty(CLASS);
+        final boolean showMessage = request.isRequested(SHOW_MESSAGE, false);
+        final String completionMessage = request.getOptionalProperty(MESSAGE);
 
-        ActionContent parameterBlock = new ActionContent(action);
+        final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
+        final String version = request.getContext().mapVersion(object);
+        final ObjectAction action = MethodsUtils.findAction(object, methodName);
+
+        final ActionContent parameterBlock = new ActionContent(action);
         request.setBlockContent(parameterBlock);
         request.processUtilCloseTag();
-        String[] parameters = parameterBlock.getParameters();
-        ObjectAdapter[] objectParameters = new ObjectAdapter[parameters.length];
+        final String[] parameters = parameterBlock.getParameters();
+        final ObjectAdapter[] objectParameters = new ObjectAdapter[parameters.length];
         int i = 0;
-        for(ObjectActionParameter spec : action.getParameters()) {
-            ObjectSpecification typ = spec.getSpecification();
+        for (final ObjectActionParameter spec : action.getParameters()) {
+            final ObjectSpecification typ = spec.getSpecification();
             if (parameters[i] == null) {
                 objectParameters[i] = null;
             } else if (typ.getFacet(ParseableFacet.class) != null) {
-                ParseableFacet facet = (ParseableFacet) typ.getFacet(ParseableFacet.class);
+                final ParseableFacet facet = typ.getFacet(ParseableFacet.class);
                 objectParameters[i] = facet.parseTextEntry(null, parameters[i]);
             } else {
                 // objectParameters[i] = request.getContext().getMappedObject(parameters[i]);
@@ -75,55 +75,41 @@ public class ActionButton extends AbstractElementProcessor {
             }
             i++;
         }
-        
-        
-        if (MethodsUtils.isVisibleAndUsable(object, action) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
+
+        if (MethodsUtils.isVisibleAndUsable(object, action)
+            && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
-            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
+            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo,
+                forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
         }
-        
+
         if (showMessage) {
-            Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
+            final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
             if (usable.isVetoed()) {
-                String notUsable = MethodsUtils.isUsable(object, action);
-    
+                final String notUsable = MethodsUtils.isUsable(object, action);
+
                 if (notUsable != null) {
                     request.appendHtml("<div class=\"" + className + "-message\" >" + notUsable + "</div>");
                 }
             }
         }
-        
-        
-        
+
         request.popBlockContent();
     }
 
-    public static void write(
-            Request request,
-            ObjectAdapter object,
-            ObjectAction action,
-            String[] parameters,
-            String objectId,
-            String version,
-            String forwardResultTo,
-            String forwardVoidTo,
-            String forwardErrorTo,
-            String variable,
-            String scope,
-            String buttonTitle, 
-            String completionMessage,
-            String resultOverride,
-            String idName,
-            String className) {
-        RequestContext context = request.getContext();
+    public static void write(final Request request, final ObjectAdapter object, final ObjectAction action,
+        final String[] parameters, final String objectId, final String version, String forwardResultTo,
+        String forwardVoidTo, String forwardErrorTo, final String variable, final String scope, String buttonTitle,
+        final String completionMessage, final String resultOverride, final String idName, final String className) {
+        final RequestContext context = request.getContext();
 
         buttonTitle = buttonTitle != null ? buttonTitle : action.getName();
-        
+
         if (action.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             LOG.info("action not visible " + action.getName());
             return;
         }
-        Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
+        final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
         if (usable.isVetoed()) {
             LOG.info("action not available: " + usable.getReason());
             return;
@@ -131,64 +117,72 @@ public class ActionButton extends AbstractElementProcessor {
 
         /*
          * 
-         * TODO this mechanism fails as it tries to process tags - which we dont need! Also it calls action
-         * 'edit' (not 'action'). Field[] fields = new Field[0]; HiddenField[] hiddenFields = new
-         * HiddenField[] { new HiddenField("service", serviceId), new HiddenField("method", methodName), new
-         * HiddenField("view", forwardToView), variable == null ? null : new HiddenField("variable",
-         * variable), }; Form.createForm(request, buttonTitle, fields, hiddenFields, false);
+         * TODO this mechanism fails as it tries to process tags - which we dont need! Also it calls action 'edit' (not
+         * 'action'). Field[] fields = new Field[0]; HiddenField[] hiddenFields = new HiddenField[] { new
+         * HiddenField("service", serviceId), new HiddenField("method", methodName), new HiddenField("view",
+         * forwardToView), variable == null ? null : new HiddenField("variable", variable), }; Form.createForm(request,
+         * buttonTitle, fields, hiddenFields, false);
          */
 
-        String idSegment = idName == null ? "" : ("id=\"" + idName + "\" ");
-        String classSegment = "class=\"" + (className == null ? "action in-line" : className) + "\"";
+        final String idSegment = idName == null ? "" : ("id=\"" + idName + "\" ");
+        final String classSegment = "class=\"" + (className == null ? "action in-line" : className) + "\"";
         request.appendHtml("\n<form " + idSegment + classSegment + " action=\"action.app\" method=\"post\">\n");
         if (objectId == null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + 
-                    context.getVariable(RequestContext.RESULT) + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\""
+                + context.getVariable(RequestContext.RESULT) + "\" />\n");
         } else {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + objectId + "\" />\n");
+            request
+                .appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + objectId + "\" />\n");
         }
         request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VERSION + "\" value=\"" + version + "\" />\n");
         if (scope != null) {
             request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + SCOPE + "\" value=\"" + scope + "\" />\n");
         }
-        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + METHOD + "\" value=\"" + action.getId() + "\" />\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + METHOD + "\" value=\"" + action.getId()
+            + "\" />\n");
         if (forwardResultTo != null) {
             forwardResultTo = context.fullFilePath(forwardResultTo);
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VIEW + "\" value=\"" + forwardResultTo + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VIEW + "\" value=\"" + forwardResultTo
+                + "\" />\n");
         }
         if (forwardErrorTo == null) {
             forwardErrorTo = request.getContext().getResourceFile();
         }
         forwardErrorTo = context.fullFilePath(forwardErrorTo);
-        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + ERRORS + "\" value=\"" + forwardErrorTo + "\" />\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + ERRORS + "\" value=\"" + forwardErrorTo
+            + "\" />\n");
         if (forwardVoidTo == null) {
             forwardVoidTo = request.getContext().getResourceFile();
         }
         forwardVoidTo = context.fullFilePath(forwardVoidTo);
         request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VOID + "\" value=\"" + forwardVoidTo + "\" />\n");
         if (variable != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + RESULT_NAME + "\" value=\"" + variable + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + RESULT_NAME + "\" value=\"" + variable
+                + "\" />\n");
         }
         if (resultOverride != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />\n");            
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + RESULT_OVERRIDE + "\" value=\""
+                + resultOverride + "\" />\n");
         }
         if (completionMessage != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + MESSAGE + "\" value=\"" + completionMessage + "\" />\n");                        
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + MESSAGE + "\" value=\"" + completionMessage
+                + "\" />\n");
         }
 
         for (int i = 0; i < parameters.length; i++) {
-            request.appendHtml("  <input type=\"hidden\" name=\"param" + (i + 1) + "\" value=\"" + parameters[i] + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"param" + (i + 1) + "\" value=\"" + parameters[i]
+                + "\" />\n");
         }
         request.appendHtml(request.getContext().interactionFields());
-        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" title=\"" 
-                + action.getDescription() + "\" />");
+        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle
+            + "\" name=\"execute\" title=\"" + action.getDescription() + "\" />");
         HelpLink.append(request, action.getDescription(), action.getHelp());
         request.appendHtml("\n</form>\n");
     }
 
+    @Override
     public String getName() {
         return "action-button";
     }
 
 }
-

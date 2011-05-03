@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher;
 
-
-
 /**
  * Indicates that request could not complete as a user was not logged in.
  */

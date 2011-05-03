@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
 public class HiddenInputField {
-    private String value;
-    private String name;
+    private final String value;
+    private final String name;
 
-    public HiddenInputField(String name, String value) {
+    public HiddenInputField(final String name, final String value) {
         this.value = value;
         this.name = name;
     }
@@ -40,4 +39,3 @@ public class HiddenInputField {
     }
 
 }
-

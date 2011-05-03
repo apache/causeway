@@ -24,20 +24,20 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class TableEmpty extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        TableBlock tableBlock = (TableBlock) request.getBlockContent();
-        ObjectAdapter collection = tableBlock.getCollection();
-        CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+    @Override
+    public void process(final Request request) {
+        final TableBlock tableBlock = (TableBlock) request.getBlockContent();
+        final ObjectAdapter collection = tableBlock.getCollection();
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         if (facet.size(collection) == 0) {
             String className = request.getOptionalProperty(CLASS);
             className = className == null ? "" : " class=\"" + className + "\"";
             request.appendHtml("<tr" + className + ">");
             request.pushNewBuffer();
             request.processUtilCloseTag();
-            String buffer = request.popBuffer();
+            final String buffer = request.popBuffer();
             request.appendHtml(buffer);
             request.appendHtml("</td>");
         } else {
@@ -45,6 +45,7 @@ public class TableEmpty extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "table-empty";
     }

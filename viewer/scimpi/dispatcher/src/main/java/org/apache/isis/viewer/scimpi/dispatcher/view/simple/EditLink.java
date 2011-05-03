@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import java.util.List;
@@ -32,30 +31,30 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class EditLink extends AbstractLink {
 
     @Override
-    protected boolean valid(Request request, ObjectAdapter adapter) {
-        ObjectSpecification specification = adapter.getSpecification();
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
-                session, adapter));
-        ImmutableFacet facet = specification.getFacet(ImmutableFacet.class);
-        boolean isImmutable = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ALWAYS;
-        boolean isImmutableOncePersisted = facet != null
-                && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED && adapter.isPersistent();
+    protected boolean valid(final Request request, final ObjectAdapter adapter) {
+        final ObjectSpecification specification = adapter.getSpecification();
+        final AuthenticationSession session = IsisContext.getAuthenticationSession();
+        final List<ObjectAssociation> visibleFields =
+            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
+        final ImmutableFacet facet = specification.getFacet(ImmutableFacet.class);
+        final boolean isImmutable = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ALWAYS;
+        final boolean isImmutableOncePersisted =
+            facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED
+                && adapter.isPersistent();
         return visibleFields.size() > 0 && !isImmutable && !isImmutableOncePersisted;
     }
 
     @Override
-    protected String linkLabel(String name, ObjectAdapter object) {
+    protected String linkLabel(final String name, final ObjectAdapter object) {
         return "edit";
     }
 
     @Override
     protected String defaultView() {
-        return  Dispatcher.GENERIC + Dispatcher.EDIT  + "." + Dispatcher.EXTENSION;
+        return Dispatcher.GENERIC + Dispatcher.EDIT + "." + Dispatcher.EXTENSION;
     }
 
     @Override
@@ -64,4 +63,3 @@ public class EditLink extends AbstractLink {
     }
 
 }
-

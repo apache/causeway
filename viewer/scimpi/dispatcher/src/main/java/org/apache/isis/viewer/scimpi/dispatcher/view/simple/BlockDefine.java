@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -27,17 +26,17 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
 public class BlockDefine extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "block";
     }
 
-    public void process(Request request) {
-        String name = request.getOptionalProperty(NAME, "unamed");
-        RepeatMarker start = request.createMarker();
+    @Override
+    public void process(final Request request) {
+        final String name = request.getOptionalProperty(NAME, "unamed");
+        final RepeatMarker start = request.createMarker();
         request.skipUntilClose();
         request.getContext().addVariable("_block-" + name, start, Scope.REQUEST);
     }
 
 }
-
-

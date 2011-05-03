@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.domain;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.util.TitleBuffer;
 
-
 public class Customer extends AbstractDomainObject {
 
     // {{ Identification Methods
@@ -50,6 +48,7 @@ public class Customer extends AbstractDomainObject {
         t.append(getFirstName()).append(getLastName());
         return t.toString();
     }
+
     // }}
 
     // {{ FirstName
@@ -66,12 +65,14 @@ public class Customer extends AbstractDomainObject {
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
+
     public boolean modifyFirstNameCalled = false;
 
     public void modifyFirstName(final String firstName) {
         setFirstName(firstName);
         this.modifyFirstNameCalled = true;
     }
+
     public boolean clearFirstNameCalled = false;
 
     public void clearFirstName() {
@@ -100,6 +101,7 @@ public class Customer extends AbstractDomainObject {
     public boolean hideFirstName() {
         return this.hideFirstName;
     }
+
     // }}
 
     // {{ CountryOfBirth
@@ -120,6 +122,7 @@ public class Customer extends AbstractDomainObject {
         setCountryOfBirth(countryOfBirth);
         this.modifyCountryOfBirthCalled = true;
     }
+
     public boolean clearCountryOfBirthCalled = false;
 
     public void clearCountryOfBirth() {
@@ -144,6 +147,7 @@ public class Customer extends AbstractDomainObject {
     public boolean hideCountryOfBirth() {
         return this.hideCountryOfBirth;
     }
+
     // }}
 
     // {{ VisitedCountries
@@ -165,11 +169,13 @@ public class Customer extends AbstractDomainObject {
     public void removeFromVisitedCountries(final Country country) {
         getVisitedCountries().remove(country);
     }
+
     public String validateAddToVisitedCountries;
 
     public String validateAddToVisitedCountries(final Country country) {
         return validateAddToVisitedCountries;
     }
+
     public String validateRemoveFromVisitedCountries;
 
     public String validateRemoveFromVisitedCountries(final Country country) {
@@ -187,6 +193,7 @@ public class Customer extends AbstractDomainObject {
     public boolean hideVisitedCountries() {
         return this.hideVisitedCountries;
     }
+
     // }}
 
     // {{ AlwaysDisabledValue
@@ -200,6 +207,7 @@ public class Customer extends AbstractDomainObject {
     public void setAlwaysDisabledValue(final String alwaysDisabled) {
         this.alwaysDisabledValue = alwaysDisabled;
     }
+
     // }}
 
     // {{ AlwaysDisabledAssociation
@@ -213,6 +221,7 @@ public class Customer extends AbstractDomainObject {
     public void setAlwaysDisabledAssociation(final Country alwaysDisabled) {
         this.alwaysDisabledAssociation = alwaysDisabled;
     }
+
     // }}
 
     // {{ AlwaysDisabledCollection
@@ -240,7 +249,9 @@ public class Customer extends AbstractDomainObject {
 
     // {{ AlwaysDisabledAction
     @Disabled(When.ALWAYS)
-    public void alwaysDisabledAction() {}
+    public void alwaysDisabledAction() {
+    }
+
     // }}
 
     // {{ SessionDisabledValue
@@ -257,6 +268,7 @@ public class Customer extends AbstractDomainObject {
     public static String disableSessionDisabledValue(final UserMemento user) {
         return "disabled for this user";
     }
+
     // }}
 
     // {{ SessionDisabledAssociation
@@ -273,6 +285,7 @@ public class Customer extends AbstractDomainObject {
     public static String disableSessionDisabledAssociation(final UserMemento user) {
         return "disabled for this user";
     }
+
     // }}
 
     // {{ SessionDisabledCollection
@@ -302,11 +315,13 @@ public class Customer extends AbstractDomainObject {
     // }}
 
     // {{ SessionDisabledAction
-    public void sessionDisabledAction() {}
+    public void sessionDisabledAction() {
+    }
 
     public static String disableSessionDisabledAction(final UserMemento user) {
         return "disabled for this user";
     }
+
     // }}
 
     // {{ AlwaysHiddenValue
@@ -320,6 +335,7 @@ public class Customer extends AbstractDomainObject {
     public void setAlwaysHiddenValue(final String alwaysHidden) {
         this.alwaysHiddenValue = alwaysHidden;
     }
+
     // }}
 
     // {{ AlwaysHiddenAssociation
@@ -333,6 +349,7 @@ public class Customer extends AbstractDomainObject {
     public void setAlwaysHiddenAssociation(final Country alwaysHidden) {
         this.alwaysHiddenAssociation = alwaysHidden;
     }
+
     // }}
 
     // {{ AlwaysHiddenCollection
@@ -360,7 +377,9 @@ public class Customer extends AbstractDomainObject {
 
     // {{ SessionDisabledAction
     @Hidden(When.ALWAYS)
-    public void alwaysHiddenAction() {}
+    public void alwaysHiddenAction() {
+    }
+
     // }}
 
     // {{ SessionHiddenValue
@@ -377,6 +396,7 @@ public class Customer extends AbstractDomainObject {
     public static boolean hideSessionHiddenValue(final UserMemento user) {
         return true;
     }
+
     // }}
 
     // {{ SessionHiddenAssociation
@@ -393,6 +413,7 @@ public class Customer extends AbstractDomainObject {
     public static boolean hideSessionHiddenAssociation(final UserMemento user) {
         return true;
     }
+
     // }}
 
     // {{ SessionHiddenCollection
@@ -422,11 +443,13 @@ public class Customer extends AbstractDomainObject {
     // }}
 
     // {{ SessionHiddenAction
-    public void sessionHiddenAction() {}
+    public void sessionHiddenAction() {
+    }
 
     public static boolean hideSessionHiddenAction(final UserMemento user) {
         return true;
     }
+
     // }}
 
     // {{ Mandatory
@@ -439,6 +462,7 @@ public class Customer extends AbstractDomainObject {
     public void setMandatoryValue(final String mandatory) {
         this.mandatoryValue = mandatory;
     }
+
     // }}
 
     // {{ Mandatory
@@ -451,6 +475,7 @@ public class Customer extends AbstractDomainObject {
     public void setMandatoryAssociation(final Country mandatory) {
         this.mandatoryAssociation = mandatory;
     }
+
     // }}
 
     // {{ Optional
@@ -464,6 +489,7 @@ public class Customer extends AbstractDomainObject {
     public void setOptionalValue(final String optional) {
         this.optionalValue = optional;
     }
+
     // }}
 
     // {{ OptionalAssociation
@@ -477,6 +503,7 @@ public class Customer extends AbstractDomainObject {
     public void setOptionalAssociation(final Country optional) {
         this.optionalAssociation = optional;
     }
+
     // }}
 
     // {{ OptionalCollection
@@ -499,6 +526,7 @@ public class Customer extends AbstractDomainObject {
     public void removeFromOptionalCollection(final Country country) {
         getOptionalCollection().remove(country);
     }
+
     // }}
 
     // {{ MaxLength
@@ -512,6 +540,7 @@ public class Customer extends AbstractDomainObject {
     public void setMaxLengthField(final String maxLength) {
         this.maxLengthField = maxLength;
     }
+
     // }}
 
     // {{ RegExCaseSensitive
@@ -525,6 +554,7 @@ public class Customer extends AbstractDomainObject {
     public void setRegExCaseSensitiveField(final String regEx) {
         this.regExCaseSensitiveField = regEx;
     }
+
     // }}
 
     // {{ RegExCaseInsensitive
@@ -538,6 +568,7 @@ public class Customer extends AbstractDomainObject {
     public void setRegExCaseInsensitiveField(final String regExCaseInsensitive) {
         this.regExCaseInsensitiveField = regExCaseInsensitive;
     }
+
     // }}
 
     // {{ LastName
@@ -558,6 +589,7 @@ public class Customer extends AbstractDomainObject {
     public void modifyLastName(final String lastName) {
         this.lastName = lastName;
     }
+
     // }}
 
     // {{ CustomerNumber
@@ -575,6 +607,7 @@ public class Customer extends AbstractDomainObject {
     public String validateCustomerNumber(final Integer customerNumber) {
         return null;
     }
+
     // }}
 
     // {{ Orders
@@ -596,6 +629,7 @@ public class Customer extends AbstractDomainObject {
     public void removeFromOrders(final Order order) {
         getOrders().remove(order);
     }
+
     // }}
 
     // {{ LastOrder
@@ -621,8 +655,7 @@ public class Customer extends AbstractDomainObject {
     // }}
 
     // {{ PlaceOrder
-    public void placeOrder(final Product p, @Named("Quantity")
-    final Integer quantity) {
+    public void placeOrder(final Product p, @Named("Quantity") final Integer quantity) {
         final Order order = getContainer().newTransientInstance(Order.class);
         order.modifyCustomer(this);
         order.modifyProduct(p);
@@ -632,16 +665,19 @@ public class Customer extends AbstractDomainObject {
         modifyLastOrder(order);
         order.makePersistent();
     }
+
     public String validatePlaceOrder;
 
     public String validatePlaceOrder(final Product p, final Integer quantity) {
         return validatePlaceOrder;
     }
+
     public String disablePlaceOrder;
 
     public String disablePlaceOrder() {
         return disablePlaceOrder;
     }
+
     public boolean hidePlaceOrder;
 
     public boolean hidePlaceOrder() {
@@ -655,6 +691,7 @@ public class Customer extends AbstractDomainObject {
         }
         return new Object[] { lastProductOrdered, new Integer(1) };
     }
+
     // }}
 
     // {{ MoreOrders
@@ -677,6 +714,7 @@ public class Customer extends AbstractDomainObject {
     public void removeFromMoreOrders(final Order order) {
         getMoreOrders().remove(order);
     }
+
     // }}
 
     public String validate;
@@ -689,16 +727,13 @@ public class Customer extends AbstractDomainObject {
 
     public Long actionWithOptionalValueParameterArgument = Long.MAX_VALUE;
 
-    public void actionWithOptionalValueParameter(@Optional
-    @Named("Amount")
-    final Long val) {
+    public void actionWithOptionalValueParameter(@Optional @Named("Amount") final Long val) {
         actionWithOptionalValueParameterArgument = val;
     }
 
     public Long actionWithMandatoryValueParameterArgument = Long.MAX_VALUE;
 
-    public void actionWithMandatoryValueParameter(@Named("Amount")
-    final Long val) {
+    public void actionWithMandatoryValueParameter(@Named("Amount") final Long val) {
         actionWithMandatoryValueParameterArgument = val;
     }
 
@@ -710,41 +745,32 @@ public class Customer extends AbstractDomainObject {
 
     public Product actionWithOptionalReferenceParameterArgument = new Product();
 
-    public void actionWithOptionalReferenceParameter(@Optional
-    final Product product) {
+    public void actionWithOptionalReferenceParameter(@Optional final Product product) {
         actionWithOptionalReferenceParameterArgument = product;
     }
 
     public String actionWithOptionalStringParameterArgument = "original value";
 
-    public void actionWithOptionalStringParameter(@Optional
-    @Named("Amount")
-    final String val) {
+    public void actionWithOptionalStringParameter(@Optional @Named("Amount") final String val) {
         actionWithOptionalStringParameterArgument = val;
     }
 
     public String actionWithMandatoryStringParameterArgument = "original value";
 
-    public void actionWithMandatoryStringParameter(@Named("Amount")
-    final String val) {
+    public void actionWithMandatoryStringParameter(@Named("Amount") final String val) {
         actionWithMandatoryStringParameterArgument = val;
     }
 
     public String actionWithMaxLengthStringParameterArgument = "1234";
 
-    public void actionWithMaxLengthStringParameter(@Named("Amount")
-    @MaxLength(4)
-    final String val) {
+    public void actionWithMaxLengthStringParameter(@Named("Amount") @MaxLength(4) final String val) {
         actionWithMaxLengthStringParameterArgument = val;
     }
 
     public String actionWithRegExStringParameterArgument = "1234";
 
-    public void actionWithRegExStringParameter(@Named("Amount")
-    @RegEx(validation = "[0-9]{4}")
-    final String val) {
+    public void actionWithRegExStringParameter(@Named("Amount") @RegEx(validation = "[0-9]{4}") final String val) {
         actionWithRegExStringParameterArgument = val;
     }
-
 
 }

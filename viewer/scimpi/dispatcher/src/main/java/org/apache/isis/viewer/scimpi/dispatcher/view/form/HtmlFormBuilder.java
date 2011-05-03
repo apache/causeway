@@ -17,75 +17,65 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
-
 public class HtmlFormBuilder {
 
-    public static void createForm(
-            Request request,
-            String action,
-            HiddenInputField[] hiddenFields,
-            InputField[] fields,
-            String className, 
-            String id,
-            String formTitle,
-            String description,
-            String helpReference,
-            String buttonTitle,
-            String errors) {
+    public static void createForm(final Request request, final String action, final HiddenInputField[] hiddenFields,
+        final InputField[] fields, final String className, final String id, final String formTitle,
+        final String description, final String helpReference, final String buttonTitle, final String errors) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
-        request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
+        request.appendHtml("<form " + classSegment + " action=\"" + action
+            + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
         if (formTitle != null && formTitle.trim().length() > 0) {
             classSegment = " class=\"title\"";
-            request.appendHtml("<div" + classSegment  +">" + formTitle + "</div>\n");
+            request.appendHtml("<div" + classSegment + ">" + formTitle + "</div>\n");
         }
-        
-        // TODO reinstate fieldsets when we can specify them
-        //request.appendHtml("<fieldset>\n");
 
-        String cls = "errors";
+        // TODO reinstate fieldsets when we can specify them
+        // request.appendHtml("<fieldset>\n");
+
+        final String cls = "errors";
         if (errors != null) {
             request.appendHtml("<div class=\"" + cls + "\">" + errors + "</div>");
         }
-        for (int i = 0; i < hiddenFields.length; i++) {
-            HiddenInputField hiddenField = hiddenFields[i];
+        for (final HiddenInputField hiddenField : hiddenFields) {
             if (hiddenField == null) {
                 continue;
             }
-            request.appendHtml("  <input type=\"hidden\" name=\"" + hiddenField.getName() + "\" value=\"" + hiddenField.getValue()
-                    + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + hiddenField.getName() + "\" value=\""
+                + hiddenField.getValue() + "\" />\n");
         }
         request.appendHtml(request.getContext().interactionFields());
-        for (int i = 0; i < fields.length; i++) {
-            InputField fld = fields[i];
+        for (final InputField fld : fields) {
             if (fld.isHidden()) {
                 request.appendHtml("  <input type=\"hidden\" name=\"" + fld.getName() + "\" value=\"" + fld.getValue()
-                        + "\" />\n");
+                    + "\" />\n");
             } else {
-                String errorSegment = fld.getErrorText() == null ? "" : "<span class=\"error\">" + fld.getErrorText() + "</span>";
-                String fieldSegment = createField(fld);
-                String helpSegment = HelpLink.createHelpSegment(fld.getDescription(), fld.getHelpReference());
-                String title = fld.getDescription().equals("") ? "" : " title=\"" + fld.getDescription() + "\"";
-                request.appendHtml("  <div class=\"field\"><label" + title + ">" + fld.getLabel() + ":</label>" + fieldSegment
-                        + errorSegment + helpSegment + "</div>\n");
+                final String errorSegment =
+                    fld.getErrorText() == null ? "" : "<span class=\"error\">" + fld.getErrorText() + "</span>";
+                final String fieldSegment = createField(fld);
+                final String helpSegment = HelpLink.createHelpSegment(fld.getDescription(), fld.getHelpReference());
+                final String title = fld.getDescription().equals("") ? "" : " title=\"" + fld.getDescription() + "\"";
+                request.appendHtml("  <div class=\"field\"><label" + title + ">" + fld.getLabel() + ":</label>"
+                    + fieldSegment + errorSegment + helpSegment + "</div>\n");
             }
         }
-        
-        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" />\n");
+
+        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle
+            + "\" name=\"execute\" />\n");
         HelpLink.append(request, description, helpReference);
         // TODO reinstate fieldsets when we can specify them
-        //request.appendHtml("</fieldset>\n");
+        // request.appendHtml("</fieldset>\n");
         request.appendHtml("</form>\n");
     }
 
-    private static String createField(InputField field) {
+    private static String createField(final InputField field) {
         if (field.isHidden()) {
             if (field.getType() == InputField.REFERENCE) {
                 return createObjectField(field, "hidden");
@@ -93,7 +83,7 @@ public class HtmlFormBuilder {
                 return "";
             }
         } else {
-            if (field.getType() == InputField.HTML)  {
+            if (field.getType() == InputField.HTML) {
                 return field.getHtml();
             } else if (field.getOptionsText() != null) {
                 return createOptions(field);
@@ -115,76 +105,82 @@ public class HtmlFormBuilder {
         }
     }
 
-    private static String createObjectField(InputField field, String type) {
+    private static String createObjectField(final InputField field, final String type) {
         return field.getHtml();
     }
 
-    private static String createTextArea(InputField field) {
-        String columnsSegment = field.getWidth() == 0 ? "" : " cols=\"" + field.getWidth() / field.getHeight() + "\"";
-        String rowsSegment = field.getHeight() == 0 ? "" : " rows=\"" + field.getHeight() + "\"";
-        String wrapSegment = !field.isWrapped() ? "" : " wrap=\"off\"";
-        String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
-        String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        String maxLength = field.getMaxLength() == 0 ? "" : " rows=\"" + field.getMaxLength() + "\"";
-        return "<textarea name=\"" + field.getName() + "\"" + columnsSegment + rowsSegment + wrapSegment + maxLength + disabled + ">"
-                + field.getValue() + "</textarea>" + requiredSegment;
+    private static String createTextArea(final InputField field) {
+        final String columnsSegment =
+            field.getWidth() == 0 ? "" : " cols=\"" + field.getWidth() / field.getHeight() + "\"";
+        final String rowsSegment = field.getHeight() == 0 ? "" : " rows=\"" + field.getHeight() + "\"";
+        final String wrapSegment = !field.isWrapped() ? "" : " wrap=\"off\"";
+        final String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
+        final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
+        final String maxLength = field.getMaxLength() == 0 ? "" : " rows=\"" + field.getMaxLength() + "\"";
+        return "<textarea name=\"" + field.getName() + "\"" + columnsSegment + rowsSegment + wrapSegment + maxLength
+            + disabled + ">" + field.getValue() + "</textarea>" + requiredSegment;
     }
 
-    private static String createPasswordField(InputField field) {
-        String extra = " autocomplete=\"off\"";
+    private static String createPasswordField(final InputField field) {
+        final String extra = " autocomplete=\"off\"";
         return createTextField(field, "password", extra);
     }
 
-    private static String createTextField(InputField field) {
+    private static String createTextField(final InputField field) {
         return createTextField(field, "text", "");
     }
-    
-    private static String createTextField(InputField field, String type, String additionalAttributes) {
-        String value = field.getValue();
-        String valueSegment = value == null ? "" : " value=\"" + value + "\"";
-        String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
-        String maxLengthSegment = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
-        String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
-        String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        return "<input type=\"" + type + "\" name=\"" + field.getName() + "\"" + valueSegment + lengthSegment + 
-            maxLengthSegment + disabled + additionalAttributes + " />" + requiredSegment;
+
+    private static String createTextField(final InputField field, final String type, final String additionalAttributes) {
+        final String value = field.getValue();
+        final String valueSegment = value == null ? "" : " value=\"" + value + "\"";
+        final String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
+        final String maxLengthSegment = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
+        final String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
+        final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
+        return "<input type=\"" + type + "\" name=\"" + field.getName() + "\"" + valueSegment + lengthSegment
+            + maxLengthSegment + disabled + additionalAttributes + " />" + requiredSegment;
     }
 
-    private static String createCheckbox(InputField field) {
-        String entryText = field.getValue();
-        String valueSegment = entryText != null && entryText.toLowerCase().equals("true") ? " checked=\"checked\"" : "";
-        String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        return "<input type=\"checkbox\" name=\"" + field.getName() + "\" value=\"true\" " + valueSegment + disabled + " />";
+    private static String createCheckbox(final InputField field) {
+        final String entryText = field.getValue();
+        final String valueSegment =
+            entryText != null && entryText.toLowerCase().equals("true") ? " checked=\"checked\"" : "";
+        final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
+        return "<input type=\"checkbox\" name=\"" + field.getName() + "\" value=\"true\" " + valueSegment + disabled
+            + " />";
     }
 
-    private static String createOptions(InputField field) {
-        StringBuffer str = new StringBuffer();
-        String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
+    private static String createOptions(final InputField field) {
+        final StringBuffer str = new StringBuffer();
+        final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
         str.append("\n  <select name=\"" + field.getName() + "\"" + disabled + ">\n");
-        String[] options = field.getOptionsText();
-        String[] ids = field.getOptionValues();
-        int length = options.length;
+        final String[] options = field.getOptionsText();
+        final String[] ids = field.getOptionValues();
+        final int length = options.length;
         boolean offerOther = false;
         for (int i = 0; i < length; i++) {
-            String selectedSegment = field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
-            if (field.getType() == InputField.TEXT &&  options[i].equals("__other")) {
+            final String selectedSegment =
+                field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
+            if (field.getType() == InputField.TEXT && options[i].equals("__other")) {
                 offerOther = true;
             } else {
                 str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
             }
         }
         if (!field.isRequired() || length == 0) {
-            String selectedSegment = field.getValue() == null || field.getValue().equals("") ? " selected=\"selected\"" : "";
+            final String selectedSegment =
+                field.getValue() == null || field.getValue().equals("") ? " selected=\"selected\"" : "";
             str.append("    <option value=\"null\"" + selectedSegment + "></option>\n");
         }
         if (offerOther) {
             str.append("    <option value=\"-OTHER-\">Other:</option>\n");
         }
         str.append("  </select>");
-        if (field.getType()  == InputField.TEXT) {
-            String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
-            String hideSegment = " style=\"display: none;\" "; // TODO only hide when JS enabled
-            str.append("  <input type=\"text\" name=\"" + field.getName() + "-other\"" + hideSegment + lengthSegment + disabled + " />");
+        if (field.getType() == InputField.TEXT) {
+            final String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
+            final String hideSegment = " style=\"display: none;\" "; // TODO only hide when JS enabled
+            str.append("  <input type=\"text\" name=\"" + field.getName() + "-other\"" + hideSegment + lengthSegment
+                + disabled + " />");
         }
         if (field.isRequired() && length == 0) {
             str.append(" <span class=\"required\">*</span>");
@@ -194,4 +190,3 @@ public class HtmlFormBuilder {
     }
 
 }
-

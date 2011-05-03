@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.service;
 
 import java.util.List;
@@ -29,7 +28,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.apache.isis.viewer.junit.sample.domain.Product;
 import org.apache.log4j.Logger;
-
 
 @Named("Products")
 public class ProductRepository extends AbstractFactoryAndRepository {
@@ -56,9 +54,9 @@ public class ProductRepository extends AbstractFactoryAndRepository {
     /**
      * Returns the Product with given code
      */
-    public Product findByCode(@Named("Code")
-    final String code) {
+    public Product findByCode(@Named("Code") final String code) {
         return firstMatch(Product.class, new Filter<Product>() {
+            @Override
             public boolean accept(final Product product) {
                 return code.equals(product.getCode());
             }

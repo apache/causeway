@@ -17,24 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class TableHeader extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "table-header";
     }
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         request.appendHtml("<thead><tr>");
         request.processUtilCloseTag();
         request.appendHtml("</tr></thead>");
     }
 
 }
-

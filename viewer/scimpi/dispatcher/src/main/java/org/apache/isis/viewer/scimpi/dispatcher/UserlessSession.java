@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.Arrays;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
-
 
 public class UserlessSession extends AuthenticationSessionAbstract {
 
@@ -35,7 +33,7 @@ public class UserlessSession extends AuthenticationSessionAbstract {
         super("__web_default", Arrays.asList(new String[] { "not-logged-in" }), "");
     }
 
-    public UserlessSession(DataInputExtended input) throws IOException {
+    public UserlessSession(final DataInputExtended input) throws IOException {
         super(input);
     }
 

@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 public class ScimpiException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public ScimpiException() {}
+    public ScimpiException() {
+    }
 
-    public ScimpiException(String message) {
+    public ScimpiException(final String message) {
         super(message);
     }
 
-    public ScimpiException(Throwable cause) {
+    public ScimpiException(final Throwable cause) {
         super(cause);
     }
 
-    public ScimpiException(String message, Throwable cause) {
+    public ScimpiException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -42,5 +42,3 @@ public class ScimpiException extends RuntimeException {
     }
 
 }
-
-

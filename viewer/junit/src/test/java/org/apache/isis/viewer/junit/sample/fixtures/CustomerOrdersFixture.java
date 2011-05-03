@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.fixtures;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.junit.sample.domain.Product;
 import org.apache.isis.viewer.junit.sample.service.CustomerRepository;
 import org.apache.isis.viewer.junit.sample.service.ProductRepository;
 import org.apache.log4j.Logger;
-
 
 public class CustomerOrdersFixture extends AbstractFixture {
 
@@ -83,6 +81,7 @@ public class CustomerOrdersFixture extends AbstractFixture {
     public void setCustomerRepository(final CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
+
     // }}
 
     // {{ Injected: ProductRepository

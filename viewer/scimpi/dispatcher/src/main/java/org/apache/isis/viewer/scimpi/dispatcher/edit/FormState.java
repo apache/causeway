@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-
 public class FormState {
-    private Map<String, FieldEditState> fields = new HashMap<String, FieldEditState>();
+    private final Map<String, FieldEditState> fields = new HashMap<String, FieldEditState>();
     private String error;
     private String formId;
 
-    public FieldEditState createField(String name, String entry) {
-        FieldEditState fieldEditState = new FieldEditState(entry);
+    public FieldEditState createField(final String name, final String entry) {
+        final FieldEditState fieldEditState = new FieldEditState(entry);
         fields.put(name, fieldEditState);
         return fieldEditState;
     }
 
     public boolean isValid() {
-        Iterator<FieldEditState> iterator = fields.values().iterator();
+        final Iterator<FieldEditState> iterator = fields.values().iterator();
         while (iterator.hasNext()) {
             if (!iterator.next().isEntryValid()) {
                 return false;
@@ -46,25 +44,24 @@ public class FormState {
         return error == null;
     }
 
-    public FieldEditState getField(String name) {
+    public FieldEditState getField(final String name) {
         return fields.get(name);
     }
 
-    public void setError(String error) {
+    public void setError(final String error) {
         this.error = error;
     }
-    
+
     public String getError() {
         return error;
     }
 
-    public void setForm(String formId) {
+    public void setForm(final String formId) {
         this.formId = formId;
     }
 
-    public boolean isForForm(String formId) {
+    public boolean isForForm(final String formId) {
         return this.formId.equals(formId);
     }
 
 }
-

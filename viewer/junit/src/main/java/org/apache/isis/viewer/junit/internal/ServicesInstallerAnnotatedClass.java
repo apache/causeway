@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.internal;
 
 import java.util.ArrayList;
@@ -27,20 +26,20 @@ import org.apache.isis.runtimes.dflt.runtime.services.ServicesInstallerAbstract;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
-
 public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
 
     public ServicesInstallerAnnotatedClass() {
-		super("annotated");
-	}
+        super("annotated");
+    }
 
-    public void addServicesAnnotatedOn(Class<?> javaClass) throws InstantiationException, IllegalAccessException {
-        List<Object> services = new ArrayList<Object>();
+    public void addServicesAnnotatedOn(final Class<?> javaClass) throws InstantiationException, IllegalAccessException {
+        final List<Object> services = new ArrayList<Object>();
         addServicesAnnotatedOn(javaClass, services);
         addServices(services);
     }
 
-    private void addServicesAnnotatedOn(final Class<?> testClass, final List<Object> services) throws InstantiationException, IllegalAccessException {
+    private void addServicesAnnotatedOn(final Class<?> testClass, final List<Object> services)
+        throws InstantiationException, IllegalAccessException {
         final Services servicesAnnotation = testClass.getAnnotation(Services.class);
         if (servicesAnnotation != null) {
             final Service[] serviceAnnotations = servicesAnnotation.value();
@@ -55,21 +54,17 @@ public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
         }
     }
 
-    private void addServiceRepresentedBy(final Service serviceAnnotation, final List<Object> services) throws InstantiationException, IllegalAccessException {
+    private void addServiceRepresentedBy(final Service serviceAnnotation, final List<Object> services)
+        throws InstantiationException, IllegalAccessException {
         final Class<?> serviceClass = serviceAnnotation.value();
         // there's no need to unravel any Collections of services,
         // because the ServiceLoader will do it for us later.
         services.add(serviceClass.newInstance());
     }
-    
-    
+
     @Override
     public List<Class<?>> getTypes() {
-    	return listOf(List.class); // ie List<Object.class>, of services
+        return listOf(List.class); // ie List<Object.class>, of services
     }
 
-
-
 }
-
-

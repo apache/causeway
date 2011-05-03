@@ -17,26 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
-
 public class TableRow extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "table-row";
     }
 
-    public void process(Request request) {
-        TableBlock block = (TableBlock) request.getBlockContent();
-        RepeatMarker start = request.createMarker();
+    @Override
+    public void process(final Request request) {
+        final TableBlock block = (TableBlock) request.getBlockContent();
+        final RepeatMarker start = request.createMarker();
         block.setMarker(start);
         request.skipUntilClose();
     }
 
 }
-

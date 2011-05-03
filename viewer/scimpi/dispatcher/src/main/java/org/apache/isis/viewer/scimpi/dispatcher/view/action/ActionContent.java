@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
@@ -31,18 +30,17 @@ import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ActionContent implements BlockContent {
     private final ObjectAction action;
     private final String[] parameters;
     private int next;
 
-    public ActionContent(ObjectAction action) {
+    public ActionContent(final ObjectAction action) {
         this.action = action;
         this.parameters = new String[action.getParameterCount()];
     }
 
-    public void setParameter(String field, String value) {
+    public void setParameter(final String field, final String value) {
         int index;
         if (field == null) {
             index = next++;
@@ -55,13 +53,13 @@ public class ActionContent implements BlockContent {
         parameters[index] = value;
     }
 
-    public ObjectAdapter[] getParameters(Request request) {
-        ObjectAdapter[] params = new ObjectAdapter[parameters.length];
-        List<ObjectActionParameter> pars = action.getParameters();
+    public ObjectAdapter[] getParameters(final Request request) {
+        final ObjectAdapter[] params = new ObjectAdapter[parameters.length];
+        final List<ObjectActionParameter> pars = action.getParameters();
         for (int i = 0; i < parameters.length; i++) {
-            ObjectSpecification typ = pars.get(i).getSpecification();
+            final ObjectSpecification typ = pars.get(i).getSpecification();
             if (typ.getFacet(ParseableFacet.class) != null) {
-                ParseableFacet facet = typ.getFacet(ParseableFacet.class);
+                final ParseableFacet facet = typ.getFacet(ParseableFacet.class);
                 params[i] = facet.parseTextEntry(null, parameters[i]);
             } else {
                 params[i] = request.getContext().getMappedObject(parameters[i]);
@@ -74,4 +72,3 @@ public class ActionContent implements BlockContent {
         return parameters;
     }
 }
-

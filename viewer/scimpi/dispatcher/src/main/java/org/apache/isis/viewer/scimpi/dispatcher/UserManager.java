@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -26,7 +25,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.log4j.Logger;
-
 
 public class UserManager {
 
@@ -40,7 +38,7 @@ public class UserManager {
         return instance.authenticationManager;
     }
 
-    public static AuthenticationSession startRequest(RequestContext context) {
+    public static AuthenticationSession startRequest(final RequestContext context) {
         AuthenticationSession session = context.getSession();
         if (session == null) {
             session = new UserlessSession();
@@ -53,9 +51,9 @@ public class UserManager {
         return session;
     }
 
-    public static AuthenticationSession authenticate(AuthenticationRequestPassword passwordAuthenticationRequest) {
-        AuthenticationSession session = getAuthenticationManager().authenticate(passwordAuthenticationRequest);
-        if (session != null)  {
+    public static AuthenticationSession authenticate(final AuthenticationRequestPassword passwordAuthenticationRequest) {
+        final AuthenticationSession session = getAuthenticationManager().authenticate(passwordAuthenticationRequest);
+        if (session != null) {
             LOG.info("log on user " + session.getUserName());
             IsisContext.closeSession();
             IsisContext.openSession(session);
@@ -76,8 +74,8 @@ public class UserManager {
         LOG.info("log off user " + session.getUserName());
         IsisContext.closeSession();
         getAuthenticationManager().closeSession(session);
-        
-        UserlessSession replacementSession = new UserlessSession();
+
+        final UserlessSession replacementSession = new UserlessSession();
         IsisContext.openSession(replacementSession);
     }
 
@@ -88,4 +86,3 @@ public class UserManager {
         UserManager.instance = this;
     }
 }
-

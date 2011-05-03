@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import org.apache.isis.core.commons.debug.DebugString;
@@ -36,40 +35,45 @@ interface Mapping {
     String debug();
 
     void reload();
-    
+
     void update();
 }
 
 class TransientObjectMapping implements Mapping {
-    private Oid oid;
+    private final Oid oid;
     private Memento memento;
 
-    public TransientObjectMapping(ObjectAdapter adapter) {
+    public TransientObjectMapping(final ObjectAdapter adapter) {
         oid = adapter.getOid();
         Assert.assertTrue("OID is for persistent", oid.isTransient());
         Assert.assertTrue("adapter is for persistent", adapter.isTransient());
         memento = new Memento(adapter);
     }
 
+    @Override
     public ObjectAdapter getObject() {
         return IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public String debug() {
-        DebugString debug = new DebugString();
+        final DebugString debug = new DebugString();
         memento.debug(debug);
         return debug.toString();
     }
 
+    @Override
     public void reload() {
         memento.recreateObject();
     }
 
-    public boolean equals(Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
         if (obj == this) {
             return true;
         }
@@ -80,58 +84,67 @@ class TransientObjectMapping implements Mapping {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return oid.hashCode();
     }
 
+    @Override
     public void update() {
-        memento = new Memento((ObjectAdapter) getObject());
+        memento = new Memento(getObject());
     }
 }
 
 class PersistentObjectMapping implements Mapping {
-    private Oid oid;
-    private ObjectSpecification spec;
+    private final Oid oid;
+    private final ObjectSpecification spec;
 
-    public PersistentObjectMapping(ObjectAdapter object) {
+    public PersistentObjectMapping(final ObjectAdapter object) {
         this.oid = object.getOid();
         this.spec = object.getSpecification();
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public String debug() {
-        return oid + "  " + spec.getShortIdentifier() + "  " + IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
+        return oid + "  " + spec.getShortIdentifier() + "  "
+            + IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
     }
 
+    @Override
     public ObjectAdapter getObject() {
-    	if (!IsisContext.inTransaction()) {
-    		throw new IllegalStateException(getClass().getSimpleName() + " requires transaction in order to load");
-    	}
+        if (!IsisContext.inTransaction()) {
+            throw new IllegalStateException(getClass().getSimpleName() + " requires transaction in order to load");
+        }
         return IsisContext.getPersistenceSession().loadObject(oid, spec);
     }
 
+    @Override
     public void reload() {
         if (IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid) == null) {
             IsisContext.getPersistenceSession().recreateAdapter(oid, spec);
         }
     }
 
-    public boolean equals(Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
         if (obj == this) {
             return true;
         }
 
         if (obj instanceof PersistentObjectMapping) {
-            PersistentObjectMapping other = (PersistentObjectMapping) obj;
+            final PersistentObjectMapping other = (PersistentObjectMapping) obj;
             return oid.equals(other.oid) && spec == other.spec;
         }
 
         return false;
     }
 
+    @Override
     public int hashCode() {
         int hash = 37;
         hash = hash * 17 + oid.hashCode();
@@ -139,7 +152,8 @@ class PersistentObjectMapping implements Mapping {
         return hash;
     }
 
-    public void update() {}
+    @Override
+    public void update() {
+    }
 
 }
-

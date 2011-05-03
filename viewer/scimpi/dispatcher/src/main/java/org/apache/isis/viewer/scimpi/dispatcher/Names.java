@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 public interface Names {
@@ -71,4 +70,3 @@ public interface Names {
     static final String WHEN = "when";
     public static final String ENTRY_FIELDS = "entry-fields";
 }
-

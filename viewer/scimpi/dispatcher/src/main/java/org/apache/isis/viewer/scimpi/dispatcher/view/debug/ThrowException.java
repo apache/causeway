@@ -17,28 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ThrowException extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
-        
-		String message = request.getOptionalProperty("message", "Exception throw for testing purposes");
+
+        final String message = request.getOptionalProperty("message", "Exception throw for testing purposes");
         throw new IsisException(message);
     }
 
+    @Override
     public String getName() {
         return "debug-exception";
     }
 
 }
-

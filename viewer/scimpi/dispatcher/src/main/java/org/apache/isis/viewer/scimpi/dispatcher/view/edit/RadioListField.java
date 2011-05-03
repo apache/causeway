@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import java.util.Iterator;
@@ -29,44 +28,44 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class RadioListField extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
-        String field = request.getRequiredProperty(FIELD);
+    @Override
+    public void process(final Request request) {
+        final FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
+        final String field = request.getRequiredProperty(FIELD);
         if (block.isVisible(field)) {
-            String id = request.getRequiredProperty(COLLECTION);
-            String exclude = request.getOptionalProperty("exclude");
+            final String id = request.getRequiredProperty(COLLECTION);
+            final String exclude = request.getOptionalProperty("exclude");
 
-            ObjectAdapter collection = request.getContext().getMappedObjectOrResult(id);
+            final ObjectAdapter collection = request.getContext().getMappedObjectOrResult(id);
 
-            RequestContext context = request.getContext();
-            CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
-            Iterator<ObjectAdapter> iterator = facet.iterator(collection);
+            final RequestContext context = request.getContext();
+            final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+            final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
 
-            StringBuffer buffer = new StringBuffer();
+            final StringBuffer buffer = new StringBuffer();
 
             while (iterator.hasNext()) {
-                ObjectAdapter element = iterator.next();
-                Scope scope = Scope.INTERACTION;
-                String elementId = context.mapObject(element, scope);
+                final ObjectAdapter element = iterator.next();
+                final Scope scope = Scope.INTERACTION;
+                final String elementId = context.mapObject(element, scope);
                 if (exclude != null && context.getMappedObject(exclude) == element) {
                     continue;
                 }
-                String title = element.titleString();
-                String checked = "";
-                buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + " />" + title
-                        + "</input><br/>\n");
+                final String title = element.titleString();
+                final String checked = "";
+                buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked
+                    + " />" + title + "</input><br/>\n");
             }
 
             block.replaceContent(field, buffer.toString());
         }
     }
 
+    @Override
     public String getName() {
         return "radio-list";
     }
 
 }
-

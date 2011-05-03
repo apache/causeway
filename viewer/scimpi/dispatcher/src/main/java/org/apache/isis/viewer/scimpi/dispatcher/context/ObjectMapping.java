@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-
 
 public interface ObjectMapping {
 
@@ -46,7 +44,5 @@ public interface ObjectMapping {
     String mapTransientObject(ObjectAdapter object);
 
     void append(DebugBuilder debug);
-
-
 
 }

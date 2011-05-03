@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
@@ -36,66 +35,66 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
 /**
- * Remove an element from a collection. 
+ * Remove an element from a collection.
  */
 public class RemoveAction implements Action {
     public static final String ACTION = "remove";
 
+    @Override
     public String getName() {
         return ACTION;
     }
 
-    public void process(RequestContext context) throws IOException {
-        AuthenticationSession session = context.getSession();
+    @Override
+    public void process(final RequestContext context) throws IOException {
+        final AuthenticationSession session = context.getSession();
         if (session == null) {
             throw new NotLoggedInException();
         }
-        
-        String parentId = context.getParameter(OBJECT);
-        String rowId = context.getParameter(ELEMENT);
+
+        final String parentId = context.getParameter(OBJECT);
+        final String rowId = context.getParameter(ELEMENT);
 
         try {
-            ObjectAdapter parent = (ObjectAdapter) context.getMappedObject(parentId);
-            ObjectAdapter row = (ObjectAdapter) context.getMappedObject(rowId);
+            final ObjectAdapter parent = context.getMappedObject(parentId);
+            final ObjectAdapter row = context.getMappedObject(rowId);
 
-            String fieldName = context.getParameter(FIELD);
-            ObjectAssociation field = parent.getSpecification().getAssociation(fieldName);
+            final String fieldName = context.getParameter(FIELD);
+            final ObjectAssociation field = parent.getSpecification().getAssociation(fieldName);
             if (field == null) {
-                throw new ScimpiException("No field " + fieldName + " in " + parent.getSpecification().getFullIdentifier());
+                throw new ScimpiException("No field " + fieldName + " in "
+                    + parent.getSpecification().getFullIdentifier());
             }
             if (field.isVisible(IsisContext.getAuthenticationSession(), parent).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
 
-            ((OneToManyAssociation) field).removeElement(parent, row);       
-            
+            ((OneToManyAssociation) field).removeElement(parent, row);
+
             // TODO duplicated in EditAction
             String view = context.getParameter(VIEW);
-            String override = context.getParameter(RESULT_OVERRIDE);
-            
+            final String override = context.getParameter(RESULT_OVERRIDE);
+
             String resultName = context.getParameter(RESULT_NAME);
             resultName = resultName == null ? RequestContext.RESULT : resultName;
 
-
-            String id = context.mapObject(parent, Scope.REQUEST);
+            final String id = context.mapObject(parent, Scope.REQUEST);
             context.addVariable(resultName, id, Scope.REQUEST);
             if (override != null) {
                 context.addVariable(resultName, override, Scope.REQUEST);
-            }                
+            }
 
-            int questionMark = view == null ? -1 : view.indexOf("?");
+            final int questionMark = view == null ? -1 : view.indexOf("?");
             if (questionMark > -1) {
-                String params = view.substring(questionMark + 1);
-                int equals = params.indexOf("=");
+                final String params = view.substring(questionMark + 1);
+                final int equals = params.indexOf("=");
                 context.addVariable(params.substring(0, equals), params.substring(equals + 1), Scope.REQUEST);
                 view = view.substring(0, questionMark);
             }
             context.setRequestPath(view);
             // TODO end of duplication
-            
-            
 
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
             IsisContext.getUpdateNotifier().clear();
@@ -104,8 +103,11 @@ public class RemoveAction implements Action {
         }
     }
 
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
-    public void debug(DebugBuilder debug) {}
+    @Override
+    public void debug(final DebugBuilder debug) {
+    }
 }
-

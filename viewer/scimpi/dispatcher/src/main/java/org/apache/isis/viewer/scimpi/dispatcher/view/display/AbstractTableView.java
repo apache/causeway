@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.Iterator;
@@ -37,51 +36,51 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public abstract class AbstractTableView extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
-        RequestContext context = request.getContext();
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
 
         ObjectAdapter collection;
         String parentObjectId = null;
         boolean isFieldEditable = false;
-        String field = request.getOptionalProperty(FIELD);
-        String tableClass = request.getOptionalProperty(CLASS);
-         ObjectSpecification elementSpec;
+        final String field = request.getOptionalProperty(FIELD);
+        final String tableClass = request.getOptionalProperty(CLASS);
+        ObjectSpecification elementSpec;
         if (field != null) {
-            String objectId = request.getOptionalProperty(OBJECT);
-            ObjectAdapter object = context.getMappedObjectOrResult(objectId);
+            final String objectId = request.getOptionalProperty(OBJECT);
+            final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
             if (object == null) {
                 throw new ScimpiException("No object for result or " + objectId);
             }
-            ObjectAssociation objectField = object.getSpecification().getAssociation(field);
+            final ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             if (!objectField.isOneToManyAssociation()) {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
             isFieldEditable = objectField.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             getPersistenceSession().resolveField(object, objectField);
             collection = objectField.get(object);
-            TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);
             elementSpec = facet.valueSpec();
             parentObjectId = objectId == null ? context.mapObject(object, Scope.REQUEST) : objectId;
         } else {
-            String id = request.getOptionalProperty(COLLECTION);
+            final String id = request.getOptionalProperty(COLLECTION);
             collection = context.getMappedObjectOrResult(id);
             elementSpec = collection.getElementSpecification();
         }
 
-        String summary = request.getOptionalProperty("summary");
-        String rowClassesList = request.getOptionalProperty(ROW_CLASSES, ODD_ROW_CLASS + "|" + EVEN_ROW_CLASS);
+        final String summary = request.getOptionalProperty("summary");
+        final String rowClassesList = request.getOptionalProperty(ROW_CLASSES, ODD_ROW_CLASS + "|" + EVEN_ROW_CLASS);
         String[] rowClasses = null;
         if (rowClassesList.length() > 0) {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        List<ObjectAssociation> allFields = elementSpec.getAssociations(
-                ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
-        TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
+        final List<ObjectAssociation> allFields =
+            elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final TableContentWriter rowBuilder =
+            createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
         write(request, collection, summary, rowBuilder, tableClass, rowClasses);
 
     }
@@ -90,27 +89,25 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         return IsisContext.getPersistenceSession();
     }
 
-    protected abstract TableContentWriter createRowBuilder(
-            final Request request,
-            RequestContext context,
-            final String parent,
-            final List<ObjectAssociation> allFields, ObjectAdapter collection);
+    protected abstract TableContentWriter createRowBuilder(final Request request, RequestContext context,
+        final String parent, final List<ObjectAssociation> allFields, ObjectAdapter collection);
 
-    public static void write(Request request, ObjectAdapter collection, String summary, TableContentWriter rowBuilder, String tableClass, String[] rowClasses) {
-        RequestContext context = request.getContext();
+    public static void write(final Request request, final ObjectAdapter collection, final String summary,
+        final TableContentWriter rowBuilder, final String tableClass, final String[] rowClasses) {
+        final RequestContext context = request.getContext();
 
-        String summarySegment = " summary=\"" + summary + "\"";
-        String classSegment = tableClass == null ? "" : (" class=\"" + tableClass + "\"");
+        final String summarySegment = " summary=\"" + summary + "\"";
+        final String classSegment = tableClass == null ? "" : (" class=\"" + tableClass + "\"");
         request.appendHtml("<table" + classSegment + summarySegment + ">");
         rowBuilder.writeHeaders(request);
         rowBuilder.writeFooters(request);
 
         request.appendHtml("<tbody>");
-        CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
-        Iterator<ObjectAdapter> iterator = facet.iterator(collection);
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+        final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         int row = 1;
         while (iterator.hasNext()) {
-            ObjectAdapter element = iterator.next();
+            final ObjectAdapter element = iterator.next();
 
             context.addVariable("row", "" + (row), Scope.REQUEST);
             String cls = "";
@@ -132,4 +129,3 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
     }
 
 }
-

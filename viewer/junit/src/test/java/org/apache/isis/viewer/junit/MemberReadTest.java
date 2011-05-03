@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,7 +28,6 @@ import java.util.List;
 
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.junit.Test;
-
 
 public class MemberReadTest extends AbstractTest {
 

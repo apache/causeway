@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 
 import org.apache.isis.core.commons.lang.ToString;
-
 
 public class InputField {
     public static final int REFERENCE = 1;
@@ -29,14 +27,14 @@ public class InputField {
     public static final int PASSWORD = 3;
     public static final int CHECKBOX = 4;
     public static final int HTML = 5;
-    
+
     private int type;
-    
+
     private String label;
     private String description = "";
     private String helpReference;
     private String errorText;
-    private String name;
+    private final String name;
 
     private int maxLength = 0;
     private int width;
@@ -53,10 +51,10 @@ public class InputField {
     private String value;
     private String html;
 
-    public InputField(String name) {
+    public InputField(final String name) {
         this.name = name;
     }
-    
+
     public String getErrorText() {
         return errorText;
     }
@@ -68,11 +66,11 @@ public class InputField {
     public String getHelpReference() {
         return helpReference;
     }
-    
+
     public String getLabel() {
         return label;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -84,7 +82,7 @@ public class InputField {
     public String getValue() {
         return value;
     }
-    
+
     public String getHtml() {
         return html;
     }
@@ -96,7 +94,7 @@ public class InputField {
     public String[] getOptionsText() {
         return optionsText;
     }
-    
+
     public String[] getOptionValues() {
         return optionValues;
     }
@@ -125,85 +123,86 @@ public class InputField {
         return type;
     }
 
-    public void setErrorText(String errorText) {
+    public void setErrorText(final String errorText) {
         this.errorText = errorText;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
-    
-    public void setHelpReference(String helpReference) {
+
+    public void setHelpReference(final String helpReference) {
         this.helpReference = helpReference;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(final String label) {
         this.label = label;
     }
 
-    public void setEditable(boolean isEditable) {
+    public void setEditable(final boolean isEditable) {
         this.isEditable = isEditable;
         isRequired = isRequired && isEditable;
     }
 
-    public void setValue(String entryText) {
+    public void setValue(final String entryText) {
         this.value = entryText;
     }
-    
-    public void setHtml(String html) {
+
+    public void setHtml(final String html) {
         this.html = html;
     }
 
-    public void setHidden(boolean isHidden) {
+    public void setHidden(final boolean isHidden) {
         this.isHidden = isHidden;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(final int width) {
         this.width = width;
     }
 
-    public void setOptions(String[] optionsText, String[] optionValues) {
+    public void setOptions(final String[] optionsText, final String[] optionValues) {
         this.optionsText = optionsText;
         this.optionValues = optionValues;
     }
-    
-    public void setHeight(int height) {
+
+    public void setHeight(final int height) {
         this.height = height;
     }
 
-    public void setWrapped(boolean isWrapped) {
+    public void setWrapped(final boolean isWrapped) {
         this.isWrapped = isWrapped;
     }
 
-    public void setRequired(boolean isRequired) {
+    public void setRequired(final boolean isRequired) {
         this.isRequired = isRequired;
     }
 
-    public void setMaxLength(int maxLength) {
+    public void setMaxLength(final int maxLength) {
         this.maxLength = maxLength;
     }
 
-    public void setType(int type) {
+    public void setType(final int type) {
         this.type = type;
     }
 
+    @Override
     public String toString() {
-        ToString str = new ToString(this);
+        final ToString str = new ToString(this);
         str.append("name", name);
         String typeName;
         switch (type) {
-        case CHECKBOX:
-            typeName = "checkbox";
-            break;
-        case REFERENCE:
-            typeName = "reference";
-            break;
-        case TEXT:
-            typeName = "text";
-            break;
-        default:
-            typeName = "unset";
-            break;
+            case CHECKBOX:
+                typeName = "checkbox";
+                break;
+            case REFERENCE:
+                typeName = "reference";
+                break;
+            case TEXT:
+                typeName = "text";
+                break;
+            default:
+                typeName = "unset";
+                break;
         }
         str.append("type", typeName);
         str.append("editable", isEditable);
@@ -213,4 +212,3 @@ public class InputField {
     }
 
 }
-

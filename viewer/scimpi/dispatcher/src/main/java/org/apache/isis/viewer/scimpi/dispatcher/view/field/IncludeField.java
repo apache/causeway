@@ -17,25 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.field;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class IncludeField extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String field = request.getOptionalProperty(NAME);
-        InclusionList block = (InclusionList) request.getBlockContent();
+    @Override
+    public void process(final Request request) {
+        final String field = request.getOptionalProperty(NAME);
+        final InclusionList block = (InclusionList) request.getBlockContent();
         block.include(field);
     }
-    
+
+    @Override
     public String getName() {
         return "include";
     }
 
 }
-
-

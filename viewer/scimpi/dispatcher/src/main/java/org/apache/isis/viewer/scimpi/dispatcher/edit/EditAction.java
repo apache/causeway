@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
@@ -43,7 +42,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
-
 public class EditAction implements Action {
     public static final String ACTION = "edit";
 
@@ -53,40 +51,43 @@ public class EditAction implements Action {
     }
 
     @Override
-    public void process(RequestContext context) throws IOException {
-        AuthenticationSession session = context.getSession();
+    public void process(final RequestContext context) throws IOException {
+        final AuthenticationSession session = context.getSession();
         if (session == null) {
             throw new NotLoggedInException();
         }
-        
+
         try {
-            String objectId = context.getParameter("_" + OBJECT);
-            String version = context.getParameter("_" + VERSION);
-            String formId = context.getParameter("_" + FORM_ID);
+            final String objectId = context.getParameter("_" + OBJECT);
+            final String version = context.getParameter("_" + VERSION);
+            final String formId = context.getParameter("_" + FORM_ID);
             String resultName = context.getParameter("_" + RESULT_NAME);
             resultName = resultName == null ? RequestContext.RESULT : resultName;
-            String override = context.getParameter("_" + RESULT_OVERRIDE);
+            final String override = context.getParameter("_" + RESULT_OVERRIDE);
             String message = context.getParameter("_" + MESSAGE);
-            
-            ObjectAdapter adapter = context.getMappedObject(objectId);
-            List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
-            FormState entryState = validateObject(context, adapter, fields);
-            Version adapterVersion = adapter.getVersion();
-            Version formVersion = context.getVersion(version);
-            if (formVersion != null && adapterVersion.different(formVersion)) {
-                
-                IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getSingularName() + " was edited " +
-                		"by another user (" + adapterVersion.getUser() +  "). Please  make your changes based on their changes.");
 
-                String view = context.getParameter("_" + ERRORS);
+            final ObjectAdapter adapter = context.getMappedObject(objectId);
+            final List<ObjectAssociation> fields =
+                adapter.getSpecification().getAssociations(
+                    ObjectAssociationFilters.dynamicallyVisible(session, adapter));
+            final FormState entryState = validateObject(context, adapter, fields);
+            final Version adapterVersion = adapter.getVersion();
+            final Version formVersion = context.getVersion(version);
+            if (formVersion != null && adapterVersion.different(formVersion)) {
+
+                IsisContext.getMessageBroker().addMessage(
+                    "The " + adapter.getSpecification().getSingularName() + " was edited " + "by another user ("
+                        + adapterVersion.getUser() + "). Please  make your changes based on their changes.");
+
+                final String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.EDIT);
-                
+
                 entryState.setForm(formId);
                 context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
                 context.addVariable(resultName, objectId, Scope.REQUEST);
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
-                }   
+                }
 
             } else if (entryState.isValid()) {
                 changeObject(context, adapter, entryState, fields);
@@ -98,16 +99,16 @@ public class EditAction implements Action {
 
                 String view = context.getParameter("_" + VIEW);
 
-                String id = context.mapObject(adapter, Scope.REQUEST);
+                final String id = context.mapObject(adapter, Scope.REQUEST);
                 context.addVariable(resultName, id, Scope.REQUEST);
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
-                }                
+                }
 
-                int questionMark = view == null ? -1 : view.indexOf("?");
+                final int questionMark = view == null ? -1 : view.indexOf("?");
                 if (questionMark > -1) {
-                    String params = view.substring(questionMark + 1);
-                    int equals = params.indexOf("=");
+                    final String params = view.substring(questionMark + 1);
+                    final int equals = params.indexOf("=");
                     context.addVariable(params.substring(0, equals), params.substring(equals + 1), Scope.REQUEST);
                     view = view.substring(0, questionMark);
                 }
@@ -118,26 +119,26 @@ public class EditAction implements Action {
                     message = null;
                 }
                 if (message != null) {
-                    MessageBroker messageBroker = IsisContext.getMessageBroker();
+                    final MessageBroker messageBroker = IsisContext.getMessageBroker();
                     messageBroker.addMessage(message);
                 }
 
             } else {
-                String view = context.getParameter("_" + ERRORS);
+                final String view = context.getParameter("_" + ERRORS);
                 context.setRequestPath(view, Dispatcher.EDIT);
-                
+
                 entryState.setForm(formId);
                 context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
                 context.addVariable(resultName, objectId, Scope.REQUEST);
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
-                }   
-                
-                MessageBroker messageBroker = IsisContext.getMessageBroker();
+                }
+
+                final MessageBroker messageBroker = IsisContext.getMessageBroker();
                 messageBroker.addWarning(entryState.getError());
             }
 
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
             IsisContext.getUpdateNotifier().clear();
@@ -146,14 +147,12 @@ public class EditAction implements Action {
         }
     }
 
-    private FormState validateObject(
-            RequestContext context,
-            ObjectAdapter object,
-            List<ObjectAssociation> fields) {
-        FormState formState = new FormState();
+    private FormState validateObject(final RequestContext context, final ObjectAdapter object,
+        final List<ObjectAssociation> fields) {
+        final FormState formState = new FormState();
         for (int i = 0; i < fields.size(); i++) {
-            ObjectAssociation field = fields.get(i);
-            String fieldId = field.getId();
+            final ObjectAssociation field = fields.get(i);
+            final String fieldId = field.getId();
             String newEntry = context.getParameter(fieldId);
             if (fields.get(i).isOneToManyAssociation()) {
                 continue;
@@ -164,47 +163,47 @@ public class EditAction implements Action {
             if (field.isUsable(IsisContext.getAuthenticationSession(), object).isVetoed()) {
                 continue;
             }
-            
+
             if (newEntry != null && newEntry.equals("-OTHER-")) {
                 newEntry = context.getParameter(fieldId + "-other");
             }
 
             if (newEntry == null) {
                 // TODO duplicated in EditObject; line 97
-                ObjectSpecification spec = field.getSpecification();
+                final ObjectSpecification spec = field.getSpecification();
                 if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                                || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+                    || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
                     newEntry = FALSE;
                 } else {
-                   continue;
+                    continue;
                 }
             }
-            FieldEditState fieldState = formState.createField(fieldId, newEntry);
-            
+            final FieldEditState fieldState = formState.createField(fieldId, newEntry);
+
             Consent consent = null;
             if (field.isMandatory() && (newEntry.equals("") || newEntry.equals("NULL"))) {
                 consent = new Veto(field.getName() + " required");
                 formState.setError("Not all fields have been set");
             } else if (field.getSpecification().containsFacet(ParseableFacet.class)) {
                 try {
-                    ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
-                    ObjectAdapter originalValue = field.get(object);
-                    ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
+                    final ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
+                    final ObjectAdapter originalValue = field.get(object);
+                    final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry);
                     consent = ((OneToOneAssociation) field).isAssociationValid(object, newValue);
                     fieldState.setValue(newValue);
-                } catch (TextEntryParseException e) {
+                } catch (final TextEntryParseException e) {
                     consent = new Veto(e.getMessage());
-//                    formState.setError("Not all fields have been entered correctly");
+                    // formState.setError("Not all fields have been entered correctly");
                 }
 
             } else {
-                ObjectAdapter associate = newEntry.equals("null") ? null : context.getMappedObject(newEntry);
+                final ObjectAdapter associate = newEntry.equals("null") ? null : context.getMappedObject(newEntry);
                 if (associate != null) {
                     IsisContext.getPersistenceSession().resolveImmediately(associate);
                 }
                 consent = ((OneToOneAssociation) field).isAssociationValid(object, associate);
                 fieldState.setValue(associate);
-                
+
             }
             if (consent.isVetoed()) {
                 fieldState.setError(consent.getReason());
@@ -216,29 +215,31 @@ public class EditAction implements Action {
         return formState;
     }
 
-    private void changeObject(RequestContext context, ObjectAdapter object, FormState editState, List<ObjectAssociation> fields) {
+    private void changeObject(final RequestContext context, final ObjectAdapter object, final FormState editState,
+        final List<ObjectAssociation> fields) {
         for (int i = 0; i < fields.size(); i++) {
-            FieldEditState field = editState.getField(fields.get(i).getId());
+            final FieldEditState field = editState.getField(fields.get(i).getId());
             if (field == null) {
                 continue;
             }
-            String newEntry = field.getEntry();
-            ObjectAdapter originalValue = fields.get(i).get(object);
-            boolean isVisible = fields.get(i).isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
-            boolean isUsable = fields.get(i).isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
-            boolean bothEmpty = originalValue == null && newEntry.equals("");
-            boolean bothSame = newEntry.equals(originalValue == null ? "" : originalValue.titleString());
-            if ((!isVisible ||!isUsable) || bothEmpty || bothSame) {
+            final String newEntry = field.getEntry();
+            final ObjectAdapter originalValue = fields.get(i).get(object);
+            final boolean isVisible =
+                fields.get(i).isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
+            final boolean isUsable = fields.get(i).isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+            final boolean bothEmpty = originalValue == null && newEntry.equals("");
+            final boolean bothSame = newEntry.equals(originalValue == null ? "" : originalValue.titleString());
+            if ((!isVisible || !isUsable) || bothEmpty || bothSame) {
                 if (fields.get(i).getSpecification().getFacet(ParseableFacet.class) == null) {
                     // REVIEW restores object to loader
                     context.getMappedObject(newEntry);
                 }
                 continue;
             }
-            
+
             if (fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
-                ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
-                ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
+                final ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
+                final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry);
                 ((OneToOneAssociation) fields.get(i)).setAssociation(object, newValue);
             } else {
                 ((OneToOneAssociation) fields.get(i)).setAssociation(object, field.getValue());
@@ -247,9 +248,10 @@ public class EditAction implements Action {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     @Override
-    public void debug(DebugBuilder debug) {}
+    public void debug(final DebugBuilder debug) {
+    }
 }
-

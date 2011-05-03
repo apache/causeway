@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,34 +25,33 @@ public class FieldEditState {
     private final String entry;
     private String reason;
     private ObjectAdapter value;
-    
-    public FieldEditState(String entry) {
+
+    public FieldEditState(final String entry) {
         this.entry = entry;
     }
 
-    public void setError(String reason) {
+    public void setError(final String reason) {
         this.reason = reason;
     }
 
     public boolean isEntryValid() {
         return reason == null;
     }
-    
+
     public String getEntry() {
         return entry;
     }
-    
+
     public String getError() {
         return reason;
     }
-    
+
     public ObjectAdapter getValue() {
         return value;
     }
-    
-    public void setValue(ObjectAdapter value) {
+
+    public void setValue(final ObjectAdapter value) {
         this.value = value;
     }
 
 }
-

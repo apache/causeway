@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 public class CreateFormParameter {
@@ -40,4 +39,3 @@ public class CreateFormParameter {
     public boolean showIcon;
     public String completionMessage;
 }
-

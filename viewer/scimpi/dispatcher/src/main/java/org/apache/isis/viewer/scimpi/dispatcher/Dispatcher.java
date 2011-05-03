@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import java.io.File;
@@ -73,7 +72,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-
 public class Dispatcher {
     public static final String ACTION = "_action";
     public static final String EDIT = "_edit";
@@ -83,227 +81,235 @@ public class Dispatcher {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(Dispatcher.class);
     public static final String COMMAND_ROOT = ".app";
-    private Map<String, Action> actions = new HashMap<String, Action>();
-    private Map<String, String> parameters = new HashMap<String, String>();
-    private ProcessorLookup processors = new ProcessorLookup();
-    private HtmlFileParser parser = new HtmlFileParser(processors);
+    private final Map<String, Action> actions = new HashMap<String, Action>();
+    private final Map<String, String> parameters = new HashMap<String, String>();
+    private final ProcessorLookup processors = new ProcessorLookup();
+    private final HtmlFileParser parser = new HtmlFileParser(processors);
 
-    public void process(RequestContext context, String servletPath) {
+    public void process(final RequestContext context, final String servletPath) {
         LOG.info("processing request " + servletPath);
-        AuthenticationSession session = UserManager.startRequest(context);
+        final AuthenticationSession session = UserManager.startRequest(context);
         LOG.debug("exsiting session: " + session);
-        
+
         IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
         context.setRequestPath(servletPath);
         context.startRequest();
-                
+
         try {
             processActions(context, false, servletPath);
             processTheView(context);
-        } catch (ScimpiNotFoundException e) {
+        } catch (final ScimpiNotFoundException e) {
             if (context.isInternalRequest()) {
-                LOG.error("invalid page request (from within application): "+ e.getMessage());
+                LOG.error("invalid page request (from within application): " + e.getMessage());
             } else {
-                LOG.info("invalid page request (from outside application): "+ e.getMessage());
+                LOG.info("invalid page request (from outside application): " + e.getMessage());
             }
-            
+
             try {
                 // TODO pick options up from configuration
                 // context.raiseError(404);
-                //context.setRequestPath("/error/notfound_404.shtml");
-                IsisContext.getMessageBroker().addWarning("Failed to find page " + servletPath + ". Please navigate from here");
+                // context.setRequestPath("/error/notfound_404.shtml");
+                IsisContext.getMessageBroker().addWarning(
+                    "Failed to find page " + servletPath + ". Please navigate from here");
                 context.setRequestPath("/index.shtml");
                 processTheView(context);
-            } catch (IOException e1) {
+            } catch (final IOException e1) {
                 throw new ScimpiException(e);
             }
-            
-        } catch (NotLoggedInException e) {
-            IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
+
+        } catch (final NotLoggedInException e) {
+            IsisContext.getMessageBroker().addWarning(
+                "You are not currently logged in! Please log in so you can continue.");
             context.setRequestPath("/login.shtml");
             try {
                 processTheView(context);
-            } catch (IOException e1) {
+            } catch (final IOException e1) {
                 throw new ScimpiException(e1);
             }
-            
-        } catch (Throwable e) {
-            String errorRef = Long.toString(System.currentTimeMillis(), 36).toUpperCase();
+
+        } catch (final Throwable e) {
+            final String errorRef = Long.toString(System.currentTimeMillis(), 36).toUpperCase();
 
             LOG.info("error " + errorRef);
             LOG.debug(e.getMessage(), e);
-            
+
             prepareErrorDetails(e, context, errorRef, servletPath);
-             
-            PersistenceSession checkSession = IsisContext.getPersistenceSession();
-            IsisTransactionManager transactionManager = checkSession.getTransactionManager();
-            if (transactionManager.getTransaction() != null && transactionManager.getTransaction().getState().canAbort()) {
+
+            final PersistenceSession checkSession = IsisContext.getPersistenceSession();
+            final IsisTransactionManager transactionManager = checkSession.getTransactionManager();
+            if (transactionManager.getTransaction() != null
+                && transactionManager.getTransaction().getState().canAbort()) {
                 transactionManager.abortTransaction();
                 transactionManager.startTransaction();
             }
 
-            Throwable ex = e instanceof TagProcessingException ? e.getCause() : e;
+            final Throwable ex = e instanceof TagProcessingException ? e.getCause() : e;
             if (ex instanceof ForbiddenException) {
-                context.addVariable("_security-context", ((TagProcessingException) e).getContext(), Scope.ERROR); 
-                context.addVariable("_security-error", ex.getMessage(), Scope.ERROR); 
+                context.addVariable("_security-context", ((TagProcessingException) e).getContext(), Scope.ERROR);
+                context.addVariable("_security-error", ex.getMessage(), Scope.ERROR);
                 context.addVariable("_security-identifier", ((ForbiddenException) ex).getIdentifier(), Scope.ERROR);
                 context.addVariable("_security-roles", ((ForbiddenException) ex).getRoles(), Scope.ERROR);
 
                 // TODO allow these values to be got configuration
                 // context.raiseError(403);
                 // context.setRequestPath("/error/security_403.shtml");
-                IsisContext.getMessageBroker().addWarning("You don't have the right permissions to perform this (#" + errorRef + ")" + 
-                        "<span class=\"debug-link\" onclick=\"$('#security-dump').toggle()\" > ...</span>");
+                IsisContext.getMessageBroker().addWarning(
+                    "You don't have the right permissions to perform this (#" + errorRef + ")"
+                        + "<span class=\"debug-link\" onclick=\"$('#security-dump').toggle()\" > ...</span>");
                 context.clearVariables(Scope.REQUEST);
                 context.setRequestPath("/index.shtml");
                 context.setRequestPath("/error/security_403.shtml");
                 try {
                     processTheView(context);
-                } catch (IOException e1) {
+                } catch (final IOException e1) {
                     throw new ScimpiException(e);
                 }
             } else {
                 // TODO allow these values to be got configuration
-                // context.raiseError(500);    
-               // context.setRequestPath("/error/server_500.shtml");
-                
-                String message = "There was a error while processing this request (#" + errorRef + ")" + 
-                        "<span class=\"debug-link\" onclick=\"$('#error-dump').toggle()\" > ...</span>";
+                // context.raiseError(500);
+                // context.setRequestPath("/error/server_500.shtml");
+
+                final String message =
+                    "There was a error while processing this request (#" + errorRef + ")"
+                        + "<span class=\"debug-link\" onclick=\"$('#error-dump').toggle()\" > ...</span>";
                 IsisContext.getMessageBroker().addWarning(message);
                 context.clearVariables(Scope.REQUEST);
                 context.setRequestPath("/index.shtml");
                 try {
                     context.reset();
                     processTheView(context);
-                } catch (TagProcessingException e1) {
+                } catch (final TagProcessingException e1) {
                     IsisContext.getMessageBroker().addWarning(message);
                     context.clearVariables(Scope.REQUEST);
                     context.setRequestPath("/error.shtml");
                     try {
                         context.reset();
                         processTheView(context);
-                    } catch (IOException e2) {
+                    } catch (final IOException e2) {
                         throw new ScimpiException(e2);
                     }
-                } catch (IOException e1) {
+                } catch (final IOException e1) {
                     throw new ScimpiException(e1);
                 }
-                
-   //             context.forward("/error.shtml");
+
+                // context.forward("/error.shtml");
             }
         } finally {
             try {
                 UserManager.endRequest(context.getSession());
-            } catch (Exception e1) {
+            } catch (final Exception e1) {
                 LOG.error("endRequest call failed", e1);
             }
         }
     }
 
-
-    protected void processTheView(RequestContext context) throws IOException {
+    protected void processTheView(final RequestContext context) throws IOException {
         IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
         if (transactionManager.getTransaction().getState().canFlush()) {
             transactionManager.flushTransaction();
         }
         processView(context);
-        // Note - the session will have changed since the earlier call if a user has logged in or out in the action processing above.
+        // Note - the session will have changed since the earlier call if a user has logged in or out in the action
+        // processing above.
         transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
         if (transactionManager.getTransaction().getState().canCommit()) {
             IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
         }
-        
+
         context.endRequest();
         UserManager.endRequest(context.getSession());
     }
 
+    private void prepareErrorDetails(final Throwable exception, final RequestContext requestContext,
+        final String errorRef, final String servletPath) {
+        final DebugString debugText = new DebugString();
+        final DebugHtmlString debugHtml = new DebugHtmlString();
+        final DebugBuilder debug = new DebugTee(debugText, debugHtml);
 
-    private void prepareErrorDetails(Throwable exception, RequestContext requestContext, String errorRef, String servletPath) {
-        DebugString debugText = new DebugString();
-        DebugHtmlString debugHtml = new DebugHtmlString();
-        DebugBuilder debug = new DebugTee(debugText, debugHtml);
-        
         try {
             debug.startSection("Exception");
             debug.appendException(exception);
             debug.endSection();
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug.appendln("NOTE - an exception occurred while dumping an exception!");
             debug.appendException(e);
         }
 
         if (IsisContext.getCurrentTransaction() != null) {
-            List<String> messages =  IsisContext.getMessageBroker().getMessages();
-            List<String> warnings = IsisContext.getMessageBroker().getWarnings();
+            final List<String> messages = IsisContext.getMessageBroker().getMessages();
+            final List<String> warnings = IsisContext.getMessageBroker().getWarnings();
             if (messages.size() > 0 || messages.size() > 0) {
                 debug.startSection("Warnings/Messages");
-                for (String message : messages) {
+                for (final String message : messages) {
                     debug.appendln("message", message);
                 }
-                for (String message : warnings) {
+                for (final String message : warnings) {
                     debug.appendln("warning", message);
                 }
             }
         }
-        
+
         requestContext.append(debug);
 
-        debug.startSection("Processing Trace"); 
-        debug.appendPreformatted(requestContext.getDebugTrace()); 
+        debug.startSection("Processing Trace");
+        debug.appendPreformatted(requestContext.getDebugTrace());
         debug.endSection();
         debug.close();
-        
-           
+
         PrintWriter writer;
         try {
-            String directory = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
+            final String directory =
+                IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
             writer = new PrintWriter(new File(directory, "error_" + errorRef + ".html"));
-            DebugWriter writer2 = new DebugWriter(writer, true);
+            final DebugWriter writer2 = new DebugWriter(writer, true);
             writer2.concat(debugHtml);
             writer2.close();
             writer.close();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             LOG.error("Failed to archive error page", e);
         }
-    
-        String replace = "";
-        String withReplacement = "";
-        String message = exception.getMessage();
-        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.ERROR);
-        requestContext.addVariable("_error-details", debugHtml.toString().replaceAll(replace, withReplacement), Scope.ERROR);
+
+        final String replace = "";
+        final String withReplacement = "";
+        final String message = exception.getMessage();
+        requestContext.addVariable("_error-message",
+            message == null ? "" : message.replaceAll(replace, withReplacement), Scope.ERROR);
+        requestContext.addVariable("_error-details", debugHtml.toString().replaceAll(replace, withReplacement),
+            Scope.ERROR);
         requestContext.addVariable("_error-ref", errorRef, Scope.ERROR);
         requestContext.clearTransientVariables();
-        
-        String msg = "failed during request for " + servletPath ;
-        LOG.error(msg +  " (#" + errorRef + ")\n" + message +"\n" + debugText + "\n" + msg);
+
+        final String msg = "failed during request for " + servletPath;
+        LOG.error(msg + " (#" + errorRef + ")\n" + message + "\n" + debugText + "\n" + msg);
     }
 
-    public void addParameter(String name, String value) {
+    public void addParameter(final String name, final String value) {
         parameters.put(name, value);
     }
 
-    private String getParameter(String name) {
+    private String getParameter(final String name) {
         return parameters.get(name);
     }
 
-    private void processActions(RequestContext context, boolean userLoggedIn, String actionName) throws IOException {
+    private void processActions(final RequestContext context, final boolean userLoggedIn, final String actionName)
+        throws IOException {
         if (actionName.endsWith(COMMAND_ROOT)) {
-            int pos = actionName.lastIndexOf('/');
-            Action action = actions.get(actionName.substring(pos, actionName.length() - COMMAND_ROOT.length()));
+            final int pos = actionName.lastIndexOf('/');
+            final Action action = actions.get(actionName.substring(pos, actionName.length() - COMMAND_ROOT.length()));
             if (action == null) {
                 throw new ScimpiException("No logic for " + actionName);
             }
 
             LOG.debug("processing action: " + action);
             action.process(context);
-            String fowardTo = context.forwardTo();
+            final String fowardTo = context.forwardTo();
             if (fowardTo != null) {
                 processActions(context, true, fowardTo);
             }
         }
     }
 
-    private void processView(RequestContext context) throws IOException {   
+    private void processView(final RequestContext context) throws IOException {
         String file = context.getRequestedFile();
         if (file == null) {
             LOG.warn("No view specified to process");
@@ -313,64 +319,64 @@ public class Dispatcher {
             return;
         }
         file = determineFile(context, file);
-        String fullPath = context.requestedFilePath(file);
+        final String fullPath = context.requestedFilePath(file);
         LOG.debug("processing file " + fullPath);
         context.setResourcePath(fullPath);
 
         context.setContentType("text/html");
 
         context.addVariable("title", "Untitled Page", Scope.REQUEST);
-        Stack<Snippet> tags = loadPageTemplate(context, fullPath);
-        Request request = new Request(file, context, tags, processors);
-        request.appendDebug("processing " + fullPath); 
+        final Stack<Snippet> tags = loadPageTemplate(context, fullPath);
+        final Request request = new Request(file, context, tags, processors);
+        request.appendDebug("processing " + fullPath);
         try {
             request.processNextTag();
             noteIfMessagesHaveNotBeenDisplay(context);
             IsisContext.getUpdateNotifier().clear();
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
             IsisContext.getUpdateNotifier().clear();
             throw e;
         }
-        String page = request.popBuffer();
-        PrintWriter writer = context.getWriter();
+        final String page = request.popBuffer();
+        final PrintWriter writer = context.getWriter();
         writer.write(page);
         if (context.getDebug() == Debug.PAGE) {
-            DebugWriter view = new DebugWriter(writer, false);
+            final DebugWriter view = new DebugWriter(writer, false);
             context.append(view);
         }
     }
 
-    public void noteIfMessagesHaveNotBeenDisplay(RequestContext context) {
-        List<String> messages = IsisContext.getMessageBroker().getMessages();
+    public void noteIfMessagesHaveNotBeenDisplay(final RequestContext context) {
+        final List<String> messages = IsisContext.getMessageBroker().getMessages();
         if (messages.size() > 0) {
             // TODO write out all messages
             context.getWriter().println("Note - messages existed but where not displayed");
         }
-        List<String> warnings = IsisContext.getMessageBroker().getWarnings();
+        final List<String> warnings = IsisContext.getMessageBroker().getWarnings();
         if (warnings.size() > 0) {
             // TODO write out all warning
             context.getWriter().println("Note - warnings existed but where not displayed");
         }
     }
 
-    private String determineFile(RequestContext context, String file) {
-        String fileName = file.trim();
+    private String determineFile(final RequestContext context, String file) {
+        final String fileName = file.trim();
         if (fileName.startsWith(GENERIC)) {
-            Object result = context.getVariable(RequestContext.RESULT);
-            ObjectAdapter mappedObject = MethodsUtils.findObject(context, (String) result);
+            final Object result = context.getVariable(RequestContext.RESULT);
+            final ObjectAdapter mappedObject = MethodsUtils.findObject(context, (String) result);
             if (mappedObject == null) {
                 throw new ScimpiException("No object mapping for " + result);
             }
             if (fileName.equals(GENERIC + "." + EXTENSION)) {
-                Facet facet = mappedObject.getSpecification().getFacet(CollectionFacet.class);
+                final Facet facet = mappedObject.getSpecification().getFacet(CollectionFacet.class);
                 if (facet != null) {
-                    ObjectSpecification specification = mappedObject.getSpecification();
-                    TypeOfFacet facet2 = specification.getFacet(TypeOfFacet.class);
+                    final ObjectSpecification specification = mappedObject.getSpecification();
+                    final TypeOfFacet facet2 = specification.getFacet(TypeOfFacet.class);
                     file = findFileForSpecification(context, facet2.valueSpec(), "collection", EXTENSION);
                 } else {
-                    ObjectAdapter mappedObject2 = mappedObject;
+                    final ObjectAdapter mappedObject2 = mappedObject;
                     if (mappedObject2.isTransient()) {
                         file = findFileForSpecification(context, mappedObject.getSpecification(), "edit", EXTENSION);
                     } else {
@@ -380,24 +386,21 @@ public class Dispatcher {
             } else if (fileName.equals(GENERIC + EDIT + "." + EXTENSION)) {
                 file = findFileForSpecification(context, mappedObject.getSpecification(), "edit", EXTENSION);
             } else if (fileName.equals(GENERIC + ACTION + "." + EXTENSION)) {
-                String method = context.getParameter("method");
+                final String method = context.getParameter("method");
                 file = findFileForSpecification(context, mappedObject.getSpecification(), method, "action", EXTENSION);
             }
         }
         return file;
     }
 
-    private String findFileForSpecification(RequestContext context, ObjectSpecification specification, String name, String extension) {
+    private String findFileForSpecification(final RequestContext context, final ObjectSpecification specification,
+        final String name, final String extension) {
         return findFileForSpecification(context, specification, name, name, extension);
     }
 
-    private String findFileForSpecification(
-            RequestContext context,
-            ObjectSpecification specification,
-            String name,
-            String defaultName,
-            String extension) {
-        
+    private String findFileForSpecification(final RequestContext context, final ObjectSpecification specification,
+        final String name, final String defaultName, final String extension) {
+
         String find = findFile(context, specification, name, extension);
         if (find == null) {
             find = "/generic/" + defaultName + "." + extension;
@@ -405,15 +408,12 @@ public class Dispatcher {
         return find;
     }
 
-    private String findFile(
-            RequestContext context,
-            ObjectSpecification specification,
-            String name,
-            String extension) {
-        String className = specification.getShortIdentifier();
+    private String findFile(final RequestContext context, final ObjectSpecification specification, final String name,
+        final String extension) {
+        final String className = specification.getShortIdentifier();
         String fileName = context.findFile("/" + className + "/" + name + "." + extension);
         if (fileName == null) {
-            List<ObjectSpecification> interfaces = specification.interfaces();
+            final List<ObjectSpecification> interfaces = specification.interfaces();
             for (int i = 0; i < interfaces.size(); i++) {
                 fileName = findFile(context, interfaces.get(i), name, extension);
                 if (fileName != null) {
@@ -427,24 +427,25 @@ public class Dispatcher {
         return fileName;
     }
 
-    private Stack<Snippet> loadPageTemplate(RequestContext context, String path) throws IOException, FileNotFoundException {
+    private Stack<Snippet> loadPageTemplate(final RequestContext context, final String path) throws IOException,
+        FileNotFoundException {
         // TODO cache stacks and check for them first
         copyParametersToVariableList(context);
         LOG.debug("parsing source " + path);
         return parser.parseHtmlFile(path, context);
     }
 
-    private void copyParametersToVariableList(RequestContext context) {
-    /*
-     * Enumeration parameterNames = context.getParameterNames(); while (parameterNames.hasMoreElements()) {
-     * String name = (String) parameterNames.nextElement(); if (!name.equals("view")) {
-     * context.addVariable(name, context.getParameter(name), Scope.REQUEST); } }
-     */
+    private void copyParametersToVariableList(final RequestContext context) {
+        /*
+         * Enumeration parameterNames = context.getParameterNames(); while (parameterNames.hasMoreElements()) { String
+         * name = (String) parameterNames.nextElement(); if (!name.equals("view")) { context.addVariable(name,
+         * context.getParameter(name), Scope.REQUEST); } }
+         */
     }
 
-    public void init(String dir) {
+    public void init(final String dir) {
         addAction(new ActionAction());
-        
+
         // TODO remove
         addAction(new DebugAction(this));
         addAction(new EditAction());
@@ -453,9 +454,9 @@ public class Dispatcher {
         addAction(new LogoutAction());
         addAction(new LogAction());
 
-        String configFile = getParameter("config");
+        final String configFile = getParameter("config");
         if (configFile != null) {
-            File file = new File(dir, configFile);
+            final File file = new File(dir, configFile);
             if (file.exists()) {
                 loadConfigFile(file);
             } else {
@@ -467,64 +468,60 @@ public class Dispatcher {
         processors.addElementProcessor(new org.apache.isis.viewer.scimpi.dispatcher.view.debug.Debug(this));
     }
 
-    private void loadConfigFile(File file) {
+    private void loadConfigFile(final File file) {
         try {
             Document document;
-            SAXReader reader = new SAXReader();
+            final SAXReader reader = new SAXReader();
             document = reader.read(file);
-            Element root = document.getRootElement();
-            for (Iterator i = root.elementIterator(); i.hasNext();) {
-                Element element = (Element) i.next();
-          
+            final Element root = document.getRootElement();
+            for (final Iterator i = root.elementIterator(); i.hasNext();) {
+                final Element element = (Element) i.next();
+
                 if (element.getName().equals("actions")) {
-                    for (Iterator actions = element.elementIterator("action"); actions.hasNext();) {
-                        Element action = (Element) actions.next();
-                        String className = action.getText();
-                        Action instance = (Action) InstanceUtil.createInstance(className);
+                    for (final Iterator actions = element.elementIterator("action"); actions.hasNext();) {
+                        final Element action = (Element) actions.next();
+                        final String className = action.getText();
+                        final Action instance = (Action) InstanceUtil.createInstance(className);
                         addAction(instance);
                     }
                 }
-                
+
                 if (element.getName().equals("processors")) {
-                    for (Iterator processors = element.elementIterator("processor"); processors.hasNext();) {
-                        Element processor = (Element) processors.next();
-                        String className = processor.getText();
-                        ElementProcessor instance = (ElementProcessor) InstanceUtil.createInstance(className);
+                    for (final Iterator processors = element.elementIterator("processor"); processors.hasNext();) {
+                        final Element processor = (Element) processors.next();
+                        final String className = processor.getText();
+                        final ElementProcessor instance = (ElementProcessor) InstanceUtil.createInstance(className);
                         this.processors.addElementProcessor(instance);
                     }
                 }
 
             }
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new IsisException(e);
-        } catch (DocumentException e) {
+        } catch (final DocumentException e) {
             throw new IsisException(e);
         }
 
     }
 
-    private void addAction(Action action) {
+    private void addAction(final Action action) {
         actions.put("/" + action.getName(), action);
         action.init();
     }
 
-    public void debug(DebugBuilder debug) {
+    public void debug(final DebugBuilder debug) {
         debug.appendTitle("Actions");
-        Set<String> keySet = actions.keySet();
-        ArrayList<String> list = new ArrayList<String>(keySet);
+        final Set<String> keySet = actions.keySet();
+        final ArrayList<String> list = new ArrayList<String>(keySet);
         Collections.sort(list);
-        for (String name : list) {
-            debug.appendln(name, actions.get(name));            
+        for (final String name : list) {
+            debug.appendln(name, actions.get(name));
         }
         /*
-        new ArrayList<E>(actions.keySet().iterator())
-        Iterator<String> names = Collections.sort().iterator();
-        while (names.hasNext()) {
-            String name = names.next();
-            view.appendRow(name, actions.get(name));
-        }
-        */
-        Iterator<Action> iterator = actions.values().iterator();
+         * new ArrayList<E>(actions.keySet().iterator()) Iterator<String> names = Collections.sort().iterator(); while
+         * (names.hasNext()) { String name = names.next(); view.appendRow(name, actions.get(name)); }
+         */
+        final Iterator<Action> iterator = actions.values().iterator();
         while (iterator.hasNext()) {
             iterator.next().debug(debug);
         }
@@ -532,4 +529,3 @@ public class Dispatcher {
         processors.debug(debug);
     }
 }
-

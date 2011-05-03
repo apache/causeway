@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -25,19 +24,19 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Mark extends AbstractElementProcessor {
 
     // TODO the return points should be pushed on to a stack so that there is traceable history.
-    public void process(Request request) {
-      //  String name = request.getOptionalProperty(NAME);
-        RequestContext context = request.getContext();
+    @Override
+    public void process(final Request request) {
+        // String name = request.getOptionalProperty(NAME);
+        final RequestContext context = request.getContext();
         context.addVariable("_return-to", context.getUri(), Scope.SESSION);
     }
 
+    @Override
     public String getName() {
         return "mark";
     }
 
 }
-

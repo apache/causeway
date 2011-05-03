@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.collection;
 
 import java.util.Iterator;
@@ -33,48 +32,48 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
-
 public class Collection extends AbstractElementProcessor {
 
-	public void process(Request request) {
-        RequestContext context = request.getContext();
+    @Override
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
 
         ObjectAdapter collection;
 
-        String field = request.getOptionalProperty(FIELD);
+        final String field = request.getOptionalProperty(FIELD);
         if (field != null) {
-            String id = request.getOptionalProperty(OBJECT);
-            ObjectAdapter object = (ObjectAdapter) context.getMappedObjectOrResult(id);
-            ObjectAssociation objectField = object.getSpecification().getAssociation(field);
+            final String id = request.getOptionalProperty(OBJECT);
+            final ObjectAdapter object = context.getMappedObjectOrResult(id);
+            final ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             if (!objectField.isOneToManyAssociation()) {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
             IsisContext.getPersistenceSession().resolveField(object, objectField);
             collection = objectField.get(object);
         } else {
-            String id = request.getOptionalProperty(COLLECTION);
+            final String id = request.getOptionalProperty(COLLECTION);
             collection = context.getMappedObjectOrResult(id);
         }
 
-        RepeatMarker marker = request.createMarker();
+        final RepeatMarker marker = request.createMarker();
 
-        String variable = request.getOptionalProperty(ELEMENT_NAME);
-        String scopeName = request.getOptionalProperty(SCOPE);
-        Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
-        String rowClassesList = request.getOptionalProperty(ROW_CLASSES, ODD_ROW_CLASS + "|" + EVEN_ROW_CLASS);
+        final String variable = request.getOptionalProperty(ELEMENT_NAME);
+        final String scopeName = request.getOptionalProperty(SCOPE);
+        final Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
+        final String rowClassesList = request.getOptionalProperty(ROW_CLASSES, ODD_ROW_CLASS + "|" + EVEN_ROW_CLASS);
         String[] rowClasses = new String[0];
         if (rowClassesList != null) {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         if (facet.size(collection) == 0) {
-            request.skipUntilClose();            
+            request.skipUntilClose();
         } else {
-            Iterator< ObjectAdapter> iterator = facet.iterator(collection);
+            final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
             int row = 0;
             while (iterator.hasNext()) {
-                ObjectAdapter element = (ObjectAdapter) iterator.next();
+                final ObjectAdapter element = iterator.next();
                 context.addVariable("row", "" + (row + 1), Scope.REQUEST);
                 if (rowClassesList != null) {
                     context.addVariable("row-class", rowClasses[row % rowClasses.length], Scope.REQUEST);
@@ -87,9 +86,9 @@ public class Collection extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return COLLECTION;
     }
 
 }
-

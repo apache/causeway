@@ -26,10 +26,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-
 /**
- * Indicates that request could not complete as it could not access (for security reasons) some of the
- * content.
+ * Indicates that request could not complete as it could not access (for security reasons) some of the content.
  */
 public class ForbiddenException extends ScimpiException {
     private static final long serialVersionUID = 1L;
@@ -38,25 +36,26 @@ public class ForbiddenException extends ScimpiException {
     private final Identifier identifier;
     private final AuthenticationSession session;
 
-    public ForbiddenException(String message) {
+    public ForbiddenException(final String message) {
         this(IsisContext.getAuthenticationSession(), message);
     }
 
-    private ForbiddenException(AuthenticationSession session, String message) {
+    private ForbiddenException(final AuthenticationSession session, final String message) {
         super(message + " for " + session.getUserName() + " " + session.getRoles());
         this.session = session;
         identifier = null;
     }
 
-    public ForbiddenException(IdentifiedHolder target, boolean isVisibleAndUsabable) {
+    public ForbiddenException(final IdentifiedHolder target, final boolean isVisibleAndUsabable) {
         this(target.getIdentifier(), IsisContext.getAuthenticationSession(), isVisibleAndUsabable);
     }
 
-    private ForbiddenException(Identifier identifier, AuthenticationSession session, boolean isVisibleAndUsabable) {
+    private ForbiddenException(final Identifier identifier, final AuthenticationSession session,
+        final boolean isVisibleAndUsabable) {
         super((identifier.getType() == Identifier.Type.PROPERTY_OR_COLLECTION ? "Field" : "Action") + " '"
-                + identifier.getMemberName() + "' in " + identifier.getClassName() + " is not "
-                + (isVisibleAndUsabable ? "visible/usable " : "visible") + " for " + session.getUserName() + " "
-                + session.getRoles());
+            + identifier.getMemberName() + "' in " + identifier.getClassName() + " is not "
+            + (isVisibleAndUsabable ? "visible/usable " : "visible") + " for " + session.getUserName() + " "
+            + session.getRoles());
         this.identifier = identifier;
         this.session = session;
     }

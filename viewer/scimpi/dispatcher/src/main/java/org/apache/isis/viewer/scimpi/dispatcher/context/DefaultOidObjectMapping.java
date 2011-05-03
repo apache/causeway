@@ -46,76 +46,83 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class DefaultOidObjectMapping implements ObjectMapping {
     private static final Logger LOG = Logger.getLogger(DefaultOidObjectMapping.class);
     private final Map<String, TransientObjectMapping> requestTransients = new HashMap<String, TransientObjectMapping>();
     private final Map<String, TransientObjectMapping> sessionTransients = new HashMap<String, TransientObjectMapping>();
     private Class<? extends Oid> oidType;
 
-    public void append(DebugBuilder debug) {
+    @Override
+    public void append(final DebugBuilder debug) {
         append(debug, requestTransients, "request");
         append(debug, sessionTransients, "session");
     }
 
-    protected void append(DebugBuilder debug, Map<String, TransientObjectMapping> transients, String type) {
-        Iterator<String> ids = new HashSet(transients.keySet()).iterator();
+    protected void append(final DebugBuilder debug, final Map<String, TransientObjectMapping> transients,
+        final String type) {
+        final Iterator<String> ids = new HashSet(transients.keySet()).iterator();
         if (ids.hasNext()) {
             debug.appendTitle("Transient objects (" + type + ")");
             while (ids.hasNext()) {
-                String key = ids.next();
+                final String key = ids.next();
                 debug.appendln(key, transients.get(key).debug());
             }
         }
     }
 
-    public void appendMappings(DebugBuilder request) {}
+    @Override
+    public void appendMappings(final DebugBuilder request) {
+    }
 
+    @Override
     public void clear() {
         requestTransients.clear();
 
-        List<String> remove = new ArrayList<String>();
-        for (String id : sessionTransients.keySet()) {
+        final List<String> remove = new ArrayList<String>();
+        for (final String id : sessionTransients.keySet()) {
             if (!sessionTransients.get(id).getOid().isTransient()) {
                 remove.add(id);
                 sessionTransients.put(id, null);
             }
         }
-        for (String id : remove) {
+        for (final String id : remove) {
             sessionTransients.remove(id);
         }
     }
 
+    @Override
     public void endSession() {
         sessionTransients.clear();
     }
 
-    public String mapTransientObject(ObjectAdapter object) {
+    @Override
+    public String mapTransientObject(final ObjectAdapter object) {
         try {
-            List<ObjectAdapter> savedObject = new ArrayList<ObjectAdapter>();
-            JSONObject data = encodeTransientData(object, savedObject);
-            return "D" + data.toString(4); //StringEscapeUtils.escapeHtml(data.toString(4));
-        } catch (JSONException e) {
+            final List<ObjectAdapter> savedObject = new ArrayList<ObjectAdapter>();
+            final JSONObject data = encodeTransientData(object, savedObject);
+            return "D" + data.toString(4); // StringEscapeUtils.escapeHtml(data.toString(4));
+        } catch (final JSONException e) {
             throw new ScimpiException(e);
         }
     }
 
-    private JSONObject encodeTransientData(ObjectAdapter object, List<ObjectAdapter> savedObject) throws JSONException {
+    private JSONObject encodeTransientData(final ObjectAdapter object, final List<ObjectAdapter> savedObject)
+        throws JSONException {
         if (savedObject.contains(object)) {
             return null;
         }
         savedObject.add(object);
 
-        JSONObject data = new JSONObject();
-        ObjectSpecification specification = object.getSpecification();
+        final JSONObject data = new JSONObject();
+        final ObjectSpecification specification = object.getSpecification();
         data.put("_class", specification.getFullIdentifier());
 
-        Oid oid = object.getOid();
+        final Oid oid = object.getOid();
         String encodedOid;
         if (oid instanceof AggregatedOid) {
-            AggregatedOid aoid = (AggregatedOid) oid;
-            Oid parentOid = aoid.getParentOid();
-            String aggregatedId = aoid.getId();
+            final AggregatedOid aoid = (AggregatedOid) oid;
+            final Oid parentOid = aoid.getParentOid();
+            final String aggregatedId = aoid.getId();
             encodedOid = Long.toString(((SerialOid) parentOid).getSerialNo(), 16) + "@" + aggregatedId;
         } else if (oid instanceof SerialOid) {
             encodedOid = Long.toString(((SerialOid) oid).getSerialNo(), 16);
@@ -125,24 +132,24 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 
         data.put("_id", encodedOid);
 
-        for (ObjectAssociation association : specification.getAssociations()) {
-            ObjectAdapter fieldValue = association.get(object);
-            String fieldName = association.getId();
+        for (final ObjectAssociation association : specification.getAssociations()) {
+            final ObjectAdapter fieldValue = association.get(object);
+            final String fieldName = association.getId();
             if (fieldValue == null) {
                 data.put(fieldName, (Object) null);
             } else if (association.getSpecification().isEncodeable()) {
-                EncodableFacet encodeableFacet = fieldValue.getSpecification().getFacet(EncodableFacet.class);
+                final EncodableFacet encodeableFacet = fieldValue.getSpecification().getFacet(EncodableFacet.class);
                 data.put(fieldName, encodeableFacet.toEncodedString(fieldValue));
             } else if (association instanceof OneToManyAssociation) {
-                List<JSONObject> collection = new ArrayList<JSONObject>();
-                CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class);
-                for (ObjectAdapter element : facet.iterable(fieldValue)) {
+                final List<JSONObject> collection = new ArrayList<JSONObject>();
+                final CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class);
+                for (final ObjectAdapter element : facet.iterable(fieldValue)) {
                     collection.add(encodeTransientData(element, savedObject));
                 }
                 data.put(fieldName, collection);
             } else {
                 if (fieldValue.isTransient() || fieldValue.isAggregated()) {
-                    JSONObject saveData = encodeTransientData(fieldValue, savedObject);
+                    final JSONObject saveData = encodeTransientData(fieldValue, savedObject);
                     if (saveData == null) {
                         data.put(fieldName, mapObject(fieldValue, Scope.INTERACTION));
                     } else {
@@ -156,24 +163,25 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         return data;
     }
 
-    public String mapObject(ObjectAdapter inObject, Scope scope) {
+    @Override
+    public String mapObject(final ObjectAdapter inObject, final Scope scope) {
         // TODO need to ensure that transient objects are remapped each time so that any changes are added to
         // session data
         // continue work here.....here
 
         ObjectAdapter object = inObject;
 
-        Oid oid = object.getOid();
+        final Oid oid = object.getOid();
         if (oidType == null) {
             oidType = oid.getClass();
         }
 
         String encodedOid;
         if (oid instanceof AggregatedOid) {
-            AggregatedOid aoid = (AggregatedOid) oid;
-            Oid parentOid = aoid.getParentOid();
+            final AggregatedOid aoid = (AggregatedOid) oid;
+            final Oid parentOid = aoid.getParentOid();
             object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);
-            String aggregatedId = aoid.getId();
+            final String aggregatedId = aoid.getId();
             encodedOid = Long.toString(((SerialOid) parentOid).getSerialNo(), 16) + "@" + aggregatedId;
         } else if (oid instanceof SerialOid) {
             encodedOid = Long.toString(((SerialOid) oid).getSerialNo(), 16);
@@ -181,8 +189,9 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             encodedOid = IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier().enString(oid);
         }
 
-        boolean isTransient = object.isTransient();
-        String transferableId = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
+        final boolean isTransient = object.isTransient();
+        final String transferableId =
+            (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
         LOG.debug("encoded " + oid + " as " + transferableId + " ~ " + encodedOid);
 
         if (inObject.isTransient()) {
@@ -190,7 +199,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             // TODO cache these in requests so that Mementos are only created once.
             // TODO if Transient/Interaction then return state; other store state in session an return OID
             // string
-            TransientObjectMapping mapping = new TransientObjectMapping(inObject);
+            final TransientObjectMapping mapping = new TransientObjectMapping(inObject);
             if (scope == Scope.REQUEST) {
                 requestTransients.put(transferableId, mapping);
             } else if (scope == Scope.INTERACTION || scope == Scope.SESSION) {
@@ -202,68 +211,68 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         return transferableId;
     }
 
-    public ObjectAdapter mappedTransientObject(String data) {
-        String objectData = data; //StringEscapeUtils.unescapeHtml(data);
+    @Override
+    public ObjectAdapter mappedTransientObject(final String data) {
+        final String objectData = data; // StringEscapeUtils.unescapeHtml(data);
         LOG.debug("data" + objectData);
 
         try {
-            JSONObject jsonObject = new JSONObject(objectData);
-            ObjectAdapter object = restoreTransientObject(jsonObject);
+            final JSONObject jsonObject = new JSONObject(objectData);
+            final ObjectAdapter object = restoreTransientObject(jsonObject);
             return object;
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new ScimpiException("Problem reading data: " + data, e);
         }
     }
 
-    private ObjectAdapter restoreTransientObject(JSONObject jsonObject) throws JSONException {
-        String cls = jsonObject.getString("_class");
-        String id = jsonObject.getString("_id");
+    private ObjectAdapter restoreTransientObject(final JSONObject jsonObject) throws JSONException {
+        final String cls = jsonObject.getString("_class");
+        final String id = jsonObject.getString("_id");
 
         ObjectAdapter object;
-        ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(cls);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(cls);
         if (specification.isAggregated() && !specification.isCollection()) {
-            String[] split = id.split("@");
-            SerialOid parentOid = SerialOid.createTransient(Long.parseLong(split[0], 16));
-            AggregatedOid oid = new AggregatedOid(parentOid, split[1]);
+            final String[] split = id.split("@");
+            final SerialOid parentOid = SerialOid.createTransient(Long.parseLong(split[0], 16));
+            final AggregatedOid oid = new AggregatedOid(parentOid, split[1]);
             object = IsisContext.getPersistenceSession().recreateAdapter(oid, specification);
         } else {
             object = mappedObject("T" + cls + "@" + id);
         }
 
-        for (ObjectAssociation association : specification.getAssociations()) {
-            String fieldName = association.getId();
+        for (final ObjectAssociation association : specification.getAssociations()) {
+            final String fieldName = association.getId();
 
-            Object fieldValue = jsonObject.has(fieldName) ? jsonObject.get(fieldName) : null;
+            final Object fieldValue = jsonObject.has(fieldName) ? jsonObject.get(fieldName) : null;
 
             if (association.getSpecification().isEncodeable()) {
                 if (fieldValue == null) {
                     ((OneToOneAssociation) association).initAssociation(object, null);
                 } else {
-                    EncodableFacet encodeableFacet = association.getSpecification().getFacet(EncodableFacet.class);
-                    ObjectAdapter fromEncodedString = encodeableFacet.fromEncodedString((String) fieldValue);
+                    final EncodableFacet encodeableFacet =
+                        association.getSpecification().getFacet(EncodableFacet.class);
+                    final ObjectAdapter fromEncodedString = encodeableFacet.fromEncodedString((String) fieldValue);
                     ((OneToOneAssociation) association).initAssociation(object, fromEncodedString);
                 }
             } else if (association instanceof OneToManyAssociation) {
-                List<JSONObject> collection = new ArrayList<JSONObject>();
+                final List<JSONObject> collection = new ArrayList<JSONObject>();
                 if (!collection.isEmpty()) {
                     throw new ScimpiException("Unexpected association for transient object " + association);
                 }
                 /*
-                CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class);
-                for (ObjectAdapter element : facet.iterable(fieldValue)) {
-                   collection.add(saveData(element, savedObject));
-                }
-                data.put(fieldName, collection);
-                */
+                 * CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class); for
+                 * (ObjectAdapter element : facet.iterable(fieldValue)) { collection.add(saveData(element,
+                 * savedObject)); } data.put(fieldName, collection);
+                 */
             } else {
                 if (fieldValue == null) {
                     ((OneToOneAssociation) association).initAssociation(object, null);
                 } else {
                     if (fieldValue instanceof JSONObject) {
-                        ObjectAdapter fieldObject = restoreTransientObject((JSONObject) fieldValue);
+                        final ObjectAdapter fieldObject = restoreTransientObject((JSONObject) fieldValue);
                         ((OneToOneAssociation) association).initAssociation(object, fieldObject);
                     } else {
-                        ObjectAdapter field = mappedObject((String) fieldValue);
+                        final ObjectAdapter field = mappedObject((String) fieldValue);
                         ((OneToOneAssociation) association).initAssociation(object, field);
                     }
                 }
@@ -272,30 +281,33 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         return object;
     }
 
-    public ObjectAdapter mappedObject(String id) {
-        char type = id.charAt(0);
+    @Override
+    public ObjectAdapter mappedObject(final String id) {
+        final char type = id.charAt(0);
         if ((type == 'T')) {
             TransientObjectMapping mapping = sessionTransients.get(id);
             if (mapping == null) {
                 mapping = requestTransients.get(id);
             }
             if (mapping == null) {
-                String[] split = id.split("@");
-                ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
-                Object pojo = spec.createObject(CreationMode.NO_INITIALIZE);
-                String oidData = split[1];
-                SerialOid oid = SerialOid.createTransient(Long.valueOf(oidData, 16).longValue());
+                final String[] split = id.split("@");
+                final ObjectSpecification spec =
+                    IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
+                final Object pojo = spec.createObject(CreationMode.NO_INITIALIZE);
+                final String oidData = split[1];
+                final SerialOid oid = SerialOid.createTransient(Long.valueOf(oidData, 16).longValue());
                 return IsisContext.getPersistenceSession().recreateAdapter(oid, pojo);
             }
-            ObjectAdapter mappedTransientObject = mapping.getObject();
+            final ObjectAdapter mappedTransientObject = mapping.getObject();
             LOG.debug("retrieved " + mappedTransientObject.getOid() + " for " + id);
             return mappedTransientObject;
         } else {
-            String[] split = id.split("@");
-            ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
+            final String[] split = id.split("@");
+            final ObjectSpecification spec =
+                IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
 
             try {
-                String oidData = split[1];
+                final String oidData = split[1];
                 LOG.debug("decoding " + oidData);
 
                 ObjectAdapter loadObject;
@@ -305,7 +317,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                     oidType = IsisContext.getPersistenceSession().getServices().get(0).getOid().getClass();
                 }
                 if (split.length > 2) {
-                    SerialOid parentOid = SerialOid.createPersistent(Long.parseLong(oidData, 16));
+                    final SerialOid parentOid = SerialOid.createPersistent(Long.parseLong(oidData, 16));
                     oid = new AggregatedOid(parentOid, split[2]);
                     IsisContext.getPersistenceSession().loadObject(parentOid, spec);
                     loadObject = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
@@ -318,21 +330,23 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 }
 
                 return loadObject;
-            } catch (SecurityException e) {
+            } catch (final SecurityException e) {
                 throw new IsisException(e);
             }
         }
     }
 
+    @Override
     public void reloadIdentityMap() {
-        Iterator<TransientObjectMapping> mappings = sessionTransients.values().iterator();
+        final Iterator<TransientObjectMapping> mappings = sessionTransients.values().iterator();
         while (mappings.hasNext()) {
-            TransientObjectMapping mapping = mappings.next();
+            final TransientObjectMapping mapping = mappings.next();
             mapping.reload();
         }
     }
 
-    public void unmapObject(ObjectAdapter object, Scope scope) {
+    @Override
+    public void unmapObject(final ObjectAdapter object, final Scope scope) {
         sessionTransients.remove(object.getOid());
         requestTransients.remove(object.getOid());
     }

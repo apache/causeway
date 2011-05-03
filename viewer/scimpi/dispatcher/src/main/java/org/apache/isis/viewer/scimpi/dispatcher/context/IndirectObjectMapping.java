@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import java.util.HashMap;
@@ -30,7 +29,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
-
 
 public class IndirectObjectMapping implements ObjectMapping {
     private final Map<Scope, Map<String, Mapping>> scopedMappings = new LinkedHashMap<Scope, Map<String, Mapping>>();
@@ -48,67 +46,72 @@ public class IndirectObjectMapping implements ObjectMapping {
         return String.valueOf(nextId);
     }
 
+    @Override
     public void endSession() {
         scopedMappings.get(Scope.SESSION).clear();
         nextId = 0;
     }
 
+    @Override
     public void reloadIdentityMap() {
         reloadIdentityMap(Scope.GLOBAL);
         reloadIdentityMap(Scope.SESSION);
         reloadIdentityMap(Scope.INTERACTION);
-        
-        Map<String, Mapping> map = scopedMappings.get(Scope.INTERACTION);
+
+        final Map<String, Mapping> map = scopedMappings.get(Scope.INTERACTION);
         scopedMappings.put(Scope.REQUEST, map);
         scopedMappings.put(Scope.INTERACTION, new HashMap<String, Mapping>());
     }
 
-    private void reloadIdentityMap(Scope scope) {
-        Map<String, Mapping> map = scopedMappings.get(scope);
-        Iterator<String> ids = map.keySet().iterator();
+    private void reloadIdentityMap(final Scope scope) {
+        final Map<String, Mapping> map = scopedMappings.get(scope);
+        final Iterator<String> ids = map.keySet().iterator();
         while (ids.hasNext()) {
-            String key = ids.next();
-            Mapping mapping = map.get(key);
+            final String key = ids.next();
+            final Mapping mapping = map.get(key);
             mapping.reload();
         }
     }
 
+    @Override
     public void clear() {
         scopedMappings.get(Scope.REQUEST).clear();
     }
 
-    public void unmapObject(ObjectAdapter object, Scope scope) {
-        String id = mapObject(object, scope);
+    @Override
+    public void unmapObject(final ObjectAdapter object, final Scope scope) {
+        final String id = mapObject(object, scope);
         scopedMappings.get(scope).remove(id);
     }
 
-    public void appendMappings(DebugBuilder debug) {
+    @Override
+    public void appendMappings(final DebugBuilder debug) {
         appendMappings(debug, scopedMappings.get(Scope.INTERACTION));
     }
 
-    private void appendMappings(DebugBuilder debug, Map<String, Mapping> map) {
-        Iterator<String> names = map.keySet().iterator();
+    private void appendMappings(final DebugBuilder debug, final Map<String, Mapping> map) {
+        final Iterator<String> names = map.keySet().iterator();
         while (names.hasNext()) {
-            String id = names.next();
-            ObjectAdapter object = mappedObject(id);
+            final String id = names.next();
+            final ObjectAdapter object = mappedObject(id);
             debug.appendln(id, object);
         }
     }
 
-    private void appendMappings(DebugBuilder debug, Scope scope) {
+    private void appendMappings(final DebugBuilder debug, final Scope scope) {
         debug.appendTitle("Objects for " + scope);
-        Map<String, Mapping> map = scopedMappings.get(scope);
-        Iterator<String> ids = new TreeSet(map.keySet()).iterator();
+        final Map<String, Mapping> map = scopedMappings.get(scope);
+        final Iterator<String> ids = new TreeSet(map.keySet()).iterator();
         if (!ids.hasNext()) {
             debug.appendln("None", "");
         }
         while (ids.hasNext()) {
-            String key = ids.next();
+            final String key = ids.next();
             debug.appendln(key, map.get(key).debug());
         }
     }
 
-    private Mapping createMapping(ObjectAdapter adapter) {
+    private Mapping createMapping(final ObjectAdapter adapter) {
         if (adapter.getResolveState().isTransient()) {
             return new TransientObjectMapping(adapter);
         } else {
@@ -121,11 +124,12 @@ public class IndirectObjectMapping implements ObjectMapping {
      * 
      * @see org.apache.isis.webapp.context.ObjectMapping#mappedObject(java.lang.String)
      */
-    public ObjectAdapter mappedObject(String id) {
-        Iterator<Map<String, Mapping>> iterator = scopedMappings.values().iterator();
+    @Override
+    public ObjectAdapter mappedObject(final String id) {
+        final Iterator<Map<String, Mapping>> iterator = scopedMappings.values().iterator();
         while (iterator.hasNext()) {
-            Map<String, Mapping> map = iterator.next();
-            Mapping mapping = map.get(id);
+            final Map<String, Mapping> map = iterator.next();
+            final Mapping mapping = map.get(id);
             if (mapping != null) {
                 return mapping.getObject();
             }
@@ -133,38 +137,39 @@ public class IndirectObjectMapping implements ObjectMapping {
         return null;
     }
 
-    public String mapObject(ObjectAdapter obj, Scope scope) {
+    @Override
+    public String mapObject(final ObjectAdapter obj, final Scope scope) {
         ObjectAdapter object;
-        object = (ObjectAdapter) obj;
-        Mapping mapping = createMapping(object);
-        
+        object = obj;
+        final Mapping mapping = createMapping(object);
+
         boolean changeScope = false;
-        for (Scope s : scopedMappings.keySet()) {
-            Map<String, Mapping> map = scopedMappings.get(s);
+        for (final Scope s : scopedMappings.keySet()) {
+            final Map<String, Mapping> map = scopedMappings.get(s);
             if (map.containsValue(mapping)) {
-                String id = findMapping(map, mapping);
+                final String id = findMapping(map, mapping);
                 if (changeScope) {
                     map.remove(id);
                     scopedMappings.get(scope).put(id, mapping);
                 }
                 return id;
             }
-            
+
             if (s == scope) {
                 changeScope = true;
             }
         }
-        
-        Map<String, Mapping> map = scopedMappings.get(scope);
-        String id = obj.getSpecification().getShortIdentifier() + "@" + nextId();
+
+        final Map<String, Mapping> map = scopedMappings.get(scope);
+        final String id = obj.getSpecification().getShortIdentifier() + "@" + nextId();
         map.put(id, mapping);
         return id;
     }
 
-    private String findMapping(Map<String, Mapping> map, Mapping mapping) {
-        Iterator<String> ids = map.keySet().iterator();
+    private String findMapping(final Map<String, Mapping> map, final Mapping mapping) {
+        final Iterator<String> ids = map.keySet().iterator();
         while (ids.hasNext()) {
-            String key = ids.next();
+            final String key = ids.next();
             if (map.get(key).equals(mapping)) {
                 return key;
             }
@@ -173,7 +178,8 @@ public class IndirectObjectMapping implements ObjectMapping {
         return null;
     }
 
-    public void append(DebugBuilder debug) {
+    @Override
+    public void append(final DebugBuilder debug) {
         debug.appendln("Next ID", nextId);
 
         appendMappings(debug, Scope.GLOBAL);
@@ -182,11 +188,13 @@ public class IndirectObjectMapping implements ObjectMapping {
         appendMappings(debug, Scope.REQUEST);
     }
 
-    public ObjectAdapter mappedTransientObject(String substring) {
+    @Override
+    public ObjectAdapter mappedTransientObject(final String substring) {
         throw new NotYetImplementedException();
     }
 
-    public String mapTransientObject(ObjectAdapter object) {
+    @Override
+    public String mapTransientObject(final ObjectAdapter object) {
         throw new NotYetImplementedException();
     }
 

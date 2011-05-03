@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
@@ -30,16 +29,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.PageWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
-
 public class TableBuilder extends AbstractTableView {
 
     @Override
-    protected TableContentWriter createRowBuilder(
-            final Request request,
-            RequestContext context,
-            final String parent,
-            List<ObjectAssociation> allFields, 
-            ObjectAdapter collection) {
+    protected TableContentWriter createRowBuilder(final Request request, final RequestContext context,
+        final String parent, final List<ObjectAssociation> allFields, final ObjectAdapter collection) {
 
         final String variable = request.getOptionalProperty(ELEMENT_NAME, ELEMENT);
         final String headerClass = request.getOptionalProperty("head-" + CLASS);
@@ -54,21 +48,22 @@ public class TableBuilder extends AbstractTableView {
         return new TableContentWriter() {
 
             @Override
-            public void writeFooters(PageWriter writer) {}
+            public void writeFooters(final PageWriter writer) {
+            }
 
             @Override
-            public void writeHeaders(PageWriter writer) {
-                String headerSegment = headerClass == null ? "" : (" class=\"" + headerClass + "\"");
+            public void writeHeaders(final PageWriter writer) {
+                final String headerSegment = headerClass == null ? "" : (" class=\"" + headerClass + "\"");
                 writer.appendHtml("<thead" + headerSegment + ">");
                 writer.appendHtml(headers);
                 writer.appendHtml("</thead>");
             }
 
             @Override
-            public void writeElement(Request request, RequestContext context, ObjectAdapter element) {
+            public void writeElement(final Request request, final RequestContext context, final ObjectAdapter element) {
                 context.addVariable(variable, context.mapObject(element, Scope.REQUEST), Scope.REQUEST);
-                RepeatMarker end = request.createMarker();
-                RepeatMarker marker = block.getMarker();
+                final RepeatMarker end = request.createMarker();
+                final RepeatMarker marker = block.getMarker();
                 marker.repeat();
                 request.processUtilCloseTag();
                 end.repeat();
@@ -82,4 +77,3 @@ public class TableBuilder extends AbstractTableView {
     }
 
 }
-

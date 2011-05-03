@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -25,10 +24,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class TagOrderException extends ScimpiException {
     private static final long serialVersionUID = 1L;
 
-    public TagOrderException(Request request) {
+    public TagOrderException(final Request request) {
         super("Invalid tag in this context: " + request.getTag().getName());
     }
 
 }
-
-

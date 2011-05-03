@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import java.util.List;
@@ -29,29 +28,29 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Specification extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
-        RequestContext context = request.getContext();
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
         if (context.isDebugDisabled()) {
             return;
         }
-        
+
         if (request.isRequested("always") || context.getDebug() == RequestContext.Debug.ON) {
             request.appendHtml("<div class=\"debug\">");
             request.appendHtml("<pre>");
-            
-            String id = request.getOptionalProperty("object");
-            ObjectAdapter object = context.getMappedObjectOrResult(id);
-            ObjectSpecification specification = object.getSpecification();
+
+            final String id = request.getOptionalProperty("object");
+            final ObjectAdapter object = context.getMappedObjectOrResult(id);
+            final ObjectSpecification specification = object.getSpecification();
             request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
-            List<ObjectAssociation> fields = specification.getAssociations();
+            final List<ObjectAssociation> fields = specification.getAssociations();
             for (int i = 0; i < fields.size(); i++) {
-                request.appendHtml("    " + fields.get(i).getName() + " (" + fields.get(i).getSpecification().getSingularName() + ") \n" );
+                request.appendHtml("    " + fields.get(i).getName() + " ("
+                    + fields.get(i).getSpecification().getSingularName() + ") \n");
             }
-            
+
             request.appendHtml("</pre>");
             request.appendHtml("</div>");
         }
@@ -63,4 +62,3 @@ public class Specification extends AbstractElementProcessor {
     }
 
 }
-

@@ -93,7 +93,7 @@ public abstract class AbstractTest {
         return wrapperFactory;
     }
 
-    public void setWrapperFactory(WrapperFactory headlessViewer) {
+    public void setWrapperFactory(final WrapperFactory headlessViewer) {
         this.wrapperFactory = headlessViewer;
     }
 

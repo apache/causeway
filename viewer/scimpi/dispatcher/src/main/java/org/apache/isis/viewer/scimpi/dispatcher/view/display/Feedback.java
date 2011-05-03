@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Feedback extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String cls = request.getOptionalProperty(CLASS);
-        StringBuffer buffer = new StringBuffer();
+    @Override
+    public void process(final Request request) {
+        final String cls = request.getOptionalProperty(CLASS);
+        final StringBuffer buffer = new StringBuffer();
         Warnings.write(cls, buffer);
         Messages.write(cls, buffer);
         if (buffer.length() > 0) {
@@ -38,9 +37,9 @@ public class Feedback extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "feedback";
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
@@ -34,7 +33,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedFieldsBlock;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.RemoveElement;
-
 
 public class TableView extends AbstractTableView {
 
@@ -53,20 +51,10 @@ public class TableView extends AbstractTableView {
         private final LinkedObject[] linkedFields;
         private final LinkedObject linkRow;
 
-        private SimpleTableBuilder(
-                String parent,
-                boolean includeHeading,
-                boolean includeFooting,
-                String title,
-                String[] headers,
-                List<ObjectAssociation> fields,
-                boolean showIcons,
-                boolean showSelectOption,
-                boolean showDeleteOption,
-                boolean showEditOption,
-                String fieldName,
-                LinkedObject[] linkedFields,
-                LinkedObject linkRow) {
+        private SimpleTableBuilder(final String parent, final boolean includeHeading, final boolean includeFooting,
+            final String title, final String[] headers, final List<ObjectAssociation> fields, final boolean showIcons,
+            final boolean showSelectOption, final boolean showDeleteOption, final boolean showEditOption,
+            final String fieldName, final LinkedObject[] linkedFields, final LinkedObject linkRow) {
             this.parent = parent;
             this.includeHeading = includeHeading;
             this.includeFooting = includeFooting;
@@ -83,7 +71,7 @@ public class TableView extends AbstractTableView {
         }
 
         @Override
-        public void writeFooters(PageWriter writer) {
+        public void writeFooters(final PageWriter writer) {
             if (includeFooting) {
                 writer.appendHtml("<tfooter>");
                 headerRow(writer, headers);
@@ -92,7 +80,7 @@ public class TableView extends AbstractTableView {
         }
 
         @Override
-        public void writeHeaders(PageWriter writer) {
+        public void writeHeaders(final PageWriter writer) {
             if (includeHeading) {
                 writer.appendHtml("<theader>");
                 titleRow(writer);
@@ -103,7 +91,7 @@ public class TableView extends AbstractTableView {
 
         private void titleRow(final PageWriter writer) {
             if (title != null) {
-                writer.appendHtml("<tr colspan=\"" + fields.size() +"\">");
+                writer.appendHtml("<tr colspan=\"" + fields.size() + "\">");
                 writer.appendHtml("<th class=\"title\">" + title + "</th>");
                 writer.appendHtml("</tr>");
             }
@@ -112,10 +100,10 @@ public class TableView extends AbstractTableView {
         private void headerRow(final PageWriter writer, final String[] headers) {
             writer.appendHtml("<tr>");
             writer.appendHtml("<th></th>");
-            String[] columnHeaders = headers;
-            for (int i = 0; i < columnHeaders.length; i++) {
-                if (columnHeaders[i] != null) {
-                    writer.appendHtml("<th>" + columnHeaders[i] + "</th>");
+            final String[] columnHeaders = headers;
+            for (final String columnHeader : columnHeaders) {
+                if (columnHeader != null) {
+                    writer.appendHtml("<th>" + columnHeader + "</th>");
                 }
             }
             writer.appendHtml("<th>" + "</th>");
@@ -123,16 +111,16 @@ public class TableView extends AbstractTableView {
         }
 
         @Override
-        public void writeElement(Request request, RequestContext context, ObjectAdapter element) {
-            String rowId = context.mapObject(element, Scope.INTERACTION);
-            String scope = linkRow == null ? "" : "&amp;" + SCOPE + "=" + linkRow.getScope();
+        public void writeElement(final Request request, final RequestContext context, final ObjectAdapter element) {
+            final String rowId = context.mapObject(element, Scope.INTERACTION);
+            final String scope = linkRow == null ? "" : "&amp;" + SCOPE + "=" + linkRow.getScope();
             String result = "";
             result = context.encodedInteractionParameters();
 
             if (fields.size() == 0) {
                 if (linkRow != null) {
                     request.appendHtml("<td><a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "="
-                            + rowId + result + scope + "\">" + element.titleString() + "</a></td>");
+                        + rowId + result + scope + "\">" + element.titleString() + "</a></td>");
                 } else {
                     request.appendHtml("<td>" + element.titleString() + "</td>");
                 }
@@ -144,27 +132,27 @@ public class TableView extends AbstractTableView {
                         continue;
                     }
                     request.appendHtml("<td>");
-                    ObjectAdapter field = fields.get(i).get(element);
+                    final ObjectAdapter field = fields.get(i).get(element);
                     if (field != null) {
                         if (showIcons && !fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                             request.appendHtml("<img class=\"" + "small-icon" + "\" src=\""
-                                    + request.getContext().imagePath(field) + "\" alt=\""
-                                    + fields.get(i).getSpecification().getShortIdentifier() + "\"/>");
+                                + request.getContext().imagePath(field) + "\" alt=\""
+                                + fields.get(i).getSpecification().getShortIdentifier() + "\"/>");
                         }
                         if (linkRow != null) {
-                            request.appendHtml("<a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "="
-                                    + rowId + result + scope + "\">");
+                            request.appendHtml("<a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable()
+                                + "=" + rowId + result + scope + "\">");
                         } else if (linkedFields[i] != null) {
-                            ObjectAdapter fieldObject = fields.get(i).get(element);
-                            String id = context.mapObject(fieldObject, Scope.INTERACTION);
+                            final ObjectAdapter fieldObject = fields.get(i).get(element);
+                            final String id = context.mapObject(fieldObject, Scope.INTERACTION);
                             request.appendHtml("<a href=\"" + linkedFields[i].getForwardView() + "?"
-                                    + linkedFields[i].getVariable() + "=" + id + "\">");
+                                + linkedFields[i].getVariable() + "=" + id + "\">");
                             context.mapObject(fieldObject, RequestContext.scope(linkedFields[i].getScope()));
 
                         }
                         try {
                             request.appendHtml(field.titleString());
-                        } catch (ObjectNotFoundException e) {
+                        } catch (final ObjectNotFoundException e) {
                             request.appendHtml(e.getMessage());
                         }
                         if (linkRow != null || linkedFields[i] != null) {
@@ -178,17 +166,18 @@ public class TableView extends AbstractTableView {
             request.appendHtml("<td>");
             if (showSelectOption) {
                 request.appendHtml("<a class=\"element-select\" href=\"" + "_generic." + Dispatcher.EXTENSION + "?"
-                        + RequestContext.RESULT + "=" + rowId + result + scope + "\">view</a>");
+                    + RequestContext.RESULT + "=" + rowId + result + scope + "\">view</a>");
             }
             if (showEditOption) {
                 request.appendHtml(" <a class=\"element-edit\" href=\"" + "_generic_edit." + Dispatcher.EXTENSION + "?"
-                        + RequestContext.RESULT + "=" + rowId + result + scope + "\">edit</a>");
+                    + RequestContext.RESULT + "=" + rowId + result + scope + "\">edit</a>");
             }
 
             if (showDeleteOption && parent != null) {
                 String view = request.getViewPath();
                 view = context.fullFilePath(view == null ? context.getResourceFile() : view);
-                RemoveElement.write(request, context.getMappedObject(parent), fieldName, element, null, view, view, "delete", "element-delete");
+                RemoveElement.write(request, context.getMappedObject(parent), fieldName, element, null, view, view,
+                    "delete", "element-delete");
             }
 
             request.appendHtml("</td>");
@@ -197,44 +186,38 @@ public class TableView extends AbstractTableView {
     }
 
     @Override
-    protected TableContentWriter createRowBuilder(
-            final Request request,
-            RequestContext context,
-            final String parent,
-            final List<ObjectAssociation> allFields, ObjectAdapter collection) {
+    protected TableContentWriter createRowBuilder(final Request request, final RequestContext context,
+        final String parent, final List<ObjectAssociation> allFields, final ObjectAdapter collection) {
         final String fieldName = request.getOptionalProperty(FIELD);
         final String title = request.getOptionalProperty(FORM_TITLE);
         return rowBuilder(request, context, title, parent, fieldName, allFields);
     }
 
-    private static TableContentWriter rowBuilder(
-            final Request request,
-            RequestContext context,
-            String title,
-            final String object,
-            String fieldName, 
-            List<ObjectAssociation> allFields) {
-        String linkRowView = request.getOptionalProperty(LINK);
-        String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
-        String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
-        final LinkedObject linkRow = linkRowView == null ? null : new LinkedObject(linkObjectName, linkObjectScope,
+    private static TableContentWriter rowBuilder(final Request request, final RequestContext context,
+        final String title, final String object, final String fieldName, final List<ObjectAssociation> allFields) {
+        final String linkRowView = request.getOptionalProperty(LINK);
+        final String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
+        final String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
+        final LinkedObject linkRow =
+            linkRowView == null ? null : new LinkedObject(linkObjectName, linkObjectScope,
                 context.fullUriPath(linkRowView));
         final boolean includeHeading = request.isRequested(HEADING, true);
         final boolean includeFooting = request.isRequested(FOOTING, false);
-        
-        boolean linkFields = request.isRequested("link-fields", true);
+
+        final boolean linkFields = request.isRequested("link-fields", true);
         final boolean showIcons = request.isRequested(SHOW_ICON, true);
         final boolean showSelectOption = request.isRequested(SHOW_SELECT, true);
         final boolean showEditOption = request.isRequested(SHOW_EDIT, true);
         final boolean showDeleteOption = request.isRequested(SHOW_DELETE, true);
 
-        LinkedFieldsBlock block = new LinkedFieldsBlock();
+        final LinkedFieldsBlock block = new LinkedFieldsBlock();
         request.setBlockContent(block);
         request.processUtilCloseTag();
         final List<ObjectAssociation> fields = block.includedFields(allFields);
         final LinkedObject[] linkedFields = block.linkedFields(fields);
         for (int i = 0; i < linkedFields.length; i++) {
-            if (linkedFields[i] == null && linkFields && !fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
+            if (linkedFields[i] == null && linkFields
+                && !fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                 linkedFields[i] = new LinkedObject("_generic.shtml");
             }
             if (linkedFields[i] != null) {
@@ -252,27 +235,23 @@ public class TableView extends AbstractTableView {
         }
 
         request.popBlockContent();
-        
-        return new SimpleTableBuilder(object, includeHeading, includeFooting, title, headers, fields, showIcons, showSelectOption, showDeleteOption,
-                showEditOption, fieldName, linkedFields, linkRow);
+
+        return new SimpleTableBuilder(object, includeHeading, includeFooting, title, headers, fields, showIcons,
+            showSelectOption, showDeleteOption, showEditOption, fieldName, linkedFields, linkRow);
     }
 
-    public static void write(
-            Request request,
-            String summary,
-            ObjectAdapter object,
-            ObjectAssociation field,
-            ObjectAdapter collection,
-            List<ObjectAssociation> fields,
-            boolean linkAllFields) {
-        boolean[] linkFields = new boolean[fields.size()];
+    public static void write(final Request request, final String summary, final ObjectAdapter object,
+        final ObjectAssociation field, final ObjectAdapter collection, final List<ObjectAssociation> fields,
+        final boolean linkAllFields) {
+        final boolean[] linkFields = new boolean[fields.size()];
         if (linkAllFields) {
             for (int i = 0; i < linkFields.length; i++) {
                 linkFields[i] = fields.get(i).isOneToOneAssociation();
             }
         }
-        RequestContext context = request.getContext();
-        TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields);
+        final RequestContext context = request.getContext();
+        final TableContentWriter rowBuilder =
+            rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields);
         write(request, collection, summary, rowBuilder, null, null);
     }
 
@@ -282,4 +261,3 @@ public class TableView extends AbstractTableView {
     }
 
 }
-

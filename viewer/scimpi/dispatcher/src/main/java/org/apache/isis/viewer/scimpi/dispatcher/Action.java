@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import java.io.IOException;
@@ -36,5 +35,3 @@ public interface Action extends Names {
     void debug(DebugBuilder debug);
 
 }
-
-

@@ -34,37 +34,42 @@ public class LogAction implements Action {
 
     private static final Logger LOG = Logger.getLogger(LogAction.class);
 
-    public void process(RequestContext context) throws IOException {
+    @Override
+    public void process(final RequestContext context) throws IOException {
 
-        AuthenticationSession session = context.getSession();
+        final AuthenticationSession session = context.getSession();
         if (session == null) {
             throw new NotLoggedInException();
         }
 
-        
-        String levelName = (String) context.getVariable("level");
-        
-        Level level = Level.toLevel(levelName);
+        final String levelName = (String) context.getVariable("level");
+
+        final Level level = Level.toLevel(levelName);
         boolean changeLogged = false;
         if (Level.INFO.isGreaterOrEqual(LogManager.getRootLogger().getLevel())) {
             LOG.info("log level changed to " + level);
-            changeLogged  = true;
+            changeLogged = true;
         }
         LogManager.getRootLogger().setLevel(level);
         if (!changeLogged) {
             LOG.info("log level changed to " + level);
         }
-        String view = (String) context.getVariable("view");
+        final String view = (String) context.getVariable("view");
         context.setRequestPath(view);
-        
+
     }
 
+    @Override
     public String getName() {
         return "log";
     }
 
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
-    public void debug(DebugBuilder debug) {}
+    @Override
+    public void debug(final DebugBuilder debug) {
+    }
 
 }

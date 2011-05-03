@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,31 +27,32 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class TableCell extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getRequiredProperty(FIELD);
+    @Override
+    public void process(final Request request) {
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getRequiredProperty(FIELD);
         String className = request.getOptionalProperty(CLASS);
         className = className == null ? "" : " class=\"" + className + "\"";
-        ObjectAdapter object = request.getContext().getMappedObjectOrVariable(id, ELEMENT);
-        ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrVariable(id, ELEMENT);
+        final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         request.appendHtml("<td" + className + ">");
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
-            ObjectAdapter fieldReference = field.get(object);
-            String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
-            String name = request.getOptionalProperty(RESULT_NAME, fieldName);
+            final ObjectAdapter fieldReference = field.get(object);
+            final String source =
+                fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
+            final String name = request.getOptionalProperty(RESULT_NAME, fieldName);
             request.getContext().addVariable(name, source, Scope.REQUEST);
-            
+
             request.pushNewBuffer();
             request.processUtilCloseTag();
-            String buffer = request.popBuffer();
+            final String buffer = request.popBuffer();
             if (buffer.trim().length() == 0) {
-                request.appendHtml( fieldReference == null ? "" : fieldReference.titleString());
+                request.appendHtml(fieldReference == null ? "" : fieldReference.titleString());
             } else {
                 request.appendHtml(buffer);
             }
@@ -62,9 +62,9 @@ public class TableCell extends AbstractElementProcessor {
         request.appendHtml("</td>");
     }
 
+    @Override
     public String getName() {
         return "table-cell";
     }
 
 }
-

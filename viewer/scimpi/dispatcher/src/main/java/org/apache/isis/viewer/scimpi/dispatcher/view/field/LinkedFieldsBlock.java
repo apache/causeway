@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.field;
 
 import java.util.HashMap;
@@ -26,19 +25,18 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-
 public class LinkedFieldsBlock extends InclusionList {
-    private Map<String, LinkedObject> linkedFields = new HashMap<String, LinkedObject>();
+    private final Map<String, LinkedObject> linkedFields = new HashMap<String, LinkedObject>();
 
-    public void link(String field, String variable, String scope, String forwardView) {
+    public void link(final String field, final String variable, final String scope, final String forwardView) {
         include(field);
         linkedFields.put(field, new LinkedObject(variable, scope, forwardView));
     }
 
-    public LinkedObject[] linkedFields(List<ObjectAssociation> fields) {
-        LinkedObject[] includedFields = new LinkedObject[fields.size()];
+    public LinkedObject[] linkedFields(final List<ObjectAssociation> fields) {
+        final LinkedObject[] includedFields = new LinkedObject[fields.size()];
         for (int i = 0; i < fields.size(); i++) {
-            String id2 = fields.get(i).getId();
+            final String id2 = fields.get(i).getId();
             if (fields.get(i).isOneToOneAssociation() && linkedFields.containsKey(id2)) {
                 includedFields[i] = linkedFields.get(id2);
             }
@@ -47,4 +45,3 @@ public class LinkedFieldsBlock extends InclusionList {
     }
 
 }
-

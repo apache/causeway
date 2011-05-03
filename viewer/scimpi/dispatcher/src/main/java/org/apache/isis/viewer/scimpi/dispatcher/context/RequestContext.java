@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import java.io.IOException;
@@ -45,7 +44,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
 import org.apache.log4j.Logger;
 
-
 public abstract class RequestContext {
     private static final Logger LOG = Logger.getLogger(RequestContext.class);
 
@@ -60,9 +58,9 @@ public abstract class RequestContext {
     private enum DebugMode {
         OFF, ON, SYSADMIN_ONLY
     }
-    
-    public static Scope scope(String scopeName) {
-        String name = scopeName.toUpperCase();
+
+    public static Scope scope(final String scopeName) {
+        final String name = scopeName.toUpperCase();
         if (name.equals(Scope.GLOBAL.toString())) {
             return Scope.GLOBAL;
         } else if (name.equals(Scope.SESSION.toString())) {
@@ -75,7 +73,7 @@ public abstract class RequestContext {
         return null;
     }
 
-    public static Scope scope(String scopeName, Scope defaultScope) {
+    public static Scope scope(final String scopeName, final Scope defaultScope) {
         if (scopeName == null || scopeName.trim().equals("")) {
             return defaultScope;
         } else {
@@ -87,14 +85,15 @@ public abstract class RequestContext {
     public static final String ERROR = "_error";
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
-    private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
+    private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION,
+        Scope.GLOBAL };
     private static DebugMode debugMode = null;
 
-    private ObjectMapping objectMapping;
-    private VersionMapping versionMapping;
+    private final ObjectMapping objectMapping;
+    private final VersionMapping versionMapping;
     private final Map<Scope, Map<String, Object>> variables;
-    private final StringBuffer debugTrace = new StringBuffer(); 
-    
+    private final StringBuffer debugTrace = new StringBuffer();
+
     private String forwardTo;
     private String requestedFile;
     private String requestedParentPath;
@@ -105,12 +104,14 @@ public abstract class RequestContext {
     private ObjectAdapter collection;
 
     public RequestContext() {
-        String className = IsisContext.getConfiguration().getString("scimpi.object-mapping.class",
+        String className =
+            IsisContext.getConfiguration().getString("scimpi.object-mapping.class",
                 DefaultOidObjectMapping.class.getName());
-        objectMapping = (ObjectMapping) InstanceUtil.createInstance(className, ObjectMapping.class);
-        className = IsisContext.getConfiguration().getString("scimpi.version-mapping.class",
+        objectMapping = InstanceUtil.createInstance(className, ObjectMapping.class);
+        className =
+            IsisContext.getConfiguration().getString("scimpi.version-mapping.class",
                 DefaultVersionMapping.class.getName());
-        versionMapping = (VersionMapping) InstanceUtil.createInstance(className, VersionMapping.class);
+        versionMapping = InstanceUtil.createInstance(className, VersionMapping.class);
         variables = new HashMap<Scope, Map<String, Object>>();
 
         variables.put(Scope.GLOBAL, globalVariables);
@@ -131,14 +132,14 @@ public abstract class RequestContext {
     // Mapped objects
     // //////////////////////////////////////////////////////////////////
 
-    public ObjectAdapter getMappedObject(String id) {
+    public ObjectAdapter getMappedObject(final String id) {
         if (id == null || id.trim().equals("") || id.trim().equals("null")) {
             return null;
         }
         if (id.equals("collection")) {
             return collection;
         }
-        ObjectAdapter object = mappedObject(id);
+        final ObjectAdapter object = mappedObject(id);
         if (object == null) {
             throw new ScimpiException("No object for " + id);
         } else {
@@ -146,11 +147,11 @@ public abstract class RequestContext {
         }
     }
 
-    public ObjectAdapter getMappedObjectOrResult(String id) {
+    public ObjectAdapter getMappedObjectOrResult(final String id) {
         return getMappedObjectOrVariable(id, RESULT);
     }
-    
-    public ObjectAdapter getMappedObjectOrVariable(String id, String name) {
+
+    public ObjectAdapter getMappedObjectOrVariable(String id, final String name) {
         if (id == null) {
             id = (String) getVariable(name);
             if (id == null) {
@@ -163,8 +164,8 @@ public abstract class RequestContext {
         return getMappedObject(id);
     }
 
-    public String mapObject(ObjectAdapter object, String scopeName, Scope defaultScope) {
-        Scope scope = scopeName == null ? defaultScope : scope(scopeName);
+    public String mapObject(final ObjectAdapter object, final String scopeName, final Scope defaultScope) {
+        final Scope scope = scopeName == null ? defaultScope : scope(scopeName);
         LOG.debug("mapping " + object + " " + scope);
         return objectMapping.mapObject(object, scope);
     }
@@ -180,33 +181,33 @@ public abstract class RequestContext {
         if (id.startsWith("D")) {
             return objectMapping.mappedTransientObject(id.substring(1));
         }
-        
-        String[] idParts = id.split("@");
+
+        final String[] idParts = id.split("@");
         if (idParts.length == 2) {
-            ObjectAdapter mappedObject = objectMapping.mappedObject(id);
+            final ObjectAdapter mappedObject = objectMapping.mappedObject(id);
             if (mappedObject instanceof ObjectAdapter) {
-                IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) mappedObject);
+                IsisContext.getPersistenceSession().resolveImmediately(mappedObject);
             }
             return mappedObject;
         } else {
-            ObjectAdapter parentObject = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
+            final ObjectAdapter parentObject = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
             if (parentObject instanceof ObjectAdapter) {
-                IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) parentObject);
+                IsisContext.getPersistenceSession().resolveImmediately(parentObject);
             }
 
-            AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
+            final AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
 
             ObjectAdapter aggregatedAdapter = null;
-            outer: for (ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
+            outer: for (final ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
                 if (association.getSpecification().isAggregated()) {
-                    ObjectAdapter objectAdapter = association.get(parentObject);
+                    final ObjectAdapter objectAdapter = association.get(parentObject);
                     if (objectAdapter == null) {
                         continue;
                     }
                     if (association.isOneToManyAssociation()) {
-                        ObjectAdapter coll = objectAdapter;
-                        CollectionFacet facet = coll.getSpecification().getFacet(CollectionFacet.class);
-                        for (ObjectAdapter element : facet.iterable(coll)) {
+                        final ObjectAdapter coll = objectAdapter;
+                        final CollectionFacet facet = coll.getSpecification().getFacet(CollectionFacet.class);
+                        for (final ObjectAdapter element : facet.iterable(coll)) {
                             if (element.getOid().equals(aggregatedOid)) {
                                 aggregatedAdapter = element;
                                 break outer;
@@ -229,21 +230,20 @@ public abstract class RequestContext {
     }
 
     public boolean isInternalRequest() {
-        String referrer = getHeader("Referer"); // Note spelling mistake is intentional
-        return referrer != null && referrer.contains("localhost");  // TODO need to look for actual domain
+        final String referrer = getHeader("Referer"); // Note spelling mistake is intentional
+        return referrer != null && referrer.contains("localhost"); // TODO need to look for actual domain
     }
 
     // //////////////////////////////////////////////////////////////////
     // Version
     // //////////////////////////////////////////////////////////////////
-    
 
-    public String mapVersion(ObjectAdapter object) {
-        Version version = object.getVersion();
+    public String mapVersion(final ObjectAdapter object) {
+        final Version version = object.getVersion();
         return version == null ? "" : versionMapping.mapVersion(version);
     }
-    
-    public Version getVersion(String id) {
+
+    public Version getVersion(final String id) {
         if (id.equals("")) {
             return null;
         } else {
@@ -254,10 +254,10 @@ public abstract class RequestContext {
     // ////////////////////////////
     // Debug
     // ////////////////////////////
-    public void append(DebugBuilder debug) {
+    public void append(final DebugBuilder debug) {
         debug.startSection("Request");
         debug.appendTitle("User");
-        AuthenticationSession session = getSession();
+        final AuthenticationSession session = getSession();
         debug.appendln("Session", session);
         if (session != null) {
             debug.appendln("Name", session.getUserName());
@@ -270,7 +270,7 @@ public abstract class RequestContext {
         debug.appendln("Parent resource path", resourceParentPath);
         debug.appendln("Resource file", resourceFile);
         debug.endSection();
-        
+
         debug.startSection("Variables");
         append(debug, Scope.GLOBAL);
         append(debug, Scope.SESSION);
@@ -284,21 +284,21 @@ public abstract class RequestContext {
         debug.endSection();
     }
 
-    private void append(DebugBuilder view, Scope scope) {
-        Map<String, Object> map = variables.get(scope);
-        Iterator<String> keys = new TreeSet(map.keySet()).iterator();
+    private void append(final DebugBuilder view, final Scope scope) {
+        final Map<String, Object> map = variables.get(scope);
+        final Iterator<String> keys = new TreeSet(map.keySet()).iterator();
         if (keys.hasNext()) {
             view.appendTitle(scope + " scoped variables");
             while (keys.hasNext()) {
-                String key = keys.next();
-                Object object = map.get(key);
-                String mappedTo = "";
+                final String key = keys.next();
+                final Object object = map.get(key);
+                final String mappedTo = "";
                 view.appendln(key, object + mappedTo);
             }
         }
     }
 
-    public void append(DebugBuilder content, String list) {
+    public void append(final DebugBuilder content, final String list) {
         if (list.equals("variables")) {
             appendVariables(content, Scope.GLOBAL);
             content.blankLine();
@@ -314,24 +314,24 @@ public abstract class RequestContext {
         }
     }
 
-    private void appendVariables(DebugBuilder content, Scope scope) {
-        Map<String, Object> map = variables.get(scope);
-        Iterator<String> names = new TreeSet(map.keySet()).iterator();
+    private void appendVariables(final DebugBuilder content, final Scope scope) {
+        final Map<String, Object> map = variables.get(scope);
+        final Iterator<String> names = new TreeSet(map.keySet()).iterator();
         if (names.hasNext()) {
             content.appendTitle(scope.toString());
             while (names.hasNext()) {
-                String name = names.next();
+                final String name = names.next();
                 try {
-                    Object object = map.get(name);
+                    final Object object = map.get(name);
                     String details = "";
                     if (object instanceof String) {
-                        ObjectAdapter mappedObject = mappedObject((String) object);
+                        final ObjectAdapter mappedObject = mappedObject((String) object);
                         if (mappedObject != null) {
                             details = mappedObject.toString();
                         }
                     }
                     content.appendln(name, object + "  " + details);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     content.appendln(name, map.get(name));
                 }
             }
@@ -342,14 +342,14 @@ public abstract class RequestContext {
     // Variables
     // ////////////////////////////
 
-    public void clearVariables(Scope scope) {
+    public void clearVariables(final Scope scope) {
         variables.get(scope).clear();
     }
 
-    public void changeScope(String name, Scope newScope) {
-        for (int i = 0; i < SCOPES.length; i++) { 
-            Map<String, Object> map = variables.get(SCOPES[i]); 
-            Object object = map.get(name);
+    public void changeScope(final String name, final Scope newScope) {
+        for (final Scope element : SCOPES) {
+            final Map<String, Object> map = variables.get(element);
+            final Object object = map.get(name);
             if (object != null) {
                 map.remove(name);
                 addVariable(name, object, newScope);
@@ -358,16 +358,16 @@ public abstract class RequestContext {
         }
     }
 
-    public void clearVariable(String name, Scope scope) {
+    public void clearVariable(String name, final Scope scope) {
         name = name != null ? name : RESULT;
         variables.get(scope).remove(name);
     }
 
-    public void addVariable(String name, Object value, String scope) {
+    public void addVariable(final String name, final Object value, final String scope) {
         addVariable(name, value, scope(scope));
     }
 
-    public void addVariable(String name, Object value, Scope scope) {
+    public void addVariable(String name, final Object value, final Scope scope) {
         name = name != null ? name : RESULT;
         if (scope == Scope.SESSION && !(value instanceof Serializable)) {
             throw new ScimpiException("SESSION scoped variable (" + name + ") must be serializable: " + value);
@@ -376,19 +376,19 @@ public abstract class RequestContext {
         variables.get(scope).put(name, value);
     }
 
-    private void removeExistingVariable(String name) { 
-        for (int i = 0; i < SCOPES.length; i++) { 
-            Map<String, Object> map = variables.get(SCOPES[i]); 
-            Object object = map.get(name); 
-            if (object != null) { 
-                map.remove(name); 
-                break; 
-            } 
-        } 
-    } 
-    
-    public String getStringVariable(String name) {
-        String value = (String) getVariable(name);
+    private void removeExistingVariable(final String name) {
+        for (final Scope element : SCOPES) {
+            final Map<String, Object> map = variables.get(element);
+            final Object object = map.get(name);
+            if (object != null) {
+                map.remove(name);
+                break;
+            }
+        }
+    }
+
+    public String getStringVariable(final String name) {
+        final String value = (String) getVariable(name);
         if (value == null) {
             return null;
         } else {
@@ -396,10 +396,10 @@ public abstract class RequestContext {
         }
     }
 
-    public Object getVariable(String name) {
-        for (int i = 0; i < SCOPES.length; i++) { 
-            Map<String, Object> map = variables.get(SCOPES[i]); 
-            Object object = map.get(name);
+    public Object getVariable(final String name) {
+        for (final Scope element : SCOPES) {
+            final Map<String, Object> map = variables.get(element);
+            final Object object = map.get(name);
             if (object != null) {
                 return object;
             }
@@ -408,23 +408,23 @@ public abstract class RequestContext {
     }
 
     public String replaceVariables(String value) {
-        int start = value.indexOf("${");
+        final int start = value.indexOf("${");
         if (start == -1) {
             return value;
         } else {
-            int end = value.indexOf('}');
+            final int end = value.indexOf('}');
             if (end == -1) {
                 throw new PropertyException("No closing brace in " + value.substring(start));
             } else if (end < start) {
                 throw new PropertyException("Closing brace before opening brace in " + value.substring(end));
             }
-            String name = value.substring(start + 2, end);
+            final String name = value.substring(start + 2, end);
             if (name != null) {
-                int pos = name.indexOf(":");
-                String variableName = pos == -1 ? name : name.substring(0, pos);
-                String qualifier = pos == -1 ? "none" : name.substring(pos); 
+                final int pos = name.indexOf(":");
+                final String variableName = pos == -1 ? name : name.substring(0, pos);
+                final String qualifier = pos == -1 ? "none" : name.substring(pos);
                 Object replacementValue;
-                boolean embed = qualifier.indexOf("embed") > -1;
+                final boolean embed = qualifier.indexOf("embed") > -1;
                 if (embed) {
                     replacementValue = "${" + variableName + "}";
                 } else {
@@ -435,9 +435,9 @@ public abstract class RequestContext {
                     if (replacementValue == null) {
                         replacementValue = getBuiltIn(variableName);
                     }
-                    
+
                     if (replacementValue == null) {
-                        boolean ensureExists = qualifier.indexOf("optional") == -1;
+                        final boolean ensureExists = qualifier.indexOf("optional") == -1;
                         if (ensureExists) {
                             throw new PropertyException("No value for the variable " + value.substring(start, end + 1));
                         } else {
@@ -445,23 +445,23 @@ public abstract class RequestContext {
                         }
                     }
                 }
-                boolean repeat = qualifier.indexOf("repeat") > -1;
+                final boolean repeat = qualifier.indexOf("repeat") > -1;
                 if (repeat) {
                     value = value.substring(0, start) + replacementValue + value.substring(end + 1);
                     return replaceVariables(value);
-                } else {                
-                    String remainder = replaceVariables(value.substring(end + 1));
+                } else {
+                    final String remainder = replaceVariables(value.substring(end + 1));
                     value = value.substring(0, start) + replacementValue + remainder;
                     return value;
                 }
-                
+
             } else {
                 throw new PropertyException("No variable name speceified");
             }
         }
     }
 
-    private Object getBuiltIn(String name) {
+    private Object getBuiltIn(final String name) {
         if (name.equals("_session")) {
             return getSessionId();
         } else if (name.equals("_context")) {
@@ -478,23 +478,24 @@ public abstract class RequestContext {
     }
 
     public String encodedInteractionParameters() {
-        StringBuffer buffer = new StringBuffer();
-        Map<String, Object> map = variables.get(Scope.INTERACTION);
-        Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
+        final StringBuffer buffer = new StringBuffer();
+        final Map<String, Object> map = variables.get(Scope.INTERACTION);
+        final Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
-            Entry<String, Object> entry = iterator.next();
+            final Entry<String, Object> entry = iterator.next();
             buffer.append("&amp;" + entry.getKey() + "=" + entry.getValue());
         }
         return buffer.toString();
     }
 
     public String interactionFields() {
-        StringBuffer buffer = new StringBuffer();
-        Map<String, Object> map = variables.get(Scope.INTERACTION);
-        Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
+        final StringBuffer buffer = new StringBuffer();
+        final Map<String, Object> map = variables.get(Scope.INTERACTION);
+        final Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
-            Entry<String, Object> entry = iterator.next();
-            buffer.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue() + "\" />\n");
+            final Entry<String, Object> entry = iterator.next();
+            buffer.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue()
+                + "\" />\n");
         }
         return buffer.toString();
     }
@@ -517,9 +518,9 @@ public abstract class RequestContext {
     }
 
     public void startRequest() {
-        debugTrace.setLength(0); 
+        debugTrace.setLength(0);
         objectMapping.reloadIdentityMap();
-        String debugParameter = getParameter("debug");
+        final String debugParameter = getParameter("debug");
         if (debugParameter != null) {
             if (debugParameter.equals("off")) {
                 debug = Debug.OFF;
@@ -536,12 +537,12 @@ public abstract class RequestContext {
     // /////////////////////////////
     // Forwarding
     // /////////////////////////////
-    public void forwardTo(String forwardTo) {
+    public void forwardTo(final String forwardTo) {
         this.forwardTo = "/" + forwardTo;
     }
 
     public String forwardTo() {
-        String returnForwardTo = forwardTo;
+        final String returnForwardTo = forwardTo;
         forwardTo = null;
         return returnForwardTo;
     }
@@ -549,25 +550,25 @@ public abstract class RequestContext {
     // /////////////////////////////
     // Parameters
     // /////////////////////////////
-    public void addParameter(String name, String parameter) {
+    public void addParameter(final String name, final String parameter) {
         if (name == null) {
             throw new ScimpiException("Name must be specified for parameter " + parameter);
         }
         addVariable(name, parameter, Scope.REQUEST);
     }
 
-    public String getParameter(String name) {
-        Object variable = getVariable(name);
+    public String getParameter(final String name) {
+        final Object variable = getVariable(name);
         if (variable instanceof String || variable == null) {
             return (String) variable;
         } else {
             return variable.toString();
         }
     }
-    
+
     public Iterator<Entry<String, Object>> interactionParameters() {
-        Map<String, Object> map = variables.get(Scope.REQUEST);
-        Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
+        final Map<String, Object> map = variables.get(Scope.REQUEST);
+        final Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
         return iterator;
     }
 
@@ -576,18 +577,18 @@ public abstract class RequestContext {
     // ///////////////////////////////////////
 
     /**
-     * The requested file is the file that the browser requested. This may or may not be the file that is
-     * actually processed and returned; that is the {@link #getResourceFile()}.
+     * The requested file is the file that the browser requested. This may or may not be the file that is actually
+     * processed and returned; that is the {@link #getResourceFile()}.
      */
     public String getRequestedFile() {
         return requestedFile;
     }
 
-    public void setRequestPath(String filePath) {
+    public void setRequestPath(final String filePath) {
         setRequestPath(filePath, null);
     }
 
-    public void setRequestPath(String filePath, String defaultGenericPath) {
+    public void setRequestPath(final String filePath, String defaultGenericPath) {
         if (filePath == null) {
             defaultGenericPath = defaultGenericPath == null ? "" : defaultGenericPath;
             this.requestedFile = Dispatcher.GENERIC + defaultGenericPath + "." + Dispatcher.EXTENSION;
@@ -598,15 +599,15 @@ public abstract class RequestContext {
             LOG.debug("requested file set = " + filePath);
 
         } else {
-            int lastSlash = filePath.lastIndexOf('/');
+            final int lastSlash = filePath.lastIndexOf('/');
             if (lastSlash == -1) {
                 throw new ScimpiException("No slash in request path: " + filePath);
             }
-            String path = filePath.substring(0, lastSlash + 1);
+            final String path = filePath.substring(0, lastSlash + 1);
             LOG.debug("requested path set = " + path);
             this.requestedParentPath = path;
 
-            String file = filePath.substring(lastSlash + 1);
+            final String file = filePath.substring(lastSlash + 1);
             LOG.debug("requested file set = " + file);
             this.requestedFile = file;
         }
@@ -618,12 +619,11 @@ public abstract class RequestContext {
     }
 
     /**
-     * Returns the absolute file system path to the specified resource based on the path used for the current
-     * request during the call to {@link #setRequestPath(String)}. The return path can then be used to access
-     * the specified resource. If the resource has a leading slash (/) then that resource string is returned
-     * as the path.
+     * Returns the absolute file system path to the specified resource based on the path used for the current request
+     * during the call to {@link #setRequestPath(String)}. The return path can then be used to access the specified
+     * resource. If the resource has a leading slash (/) then that resource string is returned as the path.
      */
-    public String requestedFilePath(String resource) {
+    public String requestedFilePath(final String resource) {
         if (resource.startsWith("/")) {
             return resource;
         } else {
@@ -636,38 +636,38 @@ public abstract class RequestContext {
     // ///////////////////////////////////////
 
     /**
-     * The resource file is the file on disk that is processed and returned to the browser. This may or may
-     * not be the file that was actually requested by the browser; that is the {@link #getRequestedFile()}.
+     * The resource file is the file on disk that is processed and returned to the browser. This may or may not be the
+     * file that was actually requested by the browser; that is the {@link #getRequestedFile()}.
      */
     public String getResourceFile() {
         return resourceFile;
     }
 
-    public void setResourcePath(String filePath) {
+    public void setResourcePath(final String filePath) {
         if (filePath == null) {
             throw new ScimpiException("Path must be specified");
         } else {
-            int lastSlash = filePath.lastIndexOf('/');
+            final int lastSlash = filePath.lastIndexOf('/');
             if (lastSlash == -1) {
                 throw new ScimpiException("No slash in request path: " + filePath);
             }
-            String path = /* getContextPath() + */filePath.substring(0, lastSlash + 1);
+            final String path = /* getContextPath() + */filePath.substring(0, lastSlash + 1);
             LOG.debug("resource path set = " + path);
             this.resourceParentPath = path;
 
-            String file = filePath.substring(lastSlash + 1);
+            final String file = filePath.substring(lastSlash + 1);
             LOG.debug("resource file set = " + file);
             this.resourceFile = file;
         }
     }
 
     /**
-     * Returns a uri for the specified resource based on the path used for the current request (as set up
-     * during the call to {@link #setResourcePath(String)}). Such a uri when used by the browser will allow
-     * access to the specified resource. If the resource has a leading slash (/) or the resource is for a
-     * generic page (starts with "_generic") then that resource string is returned as the path.
+     * Returns a uri for the specified resource based on the path used for the current request (as set up during the
+     * call to {@link #setResourcePath(String)}). Such a uri when used by the browser will allow access to the specified
+     * resource. If the resource has a leading slash (/) or the resource is for a generic page (starts with "_generic")
+     * then that resource string is returned as the path.
      */
-    public String fullUriPath(String resource) {
+    public String fullUriPath(final String resource) {
         if (resource.startsWith("/") || resource.startsWith("_generic")) {
             return resource;
         } else {
@@ -676,12 +676,12 @@ public abstract class RequestContext {
     }
 
     /**
-     * Returns the absolute file system path to the specified resource based on the path used for the current
-     * request (as set up during the call to {@link #setResourcePath(String)}). The return path can then be
-     * used to access the specified resource. If the resource has a leading slash (/) or the resource is for a
-     * generic page (starts with "_generic") then that resource string is returned as the path.
+     * Returns the absolute file system path to the specified resource based on the path used for the current request
+     * (as set up during the call to {@link #setResourcePath(String)}). The return path can then be used to access the
+     * specified resource. If the resource has a leading slash (/) or the resource is for a generic page (starts with
+     * "_generic") then that resource string is returned as the path.
      */
-    public String fullFilePath(String resource) {
+    public String fullFilePath(final String resource) {
         if (resource.startsWith("/") || resource.startsWith("_generic")) {
             return resource;
         } else {
@@ -690,10 +690,10 @@ public abstract class RequestContext {
     }
 
     // //////////////////////////////////////////////////////////////////
-    // 
+    //
     // //////////////////////////////////////////////////////////////////
 
-    public String mapObject(ObjectAdapter object, Scope scope) {
+    public String mapObject(final ObjectAdapter object, final Scope scope) {
         if (object.getResolveState().isValue()) {
             return object.titleString();
         } else if (scope == Scope.INTERACTION && object.isTransient()) {
@@ -706,7 +706,7 @@ public abstract class RequestContext {
         }
     }
 
-    public void unmapObject(ObjectAdapter object, Scope scope) {
+    public void unmapObject(final ObjectAdapter object, final Scope scope) {
         objectMapping.unmapObject(object, scope);
     }
 
@@ -730,13 +730,13 @@ public abstract class RequestContext {
 
     public abstract String getQueryString();
 
-    public abstract void startHttpSession(); 
+    public abstract void startHttpSession();
 
     public abstract String clearSession();
 
     public abstract boolean isAborted();
-    
-    public void setSession(AuthenticationSession session) {
+
+    public void setSession(final AuthenticationSession session) {
         this.session = session;
     }
 
@@ -746,23 +746,21 @@ public abstract class RequestContext {
 
     public abstract String getUri();
 
-    public void raiseError(int status) {}
+    public void raiseError(final int status) {
+    }
 
-    public void setContentType(String string) {}
+    public void setContentType(final String string) {
+    }
 
-    public void setSessionData(Map<String, Object> hashMap) {
+    public void setSessionData(final Map<String, Object> hashMap) {
         variables.put(Scope.SESSION, hashMap);
         setSession((AuthenticationSession) getVariable("_auth_session"));
     }
-    
+
     public Map<String, Object> getSessionData() {
         return variables.get(Scope.SESSION);
     }
 
-    
-    
-    
-   
     public Debug getDebug() {
         return debug;
     }
@@ -770,7 +768,7 @@ public abstract class RequestContext {
     public boolean isDebugDisabled() {
         // TODO set up mode on startup
         if (debugMode == null) {
-            String property = System.getProperties().getProperty("debug-mode");
+            final String property = System.getProperties().getProperty("debug-mode");
             if (property != null) {
                 debugMode = DebugMode.valueOf(property);
             }
@@ -778,31 +776,33 @@ public abstract class RequestContext {
                 debugMode = DebugMode.ON;
             }
         }
-        boolean allowDebug = debugMode == DebugMode.ON || (debugMode == DebugMode.SYSADMIN_ONLY && getSession().getRoles().contains("sysadmin"));
+        final boolean allowDebug =
+            debugMode == DebugMode.ON
+                || (debugMode == DebugMode.SYSADMIN_ONLY && getSession().getRoles().contains("sysadmin"));
         return !allowDebug;
     }
 
-    public boolean isDebug() { 
-        return getDebug() == Debug.ON; 
+    public boolean isDebug() {
+        return getDebug() == Debug.ON;
     }
 
     public boolean showDebugData() {
-        Boolean variable = (Boolean) getVariable("debug-on");
+        final Boolean variable = (Boolean) getVariable("debug-on");
         return variable != null && variable.booleanValue();
     }
 
-    
-    public String getDebugTrace() { 
-        return debugTrace.toString().replace('<', '[').replace('>', ']'); 
-    } 
+    public String getDebugTrace() {
+        return debugTrace.toString().replace('<', '[').replace('>', ']');
+    }
 
-    public void appendDebugTrace(String line) { 
-        debugTrace.append(line); 
+    public void appendDebugTrace(final String line) {
+        debugTrace.append(line);
     }
 
     public void clearTransientVariables() {
         objectMapping.endSession();
     }
 
-    public void reset() {}
+    public void reset() {
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -25,26 +24,25 @@ import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.TagOrderException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class HiddenField extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        BlockContent blockContent = request.getBlockContent();
+    @Override
+    public void process(final Request request) {
+        final BlockContent blockContent = request.getBlockContent();
         if (!(blockContent instanceof FormFieldBlock)) {
             throw new TagOrderException(request);
         }
 
-        String field = request.getOptionalProperty("name");
-        String value = request.getRequiredProperty("value");
-        FormFieldBlock block = (FormFieldBlock) blockContent;
+        final String field = request.getOptionalProperty("name");
+        final String value = request.getRequiredProperty("value");
+        final FormFieldBlock block = (FormFieldBlock) blockContent;
         block.value(field, value);
         block.exclude(field);
     }
-    
+
+    @Override
     public String getName() {
         return "hidden-field";
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -29,5 +28,3 @@ public interface VersionMapping {
     Version getVersion(String id);
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -25,24 +24,24 @@ import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.TagOrderException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Parameter extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        BlockContent blockContent = request.getBlockContent();
+    @Override
+    public void process(final Request request) {
+        final BlockContent blockContent = request.getBlockContent();
         if (!(blockContent instanceof ActionContent)) {
             throw new TagOrderException(request);
         }
 
-        String field = request.getOptionalProperty(PARAMETER_NUMBER);
-        String value = request.getRequiredProperty(VALUE);
-        ActionContent block = (ActionContent) blockContent;
+        final String field = request.getOptionalProperty(PARAMETER_NUMBER);
+        final String value = request.getRequiredProperty(VALUE);
+        final ActionContent block = (ActionContent) blockContent;
         block.setParameter(field, value);
     }
 
+    @Override
     public String getName() {
         return "parameter";
     }
 
 }
-

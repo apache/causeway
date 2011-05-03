@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit.sample.domain;
 
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.log4j.Logger;
-
 
 @Immutable
 public class Product extends AbstractDomainObject {
@@ -60,6 +58,7 @@ public class Product extends AbstractDomainObject {
         t.append(":", getDescription());
         return t.toString();
     }
+
     // }}
 
     // {{ Code
@@ -75,6 +74,7 @@ public class Product extends AbstractDomainObject {
     public void setCode(final String code) {
         this.code = code;
     }
+
     // }}
 
     // {{ Description
@@ -89,6 +89,7 @@ public class Product extends AbstractDomainObject {
     public void setDescription(final String description) {
         this.description = description;
     }
+
     // }}
 
     // {{ PlaceOfManufacture
@@ -102,6 +103,7 @@ public class Product extends AbstractDomainObject {
     public void setPlaceOfManufacture(final Country placeOfManufacture) {
         this.placeOfManufacture = placeOfManufacture;
     }
+
     // }}
 
     // {{ Price
@@ -121,6 +123,7 @@ public class Product extends AbstractDomainObject {
         }
         return null;
     }
+
     // }}
 
     // {{ SimilarProducts
@@ -142,11 +145,13 @@ public class Product extends AbstractDomainObject {
     public void removeFromSimilarProducts(final Product country) {
         getSimilarProducts().remove(country);
     }
+
     public String validateAddToSimilarProducts;
 
     public String validateAddToSimilarProducts(final Product country) {
         return validateAddToSimilarProducts;
     }
+
     public String validateRemoveFromSimilarProducts;
 
     public String validateRemoveFromSimilarProducts(final Product country) {
@@ -171,7 +176,8 @@ public class Product extends AbstractDomainObject {
     /**
      * An action to invoke
      */
-    public void foobar() {}
+    public void foobar() {
+    }
     // }}
 
 }

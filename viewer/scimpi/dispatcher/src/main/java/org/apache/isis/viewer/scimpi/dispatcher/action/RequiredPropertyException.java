@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.action;
 
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -29,18 +28,16 @@ public class RequiredPropertyException extends ScimpiException {
         super();
     }
 
-    public RequiredPropertyException(String message, Throwable cause) {
+    public RequiredPropertyException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public RequiredPropertyException(String message) {
+    public RequiredPropertyException(final String message) {
         super(message);
     }
 
-    public RequiredPropertyException(Throwable cause) {
+    public RequiredPropertyException(final Throwable cause) {
         super(cause);
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
@@ -27,12 +26,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Warnings extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String cls = request.getOptionalProperty(CLASS);
-        StringBuffer buffer = new StringBuffer();
+    @Override
+    public void process(final Request request) {
+        final String cls = request.getOptionalProperty(CLASS);
+        final StringBuffer buffer = new StringBuffer();
         write(cls, buffer);
         if (buffer.length() > 0) {
             request.appendHtml("<div class=\"feedback\">");
@@ -41,20 +40,20 @@ public class Warnings extends AbstractElementProcessor {
         }
     }
 
-    public static void write(String cls, StringBuffer buffer) {
+    public static void write(String cls, final StringBuffer buffer) {
         if (cls == null) {
             cls = "warning";
         }
-        MessageBroker messageBroker = IsisContext.getMessageBroker();
-        List<String> warnings = messageBroker.getWarnings();
-        for (String warning : warnings) {
+        final MessageBroker messageBroker = IsisContext.getMessageBroker();
+        final List<String> warnings = messageBroker.getWarnings();
+        for (final String warning : warnings) {
             buffer.append("<div class=\"" + cls + "\">" + warning + "</div>");
         }
     }
 
+    @Override
     public String getName() {
         return "warnings";
     }
 
 }
-

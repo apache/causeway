@@ -26,25 +26,25 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Diagnostics extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
 
-        String type = request.getOptionalProperty(TYPE, "page");
-        boolean isForced = request.isRequested("force");
+        final String type = request.getOptionalProperty(TYPE, "page");
+        final boolean isForced = request.isRequested("force");
         if (isForced || request.getContext().showDebugData()) {
             request.appendHtml("<div class=\"debug\">");
             if ("page".equals(type)) {
                 request.appendHtml("<pre>");
-                RequestContext context = request.getContext();
+                final RequestContext context = request.getContext();
                 request.appendHtml("URI:  " + context.getUri());
                 request.appendHtml("\n");
                 request.appendHtml("File: " + context.fullFilePath(context.getResourceFile()));
-                String result = (String) request.getContext().getVariable(RequestContext.RESULT);
+                final String result = (String) request.getContext().getVariable(RequestContext.RESULT);
                 if (result != null) {
                     request.appendHtml("\n");
                     request.appendHtml("Object: " + result);
@@ -52,12 +52,12 @@ public class Diagnostics extends AbstractElementProcessor {
                 request.appendHtml("</pre>");
             } else if ("session".equals(type)) {
                 request.appendHtml("<pre>");
-                AuthenticationSession session = IsisContext.getAuthenticationSession();
+                final AuthenticationSession session = IsisContext.getAuthenticationSession();
                 request.appendHtml("Session:  " + session.getUserName() + " " + session.getRoles());
                 request.appendHtml("</pre>");
             } else if ("variables".equals(type)) {
-                RequestContext context = request.getContext();
-                DebugHtmlString debug = new DebugHtmlString();
+                final RequestContext context = request.getContext();
+                final DebugHtmlString debug = new DebugHtmlString();
                 debug.appendln("", "");
                 context.append(debug, "variables");
                 debug.close();
@@ -73,6 +73,7 @@ public class Diagnostics extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "diagnostics";
     }

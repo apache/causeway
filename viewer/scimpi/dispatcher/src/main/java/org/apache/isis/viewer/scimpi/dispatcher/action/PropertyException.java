@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.action;
 
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -30,18 +29,16 @@ public class PropertyException extends ScimpiException {
         super();
     }
 
-    public PropertyException(String message, Throwable cause) {
+    public PropertyException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public PropertyException(String message) {
+    public PropertyException(final String message) {
         super(message);
     }
 
-    public PropertyException(Throwable cause) {
+    public PropertyException(final Throwable cause) {
         super(cause);
     }
 
 }
-
-

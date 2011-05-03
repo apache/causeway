@@ -22,22 +22,22 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class HelpLink {
 
     private static String site;
     private static String suffix;
 
-    public static void append(Request request, String description, String helpReference) {
+    public static void append(final Request request, final String description, final String helpReference) {
         request.appendHtml(createHelpSegment(description, helpReference));
     }
 
-    public static String createHelpSegment(String description, String helpReference) {
+    public static String createHelpSegment(final String description, final String helpReference) {
         if (site == null) {
             site = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-site", "/help/");
         }
         if (suffix == null) {
-            suffix = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-suffix", "shtml");
+            suffix =
+                IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-suffix", "shtml");
             if (suffix == null || suffix.equals("")) {
                 suffix = "";
             } else {
@@ -48,12 +48,12 @@ public class HelpLink {
         if (helpReference == null || helpReference.equals("No help available")) {
             return "";
         } else {
-            String elementClass = "help-link";
-            String link = site + helpReference + suffix;
-            String linkText = "Help";
-            String target = "scimpi-help";
-            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\"" + description
-                    + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
+            final String elementClass = "help-link";
+            final String link = site + helpReference + suffix;
+            final String linkText = "Help";
+            final String target = "scimpi-help";
+            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\""
+                + description + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
         }
     }
 

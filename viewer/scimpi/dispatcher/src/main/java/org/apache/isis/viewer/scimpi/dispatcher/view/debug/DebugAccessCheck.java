@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class DebugAccessCheck extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             throw new ForbiddenException("Debug is disabled");
         }
     }
 
+    @Override
     public String getName() {
         return "debug-access-check";
     }
 
 }
-

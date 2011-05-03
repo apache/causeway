@@ -24,26 +24,27 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class DefaultValue extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         // String sourceObjectId = objectOrResult(request);
-        String variableName = request.getRequiredProperty(NAME);
-        String defaultValue = request.getOptionalProperty(VALUE);
-        String scopeName = request.getOptionalProperty(SCOPE);
-        Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
+        final String variableName = request.getRequiredProperty(NAME);
+        final String defaultValue = request.getOptionalProperty(VALUE);
+        final String scopeName = request.getOptionalProperty(SCOPE);
+        final Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
 
-        RequestContext context = request.getContext();
-        Object currentValue = context.getVariable(variableName); 
-        if (currentValue == null) { 
-            request.appendDebug("     " + variableName + " set to " + defaultValue + " (" + scope + ")"); 
-            context.addVariable(variableName, defaultValue, scope); 
-        } else { 
-            request.appendDebug("     " + variableName + " alreadt set to " + currentValue); 
-        } 
+        final RequestContext context = request.getContext();
+        final Object currentValue = context.getVariable(variableName);
+        if (currentValue == null) {
+            request.appendDebug("     " + variableName + " set to " + defaultValue + " (" + scope + ")");
+            context.addVariable(variableName, defaultValue, scope);
+        } else {
+            request.appendDebug("     " + variableName + " alreadt set to " + currentValue);
+        }
     }
 
+    @Override
     public String getName() {
         return "default";
     }

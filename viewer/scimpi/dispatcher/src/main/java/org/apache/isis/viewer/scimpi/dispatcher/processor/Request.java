@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
 import java.util.Stack;
@@ -32,13 +31,12 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
 import org.apache.isis.viewer.scimpi.dispatcher.view.SwfTag;
 import org.apache.log4j.Logger;
 
-
 public class Request implements PageWriter {
 
     public class RepeatMarker {
         private final int index;
 
-        private RepeatMarker(int index) {
+        private RepeatMarker(final int index) {
             this.index = index;
         }
 
@@ -60,7 +58,8 @@ public class Request implements PageWriter {
     private int index = -1;
     private final String path;
 
-    public Request(String path, RequestContext context, Stack<Snippet> snippets, ProcessorLookup processors) {
+    public Request(final String path, final RequestContext context, final Stack<Snippet> snippets,
+        final ProcessorLookup processors) {
         this.path = path;
         this.context = context;
         this.snippets = snippets;
@@ -74,13 +73,13 @@ public class Request implements PageWriter {
     public void processNextTag() {
         while (index < snippets.size() - 1) {
             index++;
-            Snippet snippet = snippets.get(index);
+            final Snippet snippet = snippets.get(index);
             if (snippet instanceof HtmlSnippet) {
                 append((HtmlSnippet) snippet);
             } else {
-                SwfTag tag = (SwfTag) snippet;
-                String name = tag.getName();
-                ElementProcessor processor = processors.getFor(name);
+                final SwfTag tag = (SwfTag) snippet;
+                final String name = tag.getName();
+                final ElementProcessor processor = processors.getFor(name);
                 process(tag, processor);
                 if (context.isAborted()) {
                     return;
@@ -89,93 +88,97 @@ public class Request implements PageWriter {
         }
     }
 
-    private void append(HtmlSnippet snippet) {
+    private void append(final HtmlSnippet snippet) {
         String html = snippet.getHtml();
         try {
             if (snippet.isContainsVariable()) {
                 html = context.replaceVariables(html);
             }
             appendHtml(html);
-        } catch (TagProcessingException e) {
+        } catch (final TagProcessingException e) {
             throw e;
-        } catch (RuntimeException e) {
-            String replace = "<";
-            String withReplacement = "&lt;";
+        } catch (final RuntimeException e) {
+            final String replace = "<";
+            final String withReplacement = "&lt;";
             html = html.replaceAll(replace, withReplacement);
 
-            throw new TagProcessingException("Error while processing html block at " + snippet.errorAt() + " - " + e.getMessage(), html, e);
+            throw new TagProcessingException("Error while processing html block at " + snippet.errorAt() + " - "
+                + e.getMessage(), html, e);
         }
     }
 
-    public void appendHtml(String html) {
-        StringBuffer buffer = buffers.peek();
+    @Override
+    public void appendHtml(final String html) {
+        final StringBuffer buffer = buffers.peek();
         buffer.append(html);
     }
 
-    public void appendTruncated(String text, int truncateTo) {
+    public void appendTruncated(String text, final int truncateTo) {
         if (truncateTo > 0 && text.length() > truncateTo) {
             text = text.substring(0, truncateTo) + "...";
         }
         appendHtml(text);
-    } 
+    }
 
-    private void process(SwfTag tag, ElementProcessor processor) {
+    private void process(final SwfTag tag, final ElementProcessor processor) {
         try {
             LOG.debug("processing " + processor.getName() + " " + tag);
-            appendDebug("\n" + tag.debug()); 
-            if (tag.getType() == SwfTag.END) { 
-                throw new TagProcessingException(tag.errorAt() + " - end tag mistaken for a start tag", tag.toString()); 
-            } 
+            appendDebug("\n" + tag.debug());
+            if (tag.getType() == SwfTag.END) {
+                throw new TagProcessingException(tag.errorAt() + " - end tag mistaken for a start tag", tag.toString());
+            }
             processor.process(this);
-        } catch (TagProcessingException e) {
+        } catch (final TagProcessingException e) {
             throw e;
-        } catch (RuntimeException e) {
-            throw new TagProcessingException( "Error while processing " + tag.getName().toLowerCase() + " element at " + tag.errorAt() + " - " + e.getMessage(), tag.toString(), e); 
+        } catch (final RuntimeException e) {
+            throw new TagProcessingException("Error while processing " + tag.getName().toLowerCase() + " element at "
+                + tag.errorAt() + " - " + e.getMessage(), tag.toString(), e);
         }
     }
 
     public void processUtilCloseTag() {
-        SwfTag tag = getTag();
+        final SwfTag tag = getTag();
         if (tag.getType() == SwfTag.EMPTY) {
             return;
         }
         while (index < snippets.size() - 1) {
             index++;
-            Snippet snippet = snippets.get(index);
+            final Snippet snippet = snippets.get(index);
             if (snippet instanceof HtmlSnippet) {
-                append((HtmlSnippet)snippet);
+                append((HtmlSnippet) snippet);
             } else {
-                SwfTag nextTag = (SwfTag) snippet;
+                final SwfTag nextTag = (SwfTag) snippet;
                 if (tag.getName().equals(nextTag.getName())) {
-                    if (nextTag.getType() == SwfTag.START) {} else {
+                    if (nextTag.getType() == SwfTag.START) {
+                    } else {
                         return;
                     }
                 }
-                String name = nextTag.getName();
-                if (nextTag.getType() == SwfTag.END && !tag.getName().equals(name)) { 
-                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found " + tag.getName().toLowerCase() +
-                            " tag at " + nextTag.errorAt(), tag.toString()); 
-                } 
-                ElementProcessor processor = processors.getFor(name);
+                final String name = nextTag.getName();
+                if (nextTag.getType() == SwfTag.END && !tag.getName().equals(name)) {
+                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found "
+                        + tag.getName().toLowerCase() + " tag at " + nextTag.errorAt(), tag.toString());
+                }
+                final ElementProcessor processor = processors.getFor(name);
                 process(nextTag, processor);
             }
         }
     }
 
     public void skipUntilClose() {
-        SwfTag tag = getTag();
+        final SwfTag tag = getTag();
         if (tag.getType() == SwfTag.EMPTY) {
-            if (context.isDebug()) { 
-                appendHtml("<!-- " +  "skipped " + tag + " -->"); 
-            } 
+            if (context.isDebug()) {
+                appendHtml("<!-- " + "skipped " + tag + " -->");
+            }
             return;
         }
         int depth = 1;
         while (index < snippets.size() - 1) {
             index++;
-            Snippet snippet = snippets.get(index);
+            final Snippet snippet = snippets.get(index);
             if (snippet instanceof SwfTag) {
-                SwfTag nextTag = (SwfTag) snippet;
+                final SwfTag nextTag = (SwfTag) snippet;
                 if (tag.getName().equals(nextTag.getName())) {
                     if (nextTag.getType() == SwfTag.START) {
                         depth++;
@@ -191,14 +194,14 @@ public class Request implements PageWriter {
     }
 
     public void closeEmpty() {
-        SwfTag tag = getTag();
+        final SwfTag tag = getTag();
         if (tag.getType() == SwfTag.EMPTY) {
             return;
         }
         if (index < snippets.size()) {
-            Snippet snippet = snippets.get(index);
+            final Snippet snippet = snippets.get(index);
             if (snippet instanceof SwfTag) {
-                SwfTag nextTag = (SwfTag) snippet;
+                final SwfTag nextTag = (SwfTag) snippet;
                 if (nextTag.getType() == SwfTag.EMPTY) {
                     return;
                 }
@@ -208,12 +211,12 @@ public class Request implements PageWriter {
     }
 
     public void pushNewBuffer() {
-        StringBuffer buffer = new StringBuffer();
+        final StringBuffer buffer = new StringBuffer();
         buffers.push(buffer);
     }
 
     public String popBuffer() {
-        String content = buffers.pop().toString();
+        final String content = buffers.pop().toString();
         return content;
     }
 
@@ -226,7 +229,7 @@ public class Request implements PageWriter {
     }
 
     // TODO rename to pushBlock()
-    public void setBlockContent(BlockContent content) {
+    public void setBlockContent(final BlockContent content) {
         blocks.add(content);
     }
 
@@ -246,21 +249,21 @@ public class Request implements PageWriter {
         return String.valueOf(nextFormId++);
     }
 
-    public String getOptionalProperty(String name, String defaultValue) {
+    public String getOptionalProperty(final String name, final String defaultValue) {
         return getOptionalProperty(name, defaultValue, true);
     }
 
-    public String getOptionalProperty(String name, String defaultValue, boolean ensureVariablesExists) {
-        Attributes attributes = getTag().getAttributes();
+    public String getOptionalProperty(final String name, final String defaultValue, final boolean ensureVariablesExists) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.getOptionalProperty(name, defaultValue, ensureVariablesExists);
     }
 
-    public String getOptionalProperty(String name) {
+    public String getOptionalProperty(final String name) {
         return getOptionalProperty(name, true);
     }
 
-    public String getOptionalProperty(String name, boolean ensureVariablesExists) {
-        Attributes attributes = getTag().getAttributes();
+    public String getOptionalProperty(final String name, final boolean ensureVariablesExists) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.getOptionalProperty(name, ensureVariablesExists);
     }
 
@@ -268,41 +271,40 @@ public class Request implements PageWriter {
         return getTag().getAttributes();
     }
 
-    public String getRequiredProperty(String name) {
+    public String getRequiredProperty(final String name) {
         return getRequiredProperty(name, true);
     }
 
-    public String getRequiredProperty(String name, boolean ensureVariablesExists) {
-        Attributes attributes = getTag().getAttributes();
+    public String getRequiredProperty(final String name, final boolean ensureVariablesExists) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.getRequiredProperty(name, ensureVariablesExists);
     }
 
-    public boolean isRequested(String name) {
-        Attributes attributes = getTag().getAttributes();
+    public boolean isRequested(final String name) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.isRequested(name);
     }
 
-    public boolean isRequested(String name, boolean defaultValue) {
-        Attributes attributes = getTag().getAttributes();
+    public boolean isRequested(final String name, final boolean defaultValue) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.isRequested(name, defaultValue);
     }
 
-    public boolean isPropertySet(String name) {
-        Attributes attributes = getTag().getAttributes();
+    public boolean isPropertySet(final String name) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.isPropertySet(name);
     }
 
-    public boolean isPropertySpecified(String name) {
-        Attributes attributes = getTag().getAttributes();
+    public boolean isPropertySpecified(final String name) {
+        final Attributes attributes = getTag().getAttributes();
         return attributes.isPropertySpecified(name);
     }
-    
+
     public RepeatMarker createMarker() {
         return new RepeatMarker(index);
     }
-    
-    public void appendDebug(String line) { 
-        context.appendDebugTrace(line); 
+
+    public void appendDebug(final String line) {
+        context.appendDebugTrace(line);
     }
 }
-

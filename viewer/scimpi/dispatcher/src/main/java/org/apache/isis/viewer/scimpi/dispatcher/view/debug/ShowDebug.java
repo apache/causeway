@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class ShowDebug extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
             request.skipUntilClose();
         } else {
@@ -34,9 +33,9 @@ public class ShowDebug extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "show-debug";
     }
 
 }
-

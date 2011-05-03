@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
@@ -25,12 +24,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.junit.Test;
-
 import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.DisabledFacetForCollectionDerivedFromImmutable;
 import org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable.DisabledFacetForPropertyDerivedFromImmutable;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
-
+import org.junit.Test;
 
 public class ObjectImmutableTest extends AbstractTest {
 

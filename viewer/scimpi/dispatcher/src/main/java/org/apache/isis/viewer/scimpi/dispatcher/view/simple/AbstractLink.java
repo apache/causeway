@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -31,24 +30,25 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
-
 public abstract class AbstractLink extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String title = request.getOptionalProperty(FORM_TITLE);
-        String name = request.getOptionalProperty(NAME);
-        String cls = request.getOptionalProperty(CLASS, "action");
-        String object = request.getOptionalProperty(OBJECT);
-        RequestContext context = request.getContext();
+    @Override
+    public void process(final Request request) {
+        final String title = request.getOptionalProperty(FORM_TITLE);
+        final String name = request.getOptionalProperty(NAME);
+        final String cls = request.getOptionalProperty(CLASS, "action");
+        final String object = request.getOptionalProperty(OBJECT);
+        final RequestContext context = request.getContext();
         String objectId = object != null ? object : (String) context.getVariable(RequestContext.RESULT);
         ObjectAdapter adapter = MethodsUtils.findObject(context, objectId);
 
         // REVIEW this is common used code
-        String fieldName = request.getOptionalProperty(FIELD);
+        final String fieldName = request.getOptionalProperty(FIELD);
         if (fieldName != null) {
-            ObjectAssociation field = adapter.getSpecification().getAssociation(fieldName);
+            final ObjectAssociation field = adapter.getSpecification().getAssociation(fieldName);
             if (field == null) {
-                throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
+                throw new ScimpiException("No field " + fieldName + " in "
+                    + adapter.getSpecification().getFullIdentifier());
             }
             if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
@@ -59,25 +59,25 @@ public abstract class AbstractLink extends AbstractElementProcessor {
                 objectId = context.mapObject(adapter, Scope.INTERACTION);
             }
         }
-        
+
         if (adapter != null && valid(request, adapter)) {
-            String variable = request.getOptionalProperty("param-name", RequestContext.RESULT);
-            String variableSegment = variable + "=" + objectId;
+            final String variable = request.getOptionalProperty("param-name", RequestContext.RESULT);
+            final String variableSegment = variable + "=" + objectId;
 
             String view = request.getOptionalProperty(VIEW);
             if (view == null) {
                 view = defaultView();
             }
             view = context.fullUriPath(view);
-            String classSegment = " class=\"" + cls + "\"";
-            String titleSegment = title == null ? "" : (" title=\"" + title + "\"");
+            final String classSegment = " class=\"" + cls + "\"";
+            final String titleSegment = title == null ? "" : (" title=\"" + title + "\"");
             String additionalSegment = additionalParameters(request);
             additionalSegment = additionalSegment == null ? "" : "&amp;" + additionalSegment;
-            request.appendHtml("<a" + classSegment + titleSegment + " href=\"" + view + "?" + variableSegment + context.encodedInteractionParameters()
-                    + additionalSegment + "\">");
+            request.appendHtml("<a" + classSegment + titleSegment + " href=\"" + view + "?" + variableSegment
+                + context.encodedInteractionParameters() + additionalSegment + "\">");
             request.pushNewBuffer();
             request.processUtilCloseTag();
-            String buffer = request.popBuffer();
+            final String buffer = request.popBuffer();
             if (buffer.trim().length() > 0) {
                 request.appendHtml(buffer);
             } else {
@@ -85,13 +85,13 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             }
             request.appendHtml("</a>");
         } else {
-        	request.skipUntilClose();
+            request.skipUntilClose();
         }
     }
 
     protected abstract String linkLabel(String name, ObjectAdapter object);
 
-    protected String additionalParameters(Request request) {
+    protected String additionalParameters(final Request request) {
         return null;
     }
 
@@ -99,4 +99,3 @@ public abstract class AbstractLink extends AbstractElementProcessor {
 
     protected abstract String defaultView();
 }
-

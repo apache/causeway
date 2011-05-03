@@ -17,29 +17,28 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class FormField extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
-        String field = request.getRequiredProperty(FIELD);
+    @Override
+    public void process(final Request request) {
+        final FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
+        final String field = request.getRequiredProperty(FIELD);
         if (block.isVisible(field)) {
             request.pushNewBuffer();
             request.processUtilCloseTag();
-            String content = request.popBuffer();
+            final String content = request.popBuffer();
             block.replaceContent(field, content);
         }
     }
 
+    @Override
     public String getName() {
         return "form-field";
     }
 
 }
-

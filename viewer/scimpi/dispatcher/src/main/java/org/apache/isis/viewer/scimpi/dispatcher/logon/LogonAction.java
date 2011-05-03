@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.logon;
 
 import java.io.IOException;
@@ -33,19 +32,21 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 
-
 // TODO this should work like EditAction so that logon page is repopulated
 public class LogonAction implements Action {
 
-    public void process(RequestContext context) throws IOException {
-        String username = context.getParameter("username");
-        String password = context.getParameter("password");
-        AuthenticationSession session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
+    @Override
+    public void process(final RequestContext context) throws IOException {
+        final String username = context.getParameter("username");
+        final String password = context.getParameter("password");
+        final AuthenticationSession session =
+            UserManager.authenticate(new AuthenticationRequestPassword(username, password));
 
         String view;
         if (session == null) {
-            FormState formState = new FormState();
-            formState.setError("Failed to login. Check the username and ensure that your password was entered correctly");
+            final FormState formState = new FormState();
+            formState
+                .setError("Failed to login. Check the username and ensure that your password was entered correctly");
             FieldEditState fieldState = formState.createField("username", username);
             if (username.length() == 0) {
                 fieldState.setError("User Name required");
@@ -58,7 +59,7 @@ public class LogonAction implements Action {
                 formState.setError("Both the user name and password must be entered");
             }
             context.addVariable(ENTRY_FIELDS, formState, Scope.REQUEST);
-            
+
             view = context.getParameter("error");
             context.setRequestPath("/" + view, Dispatcher.ACTION);
         } else {
@@ -73,12 +74,16 @@ public class LogonAction implements Action {
         }
     }
 
+    @Override
     public String getName() {
         return "logon";
     }
 
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
-    public void debug(DebugBuilder debug) {}
+    @Override
+    public void debug(final DebugBuilder debug) {
+    }
 }
-

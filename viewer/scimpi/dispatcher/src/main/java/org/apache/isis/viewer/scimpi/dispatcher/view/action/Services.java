@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
@@ -30,19 +29,19 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
 
-
 public class Services extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        boolean showForms = request.isRequested(FORMS, false);
+    @Override
+    public void process(final Request request) {
+        final boolean showForms = request.isRequested(FORMS, false);
 
-        InclusionList inclusionList = new InclusionList();
+        final InclusionList inclusionList = new InclusionList();
         request.setBlockContent(inclusionList);
         request.processUtilCloseTag();
-        
-        List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (ObjectAdapter adapter: serviceAdapters) {
-            String serviceId = request.getContext().mapObject(adapter, Scope.REQUEST);
+
+        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        for (final ObjectAdapter adapter : serviceAdapters) {
+            final String serviceId = request.getContext().mapObject(adapter, Scope.REQUEST);
             request.appendHtml("<div class=\"actions\">");
             request.appendHtml("<h3>" + adapter.titleString() + "</h3>");
             Methods.writeMethods(request, serviceId, adapter, showForms, inclusionList);
@@ -51,15 +50,13 @@ public class Services extends AbstractElementProcessor {
         request.popBlockContent();
     }
 
-
-
+    @Override
     public String getName() {
         return "services";
     }
 
     private static PersistenceSession getPersistenceSession() {
-    	return IsisContext.getPersistenceSession();
+        return IsisContext.getPersistenceSession();
     }
-    
-}
 
+}

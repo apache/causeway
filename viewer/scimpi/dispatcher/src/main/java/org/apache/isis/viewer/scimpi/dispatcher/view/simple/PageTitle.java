@@ -17,17 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class PageTitle extends Variable {
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         process(request, "title", null, null, false, Scope.REQUEST);
     }
-    
+
+    @Override
     public String getName() {
         return "page-title";
     }

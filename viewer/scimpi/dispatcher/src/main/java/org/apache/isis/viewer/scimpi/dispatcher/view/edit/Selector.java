@@ -33,39 +33,42 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionForm;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.CreateFormParameter;
 
-
 public class Selector extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
-        String field = request.getRequiredProperty(FIELD);
+    @Override
+    public void process(final Request request) {
+        final FormFieldBlock block = (FormFieldBlock) request.getBlockContent();
+        final String field = request.getRequiredProperty(FIELD);
         if (block.isVisible(field)) {
             processElement(request, block, field);
         }
         request.skipUntilClose();
     }
 
-    private void processElement(Request request, FormFieldBlock block, String field) {
-        String type = request.getOptionalProperty(TYPE, "dropdown");
+    private void processElement(final Request request, final FormFieldBlock block, final String field) {
+        final String type = request.getOptionalProperty(TYPE, "dropdown");
         if (!request.isPropertySpecified(METHOD) && request.isPropertySpecified(COLLECTION)) {
-            String id = request.getRequiredProperty(COLLECTION, Request.NO_VARIABLE_CHECKING);
-            String selector = showSelectionList(request, id, block.getCurrent(field), block.isNullable(field), type);
+            final String id = request.getRequiredProperty(COLLECTION, Request.NO_VARIABLE_CHECKING);
+            final String selector =
+                showSelectionList(request, id, block.getCurrent(field), block.isNullable(field), type);
             block.replaceContent(field, selector);
         } else {
-            String objectId = request.getOptionalProperty(OBJECT);
-            String methodName = request.getRequiredProperty(METHOD);
-            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
-            ObjectAction action = MethodsUtils.findAction(object, methodName);
+            final String objectId = request.getOptionalProperty(OBJECT);
+            final String methodName = request.getRequiredProperty(METHOD);
+            final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
+            final ObjectAction action = MethodsUtils.findAction(object, methodName);
             if (action.getParameterCount() == 0) {
-                ObjectAdapter collection = action.execute(object, new ObjectAdapter[0]);
-                String selector = showSelectionList(request, collection, block.getCurrent(field), block.isNullable(field), type);
+                final ObjectAdapter collection = action.execute(object, new ObjectAdapter[0]);
+                final String selector =
+                    showSelectionList(request, collection, block.getCurrent(field), block.isNullable(field), type);
                 block.replaceContent(field, selector);
             } else {
-                String id = "selector_options";
-                String id2 = (String) request.getContext().getVariable(id);
-                String selector = showSelectionList(request, id2, block.getCurrent(field), block.isNullable(field), type);
+                final String id = "selector_options";
+                final String id2 = (String) request.getContext().getVariable(id);
+                final String selector =
+                    showSelectionList(request, id2, block.getCurrent(field), block.isNullable(field), type);
 
-                CreateFormParameter parameters = new CreateFormParameter();
+                final CreateFormParameter parameters = new CreateFormParameter();
                 parameters.objectId = objectId;
                 parameters.methodName = methodName;
                 parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE, "Search");
@@ -87,25 +90,27 @@ public class Selector extends AbstractElementProcessor {
         }
     }
 
-    private String showSelectionList(Request request, String collectionId, ObjectAdapter selectedItem, boolean allowNotSet, String type) {
+    private String showSelectionList(final Request request, final String collectionId,
+        final ObjectAdapter selectedItem, final boolean allowNotSet, final String type) {
         if (collectionId != null && !collectionId.equals("")) {
-            ObjectAdapter collection = request.getContext().getMappedObjectOrResult(collectionId);
+            final ObjectAdapter collection = request.getContext().getMappedObjectOrResult(collectionId);
             return showSelectionList(request, collection, selectedItem, allowNotSet, type);
         } else {
             return null;
         }
     }
 
-    private String showSelectionList(Request request, ObjectAdapter collection, ObjectAdapter selectedItem, boolean allowNotSet, String type) {
-        String field = request.getRequiredProperty(FIELD);
-        CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
-        
+    private String showSelectionList(final Request request, final ObjectAdapter collection,
+        final ObjectAdapter selectedItem, final boolean allowNotSet, final String type) {
+        final String field = request.getRequiredProperty(FIELD);
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+
         if (facet.size(collection) == 1 && !allowNotSet) {
             return onlyItem(request, field, collection, facet);
         } else if (type.equals("radio")) {
             return radioButtonList(request, field, allowNotSet, collection, selectedItem, facet);
         } else if (type.equals("list")) {
-            String size = request.getOptionalProperty("size", "5");
+            final String size = request.getOptionalProperty("size", "5");
             return dropdownList(request, field, allowNotSet, collection, selectedItem, size, facet);
         } else if (type.equals("dropdown")) {
             return dropdownList(request, field, allowNotSet, collection, selectedItem, null, facet);
@@ -114,70 +119,61 @@ public class Selector extends AbstractElementProcessor {
         }
     }
 
-    private String onlyItem(Request request, String field, ObjectAdapter collection, CollectionFacet facet) {
-        RequestContext context = request.getContext();
-        Iterator<ObjectAdapter> iterator = facet.iterator(collection);
-        StringBuffer buffer = new StringBuffer();
-        ObjectAdapter element = iterator.next();
-        String elementId = context.mapObject(element, Scope.INTERACTION);
+    private String onlyItem(final Request request, final String field, final ObjectAdapter collection,
+        final CollectionFacet facet) {
+        final RequestContext context = request.getContext();
+        final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
+        final StringBuffer buffer = new StringBuffer();
+        final ObjectAdapter element = iterator.next();
+        final String elementId = context.mapObject(element, Scope.INTERACTION);
         buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element) + "\" alt=\""
-                + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
+            + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
         buffer.append("<input type=\"hidden\" name=\"" + field + "\" value=\"" + elementId + "\" />\n");
         return buffer.toString();
     }
 
-    private String radioButtonList(
-            Request request,
-            String field,
-            boolean allowNotSet,
-            ObjectAdapter collection,
-            ObjectAdapter selectedItem,
-            CollectionFacet facet) {
-        RequestContext context = request.getContext();
-        Iterator<ObjectAdapter> iterator = facet.iterator(collection);
-        StringBuffer buffer = new StringBuffer();
+    private String radioButtonList(final Request request, final String field, final boolean allowNotSet,
+        final ObjectAdapter collection, final ObjectAdapter selectedItem, final CollectionFacet facet) {
+        final RequestContext context = request.getContext();
+        final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
+        final StringBuffer buffer = new StringBuffer();
         if (allowNotSet) {
             buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"null\"></input><br/>\n");
         }
         while (iterator.hasNext()) {
-            ObjectAdapter element = iterator.next();
-            String elementId = context.mapObject(element, Scope.INTERACTION);
-            String title = element.titleString();
-            String checked = element == selectedItem ? "checked=\"checked\"" : "";
-            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + ">" + title
-                    + "</input><br/>\n");
+            final ObjectAdapter element = iterator.next();
+            final String elementId = context.mapObject(element, Scope.INTERACTION);
+            final String title = element.titleString();
+            final String checked = element == selectedItem ? "checked=\"checked\"" : "";
+            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + ">"
+                + title + "</input><br/>\n");
         }
 
         return buffer.toString();
     }
 
-    private String dropdownList(
-            Request request,
-            String field,
-            boolean allowNotSet,
-            ObjectAdapter collection,
-            ObjectAdapter selectedItem,
-            String size,
-            CollectionFacet facet) {
-        RequestContext context = request.getContext();
-        Iterator<ObjectAdapter> iterator = facet.iterator(collection);
-        StringBuffer buffer = new StringBuffer();
+    private String dropdownList(final Request request, final String field, final boolean allowNotSet,
+        final ObjectAdapter collection, final ObjectAdapter selectedItem, String size, final CollectionFacet facet) {
+        final RequestContext context = request.getContext();
+        final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
+        final StringBuffer buffer = new StringBuffer();
         size = size == null ? "" : " size =\"" + size + "\"";
         buffer.append("<select name=\"" + field + "\"" + size + " >\n");
         if (allowNotSet) {
             buffer.append("  <option value=\"null\"></option>\n");
         }
         while (iterator.hasNext()) {
-            ObjectAdapter element = iterator.next();
-            String elementId = context.mapObject(element, Scope.INTERACTION);
-            String title = element.titleString();
-            String checked = element == selectedItem ? "selected=\"selected\"" : "";
+            final ObjectAdapter element = iterator.next();
+            final String elementId = context.mapObject(element, Scope.INTERACTION);
+            final String title = element.titleString();
+            final String checked = element == selectedItem ? "selected=\"selected\"" : "";
             buffer.append("  <option value=\"" + elementId + "\"" + checked + ">" + title + "</option>\n");
         }
         buffer.append("</select>\n");
         return buffer.toString();
     }
 
+    @Override
     public String getName() {
         return "selector";
     }

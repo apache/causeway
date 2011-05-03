@@ -17,22 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import org.jmock.Mockery;
-import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.internal.runners.MethodRoadie;
-import org.junit.internal.runners.TestClass;
-import org.junit.internal.runners.TestMethod;
-import org.junit.runner.Description;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunNotifier;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -49,7 +38,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.junit.internal.IsisSystemUsingInstallersWithinJunit;
-
+import org.jmock.Mockery;
+import org.junit.internal.runners.InitializationError;
+import org.junit.internal.runners.JUnit4ClassRunner;
+import org.junit.internal.runners.MethodRoadie;
+import org.junit.internal.runners.TestClass;
+import org.junit.internal.runners.TestMethod;
+import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunNotifier;
 
 /**
  * Copied from JMock, and with the same support.
@@ -58,7 +55,6 @@ import org.apache.isis.viewer.junit.internal.IsisSystemUsingInstallersWithinJuni
 public class IsisTestRunner extends JUnit4ClassRunner {
 
     private final Field mockeryField;
-
 
     /**
      * Only used during object construction.
@@ -70,7 +66,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         mockeryField = findFieldAndMakeAccessible(testClass, Mockery.class);
     }
 
-    private static String getConfigDir(Class<?> javaClass) {
+    private static String getConfigDir(final Class<?> javaClass) {
         final ConfigDir fixturesAnnotation = javaClass.getAnnotation(ConfigDir.class);
         if (fixturesAnnotation != null) {
             return fixturesAnnotation.value();
@@ -84,48 +80,47 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         final TestClass testClass = getTestClass();
         final String configDirIfAny = getConfigDir(testClass.getJavaClass());
 
-    	final Description description = methodDescription(method);
-    	
-        IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault(configDirIfAny);
-        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, ""+true); // switch off splash
-        
-        InstallerLookupDefault installerLookup = new InstallerLookupDefault(getClass());
-        isisConfigurationBuilder.injectInto(installerLookup);
-		installerLookup.init();
+        final Description description = methodDescription(method);
 
-		IsisSystemUsingInstallersWithinJunit system = null;        
-		AuthenticationSession session = null;
+        final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault(configDirIfAny);
+        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true); // switch off splash
+
+        final InstallerLookupDefault installerLookup = new InstallerLookupDefault(getClass());
+        isisConfigurationBuilder.injectInto(installerLookup);
+        installerLookup.init();
+
+        IsisSystemUsingInstallersWithinJunit system = null;
+        AuthenticationSession session = null;
         try {
             // init the system; cf similar code in Isis and IsisServletContextInitializer
             final DeploymentType deploymentType = DeploymentType.PROTOTYPE;
 
             // TODO: replace with regular IsisSystem and remove this subclass.
-            system = new IsisSystemUsingInstallersWithinJunit(
-                    deploymentType, installerLookup, testClass);
+            system = new IsisSystemUsingInstallersWithinJunit(deploymentType, installerLookup, testClass);
 
             system.init();
-            
-			// specific to this bootstrap mechanism
+
+            // specific to this bootstrap mechanism
             AuthenticationRequest request;
-			final LogonFixture logonFixture = system.getFixturesInstaller().getLogonFixture();
-			if (logonFixture != null) {
-				request = new AuthenticationRequestLogonFixture(logonFixture);
-			} else {
-				request = new AuthenticationRequestExploration(logonFixture);
-			}
-			session = IsisContext.getAuthenticationManager().authenticate(request);
-			
-			IsisContext.openSession(session);
-			getTransactionManager().startTransaction();
-			
-			Object test = createTest();
-			getServicesInjector().injectDependencies(test);
-			
-		    final TestMethod testMethod = wrapMethod(method);
-		    new MethodRoadie(test, testMethod, notifier, description).run();
-		    
-		    getTransactionManager().endTransaction();
-            
+            final LogonFixture logonFixture = system.getFixturesInstaller().getLogonFixture();
+            if (logonFixture != null) {
+                request = new AuthenticationRequestLogonFixture(logonFixture);
+            } else {
+                request = new AuthenticationRequestExploration(logonFixture);
+            }
+            session = IsisContext.getAuthenticationManager().authenticate(request);
+
+            IsisContext.openSession(session);
+            getTransactionManager().startTransaction();
+
+            final Object test = createTest();
+            getServicesInjector().injectDependencies(test);
+
+            final TestMethod testMethod = wrapMethod(method);
+            new MethodRoadie(test, testMethod, notifier, description).run();
+
+            getTransactionManager().endTransaction();
+
         } catch (final InvocationTargetException e) {
             testAborted(notifier, description, e.getCause());
             getTransactionManager().abortTransaction();
@@ -143,13 +138,11 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         }
     }
 
-
-	private void testAborted(RunNotifier notifier, Description description,
-			Throwable e) {
-		notifier.fireTestStarted(description);
-		notifier.fireTestFailure(new Failure(description, e));
-		notifier.fireTestFinished(description);
-	}
+    private void testAborted(final RunNotifier notifier, final Description description, final Throwable e) {
+        notifier.fireTestStarted(description);
+        notifier.fireTestFailure(new Failure(description, e));
+        notifier.fireTestFinished(description);
+    }
 
     /**
      * Taken from JMock's runner.
@@ -204,17 +197,15 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         }
         return null;
     }
-    
 
-    
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-    
+
     private static ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
@@ -222,6 +213,5 @@ public class IsisTestRunner extends JUnit4ClassRunner {
     private static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
-
 
 }

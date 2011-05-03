@@ -33,63 +33,58 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
-
 public class FieldValue extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String className = request.getOptionalProperty(CLASS);
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getRequiredProperty(FIELD);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
-        ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+    @Override
+    public void process(final Request request) {
+        final String className = request.getOptionalProperty(CLASS);
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getRequiredProperty(FIELD);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
-        boolean isIconShowing = request.isRequested(SHOW_ICON, true);
-        int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
+        final boolean isIconShowing = request.isRequested(SHOW_ICON, true);
+        final int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
 
-        write(request, (ObjectAdapter) object, field, null, className, isIconShowing, truncateTo);
+        write(request, object, field, null, className, isIconShowing, truncateTo);
     }
 
+    @Override
     public String getName() {
         return "field";
     }
 
-    public static void write(
-            Request request,
-            ObjectAdapter object,
-            ObjectAssociation field,
-            LinkedObject linkedField,
-            String className,
-            boolean showIcon,
-            int truncateTo) {
+    public static void write(final Request request, final ObjectAdapter object, final ObjectAssociation field,
+        final LinkedObject linkedField, final String className, final boolean showIcon, final int truncateTo) {
 
-        ObjectAdapter fieldReference = field.get(object);
+        final ObjectAdapter fieldReference = field.get(object);
 
         if (fieldReference != null) {
-            String classSection = "class=\"" + (className == null ? "field" : className) + "\"";
+            final String classSection = "class=\"" + (className == null ? "field" : className) + "\"";
             request.appendHtml("<span " + classSection + ">");
             if (field.isOneToOneAssociation()) {
                 try {
-                IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) fieldReference);
-                } catch (ObjectNotFoundException e) {
+                    IsisContext.getPersistenceSession().resolveImmediately(fieldReference);
+                } catch (final ObjectNotFoundException e) {
                     request.appendHtml(e.getMessage() + "</span>");
                 }
             }
 
             if (!field.getSpecification().containsFacet(ParseableFacet.class) && showIcon) {
                 request.appendHtml("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(fieldReference)
-                        + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>");
+                    + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>");
             }
 
             if (linkedField != null) {
-                String id = request.getContext().mapObject((ObjectAdapter) fieldReference, linkedField.getScope(),
-                        Scope.INTERACTION);
-                request.appendHtml("<a href=\"" + linkedField.getForwardView() + "?" + linkedField.getVariable() + "=" + id
-                        + request.getContext().encodedInteractionParameters() + "\">");
+                final String id =
+                    request.getContext().mapObject(fieldReference, linkedField.getScope(), Scope.INTERACTION);
+                request.appendHtml("<a href=\"" + linkedField.getForwardView() + "?" + linkedField.getVariable() + "="
+                    + id + request.getContext().encodedInteractionParameters() + "\">");
             }
             String value = fieldReference == null ? "" : fieldReference.titleString();
             if (truncateTo > 0 && value.length() > truncateTo) {
@@ -97,12 +92,12 @@ public class FieldValue extends AbstractElementProcessor {
             }
 
             // TODO figure out a better way to determine if boolean or a password
-            ObjectSpecification spec = field.getSpecification();
-            BooleanValueFacet facet = (BooleanValueFacet) spec.getFacet(BooleanValueFacet.class);
+            final ObjectSpecification spec = field.getSpecification();
+            final BooleanValueFacet facet = spec.getFacet(BooleanValueFacet.class);
             if (facet != null) {
-                boolean flag = facet.isSet(fieldReference);
-                String valueSegment = flag ? " checked=\"checked\"" : "";
-                String disabled = " disabled=\"disabled\"";
+                final boolean flag = facet.isSet(fieldReference);
+                final String valueSegment = flag ? " checked=\"checked\"" : "";
+                final String disabled = " disabled=\"disabled\"";
                 value = "<input type=\"checkbox\"" + valueSegment + disabled + " />";
             }
 

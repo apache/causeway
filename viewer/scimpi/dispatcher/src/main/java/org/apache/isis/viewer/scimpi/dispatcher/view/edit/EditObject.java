@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
 import java.util.ArrayList;
@@ -44,106 +43,109 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HtmlFormBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
-
 public class EditObject extends AbstractElementProcessor {
 
     @Override
-    public void process(Request request) {
-        RequestContext context = request.getContext();
+    public void process(final Request request) {
+        final RequestContext context = request.getContext();
 
-        String objectId = request.getOptionalProperty(OBJECT);
-        String forwardEditedTo = request.getOptionalProperty(VIEW);
-        String forwardErrorTo = request.getOptionalProperty(ERRORS);
-        boolean hideNonEditableFields = request.isRequested(HIDE_UNEDITABLE, false);
-        boolean showIcon = request.isRequested(SHOW_ICON, true);
+        final String objectId = request.getOptionalProperty(OBJECT);
+        final String forwardEditedTo = request.getOptionalProperty(VIEW);
+        final String forwardErrorTo = request.getOptionalProperty(ERRORS);
+        final boolean hideNonEditableFields = request.isRequested(HIDE_UNEDITABLE, false);
+        final boolean showIcon = request.isRequested(SHOW_ICON, true);
         String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String formTitle = request.getOptionalProperty(FORM_TITLE);
-        String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
-        String variable = request.getOptionalProperty(RESULT_NAME);
-        String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        String scope = request.getOptionalProperty(SCOPE);
-        String className = request.getOptionalProperty(CLASS, "edit full");
-        String id = request.getOptionalProperty(ID);
-        String completionMessage = request.getOptionalProperty(MESSAGE);
-
+        final String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
+        final String variable = request.getOptionalProperty(RESULT_NAME);
+        final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
+        final String scope = request.getOptionalProperty(SCOPE);
+        final String className = request.getOptionalProperty(CLASS, "edit full");
+        final String id = request.getOptionalProperty(ID);
+        final String completionMessage = request.getOptionalProperty(MESSAGE);
 
         final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
-        String actualObjectId = context.mapObject(object, Scope.INTERACTION);
-        String version = context.mapVersion(object);
+        final String actualObjectId = context.mapObject(object, Scope.INTERACTION);
+        final String version = context.mapVersion(object);
 
         final FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
 
         final ObjectSpecification specification = object.getSpecification();
-        FormFieldBlock containedBlock = new FormFieldBlock() {
+        final FormFieldBlock containedBlock = new FormFieldBlock() {
             @Override
-            public boolean isVisible(String name) {
-                ObjectAssociation fld = specification.getAssociation(name);
-                boolean isVisible = fld.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
-                boolean isUseable = fld.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+            public boolean isVisible(final String name) {
+                final ObjectAssociation fld = specification.getAssociation(name);
+                final boolean isVisible = fld.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
+                final boolean isUseable = fld.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
                 return isVisible && isUseable;
             }
-            
-            public ObjectAdapter getCurrent(String name) {
+
+            @Override
+            public ObjectAdapter getCurrent(final String name) {
                 ObjectAdapter value = null;
                 if (entryState != null) {
-                    FieldEditState field2 = entryState.getField(name);
+                    final FieldEditState field2 = entryState.getField(name);
                     value = field2.getValue();
                 }
                 if (value == null) {
-                    ObjectAssociation fld = specification.getAssociation(name);
+                    final ObjectAssociation fld = specification.getAssociation(name);
                     value = fld.get(object);
                 }
                 return value;
             }
-            
-            public boolean isNullable(String name) {
-                ObjectAssociation fld = specification.getAssociation(name);
+
+            @Override
+            public boolean isNullable(final String name) {
+                final ObjectAssociation fld = specification.getAssociation(name);
                 return !fld.isMandatory();
             }
         };
-        
+
         request.setBlockContent(containedBlock);
         request.processUtilCloseTag();
-        
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> viewFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+
+        final AuthenticationSession session = IsisContext.getAuthenticationSession();
+        List<ObjectAssociation> viewFields =
+            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
         viewFields = containedBlock.includedFields(viewFields);
-        InputField[] formFields = createFields(viewFields);
-        
+        final InputField[] formFields = createFields(viewFields);
+
         initializeFields(context, object, formFields, entryState, !hideNonEditableFields);
         setDefaults(context, object, formFields, entryState, showIcon);
-        
+
         copyFieldContent(context, object, formFields, showIcon);
         overrideWithHtml(context, containedBlock, formFields);
         String errors = null;
         if (entryState != null && entryState.isForForm(formId)) {
             copyEntryState(context, object, formFields, entryState);
-            errors = entryState.getError(); 
+            errors = entryState.getError();
         }
 
-        String errorView = context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
-        List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
+        final String errorView =
+            context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
+        final List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField("_" + OBJECT, actualObjectId));
         hiddenFields.add(new HiddenInputField("_" + VERSION, version));
         hiddenFields.add(new HiddenInputField("_" + FORM_ID, formId));
         hiddenFields.add(completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, completionMessage));
-        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context.fullFilePath(forwardEditedTo)));
+        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context
+            .fullFilePath(forwardEditedTo)));
         hiddenFields.add(new HiddenInputField("_" + ERRORS, errorView));
         hiddenFields.add(variable == null ? null : new HiddenInputField("_" + RESULT_NAME, variable));
         hiddenFields.add(resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, resultOverride));
         hiddenFields.add(scope == null ? null : new HiddenInputField("_" + SCOPE, scope));
 
         if (!object.isTransient()) {
-            // ensure all booleans are included so the pass back TRUE if set. 
-            List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
+            // ensure all booleans are included so the pass back TRUE if set.
+            final List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
             for (int i = 0; i < fields2.size(); i++) {
-                ObjectAssociation field = fields2.get(i);
+                final ObjectAssociation field = fields2.get(i);
                 if (!viewFields.contains(field) && field.getSpecification().containsFacet(BooleanValueFacet.class)) {
-                    String fieldId = field.getId();
-                    String value = getValue(context, field.get(object)); 
+                    final String fieldId = field.getId();
+                    final String value = getValue(context, field.get(object));
                     hiddenFields.add(new HiddenInputField(fieldId, value));
                 }
-            }            
+            }
         }
 
         if (formTitle == null) {
@@ -152,17 +154,18 @@ public class EditObject extends AbstractElementProcessor {
 
         if (buttonTitle == null) {
             buttonTitle = "Save " + specification.getSingularName();
-        } else if( buttonTitle.equals("")) {
+        } else if (buttonTitle.equals("")) {
             buttonTitle = "Save";
         }
-        
-        HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
-        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id, formTitle, null, null, buttonTitle, errors);
+
+        final HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
+        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id,
+            formTitle, null, null, buttonTitle, errors);
         request.popBlockContent();
     }
 
-    private InputField[] createFields(List<ObjectAssociation> fields) {
-        InputField[] formFields = new InputField[fields.size()];
+    private InputField[] createFields(final List<ObjectAssociation> fields) {
+        final InputField[] formFields = new InputField[fields.size()];
         int length = 0;
         for (int i = 0; i < fields.size(); i++) {
             if (!fields.get(i).isOneToManyAssociation()) {
@@ -170,7 +173,7 @@ public class EditObject extends AbstractElementProcessor {
                 length++;
             }
         }
-        InputField[] array = new InputField[length];
+        final InputField[] array = new InputField[length];
         for (int i = 0, j = 0; i < formFields.length; i++) {
             if (formFields[i] != null) {
                 array[j++] = formFields[i];
@@ -180,46 +183,45 @@ public class EditObject extends AbstractElementProcessor {
     }
 
     // TODO duplicated in ActionForm#initializeFields
-    private void initializeFields(RequestContext context, ObjectAdapter object, InputField[] formFields, FormState entryState, boolean includeUnusableFields) {
-        for (int i = 0; i < formFields.length; i++) {
-            String fieldId = formFields[i].getName();
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
-            InputField formField = formFields[i];
-            
-            AuthenticationSession session = IsisContext.getAuthenticationSession();
-            Consent usable = field.isUsable(session, object);
-            ObjectAdapter[] options = field.getChoices(object);
+    private void initializeFields(final RequestContext context, final ObjectAdapter object,
+        final InputField[] formFields, final FormState entryState, final boolean includeUnusableFields) {
+        for (final InputField formField : formFields) {
+            final String fieldId = formField.getName();
+            final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
+            final AuthenticationSession session = IsisContext.getAuthenticationSession();
+            final Consent usable = field.isUsable(session, object);
+            final ObjectAdapter[] options = field.getChoices(object);
             FieldFactory.initializeField(context, object, field, options, field.isMandatory(), formField);
-            
-            boolean isEditable =  usable.isAllowed();
+
+            final boolean isEditable = usable.isAllowed();
             if (!isEditable) {
                 formField.setDescription(usable.getReason());
             }
             formField.setEditable(isEditable);
-            boolean hiddenField = field.isVisible(session, object).isVetoed();
-            boolean unusable = usable.isVetoed();
-            boolean hideAsUnusable = unusable && !includeUnusableFields;
+            final boolean hiddenField = field.isVisible(session, object).isVetoed();
+            final boolean unusable = usable.isVetoed();
+            final boolean hideAsUnusable = unusable && !includeUnusableFields;
             if (hiddenField || hideAsUnusable) {
                 formField.setHidden(true);
             }
         }
     }
 
-    private void copyFieldContent(RequestContext context, ObjectAdapter object, InputField[] formFields, boolean showIcon) {
-        for (int i = 0; i < formFields.length; i++) {
-            String fieldName = formFields[i].getName();
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
-            InputField inputField = formFields[i];
+    private void copyFieldContent(final RequestContext context, final ObjectAdapter object,
+        final InputField[] formFields, final boolean showIcon) {
+        for (final InputField inputField : formFields) {
+            final String fieldName = inputField.getName();
+            final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
                 IsisContext.getPersistenceSession().resolveField(object, field);
-                ObjectAdapter fieldValue = field.get(object);
+                final ObjectAdapter fieldValue = field.get(object);
                 if (inputField.isEditable()) {
-                    String value = getValue(context, fieldValue);
+                    final String value = getValue(context, fieldValue);
                     if (!value.equals("") || inputField.getValue() == null) {
                         inputField.setValue(value);
                     }
                 } else {
-                    String entry = getValue(context, fieldValue);
+                    final String entry = getValue(context, fieldValue);
                     inputField.setHtml(entry);
                     inputField.setType(InputField.HTML);
 
@@ -227,12 +229,13 @@ public class EditObject extends AbstractElementProcessor {
 
                 if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
                     if (fieldValue != null) {
-                        String iconSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification())
-                                                        + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" : "";
-                        String entry = iconSegment + fieldValue.titleString();
+                        final String iconSegment =
+                            showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification())
+                                + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" : "";
+                        final String entry = iconSegment + fieldValue.titleString();
                         inputField.setHtml(entry);
                     } else {
-                        String entry = "<em>none specified</em>";
+                        final String entry = "<em>none specified</em>";
                         inputField.setHtml(entry);
                     }
                 }
@@ -240,66 +243,70 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void setDefaults(RequestContext context, ObjectAdapter object, InputField[] formFields, FormState entryState, boolean showIcon) {
-        for (int i = 0; i < formFields.length; i++) {
-            String fieldId = formFields[i].getName();
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
-            ObjectAdapter defaultValue = field.getDefault(object);
+    private void setDefaults(final RequestContext context, final ObjectAdapter object, final InputField[] formFields,
+        final FormState entryState, final boolean showIcon) {
+        for (final InputField formField : formFields) {
+            final String fieldId = formField.getName();
+            final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
+            final ObjectAdapter defaultValue = field.getDefault(object);
             if (defaultValue == null) {
                 continue;
             }
 
-            String title = defaultValue.titleString();
+            final String title = defaultValue.titleString();
             if (field.getSpecification().containsFacet(ParseableFacet.class)) {
-                formFields[i].setValue(title);
+                formField.setValue(title);
             } else if (field.isOneToOneAssociation()) {
-                ObjectSpecification objectSpecification = field.getSpecification();
+                final ObjectSpecification objectSpecification = field.getSpecification();
                 if (defaultValue != null) {
-                    String iconSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
-                                                + objectSpecification.getShortIdentifier() + "\"/>" : "";
-                    String html = iconSegment + title;
-                    formFields[i].setHtml(html);
-                    String value = defaultValue == null ? null : context.mapObject(defaultValue, Scope.INTERACTION);
-                    formFields[i].setValue(value);
+                    final String iconSegment =
+                        showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification)
+                            + "\" alt=\"" + objectSpecification.getShortIdentifier() + "\"/>" : "";
+                    final String html = iconSegment + title;
+                    formField.setHtml(html);
+                    final String value =
+                        defaultValue == null ? null : context.mapObject(defaultValue, Scope.INTERACTION);
+                    formField.setValue(value);
                 }
             }
         }
     }
 
-    private void overrideWithHtml(RequestContext context, FormFieldBlock containedBlock, InputField[] formFields) {
-        for (int i = 0; i < formFields.length; i++) {
-            String fieldId = formFields[i].getName();
+    private void overrideWithHtml(final RequestContext context, final FormFieldBlock containedBlock,
+        final InputField[] formFields) {
+        for (final InputField formField : formFields) {
+            final String fieldId = formField.getName();
             if (containedBlock.hasContent(fieldId)) {
-                String content = containedBlock.getContent(fieldId);
+                final String content = containedBlock.getContent(fieldId);
                 if (content != null) {
-                    formFields[i].setHtml(content);
-                    formFields[i].setValue(null);
-                    formFields[i].setType(InputField.HTML);
+                    formField.setHtml(content);
+                    formField.setValue(null);
+                    formField.setType(InputField.HTML);
                 }
             }
         }
     }
 
-    private void copyEntryState(RequestContext context, ObjectAdapter object, InputField[] formFields, FormState entryState) {
-        for (int i = 0; i < formFields.length; i++) {
-            String fieldId = formFields[i].getName();
-            ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
-            InputField formField = formFields[i];
+    private void copyEntryState(final RequestContext context, final ObjectAdapter object,
+        final InputField[] formFields, final FormState entryState) {
+        for (final InputField formField : formFields) {
+            final String fieldId = formField.getName();
+            final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() && formField.isEditable()) {
-                FieldEditState fieldState = entryState.getField(field.getId());
-                String entry = fieldState == null ? "" : fieldState.getEntry();
+                final FieldEditState fieldState = entryState.getField(field.getId());
+                final String entry = fieldState == null ? "" : fieldState.getEntry();
                 formField.setValue(entry);
-                String error =  fieldState == null ? "" : fieldState.getError();
+                final String error = fieldState == null ? "" : fieldState.getError();
                 formField.setErrorText(error);
             }
         }
     }
 
-    private String getValue(RequestContext context, ObjectAdapter field) {
+    private String getValue(final RequestContext context, final ObjectAdapter field) {
         if (field == null || field.isTransient()) {
             return "";
         }
-        ObjectSpecification specification = field.getSpecification();
+        final ObjectSpecification specification = field.getSpecification();
         if (specification.containsFacet(EnumFacet.class)) {
             return String.valueOf(field.getObject());
         } else if (specification.getFacet(ParseableFacet.class) == null) {
@@ -315,4 +322,3 @@ public class EditObject extends AbstractElementProcessor {
     }
 
 }
-

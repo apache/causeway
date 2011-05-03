@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
@@ -30,19 +29,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
-
 public class LongFormView extends AbstractFormView {
 
     @Override
-    protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject, boolean showIcon) {
+    protected void addField(final Request request, final ObjectAdapter object, final ObjectAssociation field,
+        final LinkedObject linkedObject, final boolean showIcon) {
         if (field.isOneToManyAssociation()) {
             IsisContext.getPersistenceSession().resolveField(object, field);
-            ObjectAdapter collection = field.get(object);
+            final ObjectAdapter collection = field.get(object);
             final ObjectSpecification elementSpec = collection.getElementSpecification();
-            List<ObjectAssociation> fields = elementSpec.getAssociations(
-                    ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
-            boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
-            String summary = "Table of elements in " + field.getName();
+            final List<ObjectAssociation> fields =
+                elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            final boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+            final String summary = "Table of elements in " + field.getName();
             TableView.write(request, summary, object, field, collection, fields, isFieldEditable);
         } else {
             FieldValue.write(request, object, field, linkedObject, null, showIcon, 0);
@@ -55,4 +54,3 @@ public class LongFormView extends AbstractFormView {
     }
 
 }
-

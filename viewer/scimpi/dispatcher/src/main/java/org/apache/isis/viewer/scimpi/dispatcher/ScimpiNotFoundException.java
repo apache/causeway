@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 public class ScimpiNotFoundException extends ScimpiException {
@@ -25,21 +24,18 @@ public class ScimpiNotFoundException extends ScimpiException {
         super();
     }
 
-    public ScimpiNotFoundException(String message, Throwable cause) {
+    public ScimpiNotFoundException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ScimpiNotFoundException(String message) {
+    public ScimpiNotFoundException(final String message) {
         super(message);
     }
 
-    public ScimpiNotFoundException(Throwable cause) {
+    public ScimpiNotFoundException(final Throwable cause) {
         super(cause);
     }
 
     private static final long serialVersionUID = 1L;
 
-    
 }
-
-

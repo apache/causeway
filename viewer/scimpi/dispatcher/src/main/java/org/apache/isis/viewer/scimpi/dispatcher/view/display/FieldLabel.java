@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,14 +27,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class FieldLabel extends AbstractElementProcessor {
 
-    public void process(Request request) {
-        String id = request.getOptionalProperty(OBJECT);
-        String fieldName = request.getRequiredProperty(FIELD);
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
-        ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
+    @Override
+    public void process(final Request request) {
+        final String id = request.getOptionalProperty(OBJECT);
+        final String fieldName = request.getRequiredProperty(FIELD);
+        final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
@@ -51,20 +50,21 @@ public class FieldLabel extends AbstractElementProcessor {
         write(request, field, delimiter);
     }
 
+    @Override
     public String getName() {
         return "label";
     }
 
-    public static void write(Request content, ObjectAssociation field, String delimiter) {
-        String description = field.getDescription();
-        String titleSegment = description == null || description.equals("") ? null :  ("title=\"" + description + "\"");
+    public static void write(final Request content, final ObjectAssociation field, final String delimiter) {
+        final String description = field.getDescription();
+        final String titleSegment =
+            description == null || description.equals("") ? null : ("title=\"" + description + "\"");
         content.appendHtml("<span class=\"label\"" + titleSegment + ">");
         content.appendHtml(field.getName());
         if (delimiter != null) {
-            content.appendHtml("<span class=\"delimiter\">" + delimiter + "</span>");            
+            content.appendHtml("<span class=\"delimiter\">" + delimiter + "</span>");
         }
         content.appendHtml("</span>");
     }
 
 }
-

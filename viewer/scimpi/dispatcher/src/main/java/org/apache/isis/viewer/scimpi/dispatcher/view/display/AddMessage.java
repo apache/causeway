@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -25,18 +24,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class AddMessage extends AbstractElementProcessor {
 
-    public void process(Request request) {
+    @Override
+    public void process(final Request request) {
         request.pushNewBuffer();
         request.processUtilCloseTag();
-        String content = request.popBuffer();
+        final String content = request.popBuffer();
 
-        MessageBroker messageBroker = IsisContext.getMessageBroker();
+        final MessageBroker messageBroker = IsisContext.getMessageBroker();
         messageBroker.addMessage(content);
     }
 
+    @Override
     public String getName() {
         return "add-message";
     }

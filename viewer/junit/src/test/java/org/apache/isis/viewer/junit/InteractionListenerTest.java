@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -31,7 +30,6 @@ import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.junit.Test;
 
-
 public class InteractionListenerTest extends AbstractTest {
 
     @Test
@@ -40,7 +38,7 @@ public class InteractionListenerTest extends AbstractTest {
         final InteractionEvent[] events = { null };
         final InteractionListener l = new InteractionAdapter() {
             @Override
-            public void propertyAccessed(PropertyAccessEvent ev) {
+            public void propertyAccessed(final PropertyAccessEvent ev) {
                 events[0] = ev;
             }
         };

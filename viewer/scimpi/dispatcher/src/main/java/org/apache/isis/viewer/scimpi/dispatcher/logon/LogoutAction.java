@@ -28,17 +28,20 @@ import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
-
 public class LogoutAction implements Action {
 
+    @Override
     public String getName() {
         return "logout";
     }
 
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
-    public void process(RequestContext context) throws IOException {
-        AuthenticationSession session = context.getSession();
+    @Override
+    public void process(final RequestContext context) throws IOException {
+        final AuthenticationSession session = context.getSession();
         if (session != null) {
             IsisContext.getUpdateNotifier().clear();
             UserManager.logoffUser(session);
@@ -52,6 +55,8 @@ public class LogoutAction implements Action {
         context.redirectTo(view);
     }
 
-    public void debug(DebugBuilder debug) {}
+    @Override
+    public void debug(final DebugBuilder debug) {
+    }
 
 }

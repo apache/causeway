@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -25,22 +24,23 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class Secure extends AbstractElementProcessor {
     private static final String LOGIN_VIEW = "login-view";
 
-    public void process(Request request) {
-        boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession);
+    @Override
+    public void process(final Request request) {
+        final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession);
         if (!isLoggedIn) {
-            IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
-            String view = request.getOptionalProperty(LOGIN_VIEW, "/login.shtml");
+            IsisContext.getMessageBroker().addWarning(
+                "You are not currently logged in! Please log in so you can continue.");
+            final String view = request.getOptionalProperty(LOGIN_VIEW, "/login.shtml");
             request.getContext().redirectTo(view);
         }
     }
 
+    @Override
     public String getName() {
         return "secure";
     }
 
 }
-

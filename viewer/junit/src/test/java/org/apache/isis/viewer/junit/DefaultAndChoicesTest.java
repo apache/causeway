@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,7 +24,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Ignore;
 import org.junit.Test;
-
 
 public class DefaultAndChoicesTest extends AbstractTest {
 
@@ -38,7 +36,7 @@ public class DefaultAndChoicesTest extends AbstractTest {
     @Ignore("not yet tested")
     @Test
     public void choicesDefaults() {
-    // not tested.
+        // not tested.
     }
 
 }
