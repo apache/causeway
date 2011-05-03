@@ -28,86 +28,90 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
-	
+
     private static final String DEPTH_KEY = "isis.groovy.depth";
     private static final int DEPTH_DEFAULT = 5;
-    
-	private IsisConfiguration configuration;
 
-	public RemoveGroovyMethodsFacetFactory() {
+    private IsisConfiguration configuration;
+
+    public RemoveGroovyMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-	
-	static class MethodSpec {
-		static class Builder {
-			
-			private MethodSpec methodSpec = new MethodSpec();
-			
-			public Builder param(Class<?>... paramTypes) {
-				methodSpec.parameterTypes = paramTypes;
-				return this;
-			}
-			
-			public Builder ret(Class<?> returnType) {
-				methodSpec.returnType = returnType;
-				return this;
-			}
 
-			public MethodSpec build() {
-				return methodSpec; 
-			}
+    static class MethodSpec {
+        static class Builder {
 
-			public void remove(MethodRemover remover) {
-				build().removeMethod(remover);
-			}
-		}
-		static Builder specFor(String methodName) {
-			Builder builder = new Builder();
-			builder.methodSpec.methodName = methodName;
-			return builder;
-		}
-		static Builder specFor(String formatStr, Object... args) {
-			return specFor(String.format(formatStr, args));
-		}
-		private String methodName;
-		private Class<?> returnType = void.class;
-		private Class<?>[] parameterTypes = new Class[0];
-		void removeMethod(MethodRemover methodRemover) {
-			methodRemover.removeMethod(MethodScope.OBJECT, methodName, returnType, parameterTypes);
-		}
-	}
+            private final MethodSpec methodSpec = new MethodSpec();
 
-    @Override
-    public void process(ProcessClassContext processClassContext) {
-    	MethodSpec.specFor("invokeMethod").param(String.class, Object.class).ret(Object.class).remove(processClassContext);
-    	MethodSpec.specFor("getMetaClass").ret(groovy.lang.MetaClass.class).remove(processClassContext);
-    	MethodSpec.specFor("setMetaClass").param(groovy.lang.MetaClass.class).remove(processClassContext);
-    	MethodSpec.specFor("getProperty").param(String.class).ret(Object.class).remove(processClassContext);
+            public Builder param(final Class<?>... paramTypes) {
+                methodSpec.parameterTypes = paramTypes;
+                return this;
+            }
 
-        int depth = determineDepth();
-		for(int i=1; i<depth; i++) {
-	    	MethodSpec.specFor("this$dist$invoke$%d", i).param(String.class, Object.class).ret(Object.class).remove(processClassContext);
-	    	MethodSpec.specFor("this$dist$set$%d", i).param(String.class, Object.class).remove(processClassContext);
-	    	MethodSpec.specFor("this$dist$get$%d", i).param(String.class).ret(Object.class).remove(processClassContext);
+            public Builder ret(final Class<?> returnType) {
+                methodSpec.returnType = returnType;
+                return this;
+            }
+
+            public MethodSpec build() {
+                return methodSpec;
+            }
+
+            public void remove(final MethodRemover remover) {
+                build().removeMethod(remover);
+            }
         }
-		Method[] methods = processClassContext.getCls().getMethods();
-		for(Method method: methods) {
-			if (method.getName().startsWith("super$")) {
-				processClassContext.removeMethod(method);
-			}
-		}
+
+        static Builder specFor(final String methodName) {
+            final Builder builder = new Builder();
+            builder.methodSpec.methodName = methodName;
+            return builder;
+        }
+
+        static Builder specFor(final String formatStr, final Object... args) {
+            return specFor(String.format(formatStr, args));
+        }
+
+        private String methodName;
+        private Class<?> returnType = void.class;
+        private Class<?>[] parameterTypes = new Class[0];
+
+        void removeMethod(final MethodRemover methodRemover) {
+            methodRemover.removeMethod(MethodScope.OBJECT, methodName, returnType, parameterTypes);
+        }
     }
 
-	private int determineDepth() {
-		int depth = configuration.getInteger(DEPTH_KEY, DEPTH_DEFAULT);
-		return depth;
-	}
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        MethodSpec.specFor("invokeMethod").param(String.class, Object.class).ret(Object.class)
+            .remove(processClassContext);
+        MethodSpec.specFor("getMetaClass").ret(groovy.lang.MetaClass.class).remove(processClassContext);
+        MethodSpec.specFor("setMetaClass").param(groovy.lang.MetaClass.class).remove(processClassContext);
+        MethodSpec.specFor("getProperty").param(String.class).ret(Object.class).remove(processClassContext);
 
-	@Override
-	public void setIsisConfiguration(
-			IsisConfiguration configuration) {
-		this.configuration = configuration;
-	}
+        final int depth = determineDepth();
+        for (int i = 1; i < depth; i++) {
+            MethodSpec.specFor("this$dist$invoke$%d", i).param(String.class, Object.class).ret(Object.class)
+                .remove(processClassContext);
+            MethodSpec.specFor("this$dist$set$%d", i).param(String.class, Object.class).remove(processClassContext);
+            MethodSpec.specFor("this$dist$get$%d", i).param(String.class).ret(Object.class).remove(processClassContext);
+        }
+        final Method[] methods = processClassContext.getCls().getMethods();
+        for (final Method method : methods) {
+            if (method.getName().startsWith("super$")) {
+                processClassContext.removeMethod(method);
+            }
+        }
+    }
+
+    private int determineDepth() {
+        final int depth = configuration.getInteger(DEPTH_KEY, DEPTH_DEFAULT);
+        return depth;
+    }
+
+    @Override
+    public void setIsisConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
 
 }
-
