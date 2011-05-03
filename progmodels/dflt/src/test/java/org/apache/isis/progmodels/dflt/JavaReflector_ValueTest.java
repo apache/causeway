@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodels.dflt;
 
-import org.junit.Assert;
-import org.junit.Test;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-
+import org.junit.Assert;
+import org.junit.Test;
 
 public class JavaReflector_ValueTest extends JavaReflectorTestAbstract {
 
@@ -44,4 +42,3 @@ public class JavaReflector_ValueTest extends JavaReflectorTestAbstract {
     }
 
 }
-

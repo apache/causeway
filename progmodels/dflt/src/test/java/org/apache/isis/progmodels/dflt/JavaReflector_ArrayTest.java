@@ -17,11 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodels.dflt;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -29,7 +25,8 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
-
+import org.junit.Assert;
+import org.junit.Test;
 
 public class JavaReflector_ArrayTest extends JavaReflectorTestAbstract {
 
@@ -64,4 +61,3 @@ public class JavaReflector_ArrayTest extends JavaReflectorTestAbstract {
     }
 
 }
-

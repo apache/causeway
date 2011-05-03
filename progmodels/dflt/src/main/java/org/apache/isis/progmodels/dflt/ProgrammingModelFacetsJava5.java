@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
@@ -172,11 +171,10 @@ import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueTypeF
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.timestampsql.JavaSqlTimeStampValueTypeFacetFactory;
 
-
 public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
-	
-	public ProgrammingModelFacetsJava5() {
-		
+
+    public ProgrammingModelFacetsJava5() {
+
         // must be first, so any Facets created can be replaced by other FacetFactorys later.
         addFactory(FallbackFacetFactory.class);
 
@@ -193,14 +191,14 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         // must be before any other FacetFactories that install MandatoryFacet.class facets
         addFactory(MandatoryDefaultForPropertiesFacetFactory.class);
         addFactory(MandatoryDefaultForParametersFacetFactory.class);
-        
+
         addFactory(PropertyValidateDefaultFacetFactory.class);
 
         // enum support
         addFactory(EnumFacetFactory.class);
         addFactory(ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
         addFactory(PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
-        
+
         // properties
         addFactory(PropertyAccessorFacetFactory.class);
         addFactory(PropertySetAndClearFacetFactory.class);
@@ -222,7 +220,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(ActionParameterChoicesFacetFactory.class);
         addFactory(ActionDefaultsFacetFactory.class);
         addFactory(ActionParameterDefaultsFacetFactory.class);
-        
+
         // members in general
         addFactory(NamedFacetViaNameMethodFacetFactory.class);
         addFactory(DescribedAsFacetViaDescriptionMethodFacetFactory.class);
@@ -232,16 +230,16 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(HiddenFacetViaHideForSessionMethodFacetFactory.class);
         addFactory(HiddenFacetViaAlwaysHideMethodFacetFactory.class);
         addFactory(HiddenFacetViaHideMethodFacetFactory.class);
-        
+
         addFactory(IconMethodFacetFactory.class);
-        
+
         addFactory(CreatedCallbackFacetFactory.class);
         addFactory(LoadCallbackFacetFactory.class);
         addFactory(PersistCallbackViaSaveMethodFacetFactory.class);
         addFactory(PersistCallbackFacetFactory.class);
         addFactory(UpdateCallbackFacetFactory.class);
         addFactory(RemoveCallbackFacetFactory.class);
-        
+
         addFactory(DirtyMethodsFacetFactory.class);
         addFactory(ValidateObjectViaValidateMethodFacetFactory.class);
         addFactory(ObjectValidPropertiesFacetFactory.class);
@@ -254,15 +252,15 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(BoundedAnnotationFacetFactory.class);
         addFactory(BoundedMarkerInterfaceFacetFactory.class);
         addFactory(DebugAnnotationFacetFactory.class);
-        
+
         addFactory(DefaultedAnnotationFacetFactory.class);
         addFactory(PropertyDefaultDerivedFromTypeFacetFactory.class);
         addFactory(ParameterDefaultDerivedFromTypeFacetFactory.class);
-        
+
         addFactory(DescribedAsAnnotationOnTypeFacetFactory.class);
         addFactory(DescribedAsAnnotationOnMemberFacetFactory.class);
         addFactory(DescribedAsAnnotationOnParameterFacetFactory.class);
-        
+
         addFactory(DisabledAnnotationFacetFactory.class);
         addFactory(EncodableAnnotationFacetFactory.class);
         addFactory(ExecutedAnnotationFacetFactory.class);
@@ -279,56 +277,56 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(ImmutableAnnotationFacetFactory.class);
         addFactory(DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory.class);
         addFactory(DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory.class);
-        
+
         addFactory(ImmutableMarkerInterfacesFacetFactory.class);
-        
+
         addFactory(MaxLengthAnnotationForTypeFacetFactory.class);
         addFactory(MaxLengthAnnotationForPropertyFacetFactory.class);
         addFactory(MaxLengthAnnotationForParameterFacetFactory.class);
-        
+
         addFactory(MemberOrderAnnotationFacetFactory.class);
-        
+
         addFactory(MustSatisfySpecificationOnTypeFacetFactory.class);
         addFactory(MustSatisfySpecificationOnPropertyFacetFactory.class);
         addFactory(MustSatisfySpecificationOnParameterFacetFactory.class);
-        
+
         addFactory(MultiLineAnnotationOnTypeFacetFactory.class);
         addFactory(MultiLineAnnotationOnPropertyFacetFactory.class);
         addFactory(MultiLineAnnotationOnParameterFacetFactory.class);
-        
+
         addFactory(NamedAnnotationOnTypeFacetFactory.class);
         addFactory(NamedAnnotationOnMemberFacetFactory.class);
         addFactory(NamedAnnotationOnParameterFacetFactory.class);
-        
+
         addFactory(NotPersistableAnnotationFacetFactory.class);
         addFactory(NotPersistableMarkerInterfacesFacetFactory.class);
-        
+
         addFactory(NotPersistedAnnotationForCollectionFacetFactory.class);
         addFactory(NotPersistedAnnotationForPropertyFacetFactory.class);
-        
+
         addFactory(OptionalAnnotationForPropertyFacetFactory.class);
         addFactory(OptionalAnnotationForParameterFacetFactory.class);
-        
+
         addFactory(ParseableFacetFactory.class);
         addFactory(PluralAnnotationFacetFactory.class);
-        
+
         // must come after any facets that install titles
         addFactory(MaskAnnotationForTypeFacetFactory.class);
         addFactory(MaskAnnotationForPropertyFacetFactory.class);
         addFactory(MaskAnnotationForParameterFacetFactory.class);
-        
+
         // must come after any facets that install titles, and after mask
         // if takes precedence over mask.
         addFactory(RegExFacetAnnotationForTypeFacetFactory.class);
         addFactory(RegExFacetAnnotationForPropertyFacetFactory.class);
         addFactory(RegExFacetAnnotationForParameterFacetFactory.class);
-        
+
         addFactory(TypeOfAnnotationForCollectionsFacetFactory.class);
         addFactory(TypeOfAnnotationForActionsFacetFactory.class);
-        
+
         addFactory(TypicalLengthFacetForPropertyDerivedFromTypeFacetFactory.class);
         addFactory(TypicalLengthFacetForParameterDerivedFromTypeFacetFactory.class);
-        
+
         addFactory(TypicalLengthAnnotationOnTypeFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnPropertyFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnParameterFacetFactory.class);
@@ -357,7 +355,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(JavaUtilDateValueTypeFacetFactory.class);
         addFactory(JavaSqlTimeStampValueTypeFacetFactory.class);
         addFactory(StringValueTypeFacetFactory.class);
-        
+
         // applib values
         addFactory(DateValueTypeFacetFactory.class);
         addFactory(DateTimeValueTypeFacetFactory.class);
@@ -367,19 +365,18 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(PercentageValueTypeFacetFactory.class);
         addFactory(TimeStampValueTypeFacetFactory.class);
         addFactory(TimeValueTypeFacetFactory.class);
-        addFactory(ImageValueTypeFacetFactory.class);        
+        addFactory(ImageValueTypeFacetFactory.class);
         addFactory(JavaAwtImageValueTypeFacetFactory.class);
 
         // written to not trample over TypeOf if already installed
         addFactory(CollectionFacetFactory.class);
         // must come after CollectionFacetFactory
         addFactory(AggregatedIfCollectionFacetFactory.class);
-        
+
         // so we can dogfood the NO applib "value" types
         addFactory(ValueFacetFactory.class);
 
         addFactory(FacetsAnnotationFacetFactory.class);
-	}
-
+    }
 
 }
