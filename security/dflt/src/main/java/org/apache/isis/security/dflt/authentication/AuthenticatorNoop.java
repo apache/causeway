@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.dflt.authentication;
 
 import org.apache.isis.core.commons.components.Noop;
@@ -27,18 +26,18 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstrac
 
 public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
 
-    public AuthenticatorNoop(IsisConfiguration configuration) {
-		super(configuration);
-	}
+    public AuthenticatorNoop(final IsisConfiguration configuration) {
+        super(configuration);
+    }
 
-	public boolean canAuthenticate(AuthenticationRequest request) {
+    @Override
+    public boolean canAuthenticate(final AuthenticationRequest request) {
         return true;
     }
 
-    public boolean isValid(AuthenticationRequest request) {
+    @Override
+    public boolean isValid(final AuthenticationRequest request) {
         return true;
     }
 
 }
-
-

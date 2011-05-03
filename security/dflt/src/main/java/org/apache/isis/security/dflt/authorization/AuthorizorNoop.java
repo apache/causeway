@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.dflt.authorization;
 
 import org.apache.isis.applib.Identifier;
@@ -25,20 +24,24 @@ import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
 public class AuthorizorNoop implements Authorizor {
 
-	public void init() {
-		// does nothing
-	}
-	
-	public void shutdown() {
-		// does nothing
-	}
-	
-	public boolean isUsableInRole(String role, Identifier identifier) {
-		return true;
-	}
+    @Override
+    public void init() {
+        // does nothing
+    }
 
-	public boolean isVisibleInRole(String user, Identifier identifier) {
-		return true;
-	}
+    @Override
+    public void shutdown() {
+        // does nothing
+    }
+
+    @Override
+    public boolean isUsableInRole(final String role, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisibleInRole(final String user, final Identifier identifier) {
+        return true;
+    }
 
 }

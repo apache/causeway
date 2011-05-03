@@ -17,23 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.security.dflt.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
-public class NoopAuthorizationManagerInstaller extends
-		AuthorizationManagerStandardInstallerAbstract {
+public class NoopAuthorizationManagerInstaller extends AuthorizationManagerStandardInstallerAbstract {
 
-	public NoopAuthorizationManagerInstaller() {
-		super("noop");
-	}
- 
-	@Override
-	protected Authorizor createAuthorizor(IsisConfiguration configuration) {
-		return new AuthorizorNoop();
-	}
+    public NoopAuthorizationManagerInstaller() {
+        super("noop");
+    }
+
+    @Override
+    protected Authorizor createAuthorizor(final IsisConfiguration configuration) {
+        return new AuthorizorNoop();
+    }
 
 }
