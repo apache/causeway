@@ -17,31 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 class Lock {
 
     private Thread write;
-    private List<Thread> reads = new ArrayList<Thread>();
+    private final List<Thread> reads = new ArrayList<Thread>();
 
     public boolean isWriteLocked() {
         return write != null;
     }
 
-    public void addRead(Thread transaction) {
+    public void addRead(final Thread transaction) {
         reads.add(transaction);
     }
 
-    public void setWrite(Thread transaction) {
+    public void setWrite(final Thread transaction) {
         write = transaction;
     }
 
-    public void remove(Thread transaction) {
+    public void remove(final Thread transaction) {
         if (write == transaction) {
             write = null;
         } else {
@@ -54,4 +52,3 @@ class Lock {
     }
 
 }
-

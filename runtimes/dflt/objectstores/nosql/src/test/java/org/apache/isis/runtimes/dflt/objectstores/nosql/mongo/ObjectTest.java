@@ -17,22 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
-
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.ExampleValuePojo;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.TrialObjects;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.ExampleValuePojo;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.TrialObjects;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 public class ObjectTest {
 
@@ -40,16 +37,14 @@ public class ObjectTest {
     public void hasInstances() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        TrialObjects testObjects = new TrialObjects();
-        
-        SerialOid oid = SerialOid.createTransient(1);
-        ExampleValuePojo pojo = new ExampleValuePojo();
-        
-        ObjectAdapter adapter = testObjects.createAdapter(pojo, oid);
-        
-        
-        ObjectSpecification loadSpecification = testObjects.loadSpecification(ExampleValuePojo.class);
-        
+        final TrialObjects testObjects = new TrialObjects();
+
+        final SerialOid oid = SerialOid.createTransient(1);
+        final ExampleValuePojo pojo = new ExampleValuePojo();
+
+        final ObjectAdapter adapter = testObjects.createAdapter(pojo, oid);
+
+        final ObjectSpecification loadSpecification = testObjects.loadSpecification(ExampleValuePojo.class);
 
         assertEquals(loadSpecification, adapter.getSpecification());
         assertEquals(oid, adapter.getOid());
@@ -57,6 +52,4 @@ public class ObjectTest {
         assertEquals(ResolveState.TRANSIENT, adapter.getResolveState());
     }
 
- }
-
-
+}

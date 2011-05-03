@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.DataOutputStream;
@@ -30,17 +29,17 @@ import java.util.List;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 public class LogWriter {
-    
+
     private DataOutputStream writer;
     private boolean startNewFile = true;
     private int fileIndex;
-    
+
     public void startNewFile() {
         // TODO don't start new file if old one is empty
         startNewFile = true;
     }
-    
-    public synchronized void log(List<FileContent> items) {
+
+    public synchronized void log(final List<FileContent> items) {
         if (startNewFile) {
             close();
             openNewFile();
@@ -48,7 +47,7 @@ public class LogWriter {
         }
         try {
             writer.write(("#transaction started - " + new Date().toString() + "\n").getBytes());
-            for (FileContent content: items) {
+            for (final FileContent content : items) {
                 writer.write(content.command);
                 writer.write(content.type.getBytes("utf-8"));
                 writer.write(' ');
@@ -62,7 +61,7 @@ public class LogWriter {
             }
             writer.write("#transaction ended\n\n".getBytes());
             writer.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException("Failed to write data to log file", e);
         }
     }
@@ -70,16 +69,16 @@ public class LogWriter {
     private void openNewFile() {
         File file;
         do {
-              file = Util.logFile(fileIndex++);
+            file = Util.logFile(fileIndex++);
         } while (file.exists());
         try {
             writer = new DataOutputStream(new FileOutputStream(file));
             startNewFile = false;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException("Failed to open log file", e);
         }
     }
-    
+
     public void startup() {
         // TODO replay log.
         openNewFile();
@@ -92,10 +91,8 @@ public class LogWriter {
     private void close() {
         try {
             writer.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException("Falied to close log file", e);
         }
     }
 }
-
-

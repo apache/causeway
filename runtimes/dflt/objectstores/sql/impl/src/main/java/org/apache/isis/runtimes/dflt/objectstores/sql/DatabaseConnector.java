@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -66,11 +65,12 @@ public interface DatabaseConnector {
     void debug(DebugBuilder debug);
 
     SqlMetaData getMetaData();
-    
+
     // Full PreparedStatement support
     public String addToQueryValues(int i);
+
     public String addToQueryValues(String s);
 
-	public String addToQueryValues(Object object);
-    
+    public String addToQueryValues(Object object);
+
 }

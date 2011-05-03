@@ -17,49 +17,52 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 
-
 class FileClientCommandContext implements NoSqlCommandContext {
 
     private final ClientConnection connection;
 
-    public FileClientCommandContext(ClientConnection connection) {
+    public FileClientCommandContext(final ClientConnection connection) {
         this.connection = connection;
     }
 
+    @Override
     public void start() {
     }
 
+    @Override
     public void end() {
     }
 
-    public StateWriter createStateWriter(String specificationName) {
+    @Override
+    public StateWriter createStateWriter(final String specificationName) {
         return new JsonStateWriter(connection, specificationName);
     }
 
-    public void delete(String specificationName, String key, String version) {
+    @Override
+    public void delete(final String specificationName, final String key, final String version) {
         connection.request('D', specificationName + " " + key + " " + version + " null");
         connection.endRequestSection();
     }
 
-    public void insert(StateWriter writer) {
+    @Override
+    public void insert(final StateWriter writer) {
         write('I', (JsonStateWriter) writer);
     }
 
-    public void update(StateWriter writer) {
+    @Override
+    public void update(final StateWriter writer) {
         write('U', (JsonStateWriter) writer);
     }
 
-    private void write(char command, JsonStateWriter writer) {
+    private void write(final char command, final JsonStateWriter writer) {
         connection.request(command, writer.getRequest());
         connection.requestData(writer.getData());
         connection.endRequestSection();
     }
 
 }
-

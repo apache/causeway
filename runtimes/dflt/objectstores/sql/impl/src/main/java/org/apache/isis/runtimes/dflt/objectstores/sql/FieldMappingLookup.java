@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -34,6 +32,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactor
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.log4j.Logger;
 
 public class FieldMappingLookup {
     private static final Logger LOG = Logger.getLogger(FieldMappingLookup.class);
@@ -44,8 +43,8 @@ public class FieldMappingLookup {
     private FieldMappingFactory referenceFieldMappingfactory;
     private ObjectReferenceMappingFactory objectReferenceMappingfactory;
 
-    public FieldMapping createMapping(ObjectAssociation field) {
-        ObjectSpecification spec = field.getSpecification();
+    public FieldMapping createMapping(final ObjectAssociation field) {
+        final ObjectSpecification spec = field.getSpecification();
         FieldMappingFactory factory = fieldMappings.get(spec);
         if (factory != null) {
             return factory.createFieldMapping(field);
@@ -62,11 +61,11 @@ public class FieldMappingLookup {
         }
     }
 
-    public ObjectReferenceMapping createMapping(ObjectSpecification spec) {
+    public ObjectReferenceMapping createMapping(final ObjectSpecification spec) {
         return createMapping(spec.getShortIdentifier(), spec);
     }
 
-    public ObjectReferenceMapping createMapping(String columnName, ObjectSpecification spec) {
+    public ObjectReferenceMapping createMapping(final String columnName, final ObjectSpecification spec) {
         ObjectReferenceMappingFactory factory = referenceMappings.get(spec);
         if (factory != null) {
             return factory.createReferenceMapping(columnName, spec);
@@ -83,7 +82,7 @@ public class FieldMappingLookup {
     }
 
     public void addFieldMappingFactory(final Class<?> valueType, final FieldMappingFactory mapper) {
-        ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(valueType);
+        final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(valueType);
         addFieldMappingFactory(spec, mapper);
     }
 
@@ -104,23 +103,23 @@ public class FieldMappingLookup {
 
     public IdMapping createIdMapping() {
         // TODO inject and use external factory
-        IdMapping idMapping = new IdMapping();
+        final IdMapping idMapping = new IdMapping();
         idMapping.init();
         return idMapping;
     }
 
     public VersionMapping createVersionMapping() {
         // TODO inject and use external factory
-        VersionMapping versionMapping = new VersionMapping();
+        final VersionMapping versionMapping = new VersionMapping();
         versionMapping.init();
         return versionMapping;
     }
 
-    public void setReferenceFieldMappingFactory(FieldMappingFactory referenceMappingfactory) {
+    public void setReferenceFieldMappingFactory(final FieldMappingFactory referenceMappingfactory) {
         this.referenceFieldMappingfactory = referenceMappingfactory;
     }
 
-    public void setObjectReferenceMappingfactory(ObjectReferenceMappingFactory objectReferenceMappingfactory) {
+    public void setObjectReferenceMappingfactory(final ObjectReferenceMappingFactory objectReferenceMappingfactory) {
         this.objectReferenceMappingfactory = objectReferenceMappingfactory;
     }
 

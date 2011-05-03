@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.BufferedReader;
@@ -31,9 +30,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
-
+import org.apache.log4j.Logger;
 
 public class FileServerProcessor {
 
@@ -56,52 +54,52 @@ public class FileServerProcessor {
         logger.shutdown();
     }
 
-    public void process(ServerConnection connection) {
+    public void process(final ServerConnection connection) {
         try {
             if (acceptNewRequests) {
                 connection.readCommand();
-                char command = connection.getCommand();
+                final char command = connection.getCommand();
                 switch (command) {
-                case 'L':
-                    list(connection);
-                    break;
+                    case 'L':
+                        list(connection);
+                        break;
 
-                case 'R':
-                    read(connection);
-                    break;
+                    case 'R':
+                        read(connection);
+                        break;
 
-                case 'W':
-                    write(connection);
-                    break;
+                    case 'W':
+                        write(connection);
+                        break;
 
-                case 'I':
-                    hasInstances(connection);
-                    break;
+                    case 'I':
+                        hasInstances(connection);
+                        break;
 
-                case 'S':
-                    service(connection);
-                    break;
+                    case 'S':
+                        service(connection);
+                        break;
 
-                case 'T':
-                    saveService(connection);
-                    break;
+                    case 'T':
+                        saveService(connection);
+                        break;
 
-                case 'N':
-                    nextSerialBatch(connection);
-                    break;
+                    case 'N':
+                        nextSerialBatch(connection);
+                        break;
 
-                case 'X':
-                    status(connection);
-                    break;
+                    case 'X':
+                        status(connection);
+                        break;
 
-                default:
-                    LOG.warn("Unrecognised command " + command);
-                    connection.error("Unrecognised command " + command);
+                    default:
+                        LOG.warn("Unrecognised command " + command);
+                        connection.error("Unrecognised command " + command);
                 }
             } else {
                 connection.abort();
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("Request failed", e);
             connection.error("Remote exception thrown:\n" + e.getMessage(), e);
 
@@ -110,22 +108,22 @@ public class FileServerProcessor {
         }
     }
 
-    private void list(ServerConnection connection) {
+    private void list(final ServerConnection connection) {
         try {
             connection.endCommand();
-            String type = connection.getRequest();
+            final String type = connection.getRequest();
             int limit = connection.getRequestAsInt();
             if (limit == 0) {
                 limit = Integer.MAX_VALUE;
             }
 
-            File[] listFiles = listFiles(type);
+            final File[] listFiles = listFiles(type);
             if (listFiles != null) {
                 connection.ok();
-                for (File file : listFiles) {
-                    String fileName = file.getName();
-                    String id = fileName.substring(0, fileName.length() - 5);
-                    DataReader reader = findInstance(type, id, connection);
+                for (final File file : listFiles) {
+                    final String fileName = file.getName();
+                    final String id = fileName.substring(0, fileName.length() - 5);
+                    final DataReader reader = findInstance(type, id, connection);
                     readInstance(reader, connection);
                     locks.release(id, getTransactionId());
                     connection.endBlock();
@@ -138,35 +136,36 @@ public class FileServerProcessor {
                 connection.response("");
             }
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException(Util.READ_ERROR, e);
         }
     }
 
-    private File[] listFiles(String type) {
-        File[] listFiles = Util.directory(type).listFiles(new FileFilter() {
-            public boolean accept(File pathname) {
+    private File[] listFiles(final String type) {
+        final File[] listFiles = Util.directory(type).listFiles(new FileFilter() {
+            @Override
+            public boolean accept(final File pathname) {
                 return pathname.getName().endsWith(".data");
             }
         });
         return listFiles;
     }
 
-    private void read(ServerConnection connection) {
+    private void read(final ServerConnection connection) {
         String type = null;
         String id = null;
         try {
             connection.endCommand();
             type = connection.getRequest();
             id = connection.getRequest();
-            DataReader reader = findInstance(type, id, connection);
+            final DataReader reader = findInstance(type, id, connection);
             if (reader == null) {
                 connection.notFound(Util.FILE_NOT_FOUND + " for " + type + "/" + id);
             } else {
                 connection.ok();
                 readInstance(reader, connection);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException(Util.READ_ERROR + " for " + type + "/" + id, e);
         } finally {
             locks.release(id, getTransactionId());
@@ -174,39 +173,39 @@ public class FileServerProcessor {
 
     }
 
-
-    private DataReader findInstance(String type, String id, ServerConnection connection) throws IOException {
+    private DataReader findInstance(final String type, final String id, final ServerConnection connection)
+        throws IOException {
         LOG.debug("reading file " + id);
         locks.acquireRead(id, getTransactionId());
         try {
             return new DataReader(type, id);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             LOG.error(Util.FILE_NOT_FOUND + " for " + type + "/" + id, e);
             return null;
         }
     }
-    
-    private void readInstance(DataReader reader, ServerConnection connection) {
-        String data = reader.getData();
+
+    private void readInstance(final DataReader reader, final ServerConnection connection) {
+        final String data = reader.getData();
         reader.close();
         connection.responseData(data);
     }
 
-    private void write(ServerConnection connection) {
+    private void write(final ServerConnection connection) {
         List<FileContent> files = null;
         try {
             files = getWriteRequests(connection);
-            String error = acquireLocks(files);
+            final String error = acquireLocks(files);
             if (error == null) {
                 logger.log(files);
-                DataWriter content = new DataWriter(files);
+                final DataWriter content = new DataWriter(files);
                 content.writeData();
                 connection.ok();
             } else {
                 connection.error(error);
             }
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException("Failed to write data", e);
         } finally {
             if (files != null) {
@@ -215,36 +214,37 @@ public class FileServerProcessor {
         }
     }
 
-    private List<FileContent> getWriteRequests(ServerConnection connection) throws IOException {
-        ArrayList<FileContent> files = new ArrayList<FileContent>();
-        while(connection.readWriteHeaders()) {
-            char command = connection.getCommand();
-            String type = connection.getRequest();
-            String id = connection.getRequest();
-            String currentVersion = connection.getRequest();
-            String newVersion = connection.getRequest();
+    private List<FileContent> getWriteRequests(final ServerConnection connection) throws IOException {
+        final ArrayList<FileContent> files = new ArrayList<FileContent>();
+        while (connection.readWriteHeaders()) {
+            final char command = connection.getCommand();
+            final String type = connection.getRequest();
+            final String id = connection.getRequest();
+            final String currentVersion = connection.getRequest();
+            final String newVersion = connection.getRequest();
             LOG.debug("write for " + type + "@" + id + " v." + newVersion);
 
-            String buf = connection.getData();
+            final String buf = connection.getData();
             files.add(new FileContent(command, id, currentVersion, newVersion, type, buf));
         }
-//        connection.endCommand();
+        // connection.endCommand();
         return files;
     }
 
-    private String acquireLocks(List<FileContent> list) throws IOException {
-        Thread transactionId = getTransactionId();
-        for (FileContent item : list) {
+    private String acquireLocks(final List<FileContent> list) throws IOException {
+        final Thread transactionId = getTransactionId();
+        for (final FileContent item : list) {
             if (!locks.acquireWrite(item.id, transactionId)) {
                 return item.type + " being changed by another user, please try again\n" + item.data;
             }
             if (Util.shouldFileExist(item.command)) {
-                DataReader dataReader = new DataReader(item.type, item.id);
-                String version = dataReader.getVersion();
+                final DataReader dataReader = new DataReader(item.type, item.id);
+                final String version = dataReader.getVersion();
                 if (!version.equals(item.currentVersion)) {
-                    //String data = dataReader.getData();
+                    // String data = dataReader.getData();
                     dataReader.close();
-                    return "mismatch between FileContent version (" + item.currentVersion + ") and DataReader version (" + version + ")"; 
+                    return "mismatch between FileContent version (" + item.currentVersion
+                        + ") and DataReader version (" + version + ")";
                 }
                 dataReader.close();
             }
@@ -252,9 +252,9 @@ public class FileServerProcessor {
         return null;
     }
 
-    private void releaseLocks(List<FileContent> list) {
-        Thread transactionId = getTransactionId();
-        for (FileContent item : list) {
+    private void releaseLocks(final List<FileContent> list) {
+        final Thread transactionId = getTransactionId();
+        for (final FileContent item : list) {
             locks.release(item.id, transactionId);
         }
     }
@@ -263,9 +263,9 @@ public class FileServerProcessor {
         return Thread.currentThread();
     }
 
-    private void status(ServerConnection connection) throws IOException {
+    private void status(final ServerConnection connection) throws IOException {
         connection.endCommand();
-        String request = connection.getRequest();
+        final String request = connection.getRequest();
         if (request.equals("contains-data")) {
             connection.response(Util.isPopulated());
 
@@ -274,43 +274,43 @@ public class FileServerProcessor {
         }
     }
 
-    private void service(ServerConnection connection) {
+    private void service(final ServerConnection connection) {
         connection.endCommand();
-        String name = connection.getRequest();
-        File file = Util.serviceFile(name);
+        final String name = connection.getRequest();
+        final File file = Util.serviceFile(name);
         if (file.exists()) {
-            String id = readServiceFile(file);
+            final String id = readServiceFile(file);
             connection.response(id);
         } else {
             connection.response("null");
         }
     }
 
-    private String readServiceFile(File file) {
+    private String readServiceFile(final File file) {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Util.ENCODING));
-            String[] split = reader.readLine().split(" ");
+            final String[] split = reader.readLine().split(" ");
             return split[1];
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("failed to read service file", e);
             throw new FileServerException("Failed to read service file", e);
         } finally {
             try {
                 reader.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 LOG.error("failed to close file", e);
             }
         }
     }
 
-    private void saveService(ServerConnection connection) throws IOException {
+    private void saveService(final ServerConnection connection) throws IOException {
         connection.endCommand();
-        String name = connection.getRequest();
-        String key = connection.getRequest();
+        final String name = connection.getRequest();
+        final String key = connection.getRequest();
 
         FileOutputStream fileOut = null;
-        File file = Util.serviceFile(name);
+        final File file = Util.serviceFile(name);
         try {
             fileOut = new FileOutputStream(file);
             fileOut.write(name.getBytes("utf-8"));
@@ -320,7 +320,7 @@ public class FileServerProcessor {
             if (fileOut != null) {
                 try {
                     fileOut.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new NoSqlStoreException(e);
                 }
             }
@@ -328,27 +328,28 @@ public class FileServerProcessor {
         connection.ok();
     }
 
-    private void nextSerialBatch(ServerConnection connection) throws IOException {
+    private void nextSerialBatch(final ServerConnection connection) throws IOException {
         // TODO lock file first
 
         connection.endCommand();
-        String name = connection.getRequest();
-        int batchSize = connection.getRequestAsInt();
+        final String name = connection.getRequest();
+        final int batchSize = connection.getRequestAsInt();
 
         long nextId;
-        File file = Util.serialNumberFile(name);
+        final File file = Util.serialNumberFile(name);
         if (!file.exists()) {
             nextId = 1;
             LOG.info("Initial ID batch created at " + nextId);
         } else {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Util.ENCODING));
+            final BufferedReader reader =
+                new BufferedReader(new InputStreamReader(new FileInputStream(file), Util.ENCODING));
             nextId = Long.valueOf(reader.readLine()).longValue();
             reader.close();
             LOG.info("New ID batch allocated, from " + nextId);
         }
 
-        FileOutputStream fileOutput = new FileOutputStream(file);
-        long newBatchAt = nextId + batchSize;
+        final FileOutputStream fileOutput = new FileOutputStream(file);
+        final long newBatchAt = nextId + batchSize;
         fileOutput.write(Long.toString(newBatchAt).getBytes("utf-8"));
         fileOutput.close();
 
@@ -357,13 +358,12 @@ public class FileServerProcessor {
         connection.response(nextId);
     }
 
-    private void hasInstances(ServerConnection connection) throws IOException {
+    private void hasInstances(final ServerConnection connection) throws IOException {
         connection.endCommand();
-        String type = connection.getRequest();
-        File[] listFiles = listFiles(type); 
-        boolean hasInstances = listFiles != null && listFiles.length > 0; 
+        final String type = connection.getRequest();
+        final File[] listFiles = listFiles(type);
+        final boolean hasInstances = listFiles != null && listFiles.length > 0;
         connection.response(hasInstances);
     }
 
 }
-

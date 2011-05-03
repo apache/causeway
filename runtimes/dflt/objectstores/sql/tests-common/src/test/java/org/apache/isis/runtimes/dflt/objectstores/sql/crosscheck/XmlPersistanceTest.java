@@ -17,62 +17,62 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.crosscheck;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
-import java.io.*;
-
-
-
-
 public class XmlPersistanceTest extends SqlIntegrationTestCommon {
 
-	  public static void deleteFiles( String directory, FilenameFilter extension ) {
-		    File dir = new File(directory);
+    public static void deleteFiles(final String directory, final FilenameFilter extension) {
+        final File dir = new File(directory);
 
-		    String[] list = dir.list(extension);
-		    File file;
-		    if (list.length == 0) return;
+        final String[] list = dir.list(extension);
+        File file;
+        if (list.length == 0) {
+            return;
+        }
 
-		    for (int i = 0; i < list.length; i++) {
-		      file = new File(directory, list[i]);
-		      file.delete();
-		    }
-	  }
-	
-	public void initialiseTests() {
-		// Delete all XML files.
-		deleteFiles("xml/objects", new FilenameFilter() {
-			
-			@Override
-			public boolean accept(File arg0, String arg1) {
-				return arg1.endsWith(".xml");
-			}
-		});
-	}
-	
-	@Override
-	public Properties getProperties(){
-		Properties properties = new Properties();
-		properties.put("isis.persistor", "xml");
-		properties.put("isis.logging.objectstore","on");
-		return properties;
-	}
-	public  String getPropertiesFilename(){
-		return "xml.properties";
-	}
-	@Override
-	public String getSqlTeardownString(){
-		return "SHUTDOWN;";
-	}
-	
-	
+        for (final String element : list) {
+            file = new File(directory, element);
+            file.delete();
+        }
+    }
+
+    @Override
+    public void initialiseTests() {
+        // Delete all XML files.
+        deleteFiles("xml/objects", new FilenameFilter() {
+
+            @Override
+            public boolean accept(final File arg0, final String arg1) {
+                return arg1.endsWith(".xml");
+            }
+        });
+    }
+
+    @Override
+    public Properties getProperties() {
+        final Properties properties = new Properties();
+        properties.put("isis.persistor", "xml");
+        properties.put("isis.logging.objectstore", "on");
+        return properties;
+    }
+
+    @Override
+    public String getPropertiesFilename() {
+        return "xml.properties";
+    }
+
+    @Override
+    public String getSqlTeardownString() {
+        return "SHUTDOWN;";
+    }
+
 }
-

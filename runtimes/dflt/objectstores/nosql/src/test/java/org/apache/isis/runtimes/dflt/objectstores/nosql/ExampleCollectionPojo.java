@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
-
 
 public class ExampleCollectionPojo extends ExamplePojo {
 
@@ -39,6 +37,7 @@ public class ExampleCollectionPojo extends ExamplePojo {
     public void setHomogenousCollection(final List<ExampleValuePojo> homogenousCollection) {
         this.homogenousCollection = homogenousCollection;
     }
+
     // }}
 
     // {{ HetrogenousCollection
@@ -51,6 +50,7 @@ public class ExampleCollectionPojo extends ExamplePojo {
     public void setHetrogenousCollection(final List<ExamplePojo> hetrogenousCollection) {
         this.hetrogenousCollection = hetrogenousCollection;
     }
+
     // }}
 
     // {{ NotPersisted
@@ -60,9 +60,4 @@ public class ExampleCollectionPojo extends ExamplePojo {
     }
     // }}
 
-
-    
-
 }
-
-

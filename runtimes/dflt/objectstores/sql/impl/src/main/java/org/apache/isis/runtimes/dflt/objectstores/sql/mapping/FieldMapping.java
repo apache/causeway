@@ -17,29 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 
 public interface FieldMapping {
     void appendColumnDefinitions(StringBuffer sql);
-    
+
     void appendColumnNames(StringBuffer sql);
 
     void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
     void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
-    
+
     void initializeField(ObjectAdapter object, Results rs);
 
     void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
     void debugData(DebugBuilder debug);
-
 
 }

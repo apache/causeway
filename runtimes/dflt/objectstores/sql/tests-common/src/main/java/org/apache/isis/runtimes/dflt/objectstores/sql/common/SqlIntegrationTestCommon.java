@@ -33,10 +33,6 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
@@ -53,6 +49,9 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.Num
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 /**
  * @author Kevin kevin@kmz.co.za
@@ -91,7 +90,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
          * cal.set(Calendar.MONTH, 4-1); cal.set(Calendar.DAY_OF_MONTH, 8);
          */
         // 2011-4-8 = 1270684800000
-        Date date20100308 = new Date(2010, 4, 8);
+        final Date date20100308 = new Date(2010, 4, 8);
         sqlDate = new java.sql.Date(date20100308.getMillisSinceEpoch());
     }
 
@@ -141,12 +140,12 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
     public Properties getProperties() {
         try {
-            Properties properties = new Properties();
+            final Properties properties = new Properties();
             properties.load(new FileInputStream("src/test/config/" + getPropertiesFilename()));
             return properties;
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
@@ -190,14 +189,14 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
         // Initialise the framework
         if (getSingletonInstance().getState() == 0) {
-            Properties properties = getProperties();
+            final Properties properties = getProperties();
             if (properties == null) {
                 getSingletonInstance().initNOF("src/test/config", getPropertiesFilename());
             } else {
                 getSingletonInstance().initNOF(properties);
             }
 
-            String sqlSetupString = getSqlSetupString();
+            final String sqlSetupString = getSqlSetupString();
             if (sqlSetupString != null) {
                 getSingletonInstance().sqlExecute(sqlSetupString);
             }
@@ -208,11 +207,11 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     @Override
     public void tearDown() {
         if (getSingletonInstance().getState() == 0) {
-            String sqlTeardownString = getSqlTeardownString();
+            final String sqlTeardownString = getSqlTeardownString();
             if (sqlTeardownString != null) {
                 try {
                     getSingletonInstance().sqlExecute(sqlTeardownString);
-                } catch (SQLException e) {
+                } catch (final SQLException e) {
                     e.printStackTrace();
                 }
             }
@@ -238,8 +237,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         SqlIntegrationTestSingleton.drop(getSimpleClassTableName());
         SqlIntegrationTestSingleton.drop(getSimpleClassTwoTableName());
 
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        SqlDataClass sqlDataClass = factory.newDataClass();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final SqlDataClass sqlDataClass = factory.newDataClass();
         sqlDataClass.setString("Test String");
         sqlDataClass.setDate(applibDate);
         sqlDataClass.setSqlDate(sqlDate);
@@ -289,8 +288,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
         if (simpleClassList1.size() == 0) {
             bMustAdd = true;
         }
-        for (String string : SqlIntegrationTestCommon.stringList1) {
-            SimpleClass simpleClass = factory.newSimpleClass();
+        for (final String string : SqlIntegrationTestCommon.stringList1) {
+            final SimpleClass simpleClass = factory.newSimpleClass();
             simpleClass.setString(string);
             simpleClass.setSimpleClassTwoA(simpleClassTwoA);
             sqlDataClass.addToSimpleClasses1(simpleClass);
@@ -301,8 +300,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
         // Initialise collection2
         /**/
-        for (String string : SqlIntegrationTestCommon.stringList2) {
-            SimpleClass simpleClass = factory.newSimpleClass();
+        for (final String string : SqlIntegrationTestCommon.stringList2) {
+            final SimpleClass simpleClass = factory.newSimpleClass();
             simpleClass.setString(string);
             simpleClass.setSimpleClassTwoA(simpleClassTwoA);
             sqlDataClass.addToSimpleClasses2(simpleClass);
@@ -327,17 +326,17 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * @throws Exception
      */
     public void testLoad() throws Exception {
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        List<SqlDataClass> dataClasses = factory.allDataClasses();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final List<SqlDataClass> dataClasses = factory.allDataClasses();
         assertEquals(1, dataClasses.size());
-        SqlDataClass sqlDataClass = dataClasses.get(0);
+        final SqlDataClass sqlDataClass = dataClasses.get(0);
         SqlIntegrationTestSingleton.setDataClass(sqlDataClass);
         getSingletonInstance().setState(1);
     }
 
     public void testSimpleClassCollection1Lazy() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        List<SimpleClass> collection = sqlDataClass.simpleClasses1;
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final List<SimpleClass> collection = sqlDataClass.simpleClasses1;
 
         assertEquals("collection size is not equal!", collection.size(), simpleClassList1.size());
     }
@@ -348,7 +347,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * @throws Exception
      */
     public void testString() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals("Test String", sqlDataClass.getString());
     }
 
@@ -358,7 +357,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * @throws Exception
      */
     public void testApplibDate() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
         // LOG.log(Level.INFO, "Test: testDate() '2010-3-5' = 1267747200000");
 
@@ -390,7 +389,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     /* */
     @Test
     public void testSqlDate() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
         // LOG.log(Level.INFO, "Test: testSqlDate() '2011-4-8' == 1302220800000");
 
@@ -444,7 +443,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
 
     public void testMoney() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(money, sqlDataClass.getMoney());
         // assertTrue("Money " + money.toString() + " is not equal to " + sqlDataClass.getMoney().toString(),
         // money.equals(sqlDataClass.getMoney()));
@@ -454,7 +453,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link DateTime} type.
      */
     public void testDateTime() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
         LOG.log(Level.INFO, "Test: testDateTime()");
         LOG.log(Level.INFO, "sqlDataClass.getDateTime() as String:" + sqlDataClass.getDateTime());
@@ -473,7 +472,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link TimeStamp} type.
      */
     public void testTimeStamp() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertTrue("TimeStamp " + timeStamp.toString() + " is not equal to " + sqlDataClass.getTimeStamp().toString(),
             timeStamp.isEqualTo(sqlDataClass.getTimeStamp()));
     }
@@ -483,7 +482,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     /**/
     public void testTime() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertNotNull("sqlDataClass is null", sqlDataClass);
         assertNotNull("getTime() is null", sqlDataClass.getTime());
         assertTrue("Time 14h56: expected " + time.toString() + ", but got " + sqlDataClass.getTime().toString(),
@@ -496,7 +495,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link Color} type.
      */
     public void testColor() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(color, sqlDataClass.getColor());
         // assertTrue("Color Black, expected " + color.toString() + " but got " + sqlDataClass.getColor().toString(),
         // color.isEqualTo(sqlDataClass.getColor()));
@@ -522,7 +521,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link Password} type.
      */
     public void testPassword() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(password, sqlDataClass.getPassword());
     }
 
@@ -530,13 +529,13 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test {@link Percentage} type.
      */
     public void testPercentage() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(percentage, sqlDataClass.getPercentage());
     }
 
     public void testStandardValueTypesMaxima() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        NumericTestClass numericTestMaxClass = sqlDataClass.getNumericTestClassMax();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final NumericTestClass numericTestMaxClass = sqlDataClass.getNumericTestClassMax();
 
         assertEquals(shortMaxValue, numericTestMaxClass.getShortValue());
         assertEquals(intMaxValue, numericTestMaxClass.getIntValue());
@@ -546,8 +545,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     }
 
     public void testStandardValueTypesMinima() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        NumericTestClass numericTestMinClass = sqlDataClass.getNumericTestClassMin();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final NumericTestClass numericTestMinClass = sqlDataClass.getNumericTestClassMin();
 
         assertEquals(shortMinValue, numericTestMinClass.getShortValue());
         assertEquals(intMinValue, numericTestMinClass.getIntValue());
@@ -566,8 +565,8 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
 
     public void testSingleReferenceLazy() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
         if (getProperties().getProperty("isis.persistor") != "in-memory") {
             assertEquals(null, a.text); // must check direct value, as
             // framework can auto-resolve, if you use getText()
@@ -578,14 +577,14 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      * Test a collection of {@link SimpleClass} type.
      */
     public void testSimpleClassCollection1() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
 
         assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList1.size(),
             collection.size());
 
         int i = 0;
-        for (SimpleClass simpleClass : SqlIntegrationTestCommon.simpleClassList1) {
+        for (final SimpleClass simpleClass : SqlIntegrationTestCommon.simpleClassList1) {
             assertEquals(simpleClass.getString(), collection.get(i++).getString());
         }
     }
@@ -595,24 +594,24 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
      */
     /**/
     public void testSimpleClassCollection2() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        List<SimpleClass> collection = sqlDataClass.getSimpleClasses2();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final List<SimpleClass> collection = sqlDataClass.getSimpleClasses2();
 
         assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList2.size(),
             collection.size());
 
         int i = 0;
-        for (SimpleClass simpleClass : SqlIntegrationTestCommon.simpleClassList2) {
+        for (final SimpleClass simpleClass : SqlIntegrationTestCommon.simpleClassList2) {
             assertEquals(simpleClass.getString(), collection.get(i++).getString());
         }
     }
 
     public void testSimpleClassTwoReferenceLazy() {
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
         if (getProperties().getProperty("isis.persistor") != "in-memory") {
-            for (SimpleClass simpleClass : collection) {
-                SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
+            for (final SimpleClass simpleClass : collection) {
+                final SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
                 assertEquals(null, a.text); // must check direct value, as
                                             // framework can auto-resolve, if
                                             // you use getText()
@@ -621,19 +620,19 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     }
 
     public void testSingleReferenceResolve() {
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
         factory.resolve(a);
         assertEquals(simpleClassTwoA.getText(), a.getText());
     }
 
     public void testSimpleClassTwoReferenceResolve() {
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
-        for (SimpleClass simpleClass : collection) {
-            SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
+        for (final SimpleClass simpleClass : collection) {
+            final SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
             factory.resolve(a);
             assertEquals(simpleClassTwoA.getText(), a.getText());
             assertEquals(simpleClassTwoA.getIntValue(), a.getIntValue());
@@ -642,31 +641,31 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     }
 
     public void testSimpleClassTwo() {
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
         assertEquals(1, classes.size());
-        for (SimpleClassTwo simpleClass : classes) {
+        for (final SimpleClassTwo simpleClass : classes) {
             assertEquals(simpleClassTwoA.getText(), simpleClass.getText());
         }
     }
 
     public void testUpdate1() {
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
         assertEquals(1, classes.size());
 
-        SimpleClassTwo simpleClass = classes.get(0);
+        final SimpleClassTwo simpleClass = classes.get(0);
         simpleClass.setText("XXX");
         simpleClass.setBooleanValue(false);
         simpleClassTwoA.setBooleanValue(false);
     }
 
     public void testUpdate2() {
-        SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
         assertEquals(1, classes.size());
 
-        SimpleClassTwo simpleClass = classes.get(0);
+        final SimpleClassTwo simpleClass = classes.get(0);
         assertEquals("XXX", simpleClass.getText());
         assertEquals(simpleClassTwoA.getBooleanValue(), simpleClass.getBooleanValue());
     }

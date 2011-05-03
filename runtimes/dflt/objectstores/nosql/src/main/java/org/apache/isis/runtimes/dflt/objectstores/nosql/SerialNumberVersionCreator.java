@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.Date;
@@ -27,32 +26,35 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public class SerialNumberVersionCreator implements VersionCreator {
 
-    public String versionString(Version version) {
-        long sequence = ((SerialNumberVersion) version).getSequence();
+    @Override
+    public String versionString(final Version version) {
+        final long sequence = ((SerialNumberVersion) version).getSequence();
         return Long.toHexString(sequence);
     }
-    
-    public String timeString(Version version) {
-        Date time = version.getTime();
+
+    @Override
+    public String timeString(final Version version) {
+        final Date time = version.getTime();
         return Long.toHexString(time.getTime());
     }
 
-    public Version version(String versionString, String user, String timeString) {
-        Long sequence = Long.valueOf(versionString, 16);
-        Long time = Long.valueOf(timeString, 16);
-        Date date = new Date(time);
+    @Override
+    public Version version(final String versionString, final String user, final String timeString) {
+        final Long sequence = Long.valueOf(versionString, 16);
+        final Long time = Long.valueOf(timeString, 16);
+        final Date date = new Date(time);
         return new SerialNumberVersion(sequence, user, date);
     }
 
-    public Version newVersion(String user) {
+    @Override
+    public Version newVersion(final String user) {
         return new SerialNumberVersion(1, user, new Date());
     }
-    
-    public Version nextVersion(Version version) {
-        long sequence = ((SerialNumberVersion) version).getSequence() + 1;
-        String user = version.getUser();
+
+    @Override
+    public Version nextVersion(final Version version) {
+        final long sequence = ((SerialNumberVersion) version).getSequence() + 1;
+        final String user = version.getUser();
         return new SerialNumberVersion(sequence, user, new Date());
     }
 }
-
-

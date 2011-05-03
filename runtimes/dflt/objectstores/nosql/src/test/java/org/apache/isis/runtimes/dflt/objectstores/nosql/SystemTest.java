@@ -17,46 +17,42 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class SystemTest {
 
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
-        TestProxySystemII system = new TestProxySystemII();
+        final TestProxySystemII system = new TestProxySystemII();
         system.init();
-        
+
     }
-    
+
     @Test
     public void test() {
-        ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
-        ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
-        
-        DebugBuilder debug = new DebugString();
+        final ObjectSpecification specification =
+            IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        final ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
+
+        final DebugBuilder debug = new DebugString();
         IsisContext.getPersistenceSession().debugData(debug);
         IsisContext.getSpecificationLoader().debugData(debug);
         /*
-        System.out.println(debug);
-        
-        System.out.println(Dump.adapter(object));
-        System.out.println(Dump.specification(object));
-        */
+         * System.out.println(debug);
+         * 
+         * System.out.println(Dump.adapter(object)); System.out.println(Dump.specification(object));
+         */
     }
 }
-
-

@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.List;
 
-
 public interface StateWriter {
 
     StateWriter addAggregate(String id);
-    
+
     void writeId(String oid);
 
     void writeType(String type);
@@ -41,9 +39,8 @@ public interface StateWriter {
 
     void writeUser(String user);
 
-    void writeCollection(String id,  List<StateWriter> elements);
+    void writeCollection(String id, List<StateWriter> elements);
 
     StateWriter createElementWriter();
 
 }
-

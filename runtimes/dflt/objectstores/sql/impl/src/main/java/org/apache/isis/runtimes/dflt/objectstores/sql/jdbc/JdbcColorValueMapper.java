@@ -46,7 +46,7 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
 
     private final String type;
 
-    public JdbcColorValueMapper(ObjectAssociation field, String type) {
+    public JdbcColorValueMapper(final ObjectAssociation field, final String type) {
         super(field);
         this.type = type;
     }
@@ -69,8 +69,8 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
      * .isis.core.metamodel.adapter.ObjectAdapter)
      */
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value) {
-        Object o = value.getObject();
+    protected Object preparedStatementObject(final ObjectAdapter value) {
+        final Object o = value.getObject();
         return ((Color) o).intValue();
     }
 
@@ -83,10 +83,11 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
      * org.apache.isis.core.metamodel.spec.feature.ObjectAssociation)
      */
     @Override
-    protected ObjectAdapter setFromDBColumn(Results results, String columnName, ObjectAssociation field) {
+    protected ObjectAdapter setFromDBColumn(final Results results, final String columnName,
+        final ObjectAssociation field) {
         ObjectAdapter restoredValue;
-        int intValue = results.getInt(columnName);
-        Color colorValue = new Color(intValue);
+        final int intValue = results.getInt(columnName);
+        final Color colorValue = new Color(intValue);
         restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(colorValue);
         return restoredValue;
     }

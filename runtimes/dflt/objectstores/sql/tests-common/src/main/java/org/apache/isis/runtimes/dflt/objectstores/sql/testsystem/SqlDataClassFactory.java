@@ -40,7 +40,7 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
     }
 
     public SqlDataClass newDataClass() {
-        SqlDataClass object = newTransientInstance(SqlDataClass.class);
+        final SqlDataClass object = newTransientInstance(SqlDataClass.class);
         return object;
     }
 
@@ -50,7 +50,7 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
     }
 
     public SimpleClass newSimpleClass() {
-        SimpleClass object = newTransientInstance(SimpleClass.class);
+        final SimpleClass object = newTransientInstance(SimpleClass.class);
         return object;
     }
 
@@ -60,20 +60,20 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
     }
 
     public SimpleClassTwo newSimpleClassTwo() {
-        SimpleClassTwo object = newTransientInstance(SimpleClassTwo.class);
+        final SimpleClassTwo object = newTransientInstance(SimpleClassTwo.class);
         return object;
     }
 
     public NumericTestClass newNumericTestClass() {
-        NumericTestClass object = newTransientInstance(NumericTestClass.class);
+        final NumericTestClass object = newTransientInstance(NumericTestClass.class);
         return object;
     }
 
-    public void save(Object sqlDataClass) {
+    public void save(final Object sqlDataClass) {
         persistIfNotAlready(sqlDataClass);
     }
 
-    public void delete(Object sqlDataClass) {
+    public void delete(final Object sqlDataClass) {
         remove(sqlDataClass);
     }
 

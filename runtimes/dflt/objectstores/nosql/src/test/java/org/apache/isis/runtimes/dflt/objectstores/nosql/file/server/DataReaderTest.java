@@ -17,24 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-
-import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.DataReader;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.FileServerException;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class DataReaderTest {
 
@@ -46,46 +41,44 @@ public class DataReaderTest {
         Util.ensureDirectoryExists();
         new File("target/test/type").mkdir();
     }
-    
+
     @Test
     public void noFileCausesException() throws Exception {
         try {
             new DataReader("type", "noexistant");
             fail();
-        } catch (FileNotFoundException expected) {
+        } catch (final FileNotFoundException expected) {
         }
     }
 
     @Test
     public void noDataRead() throws Exception {
-        FileWriter writer = new FileWriter("target/test/type/0013.data");
+        final FileWriter writer = new FileWriter("target/test/type/0013.data");
         writer.write("");
         writer.close();
-        
+
         try {
             reader = new DataReader("type", "0013");
             fail();
-        } catch (FileServerException expected) {
+        } catch (final FileServerException expected) {
             assertThat(expected.getMessage(), startsWith("No data in file:"));
         }
 
     }
-    
+
     @Test
     public void readIdAndVersion() throws Exception {
-        FileWriter writer = new FileWriter("target/test/type/0012.data");
+        final FileWriter writer = new FileWriter("target/test/type/0012.data");
         writer.write("class.type 0012 17\n{data}");
         writer.close();
-        
+
         reader = new DataReader("type", "0012");
-        
+
         assertEquals("0012", reader.getId());
         assertEquals("17", reader.getVersion());
-        
-        String data = reader.getData();
+
+        final String data = reader.getData();
         assertEquals("{data}", data);
         reader.close();
     }
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
-
 
 public interface ObjectMapping {
     void createObject(DatabaseConnector connector, ObjectAdapter object);
@@ -36,7 +34,8 @@ public interface ObjectMapping {
 
     ObjectAdapter[] getInstances(DatabaseConnector connector, ObjectSpecification spec, String title);
 
-    ObjectAdapter[] getInstances(DatabaseConnector connector, ObjectSpecification spec, PersistenceQueryFindByPattern query);
+    ObjectAdapter[] getInstances(DatabaseConnector connector, ObjectSpecification spec,
+        PersistenceQueryFindByPattern query);
 
     ObjectAdapter getObject(DatabaseConnector connector, Oid oid, ObjectSpecification hint);
 
@@ -49,7 +48,7 @@ public interface ObjectMapping {
     void save(DatabaseConnector connector, ObjectAdapter object);
 
     void shutdown();
-    
+
     void startup(DatabaseConnector connection, ObjectMappingLookup objectMapperLookup);
 
 }

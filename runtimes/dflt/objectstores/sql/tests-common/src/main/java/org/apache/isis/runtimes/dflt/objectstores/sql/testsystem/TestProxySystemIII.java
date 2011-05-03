@@ -17,21 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-
-import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
-import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.sql.SqlPersistorInstaller;
-import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -41,6 +31,11 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlPersistorInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -48,35 +43,39 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.
  */
 public class TestProxySystemIII {
-    
+
     private IsisConfigurationDefault configuration;
-    public void setConfiguration(IsisConfigurationDefault configuration) {
-		this.configuration = configuration;
-	}
+
+    public void setConfiguration(final IsisConfigurationDefault configuration) {
+        this.configuration = configuration;
+    }
+
     public IsisConfigurationDefault getConfiguration() {
-        if (configuration == null){
-        	configuration = new IsisConfigurationDefault();
+        if (configuration == null) {
+            configuration = new IsisConfigurationDefault();
         }
         return configuration;
     }
 
+    private List<Object> servicesList;
+    private final Mockery mockery = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
+    private IsisSessionFactoryDefault sessionFactory = null;
+    private ObjectStorePersistenceMechanismInstallerAbstract persistenceMechanismInstaller;
 
-	private List<Object> servicesList;
-    private Mockery mockery = new JUnit4Mockery(){{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
-	private IsisSessionFactoryDefault sessionFactory = null;
-	private ObjectStorePersistenceMechanismInstallerAbstract persistenceMechanismInstaller;
-    
-    
-    
-    public void init(AbstractFactoryAndRepository factory) {
+    public void init(final AbstractFactoryAndRepository factory) {
         servicesList = new ArrayList<Object>();
         servicesList.add(factory);
 
@@ -95,54 +94,47 @@ public class TestProxySystemIII {
         });
 
         SpecificationLoader mockSpecificationLoader;
-        JavaReflectorInstaller javaReflectorInstaller = new JavaReflectorInstaller();
+        final JavaReflectorInstaller javaReflectorInstaller = new JavaReflectorInstaller();
         javaReflectorInstaller.setConfiguration(configuration);
         mockSpecificationLoader = javaReflectorInstaller.createReflector();
 
         ((ObjectReflectorDefault) mockSpecificationLoader).setRuntimeContext(new RuntimeContextFromSession());
 
-        if (configuration.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver") == null){
-        	if (configuration.getString("isis.persistor") == "in-memory"){
-        		persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
-        	} else {
-        		persistenceMechanismInstaller = new XmlPersistenceMechanismInstaller();
-        	}
+        if (configuration.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver") == null) {
+            if (configuration.getString("isis.persistor") == "in-memory") {
+                persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
+            } else {
+                persistenceMechanismInstaller = new XmlPersistenceMechanismInstaller();
+            }
         } else {
-            persistenceMechanismInstaller = new SqlPersistorInstaller(); 
+            persistenceMechanismInstaller = new SqlPersistorInstaller();
         }
-        
+
         persistenceMechanismInstaller.setConfiguration(configuration);
-        PersistenceSessionFactory persistenceSessionFactory = persistenceMechanismInstaller.createPersistenceSessionFactory(DeploymentType.PROTOTYPE);
-        
-        sessionFactory = new IsisSessionFactoryDefault(
-                DeploymentType.EXPLORATION,
-                configuration, 
-                mockTemplateImageLoader, 
-                mockSpecificationLoader, 
-                mockAuthenticationManager,
-                mockAuthorizationManager, 
-                mockUserProfileLoader, 
-                persistenceSessionFactory, 
-                servicesList);
-        IsisContext context = IsisContextStatic.createRelaxedInstance(sessionFactory);
+        final PersistenceSessionFactory persistenceSessionFactory =
+            persistenceMechanismInstaller.createPersistenceSessionFactory(DeploymentType.PROTOTYPE);
+
+        sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
+                mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
+                persistenceSessionFactory, servicesList);
+        final IsisContext context = IsisContextStatic.createRelaxedInstance(sessionFactory);
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
         sessionFactory.init();
-        
+
         context.openSessionInstance(new SimpleSession("tester", new String[0], "001"));
     }
-    
-    public void addToConfiguration(String key, String value) {
+
+    public void addToConfiguration(final String key, final String value) {
         configuration.add(key, value);
     }
-    
-    public void shutDown(){
-    	if (sessionFactory != null){
-    		sessionFactory.shutdown();
-    	}
-    	if (persistenceMechanismInstaller != null){
-    		persistenceMechanismInstaller.shutdown();
-    	}
+
+    public void shutDown() {
+        if (sessionFactory != null) {
+            sessionFactory.shutdown();
+        }
+        if (persistenceMechanismInstaller != null) {
+            persistenceMechanismInstaller.shutdown();
+        }
     }
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.ArrayList;
@@ -35,14 +34,14 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-
 class WriteObjectCommand implements PersistenceCommand {
     private final KeyCreator keyCreator;
     private final ObjectAdapter object;
     private final VersionCreator versionCreator;
     private final boolean isUpdate;
 
-    WriteObjectCommand(boolean isUpdate, KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
+    WriteObjectCommand(final boolean isUpdate, final KeyCreator keyCreator, final VersionCreator versionCreator,
+        final ObjectAdapter object) {
         this.isUpdate = isUpdate;
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
@@ -50,19 +49,20 @@ class WriteObjectCommand implements PersistenceCommand {
     }
 
     @Override
-    public void execute(PersistenceCommandContext context) {
-        String specName = object.getSpecification().getFullIdentifier();
-        StateWriter writer = ((NoSqlCommandContext) context).createStateWriter(specName);
-        String key = keyCreator.key(object.getOid());
+    public void execute(final PersistenceCommandContext context) {
+        final String specName = object.getSpecification().getFullIdentifier();
+        final StateWriter writer = ((NoSqlCommandContext) context).createStateWriter(specName);
+        final String key = keyCreator.key(object.getOid());
         writer.writeId(key);
         writeFields(writer, specName, object);
         final String user = IsisContext.getAuthenticationSession().getUserName();
 
-        Version currentVersion = object.getVersion();
-        Version newVersion = isUpdate ? versionCreator.nextVersion(currentVersion) : versionCreator.newVersion(user);
+        final Version currentVersion = object.getVersion();
+        final Version newVersion =
+            isUpdate ? versionCreator.nextVersion(currentVersion) : versionCreator.newVersion(user);
         object.setOptimisticLock(newVersion);
         if (newVersion != null) {
-            String version = currentVersion == null ? null : versionCreator.versionString(currentVersion);
+            final String version = currentVersion == null ? null : versionCreator.versionString(currentVersion);
             writer.writeVersion(version, versionCreator.versionString(newVersion));
             writer.writeUser(newVersion.getUser());
             writer.writeTime(versionCreator.timeString(newVersion));
@@ -76,14 +76,14 @@ class WriteObjectCommand implements PersistenceCommand {
 
     }
 
-    private void writeFields(StateWriter writer, String specName, ObjectAdapter object) {
-        List<ObjectAssociation> associations = object.getSpecification().getAssociations();
+    private void writeFields(final StateWriter writer, final String specName, final ObjectAdapter object) {
+        final List<ObjectAssociation> associations = object.getSpecification().getAssociations();
         writer.writeType(specName);
-        for (ObjectAssociation association : associations) {
+        for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;
             }
-            ObjectAdapter field = association.get(object);
+            final ObjectAdapter field = association.get(object);
             if (association.isOneToManyAssociation()) {
                 writeCollection(writer, association, field, keyCreator);
             } else if (association.getSpecification().isValue()) {
@@ -96,69 +96,61 @@ class WriteObjectCommand implements PersistenceCommand {
         }
     }
 
-    private void writeAggregatedObject(
-            StateWriter writer,
-            ObjectAssociation association,
-            ObjectAdapter field,
-            KeyCreator keyCreator) {
+    private void writeAggregatedObject(final StateWriter writer, final ObjectAssociation association,
+        final ObjectAdapter field, final KeyCreator keyCreator) {
         if (field == null) {
             writer.writeField(association.getId(), null);
         } else if (field.getOid() instanceof AggregatedOid) {
-            String specName = field.getSpecification().getFullIdentifier();
-            StateWriter aggregateWriter = writer.addAggregate(association.getId());
+            final String specName = field.getSpecification().getFullIdentifier();
+            final StateWriter aggregateWriter = writer.addAggregate(association.getId());
             aggregateWriter.writeId(((AggregatedOid) field.getOid()).getId());
             writeFields(aggregateWriter, specName, field);
         } else {
-            throw new NoSqlStoreException("Object type is inconsistent with it OID - it should have an AggregatedOid: " + field);
+            throw new NoSqlStoreException("Object type is inconsistent with it OID - it should have an AggregatedOid: "
+                + field);
         }
     }
 
-    private void writeReference(
-            StateWriter writer,
-            ObjectAssociation association,
-            ObjectAdapter reference,
-            KeyCreator keyCreator) {
+    private void writeReference(final StateWriter writer, final ObjectAssociation association,
+        final ObjectAdapter reference, final KeyCreator keyCreator) {
         if (reference == null) {
             writer.writeField(association.getId(), null);
         } else {
-            String key = keyCreator.reference(reference);
+            final String key = keyCreator.reference(reference);
             writer.writeField(association.getId(), key);
         }
     }
 
-    private void writeValue(StateWriter writer, ObjectAssociation association, ObjectAdapter value) {
+    private void writeValue(final StateWriter writer, final ObjectAssociation association, final ObjectAdapter value) {
         String data;
         if (value == null) {
             data = null;
         } else {
-            EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
+            final EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
             data = encodeableFacet.toEncodedString(value);
         }
         writer.writeField(association.getId(), data);
     }
 
-    private void writeCollection(
-            StateWriter writer,
-            ObjectAssociation association,
-            ObjectAdapter collection,
-            KeyCreator keyCreator) {
-        CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+    private void writeCollection(final StateWriter writer, final ObjectAssociation association,
+        final ObjectAdapter collection, final KeyCreator keyCreator) {
+        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
         if (association.getSpecification().isAggregated()) {
-            List<StateWriter> elements = new ArrayList<StateWriter>();
-            for (ObjectAdapter element : collectionFacet.iterable(collection)) {
-               StateWriter elementWriter = writer.createElementWriter();
-               elementWriter.writeId(((AggregatedOid) element.getOid()).getId());
-               writeFields(elementWriter, element.getSpecification().getFullIdentifier(), element);
-               elements.add(elementWriter);
+            final List<StateWriter> elements = new ArrayList<StateWriter>();
+            for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
+                final StateWriter elementWriter = writer.createElementWriter();
+                elementWriter.writeId(((AggregatedOid) element.getOid()).getId());
+                writeFields(elementWriter, element.getSpecification().getFullIdentifier(), element);
+                elements.add(elementWriter);
             }
             writer.writeCollection(association.getId(), elements);
         } else {
             String refs = "";
-            for (ObjectAdapter element : collectionFacet.iterable(collection)) {
+            for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
                 if (element.isAggregated()) {
                     throw new DomainModelException(
-                            "Can't store an aggregated object within a collection that is not exoected aggregates: " + element
-                                    + " (" + collection + ")");
+                        "Can't store an aggregated object within a collection that is not exoected aggregates: "
+                            + element + " (" + collection + ")");
                 }
                 refs += keyCreator.reference(element) + "|";
             }
@@ -175,10 +167,9 @@ class WriteObjectCommand implements PersistenceCommand {
 
     @Override
     public String toString() {
-        ToString toString = new ToString(this);
+        final ToString toString = new ToString(this);
         toString.append("spec", object.getSpecification().getFullIdentifier());
         toString.append("oid", object.getOid());
         return toString.toString();
     }
 }
-

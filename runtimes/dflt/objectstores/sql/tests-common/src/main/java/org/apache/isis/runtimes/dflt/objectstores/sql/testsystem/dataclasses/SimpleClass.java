@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,31 +26,36 @@ import org.apache.isis.applib.AbstractDomainObject;
 
 /**
  * @author Kevin
- *
+ * 
  */
 public class SimpleClass extends AbstractDomainObject {
     public String title() {
         return string;
     }
+
     // {{ String type
     private String string;
+
     public String getString() {
         return string;
     }
+
     public void setString(final String string) {
         this.string = string;
     }
+
     // }}
 
     // {{ SimpleClassTwoA
-	private SimpleClassTwo simplyClassTwoA;
-	public SimpleClassTwo getSimpleClassTwoA() {
-		return simplyClassTwoA;
-	}
-	public void setSimpleClassTwoA(final SimpleClassTwo simpleClassTwoA) {
-		this.simplyClassTwoA = simpleClassTwoA;
-	}
-	// }}
+    private SimpleClassTwo simplyClassTwoA;
 
+    public SimpleClassTwo getSimpleClassTwoA() {
+        return simplyClassTwoA;
+    }
+
+    public void setSimpleClassTwoA(final SimpleClassTwo simpleClassTwoA) {
+        this.simplyClassTwoA = simpleClassTwoA;
+    }
+    // }}
 
 }

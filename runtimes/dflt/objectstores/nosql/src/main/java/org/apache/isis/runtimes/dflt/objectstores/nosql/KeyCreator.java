@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,11 +24,11 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface KeyCreator {
-    
+
     String key(Oid oid);
-    
+
     String reference(ObjectAdapter object);
-    
+
     Oid oid(String id);
 
     Oid oidFromReference(String ref);
@@ -37,5 +36,3 @@ public interface KeyCreator {
     ObjectSpecification specificationFromReference(String ref);
 
 }
-
-

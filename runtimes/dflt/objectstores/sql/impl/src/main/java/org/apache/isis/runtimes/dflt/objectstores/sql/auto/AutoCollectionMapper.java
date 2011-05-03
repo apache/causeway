@@ -17,12 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
@@ -32,43 +38,34 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.log4j.Logger;
-
 
 public class AutoCollectionMapper extends AbstractMapper implements CollectionMapper {
     private static final Logger LOG = Logger.getLogger(AutoCollectionMapper.class);
     private String tableName;
-    private ObjectAssociation field;
-    private ObjectReferenceMapping elementMapping;
-    private IdMapping idMapping;
+    private final ObjectAssociation field;
+    private final ObjectReferenceMapping elementMapping;
+    private final IdMapping idMapping;
 
-    public AutoCollectionMapper(
-            final ObjectSpecification specification,
-            final ObjectAssociation field,
-            final FieldMappingLookup lookup) {
+    public AutoCollectionMapper(final ObjectSpecification specification, final ObjectAssociation field,
+        final FieldMappingLookup lookup) {
         this.field = field;
 
-        ObjectSpecification spec = field.getFacet(TypeOfFacet.class).valueSpec();
+        final ObjectSpecification spec = field.getFacet(TypeOfFacet.class).valueSpec();
         idMapping = lookup.createIdMapping();
         elementMapping = lookup.createMapping(spec);
 
-        String className = specification.getShortIdentifier();
-        String columnName = field.getId();
+        final String className = specification.getShortIdentifier();
+        final String columnName = field.getId();
         tableName = Sql.sqlName(className) + "_" + asSqlName(columnName);
         tableName = Sql.identifier(tableName);
     }
 
+    @Override
     public void createTables(final DatabaseConnector connector) {
         if (!connector.hasTable(tableName)) {
-            StringBuffer sql = new StringBuffer();
+            final StringBuffer sql = new StringBuffer();
             sql.append("create table ");
             sql.append(tableName);
             sql.append(" (");
@@ -83,13 +80,14 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         }
     }
 
+    @Override
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
-        ObjectAdapter collection = (ObjectAdapter) field.get(parent);
+        final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
             collection.changeState(ResolveState.RESOLVING);
-            
-            StringBuffer sql = new StringBuffer();
+
+            final StringBuffer sql = new StringBuffer();
             sql.append("select ");
             idMapping.appendColumnNames(sql);
             sql.append(", ");
@@ -97,26 +95,28 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
             sql.append(" from ");
             sql.append(tableName);
 
-            Results rs = connector.select(sql.toString());
-            List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+            final Results rs = connector.select(sql.toString());
+            final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
             while (rs.next()) {
-                ObjectAdapter element = ((JdbcObjectReferenceMapping) elementMapping).initializeField(rs);
+                final ObjectAdapter element = ((JdbcObjectReferenceMapping) elementMapping).initializeField(rs);
                 LOG.debug("  element  " + element.getOid());
                 list.add(element);
             }
-            CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+            final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
             rs.close();
             PersistorUtil.end(collection);
         }
     }
 
+    @Override
     public boolean needsTables(final DatabaseConnector connector) {
         return !connector.hasTable(tableName);
     }
 
+    @Override
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
-        ObjectAdapter collection = (ObjectAdapter) field.get(parent);
+        final ObjectAdapter collection = field.get(parent);
         LOG.debug("saving internal collection " + collection);
 
         StringBuffer sql = new StringBuffer();
@@ -137,15 +137,16 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         idMapping.appendInsertValues(connector, sql, parent);
         sql.append(", ");
 
-        CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
-        for (ObjectAdapter element : collectionFacet.iterable(collection)) {
-            StringBuffer values = new StringBuffer();
+        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+        for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
+            final StringBuffer values = new StringBuffer();
             elementMapping.appendInsertValues(connector, values, element);
             connector.update(sql.toString() + values + ")");
         }
     }
-     
-    public void debugData(DebugBuilder debug) {
+
+    @Override
+    public void debugData(final DebugBuilder debug) {
         debug.appendln(field.getName(), "collection");
         debug.indent();
         debug.appendln("Table", tableName);

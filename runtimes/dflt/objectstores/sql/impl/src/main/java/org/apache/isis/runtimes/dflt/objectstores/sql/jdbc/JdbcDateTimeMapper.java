@@ -41,24 +41,25 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
     }
 
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value) {
-        DateTime asDate = (DateTime) value.getObject();
-        java.sql.Timestamp dateTime = new java.sql.Timestamp(asDate.millisSinceEpoch());
+    protected Object preparedStatementObject(final ObjectAdapter value) {
+        final DateTime asDate = (DateTime) value.getObject();
+        final java.sql.Timestamp dateTime = new java.sql.Timestamp(asDate.millisSinceEpoch());
         return dateTime;
     }
 
     @Override
-    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
-        String encodedValue = results.getString(columnName);
-        if (encodedValue == null)
+    public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
+        final String encodedValue = results.getString(columnName);
+        if (encodedValue == null) {
             return null;
+        }
         // convert date to yyyymmddhhmm
-        String year = encodedValue.substring(0, 4);
-        String month = encodedValue.substring(5, 7);
-        String day = encodedValue.substring(8, 10);
-        String hour = encodedValue.substring(11, 13);
-        String minute = encodedValue.substring(14, 16);
-        String valueString = year + month + day + "T" + hour + minute + "00000";
+        final String year = encodedValue.substring(0, 4);
+        final String month = encodedValue.substring(5, 7);
+        final String day = encodedValue.substring(8, 10);
+        final String hour = encodedValue.substring(11, 13);
+        final String minute = encodedValue.substring(14, 16);
+        final String valueString = year + month + day + "T" + hour + minute + "00000";
         return field.getSpecification().getFacet(EncodableFacet.class).fromEncodedString(valueString);
     }
 

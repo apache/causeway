@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
-import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.LockManager;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 
 public class LockManagerTest {
 
@@ -35,11 +33,11 @@ public class LockManagerTest {
     public void setUp() throws Exception {
         manager = new LockManager();
     }
-    
+
     @Test
     public void readDoesNotBlockReads() throws Exception {
-        Thread tx1 = new Thread();
-        Thread tx2 = new Thread();
+        final Thread tx1 = new Thread();
+        final Thread tx2 = new Thread();
         manager.acquireRead("2", tx1);
         manager.acquireRead("2", tx2);
         manager.release("2", tx1);
@@ -48,13 +46,10 @@ public class LockManagerTest {
 
     @Test
     public void writeAbortsSecondWrite() throws Exception {
-        Thread tx1 = new Thread();
-        Thread tx2 = new Thread();
+        final Thread tx1 = new Thread();
+        final Thread tx2 = new Thread();
         assertTrue(manager.acquireWrite("2", tx1));
         assertFalse(manager.acquireWrite("2", tx2));
     }
-    
 
 }
-
-

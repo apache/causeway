@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -30,41 +29,43 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-
 public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
-	
-	private NoSqlObjectStore objectStore;
 
-	public NoSqlPersistorMechanismInstaller(String name) {
-		super(name);
-	}
-	
+    private NoSqlObjectStore objectStore;
+
+    public NoSqlPersistorMechanismInstaller(final String name) {
+        super(name);
+    }
+
     @Override
-    protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory objectFactory, AdapterManager adapterManager) {
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
+        final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
         return getObjectStore(configuration);
     }
 
     @Override
-    protected OidGenerator createOidGenerator(IsisConfiguration configuration) {
+    protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
         return getObjectStore(configuration).getOidGenerator();
-     }
-
-    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new PersistenceSessionFactoryDelegating(deploymentType, this) {};
     }
 
-    private NoSqlObjectStore getObjectStore(IsisConfiguration configuration) {
+    @Override
+    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
+        return new PersistenceSessionFactoryDelegating(deploymentType, this) {
+        };
+    }
+
+    private NoSqlObjectStore getObjectStore(final IsisConfiguration configuration) {
         if (objectStore == null) {
-            KeyCreator keyCreator = createKeyCreator();
-            VersionCreator versionCreator = createVersionCreator();
-            NoSqlDataDatabase db = createNoSqlDatabase(configuration);
-            NoSqlOidGenerator oidGenerator = createOidGenerator(db);
+            final KeyCreator keyCreator = createKeyCreator();
+            final VersionCreator versionCreator = createVersionCreator();
+            final NoSqlDataDatabase db = createNoSqlDatabase(configuration);
+            final NoSqlOidGenerator oidGenerator = createOidGenerator(db);
             objectStore = new NoSqlObjectStore(db, oidGenerator, keyCreator, versionCreator);
         }
         return objectStore;
     }
 
-    protected NoSqlOidGenerator createOidGenerator(NoSqlDataDatabase db) {
+    protected NoSqlOidGenerator createOidGenerator(final NoSqlDataDatabase db) {
         return new NoSqlOidGenerator(db);
     }
 
@@ -73,7 +74,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
     protected SerialKeyCreator createKeyCreator() {
         return new SerialKeyCreator();
     }
-    
+
     private VersionCreator createVersionCreator() {
         return new SerialNumberVersionCreator();
     }

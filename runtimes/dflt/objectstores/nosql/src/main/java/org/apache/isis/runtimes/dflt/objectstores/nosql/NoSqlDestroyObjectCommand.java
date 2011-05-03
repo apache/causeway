@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -25,35 +24,37 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
-
 final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
     private final ObjectAdapter object;
     private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
 
-    public NoSqlDestroyObjectCommand(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
+    public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator,
+        final ObjectAdapter object) {
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
         this.object = object;
     }
 
+    @Override
     public void execute(final PersistenceCommandContext context) {
-        String key = keyCreator.key(object.getOid());
-        String version = versionCreator.versionString(object.getVersion());
-        String specificationName = object.getSpecification().getFullIdentifier();
+        final String key = keyCreator.key(object.getOid());
+        final String version = versionCreator.versionString(object.getVersion());
+        final String specificationName = object.getSpecification().getFullIdentifier();
 
         ((NoSqlCommandContext) context).delete(specificationName, key, version);
     }
 
+    @Override
     public ObjectAdapter onObject() {
         return object;
     }
 
+    @Override
     public String toString() {
-        ToString toString = new ToString(this);
+        final ToString toString = new ToString(this);
         toString.append("spec", object.getSpecification().getFullIdentifier());
         toString.append("oid", object.getOid());
         return toString.toString();
     }
 }
-

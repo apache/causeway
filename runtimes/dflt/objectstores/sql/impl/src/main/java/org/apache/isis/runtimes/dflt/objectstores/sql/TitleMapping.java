@@ -17,60 +17,58 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public class TitleMapping {
-    private String column = Sql.identifier("NO_title");
+    private final String column = Sql.identifier("NO_title");
 
-     protected String getColumn() {
+    protected String getColumn() {
         return column;
     }
-     
-    public void appendWhereClause(StringBuffer sql, String title) {
+
+    public void appendWhereClause(final StringBuffer sql, final String title) {
         appendAssignment(sql, title);
     }
 
-    private void appendAssignment(StringBuffer sql, String title) {
+    private void appendAssignment(final StringBuffer sql, final String title) {
         sql.append(column);
         sql.append(" = ");
         appendTitle(sql, title);
     }
 
-    public void appendColumnDefinitions(StringBuffer sql) {
+    public void appendColumnDefinitions(final StringBuffer sql) {
         sql.append(column);
         sql.append(" ");
         sql.append("varchar(200)");
     }
 
-    public void appendColumnNames(StringBuffer sql) {
+    public void appendColumnNames(final StringBuffer sql) {
         sql.append(column);
     }
 
-    //TODO:KAM:here 
-    public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    // TODO:KAM:here
+    public void appendInsertValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         if (object == null) {
             sql.append("NULL");
         } else {
-            //appendTitle(sql, object.titleString());
-        	connector.addToQueryValues(object.titleString().toLowerCase());
+            // appendTitle(sql, object.titleString());
+            connector.addToQueryValues(object.titleString().toLowerCase());
         }
-    	sql.append("?");
+        sql.append("?");
     }
 
-    private void appendTitle(StringBuffer sql, String title) {
-        String titleString = title.toLowerCase();
+    private void appendTitle(final StringBuffer sql, final String title) {
+        final String titleString = title.toLowerCase();
         sql.append(Sql.escapeAndQuoteValue(titleString));
     }
 
-    public void appendUpdateAssignment(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    public void appendUpdateAssignment(final DatabaseConnector connector, final StringBuffer sql,
+        final ObjectAdapter object) {
         sql.append(column);
         sql.append(" = ");
         appendInsertValues(connector, sql, object);
-        
+
     }
 }
-

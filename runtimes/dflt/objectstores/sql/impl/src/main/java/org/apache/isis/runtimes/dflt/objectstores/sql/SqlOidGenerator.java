@@ -41,7 +41,7 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
             return transientNumber++;
         }
 
-        public synchronized long nextPersistentId(DatabaseConnectorPool connectionPool) {
+        public synchronized long nextPersistentId(final DatabaseConnectorPool connectionPool) {
             if (lastId > newBatchAt) {
                 throw new SqlObjectStoreException("ID exception, last id (" + lastId + ") past new batch boundary ("
                     + newBatchAt + ")");
@@ -53,11 +53,11 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
             return lastId;
         }
 
-        private void prepareNewBatch(DatabaseConnectorPool connectionPool) {
-            DatabaseConnector db = connectionPool.acquire();
+        private void prepareNewBatch(final DatabaseConnectorPool connectionPool) {
+            final DatabaseConnector db = connectionPool.acquire();
             try {
-                String tableName = Sql.tableIdentifier(TABLE_NAME);
-                String numberColumn = Sql.identifier(NUMBER_COLUMN);
+                final String tableName = Sql.tableIdentifier(TABLE_NAME);
+                final String numberColumn = Sql.identifier(NUMBER_COLUMN);
                 if (!db.hasTable(tableName)) {
                     lastId = 1;
                     newBatchAt = BATCH_SIZE;
@@ -69,21 +69,21 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
                         + BATCH_SIZE) != 1) {
                         throw new SqlObjectStoreException("failed to update serial id table; no rows updated");
                     }
-                    Results rs = db.select("select " + numberColumn + " from " + tableName);
+                    final Results rs = db.select("select " + numberColumn + " from " + tableName);
                     rs.next();
                     newBatchAt = rs.getLong(NUMBER_COLUMN); // TODO here
                     lastId = newBatchAt - BATCH_SIZE;
                     LOG.debug("New ID batch created, from " + lastId + " to " + newBatchAt);
                     rs.close();
                 }
-            } catch (ObjectPersistenceException e) {
+            } catch (final ObjectPersistenceException e) {
                 throw e;
             } finally {
                 connectionPool.release(db);
             }
         }
 
-        public void debugData(DebugBuilder debug) {
+        public void debugData(final DebugBuilder debug) {
             debug.appendln("id", lastId);
             debug.appendln("transient id", transientNumber);
         }
@@ -103,18 +103,19 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
 
     @Override
     public SqlOid createTransientOid(final Object object) {
-        String className = object.getClass().getName();
+        final String className = object.getClass().getName();
         return SqlOid.createTransient(className, ids.nextTransientId());
     }
-    
-    public String createAggregateId(Object pojo) {
+
+    @Override
+    public String createAggregateId(final Object pojo) {
         throw new SqlObjectStoreException("Aggregated objects are not supported in this store");
     }
 
     @Override
     public void convertTransientToPersistentOid(final Oid oid) {
         Assert.assertNotNull("No connection set up", connectionPool);
-        IntegerPrimaryKey primaryKey = new IntegerPrimaryKey((int) ids.nextPersistentId(connectionPool));
+        final IntegerPrimaryKey primaryKey = new IntegerPrimaryKey((int) ids.nextPersistentId(connectionPool));
         ((SqlOid) oid).setId(primaryKey);
         ((SqlOid) oid).makePersistent();
     }

@@ -17,24 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class LockManager {
 
-    private Map<String, Lock> locks = new HashMap<String, Lock>();
+    private final Map<String, Lock> locks = new HashMap<String, Lock>();
 
-    public synchronized void acquireRead(String id, Thread transaction) {
-        Lock lock = getLock(id);
+    public synchronized void acquireRead(final String id, final Thread transaction) {
+        final Lock lock = getLock(id);
         lock.addRead(transaction);
     }
 
-    public boolean acquireWrite(String id, Thread transaction) {
-        Lock lock = getLock(id);
+    public boolean acquireWrite(final String id, final Thread transaction) {
+        final Lock lock = getLock(id);
         if (lock.isWriteLocked()) {
             return false;
         }
@@ -42,7 +40,7 @@ public class LockManager {
         return true;
     }
 
-    private Lock getLock(String id) {
+    private Lock getLock(final String id) {
         Lock lock;
         synchronized (this) {
             lock = locks.get(id);
@@ -54,15 +52,15 @@ public class LockManager {
         return lock;
     }
 
-    public synchronized void release(String id, Thread transaction) {
-        Lock lock = getLock(id);
+    public synchronized void release(final String id, final Thread transaction) {
+        final Lock lock = getLock(id);
         lock.remove(transaction);
         if (lock.isEmpty()) {
             locks.remove(id);
         }
     }
 
-    public void waitUntilAllRealeased() {}
+    public void waitUntilAllRealeased() {
+    }
 
 }
-

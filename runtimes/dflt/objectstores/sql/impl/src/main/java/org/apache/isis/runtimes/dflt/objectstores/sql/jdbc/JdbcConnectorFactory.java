@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnectorFactory;
 
-
 public class JdbcConnectorFactory implements DatabaseConnectorFactory {
 
+    @Override
     public DatabaseConnector createConnector() {
-        JdbcConnector connection = new JdbcConnector();
+        final JdbcConnector connection = new JdbcConnector();
         connection.open();
         return connection;
     }

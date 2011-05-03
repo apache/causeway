@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-
 public interface FieldMappingFactory {
     FieldMapping createFieldMapping(final ObjectAssociation field);
 }
-

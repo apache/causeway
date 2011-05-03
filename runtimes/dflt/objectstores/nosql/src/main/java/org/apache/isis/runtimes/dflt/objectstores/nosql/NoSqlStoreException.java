@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -29,23 +28,20 @@ public class NoSqlStoreException extends IsisException {
         super();
     }
 
-    public NoSqlStoreException(String messageFormat, Object... args) {
+    public NoSqlStoreException(final String messageFormat, final Object... args) {
         super(messageFormat, args);
     }
 
-    public NoSqlStoreException(String message, Throwable cause) {
+    public NoSqlStoreException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public NoSqlStoreException(String message) {
+    public NoSqlStoreException(final String message) {
         super(message);
     }
 
-    public NoSqlStoreException(Throwable cause) {
+    public NoSqlStoreException(final Throwable cause) {
         super(cause);
     }
 
-    
 }
-
-

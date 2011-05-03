@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.File;
@@ -25,23 +24,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-
 public class DataWriter {
 
-    //   private static final Logger LOG = Logger.getLogger(DataWriter.class);
-    
+    // private static final Logger LOG = Logger.getLogger(DataWriter.class);
+
     private static final String ENCODING = "utf-8";
- 
+
     private final List<FileContent> files;
 
-    public DataWriter(List<FileContent> files) {
+    public DataWriter(final List<FileContent> files) {
         this.files = files;
     }
 
     public void writeData() throws IOException {
-        for (FileContent content : files) {
+        for (final FileContent content : files) {
             if (Util.isDelete(content.command)) {
-                File f = Util.dataFile(content.type, content.id);
+                final File f = Util.dataFile(content.type, content.id);
                 f.delete();
             } else {
                 writeFile(content);
@@ -50,9 +48,9 @@ public class DataWriter {
     }
 
     // TODO to be consistent use PrintWriter
-    private void writeFile(FileContent content) throws IOException {
+    private void writeFile(final FileContent content) throws IOException {
         FileOutputStream output = null;
-        File file = Util.dataFile(content.type, content.id);
+        final File file = Util.dataFile(content.type, content.id);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
@@ -70,12 +68,12 @@ public class DataWriter {
         }
     }
 
-    private static void closeSafely(FileOutputStream output) {
+    private static void closeSafely(final FileOutputStream output) {
         if (output != null) {
             try {
                 output.flush();
                 output.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 // throw new ObjectAdapterRuntimeException(e);
             }
         }
@@ -83,8 +81,7 @@ public class DataWriter {
 
     public void close() {
         // TODO Auto-generated method stub
-        
+
     }
 
 }
-

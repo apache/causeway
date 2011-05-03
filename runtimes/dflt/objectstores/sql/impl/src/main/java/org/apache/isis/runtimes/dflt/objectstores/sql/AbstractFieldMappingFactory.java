@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
-
-
 
 public abstract class AbstractFieldMappingFactory implements FieldMappingFactory {
     final String type;
@@ -31,4 +28,3 @@ public abstract class AbstractFieldMappingFactory implements FieldMappingFactory
         this.type = type;
     }
 }
-

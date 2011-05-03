@@ -43,13 +43,13 @@ public class ServerConnection {
     private String[] headers;
     private char command;
 
-    public ServerConnection(InputStream input, OutputStream output) {
+    public ServerConnection(final InputStream input, final OutputStream output) {
         outputStream = Util.trace(output, true);
         inputStream = Util.trace(input, true);
         this.reader = new BufferedReader(new InputStreamReader(inputStream, Util.ENCODING));
         this.writer = new PrintWriter(new OutputStreamWriter(outputStream, Util.ENCODING));
     }
-    
+
     public void readCommand() {
         readHeaders();
     }
@@ -66,7 +66,7 @@ public class ServerConnection {
 
     boolean readHeaders() {
         try {
-            String line = reader.readLine();
+            final String line = reader.readLine();
             LOG.debug("header: " + line);
             if (line == null) {
                 logFailure();
@@ -80,14 +80,14 @@ public class ServerConnection {
                 this.header = 0;
                 return true;
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logFailure();
             throw new NoSqlStoreException(e);
         }
     }
 
     public boolean readWriteHeaders() {
-        boolean readHeaders = readHeaders();
+        final boolean readHeaders = readHeaders();
         if (readHeaders && headers.length != 4) {
             logFailure();
             throw new RemotingException("invalid header string, aborting request");
@@ -109,7 +109,7 @@ public class ServerConnection {
 
     public void endCommand() {
         try {
-            String line = reader.readLine();
+            final String line = reader.readLine();
             if (line == null) {
                 logFailure();
                 throw new RemotingException("stream ended prematurely while reading end of command, aborting request");
@@ -118,18 +118,18 @@ public class ServerConnection {
                 logFailure();
                 throw new RemotingException("command didn't end with an empty blank line, aborting request");
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logFailure();
             throw new NoSqlStoreException(e);
         }
     }
-    
+
     /**
      * Reads all the data up until the next blank line.
      */
     public String getData() {
         try {
-            StringBuffer buffer = new StringBuffer();
+            final StringBuffer buffer = new StringBuffer();
             String line;
             while (true) {
                 line = reader.readLine();
@@ -144,39 +144,32 @@ public class ServerConnection {
                 buffer.append('\n');
             }
             return buffer.toString();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logFailure();
             throw new RemotingException(e);
         }
     }
-/*
-    public void getTermination() {
-        try {
-            String line = reader.readLine();
-             if (line == null || !line.equals("***")) {
-                logFailure();
-                throw new RemotingException("stream ended abruptly while reading data, aborting request");
-            }
-        } catch (IOException e) {
-            logFailure();
-            throw new RemotingException(e);
-        }
 
-    }
-*/
-    public void notFound(String message) {
+    /*
+     * public void getTermination() { try { String line = reader.readLine(); if (line == null || !line.equals("***")) {
+     * logFailure(); throw new RemotingException("stream ended abruptly while reading data, aborting request"); } }
+     * catch (IOException e) { logFailure(); throw new RemotingException(e); }
+     * 
+     * }
+     */
+    public void notFound(final String message) {
         writer.println("not-found");
         writer.println(message);
         writer.flush();
     }
 
-    public void error(String message) {
+    public void error(final String message) {
         writer.println("error");
         writer.println(message);
         writer.flush();
     }
 
-    public void error(String message, Exception exception) {
+    public void error(final String message, final Exception exception) {
         error(message);
         exception.printStackTrace(writer);
         writer.println();
@@ -184,7 +177,7 @@ public class ServerConnection {
         writer.flush();
     }
 
-    private void write(String result) {
+    private void write(final String result) {
         writer.println(result);
         writer.flush();
     }
@@ -197,25 +190,25 @@ public class ServerConnection {
         response(Util.ABORT, "");
     }
 
-    public void response(boolean flag) {
+    public void response(final boolean flag) {
         response(Util.OK, " " + (flag ? "true" : "false"));
     }
 
-    public void response(long value) {
+    public void response(final long value) {
         response(Util.OK, " " + Long.toString(value));
     }
 
-    public void response(String message) {
+    public void response(final String message) {
         response(Util.OK, " " + message);
     }
 
-    private void response(String status, String message) {
-        String response = status + message;
+    private void response(final String status, final String message) {
+        final String response = status + message;
         LOG.debug("response: " + response);
         write(response);
     }
 
-    public void responseData(String data) {
+    public void responseData(final String data) {
         write(data);
     }
 
@@ -223,7 +216,7 @@ public class ServerConnection {
         try {
             reader.close();
             writer.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logFailure();
             throw new RemotingException(e);
         }

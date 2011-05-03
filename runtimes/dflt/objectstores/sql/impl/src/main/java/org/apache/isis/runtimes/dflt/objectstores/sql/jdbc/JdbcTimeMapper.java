@@ -30,26 +30,25 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
-	public static class Factory implements FieldMappingFactory {
-		@Override
-		public FieldMapping createFieldMapping(final ObjectAssociation field) {
-			return new JdbcTimeMapper(field);
-		}
-	}
+    public static class Factory implements FieldMappingFactory {
+        @Override
+        public FieldMapping createFieldMapping(final ObjectAssociation field) {
+            return new JdbcTimeMapper(field);
+        }
+    }
 
-	protected JdbcTimeMapper(ObjectAssociation field) {
-		super(field);
-	}
+    protected JdbcTimeMapper(final ObjectAssociation field) {
+        super(field);
+    }
 
     @Override
-	protected Object preparedStatementObject(ObjectAdapter value){
-        Time asTime = (Time) value.getObject();
+    protected Object preparedStatementObject(final ObjectAdapter value) {
+        final Time asTime = (Time) value.getObject();
         return asTime.asJavaTime();
-	}
+    }
 
-	@Override
-	public ObjectAdapter setFromDBColumn(Results results,
-			String columnName, final ObjectAssociation field) {
+    @Override
+    public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         /*
          * Long hour = Long.decode(encodedValue.substring(0, 2)); Long minute = Long.decode(encodedValue.substring(3,
          * 5)); Long millis = (minute + hour * 60) * 60 * 1000; String valueString = "T" + Long.toString(millis); return
@@ -58,18 +57,18 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
         ObjectAdapter restoredValue;
         final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
         if (correspondingClass == Time.class) {
-            Time timeValue = results.getTime(columnName);
+            final Time timeValue = results.getTime(columnName);
             restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(timeValue);
         } else {
             throw new PersistFailedException("Unhandled time type: " + correspondingClass.getCanonicalName());
         }
         return restoredValue;
 
-	}
+    }
 
-	@Override
-	public String columnType() {
+    @Override
+    public String columnType() {
         return JdbcConnector.TYPE_TIME;
-	}
+    }
 
 }

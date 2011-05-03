@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
 
 public interface Parameter {
     void setupParameter(int parameter, StoredProcedure procedure) throws ObjectPersistenceException;

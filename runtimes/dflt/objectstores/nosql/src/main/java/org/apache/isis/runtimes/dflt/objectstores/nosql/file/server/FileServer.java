@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.IOException;
@@ -33,10 +32,9 @@ import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
-
 
 public class FileServer {
 
@@ -45,7 +43,7 @@ public class FileServer {
     private static final int DEFAULT_PORT = 9012;
     private static final int BACKLOG = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         new FileServer().start();
     }
 
@@ -59,21 +57,21 @@ public class FileServer {
         PropertyConfigurator.configure("config/logging.properties");
 
         try {
-            CompositeConfiguration config = new CompositeConfiguration();
+            final CompositeConfiguration config = new CompositeConfiguration();
             config.addConfiguration(new SystemConfiguration());
             config.addConfiguration(new PropertiesConfiguration("config/server.properties"));
 
             host = config.getString("fileserver.host", DEFAULT_HOST);
             port = config.getInt("fileserver.port", DEFAULT_PORT);
-            String data = config.getString("fileserver.data");
-            String services = config.getString("fileserver.services");
-            String logs = config.getString("fileserver.logs");
+            final String data = config.getString("fileserver.data");
+            final String services = config.getString("fileserver.services");
+            final String logs = config.getString("fileserver.logs");
             connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
             readTimeout = config.getInt("fileserver.read.timeout", 5000);
 
             Util.setDirectory(data, services, logs);
             server = new FileServerProcessor();
-        } catch (ConfigurationException e) {
+        } catch (final ConfigurationException e) {
             LOG.error("configuration failure", e);
             System.out.println(e.getMessage());
             System.exit(0);
@@ -85,57 +83,57 @@ public class FileServer {
         ServerSocket socket = null;
         try {
             LOG.debug("setting up socket on " + host + ":" + port);
-            InetAddress address = InetAddress.getByName(host);
+            final InetAddress address = InetAddress.getByName(host);
             socket = new ServerSocket(port, BACKLOG, address);
             socket.setSoTimeout(connectionTimeout);
             LOG.info("listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
             LOG.debug("listenting on " + socket);
             server.startup();
-        } catch (UnknownHostException e) {
+        } catch (final UnknownHostException e) {
             LOG.error("Unknown host " + host, e);
             System.exit(0);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("start failure - networking  not set up for " + host, e);
             System.exit(0);
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             LOG.error("start failure", e);
             System.exit(0);
         }
-        boolean awaitConnections = true;
+        final boolean awaitConnections = true;
         do {
             try {
-                Socket connection = socket.accept();
+                final Socket connection = socket.accept();
                 LOG.info("connection from " + connection);
                 connection.setSoTimeout(readTimeout);
                 connection(connection);
-            } catch (SocketTimeoutException expected) {
-            } catch (IOException e) {
+            } catch (final SocketTimeoutException expected) {
+            } catch (final IOException e) {
                 LOG.error("networking problem", e);
             }
         } while (awaitConnections);
     }
 
-    private void connection(Socket connection) {
+    private void connection(final Socket connection) {
         try {
-            InputStream input = connection.getInputStream();
-            OutputStream output = connection.getOutputStream();
-            ServerConnection pipe = new ServerConnection(input, output);
+            final InputStream input = connection.getInputStream();
+            final OutputStream output = connection.getOutputStream();
+            final ServerConnection pipe = new ServerConnection(input, output);
             server.process(pipe);
             pipe.logComplete();
-        } catch (NoSqlStoreException e) {
+        } catch (final NoSqlStoreException e) {
             if (e.getCause() instanceof SocketTimeoutException) {
                 LOG.error("read timed out after " + (readTimeout / 1000.0) + " seconds", e);
             } else {
                 LOG.error("file server failure", e);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("networking failure", e);
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             LOG.error("request failure", e);
         } finally {
             try {
                 connection.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 LOG.warn("failure to close connection", e);
             }
         }
@@ -146,4 +144,3 @@ public class FileServer {
         server.shutdown();
     }
 }
-

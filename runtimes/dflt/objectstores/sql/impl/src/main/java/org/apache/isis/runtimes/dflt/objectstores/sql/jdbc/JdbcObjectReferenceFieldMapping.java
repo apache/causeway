@@ -17,23 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
 
 public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping implements FieldMapping {
 
     public static class Factory implements FieldMappingFactory {
+        @Override
         public FieldMapping createFieldMapping(final ObjectAssociation field) {
             return new JdbcObjectReferenceFieldMapping(field);
         }
@@ -41,38 +40,42 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
 
     private final ObjectAssociation field;
 
-    public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
-        ObjectAdapter fieldValue = field.get(object);
+    @Override
+    public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
         appendWhereClause(connector, sql, fieldValue.getOid());
     }
 
-    public JdbcObjectReferenceFieldMapping(ObjectAssociation field) {
+    public JdbcObjectReferenceFieldMapping(final ObjectAssociation field) {
         super(columnName(field), field.getSpecification());
         this.field = field;
     }
 
-    private static String columnName(ObjectAssociation field) {
+    private static String columnName(final ObjectAssociation field) {
         return Sql.sqlFieldName(field.getId());
     }
 
-    public void appendInsertValues(DatabaseConnector connector, StringBuffer sb, ObjectAdapter object) {
-        ObjectAdapter fieldValue = field.get(object);
+    @Override
+    public void appendInsertValues(final DatabaseConnector connector, final StringBuffer sb, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
         super.appendInsertValues(connector, sb, fieldValue);
     }
 
-    public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
-        ObjectAdapter fieldValue = field.get(object);
+    @Override
+    public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
         super.appendUpdateValues(connector, sql, fieldValue);
     }
 
-    public void initializeField(ObjectAdapter object, Results rs) {
-        ObjectAdapter reference = initializeField(rs);
+    @Override
+    public void initializeField(final ObjectAdapter object, final Results rs) {
+        final ObjectAdapter reference = initializeField(rs);
         ((OneToOneAssociation) field).initAssociation(object, reference);
     }
-    
-    public void debugData(DebugBuilder debug) {
+
+    @Override
+    public void debugData(final DebugBuilder debug) {
         debug.appendln(field.getId(), getColumn());
     }
 
 }
-

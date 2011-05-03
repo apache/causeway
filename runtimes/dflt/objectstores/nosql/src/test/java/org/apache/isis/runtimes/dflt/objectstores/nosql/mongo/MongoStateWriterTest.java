@@ -46,10 +46,10 @@ public class MongoStateWriterTest {
 
         try {
 
-            Mongo m = new Mongo();
+            final Mongo m = new Mongo();
             m.dropDatabase("mydb");
             testDb = m.getDB("mydb");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assumeThat(true, is(false)); // ie no exceptions
             return;
         }
@@ -61,7 +61,7 @@ public class MongoStateWriterTest {
     public void flushSavesObject() throws Exception {
         writer.flush();
 
-        DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
     }
 
@@ -70,7 +70,7 @@ public class MongoStateWriterTest {
         writer.writeField("number", 1023);
         writer.writeField("string", "testing");
 
-        DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(0, instances.getCount());
     }
 
@@ -79,9 +79,9 @@ public class MongoStateWriterTest {
         writer.writeId("D01");
         writer.flush();
 
-        DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
-        DBObject object = instances.findOne();
+        final DBObject object = instances.findOne();
         assertNotNull(object.get("_id"));
         assertEquals("D01", object.get("_id"));
         assertEquals(1, object.keySet().size());
@@ -94,9 +94,9 @@ public class MongoStateWriterTest {
         writer.writeField("string", "testing");
         writer.flush();
 
-        DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
-        DBObject object = instances.findOne();
+        final DBObject object = instances.findOne();
         assertEquals(SPEC_NAME, object.get("_type"));
         assertEquals("1023", object.get("number"));
         assertEquals("testing", object.get("string"));
@@ -112,9 +112,9 @@ public class MongoStateWriterTest {
         writer.writeField("string", "testing");
         writer.flush();
 
-        DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
-        DBObject object = instances.findOne();
+        final DBObject object = instances.findOne();
         assertEquals(SPEC_NAME, object.get("_type"));
         assertEquals("1023", object.get("number"));
         assertEquals("testing", object.get("string"));

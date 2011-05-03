@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -25,9 +24,9 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 public interface VersionCreator {
 
     String versionString(Version version);
-    
+
     String timeString(Version version);
-    
+
     Version version(String versionString, String user, String time);
 
     Version newVersion(String user);
@@ -35,5 +34,3 @@ public interface VersionCreator {
     Version nextVersion(Version version);
 
 }
-
-

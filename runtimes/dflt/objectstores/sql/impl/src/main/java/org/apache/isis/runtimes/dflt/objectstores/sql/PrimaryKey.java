@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 public interface PrimaryKey extends Serializable {
 
-	public String stringValue();
+    public String stringValue();
 
-	public Object naturalValue();
+    public Object naturalValue();
 }

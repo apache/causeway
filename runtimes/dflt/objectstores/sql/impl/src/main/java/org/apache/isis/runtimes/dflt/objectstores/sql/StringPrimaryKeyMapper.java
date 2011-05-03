@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public class StringPrimaryKeyMapper implements PrimaryKeyMapper {
 
+    @Override
     public PrimaryKey generateKey(final Results rs, final String column) {
-        String id = rs.getString(column);
+        final String id = rs.getString(column);
         return new StringPrimaryKey(id);
     }
 

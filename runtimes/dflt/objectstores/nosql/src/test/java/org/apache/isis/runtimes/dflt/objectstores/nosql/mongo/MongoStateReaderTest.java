@@ -45,17 +45,17 @@ public class MongoStateReaderTest {
     public void setup() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        Mongo m = new Mongo();
+        final Mongo m = new Mongo();
         try {
             m.dropDatabase("mydb");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assumeThat(true, is(false));// ie ignore test because we've had an exception
             return;
         }
 
         testDb = m.getDB("mydb");
 
-        BasicDBObject object = new BasicDBObject();
+        final BasicDBObject object = new BasicDBObject();
         object.put("_id", "1023");
         object.put("_type", "org.xxx.Class");
         object.put("name", "Fred Smith");
@@ -63,7 +63,7 @@ public class MongoStateReaderTest {
         object.put("null name 2", null);
         object.put("number", "102");
         object.put("null number", "null");
-        DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(SPEC_NAME);
         instances.insert(object);
 
         reader = new MongoStateReader(testDb, SPEC_NAME, "1023");

@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -46,6 +44,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 public final class SqlObjectStore implements ObjectStore {
     private static final String TABLE_NAME = "isis_admin_services";
@@ -66,9 +65,9 @@ public final class SqlObjectStore implements ObjectStore {
         return new CreateObjectCommand() {
             @Override
             public void execute(final PersistenceCommandContext context) {
-                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
+                final DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  create object " + object);
-                ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
+                final ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
                 mapping.createObject(connection, object);
             }
 
@@ -89,9 +88,9 @@ public final class SqlObjectStore implements ObjectStore {
         return new DestroyObjectCommand() {
             @Override
             public void execute(final PersistenceCommandContext context) {
-                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
+                final DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  destroy object " + object);
-                ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
+                final ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
                 mapping.destroyObject(connection, object);
             }
 
@@ -112,7 +111,7 @@ public final class SqlObjectStore implements ObjectStore {
         return new SaveObjectCommand() {
             @Override
             public void execute(final PersistenceCommandContext context) {
-                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
+                final DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  save object " + object);
                 if (object.getSpecification().isCollectionOrIsAggregated()) {
                     /*
@@ -125,7 +124,7 @@ public final class SqlObjectStore implements ObjectStore {
                      */
                     throw new NotYetImplementedException(object.toString());
                 } else {
-                    ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
+                    final ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
                     mapping.save(connection, object);
                     connectionPool.release(connection);
                 }
@@ -166,20 +165,20 @@ public final class SqlObjectStore implements ObjectStore {
 
     @Override
     public void execute(final List<PersistenceCommand> commands) {
-        DatabaseConnector connector = connectionPool.acquire();
+        final DatabaseConnector connector = connectionPool.acquire();
         connector.begin();
 
-        IsisTransactionManager transactionManager = IsisContext.getTransactionManager();
-        MessageBroker messageBroker = IsisContext.getMessageBroker();
-        UpdateNotifier updateNotifier = IsisContext.getUpdateNotifier();
-        SqlExecutionContext context =
+        final IsisTransactionManager transactionManager = IsisContext.getTransactionManager();
+        final MessageBroker messageBroker = IsisContext.getMessageBroker();
+        final UpdateNotifier updateNotifier = IsisContext.getUpdateNotifier();
+        final SqlExecutionContext context =
             new SqlExecutionContext(connector, transactionManager, messageBroker, updateNotifier);
         try {
-            for (PersistenceCommand command : commands) {
+            for (final PersistenceCommand command : commands) {
                 command.execute(context);
             }
             connector.commit();
-        } catch (IsisException e) {
+        } catch (final IsisException e) {
             LOG.warn("Failure during execution", e);
             connector.rollback();
             throw e;
@@ -206,58 +205,58 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     private ObjectAdapter[] findByPattern(final PersistenceQueryFindByPattern query) {
-        ObjectSpecification specification = query.getSpecification();
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
-        ObjectAdapter instances[] = mapper.getInstances(connector, specification, query);
+        final ObjectSpecification specification = query.getSpecification();
+        final DatabaseConnector connector = connectionPool.acquire();
+        final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
+        final ObjectAdapter instances[] = mapper.getInstances(connector, specification, query);
         connectionPool.release(connector);
         return instances;
     }
 
     private ObjectAdapter[] getAllInstances(final PersistenceQueryFindAllInstances criteria) {
-        ObjectSpecification spec = criteria.getSpecification();
+        final ObjectSpecification spec = criteria.getSpecification();
         return allInstances(spec);
     }
 
     // TODO: allInstances of should find all derived types, too.
-    private ObjectAdapter[] allInstances(ObjectSpecification spec) {
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
-        ObjectAdapter[] instances = mapper.getInstances(connector, spec);
-        Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
-        for (int i = 0; i < instances.length; i++) {
-            matchingInstances.addElement(instances[i]);
+    private ObjectAdapter[] allInstances(final ObjectSpecification spec) {
+        final DatabaseConnector connector = connectionPool.acquire();
+        final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
+        final ObjectAdapter[] instances = mapper.getInstances(connector, spec);
+        final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
+        for (final ObjectAdapter instance : instances) {
+            matchingInstances.addElement(instance);
         }
         connectionPool.release(connector);
-        ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
+        final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
         matchingInstances.copyInto(instanceArray);
         return instanceArray;
     }
 
     private ObjectAdapter[] findByTitle(final PersistenceQueryFindByTitle criteria) {
-        ObjectSpecification spec = criteria.getSpecification();
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
+        final ObjectSpecification spec = criteria.getSpecification();
+        final DatabaseConnector connector = connectionPool.acquire();
+        final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
 
-        ObjectAdapter[] instances = mapper.getInstances(connector, spec, criteria.getTitle());
+        final ObjectAdapter[] instances = mapper.getInstances(connector, spec, criteria.getTitle());
         connectionPool.release(connector);
         return instances;
     }
 
     @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
-        DatabaseConnector connection = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(hint, connection);
-        ObjectAdapter object = mapper.getObject(connection, oid, hint);
+        final DatabaseConnector connection = connectionPool.acquire();
+        final ObjectMapping mapper = objectMappingLookup.getMapping(hint, connection);
+        final ObjectAdapter object = mapper.getObject(connection, oid, hint);
         connectionPool.release(connection);
         return object;
     }
 
     @Override
-    public Oid getOidForService(String name) {
-        DatabaseConnector connector = connectionPool.acquire();
+    public Oid getOidForService(final String name) {
+        final DatabaseConnector connector = connectionPool.acquire();
 
-        StringBuffer sql = new StringBuffer();
+        final StringBuffer sql = new StringBuffer();
         sql.append("select ");
         sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
         sql.append(" from ");
@@ -267,9 +266,9 @@ public final class SqlObjectStore implements ObjectStore {
         sql.append(" = ?");
         connector.addToQueryValues(name);
 
-        Results results = connector.select(sql.toString());
+        final Results results = connector.select(sql.toString());
         if (results.next()) {
-            int key = results.getInt(PRIMARYKEY_COLUMN);
+            final int key = results.getInt(PRIMARYKEY_COLUMN);
             connectionPool.release(connector);
             return SqlOid.createPersistent(name, new IntegerPrimaryKey(key));
         } else {
@@ -280,9 +279,9 @@ public final class SqlObjectStore implements ObjectStore {
 
     @Override
     public boolean hasInstances(final ObjectSpecification spec) {
-        DatabaseConnector connection = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
-        boolean hasInstances = mapper.hasInstances(connection, spec);
+        final DatabaseConnector connection = connectionPool.acquire();
+        final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
+        final boolean hasInstances = mapper.hasInstances(connection, spec);
         connectionPool.release(connection);
         return hasInstances;
     }
@@ -296,19 +295,19 @@ public final class SqlObjectStore implements ObjectStore {
     public void open() {
         Sql.setMetaData(connectionPool.acquire().getMetaData());
 
-        DebugBuilder debug = new DebugString();
+        final DebugBuilder debug = new DebugString();
         connectionPool.debug(debug);
         LOG.info("Database: " + debug);
 
         objectMappingLookup.init();
 
-        DatabaseConnector connector = connectionPool.acquire();
+        final DatabaseConnector connector = connectionPool.acquire();
         isInitialized = connector.hasTable(Sql.tableIdentifier(TABLE_NAME));
         if (!isInitialized) {
 
             Defaults.initialise();
 
-            StringBuffer sql = new StringBuffer();
+            final StringBuffer sql = new StringBuffer();
             sql.append("create table ");
             sql.append(Sql.tableIdentifier(TABLE_NAME));
             sql.append(" (");
@@ -328,9 +327,9 @@ public final class SqlObjectStore implements ObjectStore {
 
     @Override
     public void registerService(final String name, final Oid oid) {
-        DatabaseConnector connector = connectionPool.acquire();
+        final DatabaseConnector connector = connectionPool.acquire();
 
-        StringBuffer sql = new StringBuffer();
+        final StringBuffer sql = new StringBuffer();
         sql.append("insert into ");
         sql.append(Sql.tableIdentifier(TABLE_NAME));
         sql.append(" (");
@@ -353,9 +352,9 @@ public final class SqlObjectStore implements ObjectStore {
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
         if (field.isOneToManyAssociation()) {
-            DatabaseConnector connection = connectionPool.acquire();
-            ObjectSpecification spec = object.getSpecification();
-            ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
+            final DatabaseConnector connection = connectionPool.acquire();
+            final ObjectSpecification spec = object.getSpecification();
+            final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
             mapper.resolveCollection(connection, object, field);
             connectionPool.release(connection);
         } else {
@@ -365,8 +364,8 @@ public final class SqlObjectStore implements ObjectStore {
 
     @Override
     public void resolveImmediately(final ObjectAdapter object) {
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapping = objectMappingLookup.getMapping(object, connector);
+        final DatabaseConnector connector = connectionPool.acquire();
+        final ObjectMapping mapping = objectMappingLookup.getMapping(object, connector);
         mapping.resolve(connector, object);
         connectionPool.release(connector);
     }

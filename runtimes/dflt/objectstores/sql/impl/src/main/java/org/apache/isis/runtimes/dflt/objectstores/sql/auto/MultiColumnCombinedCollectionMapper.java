@@ -17,44 +17,40 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
+import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 
 /**
- * Used to map 1-to-many collections by creating, in the child table, 1 column per parent collection.
- * The column is named by combining the final part of the parent class name and the collection variable name. 
+ * Used to map 1-to-many collections by creating, in the child table, 1 column per parent collection. The column is
+ * named by combining the final part of the parent class name and the collection variable name.
  * 
  * @author Kevin
  */
-public class MultiColumnCombinedCollectionMapper extends
-		CombinedCollectionMapper {
+public class MultiColumnCombinedCollectionMapper extends CombinedCollectionMapper {
 
-	public MultiColumnCombinedCollectionMapper(
-			ObjectAssociation objectAssociation,
-			String parameterBase, FieldMappingLookup lookup,
-			ObjectMappingLookup objectMapperLookup) {
-		super(objectAssociation, parameterBase, lookup, objectMapperLookup);
-	}
+    public MultiColumnCombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
+        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
+        super(objectAssociation, parameterBase, lookup, objectMapperLookup);
+    }
 
-	@Override
-    protected String determineColumnName(ObjectAssociation objectAssociation){
-	    if (objectAssociation instanceof OneToManyAssociationImpl){
-	    	OneToManyAssociationImpl fkAssoc = (OneToManyAssociationImpl) objectAssociation;
-	    	FacetedMethod peer = fkAssoc.getFacetedMethod();
-	    	String fullClassName = peer.getIdentifier().getClassName();
-	    	int lastPos = fullClassName.lastIndexOf('.');
-	    	return fullClassName.substring(lastPos+1)+"_"+fkAssoc.getId();
-	    } else {
-	    	return  objectAssociation.getSpecification().getShortIdentifier();
-	    }
-	}
+    @Override
+    protected String determineColumnName(final ObjectAssociation objectAssociation) {
+        if (objectAssociation instanceof OneToManyAssociationImpl) {
+            final OneToManyAssociationImpl fkAssoc = (OneToManyAssociationImpl) objectAssociation;
+            final FacetedMethod peer = fkAssoc.getFacetedMethod();
+            final String fullClassName = peer.getIdentifier().getClassName();
+            final int lastPos = fullClassName.lastIndexOf('.');
+            return fullClassName.substring(lastPos + 1) + "_" + fkAssoc.getId();
+        } else {
+            return objectAssociation.getSpecification().getShortIdentifier();
+        }
+    }
 }

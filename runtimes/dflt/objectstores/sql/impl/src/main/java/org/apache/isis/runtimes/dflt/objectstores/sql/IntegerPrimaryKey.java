@@ -20,49 +20,49 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public class IntegerPrimaryKey implements PrimaryKey {
-	private static final long serialVersionUID = 1L;
-	private final int primaryKey;
+    private static final long serialVersionUID = 1L;
+    private final int primaryKey;
 
-	public IntegerPrimaryKey(final int primaryKey) {
-		this.primaryKey = primaryKey;
-	}
+    public IntegerPrimaryKey(final int primaryKey) {
+        this.primaryKey = primaryKey;
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (obj instanceof IntegerPrimaryKey) {
-			IntegerPrimaryKey o = ((IntegerPrimaryKey) obj);
-			return primaryKey == o.primaryKey;
-		}
-		return false;
-	}
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof IntegerPrimaryKey) {
+            final IntegerPrimaryKey o = ((IntegerPrimaryKey) obj);
+            return primaryKey == o.primaryKey;
+        }
+        return false;
+    }
 
-	@Override
-	public String stringValue() {
-		return "" + primaryKey;
-	}
+    @Override
+    public String stringValue() {
+        return "" + primaryKey;
+    }
 
-	@Override
-	public int hashCode() {
-		int hash = 17;
-		hash = 37 * hash + primaryKey;
-		return hash;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 37 * hash + primaryKey;
+        return hash;
+    }
 
-	@Override
-	public String toString() {
-		return "" + primaryKey;
-	}
+    @Override
+    public String toString() {
+        return "" + primaryKey;
+    }
 
-	public int intValue() {
-		return primaryKey;
-	}
+    public int intValue() {
+        return primaryKey;
+    }
 
-	@Override
-	public Object naturalValue() {
-		return intValue();
-	}
+    @Override
+    public Object naturalValue() {
+        return intValue();
+    }
 
 }

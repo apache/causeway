@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 public interface StateReader {
 
     StateReader readAggregate(String id);
-    
+
     long readLongField(String id);
 
     String readField(String id);
@@ -43,5 +42,3 @@ public interface StateReader {
     List<StateReader> readCollection(String id);
 
 }
-
-

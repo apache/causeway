@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.auto.AutoMapperFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnectorFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-
 
 public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
 
@@ -43,25 +41,22 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
     }
 
     @Override
-    protected ObjectStore createObjectStore(
-            IsisConfiguration configuration,
-            ObjectAdapterFactory objectFactory,
-            AdapterManager adapterManager) {
-        
-        
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
+        final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
+
         if (objectStore == null) {
-            FieldMappingLookup fieldMappingLookup = new FieldMappingLookup();
-            JdbcFieldMappingFactoryInstaller installer = new JdbcFieldMappingFactoryInstaller();
+            final FieldMappingLookup fieldMappingLookup = new FieldMappingLookup();
+            final JdbcFieldMappingFactoryInstaller installer = new JdbcFieldMappingFactoryInstaller();
             installer.load(fieldMappingLookup);
             // fieldMappingLookup.setValueMappingFactory(new
             // JdbcFieldMappingFactoryInstaller());
 
-            ObjectMappingLookup objectMappingLookup = new ObjectMappingLookup();
+            final ObjectMappingLookup objectMappingLookup = new ObjectMappingLookup();
             objectMappingLookup.setValueMappingLookup(fieldMappingLookup);
             objectMappingLookup.setObjectMappingFactory(new AutoMapperFactory());
             objectMappingLookup.setConnectionPool(connectionPool);
 
-            SqlObjectStore objectStore = new SqlObjectStore();
+            final SqlObjectStore objectStore = new SqlObjectStore();
             objectStore.setMapperLookup(objectMappingLookup);
             objectStore.setConnectionPool(connectionPool);
             this.objectStore = objectStore;
@@ -70,26 +65,23 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
     }
 
     @Override
-    protected OidGenerator createOidGenerator(IsisConfiguration configuration) {
-        DatabaseConnectorFactory connectorFactory = new JdbcConnectorFactory();
+    protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
+        final DatabaseConnectorFactory connectorFactory = new JdbcConnectorFactory();
         connectionPool = new DatabaseConnectorPool(connectorFactory, 1);
 
         return new SqlOidGenerator(connectionPool);
     }
 
+    @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
         return new SqlPersistenceSessionFactory(deploymentType, this);
     }
-    
-    
+
     /*
-    
-
-    
-    @Override
-    protected AdapterManagerExtended createAdapterManager(final IsisConfiguration configuration) {
-        return new XmlAdapterManager();
-    }
-*/
+     * 
+     * 
+     * 
+     * @Override protected AdapterManagerExtended createAdapterManager(final IsisConfiguration configuration) { return
+     * new XmlAdapterManager(); }
+     */
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.BufferedReader;
@@ -28,29 +27,29 @@ import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
-
 public class DataReader {
     private static final Logger LOG = Logger.getLogger(DataReader.class);
 
-    private BufferedReader reader;
-    private String id;
-    private String version;
+    private final BufferedReader reader;
+    private final String id;
+    private final String version;
 
     /**
-     * Opens the file for the specified id. The top line contains: type id version newline The remainder
-     * contains the data.
+     * Opens the file for the specified id. The top line contains: type id version newline The remainder contains the
+     * data.
      */
-    public DataReader(String type, String id) throws IOException {
-        File file = Util.dataFile(type, id);
+    public DataReader(final String type, final String id) throws IOException {
+        final File file = Util.dataFile(type, id);
         reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
-        String line = reader.readLine();
+        final String line = reader.readLine();
         if (line == null || line.length() == 0) {
             throw new FileServerException("No data in file: " + file.getAbsolutePath());
         }
-        String[] split = line.split(" ");
+        final String[] split = line.split(" ");
         this.id = split[1];
         if (!id.equals(id)) {
-            throw new FileServerException("Id in file (" + this.id + ") not the same as the file name: " + file.getAbsolutePath());
+            throw new FileServerException("Id in file (" + this.id + ") not the same as the file name: "
+                + file.getAbsolutePath());
         }
         version = split[2];
     }
@@ -59,7 +58,7 @@ public class DataReader {
         if (reader != null) {
             try {
                 reader.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 LOG.error("Failed to close reader " + reader, e);
             }
         }
@@ -75,15 +74,14 @@ public class DataReader {
 
     public String getData() {
         try {
-            StringBuffer buffer = new StringBuffer();
+            final StringBuffer buffer = new StringBuffer();
             String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
             }
             return buffer.toString();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new FileServerException("Failed to read data for " + id, e);
         }
     }
 }
-

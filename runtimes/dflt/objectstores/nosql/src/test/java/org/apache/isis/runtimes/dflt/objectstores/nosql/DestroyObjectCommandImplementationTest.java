@@ -17,17 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.Date;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
@@ -35,29 +27,34 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DestroyObjectCommandImplementationTest {
 
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
-        TestProxySystemII system = new TestProxySystemII();
+        final TestProxySystemII system = new TestProxySystemII();
         system.init();
     }
 
     @Test
     public void testname() throws Exception {
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(
-                ExampleReferencePojo.class);
-        ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
+        final ObjectSpecification specification =
+            IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        final ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
         IsisContext.getPersistenceSession().makePersistent(object);
         object.setOptimisticLock(new SerialNumberVersion(3, "username", new Date(1000)));
-        
-        long id = ((SerialOid) object.getOid()).getSerialNo();
+
+        final long id = ((SerialOid) object.getOid()).getSerialNo();
         final String key = Long.toString(id, 16);
 
-        Mockery context = new Mockery();
+        final Mockery context = new Mockery();
         final NoSqlCommandContext commandContext = context.mock(NoSqlCommandContext.class);
         context.checking(new Expectations() {
             {
@@ -65,9 +62,8 @@ public class DestroyObjectCommandImplementationTest {
             }
         });
 
-        NoSqlDestroyObjectCommand command = new NoSqlDestroyObjectCommand(new SerialKeyCreator(),
-                new SerialNumberVersionCreator(), object);
+        final NoSqlDestroyObjectCommand command =
+            new NoSqlDestroyObjectCommand(new SerialKeyCreator(), new SerialNumberVersionCreator(), object);
         command.execute(commandContext);
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.ArrayList;
@@ -52,13 +51,14 @@ public class NoSqlObjectStore implements ObjectStore {
     private final ObjectReader objectReader = new ObjectReader();
     private final NoSqlOidGenerator oidGenerator;
     private final boolean isDataLoaded;
-    
-    public NoSqlObjectStore(NoSqlDataDatabase db, NoSqlOidGenerator oidGenerator, KeyCreator keyCreator, VersionCreator versionCreator) {
+
+    public NoSqlObjectStore(final NoSqlDataDatabase db, final NoSqlOidGenerator oidGenerator,
+        final KeyCreator keyCreator, final VersionCreator versionCreator) {
         this.database = db;
         this.oidGenerator = oidGenerator;
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
-        
+
         db.open();
         isDataLoaded = db.containsData();
         db.close();
@@ -72,7 +72,7 @@ public class NoSqlObjectStore implements ObjectStore {
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         // TODO should this be done at a higher level so it is applicable for all OSes
         if (object.getSpecification().isAggregated()) {
-            //throw new UnexpectedCallException("Aggregated objects should not be created outside of their owner");
+            // throw new UnexpectedCallException("Aggregated objects should not be created outside of their owner");
             return null;
         } else {
             return new NoSqlCreateObjectCommand(keyCreator, versionCreator, object);
@@ -106,50 +106,51 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void execute(List<PersistenceCommand> commands) {
+    public void execute(final List<PersistenceCommand> commands) {
         database.write(commands);
     }
 
     @Override
-    public ObjectAdapter[] getInstances(PersistenceQuery persistenceQuery) {
-        ObjectSpecification specification = persistenceQuery.getSpecification(); 
-        List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>(); 
-        instances(persistenceQuery, specification, instances); 
-        return instances.toArray(new ObjectAdapter[instances.size()]); 
-    } 
+    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
+        final ObjectSpecification specification = persistenceQuery.getSpecification();
+        final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
+        instances(persistenceQuery, specification, instances);
+        return instances.toArray(new ObjectAdapter[instances.size()]);
+    }
 
-    private void instances(PersistenceQuery persistenceQuery, ObjectSpecification specification, List<ObjectAdapter> instances) { 
-        String specificationName = specification.getFullIdentifier(); 
-        Iterator<StateReader> instanceData = database.instancesOf(specificationName);
-        while(instanceData.hasNext()) {
-            StateReader reader = instanceData.next();
-            ObjectAdapter instance = objectReader.load(reader, keyCreator, versionCreator);
+    private void instances(final PersistenceQuery persistenceQuery, final ObjectSpecification specification,
+        final List<ObjectAdapter> instances) {
+        String specificationName = specification.getFullIdentifier();
+        final Iterator<StateReader> instanceData = database.instancesOf(specificationName);
+        while (instanceData.hasNext()) {
+            final StateReader reader = instanceData.next();
+            final ObjectAdapter instance = objectReader.load(reader, keyCreator, versionCreator);
             // TODO deal with this natively
             if (persistenceQuery instanceof PersistenceQueryBuiltIn) {
-                if (!((PersistenceQueryBuiltIn)persistenceQuery).matches(instance)) {
+                if (!((PersistenceQueryBuiltIn) persistenceQuery).matches(instance)) {
                     continue;
                 }
             }
             instances.add(instance);
         }
-        for (ObjectSpecification spec : specification.subclasses()) { 
-            specificationName = spec.getFullIdentifier(); 
-            instances(persistenceQuery, spec, instances); 
-        } 
+        for (final ObjectSpecification spec : specification.subclasses()) {
+            specificationName = spec.getFullIdentifier();
+            instances(persistenceQuery, spec, instances);
+        }
     }
 
     @Override
-    public ObjectAdapter getObject(Oid oid, ObjectSpecification hint) {
-        String key = keyCreator.key(oid);
-        StateReader reader = database.getInstance(key, hint.getFullIdentifier());
+    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
+        final String key = keyCreator.key(oid);
+        final StateReader reader = database.getInstance(key, hint.getFullIdentifier());
         return objectReader.load(reader, keyCreator, versionCreator);
     }
 
     @Override
-    public Oid getOidForService(String name) {
+    public Oid getOidForService(final String name) {
         Oid oid = serviceCache.get(name);
         if (oid == null) {
-            String id = database.getService(name);
+            final String id = database.getService(name);
             oid = id == null ? null : keyCreator.oid(id);
             serviceCache.put(name, oid);
         }
@@ -157,7 +158,7 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public boolean hasInstances(ObjectSpecification specification) {
+    public boolean hasInstances(final ObjectSpecification specification) {
         return database.hasInstances(specification.getFullIdentifier());
     }
 
@@ -167,37 +168,40 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void registerService(String name, Oid oid) {
-        String key = keyCreator.key(oid);
+    public void registerService(final String name, final Oid oid) {
+        final String key = keyCreator.key(oid);
         database.addService(name, key);
     }
 
     @Override
-    public void reset() {}
+    public void reset() {
+    }
 
     @Override
-    public void resolveField(ObjectAdapter object, ObjectAssociation field) {
-        ObjectAdapter fieldValue = field.get(object);
-        if (fieldValue != null && !fieldValue.getResolveState().isResolved() && !fieldValue.getSpecification().isAggregated()) {
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
+        final ObjectAdapter fieldValue = field.get(object);
+        if (fieldValue != null && !fieldValue.getResolveState().isResolved()
+            && !fieldValue.getSpecification().isAggregated()) {
             resolveImmediately(fieldValue);
         }
     }
 
     @Override
-    public void resolveImmediately(ObjectAdapter object) {
-        Oid oid= object.getOid();;
+    public void resolveImmediately(final ObjectAdapter object) {
+        final Oid oid = object.getOid();
+        ;
         if (oid instanceof AggregatedOid) {
-//            throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " + object);
+            // throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " + object);
         } else {
-            String specificationName = object.getSpecification().getFullIdentifier();
-            String key = keyCreator.key(oid);
-            StateReader reader = database.getInstance(key, specificationName);
+            final String specificationName = object.getSpecification().getFullIdentifier();
+            final String key = keyCreator.key(oid);
+            final StateReader reader = database.getInstance(key, specificationName);
             objectReader.update(reader, keyCreator, versionCreator, object);
         }
     }
 
     @Override
-    public void debugData(DebugBuilder debug) {
+    public void debugData(final DebugBuilder debug) {
         // TODO show details
     }
 
@@ -222,19 +226,21 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void abortTransaction() {}
+    public void abortTransaction() {
+    }
 
     @Override
-    public void endTransaction() {}
+    public void endTransaction() {
+    }
 
     @Override
-    public void startTransaction() {}
+    public void startTransaction() {
+    }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -243,7 +249,4 @@ public class NoSqlObjectStore implements ObjectStore {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-
-

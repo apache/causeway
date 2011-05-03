@@ -17,9 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public interface ObjectMappingFactory {
-    ObjectMapping createMapper(String className, String propertiesBase, FieldMappingLookup fieldMapperLookup, ObjectMappingLookup objectMapperLookup );
+    ObjectMapping createMapper(String className, String propertiesBase, FieldMappingLookup fieldMapperLookup,
+        ObjectMappingLookup objectMapperLookup);
 }

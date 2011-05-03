@@ -20,20 +20,20 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public class TransientKey implements PrimaryKey {
-	private static final long serialVersionUID = 1L;
-	private final long transientId;
+    private static final long serialVersionUID = 1L;
+    private final long transientId;
 
-	public TransientKey(final long id) {
-		transientId = id;
-	}
+    public TransientKey(final long id) {
+        transientId = id;
+    }
 
-	@Override
-	public String stringValue() {
-		return "" + transientId;
-	}
+    @Override
+    public String stringValue() {
+        return "" + transientId;
+    }
 
-	@Override
-	public Object naturalValue() {
-		return transientId;
-	}
+    @Override
+    public Object naturalValue() {
+        return transientId;
+    }
 }

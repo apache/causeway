@@ -52,11 +52,12 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
     }
 
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value) {
-        if (value == null)
+    protected Object preparedStatementObject(final ObjectAdapter value) {
+        if (value == null) {
             return null;
+        }
 
-        Object o = value.getObject();
+        final Object o = value.getObject();
 
         if (o instanceof Money) {
             return ((Money) o).floatValue();
@@ -68,8 +69,8 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
             return o;
         } else {
             if (columnType().contains("CHAR")) {
-                EncodableFacet facet = value.getSpecification().getFacet(EncodableFacet.class);
-                String encodedString = facet.toEncodedString(value);
+                final EncodableFacet facet = value.getSpecification().getFacet(EncodableFacet.class);
+                final String encodedString = facet.toEncodedString(value);
                 return encodedString;
             } else {
                 return o;
@@ -78,11 +79,12 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
     }
 
     @Override
-    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
-        String encodedValue = results.getString(columnName);
-        if (encodedValue == null)
+    public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
+        final String encodedValue = results.getString(columnName);
+        if (encodedValue == null) {
             return null;
-        EncodableFacet facet = field.getSpecification().getFacet(EncodableFacet.class);
+        }
+        final EncodableFacet facet = field.getSpecification().getFacet(EncodableFacet.class);
         return facet.fromEncodedString(encodedValue);
     }
 

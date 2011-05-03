@@ -17,40 +17,40 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
+import org.apache.log4j.Logger;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-public class MongoStateReader implements StateReader{
+public class MongoStateReader implements StateReader {
     private static final Logger LOG = Logger.getLogger(MongoStateReader.class);
-    private DBObject instance;
+    private final DBObject instance;
 
-    public MongoStateReader(DB db, String specName, String key) {
-        DBCollection instances = db.getCollection(specName);
+    public MongoStateReader(final DB db, final String specName, final String key) {
+        final DBCollection instances = db.getCollection(specName);
         instance = instances.findOne(key);
         if (instance == null) {
             throw new ObjectNotFoundException(key);
         }
         LOG.debug("loading " + instance);
     }
-   
-    public MongoStateReader(DBObject instance) {
+
+    public MongoStateReader(final DBObject instance) {
         this.instance = instance;
         LOG.debug("loading " + instance);
     }
 
-    public long readLongField(String id) {
-        Object value = instance.get(id);
+    @Override
+    public long readLongField(final String id) {
+        final Object value = instance.get(id);
         if (value == null || value.equals("null")) {
             return 0;
         } else {
@@ -58,8 +58,9 @@ public class MongoStateReader implements StateReader{
         }
     }
 
-    public String readField(String name) {
-        Object value = instance.get(name);
+    @Override
+    public String readField(final String name) {
+        final Object value = instance.get(name);
         if (value == null || value.equals("null")) {
             return null;
         } else {
@@ -67,34 +68,39 @@ public class MongoStateReader implements StateReader{
         }
     }
 
+    @Override
     public String readObjectType() {
         return (String) instance.get("_type");
     }
 
+    @Override
     public String readId() {
         return readField("_id");
     }
 
+    @Override
     public String readVersion() {
         return null;
     }
 
+    @Override
     public String readUser() {
         return null;
     }
 
+    @Override
     public String readTime() {
         return null;
     }
 
-    public StateReader readAggregate(String id) {
+    @Override
+    public StateReader readAggregate(final String id) {
         throw new UnexpectedCallException();
     }
 
-    public List<StateReader> readCollection(String id) {
+    @Override
+    public List<StateReader> readCollection(final String id) {
         throw new UnexpectedCallException();
     }
-    
+
 }
-
-

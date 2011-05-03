@@ -31,7 +31,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 public class IdMappingAbstract {
     private String column;
 
-    protected void setColumn(String column) {
+    protected void setColumn(final String column) {
         this.column = Sql.identifier(column);
     }
 
@@ -39,29 +39,29 @@ public class IdMappingAbstract {
         return column;
     }
 
-    public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, Oid oid) {
+    public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final Oid oid) {
         sql.append(column);
         connector.addToQueryValues(primaryKeyAsObject(oid));
         sql.append(" = ?");
     }
 
-    public void appendCreateColumnDefinitions(StringBuffer sql) {
+    public void appendCreateColumnDefinitions(final StringBuffer sql) {
         sql.append(column);
         sql.append(" ");
         sql.append(JdbcConnector.TYPE_PK() + " NOT NULL PRIMARY KEY");
     }
 
-    public void appendColumnDefinitions(StringBuffer sql) {
+    public void appendColumnDefinitions(final StringBuffer sql) {
         sql.append(column);
         sql.append(" ");
         sql.append(JdbcConnector.TYPE_PK());
     }
 
-    public void appendColumnNames(StringBuffer sql) {
+    public void appendColumnNames(final StringBuffer sql) {
         sql.append(column);
     }
 
-    public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    public void appendInsertValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         if (object == null) {
             sql.append("NULL");
         } else {
@@ -74,35 +74,37 @@ public class IdMappingAbstract {
      */
     public Object primaryKeyAsObject(final Oid oid) {
         if (oid instanceof SqlOid) {
-            PrimaryKey pk = ((SqlOid) oid).getPrimaryKey();
+            final PrimaryKey pk = ((SqlOid) oid).getPrimaryKey();
             return pk.naturalValue();
-        } else
+        } else {
             return ((SerialOid) oid).getSerialNo();
+        }
     }
 
     public String primaryKey(final Oid oid) {
-        if (oid instanceof SqlOid)
+        if (oid instanceof SqlOid) {
             return "" + ((SqlOid) oid).getPrimaryKey().stringValue() + "";
-        else
+        } else {
             return "" + ((SerialOid) oid).getSerialNo();
+        }
     }
 
     public Oid recreateOid(final Results rs, final ObjectSpecification specification) {
         PrimaryKey key;
-        Object object = rs.getObject(column);
+        final Object object = rs.getObject(column);
         if (object == null) {
             return null;
         } else {
-            int id = ((Integer) object).intValue();
+            final int id = ((Integer) object).intValue();
             key = new IntegerPrimaryKey(id);
         }
-        Oid oid = new SqlOid(specification.getFullIdentifier(), key, State.PERSISTENT);
+        final Oid oid = new SqlOid(specification.getFullIdentifier(), key, State.PERSISTENT);
         return oid;
     }
 
     protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-        AdapterManager objectLoader = IsisContext.getPersistenceSession().getAdapterManager();
-        ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
+        final AdapterManager objectLoader = IsisContext.getPersistenceSession().getAdapterManager();
+        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         } else {

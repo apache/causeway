@@ -17,78 +17,84 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class JsonStateWriter implements StateWriter {
 
     // private static final Logger LOG = Logger.getLogger(FileStateWriter.class);
 
-    private JSONObject dbObject;
+    private final JSONObject dbObject;
     private String type;
     private String oid;
     private String currentVersion;
     private String newVersion;
 
-    public JsonStateWriter(ClientConnection connection, String specName) {
+    public JsonStateWriter(final ClientConnection connection, final String specName) {
         dbObject = new JSONObject();
     }
 
-    public StateWriter addAggregate(String id) {
-        JsonStateWriter jsonStateWriter = new JsonStateWriter(null, null);
+    @Override
+    public StateWriter addAggregate(final String id) {
+        final JsonStateWriter jsonStateWriter = new JsonStateWriter(null, null);
         try {
             dbObject.put(id, jsonStateWriter.dbObject);
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException(e);
         }
         return jsonStateWriter;
     }
-    
-    public void writeType(String type) {
+
+    @Override
+    public void writeType(final String type) {
         this.type = type;
         writeField("_type", type);
     }
 
-    public void writeId(String oid) {
+    @Override
+    public void writeId(final String oid) {
         this.oid = oid;
         writeField("_id", oid);
     }
 
-    public void writeVersion(String currentVersion, String newVersion) {
+    @Override
+    public void writeVersion(final String currentVersion, final String newVersion) {
         this.currentVersion = currentVersion;
         this.newVersion = newVersion;
         writeField("_version", newVersion);
     }
 
-    public void writeTime(String time) {
+    @Override
+    public void writeTime(final String time) {
         writeField("_time", time);
     }
 
-    public void writeUser(String user) {
+    @Override
+    public void writeUser(final String user) {
         writeField("_user", user);
     }
 
-    public void writeField(String id, String data) {
+    @Override
+    public void writeField(final String id, final String data) {
         try {
             dbObject.put(id, data == null ? JSONObject.NULL : data);
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException(e);
         }
     }
 
-    public void writeField(String id, long l) {
+    @Override
+    public void writeField(final String id, final long l) {
         try {
             dbObject.put(id, Long.toString(l));
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException(e);
         }
     }
@@ -100,25 +106,26 @@ public class JsonStateWriter implements StateWriter {
     public String getData() {
         try {
             return dbObject.toString(4);
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException(e);
         }
     }
 
+    @Override
     public StateWriter createElementWriter() {
         return new JsonStateWriter(null, null);
     }
-    
-    public void writeCollection(String id, List<StateWriter> elements) {
-        ArrayList<JSONObject> collection = new ArrayList<JSONObject>();
-        for (StateWriter writer : elements) {
+
+    @Override
+    public void writeCollection(final String id, final List<StateWriter> elements) {
+        final ArrayList<JSONObject> collection = new ArrayList<JSONObject>();
+        for (final StateWriter writer : elements) {
             collection.add(((JsonStateWriter) writer).dbObject);
         }
         try {
             dbObject.put(id, collection);
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException(e);
         }
     }
 }
-

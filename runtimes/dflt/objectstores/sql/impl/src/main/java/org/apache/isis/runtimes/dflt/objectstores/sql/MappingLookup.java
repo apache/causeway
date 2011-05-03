@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public class MappingLookup {
-   // private ObjectMappingLookup classMappingLookup;
-   // private FieldMappingLookup fieldMappingLookup;
+    // private ObjectMappingLookup classMappingLookup;
+    // private FieldMappingLookup fieldMappingLookup;
 
 }
-
-

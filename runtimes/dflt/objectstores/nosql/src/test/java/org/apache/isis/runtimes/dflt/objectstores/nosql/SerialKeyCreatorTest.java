@@ -17,43 +17,36 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import static org.junit.Assert.assertEquals;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
-
-import static org.junit.Assert.assertEquals;
-
 
 public class SerialKeyCreatorTest {
 
-
     private ObjectSpecification specification;
     private ObjectAdapter object;
-    private String reference = ExampleReferencePojo.class.getName() + "@3";
+    private final String reference = ExampleReferencePojo.class.getName() + "@3";
     private SerialKeyCreator serialKeyCreator;
-
 
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
-        TestProxySystemII system = new TestProxySystemII();
+        final TestProxySystemII system = new TestProxySystemII();
         system.init();
-
 
         serialKeyCreator = new SerialKeyCreator();
     }
-
 
     @Test
     public void reference() throws Exception {
@@ -64,19 +57,17 @@ public class SerialKeyCreatorTest {
 
         assertEquals(reference, serialKeyCreator.reference(object));
     }
-    
+
     @Test
     public void oid() throws Exception {
-        Oid oid = serialKeyCreator.oidFromReference(reference);
+        final Oid oid = serialKeyCreator.oidFromReference(reference);
         assertEquals(SerialOid.createPersistent(3), oid);
     }
-    
+
     @Test
     public void specification() throws Exception {
         specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
-        ObjectSpecification spec = serialKeyCreator.specificationFromReference(reference);
+        final ObjectSpecification spec = serialKeyCreator.specificationFromReference(reference);
         assertEquals(specification, spec);
     }
 }
-
-

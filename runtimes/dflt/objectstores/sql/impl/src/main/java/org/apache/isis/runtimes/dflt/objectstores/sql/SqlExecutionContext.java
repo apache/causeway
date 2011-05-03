@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
@@ -25,12 +24,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
-
-
 public class SqlExecutionContext implements PersistenceCommandContext {
     private final DatabaseConnector connection;
 
-    public SqlExecutionContext(final DatabaseConnector connection, IsisTransactionManager transactionManager, MessageBroker messageBroker, UpdateNotifier updateNotifier) {
+    public SqlExecutionContext(final DatabaseConnector connection, final IsisTransactionManager transactionManager,
+        final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
         this.connection = connection;
     }
 
@@ -38,8 +36,12 @@ public class SqlExecutionContext implements PersistenceCommandContext {
         return connection;
     }
 
-    public void start() {}
+    @Override
+    public void start() {
+    }
 
-    public void end() {}
+    @Override
+    public void end() {
+    }
 
 }

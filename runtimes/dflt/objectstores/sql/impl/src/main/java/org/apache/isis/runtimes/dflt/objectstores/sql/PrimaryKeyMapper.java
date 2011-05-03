@@ -17,8 +17,6 @@
  *  under the License.
  */
 
-
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public interface PrimaryKeyMapper {

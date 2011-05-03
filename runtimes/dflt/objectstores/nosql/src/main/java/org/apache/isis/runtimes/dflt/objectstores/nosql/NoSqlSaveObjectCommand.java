@@ -21,10 +21,10 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 
-
 final class NoSqlSaveObjectCommand extends WriteObjectCommand implements SaveObjectCommand {
 
-    public NoSqlSaveObjectCommand(KeyCreator keyCreator, VersionCreator versionCreator, ObjectAdapter object) {
+    public NoSqlSaveObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator,
+        final ObjectAdapter object) {
         super(true, keyCreator, versionCreator, object);
     }
 

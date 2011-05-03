@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public interface ObjectReferenceMappingFactory {
     ObjectReferenceMapping createReferenceMapping(String columnName, ObjectSpecification specification);
 }
-

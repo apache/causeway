@@ -17,39 +17,38 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
-
 
 public class JsonStateReader implements StateReader {
-//    private static final Logger LOG = Logger.getLogger(FileStateReader.class);
+    // private static final Logger LOG = Logger.getLogger(FileStateReader.class);
     private JSONObject instance;
 
-    public JsonStateReader(String data) {
-          try {  
-            JSONObject instance = new JSONObject(data);
+    public JsonStateReader(final String data) {
+        try {
+            final JSONObject instance = new JSONObject(data);
             this.instance = instance;
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException("failed initialise JSON object for text form: " + data, e);
         }
     }
-    
-    private JsonStateReader(JSONObject aggregatedObject) {
+
+    private JsonStateReader(final JSONObject aggregatedObject) {
         instance = aggregatedObject;
     }
 
-    public StateReader readAggregate(String name) {
+    @Override
+    public StateReader readAggregate(final String name) {
         if (instance.has(name)) {
-            JSONObject aggregatedObject = instance.optJSONObject(name);
+            final JSONObject aggregatedObject = instance.optJSONObject(name);
             if (aggregatedObject == null) {
                 return null;
             } else {
@@ -59,9 +58,10 @@ public class JsonStateReader implements StateReader {
             return null;
         }
     }
-    
-    public long readLongField(String id) {
-        Object value = instance.opt(id);
+
+    @Override
+    public long readLongField(final String id) {
+        final Object value = instance.opt(id);
         if (value == null) {
             return 0;
         } else {
@@ -69,9 +69,10 @@ public class JsonStateReader implements StateReader {
         }
     }
 
-    public String readField(String name) {
+    @Override
+    public String readField(final String name) {
         if (instance.has(name)) {
-            Object value = instance.optString(name);
+            final Object value = instance.optString(name);
             if (value == null) {
                 return null;
             } else {
@@ -82,44 +83,48 @@ public class JsonStateReader implements StateReader {
         }
     }
 
+    @Override
     public String readObjectType() {
         return readRequiredField("_type");
     }
 
+    @Override
     public String readId() {
         return readRequiredField("_id");
     }
 
+    @Override
     public String readVersion() {
         return readRequiredField("_version");
     }
 
+    @Override
     public String readUser() {
         return readRequiredField("_user");
     }
 
+    @Override
     public String readTime() {
         return readRequiredField("_time");
     }
 
-    private String readRequiredField(String name) {
+    private String readRequiredField(final String name) {
         try {
-            Object value = instance.get(name);
+            final Object value = instance.get(name);
             return (String) value;
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new NoSqlStoreException("failed to read long field value", e);
         }
     }
-    
-    public List<StateReader> readCollection(String id) {
-        JSONArray array = instance.optJSONArray(id);
-        List<StateReader> readers = new ArrayList<StateReader>();
-        int size = array.length();
+
+    @Override
+    public List<StateReader> readCollection(final String id) {
+        final JSONArray array = instance.optJSONArray(id);
+        final List<StateReader> readers = new ArrayList<StateReader>();
+        final int size = array.length();
         for (int i = 0; i < size; i++) {
             readers.add(new JsonStateReader(array.optJSONObject(i)));
         }
         return readers;
     }
 }
-
-

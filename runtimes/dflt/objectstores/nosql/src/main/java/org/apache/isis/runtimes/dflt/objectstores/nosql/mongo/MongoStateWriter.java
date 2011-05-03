@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
+import org.apache.log4j.Logger;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -32,50 +31,62 @@ import com.mongodb.DBCollection;
 
 public class MongoStateWriter implements StateWriter {
     private static final Logger LOG = Logger.getLogger(MongoStateWriter.class);
-    private BasicDBObject dbObject;
-    private DBCollection instances;
-    
-    public MongoStateWriter(DB db, String specName) {
+    private final BasicDBObject dbObject;
+    private final DBCollection instances;
+
+    public MongoStateWriter(final DB db, final String specName) {
         dbObject = new BasicDBObject();
         instances = db.getCollection(specName);
     }
-    
+
     public void flush() {
         instances.save(dbObject);
         LOG.debug("saved " + dbObject);
     }
 
-    public void writeId(String oid) {
+    @Override
+    public void writeId(final String oid) {
         writeField("_id", oid);
     }
 
-    public void writeType(String type) {
+    @Override
+    public void writeType(final String type) {
         writeField("_type", type);
     }
-    
-    public void writeField(String id, String data) {
+
+    @Override
+    public void writeField(final String id, final String data) {
         dbObject.put(id, data);
     }
 
-    public void writeField(String id, long l) {
+    @Override
+    public void writeField(final String id, final long l) {
         dbObject.put(id, Long.toString(l));
     }
 
-    public void writeVersion(String currentVersion, String newVersion) {}
+    @Override
+    public void writeVersion(final String currentVersion, final String newVersion) {
+    }
 
-    public void writeTime(String time) {}
+    @Override
+    public void writeTime(final String time) {
+    }
 
-    public void writeUser(String user) {}
+    @Override
+    public void writeUser(final String user) {
+    }
 
-    public StateWriter addAggregate(String id) {
+    @Override
+    public StateWriter addAggregate(final String id) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public StateWriter createElementWriter() {
         return null;
     }
-    
-    public void writeCollection(String id, List<StateWriter> elements) {}
+
+    @Override
+    public void writeCollection(final String id, final List<StateWriter> elements) {
+    }
 }
-
-

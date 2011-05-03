@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
 
 public class FileServerPersistorMechanismInstaller extends NoSqlPersistorMechanismInstaller {
-    
+
     private static final String ROOT = ConfigurationConstants.ROOT + "nosql.fileserver.";
     private static final String DB_HOST = ROOT + "host";
     private static final String DB_PORT = ROOT + "port";
@@ -36,15 +35,14 @@ public class FileServerPersistorMechanismInstaller extends NoSqlPersistorMechani
         super("fileserver");
     }
 
-    protected NoSqlDataDatabase createNoSqlDatabase(IsisConfiguration configuration) {
+    @Override
+    protected NoSqlDataDatabase createNoSqlDatabase(final IsisConfiguration configuration) {
         NoSqlDataDatabase db;
-        String host = configuration.getString(DB_HOST, "localhost");
-        int port = configuration.getInteger(DB_PORT, 0);
-        int timeout = configuration.getInteger(DB_TIMEMOUT, 5000);
+        final String host = configuration.getString(DB_HOST, "localhost");
+        final int port = configuration.getInteger(DB_PORT, 0);
+        final int timeout = configuration.getInteger(DB_TIMEMOUT, 5000);
         db = new FileServerDb(host, port, timeout);
         return db;
     }
 
 }
-
-

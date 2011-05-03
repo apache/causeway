@@ -46,7 +46,7 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
 
     private final String type;
 
-    public JdbcBinaryValueMapper(ObjectAssociation field, String type) {
+    public JdbcBinaryValueMapper(final ObjectAssociation field, final String type) {
         super(field);
         this.type = type;
     }
@@ -69,8 +69,8 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
      * .isis.core.metamodel.adapter.ObjectAdapter)
      */
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value) {
-        Object o = value.getObject();
+    protected Object preparedStatementObject(final ObjectAdapter value) {
+        final Object o = value.getObject();
         return o;
     }
 
@@ -83,10 +83,11 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
      * org.apache.isis.core.metamodel.spec.feature.ObjectAssociation)
      */
     @Override
-    protected ObjectAdapter setFromDBColumn(Results results, String columnName, ObjectAssociation field) {
+    protected ObjectAdapter setFromDBColumn(final Results results, final String columnName,
+        final ObjectAssociation field) {
         ObjectAdapter restoredValue;
 
-        Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
+        final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
         Object resultObject = results.getObject(columnName);
 
         if (resultObject.getClass() != correspondingClass) {
@@ -113,7 +114,7 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
 
     }
 
-    private boolean checkIfIsClass(Class<?> expected, Class<?> couldBe1, Class<?> couldBe2) {
+    private boolean checkIfIsClass(final Class<?> expected, final Class<?> couldBe1, final Class<?> couldBe2) {
         return (expected == couldBe1 || expected == couldBe2);
     }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.util.Set;
@@ -28,46 +27,39 @@ import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 
 public class DemoMongo {
-  //  @Test
+    // @Test
     public void installed() throws Exception {
 
-        Mongo m = new Mongo();
+        final Mongo m = new Mongo();
 
-        for (String s : m.getDatabaseNames()) {
+        for (final String s : m.getDatabaseNames()) {
             System.out.println(s);
         }
 
-        
         /*
-        Mongo m = new Mongo( "localhost" );
-        Mongo m = new Mongo( "localhost" , 27017 );
-*/
+         * Mongo m = new Mongo( "localhost" ); Mongo m = new Mongo( "localhost" , 27017 );
+         */
         m.dropDatabase("mydb");
 
-
         System.out.println("\n...");
-        for (String s : m.getDatabaseNames()) {
+        for (final String s : m.getDatabaseNames()) {
             System.out.println(s);
         }
 
-        
-        DB db = m.getDB( "mydb" );
-/*
-        DBCollection coll = db.getCollection("testCollection1");
-        coll = db.getCollection("testCollection2");
-*/
-          
-        
-        DBCollection coll = db.getCollection("testCollection1");
-        
-        
-        BasicDBObject doc = new BasicDBObject();
+        final DB db = m.getDB("mydb");
+        /*
+         * DBCollection coll = db.getCollection("testCollection1"); coll = db.getCollection("testCollection2");
+         */
+
+        final DBCollection coll = db.getCollection("testCollection1");
+
+        final BasicDBObject doc = new BasicDBObject();
 
         doc.put("name", "MongoDB");
         doc.put("type", "database");
         doc.put("count", 1);
 
-        BasicDBObject info = new BasicDBObject();
+        final BasicDBObject info = new BasicDBObject();
 
         info.put("x", 203);
         info.put("y", 102);
@@ -76,19 +68,11 @@ public class DemoMongo {
 
         coll.insert(doc);
 
-        
-        
-        
-        
-        
-        Set<String> colls = db.getCollectionNames();
+        final Set<String> colls = db.getCollectionNames();
 
-        for (String s : colls) {
+        for (final String s : colls) {
             System.out.println(s);
         }
 
-
     }
 }
-
-

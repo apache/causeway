@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 class FileContent {
@@ -29,7 +28,8 @@ class FileContent {
     final String data;
     final String type;
 
-    public FileContent(char command, String id, String currentVersion, String newVersion, String type, String buf) {
+    public FileContent(final char command, final String id, final String currentVersion, final String newVersion,
+        final String type, final String buf) {
         this.command = command;
         this.id = id;
         this.currentVersion = currentVersion;
@@ -39,4 +39,3 @@ class FileContent {
     }
 
 }
-

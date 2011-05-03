@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,43 +26,43 @@ import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
-
-
-
 public class PostgreSqlTest extends SqlIntegrationTestCommon {
-	
-	@Override
-	public Properties getProperties(){
-		Properties properties = super.getProperties();
-		if (properties == null){
-			properties = new Properties();
-			// Only used if src/test/config/postgresql.properties does not exist.
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.postgresql.Driver");
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:postgresql://abacus/noftest");
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
-			
-            //properties.put(SqlObjectStore.BASE_NAME + ".datatypes.timestamp", "TIMESTAMP");
-            //properties.put(SqlObjectStore.BASE_NAME + ".datatypes.datetime", "TIMESTAMP");
-		}
-		return properties;
-	}
-	
-	public  String getPropertiesFilename(){
-		return "postgresql.properties";
-	}	
-	
+
+    @Override
+    public Properties getProperties() {
+        Properties properties = super.getProperties();
+        if (properties == null) {
+            properties = new Properties();
+            // Only used if src/test/config/postgresql.properties does not exist.
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.postgresql.Driver");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:postgresql://abacus/noftest");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
+
+            // properties.put(SqlObjectStore.BASE_NAME + ".datatypes.timestamp", "TIMESTAMP");
+            // properties.put(SqlObjectStore.BASE_NAME + ".datatypes.datetime", "TIMESTAMP");
+        }
+        return properties;
+    }
+
+    @Override
+    public String getPropertiesFilename() {
+        return "postgresql.properties";
+    }
+
+    @Override
     public String getPersonTableName() {
         return "isis_sqldataclass";
     }
 
+    @Override
     public String getSimpleClassTableName() {
         return "isis_simpleclass";
     }
 
+    @Override
     public String getSimpleClassTwoTableName() {
         return "isis_simpleclasstwo";
     }
-	
-}
 
+}

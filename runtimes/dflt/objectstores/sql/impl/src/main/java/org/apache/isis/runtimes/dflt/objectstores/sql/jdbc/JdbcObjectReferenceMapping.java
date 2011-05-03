@@ -19,52 +19,48 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.IdMappingAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class JdbcObjectReferenceMapping extends IdMappingAbstract implements
-		ObjectReferenceMapping {
-	private final ObjectSpecification specification;
+public class JdbcObjectReferenceMapping extends IdMappingAbstract implements ObjectReferenceMapping {
+    private final ObjectSpecification specification;
 
-	public JdbcObjectReferenceMapping(String columnName,
-			ObjectSpecification specification) {
-		this.specification = specification;
-		String idColumn = Sql.sqlName("fk_" + columnName);
-		setColumn(idColumn);
-	}
+    public JdbcObjectReferenceMapping(final String columnName, final ObjectSpecification specification) {
+        this.specification = specification;
+        final String idColumn = Sql.sqlName("fk_" + columnName);
+        setColumn(idColumn);
+    }
 
-	@Override
-	public void appendUpdateValues(DatabaseConnector connector,
-			StringBuffer sql, ObjectAdapter object) {
-		sql.append(getColumn());
-		if (object == null) {
-			sql.append("= NULL ");
-		} else {
-			sql.append("= ?");
-			// sql.append(primaryKey(object.getOid()));
-			connector.addToQueryValues(primaryKeyAsObject(object.getOid()));
-		}
-	}
+    @Override
+    public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        sql.append(getColumn());
+        if (object == null) {
+            sql.append("= NULL ");
+        } else {
+            sql.append("= ?");
+            // sql.append(primaryKey(object.getOid()));
+            connector.addToQueryValues(primaryKeyAsObject(object.getOid()));
+        }
+    }
 
-	public ObjectAdapter initializeField(Results rs) {
-		Oid oid = recreateOid(rs, specification);
-		if (oid != null) {
-			if (specification.isAbstract()) {
-				throw new SqlObjectStoreException(
-						"NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
-			} else {
-				return getAdapter(specification, oid);
-			}
-		} else {
-			return null;
-		}
-	}
+    public ObjectAdapter initializeField(final Results rs) {
+        final Oid oid = recreateOid(rs, specification);
+        if (oid != null) {
+            if (specification.isAbstract()) {
+                throw new SqlObjectStoreException("NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
+            } else {
+                return getAdapter(specification, oid);
+            }
+        } else {
+            return null;
+        }
+    }
 
 }

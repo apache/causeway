@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import java.io.BufferedReader;
@@ -36,7 +35,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.log4j.Logger;
 
-
 public class ClientConnection {
 
     private static final Logger LOG = Logger.getLogger(ClientConnection.class);
@@ -50,7 +48,7 @@ public class ClientConnection {
     private InputStream inputStream;
     private OutputStream outputStream;
 
-    public ClientConnection(String host, int port, int timeout) {
+    public ClientConnection(final String host, final int port, final int timeout) {
         try {
             socket = new Socket(host, port);
             socket.setSoTimeout(timeout);
@@ -60,9 +58,9 @@ public class ClientConnection {
             inputStream = socket.getInputStream();
             inputStream = Util.trace(inputStream, true);
             reader = new BufferedReader(new InputStreamReader(inputStream, Util.ENCODING));
-        } catch (UnknownHostException e) {
+        } catch (final UnknownHostException e) {
             throw new NoSqlStoreException("Unknow host " + host, e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException("Failed to connect to " + host + ":" + port, e);
         }
 
@@ -71,7 +69,7 @@ public class ClientConnection {
     public void close() {
         try {
             reader.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("Failed to close connection", e);
         }
         writer.close();
@@ -87,7 +85,7 @@ public class ClientConnection {
         LOG.info("response failed: " + inputStream);
     }
 
-    public void request(char command, String request) {
+    public void request(final char command, final String request) {
         LOG.debug("request: " + command + request);
         write(command + request);
     }
@@ -96,15 +94,15 @@ public class ClientConnection {
         writer.println();
         writer.flush();
         getReponseHeader();
-        String status = readNext();
+        final String status = readNext();
         if (status.equals("error")) {
-            String message = getResponseData();
+            final String message = getResponseData();
             throw new RemotingException(message);
         } else if (status.equals("not-found")) {
-            String message = getResponseData();
+            final String message = getResponseData();
             throw new ObjectNotFoundException(message);
         } else if (status.equals("concurrency")) {
-            String data = getResponseData();
+            final String data = getResponseData();
             // TODO create better exceptions (requires way to restore object/version)
             if (data.startsWith("{")) {
                 throw new ConcurrencyException(data, (Throwable) null);
@@ -118,7 +116,7 @@ public class ClientConnection {
         }
     }
 
-    public void requestData(String data) {
+    public void requestData(final String data) {
         write(data);
     }
 
@@ -126,16 +124,16 @@ public class ClientConnection {
         writer.println();
     }
 
-    private void write(String req) {
+    private void write(final String req) {
         writer.println(req);
     }
 
     public void getReponseHeader() {
         try {
-            String response = reader.readLine();
+            final String response = reader.readLine();
             LOG.debug("response: " + response);
             headers = response.split(" ");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException(e);
         }
     }
@@ -145,12 +143,12 @@ public class ClientConnection {
     }
 
     public boolean getResponseAsBoolean() {
-        String response = readNext();
+        final String response = readNext();
         return response.equals("true") ? true : false;
     }
 
     public long getResponseAsLong() {
-        String response = readNext();
+        final String response = readNext();
         return Long.valueOf(response).longValue();
     }
 
@@ -159,14 +157,14 @@ public class ClientConnection {
      */
     public String getResponseData() {
         try {
-            StringBuffer buffer = new StringBuffer();
+            final StringBuffer buffer = new StringBuffer();
             String line;
             while ((line = reader.readLine()) != null && line.length() > 0) {
                 buffer.append(line);
                 buffer.append('\n');
             }
             return buffer.toString();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logFailure();
             LOG.error(e);
             throw new RemotingException(e);
@@ -175,11 +173,10 @@ public class ClientConnection {
 
     private String readNext() {
         if (header >= headers.length) {
-            throw new RemotingException("attempting to reader header property (index) " + header + " when there are only "
-                    + headers.length);
+            throw new RemotingException("attempting to reader header property (index) " + header
+                + " when there are only " + headers.length);
         }
         return headers[header++];
     }
 
 }
-

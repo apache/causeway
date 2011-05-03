@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
@@ -25,9 +24,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class SqlPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
-    public SqlPersistenceSessionFactory(DeploymentType deploymentType, SqlPersistorInstaller sqlPersistorInstaller) {
+    public SqlPersistenceSessionFactory(final DeploymentType deploymentType,
+        final SqlPersistorInstaller sqlPersistorInstaller) {
         super(deploymentType, sqlPersistorInstaller);
     }
 }
-
-

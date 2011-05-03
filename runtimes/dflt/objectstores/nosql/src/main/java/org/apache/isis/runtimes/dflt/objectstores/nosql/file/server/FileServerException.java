@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.IOException;
@@ -27,15 +26,13 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 public class FileServerException extends IsisException {
 
     private static final long serialVersionUID = 1L;
-    
-    public FileServerException(String message, IOException e) {
+
+    public FileServerException(final String message, final IOException e) {
         super(message, e);
     }
 
-    public FileServerException(String message) {
+    public FileServerException(final String message) {
         super(message);
     }
 
 }
-
-

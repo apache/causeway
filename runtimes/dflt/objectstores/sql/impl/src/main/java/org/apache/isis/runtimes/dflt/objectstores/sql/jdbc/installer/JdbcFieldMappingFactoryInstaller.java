@@ -44,7 +44,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimestampMapper;
 public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInstaller {
 
     @Override
-    public void load(FieldMappingLookup lookup) {
+    public void load(final FieldMappingLookup lookup) {
         lookup.addFieldMappingFactory(boolean.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_BOOLEAN()));
         lookup.addFieldMappingFactory(short.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
         lookup.addFieldMappingFactory(int.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_INT()));

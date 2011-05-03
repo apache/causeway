@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
-
 
 public class ExampleReferencePojo extends ExamplePojo {
     // {{ Reference1
@@ -35,6 +33,7 @@ public class ExampleReferencePojo extends ExamplePojo {
     public void setReference1(final ExampleValuePojo reference1) {
         this.reference1 = reference1;
     }
+
     // }}
 
     // {{ Reference2
@@ -47,6 +46,7 @@ public class ExampleReferencePojo extends ExamplePojo {
     public void setReference2(final ExampleValuePojo reference2) {
         this.reference2 = reference2;
     }
+
     // }}
 
     // {{ NotPersisted
@@ -56,7 +56,4 @@ public class ExampleReferencePojo extends ExamplePojo {
     }
     // }}
 
-
 }
-
-

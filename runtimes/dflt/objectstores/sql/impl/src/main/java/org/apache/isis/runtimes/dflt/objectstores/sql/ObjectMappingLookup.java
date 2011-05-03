@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -35,7 +32,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
+import org.apache.log4j.Logger;
 
 public class ObjectMappingLookup implements DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(ObjectMappingLookup.class);
@@ -44,12 +41,13 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
     private ObjectMappingFactory objectMappingFactory;
     private FieldMappingLookup fieldMappingLookup;
 
-    public ObjectMapping getMapping(final ObjectSpecification spec, DatabaseConnector connection) {
+    public ObjectMapping getMapping(final ObjectSpecification spec, final DatabaseConnector connection) {
         ObjectMapping mapping = mappings.get(spec);
         if (mapping == null) {
-            String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper.default";
-            mapping = objectMappingFactory.createMapper(spec.getFullIdentifier(), propertiesBase, fieldMappingLookup, this);
-            add(spec, mapping, connection); 
+            final String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper.default";
+            mapping =
+                objectMappingFactory.createMapper(spec.getFullIdentifier(), propertiesBase, fieldMappingLookup, this);
+            add(spec, mapping, connection);
         }
         LOG.debug("  mapper for " + spec.getSingularName() + " -> " + mapping);
         if (mapping == null) {
@@ -58,7 +56,7 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
         return mapping;
     }
 
-    public ObjectMapping getMapping(final ObjectAdapter object, DatabaseConnector connection) {
+    public ObjectMapping getMapping(final ObjectAdapter object, final DatabaseConnector connection) {
         return getMapping(object.getSpecification(), connection);
     }
 
@@ -71,12 +69,12 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
         this.objectMappingFactory = mapperFactory;
     }
 
-    public void setValueMappingLookup(FieldMappingLookup fieldMappingLookup) {
+    public void setValueMappingLookup(final FieldMappingLookup fieldMappingLookup) {
         this.fieldMappingLookup = fieldMappingLookup;
     }
 
     private void add(final String className, final ObjectMapping mapper) {
-        ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(className);
+        final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(className);
         if (spec.getProperties().size() == 0) {
             throw new SqlObjectStoreException(spec.getFullIdentifier() + " has no fields to persist: " + spec);
         }
@@ -85,8 +83,8 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
 
     public void add(final ObjectSpecification specification, final ObjectMapping mapper, DatabaseConnector connection) {
         LOG.debug("add mapper " + mapper + " for " + specification);
-        if (connection == null){
-        	connection = connectionPool.acquire();
+        if (connection == null) {
+            connection = connectionPool.acquire();
         }
         mapper.startup(connection, this);
         connectionPool.release(connection);
@@ -95,24 +93,24 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
 
     public void init() {
         fieldMappingLookup.init();
-        
-        String prefix = SqlObjectStore.BASE_NAME + ".mapper.";
-        IsisConfiguration subset = IsisContext.getConfiguration().createSubset(prefix);
-        for (String className : subset) {
-            String value = subset.getString(className);
-            
+
+        final String prefix = SqlObjectStore.BASE_NAME + ".mapper.";
+        final IsisConfiguration subset = IsisContext.getConfiguration().createSubset(prefix);
+        for (final String className : subset) {
+            final String value = subset.getString(className);
+
             if (value.startsWith("auto.")) {
-                String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper." + value.substring(5) + ".";
+                final String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper." + value.substring(5) + ".";
                 add(className, objectMappingFactory.createMapper(className, propertiesBase, fieldMappingLookup, this));
             } else if (value.trim().equals("auto")) {
-                String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper.default";
+                final String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper.default";
                 add(className, objectMappingFactory.createMapper(className, propertiesBase, fieldMappingLookup, this));
             } else {
                 LOG.debug("mapper " + className + "=" + value);
-                
+
                 try {
                     add(className, InstanceUtil.createInstance(value, ObjectMapping.class));
-                } catch (ObjectPersistenceException ex) {
+                } catch (final ObjectPersistenceException ex) {
                     throw new InstanceCreationException("Failed to set up mapper for " + className, ex);
                 }
             }
@@ -120,28 +118,28 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
     }
 
     public void shutdown() {
-        for (ObjectMapping mapping : mappings.values()) {
+        for (final ObjectMapping mapping : mappings.values()) {
             try {
                 mapping.shutdown();
-            } catch (ObjectPersistenceException ex) {
+            } catch (final ObjectPersistenceException ex) {
                 LOG.error("Shutdown mapper " + mapping, ex);
             }
         }
     }
 
     @Override
-    public void debugData(DebugBuilder debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("field mapping lookup", fieldMappingLookup);
         debug.appendln("object mapping factory", objectMappingFactory);
         debug.appendTitle("Mappings");
         int i = 1;
-        for (ObjectSpecification specification : mappings.keySet()) {
+        for (final ObjectSpecification specification : mappings.keySet()) {
             debug.appendln(i++ + ". " + specification.getShortIdentifier());
-           ObjectMapping mapper = mappings.get(specification);
-           debug.indent();
-           debug.append(mapper);
-           debug.unindent();
-         }
+            final ObjectMapping mapper = mappings.get(specification);
+            debug.indent();
+            debug.append(mapper);
+            debug.unindent();
+        }
     }
 
     @Override

@@ -17,36 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlOidGenerator;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.VersionCreator;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class NoSqlObjectStoreTest {
 
@@ -61,131 +54,150 @@ public class NoSqlObjectStoreTest {
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
-        TestProxySystemII system = new TestProxySystemII();
+        final TestProxySystemII system = new TestProxySystemII();
         system.init();
 
         specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
         object = IsisContext.getPersistenceSession().createInstance(specification);
         ((SerialOid) object.getOid()).setId(3);
         object.getOid().makePersistent();
-        
+
         context = new Mockery();
         db = context.mock(NoSqlDataDatabase.class);
-        context.checking(new Expectations() {{
+        context.checking(new Expectations() {
+            {
                 one(db).open();
                 one(db).containsData();
                 will(returnValue(false));
                 one(db).close();
-        }});
+            }
+        });
         keyCreator = context.mock(KeyCreator.class);
-        versionCreator = context.mock(VersionCreator.class);;
+        versionCreator = context.mock(VersionCreator.class);
+        ;
         store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), keyCreator, versionCreator);
     }
 
     @Test
     public void open() throws Exception {
-        context.checking(new Expectations() {{
-            one(db).open();
-        }});
+        context.checking(new Expectations() {
+            {
+                one(db).open();
+            }
+        });
         store.open();
     }
 
     @Test
     public void close() throws Exception {
-        context.checking(new Expectations() {{
-            one(db).close();
-        }});
+        context.checking(new Expectations() {
+            {
+                one(db).close();
+            }
+        });
         store.close();
     }
-    
+
     @Test
     public void isFixtureInstalledOnFirstStartup() throws Exception {
         assertFalse(store.isFixturesInstalled());
     }
-    
+
     @Test
     public void isFixtureInstalledOnSubsequentStartup() throws Exception {
-        context.checking(new Expectations() {{
-            one(db).open();
-            one(db).containsData();
-            will(returnValue(true));
-            one(db).close();
-        }});
+        context.checking(new Expectations() {
+            {
+                one(db).open();
+                one(db).containsData();
+                will(returnValue(true));
+                one(db).close();
+            }
+        });
         store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), null, null);
         assertTrue(store.isFixturesInstalled());
     }
-    
+
     @Test
     public void registerService() throws Exception {
-        context.checking(new Expectations() {{
-            one(keyCreator).key(SerialOid.createPersistent(4));
-            will(returnValue("4"));
-            one(db).addService("service", "4");
-        }});
+        context.checking(new Expectations() {
+            {
+                one(keyCreator).key(SerialOid.createPersistent(4));
+                will(returnValue("4"));
+                one(db).addService("service", "4");
+            }
+        });
         store.registerService("service", SerialOid.createPersistent(4));
     }
-    
+
     @Test
     public void oidForService() throws Exception {
-        context.checking(new Expectations() {{
-            one(db).getService("service");
-            will(returnValue("4"));
-            one(keyCreator).oid("4");
-                 }});
+        context.checking(new Expectations() {
+            {
+                one(db).getService("service");
+                will(returnValue("4"));
+                one(keyCreator).oid("4");
+            }
+        });
         store.getOidForService("service");
     }
-    
+
     @Test
     public void hasInstances() throws Exception {
-        context.checking(new Expectations() {{
-            one(db).hasInstances(specification.getFullIdentifier());
-            will(returnValue(true));
-        }});
+        context.checking(new Expectations() {
+            {
+                one(db).hasInstances(specification.getFullIdentifier());
+                will(returnValue(true));
+            }
+        });
         store.hasInstances(specification);
     }
-    
+
     @Test
     public void execute() throws Exception {
         final PersistenceCommand command = context.mock(PersistenceCommand.class);
         final List<PersistenceCommand> commands = new ArrayList<PersistenceCommand>();
         commands.add(command);
 
-        context.checking(new Expectations() {{
-            one(command).execute(null);
-            one(db).write(commands);
-        }});
-        
+        context.checking(new Expectations() {
+            {
+                one(command).execute(null);
+                one(db).write(commands);
+            }
+        });
+
         store.execute(commands);
     }
-    
+
     @Test
     public void instances() throws Exception {
         final PersistenceQuery persistenceQuery = context.mock(PersistenceQuery.class);
-        context.checking(new Expectations() {{
-            one(persistenceQuery).getSpecification();
-            will(returnValue(specification));
-            
-            one(db).instancesOf(specification.getFullIdentifier());
-            will(returnIterator());
-        }});
-        
+        context.checking(new Expectations() {
+            {
+                one(persistenceQuery).getSpecification();
+                will(returnValue(specification));
+
+                one(db).instancesOf(specification.getFullIdentifier());
+                will(returnIterator());
+            }
+        });
+
         store.getInstances(persistenceQuery);
     }
-    
+
     @Test
     public void resolve() throws Exception {
         specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojo.class);
-        
-        context.checking(new Expectations() {{
-            one(keyCreator).key(SerialOid.createPersistent(3));
-            will(returnValue("3"));
-            one(db).getInstance("3", specification.getFullIdentifier());
-        }});
+
+        context.checking(new Expectations() {
+            {
+                one(keyCreator).key(SerialOid.createPersistent(3));
+                will(returnValue("3"));
+                one(db).getInstance("3", specification.getFullIdentifier());
+            }
+        });
         object = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(3), specification);
         assertEquals(ResolveState.GHOST, object.getResolveState());
         store.resolveImmediately(object);
         assertEquals(ResolveState.RESOLVED, object.getResolveState());
     }
 }
-
-

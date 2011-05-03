@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
@@ -25,9 +24,10 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 
-
 public class AutoMapperFactory implements ObjectMappingFactory {
-    public ObjectMapping createMapper(final String className, final String propertiesBase, FieldMappingLookup lookup, ObjectMappingLookup objectMapperLookup) {
+    @Override
+    public ObjectMapping createMapper(final String className, final String propertiesBase,
+        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         return new AutoMapper(className, propertiesBase, lookup, objectMapperLookup);
     }
 }

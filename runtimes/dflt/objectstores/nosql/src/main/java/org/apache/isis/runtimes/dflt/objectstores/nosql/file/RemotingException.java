@@ -17,23 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class RemotingException extends IsisException {
 
     private static final long serialVersionUID = 1L;
 
-    public RemotingException(String message) {
+    public RemotingException(final String message) {
         super(message);
     }
 
-    public RemotingException(Exception e) {
+    public RemotingException(final Exception e) {
         super(e);
     }
 
 }
-

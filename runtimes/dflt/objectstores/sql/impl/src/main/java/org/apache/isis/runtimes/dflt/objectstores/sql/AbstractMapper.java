@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Date;
 import java.util.Hashtable;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid.State;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
+import org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid.State;
 
 public abstract class AbstractMapper {
     private FieldMappingLookup objectMapperLookup;
-    private Hashtable<String, PrimaryKeyMapper> keyMapping = new Hashtable<String, PrimaryKeyMapper>();
+    private final Hashtable<String, PrimaryKeyMapper> keyMapping = new Hashtable<String, PrimaryKeyMapper>();
 
     public abstract void createTables(final DatabaseConnector connector);
 
@@ -39,7 +37,8 @@ public abstract class AbstractMapper {
         return false;
     }
 
-    public final void shutdown() {}
+    public final void shutdown() {
+    }
 
     public void startup(final DatabaseConnector connector, final FieldMappingLookup objectMapperLookup) {
         this.objectMapperLookup = objectMapperLookup;
@@ -58,15 +57,15 @@ public abstract class AbstractMapper {
         if (keyMapping.containsKey(column)) {
             key = keyMapping.get(column).generateKey(rs, column);
         } else {
-            Object object = rs.getObject(column);
+            final Object object = rs.getObject(column);
             if (object == null) {
                 return null;
             } else {
-                int id = ((Integer) object).intValue();
+                final int id = ((Integer) object).intValue();
                 key = new IntegerPrimaryKey(id);
             }
         }
-        Oid oid = new SqlOid(cls.getFullIdentifier(), key, State.PERSISTENT);
+        final Oid oid = new SqlOid(cls.getFullIdentifier(), key, State.PERSISTENT);
         return oid;
     }
 

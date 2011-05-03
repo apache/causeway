@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
@@ -46,6 +44,8 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Ser
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestClassSubstitutor;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 
+import com.google.common.collect.Maps;
+
 public class TrialObjects {
 
     private ObjectAdapterFactory factory;
@@ -55,17 +55,18 @@ public class TrialObjects {
 
     public TrialObjects() {
 
-        IsisConfigurationDefault configuration = new IsisConfigurationDefault();
+        final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
 
         final AdapterMapAbstract adapterMap = new AdapterMapAbstract() {
-            
+
             @Override
-            public ObjectAdapter getAdapterFor(Object pojo) {
+            public ObjectAdapter getAdapterFor(final Object pojo) {
                 throw new UnsupportedOperationException();
             }
-            
+
             @Override
-            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
+                final IdentifiedHolder identifiedHolder) {
                 if (adapters.get(pojo) != null) {
                     return adapters.get(pojo);
                 } else {
@@ -74,24 +75,24 @@ public class TrialObjects {
             }
 
             @Override
-            public ObjectAdapter adapterForAggregated(Object pojo, ObjectAdapter parent) {
+            public ObjectAdapter adapterForAggregated(final Object pojo, final ObjectAdapter parent) {
                 if (adapters.get(pojo) != null) {
                     return adapters.get(pojo);
                 } else {
                     return factory.createAdapter(pojo, null);
                 }
             }
-            
+
             @Override
-            public ObjectAdapter adapterFor(Object pattern) {
+            public ObjectAdapter adapterFor(final Object pattern) {
                 return adapters.get(pattern);
             }
         };
 
         reflector =
             new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
-                new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
-                new MetaModelValidatorDefault());
+                new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(),
+                new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(), new MetaModelValidatorDefault());
         reflector.setRuntimeContext(new RuntimeContextNoRuntime() {
 
             @Override
@@ -103,9 +104,9 @@ public class TrialObjects {
 
         factory = new AdapterFactoryAbstract() {
             @Override
-            public ObjectAdapter createAdapter(Object pojo, Oid oid) {
-                ObjectSpecification specification = reflector.loadSpecification(pojo.getClass());
-                ResolveState state =
+            public ObjectAdapter createAdapter(final Object pojo, final Oid oid) {
+                final ObjectSpecification specification = reflector.loadSpecification(pojo.getClass());
+                final ResolveState state =
                     oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST;
 
                 final TestProxyAdapter objectAdapter = new TestProxyAdapter();
@@ -121,11 +122,11 @@ public class TrialObjects {
         };
     }
 
-    public ObjectSpecification loadSpecification(Class<? extends Object> cls) {
+    public ObjectSpecification loadSpecification(final Class<? extends Object> cls) {
         return reflector.loadSpecification(cls);
     }
 
-    public ObjectAdapter createAdapter(Object pojo, SerialOid oid) {
+    public ObjectAdapter createAdapter(final Object pojo, final SerialOid oid) {
         return factory.createAdapter(pojo, oid);
     }
 }

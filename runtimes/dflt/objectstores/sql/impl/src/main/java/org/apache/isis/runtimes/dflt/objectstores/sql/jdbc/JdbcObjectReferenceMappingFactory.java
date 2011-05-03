@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMappingFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class JdbcObjectReferenceMappingFactory implements ObjectReferenceMappingFactory {
 
-    public ObjectReferenceMapping createReferenceMapping(String columnName, ObjectSpecification specification) {
+    @Override
+    public ObjectReferenceMapping createReferenceMapping(final String columnName,
+        final ObjectSpecification specification) {
         return new JdbcObjectReferenceMapping(columnName, specification);
     }
 
 }
-
-

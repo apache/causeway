@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.log4j.Logger;
-
 
 public class NoSqlOidGenerator extends OidGeneratorAbstract {
     private static final Logger LOG = Logger.getLogger(NoSqlOidGenerator.class);
@@ -43,7 +41,7 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
         private long newSubIdBatchAt = 0;
         private final int batchSize;
 
-        public IdNumbers(int initialTransientId, int batchSize) {
+        public IdNumbers(final int initialTransientId, final int batchSize) {
             transientNumber = initialTransientId;
             this.batchSize = batchSize;
         }
@@ -52,9 +50,10 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
             return transientNumber++;
         }
 
-        public synchronized long nextSubId(NoSqlDataDatabase connectionPool) {
+        public synchronized long nextSubId(final NoSqlDataDatabase connectionPool) {
             if (nextSubId > newSubIdBatchAt) {
-                String message = "ID exception, last id (" + nextSubId + ") past new batch boundary (" + newSubIdBatchAt + ")";
+                final String message =
+                    "ID exception, last id (" + nextSubId + ") past new batch boundary (" + newSubIdBatchAt + ")";
                 throw new NoSqlStoreException(message);
             }
             if (nextSubId == newSubIdBatchAt) {
@@ -65,9 +64,10 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
             return nextSubId++;
         }
 
-        public synchronized long nextPersistentId(NoSqlDataDatabase connectionPool) {
+        public synchronized long nextPersistentId(final NoSqlDataDatabase connectionPool) {
             if (nextId > newIdBatchAt) {
-                String message = "ID exception, last id (" + nextId + ") past new batch boundary (" + newIdBatchAt + ")";
+                final String message =
+                    "ID exception, last id (" + nextId + ") past new batch boundary (" + newIdBatchAt + ")";
                 throw new NoSqlStoreException(message);
             }
             if (nextId == newIdBatchAt) {
@@ -77,8 +77,8 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
             }
             return nextId++;
         }
-        
-        public void debugData(DebugBuilder debug) {
+
+        public void debugData(final DebugBuilder debug) {
             debug.appendln("id", nextId);
             debug.appendln("sub-id", nextSubId);
             debug.appendln("transient id", transientNumber);
@@ -92,7 +92,7 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
         this(database, INITIAL_TRANSIENT_ID, DEFAULT_BATCH_SIZE);
     }
 
-    public NoSqlOidGenerator(final NoSqlDataDatabase database, int initialTransientId, int batchSize) {
+    public NoSqlOidGenerator(final NoSqlDataDatabase database, final int initialTransientId, final int batchSize) {
         this.database = database;
         ids = new IdNumbers(initialTransientId, batchSize);
     }
@@ -103,18 +103,18 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
     }
 
     @Override
-    public String createAggregateId(Object pojo) {
+    public String createAggregateId(final Object pojo) {
         Assert.assertNotNull("No connection set up", database);
         return Long.toHexString(ids.nextSubId(database));
     }
-    
+
     @Override
     public void convertTransientToPersistentOid(final Oid oid) {
         Assert.assertNotNull("No connection set up", database);
         if (oid instanceof AggregatedOid) {
             return;
         }
-        long persistentId = ids.nextPersistentId(database);
+        final long persistentId = ids.nextPersistentId(database);
         ((SerialOid) oid).setId(persistentId);
         ((SerialOid) oid).makePersistent();
     }
@@ -140,4 +140,3 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
         return "NoSql OID Generator";
     }
 }
-

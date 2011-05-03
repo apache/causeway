@@ -30,18 +30,18 @@ public class Sql {
 
     // public static String timestamp = "CURRENT_TIMESTAMP";
 
-    public static void setMetaData(SqlMetaData metadata) {
+    public static void setMetaData(final SqlMetaData metadata) {
         Sql.metadata = metadata;
     }
 
-    public static String escapeAndQuoteValue(String encodedString) {
+    public static String escapeAndQuoteValue(final String encodedString) {
         if (encodedString == null || encodedString.equals("NULL")) {
             return "NULL";
         }
         // StringBuffer buffer = new StringBuffer("'");
-        StringBuffer buffer = new StringBuffer(metadata.getQuoteString());
+        final StringBuffer buffer = new StringBuffer(metadata.getQuoteString());
         for (int i = 0; i < encodedString.length(); i++) {
-            char c = encodedString.charAt(i);
+            final char c = encodedString.charAt(i);
             if (c == '\'') {
                 buffer.append("\\'");
             } else if (c == '\\') {
@@ -52,11 +52,11 @@ public class Sql {
         }
         // buffer.append("'");
         buffer.append(metadata.getQuoteString());
-        String string = buffer.toString();
+        final String string = buffer.toString();
         return string;
     }
 
-    public static String sqlName(String name) {
+    public static String sqlName(final String name) {
         // TODO need to deal with non-ascii (ie unicode characters)
         return name.replace(' ', '_').toLowerCase();
 
@@ -67,12 +67,12 @@ public class Sql {
          */
     }
 
-    public static String sqlFieldName(String name) {
-        int length = name.length();
-        StringBuffer convertedName = new StringBuffer(length);
+    public static String sqlFieldName(final String name) {
+        final int length = name.length();
+        final StringBuffer convertedName = new StringBuffer(length);
         boolean lastWasLowerCase = false;
         for (int i = 0; i < length; i++) {
-            char ch = name.charAt(i);
+            final char ch = name.charAt(i);
             if (Character.isUpperCase(ch)) {
                 if (lastWasLowerCase) {
                     convertedName.append('_');
@@ -86,12 +86,12 @@ public class Sql {
         return sqlName(convertedName.toString());
     }
 
-    public static String identifier(String name) {
+    public static String identifier(final String name) {
         // return metadata.quoteIdentifier(name);
         return tableIdentifier(name);
     }
 
-    public static String tableIdentifier(String name) {
+    public static String tableIdentifier(final String name) {
         if (metadata.isStoresMixedCaseIdentifiers()) {
             return name;
         } else if (metadata.isStoresLowerCaseIdentifiers()) {

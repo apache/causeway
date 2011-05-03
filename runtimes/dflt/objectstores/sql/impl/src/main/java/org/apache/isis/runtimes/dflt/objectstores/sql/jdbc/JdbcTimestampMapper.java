@@ -36,30 +36,31 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
         }
     }
 
-    protected JdbcTimestampMapper(ObjectAssociation field) {
+    protected JdbcTimestampMapper(final ObjectAssociation field) {
         super(field);
     }
 
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value) {
-        TimeStamp asDate = (TimeStamp) value.getObject();
-        java.sql.Timestamp timeStamp = new java.sql.Timestamp(asDate.longValue());
+    protected Object preparedStatementObject(final ObjectAdapter value) {
+        final TimeStamp asDate = (TimeStamp) value.getObject();
+        final java.sql.Timestamp timeStamp = new java.sql.Timestamp(asDate.longValue());
         return timeStamp;
     }
 
     @Override
-    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
-        String encodedValue = results.getString(columnName);
-        if (encodedValue == null)
+    public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
+        final String encodedValue = results.getString(columnName);
+        if (encodedValue == null) {
             return null;
+        }
         // convert date to yyyymmddhhmm
-        String year = encodedValue.substring(0, 4);
-        String month = encodedValue.substring(5, 7);
-        String day = encodedValue.substring(8, 10);
-        String hour = encodedValue.substring(11, 13);
-        String minute = encodedValue.substring(14, 16);
-        String second = encodedValue.substring(17, 19);
-        int length = encodedValue.length();
+        final String year = encodedValue.substring(0, 4);
+        final String month = encodedValue.substring(5, 7);
+        final String day = encodedValue.substring(8, 10);
+        final String hour = encodedValue.substring(11, 13);
+        final String minute = encodedValue.substring(14, 16);
+        final String second = encodedValue.substring(17, 19);
+        final int length = encodedValue.length();
         String millisecond;
         if (length > 20) {
             millisecond = encodedValue.substring(20, length);
@@ -73,7 +74,7 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
         } else if (length < 23) {
             millisecond = millisecond + "0";
         }
-        String valueString = year + month + day + "T" + hour + minute + second + millisecond;
+        final String valueString = year + month + day + "T" + hour + minute + second + millisecond;
         return field.getSpecification().getFacet(EncodableFacet.class).fromEncodedString(valueString);
     }
 

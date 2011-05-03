@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.io.IOException;
@@ -27,23 +26,20 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 public final class SqlOid implements Oid {
     private static final long serialVersionUID = 1L;
 
     public static enum State {
-        PERSISTENT,
-        TRANSIENT;
+        PERSISTENT, TRANSIENT;
         public boolean isTransient() {
             return this == TRANSIENT;
         }
     }
 
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Factory methods
-    ////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////
+
     public static SqlOid createPersistent(final String className, final PrimaryKey primaryKey) {
         return new SqlOid(className, primaryKey, State.PERSISTENT);
     }
@@ -52,10 +48,9 @@ public final class SqlOid implements Oid {
         return new SqlOid(className, new TransientKey(serialNo), State.TRANSIENT);
     }
 
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Constructors, encode
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     private String className;
     private SqlOid previous;
@@ -70,16 +65,17 @@ public final class SqlOid implements Oid {
         initialized();
     }
 
-    public SqlOid(DataInputExtended input) throws IOException {
-    	this.className = input.readUTF();
-    	this.primaryKey = input.readSerializable(PrimaryKey.class);
-    	this.newPrimaryKey = input.readSerializable(PrimaryKey.class);
-    	this.previous = input.readEncodable(SqlOid.class);
-    	this.state = input.readSerializable(State.class);
-    	initialized();
+    public SqlOid(final DataInputExtended input) throws IOException {
+        this.className = input.readUTF();
+        this.primaryKey = input.readSerializable(PrimaryKey.class);
+        this.newPrimaryKey = input.readSerializable(PrimaryKey.class);
+        this.previous = input.readEncodable(SqlOid.class);
+        this.state = input.readSerializable(State.class);
+        initialized();
     }
 
-	public void encode(DataOutputExtended output) throws IOException {
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(className);
         output.writeSerializable(primaryKey);
         output.writeSerializable(newPrimaryKey);
@@ -87,19 +83,18 @@ public final class SqlOid implements Oid {
         output.writeSerializable(state);
     }
 
-
     private void initialized() {
-		// nothing to do
-	}
+        // nothing to do
+    }
 
-
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // impl
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
+    @Override
     public void copyFrom(final Oid oid) {
         Assert.assertTrue(oid instanceof SqlOid);
-        SqlOid from = (SqlOid) oid;
+        final SqlOid from = (SqlOid) oid;
         this.primaryKey = from.primaryKey;
         this.className = from.className;
     }
@@ -109,14 +104,15 @@ public final class SqlOid implements Oid {
     }
 
     public PrimaryKey getPrimaryKey() {
-    	return primaryKey;
+        return primaryKey;
     }
-    
+
+    @Override
     public boolean isTransient() {
-    	// TODO: why not look at the State?
-    	return primaryKey instanceof TransientKey;
+        // TODO: why not look at the State?
+        return primaryKey instanceof TransientKey;
     }
-    
+
     /**
      * Should be called prior to {@link #makePersistent()}
      */
@@ -125,30 +121,34 @@ public final class SqlOid implements Oid {
         this.newPrimaryKey = primaryKey;
     }
 
+    @Override
     public void makePersistent() {
         Assert.assertTrue(state.isTransient());
         Assert.assertNotNull(newPrimaryKey);
         previous = new SqlOid(this.className, this.primaryKey, state);
         this.primaryKey = newPrimaryKey;
         this.state = State.PERSISTENT;
-        
+
     }
 
+    @Override
     public boolean hasPrevious() {
-    	return previous != null;
+        return previous != null;
     }
-    
+
+    @Override
     public Oid getPrevious() {
-    	return previous;
+        return previous;
     }
-    
+
+    @Override
     public void clearPrevious() {
         previous = null;
     }
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // equals, hashCode
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     @Override
     public boolean equals(final Object obj) {
@@ -156,7 +156,7 @@ public final class SqlOid implements Oid {
             return true;
         }
         if (obj instanceof SqlOid) {
-            SqlOid otherOid = ((SqlOid) obj);
+            final SqlOid otherOid = ((SqlOid) obj);
             return className.equals(otherOid.className) && primaryKey.equals(otherOid.primaryKey);
         }
         return false;
@@ -170,15 +170,14 @@ public final class SqlOid implements Oid {
         return hashCode;
     }
 
-
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // toString
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     @Override
     public String toString() {
-        return (isTransient() ? "T" : "") + "OID#" + primaryKey.stringValue() + "/" + className + (previous == null ? "" : "+");
+        return (isTransient() ? "T" : "") + "OID#" + primaryKey.stringValue() + "/" + className
+            + (previous == null ? "" : "+");
     }
-
 
 }

@@ -32,26 +32,26 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
     private final String columnName;
     protected final ObjectAssociation field;
 
-    public AbstractJdbcFieldMapping(ObjectAssociation field) {
+    public AbstractJdbcFieldMapping(final ObjectAssociation field) {
         this.field = field;
         columnName = Sql.sqlFieldName(field.getId());
     }
 
     @Override
-    public void appendColumnDefinitions(StringBuffer sql) {
+    public void appendColumnDefinitions(final StringBuffer sql) {
         sql.append(columnName);
         sql.append(" ");
         sql.append(columnType());
     }
 
     @Override
-    public void appendColumnNames(StringBuffer sql) {
+    public void appendColumnNames(final StringBuffer sql) {
         sql.append(columnName);
     }
 
     @Override
-    public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
-        ObjectAdapter fieldValue = field.get(object);
+    public void appendInsertValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
         if (fieldValue == null) {
             sql.append("NULL");
         } else {
@@ -61,33 +61,33 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
     }
 
     @Override
-    public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         appendEqualsClause(connector, sql, object, "=");
     }
 
     @Override
-    public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         appendEqualsClause(connector, sql, object, "=");
     }
 
-    protected void appendEqualsClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object,
-        String condition) {
+    protected void appendEqualsClause(final DatabaseConnector connector, final StringBuffer sql,
+        final ObjectAdapter object, final String condition) {
         sql.append(Sql.sqlFieldName(field.getId()));
         sql.append(condition);
-        ObjectAdapter fieldValue = field.get(object);
+        final ObjectAdapter fieldValue = field.get(object);
         sql.append("?");
         connector.addToQueryValues(preparedStatementObject(fieldValue));
     }
 
     @Override
-    public void initializeField(ObjectAdapter object, Results rs) {
-        String columnName = Sql.sqlFieldName(field.getId());
-        ObjectAdapter restoredValue = setFromDBColumn(rs, columnName, field);
+    public void initializeField(final ObjectAdapter object, final Results rs) {
+        final String columnName = Sql.sqlFieldName(field.getId());
+        final ObjectAdapter restoredValue = setFromDBColumn(rs, columnName, field);
         ((OneToOneAssociation) field).initAssociation(object, restoredValue);
     }
 
     @Override
-    public void debugData(DebugBuilder debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln(field.getId(), columnName + "/" + columnType());
     }
 

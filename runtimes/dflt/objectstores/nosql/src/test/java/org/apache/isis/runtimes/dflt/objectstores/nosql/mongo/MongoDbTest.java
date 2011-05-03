@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import static org.hamcrest.Matchers.is;
@@ -27,11 +26,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.ExampleValuePojo;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.TrialObjects;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -43,7 +42,6 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 
-
 public class MongoDbTest {
     private MongoDb db;
     private TrialObjects testObjects;
@@ -51,25 +49,25 @@ public class MongoDbTest {
     private ObjectAdapter object;
     private SerialOid oid;
     private DB testDb;
-    
+
     @Before
     public void setup() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
         testObjects = new TrialObjects();
-        
+
         try {
-            Mongo m = new Mongo();
+            final Mongo m = new Mongo();
             m.dropDatabase("testdb");
             testDb = m.getDB("testdb");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assumeThat(true, is(false)); // ignore if no MongoDB instance to connect to
             return;
         }
-        
+
         db = new MongoDb("localhost", 0, "testdb", new SerialKeyCreator());
         db.open();
-        
-        ExampleValuePojo pojo = new ExampleValuePojo();
+
+        final ExampleValuePojo pojo = new ExampleValuePojo();
         pojo.setName("Fred Smith");
         oid = SerialOid.createTransient(3);
         object = testObjects.createAdapter(pojo, oid);
@@ -81,24 +79,23 @@ public class MongoDbTest {
     public void newDatabaseContainsNothing() throws Exception {
         assertFalse(db.containsData());
     }
-    
+
     @Test
     public void serialNumberSaved() throws Exception {
         assertEquals(0, db.readSerialNumber());
-       db.writeSerialNumber(1023);
-       assertEquals(1023, db.readSerialNumber());
+        db.writeSerialNumber(1023);
+        assertEquals(1023, db.readSerialNumber());
     }
 
     @Test
     public void hasInstances() throws Exception {
-        String specificationName = specification.getFullIdentifier();
+        final String specificationName = specification.getFullIdentifier();
         assertFalse(db.hasInstances(specificationName));
         db.close();
-        
-        
-        DBCollection instances = testDb.getCollection(specificationName);
+
+        final DBCollection instances = testDb.getCollection(specificationName);
         instances.insert(new BasicDBObject().append("test", "test"));
-        
+
         db.open();
         assertTrue(db.hasInstances(specificationName));
         assertFalse(db.hasInstances("org.xxx.unknown"));
@@ -108,26 +105,24 @@ public class MongoDbTest {
     public void destroyInstance() throws Exception {
         db.close();
 
-        String specificationName = specification.getFullIdentifier();      
-        DBCollection instances = testDb.getCollection(specificationName);
-        BasicDBObject dbObject = new BasicDBObject().append("test", "test");
+        final String specificationName = specification.getFullIdentifier();
+        final DBCollection instances = testDb.getCollection(specificationName);
+        final BasicDBObject dbObject = new BasicDBObject().append("test", "test");
         instances.insert(dbObject);
-        
+
         db.open();
         db.delete(specificationName, dbObject.getString("_id"));
         assertFalse(db.hasInstances(specificationName));
     }
-    
+
     @Test
     public void serviceIds() throws Exception {
         db.addService("one", "123");
         assertEquals("123", db.getService("one"));
     }
-    
+
     @Test
     public void unknownServiceIds() throws Exception {
         assertNull(db.getService("two"));
     }
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
@@ -33,5 +32,3 @@ public interface NoSqlCommandContext extends PersistenceCommandContext {
     void update(StateWriter writer);
 
 }
-
-

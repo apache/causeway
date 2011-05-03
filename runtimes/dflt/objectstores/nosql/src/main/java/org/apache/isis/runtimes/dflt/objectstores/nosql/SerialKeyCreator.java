@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,40 +27,43 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class SerialKeyCreator implements KeyCreator {
 
-    public String key(Oid oid) {
+    @Override
+    public String key(final Oid oid) {
         if (oid.isTransient()) {
             throw new NoSqlStoreException("Oid is not for a persistent object: " + oid);
         }
         if (oid instanceof SerialOid) {
-            long serialNo = ((SerialOid) oid).getSerialNo();
+            final long serialNo = ((SerialOid) oid).getSerialNo();
             return Long.toString(serialNo, 16);
         } else {
-            throw new NoSqlStoreException("Oid is not a SerialOid: " + oid);            
+            throw new NoSqlStoreException("Oid is not a SerialOid: " + oid);
         }
     }
 
-    public String reference(ObjectAdapter object) {
+    @Override
+    public String reference(final ObjectAdapter object) {
         try {
             return object.getSpecification().getFullIdentifier() + "@" + key(object.getOid());
-        } catch (NoSqlStoreException e) {
+        } catch (final NoSqlStoreException e) {
             throw new NoSqlStoreException("Failed to create refence for " + object, e);
         }
     }
-    
-    public SerialOid oid(String id) {
+
+    @Override
+    public SerialOid oid(final String id) {
         return SerialOid.createPersistent(Long.valueOf(id, 16).longValue());
     }
 
-    public Oid oidFromReference(String ref) {
-        String id = ref.split("@")[1];
+    @Override
+    public Oid oidFromReference(final String ref) {
+        final String id = ref.split("@")[1];
         return oid(id);
     }
 
-    public ObjectSpecification specificationFromReference(String ref) {
-        String name = ref.split("@")[0];
+    @Override
+    public ObjectSpecification specificationFromReference(final String ref) {
+        final String name = ref.split("@")[0];
         return IsisContext.getSpecificationLoader().loadSpecification(name);
     }
 
 }
-
-

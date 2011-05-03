@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
-
 
 public interface NoSqlDataDatabase {
 
@@ -48,4 +46,3 @@ public interface NoSqlDataDatabase {
 
     void write(List<PersistenceCommand> commands);
 }
-

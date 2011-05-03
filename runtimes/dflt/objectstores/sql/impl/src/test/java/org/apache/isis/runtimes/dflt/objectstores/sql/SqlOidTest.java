@@ -17,15 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.IntegerPrimaryKey;
-import org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid.State;
-
 
 public class SqlOidTest extends TestCase {
 
@@ -33,8 +29,8 @@ public class SqlOidTest extends TestCase {
      * Test method for 'org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid.hashCode()'
      */
     public void testHashCode() {
-        SqlOid oid1 = new SqlOid("className", new IntegerPrimaryKey(13), State.TRANSIENT);
-        SqlOid oid2 = new SqlOid("className", new IntegerPrimaryKey(13), State.TRANSIENT);
+        final SqlOid oid1 = new SqlOid("className", new IntegerPrimaryKey(13), State.TRANSIENT);
+        final SqlOid oid2 = new SqlOid("className", new IntegerPrimaryKey(13), State.TRANSIENT);
 
         assertEquals(oid1.hashCode(), oid2.hashCode());
     }

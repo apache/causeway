@@ -66,8 +66,9 @@ public class LogWriterTest {
 
     @After
     public void tearDown() throws Exception {
-        if (logger != null)
+        if (logger != null) {
             logger.shutdown();
+        }
     }
 
     @Test
@@ -80,7 +81,7 @@ public class LogWriterTest {
     public void logsData() throws Exception {
         logger.log(items);
 
-        BufferedReader reader = new BufferedReader(new FileReader(logFile1));
+        final BufferedReader reader = new BufferedReader(new FileReader(logFile1));
         String line = reader.readLine();
         line = reader.readLine();
         reader.close();

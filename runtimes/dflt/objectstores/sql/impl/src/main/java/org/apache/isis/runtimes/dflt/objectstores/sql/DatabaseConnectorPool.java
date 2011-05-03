@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Vector;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.log4j.Logger;
-
 
 public class DatabaseConnectorPool {
     private static final Logger LOG = Logger.getLogger(DatabaseConnectorPool.class);
@@ -44,14 +42,14 @@ public class DatabaseConnectorPool {
             newConnector();
         }
         LOG.info("Created an intial pool of " + size + " database connections");
-        
-        DatabaseConnector connection = acquire();
+
+        final DatabaseConnector connection = acquire();
         Sql.setMetaData(connection.getMetaData());
         release(connection);
     }
 
     private DatabaseConnector newConnector() {
-        DatabaseConnector connector = factory.createConnector();
+        final DatabaseConnector connector = factory.createConnector();
         connector.setConnectionPool(this);
         connectorPool.addElement(connector);
         return connector;
@@ -70,7 +68,7 @@ public class DatabaseConnectorPool {
 
     private DatabaseConnector findFreeConnector() {
         for (int i = 0, no = connectorPool.size(); i < no; i++) {
-            DatabaseConnector connector = (DatabaseConnector) connectorPool.elementAt(i);
+            final DatabaseConnector connector = connectorPool.elementAt(i);
             if (!connector.isUsed()) {
                 connector.setUsed(true);
                 return connector;
@@ -86,21 +84,21 @@ public class DatabaseConnectorPool {
 
     public void shutdown() {
         for (int i = 0, no = connectorPool.size(); i < no; i++) {
-            DatabaseConnector connector = (DatabaseConnector) connectorPool.elementAt(i);
+            final DatabaseConnector connector = connectorPool.elementAt(i);
             try {
                 connector.close();
-            } catch (SqlObjectStoreException e) {
+            } catch (final SqlObjectStoreException e) {
                 LOG.error("Failed to release connectuion", e);
             }
         }
         connectorPool.removeAllElements();
     }
 
-    public void debug(DebugBuilder debug) {
-        DatabaseConnector connection = acquire();
+    public void debug(final DebugBuilder debug) {
+        final DatabaseConnector connection = acquire();
         connection.debug(debug);
         release(connection);
-        
+
     }
 
     public SqlMetaData getMetaData() {

@@ -17,11 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 public class ExamplePojo {
 
 }
-
-

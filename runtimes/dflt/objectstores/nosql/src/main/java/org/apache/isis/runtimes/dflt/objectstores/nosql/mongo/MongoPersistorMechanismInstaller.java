@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public class MongoPersistorMechanismInstaller extends NoSqlPersistorMechanismInstaller {
-    
+
     private static final String STRING = ConfigurationConstants.ROOT + "nosql.mongodb.";
     private static final String DB_HOST = STRING + "host";
     private static final String DB_PORT = STRING + "port";
@@ -38,16 +37,15 @@ public class MongoPersistorMechanismInstaller extends NoSqlPersistorMechanismIns
         super("mongodb");
     }
 
-    protected NoSqlDataDatabase createNoSqlDatabase(IsisConfiguration configuration) {
+    @Override
+    protected NoSqlDataDatabase createNoSqlDatabase(final IsisConfiguration configuration) {
         NoSqlDataDatabase db;
-        String host = configuration.getString(DB_HOST, "localhost");
-        int port = configuration.getInteger(DB_PORT, 0);
-        String name = configuration.getString(DB_NAME, "isis");
-        KeyCreator keyCreator = new SerialKeyCreator();
+        final String host = configuration.getString(DB_HOST, "localhost");
+        final int port = configuration.getInteger(DB_PORT, 0);
+        final String name = configuration.getString(DB_NAME, "isis");
+        final KeyCreator keyCreator = new SerialKeyCreator();
         db = new MongoDb(host, port, name, keyCreator);
         return db;
     }
 
 }
-
-

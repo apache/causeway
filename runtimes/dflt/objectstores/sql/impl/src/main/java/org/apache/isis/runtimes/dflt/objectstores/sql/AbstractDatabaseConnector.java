@@ -17,26 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 public abstract class AbstractDatabaseConnector implements DatabaseConnector {
     private boolean isUsed;
 
-    public final void setUsed(boolean isUsed) {
+    @Override
+    public final void setUsed(final boolean isUsed) {
         this.isUsed = isUsed;
     }
 
+    @Override
     public final boolean isUsed() {
         return isUsed;
     }
 
     private DatabaseConnectorPool pool;
 
-    public final void setConnectionPool(DatabaseConnectorPool pool) {
+    @Override
+    public final void setConnectionPool(final DatabaseConnectorPool pool) {
         this.pool = pool;
     }
 
+    @Override
     public final DatabaseConnectorPool getConnectionPool() {
         return pool;
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,44 +26,46 @@ import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
-
-
-
 public class MySqlTest extends SqlIntegrationTestCommon {
 
-	/**/
-	@Override
-	public Properties getProperties(){
-		Properties properties = super.getProperties();
-		if (properties == null){
-		    // Only used if *sql.properties is not found
-			properties = new Properties();
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "com.mysql.jdbc.Driver");
-			//properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:mysql://abacus/noftest&useTimezone=true&serverTimezone=GMT");
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:mysql://abacus/noftest&useLegacyDatetimeCode=false");
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
-			properties.put(SqlObjectStore.BASE_NAME + ".jdbc.jdbc.password", "");
-		}
-		return properties;
-	}
-	/**/
-	
-	public  String getPropertiesFilename(){
-		return "mysql.properties";
-	}
+    /**/
+    @Override
+    public Properties getProperties() {
+        Properties properties = super.getProperties();
+        if (properties == null) {
+            // Only used if *sql.properties is not found
+            properties = new Properties();
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "com.mysql.jdbc.Driver");
+            // properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection",
+            // "jdbc:mysql://abacus/noftest&useTimezone=true&serverTimezone=GMT");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection",
+                "jdbc:mysql://abacus/noftest&useLegacyDatetimeCode=false");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.jdbc.password", "");
+        }
+        return properties;
+    }
 
+    /**/
+
+    @Override
+    public String getPropertiesFilename() {
+        return "mysql.properties";
+    }
+
+    @Override
     public String getPersonTableName() {
         return "isis_sqldataclass";
     }
 
+    @Override
     public String getSimpleClassTableName() {
         return "isis_simpleclass";
     }
 
+    @Override
     public String getSimpleClassTwoTableName() {
         return "isis_simpleclasstwo";
     }
 
-	
 }
-

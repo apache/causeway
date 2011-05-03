@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,27 +26,24 @@ import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
-
-
-
 public class InMemoryPersistanceTest extends SqlIntegrationTestCommon {
-	
-	@Override
-	public Properties getProperties(){
-		Properties properties = new Properties();
-		properties.put("isis.persistor", "in-memory");
-		properties.put("isis.logging.objectstore","on");
-		return properties;
-	}
-	
-	public  String getPropertiesFilename(){
-		return "inmemory.properties";
-	}
-	@Override
-	public String getSqlTeardownString(){
-		return "SHUTDOWN;";
-	}
-	
-	
-}
 
+    @Override
+    public Properties getProperties() {
+        final Properties properties = new Properties();
+        properties.put("isis.persistor", "in-memory");
+        properties.put("isis.logging.objectstore", "on");
+        return properties;
+    }
+
+    @Override
+    public String getPropertiesFilename() {
+        return "inmemory.properties";
+    }
+
+    @Override
+    public String getSqlTeardownString() {
+        return "SHUTDOWN;";
+    }
+
+}

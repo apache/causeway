@@ -34,7 +34,7 @@ public class JdbcSqlMetaData implements SqlMetaData {
     private final boolean storesMixedCaseIdentifiers;
     private final boolean storesUpperCaseIdentifiers;
 
-    public JdbcSqlMetaData(DatabaseMetaData metaData) throws SQLException {
+    public JdbcSqlMetaData(final DatabaseMetaData metaData) throws SQLException {
         keywords = metaData.getSQLKeywords();
         timeDateFunctions = metaData.getTimeDateFunctions();
         quoteString = metaData.getIdentifierQuoteString();
@@ -76,7 +76,7 @@ public class JdbcSqlMetaData implements SqlMetaData {
     }
 
     @Override
-    public String quoteIdentifier(String identifier) {
+    public String quoteIdentifier(final String identifier) {
         if (hasQuoteString) {
             return quoteString + identifier + quoteString;
         } else {

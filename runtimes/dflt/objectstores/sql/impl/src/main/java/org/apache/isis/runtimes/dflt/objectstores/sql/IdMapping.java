@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public class IdMapping extends IdMappingAbstract {
 
@@ -34,8 +32,9 @@ public class IdMapping extends IdMappingAbstract {
         setColumn(idColumn);
     }
 
-    public void appendUpdateValues(StringBuffer sql, ObjectAdapter object) {}
+    public void appendUpdateValues(final StringBuffer sql, final ObjectAdapter object) {
+    }
 
-    public void initializeField(ObjectAdapter object, Results rs) {}
+    public void initializeField(final ObjectAdapter object, final Results rs) {
+    }
 }
-

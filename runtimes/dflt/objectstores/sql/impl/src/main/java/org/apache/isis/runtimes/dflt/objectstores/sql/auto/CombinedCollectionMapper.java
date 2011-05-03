@@ -22,6 +22,12 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
@@ -33,12 +39,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.log4j.Logger;
 
@@ -53,8 +53,8 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     private final ObjectMapping originalMapping;
     private final ObjectMappingLookup objectMapperLookup2;
 
-    public CombinedCollectionMapper(ObjectAssociation objectAssociation, String parameterBase,
-        FieldMappingLookup lookup, ObjectMappingLookup objectMapperLookup) {
+    public CombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
+        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
         this.field = objectAssociation;
 
@@ -72,7 +72,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         foreignKeyMapping = lookup.createMapping(columnName, objectAssociation.getSpecification());
     }
 
-    protected String determineColumnName(ObjectAssociation objectAssociation) {
+    protected String determineColumnName(final ObjectAssociation objectAssociation) {
         return objectAssociation.getSpecification().getShortIdentifier();
     }
 
@@ -80,24 +80,24 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         return columnName;
     }
 
-    public void setColumnName(String columnName) {
+    public void setColumnName(final String columnName) {
         this.columnName = columnName;
     }
 
     @Override
-    public boolean needsTables(DatabaseConnector connection) {
+    public boolean needsTables(final DatabaseConnector connection) {
         return !connection.hasColumn(table, foreignKeyName);
     }
 
     @Override
-    public void startup(DatabaseConnector connector, FieldMappingLookup lookup) {
+    public void startup(final DatabaseConnector connector, final FieldMappingLookup lookup) {
         originalMapping.startup(connector, objectMapperLookup2);
         super.startup(connector, lookup);
     }
 
     @Override
-    public void createTables(DatabaseConnector connection) {
-        StringBuffer sql = new StringBuffer();
+    public void createTables(final DatabaseConnector connection) {
+        final StringBuffer sql = new StringBuffer();
         sql.append("alter table ");
         sql.append(table);
         sql.append(" add ");
@@ -106,18 +106,18 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
     @Override
-    public void loadInternalCollection(DatabaseConnector connector, ObjectAdapter parent) {
-        ObjectAdapter collection = field.get(parent);
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
+        final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
             PersistorUtil.start(collection, ResolveState.RESOLVING);
 
-            StringBuffer sql = new StringBuffer();
+            final StringBuffer sql = new StringBuffer();
             sql.append("select ");
             idMapping.appendColumnNames(sql);
 
             sql.append(", ");
-            String columnList = columnList();
+            final String columnList = columnList();
             if (columnList.length() > 0) {
                 sql.append(columnList);
                 sql.append(", ");
@@ -128,16 +128,16 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             sql.append(" where ");
             foreignKeyMapping.appendUpdateValues(connector, sql, parent);
 
-            Results rs = connector.select(sql.toString());
-            List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+            final Results rs = connector.select(sql.toString());
+            final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
             while (rs.next()) {
-                Oid oid = idMapping.recreateOid(rs, specification);
-                ObjectAdapter element = getAdapter(specification, oid);
+                final Oid oid = idMapping.recreateOid(rs, specification);
+                final ObjectAdapter element = getAdapter(specification, oid);
                 loadFields(element, rs);
                 LOG.debug("  element  " + element.getOid());
                 list.add(element);
             }
-            CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+            final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
             rs.close();
             PersistorUtil.end(collection);
@@ -147,7 +147,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     protected void loadFields(final ObjectAdapter object, final Results rs) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
-            for (FieldMapping mapping : fieldMappings) {
+            for (final FieldMapping mapping : fieldMappings) {
                 mapping.initializeField(object, rs);
             }
             object.setOptimisticLock(versionMapping.getLock(rs));
@@ -156,8 +156,8 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
     @Override
-    public void saveInternalCollection(DatabaseConnector connector, ObjectAdapter parent) {
-        ObjectAdapter collection = field.get(parent);
+    public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
+        final ObjectAdapter collection = field.get(parent);
         LOG.debug("Saving internal collection " + collection);
 
         StringBuffer sql = new StringBuffer();
@@ -174,9 +174,9 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         sql.append(table);
         sql.append(" set ");
 
-        CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
-        for (ObjectAdapter element : collectionFacet.iterable(collection)) {
-            StringBuffer update = new StringBuffer(sql);
+        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+        for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
+            final StringBuffer update = new StringBuffer(sql);
             foreignKeyMapping.appendUpdateValues(connector, update, parent);
             update.append(" where ");
             idMapping.appendWhereClause(connector, update, element.getOid());
@@ -185,7 +185,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
     @Override
-    public void debugData(DebugBuilder debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln(field.getName(), "collection");
         debug.indent();
         debug.appendln("Foreign key name", foreignKeyName);

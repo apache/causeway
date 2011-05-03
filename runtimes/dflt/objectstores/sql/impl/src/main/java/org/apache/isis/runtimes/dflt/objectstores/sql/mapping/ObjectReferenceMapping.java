@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
-import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
+import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 
 public interface ObjectReferenceMapping {
 
@@ -38,6 +36,5 @@ public interface ObjectReferenceMapping {
     void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
     Oid recreateOid(final Results rs, final ObjectSpecification specification);
-        
-}
 
+}

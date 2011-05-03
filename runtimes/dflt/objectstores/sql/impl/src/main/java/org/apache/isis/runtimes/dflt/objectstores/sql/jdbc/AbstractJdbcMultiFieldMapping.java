@@ -43,7 +43,7 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
      * @param types
      *            the list of SQL data types, 1 per columnCount, to represent the value type.
      */
-    public AbstractJdbcMultiFieldMapping(ObjectAssociation field, int columnCount, String... types) {
+    public AbstractJdbcMultiFieldMapping(final ObjectAssociation field, final int columnCount, final String... types) {
         super(field);
         this.columnCount = columnCount;
 
@@ -52,14 +52,14 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
             this.types[i] = types[i];
         }
 
-        String fieldName = field.getId();
+        final String fieldName = field.getId();
         columnNames = new String[columnCount];
         columnNames[0] = Sql.sqlFieldName(fieldName + "1");
         columnNames[1] = Sql.sqlFieldName(fieldName + "2");
     }
 
     @Override
-    public void appendColumnDefinitions(StringBuffer sql) {
+    public void appendColumnDefinitions(final StringBuffer sql) {
         for (int i = 0; i < columnCount; i++) {
             sql.append(columnName(i) + " " + columnType(i));
             if (i < columnCount - 1) {
@@ -69,7 +69,7 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     @Override
-    public void appendColumnNames(StringBuffer sql) {
+    public void appendColumnNames(final StringBuffer sql) {
         for (int i = 0; i < columnCount; i++) {
             sql.append(columnName(i));
             if (i < columnCount - 1) {
@@ -79,9 +79,9 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     @Override
-    public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
-        ObjectAdapter fieldValue = field.get(object);
-        Object o = (fieldValue == null) ? null : fieldValue.getObject();
+    public void appendInsertValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
+        final Object o = (fieldValue == null) ? null : fieldValue.getObject();
 
         for (int i = 0; i < columnCount; i++) {
             if (fieldValue == null) {
@@ -98,24 +98,24 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     @Override
-    public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         for (int i = 0; i < columnCount; i++) {
             appendEqualsClause(connector, i, sql, object, "=");
         }
     }
 
     @Override
-    public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+    public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         for (int i = 0; i < columnCount; i++) {
             appendEqualsClause(connector, i, sql, object, "=");
         }
     }
 
-    protected void appendEqualsClause(DatabaseConnector connector, int index, StringBuffer sql, ObjectAdapter object,
-        String condition) {
+    protected void appendEqualsClause(final DatabaseConnector connector, final int index, final StringBuffer sql,
+        final ObjectAdapter object, final String condition) {
 
-        ObjectAdapter fieldValue = field.get(object);
-        Object o = (fieldValue == null) ? null : fieldValue.getObject();
+        final ObjectAdapter fieldValue = field.get(object);
+        final Object o = (fieldValue == null) ? null : fieldValue.getObject();
 
         for (int i = 0; i < columnCount; i++) {
             sql.append(columnName(i) + condition + "?");
@@ -128,15 +128,15 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     @Override
-    public ObjectAdapter setFromDBColumn(Results results, String columnName, final ObjectAssociation field) {
+    public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         ObjectAdapter restoredValue;
-        Object objectValue = getObjectFromResults(results);
+        final Object objectValue = getObjectFromResults(results);
         restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(objectValue);
         return restoredValue;
     }
 
     @Override
-    public void debugData(DebugBuilder debug) {
+    public void debugData(final DebugBuilder debug) {
         for (int i = 0; i < columnCount; i++) {
             debug.appendln(field.getId(), columnName(i) + "/" + columnType(i));
         }
@@ -148,15 +148,15 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     @Override
-    protected Object preparedStatementObject(ObjectAdapter value) {
+    protected Object preparedStatementObject(final ObjectAdapter value) {
         throw new ApplicationException("Should never be called");
     }
 
-    protected String columnType(int index) {
+    protected String columnType(final int index) {
         return types[index];
     }
 
-    protected String columnName(int index) {
+    protected String columnName(final int index) {
         return columnNames[index];
     }
 

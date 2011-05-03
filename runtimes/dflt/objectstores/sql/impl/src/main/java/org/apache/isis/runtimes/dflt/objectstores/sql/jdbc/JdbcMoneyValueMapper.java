@@ -37,7 +37,7 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
         private final String type1;
         private final String type2;
 
-        public Factory(String type1, String type2) {
+        public Factory(final String type1, final String type2) {
             this.type1 = type1;
             this.type2 = type2;
         }
@@ -48,12 +48,12 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
         }
     }
 
-    public JdbcMoneyValueMapper(ObjectAssociation field, String type1, String type2) {
+    public JdbcMoneyValueMapper(final ObjectAssociation field, final String type1, final String type2) {
         super(field, 2, type1, type2);
     }
 
     @Override
-    protected Object preparedStatementObject(int index, Object o) {
+    protected Object preparedStatementObject(final int index, final Object o) {
 
         if (o instanceof Money) {
             if (index == 0) {
@@ -68,11 +68,11 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
     }
 
     @Override
-    protected Object getObjectFromResults(Results results) {
-        double doubleValue = results.getDouble(columnName(0));
-        String currencyValue = results.getString(columnName(1));
+    protected Object getObjectFromResults(final Results results) {
+        final double doubleValue = results.getDouble(columnName(0));
+        final String currencyValue = results.getString(columnName(1));
 
-        Money moneyObject = new Money(doubleValue, currencyValue);
+        final Money moneyObject = new Money(doubleValue, currencyValue);
 
         return moneyObject;
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -36,6 +35,7 @@ public class ExampleValuePojo extends ExamplePojo {
     public void setName(final String name) {
         this.name = name;
     }
+
     // }}
 
     // {{ Size
@@ -49,6 +49,7 @@ public class ExampleValuePojo extends ExamplePojo {
     public void setSize(final int size) {
         this.size = size;
     }
+
     // }}
 
     // {{ Nullable
@@ -62,6 +63,7 @@ public class ExampleValuePojo extends ExamplePojo {
     public void setNullable(final Long number) {
         this.number = number;
     }
+
     // }}
 
     // {{ NotPersisted
@@ -72,5 +74,3 @@ public class ExampleValuePojo extends ExamplePojo {
     // }}
 
 }
-
-

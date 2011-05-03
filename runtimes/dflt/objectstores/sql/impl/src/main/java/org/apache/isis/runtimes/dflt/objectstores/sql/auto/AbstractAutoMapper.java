@@ -24,6 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
@@ -32,12 +38,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.log4j.Logger;
@@ -52,8 +52,8 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     protected List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
     protected Map<ObjectAssociation, FieldMapping> fieldMappingLookup = new HashMap<ObjectAssociation, FieldMapping>();
 
-    protected AbstractAutoMapper(final String className, final String parameterBase, FieldMappingLookup lookup,
-        ObjectMappingLookup objectMapperLookup) {
+    protected AbstractAutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
+        final ObjectMappingLookup objectMapperLookup) {
         specification = IsisContext.getSpecificationLoader().loadSpecification(className);
         if (specification.getProperties() == null || specification.getProperties().size() == 0) {
             throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: " + specification);
@@ -61,12 +61,12 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
     }
 
-    private void setUpFieldMappers(FieldMappingLookup lookup, ObjectMappingLookup objectMapperLookup,
+    private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         final String className, final String parameterBase) {
-        IsisConfiguration configParameters = IsisContext.getConfiguration();
+        final IsisConfiguration configParameters = IsisContext.getConfiguration();
         table = configParameters.getString(parameterBase + "table");
         if (table == null) {
-            String name = "isis_" + className.substring(className.lastIndexOf('.') + 1).toUpperCase();
+            final String name = "isis_" + className.substring(className.lastIndexOf('.') + 1).toUpperCase();
             table = Sql.sqlName(name);
         }
 
@@ -84,7 +84,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
     private void setupFullMapping(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         final String className, final IsisConfiguration configParameters, final String parameterBase) {
-        List<? extends ObjectAssociation> fields = specification.getAssociations();
+        final List<? extends ObjectAssociation> fields = specification.getAssociations();
 
         int simpleFieldCount = 0;
         int collectionFieldCount = 0;
@@ -98,15 +98,15 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             }
         }
 
-        ObjectAssociation[] oneToOneProperties = new ObjectAssociation[simpleFieldCount];
-        ObjectAssociation[] oneToManyProperties = new ObjectAssociation[collectionFieldCount];
+        final ObjectAssociation[] oneToOneProperties = new ObjectAssociation[simpleFieldCount];
+        final ObjectAssociation[] oneToManyProperties = new ObjectAssociation[collectionFieldCount];
         collectionMappers = new CollectionMapper[collectionFieldCount];
         // Properties collectionMappings = configParameters.getPropertiesStrippingPrefix(parameterBase +
         // "collection");
-        IsisConfiguration subset = IsisContext.getConfiguration().createSubset(parameterBase + ".mapper.");
+        final IsisConfiguration subset = IsisContext.getConfiguration().createSubset(parameterBase + ".mapper.");
 
         for (int i = 0, simpleFieldNo = 0, collectionFieldNo = 0; i < fields.size(); i++) {
-            ObjectAssociation field = fields.get(i);
+            final ObjectAssociation field = fields.get(i);
             if (field.isNotPersisted()) {
                 continue;
             } else if (field.isOneToManyAssociation()) {
@@ -114,7 +114,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
                 // TODO: Replace "new CombinedCollectionMapper" with a factory method(?) to allow a different
                 // default CollectionMapper
-                String type = subset.getString(field.getId());
+                final String type = subset.getString(field.getId());
                 if (type == null || type.equals("association-table")) {
                     // collectionMappers[collectionFieldNo] = new AutoCollectionMapper(specification,
                     // oneToManyProperties[collectionFieldNo], lookup);
@@ -126,8 +126,8 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                             lookup, objectMapperLookup);
 
                 } else if (type.equals("fk-table")) {
-                    String property = parameterBase + field.getId() + ".element-type";
-                    String elementType = configParameters.getString(property);
+                    final String property = parameterBase + field.getId() + ".element-type";
+                    final String elementType = configParameters.getString(property);
                     if (elementType == null) {
                         throw new SqlObjectStoreException("Expected property " + property);
                     }
@@ -150,9 +150,8 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             }
         }
 
-        for (int f = 0; f < oneToOneProperties.length; f++) {
-            ObjectAssociation field = oneToOneProperties[f];
-            FieldMapping mapping = lookup.createMapping(field);
+        for (final ObjectAssociation field : oneToOneProperties) {
+            final FieldMapping mapping = lookup.createMapping(field);
             fieldMappings.add(mapping);
             fieldMappingLookup.put(field, mapping);
         }
@@ -185,8 +184,8 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
      * throw new NotYetImplementedException(); } } }
      */
     protected String columnList() {
-        StringBuffer sql = new StringBuffer();
-        for (FieldMapping mapping : fieldMappings) {
+        final StringBuffer sql = new StringBuffer();
+        for (final FieldMapping mapping : fieldMappings) {
             if (sql.length() > 0) {
                 sql.append(",");
             }
@@ -196,8 +195,8 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     }
 
     protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-        AdapterManager objectLoader = IsisContext.getPersistenceSession().getAdapterManager();
-        ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
+        final AdapterManager objectLoader = IsisContext.getPersistenceSession().getAdapterManager();
+        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         } else {
@@ -205,7 +204,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         }
     }
 
-    protected FieldMapping fieldMappingFor(ObjectAssociation field) {
+    protected FieldMapping fieldMappingFor(final ObjectAssociation field) {
         return fieldMappingLookup.get(field);
     }
 
@@ -225,9 +224,9 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             + specification.getFullIdentifier() + "]";
     }
 
-    protected String values(DatabaseConnector connector, final ObjectAdapter object) {
-        StringBuffer sql = new StringBuffer();
-        for (FieldMapping mapping : fieldMappings) {
+    protected String values(final DatabaseConnector connector, final ObjectAdapter object) {
+        final StringBuffer sql = new StringBuffer();
+        for (final FieldMapping mapping : fieldMappings) {
             mapping.appendInsertValues(connector, sql, object);
             sql.append(",");
         }
