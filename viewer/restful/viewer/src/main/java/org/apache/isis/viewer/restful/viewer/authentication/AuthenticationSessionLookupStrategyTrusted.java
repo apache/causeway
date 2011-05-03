@@ -29,14 +29,14 @@ import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStra
 public class AuthenticationSessionLookupStrategyTrusted extends AuthenticationSessionLookupStrategyDefault {
 
     @Override
-    public AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse) {
-        AuthenticationSession session = super.lookup(servletRequest, servletResponse);
+    public AuthenticationSession lookup(final ServletRequest servletRequest, final ServletResponse servletResponse) {
+        final AuthenticationSession session = super.lookup(servletRequest, servletResponse);
         if (session != null) {
             return session;
         }
 
         // will always succeed.
-        AuthenticationRequestExploration request = new AuthenticationRequestExploration();
+        final AuthenticationRequestExploration request = new AuthenticationRequestExploration();
         return IsisContext.getAuthenticationManager().authenticate(request);
     }
 }

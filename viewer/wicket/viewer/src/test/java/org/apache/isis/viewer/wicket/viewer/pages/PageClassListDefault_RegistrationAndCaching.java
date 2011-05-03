@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.pages;
 
 import static org.hamcrest.Matchers.is;
@@ -36,32 +35,33 @@ import org.junit.Test;
 
 public class PageClassListDefault_RegistrationAndCaching {
 
-	private PageClassRegistryDefault registryImpl;
-	
-	@Before
-	public void setUp() throws Exception {
-		// necessary to provide an implementation that will register
-		// all pages with the registry.
-		final PageClassListDefault pageClassList = new PageClassListDefault();
-		registryImpl =new PageClassRegistryDefault(pageClassList);
-	}
+    private PageClassRegistryDefault registryImpl;
 
-	@Test
-	public void cachesPageByPageType() {
-		final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION);
-		assertThat(pageClass, is(not(nullValue())));
-	}
+    @Before
+    public void setUp() throws Exception {
+        // necessary to provide an implementation that will register
+        // all pages with the registry.
+        final PageClassListDefault pageClassList = new PageClassListDefault();
+        registryImpl = new PageClassRegistryDefault(pageClassList);
+    }
 
-	@Test
-	public void canRegisterNewPageType() {
-		class TestingActionPage extends ActionPage {
-			TestingActionPage() { super((ActionModel)null); }
-		}
-		registryImpl.registerPage(PageType.ACTION, TestingActionPage.class);
+    @Test
+    public void cachesPageByPageType() {
+        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION);
+        assertThat(pageClass, is(not(nullValue())));
+    }
 
-		final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION);
-		assertThat(pageClass.equals(TestingActionPage.class),  is(true));
-	}
+    @Test
+    public void canRegisterNewPageType() {
+        class TestingActionPage extends ActionPage {
+            TestingActionPage() {
+                super((ActionModel) null);
+            }
+        }
+        registryImpl.registerPage(PageType.ACTION, TestingActionPage.class);
+
+        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION);
+        assertThat(pageClass.equals(TestingActionPage.class), is(true));
+    }
 
 }
-

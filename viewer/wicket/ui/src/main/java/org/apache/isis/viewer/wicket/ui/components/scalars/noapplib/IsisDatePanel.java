@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
 
 import org.apache.isis.applib.value.Date;
@@ -37,71 +36,74 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class IsisDatePanel extends ScalarPanelTextFieldAbstract<java.util.Date> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_SCALAR_VALUE = "scalarValue";
-	private static final String DATE_PATTERN = "MM/dd/yyyy"; // TODO: i18n
+    private static final long serialVersionUID = 1L;
 
-	public IsisDatePanel(String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-	}
-	
-	@Override
-	protected TextField<java.util.Date> createTextField() {
-		TextField<java.util.Date> textField = DateTextField.forDatePattern(ID_SCALAR_VALUE, new Model<java.util.Date>() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public java.util.Date getObject() {
-				ObjectAdapter adapter = getModel().getObject();
-				if (adapter == null) {
-					return null;
-				}
-				Date noDate = (Date) adapter.getObject();
-				return noDate.dateValue();
-			}
-			@Override
-			public void setObject(java.util.Date date) {
-				Date noDate = new Date(date);
-				ObjectAdapter adapter = adapterFor(noDate);
-				getModel().setObject(adapter);
-			}
-		}, DATE_PATTERN);
-		return textField;
-	}
-	
+    private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final String DATE_PATTERN = "MM/dd/yyyy"; // TODO: i18n
 
-	protected void addSemantics() {
-		super.addSemantics();
+    public IsisDatePanel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+    }
 
-		DatePicker datePicker = new DatePicker();
-		getTextField().add(datePicker);
+    @Override
+    protected TextField<java.util.Date> createTextField() {
+        final TextField<java.util.Date> textField =
+            DateTextField.forDatePattern(ID_SCALAR_VALUE, new Model<java.util.Date>() {
+                private static final long serialVersionUID = 1L;
 
-		addObjectAdapterValidator();
-	}
+                @Override
+                public java.util.Date getObject() {
+                    final ObjectAdapter adapter = getModel().getObject();
+                    if (adapter == null) {
+                        return null;
+                    }
+                    final Date noDate = (Date) adapter.getObject();
+                    return noDate.dateValue();
+                }
 
-	private void addObjectAdapterValidator() {
-		final ScalarModel scalarModel = getModel();
-		final TextField<java.util.Date> textField = getTextField();
+                @Override
+                public void setObject(final java.util.Date date) {
+                    final Date noDate = new Date(date);
+                    final ObjectAdapter adapter = adapterFor(noDate);
+                    getModel().setObject(adapter);
+                }
+            }, DATE_PATTERN);
+        return textField;
+    }
 
-		textField.add(new IValidator<java.util.Date>(){
-			private static final long serialVersionUID = 1L;
+    @Override
+    protected void addSemantics() {
+        super.addSemantics();
 
-			@Override
-			public void validate(IValidatable<java.util.Date> validatable) {
-				java.util.Date proposedValue = validatable.getValue();
-				Date proposed = new Date(proposedValue);
-				ObjectAdapter proposedAdapter = adapterFor(proposed);
-				String reasonIfAny = scalarModel.validate(proposedAdapter);
-				if (reasonIfAny != null) {
-					ValidationError error = new ValidationError();
-					error.setMessage(reasonIfAny);
-					validatable.error(error);
-				}
-			}
-		});
-	}
+        final DatePicker datePicker = new DatePicker();
+        getTextField().add(datePicker);
 
-	private ObjectAdapter adapterFor(Object pojo) {
-		return getPersistenceSession().getAdapterManager().adapterFor(pojo);
-	}
+        addObjectAdapterValidator();
+    }
+
+    private void addObjectAdapterValidator() {
+        final ScalarModel scalarModel = getModel();
+        final TextField<java.util.Date> textField = getTextField();
+
+        textField.add(new IValidator<java.util.Date>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void validate(final IValidatable<java.util.Date> validatable) {
+                final java.util.Date proposedValue = validatable.getValue();
+                final Date proposed = new Date(proposedValue);
+                final ObjectAdapter proposedAdapter = adapterFor(proposed);
+                final String reasonIfAny = scalarModel.validate(proposedAdapter);
+                if (reasonIfAny != null) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(reasonIfAny);
+                    validatable.error(error);
+                }
+            }
+        });
+    }
+
+    private ObjectAdapter adapterFor(final Object pojo) {
+        return getPersistenceSession().getAdapterManager().adapterFor(pojo);
+    }
 }

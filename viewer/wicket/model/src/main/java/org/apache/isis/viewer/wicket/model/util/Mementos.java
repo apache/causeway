@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,74 +38,76 @@ import com.google.common.base.Function;
 
 public final class Mementos {
 
-	private Mementos(){}
+    private Mementos() {
+    }
 
-	public static Function<ObjectSpecification, SpecMemento> fromSpec() {
-		return new Function<ObjectSpecification, SpecMemento>() {
-			
-			public SpecMemento apply(ObjectSpecification from) {
-				return new SpecMemento(from);
-			}
-		};
-	}
+    public static Function<ObjectSpecification, SpecMemento> fromSpec() {
+        return new Function<ObjectSpecification, SpecMemento>() {
 
-	public static Function<OneToOneAssociation, PropertyMemento> fromProperty() {
-		return new Function<OneToOneAssociation, PropertyMemento>() {
-			public PropertyMemento apply(
-					OneToOneAssociation from) {
-				return new PropertyMemento(from);
-			}
-		};
-	}
-	
-	public static Function<OneToManyAssociation, CollectionMemento> fromCollection() {
-		return new Function<OneToManyAssociation, CollectionMemento>() {
-			public CollectionMemento apply(
-					OneToManyAssociation from) {
-				return new CollectionMemento(from);
-			}
-		};
-	}
-	
-	public static Function<ObjectAction, ActionMemento> fromAction() {
-		return new Function<ObjectAction, ActionMemento>() {
-			public ActionMemento apply(
-					ObjectAction from) {
-				return new ActionMemento(from);
-			}
-		};
-	}
-	
-	public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
-		return new Function<ObjectActionParameter, ActionParameterMemento>() {
-			public ActionParameterMemento apply(
-					ObjectActionParameter from) {
-				return new ActionParameterMemento(from);
-			}
-		};
-	}
+            @Override
+            public SpecMemento apply(final ObjectSpecification from) {
+                return new SpecMemento(from);
+            }
+        };
+    }
 
-	public static Function<Object, ObjectAdapterMemento> fromPojo() {
-		return new Function<Object, ObjectAdapterMemento>() {
-			public ObjectAdapterMemento apply(Object pojo) {
-				ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
-				return ObjectAdapterMemento.createOrNull(adapter);
-			}
-		};
-	}
+    public static Function<OneToOneAssociation, PropertyMemento> fromProperty() {
+        return new Function<OneToOneAssociation, PropertyMemento>() {
+            @Override
+            public PropertyMemento apply(final OneToOneAssociation from) {
+                return new PropertyMemento(from);
+            }
+        };
+    }
 
+    public static Function<OneToManyAssociation, CollectionMemento> fromCollection() {
+        return new Function<OneToManyAssociation, CollectionMemento>() {
+            @Override
+            public CollectionMemento apply(final OneToManyAssociation from) {
+                return new CollectionMemento(from);
+            }
+        };
+    }
 
-	   public static Function<ObjectAdapter, ObjectAdapterMemento> fromAdapter() {
-	        return new Function<ObjectAdapter, ObjectAdapterMemento>() {
-	            public ObjectAdapterMemento apply(ObjectAdapter adapter) {
-	                return ObjectAdapterMemento.createOrNull(adapter);
-	            }
-	        };
-	    }
+    public static Function<ObjectAction, ActionMemento> fromAction() {
+        return new Function<ObjectAction, ActionMemento>() {
+            @Override
+            public ActionMemento apply(final ObjectAction from) {
+                return new ActionMemento(from);
+            }
+        };
+    }
 
+    public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
+        return new Function<ObjectActionParameter, ActionParameterMemento>() {
+            @Override
+            public ActionParameterMemento apply(final ObjectActionParameter from) {
+                return new ActionParameterMemento(from);
+            }
+        };
+    }
 
-	private static AdapterManager getAdapterManager() {
-		return IsisContext.getPersistenceSession().getAdapterManager();
-	}
+    public static Function<Object, ObjectAdapterMemento> fromPojo() {
+        return new Function<Object, ObjectAdapterMemento>() {
+            @Override
+            public ObjectAdapterMemento apply(final Object pojo) {
+                final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+                return ObjectAdapterMemento.createOrNull(adapter);
+            }
+        };
+    }
+
+    public static Function<ObjectAdapter, ObjectAdapterMemento> fromAdapter() {
+        return new Function<ObjectAdapter, ObjectAdapterMemento>() {
+            @Override
+            public ObjectAdapterMemento apply(final ObjectAdapter adapter) {
+                return ObjectAdapterMemento.createOrNull(adapter);
+            }
+        };
+    }
+
+    private static AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
+    }
 
 }

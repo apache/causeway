@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.lang.annotation.ElementType;
@@ -31,7 +30,7 @@ import com.google.inject.BindingAnnotation;
  * Names the injection of a string representing the default application CSS link to be included.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ ElementType.FIELD })
 @BindingAnnotation
 public @interface ApplicationCssUrl {
 

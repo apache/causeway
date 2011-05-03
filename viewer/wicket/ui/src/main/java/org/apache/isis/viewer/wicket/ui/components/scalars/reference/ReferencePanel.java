@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,116 +38,110 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class ReferencePanel extends ScalarPanelAbstract {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-	private static final String ID_SCALAR_NAME = "scalarName";
-	private static final String ID_FEEDBACK = "feedback";
-	
-	private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
+    private static final long serialVersionUID = 1L;
 
-	private EntityLink entityLink;
+    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
+    private static final String ID_SCALAR_NAME = "scalarName";
+    private static final String ID_FEEDBACK = "feedback";
 
+    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-	public ReferencePanel(String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-	}
+    private EntityLink entityLink;
 
+    public ReferencePanel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+    }
 
-	@Override
-	protected void onBeforeRenderWhenEnabled() {
-		super.onBeforeRenderWhenEnabled();
-		entityLink.setEnabled(true);
-		entityLink.syncFindUsingVisibility();
-	}
-	
-	@Override
-	protected void onBeforeRenderWhenViewMode() {
-		super.onBeforeRenderWhenViewMode();
-		entityLink.setEnabled(false);
-		entityLink.syncFindUsingVisibility();
-	}
-	
-	@Override
-	protected void onBeforeRenderWhenDisabled(String disableReason) {
-		super.onBeforeRenderWhenDisabled(disableReason);
-		entityLink.setEnabled(false);
-		entityLink.syncFindUsingVisibility();
-	}
+    @Override
+    protected void onBeforeRenderWhenEnabled() {
+        super.onBeforeRenderWhenEnabled();
+        entityLink.setEnabled(true);
+        entityLink.syncFindUsingVisibility();
+    }
 
-	protected FormComponentLabel addComponentForRegular() {
-		ScalarModel scalarModel = getModel();
-		String name = scalarModel.getName();
+    @Override
+    protected void onBeforeRenderWhenViewMode() {
+        super.onBeforeRenderWhenViewMode();
+        entityLink.setEnabled(false);
+        entityLink.syncFindUsingVisibility();
+    }
 
-		
-		entityLink = (EntityLink) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
-		
-		entityLink.setOutputMarkupId(true);
-		entityLink.setLabel(Model.of(name));
+    @Override
+    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+        super.onBeforeRenderWhenDisabled(disableReason);
+        entityLink.setEnabled(false);
+        entityLink.syncFindUsingVisibility();
+    }
 
-		FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR,entityLink);
+    @Override
+    protected FormComponentLabel addComponentForRegular() {
+        final ScalarModel scalarModel = getModel();
+        final String name = scalarModel.getName();
 
-		labelIfRegular.add(entityLink);
-		Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(entityLink));
-		labelIfRegular.add(scalarName);
+        entityLink = (EntityLink) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
 
-		addOrReplace(labelIfRegular);
-		
-		addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
+        entityLink.setOutputMarkupId(true);
+        entityLink.setLabel(Model.of(name));
 
-		
-		addStandardSemantics();
-		addSemantics();
+        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
 
-		return labelIfRegular;
-	}
+        labelIfRegular.add(entityLink);
+        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(entityLink));
+        labelIfRegular.add(scalarName);
 
+        addOrReplace(labelIfRegular);
 
-	protected void addStandardSemantics() {
-		setRequiredIfSpecified();
-	}
+        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
 
-	private void setRequiredIfSpecified() {
-		ScalarModel scalarModel = getModel();
-		boolean required = scalarModel.isRequired();
-		entityLink.setRequired(required);
-	}
+        addStandardSemantics();
+        addSemantics();
 
-	protected void addSemantics() {
-		
-		addObjectAdapterValidator();
-	}
-	
-	private void addObjectAdapterValidator() {
-		final ScalarModel scalarModel = getModel();
+        return labelIfRegular;
+    }
 
-		entityLink.add(new IValidator<ObjectAdapter>() {
-			
-			private static final long serialVersionUID = 1L;
+    protected void addStandardSemantics() {
+        setRequiredIfSpecified();
+    }
 
-			@Override
-			public void validate(IValidatable<ObjectAdapter> validatable) {
-				ObjectAdapter proposedAdapter = validatable.getValue();
-				String reasonIfAny = scalarModel.validate(proposedAdapter);
-				if (reasonIfAny != null) {
-					ValidationError error = new ValidationError();
-					error.setMessage(reasonIfAny);
-					validatable.error(error);
-				}
-			}
-		});
-	}
+    private void setRequiredIfSpecified() {
+        final ScalarModel scalarModel = getModel();
+        final boolean required = scalarModel.isRequired();
+        entityLink.setRequired(required);
+    }
 
+    protected void addSemantics() {
 
-	/**
-	 * Mandatory hook method to build the component to render the model
-	 * when in {@link Format#COMPACT compact} format.
-	 */
-	protected Component addComponentForCompact() {
-		Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-		addOrReplace(labelIfCompact);
-		return labelIfCompact;
-	}
+        addObjectAdapterValidator();
+    }
 
+    private void addObjectAdapterValidator() {
+        final ScalarModel scalarModel = getModel();
+
+        entityLink.add(new IValidator<ObjectAdapter>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void validate(final IValidatable<ObjectAdapter> validatable) {
+                final ObjectAdapter proposedAdapter = validatable.getValue();
+                final String reasonIfAny = scalarModel.validate(proposedAdapter);
+                if (reasonIfAny != null) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(reasonIfAny);
+                    validatable.error(error);
+                }
+            }
+        });
+    }
+
+    /**
+     * Mandatory hook method to build the component to render the model when in {@link Format#COMPACT compact} format.
+     */
+    @Override
+    protected Component addComponentForCompact() {
+        final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+        addOrReplace(labelIfCompact);
+        return labelIfCompact;
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import org.apache.wicket.Page;
@@ -27,9 +26,9 @@ import org.apache.wicket.Page;
  */
 public interface PageClassRegistry {
 
-	/**
-	 * Used by <tt>WicketObjectsApplication</tt> to lookup pages from the registry.
-	 */
-	public Class<? extends Page> getPageClass(PageType pageType);
-	
+    /**
+     * Used by <tt>WicketObjectsApplication</tt> to lookup pages from the registry.
+     */
+    public Class<? extends Page> getPageClass(PageType pageType);
+
 }

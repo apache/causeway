@@ -29,13 +29,11 @@ import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.resources.objects.TableColumnNakedObjectAssociation;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
+public final class TableColumnOneToManyAssociationAccess extends
+    TableColumnNakedObjectAssociation<OneToManyAssociation> {
 
-public final class TableColumnOneToManyAssociationAccess extends TableColumnNakedObjectAssociation<OneToManyAssociation> {
-
-    public TableColumnOneToManyAssociationAccess(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnOneToManyAssociationAccess(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("Access", session, nakedObject, resourceContext);
     }
 
@@ -47,7 +45,8 @@ public final class TableColumnOneToManyAssociationAccess extends TableColumnNake
 
         final String contextPath = resourceContext.getHttpServletRequest().getContextPath();
         final String collectionId = collection.getId();
-        final String uri = MessageFormat.format("{0}/object/{1}/collection/{2}", contextPath, getOidStr(), collectionId);
+        final String uri =
+            MessageFormat.format("{0}/object/{1}/collection/{2}", contextPath, getOidStr(), collectionId);
         return xhtmlRenderer.aHref(uri, collectionId, "collection", "nakedObject", HtmlClass.COLLECTION);
     }
 

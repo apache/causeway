@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,20 +24,20 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 
 public final class AdapterFixtures {
-	
-	private Mockery context;
-	public AdapterFixtures(Mockery context) {
-		this.context = context;
-	}
 
-	public void getOid(final ObjectAdapter mockAdapter, final Object returns) {
-		context.checking(new Expectations() {
-			{
-				allowing(mockAdapter).getOid();
-				will(returnValue(returns));
-			}
-		});
-	}
+    private final Mockery context;
 
+    public AdapterFixtures(final Mockery context) {
+        this.context = context;
+    }
+
+    public void getOid(final ObjectAdapter mockAdapter, final Object returns) {
+        context.checking(new Expectations() {
+            {
+                allowing(mockAdapter).getOid();
+                will(returnValue(returns));
+            }
+        });
+    }
 
 }

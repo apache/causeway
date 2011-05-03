@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,45 +34,47 @@ import org.apache.wicket.markup.html.link.Link;
 
 final class FindUsingLinkFactory implements CssMenuLinkFactory {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final EntityLink entityLink;
+    private static final long serialVersionUID = 1L;
 
-	FindUsingLinkFactory(EntityLink entityLink) {
-		this.entityLink = entityLink;
-	}
+    private final EntityLink entityLink;
 
-	public LinkAndLabel newLink(ObjectAdapterMemento adapterMemento,
-			ObjectAction action, final String linkId) {
-		final ActionMemento actionMemento = new ActionMemento(action);
-		final ActionModel.Mode actionMode = ActionModel.determineMode(action);
-		final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.SELECT);
-		
-		actionModel.setSelectionHandler(new SelectionHandler() {
-			private static final long serialVersionUID = 1L;
+    FindUsingLinkFactory(final EntityLink entityLink) {
+        this.entityLink = entityLink;
+    }
 
-			@Override
-			public void onSelected(Component context, ObjectAdapter selectedAdapter) {
-				entityLink.onSelected(selectedAdapter);
-			}
-		});
-		actionModel.setNoResultsHandler(new NoResultsHandler() {
-			private static final long serialVersionUID = 1L;
+    @Override
+    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action,
+        final String linkId) {
+        final ActionMemento actionMemento = new ActionMemento(action);
+        final ActionModel.Mode actionMode = ActionModel.determineMode(action);
+        final ActionModel actionModel =
+            ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.SELECT);
 
-			@Override
-			public void onNoResults(Component context) {
-				entityLink.onNoResults();
-			}
-		});
+        actionModel.setSelectionHandler(new SelectionHandler() {
+            private static final long serialVersionUID = 1L;
 
-		return new LinkAndLabel(new Link<String>(linkId) {
-			private static final long serialVersionUID = 1L;
+            @Override
+            public void onSelected(final Component context, final ObjectAdapter selectedAdapter) {
+                entityLink.onSelected(selectedAdapter);
+            }
+        });
+        actionModel.setNoResultsHandler(new NoResultsHandler() {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onClick() {
-				entityLink.onClick(actionModel);
-			}
-		}, Actions.labelFor(action));
-	}
-	
+            @Override
+            public void onNoResults(final Component context) {
+                entityLink.onNoResults();
+            }
+        });
+
+        return new LinkAndLabel(new Link<String>(linkId) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                entityLink.onClick(actionModel);
+            }
+        }, Actions.labelFor(action));
+    }
+
 }

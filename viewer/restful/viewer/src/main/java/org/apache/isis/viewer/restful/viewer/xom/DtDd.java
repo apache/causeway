@@ -23,7 +23,6 @@ package org.apache.isis.viewer.restful.viewer.xom;
 
 import nu.xom.Element;
 
-
 public class DtDd {
     final Element dt;
     final Element dd;

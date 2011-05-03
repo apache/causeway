@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
@@ -27,50 +26,49 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 /**
- * {@link Serializable} representation of a {@link ObjectActioneter parameter}
- * of a {@link ObjecObjectActionsee ActionMemento
+ * {@link Serializable} representation of a {@link ObjectActioneter parameter} of a {@link ObjecObjectActionsee
+ * ActionMemento
  */
 public class ActionParameterMemento implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ActionMemento actionMemento;
-	private int number;
+    private final ActionMemento actionMemento;
+    private final int number;
 
-	private transient ObjectActionParameter actionParameter;
-	
-	public ActionParameterMemento(ActionMemento actionMemento, int number) {
-		this.actionMemento = actionMemento;
-		this.number = number;
-	}
-	
-	public ActionParameterMemento(ObjectActionParameter actionParameter) {
-		this(new ActionMemento(actionParameter.getAction()), actionParameter.getNumber());
-		this.actionParameter = actionParameter;
-	}
-	
-	public ActionMemento getActionMemento() {
-		return actionMemento;
-	}
-	
-	public int getNumber() {
-		return number;
-	}
-	
-	public ObjectActionParameter getActionParameter() {
-		if (actionParameter == null) {
-			ObjectAction action = actionMemento.getAction();
-			this.actionParameter = action.getParameters().get(number);
-		}
-		return actionParameter;
-	}
-	
-	/**
-	 * Convenience.
-	 */
-	public ObjectSpecification getSpecification() {
-		return getActionParameter().getSpecification();
-	}
+    private transient ObjectActionParameter actionParameter;
 
+    public ActionParameterMemento(final ActionMemento actionMemento, final int number) {
+        this.actionMemento = actionMemento;
+        this.number = number;
+    }
+
+    public ActionParameterMemento(final ObjectActionParameter actionParameter) {
+        this(new ActionMemento(actionParameter.getAction()), actionParameter.getNumber());
+        this.actionParameter = actionParameter;
+    }
+
+    public ActionMemento getActionMemento() {
+        return actionMemento;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public ObjectActionParameter getActionParameter() {
+        if (actionParameter == null) {
+            final ObjectAction action = actionMemento.getAction();
+            this.actionParameter = action.getParameters().get(number);
+        }
+        return actionParameter;
+    }
+
+    /**
+     * Convenience.
+     */
+    public ObjectSpecification getSpecification() {
+        return getActionParameter().getSpecification();
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -34,24 +33,25 @@ import org.apache.wicket.model.IModel;
  */
 public class ReferencePanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ReferencePanelFactory() {
-		super(ComponentType.SCALAR_NAME_AND_VALUE);
-	}
+    public ReferencePanelFactory() {
+        super(ComponentType.SCALAR_NAME_AND_VALUE);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof ScalarModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		ScalarModel scalarModel = (ScalarModel) model;
-		ObjectSpecification specification = scalarModel.getTypeOfSpecification();
-		return appliesIf(!specification.containsFacet(ValueFacet.class));
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof ScalarModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final ScalarModel scalarModel = (ScalarModel) model;
+        final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
+        return appliesIf(!specification.containsFacet(ValueFacet.class));
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		ScalarModel scalarModel = (ScalarModel) model;
-		return new ReferencePanel(id, scalarModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final ScalarModel scalarModel = (ScalarModel) model;
+        return new ReferencePanel(id, scalarModel);
+    }
 }

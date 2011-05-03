@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.util.Arrays;
@@ -46,107 +45,102 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class PageAbstract extends WebPage {
 
-	public static final String ID_MENU_LINK = "menuLink";
-	
-	private List<ComponentType> childComponentIds;
-	private PageParameters pageParameters;
+    public static final String ID_MENU_LINK = "menuLink";
 
-	public PageAbstract(PageParameters pageParameters, final ComponentType... childComponentIds) {
-		addApplicationActionsComponent();
-		this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
-		this.pageParameters = pageParameters;
-	}
-	
-	
-	/**
-	 * As provided in the {@link #PageAbstract(ComponentType) constructor}.
-	 * 
-	 * <p>
-	 * This superclass doesn't do anything with this property directly, but requiring it to
-	 * be provided enforces standardization of the implementation of the subclasses.
-	 */
-	public List<ComponentType> getChildModelTypes() {
-		return childComponentIds;
-	}
-	
+    private final List<ComponentType> childComponentIds;
+    private final PageParameters pageParameters;
 
-	@Override
-	public PageParameters getPageParameters() {
-		return pageParameters;
-	}
-	
+    public PageAbstract(final PageParameters pageParameters, final ComponentType... childComponentIds) {
+        addApplicationActionsComponent();
+        this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+        this.pageParameters = pageParameters;
+    }
 
-	private void addApplicationActionsComponent() {
-		ApplicationActionsModel model = new ApplicationActionsModel();
-		addComponent(ComponentType.APPLICATION_ACTIONS, model);
-	}
+    /**
+     * As provided in the {@link #PageAbstract(ComponentType) constructor}.
+     * 
+     * <p>
+     * This superclass doesn't do anything with this property directly, but requiring it to be provided enforces
+     * standardization of the implementation of the subclasses.
+     */
+    public List<ComponentType> getChildModelTypes() {
+        return childComponentIds;
+    }
 
-	/**
-	 * For subclasses to call.
-	 * 
-	 * <p>
-	 * Should be called in the subclass' constructor.
-	 * 
-	 * @param model - used to find the best matching {@link ComponentFactory} to render the model.
-	 */
-	protected void addChildComponents(IModel<?> model) {
-		for (ComponentType componentType : getChildModelTypes()) {
-			addComponent(componentType, model);
-		}
-	}
+    @Override
+    public PageParameters getPageParameters() {
+        return pageParameters;
+    }
 
-	private void addComponent(ComponentType componentType, IModel<?> model) {
-		getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
-	}
+    private void addApplicationActionsComponent() {
+        final ApplicationActionsModel model = new ApplicationActionsModel();
+        addComponent(ComponentType.APPLICATION_ACTIONS, model);
+    }
 
-	
-	@Override
-	protected void onRender(MarkupStream markupStream) {
-		super.onRender(markupStream);
-	}
-	
-	/**
-	 * Renders the application-supplied CSS, if any.
-	 */
-	@Override
-	public void renderHead(HtmlHeaderContainer container) {
-		super.renderHead(container);
-		final ApplicationCssRenderer applicationCssRenderer = getApplicationCssRenderer();
+    /**
+     * For subclasses to call.
+     * 
+     * <p>
+     * Should be called in the subclass' constructor.
+     * 
+     * @param model
+     *            - used to find the best matching {@link ComponentFactory} to render the model.
+     */
+    protected void addChildComponents(final IModel<?> model) {
+        for (final ComponentType componentType : getChildModelTypes()) {
+            addComponent(componentType, model);
+        }
+    }
+
+    private void addComponent(final ComponentType componentType, final IModel<?> model) {
+        getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
+    }
+
+    @Override
+    protected void onRender(final MarkupStream markupStream) {
+        super.onRender(markupStream);
+    }
+
+    /**
+     * Renders the application-supplied CSS, if any.
+     */
+    @Override
+    public void renderHead(final HtmlHeaderContainer container) {
+        super.renderHead(container);
+        final ApplicationCssRenderer applicationCssRenderer = getApplicationCssRenderer();
         applicationCssRenderer.renderApplicationCss(container);
-	}
+    }
 
+    // ///////////////////////////////////////////////////////////////////
+    // Convenience
+    // ///////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////
-	// Convenience
-	/////////////////////////////////////////////////////////////////////
-
-	protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-		final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
+    protected ComponentFactoryRegistry getComponentFactoryRegistry() {
+        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
-	}
+    }
 
     protected ApplicationCssRenderer getApplicationCssRenderer() {
         return (ApplicationCssRenderer) getApplication();
     }
-    
 
-	/////////////////////////////////////////////////////
-	// System components
-	/////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
+    // System components
+    // ///////////////////////////////////////////////////
 
-	protected ServicesInjector getServicesInjector() {
-		return getPersistenceSession().getServicesInjector();
-	}
-	
-	protected PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    protected ServicesInjector getServicesInjector() {
+        return getPersistenceSession().getServicesInjector();
+    }
 
-	protected OidStringifier getOidStringifier() {
-		return getPersistenceSession().getOidGenerator().getOidStringifier();
-	}
-	
-	protected SpecificationLoader getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected OidStringifier getOidStringifier() {
+        return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 }

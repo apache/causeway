@@ -17,11 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
-
-
-import com.google.common.base.Predicate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
@@ -29,21 +25,24 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import com.google.common.base.Predicate;
+
 public final class Actions {
 
-	private Actions(){}
-	
-	public static Predicate<ObjectAction> ofType(
-			final ActionType type) {
-		return new Predicate<ObjectAction>(){
-			@Override
-            public boolean apply(ObjectAction input) {
-				return input.getType() == type;
-			}};
-	}
+    private Actions() {
+    }
+
+    public static Predicate<ObjectAction> ofType(final ActionType type) {
+        return new Predicate<ObjectAction>() {
+            @Override
+            public boolean apply(final ObjectAction input) {
+                return input.getType() == type;
+            }
+        };
+    }
 
     public static String labelFor(final ObjectAction noAction) {
-        String actionName = Actions.nameFor(noAction);
+        final String actionName = Actions.nameFor(noAction);
         String actionLabel = actionName;
         if (noAction.getParameterCount() > 0) {
             actionLabel += "...";
@@ -51,9 +50,8 @@ public final class Actions {
         return actionLabel;
     }
 
-    public static String labelFor(ObjectAction action,
-            final ObjectAdapter contextAdapter) {
-        if(action.getParameterCount() == 1) {
+    public static String labelFor(final ObjectAction action, final ObjectAdapter contextAdapter) {
+        if (action.getParameterCount() == 1) {
             final ObjectActionParameter actionParam = action.getParameters().get(0);
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
                 return nameFor(action);
@@ -61,17 +59,17 @@ public final class Actions {
         }
         return labelFor(action);
     }
-    
+
     private static String nameFor(final ObjectAction noAction) {
-        String actionName = noAction.getName();
+        final String actionName = noAction.getName();
         if (actionName != null) {
             return actionName;
-        } 
-        NamedFacet namedFacet = noAction.getFacet(NamedFacet.class);
+        }
+        final NamedFacet namedFacet = noAction.getFacet(NamedFacet.class);
         if (namedFacet != null) {
             return namedFacet.value();
         }
-        return  "(no name)";
+        return "(no name)";
     }
 
 }

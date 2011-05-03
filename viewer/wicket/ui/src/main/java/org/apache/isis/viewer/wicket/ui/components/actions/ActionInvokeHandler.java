@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
 public interface ActionInvokeHandler {
 
-	void onClick(ActionModel actionModel);
+    void onClick(ActionModel actionModel);
 }

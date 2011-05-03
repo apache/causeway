@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.nof;
 
 import org.apache.isis.runtimes.dflt.runtime.system.ContextCategory;
@@ -27,17 +26,16 @@ import org.apache.isis.runtimes.dflt.runtime.system.Splash;
 import org.apache.wicket.Application;
 
 /**
- * Simple adapter for Isis' {@link DeploymentType} class,
- * specifying that the {@link IsisContextForWicket.WicketContextCategory}
- * is used as the {@link ContextCategory}.
+ * Simple adapter for Isis' {@link DeploymentType} class, specifying that the
+ * {@link IsisContextForWicket.WicketContextCategory} is used as the {@link ContextCategory}.
  * 
  * <p>
  * TODO: should somehow tie this in with Wicket's own {@link Application#getConfigurationType() configuration mode}.
  */
 public abstract class DeploymentTypeAbstract extends DeploymentType {
 
-	public DeploymentTypeAbstract(String name, DeploymentCategory category) {
-		super(name, category, new IsisContextForWicket.WicketContextCategory(), null, Splash.NO_SHOW);
-	}
+    public DeploymentTypeAbstract(final String name, final DeploymentCategory category) {
+        super(name, category, new IsisContextForWicket.WicketContextCategory(), null, Splash.NO_SHOW);
+    }
 
 }

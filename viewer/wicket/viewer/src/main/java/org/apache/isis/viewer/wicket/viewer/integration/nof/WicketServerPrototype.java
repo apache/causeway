@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.nof;
 
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
@@ -28,8 +27,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
  */
 public class WicketServerPrototype extends DeploymentTypeAbstract {
 
-	public WicketServerPrototype() {
-		super("WICKET_SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
-	}
+    public WicketServerPrototype() {
+        super("WICKET_SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
+    }
 
 }

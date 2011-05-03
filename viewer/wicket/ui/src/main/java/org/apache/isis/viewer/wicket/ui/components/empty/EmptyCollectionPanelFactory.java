@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.empty;
 
 import org.apache.isis.viewer.wicket.model.common.NoResultsHandler;
@@ -28,31 +27,30 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-public class EmptyCollectionPanelFactory extends ComponentFactoryAbstract implements
-		ComponentFactory {
+public class EmptyCollectionPanelFactory extends ComponentFactoryAbstract implements ComponentFactory {
 
-	private static final long serialVersionUID = 1L;
-	
-	public EmptyCollectionPanelFactory() {
-		super(ComponentType.EMPTY_COLLECTION);
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof ActionModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		ActionModel actionModel = (ActionModel) model;
-		
-		final NoResultsHandler hasNoResultsHandler = actionModel.getNoResultsHandler();
-		// fail fast if a NoResultsHandler has not been specified
-		return appliesIf(hasNoResultsHandler != null);
-	}
-	
-	@Override
-	public Component createComponent(String id, IModel<?> model) {
-		ActionModel actionModel = (ActionModel) model;
-		return new EmptyCollectionPanel(id, actionModel);
-	}
+    public EmptyCollectionPanelFactory() {
+        super(ComponentType.EMPTY_COLLECTION);
+    }
+
+    @Override
+    protected ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof ActionModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final ActionModel actionModel = (ActionModel) model;
+
+        final NoResultsHandler hasNoResultsHandler = actionModel.getNoResultsHandler();
+        // fail fast if a NoResultsHandler has not been specified
+        return appliesIf(hasNoResultsHandler != null);
+    }
+
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final ActionModel actionModel = (ActionModel) model;
+        return new EmptyCollectionPanel(id, actionModel);
+    }
 
 }

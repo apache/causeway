@@ -17,44 +17,40 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.models;
-
 
 /**
  * Model providing welcome text.
  */
 public class WelcomeModel extends ModelAbstract<String> {
-	
-	private static final long serialVersionUID = 1L;
 
-	private static final String DEFAULT_MESSAGE = 
-		"Apache Isis' Wicket Viewer combines the power of Apache Wicket " +
-		"for web UIs with Apache Isis for domain modelling.  " +
-		"Out-of-the box you get a fully-functional webapp just from " +
-		"your domain objects; you can then customize the UI by " +
-		"writing custom Wicket components, replacing the page layouts or " +
-		"simply by altering the CSS";
-	
-	private String welcomeMessage;
+    private static final long serialVersionUID = 1L;
 
-	public WelcomeModel(final String welcomeMessage) {
-		this.welcomeMessage = welcomeMessage;
-	}
+    private static final String DEFAULT_MESSAGE = "Apache Isis' Wicket Viewer combines the power of Apache Wicket "
+        + "for web UIs with Apache Isis for domain modelling.  "
+        + "Out-of-the box you get a fully-functional webapp just from "
+        + "your domain objects; you can then customize the UI by "
+        + "writing custom Wicket components, replacing the page layouts or " + "simply by altering the CSS";
 
-	public WelcomeModel() {
-		this(DEFAULT_MESSAGE);
-	}
+    private String welcomeMessage;
 
-	@Override
-	protected String load() {
-		return welcomeMessage;
-	}
+    public WelcomeModel(final String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
 
-	@Override
-	public void setObject(String welcomeMessage) {
-		super.setObject(welcomeMessage);
-		this.welcomeMessage = welcomeMessage;
-	}
-	
+    public WelcomeModel() {
+        this(DEFAULT_MESSAGE);
+    }
+
+    @Override
+    protected String load() {
+        return welcomeMessage;
+    }
+
+    @Override
+    public void setObject(final String welcomeMessage) {
+        super.setObject(welcomeMessage);
+        this.welcomeMessage = welcomeMessage;
+    }
+
 }

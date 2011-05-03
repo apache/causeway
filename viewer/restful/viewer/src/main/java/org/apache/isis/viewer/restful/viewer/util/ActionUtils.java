@@ -20,16 +20,16 @@ package org.apache.isis.viewer.restful.viewer.util;
 
 import java.util.List;
 
-import com.google.inject.internal.Lists;
-
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
+import com.google.inject.internal.Lists;
 
 public final class ActionUtils {
 
-    private ActionUtils() {}
+    private ActionUtils() {
+    }
 
     public static List<ObjectAction> flattened(final List<ObjectAction> objectActions) {
         final List<ObjectAction> actions = Lists.newArrayList();

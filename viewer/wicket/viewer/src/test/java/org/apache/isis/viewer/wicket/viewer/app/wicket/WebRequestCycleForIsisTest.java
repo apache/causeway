@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.junit.Assert.fail;
@@ -32,47 +31,47 @@ import org.junit.Test;
 
 public class WebRequestCycleForIsisTest extends AbstractJMockForClassesTest {
 
-	@Ignore
-	@Test
-	public void testOnBeginRequest() {
+    @Ignore
+    @Test
+    public void testOnBeginRequest() {
         fail("Not yet implemented");
-	}
+    }
 
-	@Ignore
-	@Test
-	public void testOnEndRequest() {
-		fail("Not yet implemented");
-	}
+    @Ignore
+    @Test
+    public void testOnEndRequest() {
+        fail("Not yet implemented");
+    }
 
-	@Test
-	public void testIsisWebRequestCycle() {
-		final WebApplication mockApplication = context.mockAndIgnoreAnyInteraction(WebApplication.class);
-		final WebRequest mockRequest = context.mock(WebRequest.class);
-		final Response mockResponse = context.mock(Response.class);
-		new WebRequestCycleForIsis(mockApplication, mockRequest, mockResponse);
-	}
+    @Test
+    public void testIsisWebRequestCycle() {
+        final WebApplication mockApplication = context.mockAndIgnoreAnyInteraction(WebApplication.class);
+        final WebRequest mockRequest = context.mock(WebRequest.class);
+        final Response mockResponse = context.mock(Response.class);
+        new WebRequestCycleForIsis(mockApplication, mockRequest, mockResponse);
+    }
 
-	@Ignore("downcast")
-	@Test
-	public void testGetWebSession() {
-	}
+    @Ignore("downcast")
+    @Test
+    public void testGetWebSession() {
+    }
 
-	@Ignore
-	@Test
-	public void testGetIsisContext() {
-		fail("Not yet implemented");
-	}
+    @Ignore
+    @Test
+    public void testGetIsisContext() {
+        fail("Not yet implemented");
+    }
 
-	@Ignore
-	@Test
-	public void testNewClientInfo() {
-		fail("Not yet implemented");
-	}
+    @Ignore
+    @Test
+    public void testNewClientInfo() {
+        fail("Not yet implemented");
+    }
 
-	@Ignore
-	@Test
-	public void testGetTransactionManager() {
-		fail("Not yet implemented");
-	}
+    @Ignore
+    @Test
+    public void testGetTransactionManager() {
+        fail("Not yet implemented");
+    }
 
 }

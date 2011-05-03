@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
-
-import com.google.inject.AbstractModule;
 
 import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
@@ -32,6 +29,8 @@ import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFacto
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
+
+import com.google.inject.AbstractModule;
 
 public class IsisWicketModule extends AbstractModule {
 

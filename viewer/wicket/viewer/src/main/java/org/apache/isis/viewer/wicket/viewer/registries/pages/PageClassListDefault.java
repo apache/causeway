@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -32,18 +31,17 @@ import org.apache.isis.viewer.wicket.viewer.login.WicketSignOutPage;
 import com.google.inject.Singleton;
 
 /**
- * Default implementation of {@link PageClassList}, specifying the
- * default pages for each of the {@link PageType}s.
+ * Default implementation of {@link PageClassList}, specifying the default pages for each of the {@link PageType}s.
  */
 @Singleton
-public class PageClassListDefault implements PageClassList  {
+public class PageClassListDefault implements PageClassList {
 
-	@Override
-	public void registerPages(PageRegistrySpi pageRegistry) {
-		pageRegistry.registerPage(PageType.SIGN_IN, WicketSignInPage.class);
-		pageRegistry.registerPage(PageType.SIGN_OUT, WicketSignOutPage.class);
-		pageRegistry.registerPage(PageType.ENTITY, EntityPage.class);
-		pageRegistry.registerPage(PageType.HOME, HomePage.class);
-		pageRegistry.registerPage(PageType.ACTION, ActionPage.class);
-	}
+    @Override
+    public void registerPages(final PageRegistrySpi pageRegistry) {
+        pageRegistry.registerPage(PageType.SIGN_IN, WicketSignInPage.class);
+        pageRegistry.registerPage(PageType.SIGN_OUT, WicketSignOutPage.class);
+        pageRegistry.registerPage(PageType.ENTITY, EntityPage.class);
+        pageRegistry.registerPage(PageType.HOME, HomePage.class);
+        pageRegistry.registerPage(PageType.ACTION, ActionPage.class);
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.io.Serializable;
@@ -34,18 +33,21 @@ public interface CssMenuLinkFactory extends Serializable {
     public class LinkAndLabel {
         private final Link<?> link;
         private final String label;
-        public LinkAndLabel(Link<?> link, String label) {
+
+        public LinkAndLabel(final Link<?> link, final String label) {
             this.link = link;
             this.label = label;
         }
+
         public Link<?> getLink() {
             return link;
         }
+
         public String getLabel() {
             return label;
         }
     }
-    
-	LinkAndLabel newLink(ObjectAdapterMemento adapter, ObjectAction noAction, String linkId);
+
+    LinkAndLabel newLink(ObjectAdapterMemento adapter, ObjectAction noAction, String linkId);
 
 }

@@ -28,14 +28,11 @@ import org.apache.isis.viewer.restful.viewer.resources.objects.TableColumnNakedO
 import org.apache.isis.viewer.restful.viewer.util.StringUtil;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnOneToManyAssociationRemoveFrom extends
-        TableColumnNakedObjectAssociationModifyAbstract<OneToManyAssociation> {
+    TableColumnNakedObjectAssociationModifyAbstract<OneToManyAssociation> {
 
-    public TableColumnOneToManyAssociationRemoveFrom(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnOneToManyAssociationRemoveFrom(final AuthenticationSession session,
+        final ObjectAdapter nakedObject, final ResourceContext resourceContext) {
         super("RemoveFrom", session, nakedObject, resourceContext);
     }
 
@@ -55,8 +52,7 @@ public final class TableColumnOneToManyAssociationRemoveFrom extends
     }
 
     /**
-     * Calls the <tt>removeFromCollection()</tt> Javascript function that lives in
-     * <tt>nof-rest-support.js</tt>
+     * Calls the <tt>removeFromCollection()</tt> Javascript function that lives in <tt>nof-rest-support.js</tt>
      * 
      * @param url
      * @param associationId
@@ -66,8 +62,8 @@ public final class TableColumnOneToManyAssociationRemoveFrom extends
      */
     @Override
     protected String invokeJavascript(final String url, final String associationId, final String inputFieldName) {
-        return MessageFormat.format("removeFromCollection({0}, {1}, {2}.value);", StringUtil.quote(url), StringUtil
-                .quote(associationId), inputFieldName);
+        return MessageFormat.format("removeFromCollection({0}, {1}, {2}.value);", StringUtil.quote(url),
+            StringUtil.quote(associationId), inputFieldName);
     }
 
 }

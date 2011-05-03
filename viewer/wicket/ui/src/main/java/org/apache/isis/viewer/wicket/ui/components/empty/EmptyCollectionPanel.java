@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.empty;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -27,24 +26,24 @@ import org.apache.wicket.model.Model;
 
 public class EmptyCollectionPanel extends PanelAbstract<ActionModel> {
 
-	private static final long serialVersionUID = 1L;
-	
-	public EmptyCollectionPanel(String id, final ActionModel model) {
-		super(id, model);
-		buildGui(id);
-	}
-	
-	private void buildGui(String id) {
-		final ActionModel model = getModel();
-		addOrReplace(new Button("ok", Model.of("OK")) { // TODO: i18n
+    private static final long serialVersionUID = 1L;
 
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public void onSubmit() {
-				model.getNoResultsHandler().onNoResults(this);
-			}
-		});
-	}
+    public EmptyCollectionPanel(final String id, final ActionModel model) {
+        super(id, model);
+        buildGui(id);
+    }
+
+    private void buildGui(final String id) {
+        final ActionModel model = getModel();
+        addOrReplace(new Button("ok", Model.of("OK")) { // TODO: i18n
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit() {
+                model.getNoResultsHandler().onNoResults(this);
+            }
+        });
+    }
 
 }

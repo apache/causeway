@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import static org.hamcrest.Matchers.is;
@@ -25,7 +24,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.testsupport.jmock.AbstractJMockForInterfacesTest;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.junit.Before;
@@ -35,40 +33,43 @@ import com.google.inject.Injector;
 
 public class IsisWicketApplication_init extends AbstractJMockForInterfacesTest {
 
-	private IsisWicketApplication application;
+    private IsisWicketApplication application;
 
     private ISecuritySettings mockSecuritySettings;
     private IResourceSettings mockResourceSettings;
 
-	@Before
-	public void setUp() throws Exception {
-	    mockSecuritySettings = context.mock(ISecuritySettings.class);
+    @Before
+    public void setUp() throws Exception {
+        mockSecuritySettings = context.mock(ISecuritySettings.class);
         mockResourceSettings = context.mock(IResourceSettings.class);
-	    ignoring(mockSecuritySettings);
+        ignoring(mockSecuritySettings);
         ignoring(mockResourceSettings);
-	    
-		application = new IsisWicketApplication() {
+
+        application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;
+
             @Override
             protected void initWicketComponentInjection(final Injector injector) {
                 // ignore
             }
+
             @Override
             public ISecuritySettings getSecuritySettings() {
                 return mockSecuritySettings;
             }
+
             @Override
             public IResourceSettings getResourceSettings() {
                 return mockResourceSettings;
             }
-		};
-	}
+        };
+    }
 
-	@Test
-	public void injectedApplicationCssUrl() {
-	    application.init();
-	    assertThat(application.getApplicationCssUrl(), is(notNullValue()));
-	}
+    @Test
+    public void injectedApplicationCssUrl() {
+        application.init();
+        assertThat(application.getApplicationCssUrl(), is(notNullValue()));
+    }
 
     @Test
     public void injectedComponentFactoryRegistry() {

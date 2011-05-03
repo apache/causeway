@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
@@ -27,23 +26,20 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 
-
 /**
- * Web page representing the home page (showing a welcome message). 
+ * Web page representing the home page (showing a welcome message).
  */
 @AuthorizeInstantiation("org.starobjects.wicket.roles.USER")
 public class HomePage extends PageAbstract {
-	
-	
-	public HomePage() {
-		super(new PageParameters(), ComponentType.WELCOME);
-		IModel<?> model = buildModel();
-		addChildComponents(model);
-	}
 
-	private IModel<?> buildModel() {
-		return new WelcomeModel();
-	}
-	
+    public HomePage() {
+        super(new PageParameters(), ComponentType.WELCOME);
+        final IModel<?> model = buildModel();
+        addChildComponents(model);
+    }
+
+    private IModel<?> buildModel() {
+        return new WelcomeModel();
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.app.cssrenderer;
 
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;

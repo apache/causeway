@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -36,18 +35,19 @@ import org.jmock.Mockery;
  */
 public class Fixture_Request_Stub extends MockFixtureAdapter<Request> {
 
-	public void setUp(MockFixture.Context fixtureContext) {
-		final Mockery mockery = fixtureContext.getMockery();
-		final Request mock = createMock(fixtureContext, Request.class);
-		mockery.checking(new Expectations() {
-			{
-				// must provide explicit expectation, since Locale is final.
-				allowing(mock).getLocale();
-				will(returnValue(Locale.getDefault()));
-				
-				// stub everything else out
-				ignoring(mock);
-			}
-		});
-	}
+    @Override
+    public void setUp(final MockFixture.Context fixtureContext) {
+        final Mockery mockery = fixtureContext.getMockery();
+        final Request mock = createMock(fixtureContext, Request.class);
+        mockery.checking(new Expectations() {
+            {
+                // must provide explicit expectation, since Locale is final.
+                allowing(mock).getLocale();
+                will(returnValue(Locale.getDefault()));
+
+                // stub everything else out
+                ignoring(mock);
+            }
+        });
+    }
 }

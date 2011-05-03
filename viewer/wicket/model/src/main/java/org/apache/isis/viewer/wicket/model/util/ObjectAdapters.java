@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
-
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -32,39 +30,42 @@ import com.google.common.base.Function;
 
 public final class ObjectAdapters {
 
-	private ObjectAdapters(){}
-	
-	public static Function<Object, ObjectAdapter> fromPojo() {
-		return new Function<Object, ObjectAdapter>() {
-			public ObjectAdapter apply(Object pojo) {
-				return getAdapterManager().getAdapterFor(pojo);
-			}
-		};
-	}
+    private ObjectAdapters() {
+    }
 
-	public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento() {
-		return new Function<ObjectAdapterMemento, ObjectAdapter>() {
-			public ObjectAdapter apply(ObjectAdapterMemento from) {
-				return from.getObjectAdapter();
-			}
-		};
-	}
+    public static Function<Object, ObjectAdapter> fromPojo() {
+        return new Function<Object, ObjectAdapter>() {
+            @Override
+            public ObjectAdapter apply(final Object pojo) {
+                return getAdapterManager().getAdapterFor(pojo);
+            }
+        };
+    }
 
-	public static Function<Oid, ObjectAdapter> fromOid() {
-		return new Function<Oid, ObjectAdapter>() {
-			public ObjectAdapter apply(Oid from) {
-				final ObjectAdapter adapterFor = getAdapterManager().getAdapterFor(from);
-				return adapterFor;
-			}
-		};
-	}
+    public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento() {
+        return new Function<ObjectAdapterMemento, ObjectAdapter>() {
+            @Override
+            public ObjectAdapter apply(final ObjectAdapterMemento from) {
+                return from.getObjectAdapter();
+            }
+        };
+    }
 
-	private static AdapterManager getAdapterManager() {
-		return getPersistenceSession().getAdapterManager();
-	}
+    public static Function<Oid, ObjectAdapter> fromOid() {
+        return new Function<Oid, ObjectAdapter>() {
+            @Override
+            public ObjectAdapter apply(final Oid from) {
+                final ObjectAdapter adapterFor = getAdapterManager().getAdapterFor(from);
+                return adapterFor;
+            }
+        };
+    }
 
-	private static PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    private static AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    private static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 }
-

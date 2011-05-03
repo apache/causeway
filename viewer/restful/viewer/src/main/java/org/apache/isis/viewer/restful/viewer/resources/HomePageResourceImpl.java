@@ -25,24 +25,23 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.viewer.restful.applib.resources.HomePageResource;
 import org.apache.isis.viewer.restful.viewer.html.XhtmlTemplate;
 
-
 /**
- * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than
- * the interface (at least under RestEasy 1.0.2 and 1.1-RC2).
+ * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
+ * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
 @Path("/")
 public class HomePageResourceImpl extends ResourceAbstract implements HomePageResource {
 
-	
-	@Produces(MediaType.APPLICATION_XHTML_XML)
+    @Override
+    @Produces(MediaType.APPLICATION_XHTML_XML)
     public String resources() {
         init();
         final XhtmlTemplate xhtml = new XhtmlTemplate("Home Page", getServletRequest());
-        
+
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
-        
-		return xhtml.toXML();
+
+        return xhtml.toXML();
     }
 
 }

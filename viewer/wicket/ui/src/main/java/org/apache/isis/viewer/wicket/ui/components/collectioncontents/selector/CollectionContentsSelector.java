@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -26,24 +25,21 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.selector.SelectorPanelAbstract;
 
 /**
- * Provides a drop-down for selecting other views that support 
- * {@link ComponentType#COLLECTION_CONTENTS} with a backing {@link EntityCollectionModel}. 
+ * Provides a drop-down for selecting other views that support {@link ComponentType#COLLECTION_CONTENTS} with a backing
+ * {@link EntityCollectionModel}.
  * 
  * <p>
  * Most of the heavy lifting is factored out into the superclass, {@link SelectorPanelAbstract}.
  * 
  * <p>
- * Note that this class is {@link ComponentFactoryListDefault registered} prior to
- * any other views.
+ * Note that this class is {@link ComponentFactoryListDefault registered} prior to any other views.
  */
 public class CollectionContentsSelector extends SelectorPanelAbstract<EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
-    
 
-	public CollectionContentsSelector(String id, EntityCollectionModel model,
-			ComponentFactory factory) {
-		super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
-	}
+    public CollectionContentsSelector(final String id, final EntityCollectionModel model, final ComponentFactory factory) {
+        super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
+    }
 
 }

@@ -26,29 +26,28 @@ import javax.ws.rs.core.Application;
 
 public abstract class AbstractJaxRsApplication extends Application {
 
-	private Set<Object> singletons = new LinkedHashSet<Object>();
-	private Set<Class<?>> classes = new LinkedHashSet<Class<?>>();
+    private final Set<Object> singletons = new LinkedHashSet<Object>();
+    private final Set<Class<?>> classes = new LinkedHashSet<Class<?>>();
 
-	public AbstractJaxRsApplication() {
-	}
+    public AbstractJaxRsApplication() {
+    }
 
-	@Override
-	public Set<Class<?>> getClasses() {
-		return Collections.unmodifiableSet(classes);
-	}
+    @Override
+    public Set<Class<?>> getClasses() {
+        return Collections.unmodifiableSet(classes);
+    }
 
-	@Override
-	public Set<Object> getSingletons() {
-		return Collections.unmodifiableSet(singletons);
-	}
+    @Override
+    public Set<Object> getSingletons() {
+        return Collections.unmodifiableSet(singletons);
+    }
 
-	
-	protected boolean addClass(Class<?> cls) {
-		return classes.add(cls);
-	}
-	
-	protected boolean addSingleton(Object resource) {
-		return singletons.add(resource);
-	}
+    protected boolean addClass(final Class<?> cls) {
+        return classes.add(cls);
+    }
+
+    protected boolean addSingleton(final Object resource) {
+        return singletons.add(resource);
+    }
 
 }

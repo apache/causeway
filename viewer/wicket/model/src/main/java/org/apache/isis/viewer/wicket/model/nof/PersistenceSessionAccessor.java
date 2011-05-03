@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.nof;
 
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public interface PersistenceSessionAccessor {
 
-	PersistenceSession getPersistenceSession();
+    PersistenceSession getPersistenceSession();
 }

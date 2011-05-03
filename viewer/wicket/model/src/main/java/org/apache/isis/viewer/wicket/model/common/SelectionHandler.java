@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.common;
 
 import java.io.Serializable;
@@ -30,10 +29,12 @@ import org.apache.wicket.Component;
  */
 public interface SelectionHandler extends Serializable {
 
-	/**
-	 * The entity that has been selected.
-	 * @param context TODO
-	 */
-	void onSelected(Component context, ObjectAdapter selectedAdapter);
+    /**
+     * The entity that has been selected.
+     * 
+     * @param context
+     *            TODO
+     */
+    void onSelected(Component context, ObjectAdapter selectedAdapter);
 
 }

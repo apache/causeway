@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.selector;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -32,15 +31,15 @@ import org.apache.wicket.model.IModel;
  */
 public class EntitySelectorFactory extends EntityComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntitySelectorFactory() {
-		super(ComponentType.ENTITY);
-	}
+    public EntitySelectorFactory() {
+        super(ComponentType.ENTITY);
+    }
 
-
-	public Component createComponent(String id, IModel<?> model) {
-		EntityModel entityModel = (EntityModel) model;
-		return new EntitySelector(id, entityModel, this);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntitySelector(id, entityModel, this);
+    }
 }

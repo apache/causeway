@@ -38,19 +38,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
-
 public class IsisSessionFilter implements Filter {
 
     private static final String NOF_SESSION_REQUEST_KEY = "session";
     public static final String AUTHENTICATION_MANAGER_WEBAPP_CONTEXT_KEY = "authenticationManager";
-    
+
     private static final long serialVersionUID = 1L;
     @SuppressWarnings("unused")
-	private final Logger LOG = Logger.getLogger(IsisSessionFilter.class);
+    private final Logger LOG = Logger.getLogger(IsisSessionFilter.class);
 
     /**
      * does nothing.
      */
+    @Override
     public void init(final FilterConfig config) throws ServletException {
 
     }
@@ -58,14 +58,17 @@ public class IsisSessionFilter implements Filter {
     /**
      * does nothing.
      */
-    public void destroy() {}
+    @Override
+    public void destroy() {
+    }
 
     /**
-     * If the {@link DeploymentType} of effective {@link NakedObjectsContext} is
-     * {@link DeploymentType#isExploration() exploration}, then automatically create a session.
+     * If the {@link DeploymentType} of effective {@link NakedObjectsContext} is {@link DeploymentType#isExploration()
+     * exploration}, then automatically create a session.
      */
+    @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
 
         final AuthenticationSession nofSession = getNofSession(request);
 
@@ -78,16 +81,15 @@ public class IsisSessionFilter implements Filter {
     }
 
     /**
-     * Locates the {@link Session Isis session} from the {@link HttpSession}, if available, and
-     * ensures is {@link AuthenticationManager#isSessionValid(Session) still valid}.
+     * Locates the {@link Session Isis session} from the {@link HttpSession}, if available, and ensures is
+     * {@link AuthenticationManager#isSessionValid(Session) still valid}.
      * 
      * <p>
-     * Any bound {@link Session Isis session} is bound onto the {@link HttpSession} for further
-     * requests.
+     * Any bound {@link Session Isis session} is bound onto the {@link HttpSession} for further requests.
      * 
      * <p>
-     * If no valid {@link Session Isis session} exists, then attempts to create one using
-     * <tt>user</tt> and <tt>password</tt> parameters.
+     * If no valid {@link Session Isis session} exists, then attempts to create one using <tt>user</tt> and
+     * <tt>password</tt> parameters.
      * 
      * <p>
      * Note: if running in {@link DeploymentType#isExploration() exploration mode}, then always sets up an
@@ -101,7 +103,8 @@ public class IsisSessionFilter implements Filter {
 
         final HttpSession httpSession = httpRequest.getSession(true);
 
-        final AuthenticationManager authenticationManager = (AuthenticationManager) httpSession.getServletContext().getAttribute(
+        final AuthenticationManager authenticationManager =
+            (AuthenticationManager) httpSession.getServletContext().getAttribute(
                 AUTHENTICATION_MANAGER_WEBAPP_CONTEXT_KEY);
 
         if (authenticationManager == null) {

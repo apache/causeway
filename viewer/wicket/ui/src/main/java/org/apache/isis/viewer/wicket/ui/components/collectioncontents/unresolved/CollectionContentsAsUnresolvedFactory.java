@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -32,26 +31,27 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionContentsAsUnresolvedFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String NAME = "show...";
+    private static final String NAME = "show...";
 
-	public CollectionContentsAsUnresolvedFactory() {
-		super(ComponentType.COLLECTION_CONTENTS, NAME);
-	}
+    public CollectionContentsAsUnresolvedFactory() {
+        super(ComponentType.COLLECTION_CONTENTS, NAME);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof EntityCollectionModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-        EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof EntityCollectionModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
         return appliesIf(entityCollectionModel.isParented());
-	}
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-		return new CollectionContentsAsUnresolved(id, collectionModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsAsUnresolved(id, collectionModel);
+    }
 
 }

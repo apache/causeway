@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.hamcrest.Matchers.is;
@@ -37,30 +36,31 @@ import org.apache.wicket.Request;
  */
 public class Fixture_AuthenticatedWebSessionForIsis_SignedIn extends MockFixtureAdapter<AuthenticatedWebSessionForIsis> {
 
-	private AuthenticatedWebSessionForIsis webSession;
+    private AuthenticatedWebSessionForIsis webSession;
 
-	public void setUp(MockFixture.Context fixtureContext) {
-		final FixtureMockery mockery = fixtureContext.getMockery();
-		
-		
-		final AuthenticationManager mockAuthMgr = mockery.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
-		Request stubRequest = mockery.fixture(Fixture_Request_Stub.class).object();
-		
-		webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
-			private static final long serialVersionUID = 1L;
+    @Override
+    public void setUp(final MockFixture.Context fixtureContext) {
+        final FixtureMockery mockery = fixtureContext.getMockery();
 
-			@Override
-			protected AuthenticationManager getAuthenticationManager() {
-				return mockAuthMgr;
-			}
-		};
-		webSession.signIn("john", "secret");
-		assertThat(webSession.isSignedIn(), is(true));
+        final AuthenticationManager mockAuthMgr =
+            mockery.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
+        final Request stubRequest = mockery.fixture(Fixture_Request_Stub.class).object();
 
-	}
-	
-	@Override
-	public AuthenticatedWebSessionForIsis object() {
-		return webSession;
-	}
+        webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected AuthenticationManager getAuthenticationManager() {
+                return mockAuthMgr;
+            }
+        };
+        webSession.signIn("john", "secret");
+        assertThat(webSession.isSignedIn(), is(true));
+
+    }
+
+    @Override
+    public AuthenticatedWebSessionForIsis object() {
+        return webSession;
+    }
 }

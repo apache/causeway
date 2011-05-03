@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,21 +28,21 @@ import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInst
 import org.apache.wicket.model.IModel;
 
 /**
- * Web page representing an entity. 
+ * Web page representing an entity.
  */
 @AuthorizeInstantiation("org.starobjects.wicket.roles.USER")
 public class EntityPage extends PageAbstract {
 
-	public EntityPage(PageParameters pageParameters) {
-		super(pageParameters, ComponentType.ENTITY);
-		IModel<?> model = new EntityModel(getPageParameters(), getOidStringifier());
-		addChildComponents(model);
-	}
+    public EntityPage(final PageParameters pageParameters) {
+        super(pageParameters, ComponentType.ENTITY);
+        final IModel<?> model = new EntityModel(getPageParameters(), getOidStringifier());
+        addChildComponents(model);
+    }
 
-	public EntityPage(ObjectAdapter adapter) {
-		super(new PageParameters(), ComponentType.ENTITY);
-		IModel<?> model = new EntityModel(adapter);
-		addChildComponents(model);
-	}
+    public EntityPage(final ObjectAdapter adapter) {
+        super(new PageParameters(), ComponentType.ENTITY);
+        final IModel<?> model = new EntityModel(adapter);
+        addChildComponents(model);
+    }
 
 }

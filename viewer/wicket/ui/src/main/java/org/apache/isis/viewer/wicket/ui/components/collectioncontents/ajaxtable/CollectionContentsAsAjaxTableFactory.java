@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -32,21 +31,22 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionContentsAsAjaxTableFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String NAME = "styled";
+    private static final long serialVersionUID = 1L;
 
-	public CollectionContentsAsAjaxTableFactory() {
-		super(ComponentType.COLLECTION_CONTENTS, NAME);
-	}
-	
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		return appliesIf(model instanceof EntityCollectionModel);
-	}
+    private static final String NAME = "styled";
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-		return new CollectionContentsAsAjaxTable(id, collectionModel);
-	}
+    public CollectionContentsAsAjaxTableFactory() {
+        super(ComponentType.COLLECTION_CONTENTS, NAME);
+    }
+
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return appliesIf(model instanceof EntityCollectionModel);
+    }
+
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsAsAjaxTable(id, collectionModel);
+    }
 }

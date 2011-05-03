@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
@@ -29,93 +28,96 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 public class PropertyMemento implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static ObjectSpecification owningSpecFor(
-			OneToOneAssociation association) {
-		return IsisContext.getSpecificationLoader().loadSpecification(
-				association.getIdentifier().toClassIdentityString());
-	}
+    private static ObjectSpecification owningSpecFor(final OneToOneAssociation association) {
+        return IsisContext.getSpecificationLoader().loadSpecification(
+            association.getIdentifier().toClassIdentityString());
+    }
 
-	private SpecMemento owningType;
-	private String identifier;
+    private final SpecMemento owningType;
+    private final String identifier;
 
-	/**
-	 * Lazily loaded as required.
-	 */
-	private SpecMemento type;
-	
-	private transient OneToOneAssociation property;
+    /**
+     * Lazily loaded as required.
+     */
+    private SpecMemento type;
 
-	public PropertyMemento(SpecMemento owningType, String name) {
-		this(owningType, name, null);
-	}
+    private transient OneToOneAssociation property;
 
-	public PropertyMemento(SpecMemento owningType, String name, SpecMemento type) {
-		this.owningType = owningType;
-		this.identifier = name;
-		this.type = type;
-	}
+    public PropertyMemento(final SpecMemento owningType, final String name) {
+        this(owningType, name, null);
+    }
 
-	public PropertyMemento(OneToOneAssociation property) {
-		this(new SpecMemento(owningSpecFor(property)), property
-				.getIdentifier().toNameIdentityString(), new SpecMemento(property.getSpecification()));
-		this.property = property;
-	}
+    public PropertyMemento(final SpecMemento owningType, final String name, final SpecMemento type) {
+        this.owningType = owningType;
+        this.identifier = name;
+        this.type = type;
+    }
 
-	public SpecMemento getOwningType() {
-		return owningType;
-	}
+    public PropertyMemento(final OneToOneAssociation property) {
+        this(new SpecMemento(owningSpecFor(property)), property.getIdentifier().toNameIdentityString(),
+            new SpecMemento(property.getSpecification()));
+        this.property = property;
+    }
 
-	public SpecMemento getType() {
-		if (type == null) {
-			// lazy load if need be
-			type = new SpecMemento(getProperty().getSpecification());
-		}
-		return type;
-	}
-	
-	public String getIdentifier() {
-		return identifier;
-	}
-	
-	public OneToOneAssociation getProperty() {
-		if (property == null) {
-			property = (OneToOneAssociation) owningType.getSpecification().getAssociation(identifier);
-		}
-		return property;
-	}
+    public SpecMemento getOwningType() {
+        return owningType;
+    }
 
-	/**
-	 * Value semantics so can use as a key in {@link EntityModel} hash.
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
-		return result;
-	}
+    public SpecMemento getType() {
+        if (type == null) {
+            // lazy load if need be
+            type = new SpecMemento(getProperty().getSpecification());
+        }
+        return type;
+    }
 
-	/**
-	 * Value semantics so can use as a key in {@link EntityModel} hash.
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PropertyMemento other = (PropertyMemento) obj;
-		if (identifier == null) {
-			if (other.identifier != null)
-				return false;
-		} else if (!identifier.equals(other.identifier))
-			return false;
-		return true;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
+    public OneToOneAssociation getProperty() {
+        if (property == null) {
+            property = (OneToOneAssociation) owningType.getSpecification().getAssociation(identifier);
+        }
+        return property;
+    }
+
+    /**
+     * Value semantics so can use as a key in {@link EntityModel} hash.
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
+        return result;
+    }
+
+    /**
+     * Value semantics so can use as a key in {@link EntityModel} hash.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PropertyMemento other = (PropertyMemento) obj;
+        if (identifier == null) {
+            if (other.identifier != null) {
+                return false;
+            }
+        } else if (!identifier.equals(other.identifier)) {
+            return false;
+        }
+        return true;
+    }
 
 }

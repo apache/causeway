@@ -17,28 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll;
 
 import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
-import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -60,336 +41,342 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelH
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
-
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.feedback.IFeedbackMessageFilter;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
+import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 
 /**
- * {@link PanelAbstract Panel} representing the properties of an entity,
- * as per the provided {@link EntityModel}.
+ * {@link PanelAbstract Panel} representing the properties of an entity, as per the provided {@link EntityModel}.
  */
 public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS = "entityPropertiesAndOrCollections";
+    private static final String ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS = "entityPropertiesAndOrCollections";
 
-	public enum Render {
-	    PROPERTIES_ONLY {
+    public enum Render {
+        PROPERTIES_ONLY {
             @Override
             public Filter<ObjectAssociation> getFilters() {
                 return ObjectAssociationFilters.PROPERTIES;
             }
         },
-	    COLLECTIONS_ONLY {
+        COLLECTIONS_ONLY {
             @Override
             public Filter<ObjectAssociation> getFilters() {
                 return ObjectAssociationFilters.COLLECTIONS;
             }
         },
-	    PROPERTIES_AND_COLLECTIONS {
+        PROPERTIES_AND_COLLECTIONS {
             @Override
             public Filter<ObjectAssociation> getFilters() {
-                return Filters.or(PROPERTIES_ONLY.getFilters(),COLLECTIONS_ONLY.getFilters());
+                return Filters.or(PROPERTIES_ONLY.getFilters(), COLLECTIONS_ONLY.getFilters());
             }
         };
 
         public abstract Filter<ObjectAssociation> getFilters();
-	}
-	
+    }
+
     private final Render render;
-	private PropCollForm form;
+    private PropCollForm form;
 
-	public EntityPropertiesAndOrCollectionsPanel(String id, final EntityModel entityModel, final Render render) {
-		super(id, entityModel);
-		this.render = render;
-		buildGui();
-		form.toViewMode(null);
-	}
+    public EntityPropertiesAndOrCollectionsPanel(final String id, final EntityModel entityModel, final Render render) {
+        super(id, entityModel);
+        this.render = render;
+        buildGui();
+        form.toViewMode(null);
+    }
 
-	private void buildGui() {
-		buildEntityPropertiesAndOrCollectionsGui();
-		setOutputMarkupId(true); // so can repaint via ajax
-	}
+    private void buildGui() {
+        buildEntityPropertiesAndOrCollectionsGui();
+        setOutputMarkupId(true); // so can repaint via ajax
+    }
 
-	private void buildEntityPropertiesAndOrCollectionsGui() {
-	    EntityModel model = getModel();
-	    ObjectAdapter adapter = model.getObject();
-		if (adapter != null) {
-			form = new PropCollForm(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS,
-					model,
-					render, 
-					this);
-			addOrReplace(form);
-		} else {
-			permanentlyHide(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS);
-		}
-	}
+    private void buildEntityPropertiesAndOrCollectionsGui() {
+        final EntityModel model = getModel();
+        final ObjectAdapter adapter = model.getObject();
+        if (adapter != null) {
+            form = new PropCollForm(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS, model, render, this);
+            addOrReplace(form);
+        } else {
+            permanentlyHide(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS);
+        }
+    }
 
-	
-	static class PropCollForm extends FormAbstract<ObjectAdapter> {
-
+    static class PropCollForm extends FormAbstract<ObjectAdapter> {
 
         private static final long serialVersionUID = 1L;
 
-	    private static final String ID_PROPERTIES_AND_OR_COLLECTIONS = "propertiesAndOrCollections";
-	    private static final String ID_PROPERTY_OR_COLLECTION = "propertyOrCollection";
-	    private static final String ID_EDIT_BUTTON = "edit";
-	    private static final String ID_OK_BUTTON = "ok";
-	    private static final String ID_CANCEL_BUTTON = "cancel";
-	    private static final String ID_FEEDBACK = "feedback";
+        private static final String ID_PROPERTIES_AND_OR_COLLECTIONS = "propertiesAndOrCollections";
+        private static final String ID_PROPERTY_OR_COLLECTION = "propertyOrCollection";
+        private static final String ID_EDIT_BUTTON = "edit";
+        private static final String ID_OK_BUTTON = "ok";
+        private static final String ID_CANCEL_BUTTON = "cancel";
+        private static final String ID_FEEDBACK = "feedback";
 
-	    private final Render render;
-	    
-	    private final Component owningPanel;
-	    private Button editButton;
-	    private Button okButton;
-	    private Button cancelButton;
-	    private FeedbackPanel feedback;
+        private final Render render;
 
-	    public PropCollForm(String id, EntityModel entityModel, Render render, Component owningPanel) {
-	        super(id, entityModel);
-	        this.owningPanel = owningPanel; // for repainting
-	        this.render = render;
+        private final Component owningPanel;
+        private Button editButton;
+        private Button okButton;
+        private Button cancelButton;
+        private FeedbackPanel feedback;
 
-	        buildGui();
-	    }
+        public PropCollForm(final String id, final EntityModel entityModel, final Render render,
+            final Component owningPanel) {
+            super(id, entityModel);
+            this.owningPanel = owningPanel; // for repainting
+            this.render = render;
 
-	    private void buildGui() {
-	        addPropertiesAndOrCollections();
-	        addButtons();
-	        addFeedbackGui();
-	        
-	        addValidator();
-	    }
-	    
-	    private void addPropertiesAndOrCollections() {
-	        EntityModel entityModel = (EntityModel) getModel();
-	        ObjectAdapter adapter = entityModel.getObject();
-	        ObjectSpecification noSpec = adapter.getSpecification();
+            buildGui();
+        }
 
-	        List<ObjectAssociation> associations = visibleAssociations(adapter,
-	                noSpec);
+        private void buildGui() {
+            addPropertiesAndOrCollections();
+            addButtons();
+            addFeedbackGui();
 
-	        RepeatingView rv = new RepeatingView(ID_PROPERTIES_AND_OR_COLLECTIONS);
-	        EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
-	        add(rv);
-	        
-	        @SuppressWarnings("unused")
+            addValidator();
+        }
+
+        private void addPropertiesAndOrCollections() {
+            final EntityModel entityModel = (EntityModel) getModel();
+            final ObjectAdapter adapter = entityModel.getObject();
+            final ObjectSpecification noSpec = adapter.getSpecification();
+
+            final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec);
+
+            final RepeatingView rv = new RepeatingView(ID_PROPERTIES_AND_OR_COLLECTIONS);
+            final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
+            add(rv);
+
+            @SuppressWarnings("unused")
             Component component;
-	        for(ObjectAssociation association: associations) {
-	            WebMarkupContainer container = new WebMarkupContainer(rv
-	                    .newChildId());
-	            rv.add(container);
-	            container.add(eo.nextClass());
-	            if (association instanceof OneToOneAssociation) {
-	                OneToOneAssociation otoa = (OneToOneAssociation) association;
-                    PropertyMemento pm = new PropertyMemento(otoa); 
-	                
-	                ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-	                component = getComponentFactoryRegistry().addOrReplaceComponent(container,
-	                        ID_PROPERTY_OR_COLLECTION, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-	            } else {
-	                OneToManyAssociation otma = (OneToManyAssociation) association;
-                    
-                    final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModel, otma);
-                    final CollectionPanel collectionPanel = new CollectionPanel(ID_PROPERTY_OR_COLLECTION, entityCollectionModel);
+            for (final ObjectAssociation association : associations) {
+                final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
+                rv.add(container);
+                container.add(eo.nextClass());
+                if (association instanceof OneToOneAssociation) {
+                    final OneToOneAssociation otoa = (OneToOneAssociation) association;
+                    final PropertyMemento pm = new PropertyMemento(otoa);
+
+                    final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+                    component =
+                        getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION,
+                            ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                } else {
+                    final OneToManyAssociation otma = (OneToManyAssociation) association;
+
+                    final EntityCollectionModel entityCollectionModel =
+                        EntityCollectionModel.createParented(entityModel, otma);
+                    final CollectionPanel collectionPanel =
+                        new CollectionPanel(ID_PROPERTY_OR_COLLECTION, entityCollectionModel);
                     container.addOrReplace(collectionPanel);
-                    
-                    component = getComponentFactoryRegistry().addOrReplaceComponent(container,
-                            ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
-	            }
-	        }
-	        
-	        // massive hack: an empty property line to get CSS correct...!
-            WebMarkupContainer container = new WebMarkupContainer(rv
-                    .newChildId());
+
+                    component =
+                        getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION,
+                            ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
+                }
+            }
+
+            // massive hack: an empty property line to get CSS correct...!
+            final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
             rv.add(container);
             container.add(new Label(ID_PROPERTY_OR_COLLECTION, Model.of(" ")));
             container.add(eo.nextClass());
-	    }
+        }
 
-	    @SuppressWarnings("unchecked")
-	    private List<ObjectAssociation> visibleAssociations(
-	    		ObjectAdapter adapter, ObjectSpecification noSpec) {
-	        return noSpec
-	                .getAssociations(visibleAssociationFilter(adapter));
-	    }
+        @SuppressWarnings("unchecked")
+        private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter,
+            final ObjectSpecification noSpec) {
+            return noSpec.getAssociations(visibleAssociationFilter(adapter));
+        }
 
-	    private Filter<ObjectAssociation> visibleAssociationFilter(
-	    		ObjectAdapter adapter) {
-	        return Filters.and(render.getFilters(),
-	                ObjectAssociationFilters.dynamicallyVisible(
-	                        getAuthenticationSession(), adapter));
-	    }
+        private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter) {
+            return Filters.and(render.getFilters(),
+                ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
+        }
 
-	    private void addButtons() {
-	        editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
-	        private static final long serialVersionUID = 1L;
+        private void addButtons() {
+            editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
+                private static final long serialVersionUID = 1L;
 
-	        @Override
-	        public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-	            toEditMode(target);
-	        }
-	        @Override
-	        protected void onError(AjaxRequestTarget target,
-	                Form<?> form) {
-	            toEditMode(target);
-	        }
-	    };
-	    add(editButton);
+                @Override
+                public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                    toEditMode(target);
+                }
 
-	    okButton = new Button(ID_OK_BUTTON, Model.of("OK")) {
-	            private static final long serialVersionUID = 1L;
+                @Override
+                protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                    toEditMode(target);
+                }
+            };
+            add(editButton);
 
-	            @Override
-	            public void onSubmit() {
-	                if (!getForm().hasError()) {
-	                	ObjectAdapter object = getEntityModel().getObject();
-	                    Memento snapshotToRollbackToIfInvalid = new Memento(object);
-	                    // to perform object-level validation, we must apply the changes first
-	                    // contrast this with ActionPanel (for validating action arguments) where
-	                    // we do the validation prior to the execution of the action
-	                    getEntityModel().apply();
-	                    String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
-	                    if (invalidReasonIfAny != null) {
-	                        getForm().error(invalidReasonIfAny);
-	                        snapshotToRollbackToIfInvalid.recreateObject();
-	                        return;
-	                    } else {
-	                        toViewMode(null);
-	                    }
-	                } else {
-	                    // stay in edit mode
-	                }
-	            }
-	        };
-	        add(okButton);
+            okButton = new Button(ID_OK_BUTTON, Model.of("OK")) {
+                private static final long serialVersionUID = 1L;
 
-	        cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
-	            private static final long serialVersionUID = 1L;
-	            {
-	                setDefaultFormProcessing(false);
-	            }
-	            @Override
-	            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-	                Session.get().getFeedbackMessages().clear();
-	                getForm().clearInput();
-	                getForm().visitFormComponentsPostOrder(new IVisitor(){
+                @Override
+                public void onSubmit() {
+                    if (!getForm().hasError()) {
+                        final ObjectAdapter object = getEntityModel().getObject();
+                        final Memento snapshotToRollbackToIfInvalid = new Memento(object);
+                        // to perform object-level validation, we must apply the changes first
+                        // contrast this with ActionPanel (for validating action arguments) where
+                        // we do the validation prior to the execution of the action
+                        getEntityModel().apply();
+                        final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
+                        if (invalidReasonIfAny != null) {
+                            getForm().error(invalidReasonIfAny);
+                            snapshotToRollbackToIfInvalid.recreateObject();
+                            return;
+                        } else {
+                            toViewMode(null);
+                        }
+                    } else {
+                        // stay in edit mode
+                    }
+                }
+            };
+            add(okButton);
 
-	                    @Override
-	                    public Object formComponent(
-	                            IFormVisitorParticipant formComponent) {
-	                        if (formComponent instanceof CancelHintRequired) {
-	                            CancelHintRequired cancelHintRequired = (CancelHintRequired) formComponent;
-	                            cancelHintRequired.onCancel();
-	                        }
-	                        return null;
-	                    }
-	                });
-	                getEntityModel().resetPropertyModels();
-	                toViewMode(target);
-	            }
-	            @Override
-	            protected void onError(AjaxRequestTarget target, Form<?> form) {
-	                toViewMode(target);
-	            }
-	        };
-	        add(cancelButton);
-	        
-	        editButton.setOutputMarkupPlaceholderTag(true);
-	        cancelButton.setOutputMarkupPlaceholderTag(true);
-	    }
+            cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
+                private static final long serialVersionUID = 1L;
+                {
+                    setDefaultFormProcessing(false);
+                }
 
-	    private void requestRepaintPanel(AjaxRequestTarget target) {
-	        if (target != null) {
-	            target.addComponent(owningPanel);
-	            // TODO: is it necessary to add these too?
-	            target.addComponent(editButton);
-	            target.addComponent(okButton);
-	            target.addComponent(cancelButton);
-	            target.addComponent(feedback);
-	        }
-	    }
-	    
+                @Override
+                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                    Session.get().getFeedbackMessages().clear();
+                    getForm().clearInput();
+                    getForm().visitFormComponentsPostOrder(new IVisitor() {
 
-	    private void addValidator() {
-	        add(new AbstractFormValidator(){
+                        @Override
+                        public Object formComponent(final IFormVisitorParticipant formComponent) {
+                            if (formComponent instanceof CancelHintRequired) {
+                                final CancelHintRequired cancelHintRequired = (CancelHintRequired) formComponent;
+                                cancelHintRequired.onCancel();
+                            }
+                            return null;
+                        }
+                    });
+                    getEntityModel().resetPropertyModels();
+                    toViewMode(target);
+                }
 
-	            private static final long serialVersionUID = 1L;
+                @Override
+                protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                    toViewMode(target);
+                }
+            };
+            add(cancelButton);
 
-	            @Override
-	            public FormComponent<?>[] getDependentFormComponents() {
-	                return new FormComponent<?>[0];
-	            }
+            editButton.setOutputMarkupPlaceholderTag(true);
+            cancelButton.setOutputMarkupPlaceholderTag(true);
+        }
 
-	            @Override
-	            public void validate(Form<?> form) {
-	                EntityModel entityModel = (EntityModel) getModel();
-	                ObjectAdapter adapter = entityModel.getObject();
-	                ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
-	                if (facet == null) {
-	                    return;
-	                }
-	                String invalidReasonIfAny = facet.invalidReason(adapter);
-	                if (invalidReasonIfAny != null) {
-	                    Session.get().getFeedbackMessages().add(
-	                        new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
-	                }
-	            }
-	        });
-	    }
+        private void requestRepaintPanel(final AjaxRequestTarget target) {
+            if (target != null) {
+                target.addComponent(owningPanel);
+                // TODO: is it necessary to add these too?
+                target.addComponent(editButton);
+                target.addComponent(okButton);
+                target.addComponent(cancelButton);
+                target.addComponent(feedback);
+            }
+        }
 
-	    private EntityModel getEntityModel() {
-	        return (EntityModel) getModel();
-	    }
+        private void addValidator() {
+            add(new AbstractFormValidator() {
 
-	    void toViewMode(AjaxRequestTarget target) {
-	        getEntityModel().toViewMode();
-	        editButton.setVisible(true);
-	        okButton.setVisible(false);
-	        cancelButton.setVisible(false);
-	        requestRepaintPanel(target);
-	    }
-	    
-	    private void toEditMode(AjaxRequestTarget target) {
-	        getEntityModel().toEditMode();
-	        editButton.setVisible(false);
-	        okButton.setVisible(true);
-	        cancelButton.setVisible(true);
-	        requestRepaintPanel(target);
-	    }
+                private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void onValidate() {
-	        Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
-	            
-	            private static final long serialVersionUID = 1L;
+                @Override
+                public FormComponent<?>[] getDependentFormComponents() {
+                    return new FormComponent<?>[0];
+                }
 
-	            @Override
-	            public boolean accept(FeedbackMessage message) {
-	                return message.getReporter() == owningPanel;
-	            }
-	        });
-	        super.onValidate();
-	    }
+                @Override
+                public void validate(final Form<?> form) {
+                    final EntityModel entityModel = (EntityModel) getModel();
+                    final ObjectAdapter adapter = entityModel.getObject();
+                    final ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
+                    if (facet == null) {
+                        return;
+                    }
+                    final String invalidReasonIfAny = facet.invalidReason(adapter);
+                    if (invalidReasonIfAny != null) {
+                        Session.get().getFeedbackMessages()
+                            .add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
+                    }
+                }
+            });
+        }
 
+        private EntityModel getEntityModel() {
+            return (EntityModel) getModel();
+        }
 
-	    private void addFeedbackGui() {
-	        final FeedbackPanel feedback = addOrReplaceFeedback();
+        void toViewMode(final AjaxRequestTarget target) {
+            getEntityModel().toViewMode();
+            editButton.setVisible(true);
+            okButton.setVisible(false);
+            cancelButton.setVisible(false);
+            requestRepaintPanel(target);
+        }
 
-	        ObjectAdapter adapter = getEntityModel().getObject();
-	        if (adapter == null) {
-	            feedback.error("cannot locate object:"
-	                    + getEntityModel().getObjectAdapterMemento().toString());
-	        }
-	    }
+        private void toEditMode(final AjaxRequestTarget target) {
+            getEntityModel().toEditMode();
+            editButton.setVisible(false);
+            okButton.setVisible(true);
+            cancelButton.setVisible(true);
+            requestRepaintPanel(target);
+        }
 
-	    private FeedbackPanel addOrReplaceFeedback() {
-	        feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
-	        feedback.setOutputMarkupPlaceholderTag(true);
-	        addOrReplace(feedback);
-	        return feedback;
-	    }
-	}
+        @Override
+        protected void onValidate() {
+            Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public boolean accept(final FeedbackMessage message) {
+                    return message.getReporter() == owningPanel;
+                }
+            });
+            super.onValidate();
+        }
+
+        private void addFeedbackGui() {
+            final FeedbackPanel feedback = addOrReplaceFeedback();
+
+            final ObjectAdapter adapter = getEntityModel().getObject();
+            if (adapter == null) {
+                feedback.error("cannot locate object:" + getEntityModel().getObjectAdapterMemento().toString());
+            }
+        }
+
+        private FeedbackPanel addOrReplaceFeedback() {
+            feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
+            feedback.setOutputMarkupPlaceholderTag(true);
+            addOrReplace(feedback);
+            return feedback;
+        }
+    }
 
 }
-

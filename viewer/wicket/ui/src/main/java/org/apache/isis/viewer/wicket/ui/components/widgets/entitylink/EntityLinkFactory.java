@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -30,24 +29,25 @@ import org.apache.wicket.model.IModel;
 
 public class EntityLinkFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntityLinkFactory() {
-		super(ComponentType.ENTITY_LINK);
-	}
+    public EntityLinkFactory() {
+        super(ComponentType.ENTITY_LINK);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof EntityModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		EntityModel entityModel = (EntityModel) model;
-		ObjectSpecification specification = entityModel.getTypeOfSpecification();
-		return appliesIf(specification != null && !specification.containsFacet(ValueFacet.class));
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof EntityModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final EntityModel entityModel = (EntityModel) model;
+        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
+        return appliesIf(specification != null && !specification.containsFacet(ValueFacet.class));
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityModel entityModel = (EntityModel) model;
-		return new EntityLink(id, entityModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityLink(id, entityModel);
+    }
 }

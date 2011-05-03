@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -31,76 +30,78 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class ComponentFactoryAbstract implements ComponentFactory, SpecificationLoaderAccessor {
 
-	private static final long serialVersionUID = 1L;
-	
-	private ComponentType componentType;
-	private String name;
+    private static final long serialVersionUID = 1L;
 
-	public ComponentFactoryAbstract(ComponentType componentType) {
-		this.componentType = componentType;
-		this.name = getClass().getSimpleName();
-	}
+    private final ComponentType componentType;
+    private final String name;
 
-	public ComponentFactoryAbstract(ComponentType componentType, String name) {
-		this.componentType = componentType;
-		this.name = name;
-	}
+    public ComponentFactoryAbstract(final ComponentType componentType) {
+        this.componentType = componentType;
+        this.name = getClass().getSimpleName();
+    }
 
-	public ComponentType getComponentType() {
-		return componentType;
-	}
+    public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
+        this.componentType = componentType;
+        this.name = name;
+    }
 
+    @Override
+    public ComponentType getComponentType() {
+        return componentType;
+    }
 
-	/**
-	 * Applies if {@link #getComponentType()} matches; disregards the provided {@link IModel}.
-	 * 
-	 * @see #appliesTo(IModel)
-	 */
-	public final ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model) {
-		if (componentType != getComponentType()) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		return appliesTo(model);
-	}
+    /**
+     * Applies if {@link #getComponentType()} matches; disregards the provided {@link IModel}.
+     * 
+     * @see #appliesTo(IModel)
+     */
+    @Override
+    public final ApplicationAdvice appliesTo(final ComponentType componentType, final IModel<?> model) {
+        if (componentType != getComponentType()) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        return appliesTo(model);
+    }
 
-	/**
-	 * Hook for subclasses to check the {@link IModel}.
-	 */
-	protected abstract ApplicationAdvice appliesTo(IModel<?> model);
+    /**
+     * Hook for subclasses to check the {@link IModel}.
+     */
+    protected abstract ApplicationAdvice appliesTo(IModel<?> model);
 
-	/**
-	 * Convenenience for subclasses to call from {@link #appliesTo(IModel)}
-	 */
-	protected final ApplicationAdvice appliesIf(boolean b) {
-		return b?ApplicationAdvice.APPLIES:ApplicationAdvice.DOES_NOT_APPLY;
-	}
+    /**
+     * Convenenience for subclasses to call from {@link #appliesTo(IModel)}
+     */
+    protected final ApplicationAdvice appliesIf(final boolean b) {
+        return b ? ApplicationAdvice.APPLIES : ApplicationAdvice.DOES_NOT_APPLY;
+    }
 
-	/**
-	 * Convenenience for subclasses to call from {@link #appliesTo(IModel)}
-	 */
-	protected final ApplicationAdvice appliesExclusivelyIf(boolean b) {
-		return b?ApplicationAdvice.APPLIES_EXCLUSIVELY:ApplicationAdvice.DOES_NOT_APPLY;
-	}
+    /**
+     * Convenenience for subclasses to call from {@link #appliesTo(IModel)}
+     */
+    protected final ApplicationAdvice appliesExclusivelyIf(final boolean b) {
+        return b ? ApplicationAdvice.APPLIES_EXCLUSIVELY : ApplicationAdvice.DOES_NOT_APPLY;
+    }
 
+    @Override
+    public final Component createComponent(final IModel<?> model) {
+        return createComponent(getComponentType().toString(), model);
+    }
 
-	public final Component createComponent(IModel<?> model) {
-		return createComponent(getComponentType().toString(), model);
-	}
+    @Override
+    public abstract Component createComponent(String id, IModel<?> model);
 
-	public abstract Component createComponent(String id, IModel<?> model);
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    // ///////////////////////////////////////////////////////////////
+    // Dependencies
+    // ///////////////////////////////////////////////////////////////
 
-	
-	/////////////////////////////////////////////////////////////////
-	// Dependencies
-	/////////////////////////////////////////////////////////////////
-	
-	public SpecificationLoader getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
-
+    @Override
+    public SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 }

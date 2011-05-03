@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons;
 
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -34,35 +33,36 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionContentsAsIconsFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String NAME = "icons";
+    private static final String NAME = "icons";
 
-	public CollectionContentsAsIconsFactory() {
-		super(ComponentType.COLLECTION_CONTENTS, NAME);
-	}
+    public CollectionContentsAsIconsFactory() {
+        super(ComponentType.COLLECTION_CONTENTS, NAME);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof EntityCollectionModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		
-		EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-		if (entityCollectionModel.hasSelectionHandler()) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		
-		ObjectSpecification typeOfSpec = entityCollectionModel.getTypeOfSpecification();
-		if (typeOfSpec.getFacet(IconFacet.class) == null) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		return ApplicationAdvice.APPLIES;
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof EntityCollectionModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-		return new CollectionContentsAsIcons(id, collectionModel);
-	}
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        if (entityCollectionModel.hasSelectionHandler()) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+
+        final ObjectSpecification typeOfSpec = entityCollectionModel.getTypeOfSpecification();
+        if (typeOfSpec.getFacet(IconFacet.class) == null) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        return ApplicationAdvice.APPLIES;
+    }
+
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsAsIcons(id, collectionModel);
+    }
 
 }

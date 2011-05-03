@@ -23,8 +23,8 @@ import javax.ws.rs.Produces;
 
 public interface HomePageResource {
 
-	@GET
-	@Produces( {"application/xhtml+xml", "text/html"} )
-	public String resources();
+    @GET
+    @Produces({ "application/xhtml+xml", "text/html" })
+    public String resources();
 
 }

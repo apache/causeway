@@ -28,14 +28,11 @@ import org.apache.isis.viewer.restful.viewer.resources.objects.TableColumnNakedO
 import org.apache.isis.viewer.restful.viewer.util.StringUtil;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnOneToOneAssociationModify extends
-        TableColumnNakedObjectAssociationModifyAbstract<OneToOneAssociation> {
+    TableColumnNakedObjectAssociationModifyAbstract<OneToOneAssociation> {
 
-    public TableColumnOneToOneAssociationModify(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnOneToOneAssociationModify(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("Modify", session, nakedObject, resourceContext);
     }
 
@@ -65,8 +62,8 @@ public final class TableColumnOneToOneAssociationModify extends
      */
     @Override
     protected String invokeJavascript(final String url, final String associationId, final String inputFieldName) {
-        return MessageFormat.format("modifyProperty({0},{1},{2}.value);", StringUtil.quote(url), StringUtil.quote(associationId),
-                inputFieldName);
+        return MessageFormat.format("modifyProperty({0},{1},{2}.value);", StringUtil.quote(url),
+            StringUtil.quote(associationId), inputFieldName);
     }
 
 }

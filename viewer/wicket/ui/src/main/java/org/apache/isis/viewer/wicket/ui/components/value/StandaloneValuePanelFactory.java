@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.value;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -36,20 +35,20 @@ import org.apache.wicket.model.IModel;
  */
 public class StandaloneValuePanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public StandaloneValuePanelFactory() {
-		super(ComponentType.VALUE);
-	}
+    public StandaloneValuePanelFactory() {
+        super(ComponentType.VALUE);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		return ApplicationAdvice.APPLIES;
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return ApplicationAdvice.APPLIES;
+    }
 
-	@Override
-	public Component createComponent(String id, IModel<?> model) {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        throw new NotYetImplementedException();
+    }
 
 }

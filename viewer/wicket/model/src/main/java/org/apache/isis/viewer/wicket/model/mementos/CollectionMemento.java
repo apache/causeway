@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
@@ -27,59 +26,55 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
- * {@link Serializable} representation of a {@link OneToManyAssociation} (a parented
- * collection of entities).
+ * {@link Serializable} representation of a {@link OneToManyAssociation} (a parented collection of entities).
  */
 public class CollectionMemento implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static ObjectSpecification owningSpecFor(
-			OneToManyAssociation association) {
-		return IsisContext.getSpecificationLoader().loadSpecification(
-				association.getIdentifier().toClassIdentityString());
-	}
+    private static ObjectSpecification owningSpecFor(final OneToManyAssociation association) {
+        return IsisContext.getSpecificationLoader().loadSpecification(
+            association.getIdentifier().toClassIdentityString());
+    }
 
-	private SpecMemento owningType;
-	private String id;
+    private final SpecMemento owningType;
+    private final String id;
 
-	private transient OneToManyAssociation collection;
+    private transient OneToManyAssociation collection;
 
-	public CollectionMemento(SpecMemento owningType, String id) {
-		this.owningType = owningType;
-		this.id = id;
-	}
+    public CollectionMemento(final SpecMemento owningType, final String id) {
+        this.owningType = owningType;
+        this.id = id;
+    }
 
-	public CollectionMemento(OneToManyAssociation collection) {
-		this(new SpecMemento(owningSpecFor(collection)), collection
-				.getIdentifier().toNameIdentityString());
-		this.collection = collection;
-	}
+    public CollectionMemento(final OneToManyAssociation collection) {
+        this(new SpecMemento(owningSpecFor(collection)), collection.getIdentifier().toNameIdentityString());
+        this.collection = collection;
+    }
 
-	public SpecMemento getOwningType() {
-		return owningType;
-	}
+    public SpecMemento getOwningType() {
+        return owningType;
+    }
 
-	/**
-	 * Only applies to parented collections, being the id of the collection in the parent
-	 * (eg <tt>lineItems</tt>).
-	 * 
-	 * <p>
-	 * Will return <tt>null</tt> otherwise.
-	 */
-	public String getId() {
-		return id;
-	}
-	
-	public String getName() {
-	    return getCollection().getName();
-	}
-	
-	public OneToManyAssociation getCollection() {
-		if (collection == null) {
-			collection = (OneToManyAssociation) owningType.getSpecification().getAssociation(id);
-		}
-		return collection;
-	}
+    /**
+     * Only applies to parented collections, being the id of the collection in the parent (eg <tt>lineItems</tt>).
+     * 
+     * <p>
+     * Will return <tt>null</tt> otherwise.
+     */
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return getCollection().getName();
+    }
+
+    public OneToManyAssociation getCollection() {
+        if (collection == null) {
+            collection = (OneToManyAssociation) owningType.getSpecification().getAssociation(id);
+        }
+        return collection;
+    }
 
 }

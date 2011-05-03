@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacet;
@@ -31,85 +30,80 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
 
 /**
- * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}s where
- * moreover the scalar parameter or property is a value type that is parseable. 
+ * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}s where moreover the scalar parameter or
+ * property is a value type that is parseable.
  */
-public abstract class ScalarPanelTextFieldParseableAbstract extends
-		ScalarPanelTextFieldAbstract<String> {
+public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelTextFieldAbstract<String> {
 
-	private static final long serialVersionUID = 1L;
-	private String idTextField;
+    private static final long serialVersionUID = 1L;
+    private final String idTextField;
 
-	public ScalarPanelTextFieldParseableAbstract(String id, String idTextField,
-			final ScalarModel scalarModel) {
-		super(id, scalarModel);
-		this.idTextField = idTextField;
-	}
+    public ScalarPanelTextFieldParseableAbstract(final String id, final String idTextField,
+        final ScalarModel scalarModel) {
+        super(id, scalarModel);
+        this.idTextField = idTextField;
+    }
 
-	@Override
-	protected TextField<String> createTextField() {
-		TextField<String> textField = new TextField<String>(idTextField,
-				new Model<String>() {
-					private static final long serialVersionUID = 1L;
+    @Override
+    protected TextField<String> createTextField() {
+        final TextField<String> textField = new TextField<String>(idTextField, new Model<String>() {
+            private static final long serialVersionUID = 1L;
 
-					@Override
-					public String getObject() {
-						return getModel().getObjectAsString();
-					}
+            @Override
+            public String getObject() {
+                return getModel().getObjectAsString();
+            }
 
-					@Override
-					public void setObject(String object) {
-						if (object == null) {
-							getModel().setObject(null);
-						} else {
-							getModel().setObjectAsString(object);
-						}
-					}
-				});
-		return textField;
-	}
+            @Override
+            public void setObject(final String object) {
+                if (object == null) {
+                    getModel().setObject(null);
+                } else {
+                    getModel().setObjectAsString(object);
+                }
+            }
+        });
+        return textField;
+    }
 
-	protected void addStandardSemantics() {
-		super.addStandardSemantics();
+    @Override
+    protected void addStandardSemantics() {
+        super.addStandardSemantics();
 
-		addMaxLengthValidator();
-		addObjectAdapterValidator();
-	}
+        addMaxLengthValidator();
+        addObjectAdapterValidator();
+    }
 
-	private void addMaxLengthValidator() {
-		ScalarModel scalarModel = getModel();
-		TextField<String> textField = getTextField();
+    private void addMaxLengthValidator() {
+        final ScalarModel scalarModel = getModel();
+        final TextField<String> textField = getTextField();
 
-		ObjectSpecification facetHolder = scalarModel
-				.getTypeOfSpecification();
+        final ObjectSpecification facetHolder = scalarModel.getTypeOfSpecification();
 
-		MaxLengthFacet maxLengthFacet = facetHolder
-				.getFacet(MaxLengthFacet.class);
-		if (maxLengthFacet != null) {
-			textField
-					.add(StringValidator.maximumLength(maxLengthFacet.value()));
-		}
-	}
+        final MaxLengthFacet maxLengthFacet = facetHolder.getFacet(MaxLengthFacet.class);
+        if (maxLengthFacet != null) {
+            textField.add(StringValidator.maximumLength(maxLengthFacet.value()));
+        }
+    }
 
-	private void addObjectAdapterValidator() {
-		final ScalarModel scalarModel = getModel();
-		final TextField<String> textField = getTextField();
+    private void addObjectAdapterValidator() {
+        final ScalarModel scalarModel = getModel();
+        final TextField<String> textField = getTextField();
 
-		textField.add(new IValidator<String>() {
-			private static final long serialVersionUID = 1L;
+        textField.add(new IValidator<String>() {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void validate(IValidatable<String> validatable) {
-				String proposedValue = validatable.getValue();
-				String reasonIfAny = scalarModel
-						.parseAndValidate(proposedValue);
-				if (reasonIfAny != null) {
-					ValidationError error = new ValidationError();
-					error.setMessage(reasonIfAny);
-					validatable.error(error);
-				}
-			}
-		});
-	}
+            @Override
+            public void validate(final IValidatable<String> validatable) {
+                final String proposedValue = validatable.getValue();
+                final String reasonIfAny = scalarModel.parseAndValidate(proposedValue);
+                if (reasonIfAny != null) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(reasonIfAny);
+                    validatable.error(error);
+                }
+            }
+        });
+    }
 
 }

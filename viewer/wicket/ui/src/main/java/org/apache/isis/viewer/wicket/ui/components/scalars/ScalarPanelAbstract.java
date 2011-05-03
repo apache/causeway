@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Format;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -30,145 +28,142 @@ import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.Model;
 
 /**
- * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as their
- * backing model.
+ * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as their backing model.
  * 
  * <p>
- * Supports the concept of being {@link Format#COMPACT} (eg within a table)
- * or {@link Format#REGULAR regular} (eg within a form).
+ * Supports the concept of being {@link Format#COMPACT} (eg within a table) or {@link Format#REGULAR regular} (eg within
+ * a form).
  */
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
-	private static final long serialVersionUID = 1L;
-	
-	public enum Format {
-		/**
-		 * Does not show labels, eg for use in tables
-		 */
-		COMPACT {
-			@Override
-			public String getLabelCaption(LabeledWebMarkupContainer labeledContainer) {
-				return "";
-			}
+    private static final long serialVersionUID = 1L;
 
-			@Override
-			public void buildGui(ScalarPanelAbstract panel) {
-				panel.getComponentForRegular().setVisible(false);
-			}
-		},
-		/**
-		 * Does show labels, eg for use in forms.
-		 */
-		REGULAR {
-			@Override
-			public String getLabelCaption(LabeledWebMarkupContainer labeledContainer) {
-				return labeledContainer.getLabel().getObject();
-			}
+    public enum Format {
+        /**
+         * Does not show labels, eg for use in tables
+         */
+        COMPACT {
+            @Override
+            public String getLabelCaption(final LabeledWebMarkupContainer labeledContainer) {
+                return "";
+            }
 
-			@Override
-			public void buildGui(ScalarPanelAbstract panel) {
-				panel.getLabelForCompact().setVisible(false);
-			}
-		};
+            @Override
+            public void buildGui(final ScalarPanelAbstract panel) {
+                panel.getComponentForRegular().setVisible(false);
+            }
+        },
+        /**
+         * Does show labels, eg for use in forms.
+         */
+        REGULAR {
+            @Override
+            public String getLabelCaption(final LabeledWebMarkupContainer labeledContainer) {
+                return labeledContainer.getLabel().getObject();
+            }
 
-		public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
+            @Override
+            public void buildGui(final ScalarPanelAbstract panel) {
+                panel.getLabelForCompact().setVisible(false);
+            }
+        };
 
-		public abstract void buildGui(ScalarPanelAbstract panel);
-	}
-	
-	private Format format;
-	
-	protected Component componentIfCompact;
-	private Component componentIfRegular;
+        public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
 
-	public ScalarPanelAbstract(String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-		setFormat(Format.REGULAR);
-	}
+        public abstract void buildGui(ScalarPanelAbstract panel);
+    }
 
-	protected Format getFormat() {
-		return format;
-	}
-	
-	public void setFormat(Format format) {
-		this.format = format;
-	}
-	
-	protected Component getLabelForCompact() {
-		return componentIfCompact;
-	}
+    private Format format;
 
-	public Component getComponentForRegular() {
-		return componentIfRegular;
-	}
-	
+    protected Component componentIfCompact;
+    private Component componentIfRegular;
 
-	@Override
-	protected void onBeforeRender() {
-		if (!hasBeenRendered()) {
-			buildGui();
-		}
-		final ScalarModel scalarModel = getModel();
-		if (scalarModel.isViewMode()) {
-			onBeforeRenderWhenViewMode();	
-		} else {
-			String disableReasonIfAny = scalarModel.disable();
-			if(disableReasonIfAny != null) {
-				onBeforeRenderWhenDisabled(disableReasonIfAny);
-			} else {
-				onBeforeRenderWhenEnabled();
-			}
-		}
-		super.onBeforeRender();
-	}
+    public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+        setFormat(Format.REGULAR);
+    }
 
-	/**
-	 * Builds GUI lazily prior to first render.
-	 * 
-	 * <p>
-	 * This design allows the panel to be configured first, using {@link #setFormat(Format)}.
-	 * 
-	 * @see #onBeforeRender()
-	 * @see #setFormat(Format)
-	 */
-	private void buildGui() {
-		componentIfRegular = addComponentForRegular();
-		componentIfCompact = addComponentForCompact();
-		getFormat().buildGui(this);
-		addCssForMetaModel();
-	}
+    protected Format getFormat() {
+        return format;
+    }
 
-	private void addCssForMetaModel() {
-		String cssForMetaModel = getModel().getLongName();
-		if (cssForMetaModel != null) {
-			add(new AttributeAppender("class", true, Model.of(cssForMetaModel), " "));
-		}
-	}
-	
-	/**
-	 * Mandatory hook method to build the component to render the model
-	 * when in {@link Format#REGULAR regular} format.
-	 */
-	protected abstract FormComponentLabel addComponentForRegular();
+    public void setFormat(final Format format) {
+        this.format = format;
+    }
 
-	protected abstract Component addComponentForCompact();
+    protected Component getLabelForCompact() {
+        return componentIfCompact;
+    }
 
-	/**
-	 * Optional hook.
-	 */
-	protected void onBeforeRenderWhenViewMode() {
-	}
-	
-	/**
-	 * Optional hook.
-	 */
-	protected void onBeforeRenderWhenDisabled(String disableReason) {
-	}
-	
-	/**
-	 * Optional hook.
-	 */
-	protected void onBeforeRenderWhenEnabled() {
-	}
+    public Component getComponentForRegular() {
+        return componentIfRegular;
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        if (!hasBeenRendered()) {
+            buildGui();
+        }
+        final ScalarModel scalarModel = getModel();
+        if (scalarModel.isViewMode()) {
+            onBeforeRenderWhenViewMode();
+        } else {
+            final String disableReasonIfAny = scalarModel.disable();
+            if (disableReasonIfAny != null) {
+                onBeforeRenderWhenDisabled(disableReasonIfAny);
+            } else {
+                onBeforeRenderWhenEnabled();
+            }
+        }
+        super.onBeforeRender();
+    }
+
+    /**
+     * Builds GUI lazily prior to first render.
+     * 
+     * <p>
+     * This design allows the panel to be configured first, using {@link #setFormat(Format)}.
+     * 
+     * @see #onBeforeRender()
+     * @see #setFormat(Format)
+     */
+    private void buildGui() {
+        componentIfRegular = addComponentForRegular();
+        componentIfCompact = addComponentForCompact();
+        getFormat().buildGui(this);
+        addCssForMetaModel();
+    }
+
+    private void addCssForMetaModel() {
+        final String cssForMetaModel = getModel().getLongName();
+        if (cssForMetaModel != null) {
+            add(new AttributeAppender("class", true, Model.of(cssForMetaModel), " "));
+        }
+    }
+
+    /**
+     * Mandatory hook method to build the component to render the model when in {@link Format#REGULAR regular} format.
+     */
+    protected abstract FormComponentLabel addComponentForRegular();
+
+    protected abstract Component addComponentForCompact();
+
+    /**
+     * Optional hook.
+     */
+    protected void onBeforeRenderWhenViewMode() {
+    }
+
+    /**
+     * Optional hook.
+     */
+    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+    }
+
+    /**
+     * Optional hook.
+     */
+    protected void onBeforeRenderWhenEnabled() {
+    }
 
 }

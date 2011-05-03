@@ -30,8 +30,6 @@ import javax.ws.rs.WebApplicationException;
 
 import nu.xom.Element;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,10 +45,11 @@ import org.apache.isis.viewer.restful.viewer.html.XhtmlTemplate;
 import org.apache.isis.viewer.restful.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.restful.viewer.util.ActionUtils;
 
+import com.google.common.collect.Lists;
 
 /**
- * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than
- * the interface (at least under RestEasy 1.0.2 and 1.1-RC2).
+ * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
+ * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
 @Path("/specs")
 public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource {
@@ -60,28 +59,29 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         init();
 
         final XhtmlTemplate xhtml = new XhtmlTemplate("Specifications", getServletRequest());
-        
+
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
 
         final Element div = xhtmlRenderer.div_p("Specifications", HtmlClass.SECTION);
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.SPECIFICATIONS);
-        final ArrayList<ObjectSpecification> allSpecs = Lists.newArrayList(getSpecificationLoader().allSpecifications());
+        final ArrayList<ObjectSpecification> allSpecs =
+            Lists.newArrayList(getSpecificationLoader().allSpecifications());
         Collections.sort(allSpecs, ObjectSpecification.COMPARATOR_FULLY_QUALIFIED_CLASS_NAME);
         final List<ObjectSpecification> sorted = allSpecs;
         for (final ObjectSpecification spec : sorted) {
             final String specFullName = spec.getFullIdentifier();
-            final String uri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
+            final String uri =
+                MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
             ul.appendChild(xhtmlRenderer.li_a(uri, specFullName, "spec", "specs", HtmlClass.SPECIFICATION));
         }
         div.appendChild(ul);
 
         xhtml.appendToBody(div);
-        
-		return xhtml.toXML();
-    }
 
+        return xhtml.toXML();
+    }
 
     private SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
@@ -123,8 +123,9 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         div.appendChild(ul);
         for (final ObjectAssociation property : properties) {
             final String propertyId = property.getIdentifier().getMemberName();
-            final String path = MessageFormat.format("{0}/specs/{1}/property/{2}", getServletRequest().getContextPath(), noSpec
-                    .getFullIdentifier(), propertyId);
+            final String path =
+                MessageFormat.format("{0}/specs/{1}/property/{2}", getServletRequest().getContextPath(),
+                    noSpec.getFullIdentifier(), propertyId);
             final Element li = xhtmlRenderer.li_a(path, propertyId, "property", "spec", HtmlClass.PROPERTY);
             ul.appendChild(li);
         }
@@ -139,8 +140,9 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         div.appendChild(ul);
         for (final ObjectAssociation collection : collections) {
             final String collectionId = collection.getIdentifier().getMemberName();
-            final String path = MessageFormat.format("{0}/specs/{1}/collection/{2}", getServletRequest().getContextPath(), noSpec
-                    .getFullIdentifier(), collectionId);
+            final String path =
+                MessageFormat.format("{0}/specs/{1}/collection/{2}", getServletRequest().getContextPath(),
+                    noSpec.getFullIdentifier(), collectionId);
             final Element li = xhtmlRenderer.li_a(path, collectionId, "collection", "spec", HtmlClass.COLLECTION);
             ul.appendChild(li);
         }
@@ -157,7 +159,9 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
             final Identifier actionIdentifier = action.getIdentifier();
             final String actionId = actionIdentifier.toNameParmsIdentityString();
             final String noSpecFullName = noSpec.getFullIdentifier();
-            final String uri = MessageFormat.format("{0}/specs/{1}/action/{2}", getServletRequest().getContextPath(), noSpecFullName, actionId);
+            final String uri =
+                MessageFormat.format("{0}/specs/{1}/action/{2}", getServletRequest().getContextPath(), noSpecFullName,
+                    actionId);
             final Element li = xhtmlRenderer.li_a(uri, actionId, "action", "spec", HtmlClass.ACTION);
             ul.appendChild(li);
         }
@@ -169,15 +173,12 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specFacet(
-            final String specFullName,
-            final String facetTypeName) {
+    public String specFacet(final String specFullName, final String facetTypeName) {
         init();
 
         final String specAndFacet = specFullName + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndFacet, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
-
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
 
@@ -191,11 +192,11 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         } catch (final ClassNotFoundException e) {
             throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IntrospectionException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IllegalAccessException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final InvocationTargetException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         }
 
         return xhtml.toXML();
@@ -206,15 +207,12 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specProperty(
-            final String specFullName,
-            final String propertyName) {
+    public String specProperty(final String specFullName, final String propertyName) {
         init();
 
         final String specAndProperty = specFullName + "/property/" + propertyName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndProperty, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
-
 
         // owners
         final Element div = xhtmlRenderer.div_p("Owners", null);
@@ -226,7 +224,6 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         div.appendChild(ul);
 
-        
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAssociation property = noSpec.getAssociation(propertyName);
 
@@ -240,15 +237,12 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specCollection(
-            final String specFullName,
-            final String collectionName) {
+    public String specCollection(final String specFullName, final String collectionName) {
         init();
 
         final String specAndCollection = specFullName + "/collection/" + collectionName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndCollection, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
-
 
         // owners
         final Element div = xhtmlRenderer.div_p("Owners", null);
@@ -260,7 +254,6 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         div.appendChild(ul);
 
-        
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAssociation collection = noSpec.getAssociation(collectionName);
 
@@ -274,27 +267,24 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specAction(
-    		final String specFullName, 
-    		final String actionId) {
+    public String specAction(final String specFullName, final String actionId) {
         init();
 
         final String specAndAction = specFullName + "/action/" + actionId;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndAction, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
 
-
         // owners
         final Element div = xhtmlRenderer.div_p("Owners", null);
         xhtml.appendToBody(div);
         final Element ul = xhtmlRenderer.ul(HtmlClass.SPECIFICATION);
 
-        final String specUri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
+        final String specUri =
+            MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
         ul.appendChild(xhtmlRenderer.li_a(specUri, specFullName, "owning spec", "spec", HtmlClass.SPECIFICATION));
 
         div.appendChild(ul);
 
-        
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAction action = noSpec.getObjectAction(null, actionId);
 
@@ -308,16 +298,12 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specPropertyFacet(
-            final String specFullName,
-            final String propertyName,
-            final String facetTypeName) {
+    public String specPropertyFacet(final String specFullName, final String propertyName, final String facetTypeName) {
         init();
 
         final String specAndPropertyAndFacet = specFullName + "/property/" + propertyName + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndPropertyAndFacet, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
-
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAssociation property = noSpec.getAssociation(propertyName);
@@ -327,11 +313,13 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         xhtml.appendToBody(div);
         final Element ul = xhtmlRenderer.ul(HtmlClass.PROPERTIES);
 
-        final String specUri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
+        final String specUri =
+            MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
         ul.appendChild(xhtmlRenderer.li_a(specUri, specFullName, "owning spec", "spec", "facet"));
 
-        final String propertyUri = MessageFormat.format("{0}/specs/{1}/property/{2}", getServletRequest().getContextPath(),
-                specFullName, propertyName);
+        final String propertyUri =
+            MessageFormat.format("{0}/specs/{1}/property/{2}", getServletRequest().getContextPath(), specFullName,
+                propertyName);
         ul.appendChild(xhtmlRenderer.li_a(propertyUri, propertyName, "owning property", "property", "facet"));
 
         div.appendChild(ul);
@@ -339,15 +327,15 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         try {
             xhtml.appendToBody(divFacetElements(facetTypeName, property));
         } catch (final IllegalArgumentException e) {
-        	throw new WebApplicationException(responseOfNotFound(e));
+            throw new WebApplicationException(responseOfNotFound(e));
         } catch (final ClassNotFoundException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IntrospectionException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IllegalAccessException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final InvocationTargetException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         }
 
         return xhtml.toXML();
@@ -358,16 +346,12 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specCollectionFacet(
-            final String specFullName,
-            final String collectionId,
-            final String facetTypeName) {
+    public String specCollectionFacet(final String specFullName, final String collectionId, final String facetTypeName) {
         init();
 
         final String specAndPropertyAndFacet = specFullName + "/collection/" + collectionId + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndPropertyAndFacet, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
-
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAssociation collection = noSpec.getAssociation(collectionId);
@@ -377,26 +361,28 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         xhtml.appendToBody(div);
         final Element ul = xhtmlRenderer.ul(HtmlClass.PROPERTIES);
 
-        final String specUri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
+        final String specUri =
+            MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
         ul.appendChild(xhtmlRenderer.li_a(specUri, specFullName, "owning spec", "spec", "facet"));
 
-        final String collectionUri = MessageFormat.format("{0}/specs/{1}/collection/{2}", getServletRequest().getContextPath(),
-                specFullName, collectionId);
+        final String collectionUri =
+            MessageFormat.format("{0}/specs/{1}/collection/{2}", getServletRequest().getContextPath(), specFullName,
+                collectionId);
         ul.appendChild(xhtmlRenderer.li_a(collectionUri, collectionId, "owning collection", "collection", "facet"));
         div.appendChild(ul);
 
         try {
             xhtml.appendToBody(divFacetElements(facetTypeName, collection));
         } catch (final IllegalArgumentException e) {
-        	throw new WebApplicationException(responseOfNotFound(e));
+            throw new WebApplicationException(responseOfNotFound(e));
         } catch (final ClassNotFoundException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IntrospectionException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IllegalAccessException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final InvocationTargetException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         }
 
         return xhtml.toXML();
@@ -407,16 +393,12 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String specActionFacet(
-            final String specFullName,
-            final String actionId,
-            final String facetTypeName) {
+    public String specActionFacet(final String specFullName, final String actionId, final String facetTypeName) {
         init();
 
         final String specAndPropertyAndFacet = specFullName + "/action/" + actionId + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndPropertyAndFacet, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
-
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAction action = noSpec.getObjectAction(null, actionId);
@@ -425,9 +407,11 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         final Element div = xhtmlRenderer.div_p("Owners", null);
         xhtml.appendToBody(div);
         final Element ul = xhtmlRenderer.ul(HtmlClass.PROPERTIES);
-        final String specUri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
+        final String specUri =
+            MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
         ul.appendChild(xhtmlRenderer.li_a(specUri, specFullName, "owning spec", "spec", "facet"));
-        final String actionUri = MessageFormat.format("{0}/specs/{1}/action/{2}", getServletRequest().getContextPath(), specFullName,
+        final String actionUri =
+            MessageFormat.format("{0}/specs/{1}/action/{2}", getServletRequest().getContextPath(), specFullName,
                 actionId);
         ul.appendChild(xhtmlRenderer.li_a(actionUri, actionId, "owning action", "collection", "facet"));
         div.appendChild(ul);
@@ -435,15 +419,15 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         try {
             xhtml.appendToBody(divFacetElements(facetTypeName, action));
         } catch (final IllegalArgumentException e) {
-        	throw new WebApplicationException(responseOfNotFound(e));
+            throw new WebApplicationException(responseOfNotFound(e));
         } catch (final ClassNotFoundException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IntrospectionException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final IllegalAccessException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         } catch (final InvocationTargetException e) {
-        	throw new WebApplicationException(responseOfInternalServerError(e));
+            throw new WebApplicationException(responseOfInternalServerError(e));
         }
 
         return xhtml.toXML();

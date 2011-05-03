@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
@@ -30,33 +29,30 @@ import org.apache.wicket.markup.html.WebPage;
  * Enumerates the different types of pages that can be rendered.
  * 
  * <p>
- * Is used by {@link PageClassRegistry} to lookup the concrete page to render
- * different types of pages. This allows the large-scale structure of page
- * layout (eg headers, footers) to be altered.
+ * Is used by {@link PageClassRegistry} to lookup the concrete page to render different types of pages. This allows the
+ * large-scale structure of page layout (eg headers, footers) to be altered.
  */
 public enum PageType {
-	SIGN_IN(WebPage.class), HOME(HomePage.class), ENTITY(EntityPage.class), ACTION(
-			ActionPage.class), SIGN_OUT(WebPage.class);
+    SIGN_IN(WebPage.class), HOME(HomePage.class), ENTITY(EntityPage.class), ACTION(ActionPage.class),
+    SIGN_OUT(WebPage.class);
 
-	private Class<? extends Page> superClass;
+    private Class<? extends Page> superClass;
 
-	private PageType() {
-		this(Page.class);
-	}
+    private PageType() {
+        this(Page.class);
+    }
 
-	private PageType(final Class<? extends Page> pageClass) {
-		this.superClass = pageClass;
-	}
+    private PageType(final Class<? extends Page> pageClass) {
+        this.superClass = pageClass;
+    }
 
-	/**
-	 * The class that pages registered against this page type must be assignable
-	 * from (ie have as their superclass).
-	 * 
-	 * <p>
-	 * This allows us to perform fail-fast checking when pages are registered,
-	 * rather than when they are used.
-	 */
-	public Class<? extends Page> getPageClass() {
-		return superClass;
-	}
+    /**
+     * The class that pages registered against this page type must be assignable from (ie have as their superclass).
+     * 
+     * <p>
+     * This allows us to perform fail-fast checking when pages are registered, rather than when they are used.
+     */
+    public Class<? extends Page> getPageClass() {
+        return superClass;
+    }
 }

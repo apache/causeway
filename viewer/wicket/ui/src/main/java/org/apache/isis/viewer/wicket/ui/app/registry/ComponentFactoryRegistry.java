@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.app.registry;
 
 import java.util.List;
@@ -28,68 +27,55 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 
-
 /**
  * API for finding registered {@link ComponentFactory}s.
  * 
  * <p>
- * Ultimately all requests to locate {@link ComponentFactory}s are routed through to
- * an object implementing this interface.
+ * Ultimately all requests to locate {@link ComponentFactory}s are routed through to an object implementing this
+ * interface.
  */
 public interface ComponentFactoryRegistry {
 
-	List<ComponentFactory> findComponentFactories(ComponentType componentType, IModel<?> model);
+    List<ComponentFactory> findComponentFactories(ComponentType componentType, IModel<?> model);
 
-	/**
-	 * Finds the "best" {@link ComponentFactory} for the viewId.
-	 */
-	ComponentFactory findComponentFactory(ComponentType componentType, IModel<?> model);
+    /**
+     * Finds the "best" {@link ComponentFactory} for the viewId.
+     */
+    ComponentFactory findComponentFactory(ComponentType componentType, IModel<?> model);
 
-	
-	/**
-	 * As per {@link #addOrReplaceComponent(MarkupContainer, ComponentType, IModel)}, but 
-	 * with the wicket id derived from the {@link ComponentType}.
-	 */
-	Component addOrReplaceComponent(
-			MarkupContainer markupContainer, ComponentType componentType,
-			IModel<?> model);
+    /**
+     * As per {@link #addOrReplaceComponent(MarkupContainer, ComponentType, IModel)}, but with the wicket id derived
+     * from the {@link ComponentType}.
+     */
+    Component addOrReplaceComponent(MarkupContainer markupContainer, ComponentType componentType, IModel<?> model);
 
-	/**
-	 * {@link #createComponent(ComponentType, String, IModel) Creates} the relevant {@link Component} for
-	 * the provided arguments, and adds to the provided {@link MarkupContainer}; the
-	 * wicket id is as specified.
-	 * 
-	 * <p>
-	 * If none can be found, will fail fast.
-	 */
-	Component addOrReplaceComponent(
-			MarkupContainer markupContainer, String id, ComponentType componentType,
-			IModel<?> model);
+    /**
+     * {@link #createComponent(ComponentType, String, IModel) Creates} the relevant {@link Component} for the provided
+     * arguments, and adds to the provided {@link MarkupContainer}; the wicket id is as specified.
+     * 
+     * <p>
+     * If none can be found, will fail fast.
+     */
+    Component addOrReplaceComponent(MarkupContainer markupContainer, String id, ComponentType componentType,
+        IModel<?> model);
 
+    /**
+     * As per {@link #createComponent(ComponentType, String, IModel)}, but with the wicket id derived from the
+     * {@link ComponentType}.
+     * 
+     * @see #createComponent(ComponentType, String, IModel)
+     */
+    Component createComponent(ComponentType componentType, IModel<?> model);
 
-	/**
-	 * As per {@link #createComponent(ComponentType, String, IModel)}, but with the
-	 * wicket id derived from the {@link ComponentType}.
-	 * 
-	 * @see #createComponent(ComponentType, String, IModel)
-	 */
-	Component createComponent(ComponentType componentType,
-			IModel<?> model);
+    /**
+     * Create the {@link Component} matching the specified {@link ComponentType} and {@link IModel} to the provided
+     * {@link MarkupContainer}; the id is specified explicitly.
+     * 
+     * <p>
+     * If none can be found, will fail fast.
+     */
+    Component createComponent(ComponentType componentType, String id, IModel<?> model);
 
-	/**
-	 * Create the {@link Component} matching the specified {@link ComponentType} and
-	 * {@link IModel} to the provided {@link MarkupContainer}; the id is specified explicitly.
-	 * 
-	 * <p>
-	 * If none can be found, will fail fast.
-	 */
-	Component createComponent(ComponentType componentType,
-			String id, IModel<?> model);
-
-
-
-	ComponentFactory findComponentFactoryElseFailFast(
-			ComponentType componentType, IModel<?> model);
-
+    ComponentFactory findComponentFactoryElseFailFast(ComponentType componentType, IModel<?> model);
 
 }

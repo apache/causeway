@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -33,24 +32,25 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionPanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String NAME = "labelled";
+    private static final long serialVersionUID = 1L;
 
-	public CollectionPanelFactory() {
-		super(ComponentType.COLLECTION_NAME_AND_CONTENTS, NAME);
-	}
+    private static final String NAME = "labelled";
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if ( !(model instanceof EntityCollectionModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		} 
-		return ApplicationAdvice.APPLIES;
-	}
+    public CollectionPanelFactory() {
+        super(ComponentType.COLLECTION_NAME_AND_CONTENTS, NAME);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-		return new CollectionPanel(id, collectionModel);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof EntityCollectionModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        return ApplicationAdvice.APPLIES;
+    }
+
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionPanel(id, collectionModel);
+    }
 }

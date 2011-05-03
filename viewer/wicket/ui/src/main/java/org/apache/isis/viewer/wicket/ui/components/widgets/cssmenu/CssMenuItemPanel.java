@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import org.apache.wicket.model.Model;
@@ -27,19 +26,19 @@ import org.apache.wicket.model.Model;
  */
 class CssMenuItemPanel extends CssMenuItemPanelAbstract<CssMenuItemPanel.MyModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	static class MyModel extends Model<CssMenuItem>{
-		private static final long serialVersionUID = 1L;
-		
-		public MyModel(CssMenuItem cssMenuItem) {
-			super(cssMenuItem);
-		}
-	}
+    static class MyModel extends Model<CssMenuItem> {
+        private static final long serialVersionUID = 1L;
 
-	public CssMenuItemPanel(String id, CssMenuItem cssMenuItem) {
-		super(id, new MyModel(cssMenuItem));
-		
-		addSubMenuItems(this, getModel().getObject());
-	}
+        public MyModel(final CssMenuItem cssMenuItem) {
+            super(cssMenuItem);
+        }
+    }
+
+    public CssMenuItemPanel(final String id, final CssMenuItem cssMenuItem) {
+        super(id, new MyModel(cssMenuItem));
+
+        addSubMenuItems(this, getModel().getObject());
+    }
 }

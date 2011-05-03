@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import org.apache.wicket.Page;
@@ -27,7 +26,6 @@ import org.apache.wicket.Page;
  */
 public interface PageRegistrySpi {
 
-	public void registerPage(PageType pageType, Class<? extends Page> pageClass);
+    public void registerPage(PageType pageType, Class<? extends Page> pageClass);
 
-	
 }

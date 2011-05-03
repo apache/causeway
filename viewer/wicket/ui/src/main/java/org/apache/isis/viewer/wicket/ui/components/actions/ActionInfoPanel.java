@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,20 +29,20 @@ import org.apache.wicket.markup.html.basic.Label;
  * Renders a panel providing summary information about an action.
  */
 public class ActionInfoPanel extends PanelAbstract<ActionModel> {
-	
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_ACTION_NAME = "actionName";
-	private static final String ID_TARGET = "target";
 
-	public ActionInfoPanel(String id, ActionModel actionModel) {
-		super(id, actionModel);
+    private static final long serialVersionUID = 1L;
 
-		final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
-		final ObjectAction objectAction = getModel().getActionMemento().getAction();
-		
-		// TODO: render instead as links (providing isn't a service; provide a component for this?)
-		add(new Label(ID_TARGET, targetAdapter.titleString()));
-		add(new Label(ID_ACTION_NAME, objectAction.getName()));
-	}
+    private static final String ID_ACTION_NAME = "actionName";
+    private static final String ID_TARGET = "target";
+
+    public ActionInfoPanel(final String id, final ActionModel actionModel) {
+        super(id, actionModel);
+
+        final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
+        final ObjectAction objectAction = getModel().getActionMemento().getAction();
+
+        // TODO: render instead as links (providing isn't a service; provide a component for this?)
+        add(new Label(ID_TARGET, targetAdapter.titleString()));
+        add(new Label(ID_ACTION_NAME, objectAction.getName()));
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -32,19 +31,20 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionContentsSelectorFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CollectionContentsSelectorFactory() {
-		super(ComponentType.COLLECTION_CONTENTS);
-	}
+    public CollectionContentsSelectorFactory() {
+        super(ComponentType.COLLECTION_CONTENTS);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		return appliesIf(model instanceof EntityCollectionModel);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return appliesIf(model instanceof EntityCollectionModel);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-		return new CollectionContentsSelector(id, collectionModel, this);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsSelector(id, collectionModel, this);
+    }
 }

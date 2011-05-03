@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
 
 import java.util.ArrayList;
@@ -35,8 +34,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 /**
- * {@link PanelAbstract Panel} for entity, with separate tabs for the summary
- * info (icon, title, actions), the properties, and for each of the collections.
+ * {@link PanelAbstract Panel} for entity, with separate tabs for the summary info (icon, title, actions), the
+ * properties, and for each of the collections.
  */
 public class EntityTabbedPanel extends TabbedPanelAbstract<EntityModel> {
 
@@ -44,7 +43,7 @@ public class EntityTabbedPanel extends TabbedPanelAbstract<EntityModel> {
 
     private static final String ID_TABS = "tabs";
 
-    public EntityTabbedPanel(String id, final EntityModel entityModel) {
+    public EntityTabbedPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }
@@ -52,12 +51,12 @@ public class EntityTabbedPanel extends TabbedPanelAbstract<EntityModel> {
     private void buildGui() {
 
         // create a list of ITab objects used to feed the tabbed panel
-        List<ITab> tabs = new ArrayList<ITab>();
+        final List<ITab> tabs = new ArrayList<ITab>();
         tabs.add(new AbstractTab(new Model<String>("Summary")) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Panel getPanel(String panelId) {
+            public Panel getPanel(final String panelId) {
                 return new EntitySummaryTab(panelId, getModel());
             }
         });
@@ -66,21 +65,19 @@ public class EntityTabbedPanel extends TabbedPanelAbstract<EntityModel> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Panel getPanel(String panelId) {
+            public Panel getPanel(final String panelId) {
                 return new EntityPropertiesTab(panelId, getModel());
             }
         });
 
-        List<OneToManyAssociation> collectionList = getModel()
-                .getTypeOfSpecification().getCollections();
-        for (OneToManyAssociation collection : collectionList) {
-            final EntityCollectionModel collectionModel = EntityCollectionModel
-                    .createParented(getModel(), collection);
+        final List<OneToManyAssociation> collectionList = getModel().getTypeOfSpecification().getCollections();
+        for (final OneToManyAssociation collection : collectionList) {
+            final EntityCollectionModel collectionModel = EntityCollectionModel.createParented(getModel(), collection);
             tabs.add(new AbstractTab(new Model<String>(collection.getName())) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public Panel getPanel(String panelId) {
+                public Panel getPanel(final String panelId) {
                     return new EntityCollectionTab(panelId, collectionModel);
                 }
             });

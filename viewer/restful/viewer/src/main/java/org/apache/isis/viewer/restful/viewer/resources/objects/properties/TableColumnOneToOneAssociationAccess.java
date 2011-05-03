@@ -32,13 +32,10 @@ import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.resources.objects.TableColumnNakedObjectAssociation;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnOneToOneAssociationAccess extends TableColumnNakedObjectAssociation<OneToOneAssociation> {
 
-    public TableColumnOneToOneAssociationAccess(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnOneToOneAssociationAccess(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("Access", session, nakedObject, resourceContext);
     }
 

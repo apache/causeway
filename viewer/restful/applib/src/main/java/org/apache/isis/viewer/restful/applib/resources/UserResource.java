@@ -23,8 +23,8 @@ import javax.ws.rs.Produces;
 
 public interface UserResource {
 
-	@GET
-	@Produces( { "application/xhtml+xml", "text/html" })
-	public String user();
+    @GET
+    @Produces({ "application/xhtml+xml", "text/html" })
+    public String user();
 
 }

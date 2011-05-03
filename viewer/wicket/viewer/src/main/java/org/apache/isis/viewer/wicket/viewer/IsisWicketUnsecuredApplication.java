@@ -19,26 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Response;
-import org.apache.wicket.Session;
-import org.apache.wicket.guice.GuiceComponentInjector;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.util.convert.ConverterLocator;
-
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -50,7 +30,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule;
@@ -74,6 +53,25 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.AnonymousWebSessi
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
+import org.apache.wicket.Application;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.Response;
+import org.apache.wicket.Session;
+import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.util.convert.ConverterLocator;
+
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 
 public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor,
     PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionAccessor {
@@ -137,9 +135,9 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         super.init();
         getResourceSettings().setParentFolderPlaceholder("$up$");
 
-        DeploymentType deploymentType = determineDeploymentType();
+        final DeploymentType deploymentType = determineDeploymentType();
 
-        IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
 
         final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
@@ -160,7 +158,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(getServletContext());
         final ResourceStreamSource rssTcl = new ResourceStreamSourceContextLoaderClassPath();
         final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
-        IsisConfigurationBuilder isisConfigurationBuilder =
+        final IsisConfigurationBuilder isisConfigurationBuilder =
             new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
         return isisConfigurationBuilder;
     }
@@ -181,8 +179,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     // /////////////////////////////////////////////////
 
     @Override
-    public Session newSession(Request request, Response response) {
-        AuthenticationManager authenticationManager = anonymousAuthenticationManager();
+    public Session newSession(final Request request, final Response response) {
+        final AuthenticationManager authenticationManager = anonymousAuthenticationManager();
 
         final AnonymousWebSessionForIsis anonymousWebSession =
             new AnonymousWebSessionForIsis(request, authenticationManager);
@@ -191,22 +189,23 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     private AuthenticationManager authenticationManager;
-    
+
     /**
      * Lazily creates an {@link AuthenticationManager} that will authenticate all requests.
      */
     private AuthenticationManager anonymousAuthenticationManager() {
-        if(authenticationManager == null) {
+        if (authenticationManager == null) {
             final IsisConfiguration configuration = IsisContext.getConfiguration();
-            AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(configuration);
+            final AuthenticationManagerStandard authenticationManager =
+                new AuthenticationManagerStandard(configuration);
             authenticationManager.addAuthenticator(new AuthenticatorAbstract(configuration) {
                 @Override
-                public boolean canAuthenticate(AuthenticationRequest request) {
+                public boolean canAuthenticate(final AuthenticationRequest request) {
                     return true;
                 }
 
                 @Override
-                public boolean isValid(AuthenticationRequest request) {
+                public boolean isValid(final AuthenticationRequest request) {
                     return true;
                 }
             });
@@ -225,7 +224,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
      * In general, it shouldn't be necessary to override this method.
      */
     @Override
-    public RequestCycle newRequestCycle(Request request, Response response) {
+    public RequestCycle newRequestCycle(final Request request, final Response response) {
         return new WebRequestCycleForIsis(this, (WebRequest) request, response);
     }
 
@@ -238,7 +237,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
      */
     @Override
     protected IConverterLocator newConverterLocator() {
-        ConverterLocator converterLocator = new ConverterLocator();
+        final ConverterLocator converterLocator = new ConverterLocator();
         converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
         converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento());
         return converterLocator;
@@ -261,7 +260,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
      * CSS. However, it still comes after any component-level CSS, so is not ideal.
      */
     @Override
-    public void renderApplicationCss(HtmlHeaderContainer container) {
+    public void renderApplicationCss(final HtmlHeaderContainer container) {
         final String cssUrl = getApplicationCssUrl();
         if (cssUrl == null) {
             return;

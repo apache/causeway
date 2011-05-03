@@ -20,21 +20,21 @@ package org.apache.isis.viewer.restful.applib;
 
 public class RestfulClientException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public RestfulClientException() {
-	}
+    public RestfulClientException() {
+    }
 
-	public RestfulClientException(String message) {
-		super(message);
-	}
+    public RestfulClientException(final String message) {
+        super(message);
+    }
 
-	public RestfulClientException(Throwable cause) {
-		super(cause);
-	}
+    public RestfulClientException(final Throwable cause) {
+        super(cause);
+    }
 
-	public RestfulClientException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public RestfulClientException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
 }

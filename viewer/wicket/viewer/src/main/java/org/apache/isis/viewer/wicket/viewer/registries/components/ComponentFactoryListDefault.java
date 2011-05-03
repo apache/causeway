@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.Iterator;
@@ -74,189 +73,172 @@ import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkFactory;
 
 /**
- * Default implementation of {@link ComponentFactoryList} that registers
- * a hardcoded set of built-in {@link ComponentFactory}s, along with
- * any implementations loaded using {@link ServiceLoader} (ie from <tt>META-INF/services</tt>).
+ * Default implementation of {@link ComponentFactoryList} that registers a hardcoded set of built-in
+ * {@link ComponentFactory}s, along with any implementations loaded using {@link ServiceLoader} (ie from
+ * <tt>META-INF/services</tt>).
  */
 public class ComponentFactoryListDefault implements ComponentFactoryList {
 
-	public void addComponentFactories(List<ComponentFactory> componentFactories) {
-		
-		addComponentFactoriesActingAsSelectors(componentFactories);
-		
-		addComponentFactoriesUsingServiceLoader(componentFactories);
-		
-		addBuiltInComponentFactories(componentFactories);
-	}
+    @Override
+    public void addComponentFactories(final List<ComponentFactory> componentFactories) {
 
-	/**
-	 * Any {@link ComponentFactory}s that act as selectors of other factories should be registered
-	 * here; they will be loaded first, to ensure that they are found first.
-	 */
-	protected void addComponentFactoriesActingAsSelectors(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new EntitySelectorFactory());
-		componentFactories.add(new CollectionContentsSelectorFactory());
-        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // make first
-	}
+        addComponentFactoriesActingAsSelectors(componentFactories);
 
-	protected void addComponentFactoriesUsingServiceLoader(
-			List<ComponentFactory> componentFactories) {
-		ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
+        addComponentFactoriesUsingServiceLoader(componentFactories);
 
-	    for (ComponentFactory componentFactory : serviceLoader) {
-	    	componentFactories.add(componentFactory);
-	    }
-	}
-
-	private void addBuiltInComponentFactories(
-			List<ComponentFactory> componentFactories) {
-		addComponentFactoriesForSpecial(componentFactories);
-		addComponentFactoriesForWelcome(componentFactories);
-		addComponentFactoriesForApplicationActions(componentFactories);
-		addComponentFactoriesForEntity(componentFactories);
-		addComponentFactoriesForActionInfo(componentFactories);
-		addComponentFactoriesForAction(componentFactories);
-        addComponentFactoriesForEntityCollection(componentFactories);
-		addComponentFactoriesForEntityCollectionContents(componentFactories);
-		addComponentFactoriesForEmptyCollection(componentFactories);
-		addComponentFactoriesForScalar(componentFactories);
-		addComponentFactoriesForEntityLink(componentFactories);
-		addComponentFactoriesForVoidReturn(componentFactories);
-		addComponentFactoriesForValue(componentFactories);
-		addComponentFactoriesForParameters(componentFactories);
-	}
-
-	protected void addComponentFactoriesForSpecial(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new WizardPageDescriptionPanelFactory());
-	}
-
-	protected void addComponentFactoriesForWelcome(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new WelcomePanelFactory());
-	}
-	
-	protected void addComponentFactoriesForEntity(
-			List<ComponentFactory> componentFactories) {
-	    
-		// top-level
-		componentFactories.add(new EntityCombinedPanelFactory());
-		componentFactories.add(new EntityTabbedPanelFactory());
-		
-		// lower-level
-		componentFactories.add(new EntitySummaryPanelFactory());
-		componentFactories.add(new EntityPropertiesPanelFactory());
-		componentFactories.add(new EntityCollectionsPanelFactory());
-		componentFactories.add(new EntityPropertiesAndCollectionsPanelFactory());
-	}
-
-	protected void addComponentFactoriesForEntityCollectionContents(
-			List<ComponentFactory> componentFactories) {
-	    componentFactories.add(new CollectionContentsAsAjaxTableFactory());
-		// componentFactories.add(new CollectionContentsAsSimpleTableFactory()); // work-in-progress
-		componentFactories.add(new CollectionContentsAsIconsFactory()); 
-	}
-	
-    protected void addComponentFactoriesForEntityCollection(
-            List<ComponentFactory> componentFactories) {
-        componentFactories.add(new CollectionPanelFactory()); 
+        addBuiltInComponentFactories(componentFactories);
     }
-    
-	protected void addComponentFactoriesForEmptyCollection(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new EmptyCollectionPanelFactory());
-	}
-	
-	protected void addComponentFactoriesForValue(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new StandaloneValuePanelFactory());
-	}
 
-	protected void addComponentFactoriesForScalar(
-			List<ComponentFactory> componentFactories) {
-		
-		componentFactories.add(new ReferencePanelFactory());
+    /**
+     * Any {@link ComponentFactory}s that act as selectors of other factories should be registered here; they will be
+     * loaded first, to ensure that they are found first.
+     */
+    protected void addComponentFactoriesActingAsSelectors(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new EntitySelectorFactory());
+        componentFactories.add(new CollectionContentsSelectorFactory());
+        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // make first
+    }
 
-		componentFactories.add(new BooleanPanelFactory());
-		componentFactories.add(new BytePanelFactory());
-		componentFactories.add(new ShortPanelFactory());
-		componentFactories.add(new IntegerPanelFactory());
-		componentFactories.add(new LongPanelFactory());
-		componentFactories.add(new CharacterPanelFactory());
-		componentFactories.add(new FloatPanelFactory());
-		componentFactories.add(new DoublePanelFactory());
-		
-		componentFactories.add(new StringPanelFactory());
+    protected void addComponentFactoriesUsingServiceLoader(final List<ComponentFactory> componentFactories) {
+        final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
 
-		// componentFactories.add(new JavaAwtImagePanelFactory()); // work-in-progress
-		componentFactories.add(new JavaUtilDatePanelFactory());
-		componentFactories.add(new JavaSqlDatePanelFactory());
-		componentFactories.add(new JavaSqlTimePanelFactory());
-		
-		componentFactories.add(new IsisMoneyPanelFactory());
-		componentFactories.add(new IsisDatePanelFactory());
-		componentFactories.add(new IsisDateTimePanelFactory());
-		componentFactories.add(new IsisTimePanelFactory());
-		componentFactories.add(new IsisTimeStampPanelFactory());
-		componentFactories.add(new IsisColorPanelFactory());
-		componentFactories.add(new IsisPercentagePanelFactory());
-		componentFactories.add(new IsisPasswordPanelFactory());
-		
-		componentFactories.add(new JavaMathBigIntegerPanelFactory());
-		componentFactories.add(new JavaMathBigDecimalPanelFactory());
-		
-		componentFactories.add(new ValuePanelFactory());
-	}
-	
-	protected void addComponentFactoriesForEntityLink(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new EntityLinkFactory());
-	}
-	
-	protected void addComponentFactoriesForVoidReturn(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new VoidReturnPanelFactory());
-	}
+        for (final ComponentFactory componentFactory : serviceLoader) {
+            componentFactories.add(componentFactory);
+        }
+    }
 
-	protected void addComponentFactoriesForActionInfo(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new ActionInfoPanelFactory());
-	}
-	
-	protected void addComponentFactoriesForParameters(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new ActionParametersFormPanelFactory());
-	}
-	
-	protected void addComponentFactoriesForAction(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new ActionPanelFactory());
-	}
+    private void addBuiltInComponentFactories(final List<ComponentFactory> componentFactories) {
+        addComponentFactoriesForSpecial(componentFactories);
+        addComponentFactoriesForWelcome(componentFactories);
+        addComponentFactoriesForApplicationActions(componentFactories);
+        addComponentFactoriesForEntity(componentFactories);
+        addComponentFactoriesForActionInfo(componentFactories);
+        addComponentFactoriesForAction(componentFactories);
+        addComponentFactoriesForEntityCollection(componentFactories);
+        addComponentFactoriesForEntityCollectionContents(componentFactories);
+        addComponentFactoriesForEmptyCollection(componentFactories);
+        addComponentFactoriesForScalar(componentFactories);
+        addComponentFactoriesForEntityLink(componentFactories);
+        addComponentFactoriesForVoidReturn(componentFactories);
+        addComponentFactoriesForValue(componentFactories);
+        addComponentFactoriesForParameters(componentFactories);
+    }
 
-	protected void addComponentFactoriesForApplicationActions(
-			List<ComponentFactory> componentFactories) {
-		componentFactories.add(new AppActionsCssMenuFactory());
-	}
+    protected void addComponentFactoriesForSpecial(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new WizardPageDescriptionPanelFactory());
+    }
 
-	/**
-	 * Allows the subclass to remove any built-in factories.
-	 */
-	protected void removeComponentFactories(List<ComponentFactory> componentFactories, Class<? extends ComponentFactory>... classes) {
-	    for (Iterator<ComponentFactory> iterator = componentFactories.iterator(); iterator
-                .hasNext();) {
-            ComponentFactory componentFactory = (ComponentFactory) iterator
-                    .next();
+    protected void addComponentFactoriesForWelcome(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new WelcomePanelFactory());
+    }
+
+    protected void addComponentFactoriesForEntity(final List<ComponentFactory> componentFactories) {
+
+        // top-level
+        componentFactories.add(new EntityCombinedPanelFactory());
+        componentFactories.add(new EntityTabbedPanelFactory());
+
+        // lower-level
+        componentFactories.add(new EntitySummaryPanelFactory());
+        componentFactories.add(new EntityPropertiesPanelFactory());
+        componentFactories.add(new EntityCollectionsPanelFactory());
+        componentFactories.add(new EntityPropertiesAndCollectionsPanelFactory());
+    }
+
+    protected void addComponentFactoriesForEntityCollectionContents(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new CollectionContentsAsAjaxTableFactory());
+        // componentFactories.add(new CollectionContentsAsSimpleTableFactory()); // work-in-progress
+        componentFactories.add(new CollectionContentsAsIconsFactory());
+    }
+
+    protected void addComponentFactoriesForEntityCollection(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new CollectionPanelFactory());
+    }
+
+    protected void addComponentFactoriesForEmptyCollection(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new EmptyCollectionPanelFactory());
+    }
+
+    protected void addComponentFactoriesForValue(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new StandaloneValuePanelFactory());
+    }
+
+    protected void addComponentFactoriesForScalar(final List<ComponentFactory> componentFactories) {
+
+        componentFactories.add(new ReferencePanelFactory());
+
+        componentFactories.add(new BooleanPanelFactory());
+        componentFactories.add(new BytePanelFactory());
+        componentFactories.add(new ShortPanelFactory());
+        componentFactories.add(new IntegerPanelFactory());
+        componentFactories.add(new LongPanelFactory());
+        componentFactories.add(new CharacterPanelFactory());
+        componentFactories.add(new FloatPanelFactory());
+        componentFactories.add(new DoublePanelFactory());
+
+        componentFactories.add(new StringPanelFactory());
+
+        // componentFactories.add(new JavaAwtImagePanelFactory()); // work-in-progress
+        componentFactories.add(new JavaUtilDatePanelFactory());
+        componentFactories.add(new JavaSqlDatePanelFactory());
+        componentFactories.add(new JavaSqlTimePanelFactory());
+
+        componentFactories.add(new IsisMoneyPanelFactory());
+        componentFactories.add(new IsisDatePanelFactory());
+        componentFactories.add(new IsisDateTimePanelFactory());
+        componentFactories.add(new IsisTimePanelFactory());
+        componentFactories.add(new IsisTimeStampPanelFactory());
+        componentFactories.add(new IsisColorPanelFactory());
+        componentFactories.add(new IsisPercentagePanelFactory());
+        componentFactories.add(new IsisPasswordPanelFactory());
+
+        componentFactories.add(new JavaMathBigIntegerPanelFactory());
+        componentFactories.add(new JavaMathBigDecimalPanelFactory());
+
+        componentFactories.add(new ValuePanelFactory());
+    }
+
+    protected void addComponentFactoriesForEntityLink(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new EntityLinkFactory());
+    }
+
+    protected void addComponentFactoriesForVoidReturn(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new VoidReturnPanelFactory());
+    }
+
+    protected void addComponentFactoriesForActionInfo(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new ActionInfoPanelFactory());
+    }
+
+    protected void addComponentFactoriesForParameters(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new ActionParametersFormPanelFactory());
+    }
+
+    protected void addComponentFactoriesForAction(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new ActionPanelFactory());
+    }
+
+    protected void addComponentFactoriesForApplicationActions(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new AppActionsCssMenuFactory());
+    }
+
+    /**
+     * Allows the subclass to remove any built-in factories.
+     */
+    protected void removeComponentFactories(final List<ComponentFactory> componentFactories,
+        final Class<? extends ComponentFactory>... classes) {
+        for (final Iterator<ComponentFactory> iterator = componentFactories.iterator(); iterator.hasNext();) {
+            final ComponentFactory componentFactory = iterator.next();
             if (isAssignableToAny(componentFactory, classes)) {
                 iterator.remove();
             }
         }
-	}
+    }
 
-    private boolean isAssignableToAny(ComponentFactory componentFactory,
-            Class<? extends ComponentFactory>... classes) {
+    private boolean isAssignableToAny(final ComponentFactory componentFactory,
+        final Class<? extends ComponentFactory>... classes) {
         final Class<? extends ComponentFactory> componentFactoryCls = componentFactory.getClass();
-        for (Class<? extends ComponentFactory> cls : classes) {
+        for (final Class<? extends ComponentFactory> cls : classes) {
             if (cls.isAssignableFrom(componentFactoryCls)) {
                 return true;
             }

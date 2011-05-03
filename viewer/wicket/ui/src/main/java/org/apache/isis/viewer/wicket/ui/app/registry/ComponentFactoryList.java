@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.app.registry;
 
 import java.util.List;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-
 
 /**
  * Defines an API for registering {@link ComponentFactory}s.
@@ -32,5 +30,5 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
  * As used by {@link ComponentFactoryListDefault}.
  */
 public interface ComponentFactoryList {
-	void addComponentFactories(List<ComponentFactory> componentFactories);
+    void addComponentFactories(List<ComponentFactory> componentFactories);
 }

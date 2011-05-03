@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.simple;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -32,28 +31,29 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionContentsAsSimpleTableFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String NAME = "simple";
+    private static final long serialVersionUID = 1L;
 
-	public CollectionContentsAsSimpleTableFactory() {
-		super(ComponentType.COLLECTION_CONTENTS, NAME);
-	}
+    private static final String NAME = "simple";
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if ( !(model instanceof EntityCollectionModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		} 
-		EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-		if (entityCollectionModel.hasSelectionHandler()) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		return ApplicationAdvice.APPLIES;
-	}
+    public CollectionContentsAsSimpleTableFactory() {
+        super(ComponentType.COLLECTION_CONTENTS, NAME);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-		return new CollectionContentsAsSimpleTable(id, collectionModel);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof EntityCollectionModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        if (entityCollectionModel.hasSelectionHandler()) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        return ApplicationAdvice.APPLIES;
+    }
+
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsAsSimpleTable(id, collectionModel);
+    }
 }

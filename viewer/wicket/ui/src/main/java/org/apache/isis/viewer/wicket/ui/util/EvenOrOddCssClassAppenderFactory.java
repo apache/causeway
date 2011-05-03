@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.wicket.behavior.IBehavior;
@@ -25,10 +24,9 @@ import org.apache.wicket.behavior.IBehavior;
 public class EvenOrOddCssClassAppenderFactory {
 
     private enum EvenOrOdd {
-        EVEN,
-        ODD;
+        EVEN, ODD;
         private EvenOrOddCssClassAppenderFactory.EvenOrOdd next() {
-            return this==EVEN?ODD:EVEN;
+            return this == EVEN ? ODD : EVEN;
         }
 
         private String className() {
@@ -36,11 +34,11 @@ public class EvenOrOddCssClassAppenderFactory {
         }
     }
 
-   private EvenOrOddCssClassAppenderFactory.EvenOrOdd eo = EvenOrOdd.EVEN;
+    private EvenOrOddCssClassAppenderFactory.EvenOrOdd eo = EvenOrOdd.EVEN;
 
-   public IBehavior nextClass() {
-       final String className = eo.className();
-       eo = eo.next();
-       return new CssClassAppender(className);
-   }
+    public IBehavior nextClass() {
+        final String className = eo.className();
+        eo = eo.next();
+        return new CssClassAppender(className);
+    }
 }

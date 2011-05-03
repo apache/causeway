@@ -17,21 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.junit.Test;
 
 public class ComponentType_ConstantsTest {
 
-	@Test
-	public void testToString() {
-		assertThat(ComponentType.COLLECTION_CONTENTS.toString(), is("collectionContents"));
-	}
+    @Test
+    public void testToString() {
+        assertThat(ComponentType.COLLECTION_CONTENTS.toString(), is("collectionContents"));
+    }
 
-	public enum X {FOO,BAR}
+    public enum X {
+        FOO, BAR
+    }
 }

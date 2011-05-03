@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.welcome;
 
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
@@ -32,19 +31,20 @@ import org.apache.wicket.model.IModel;
  */
 public class WelcomePanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public WelcomePanelFactory() {
-		super(ComponentType.WELCOME);
-	}
+    public WelcomePanelFactory() {
+        super(ComponentType.WELCOME);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		return appliesIf(model instanceof WelcomeModel);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return appliesIf(model instanceof WelcomeModel);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		return new WelcomePanel(id, (WelcomeModel)model);
-	}
-	
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        return new WelcomePanel(id, (WelcomeModel) model);
+    }
+
 }

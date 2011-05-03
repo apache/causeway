@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -40,60 +39,63 @@ import org.apache.wicket.model.Model;
  * <p>
  * Used by {@link SelectorPanelAbstract}.
  */
-public class DropDownChoiceComponentFactory extends
-		DropDownChoice<ComponentFactory> {
+public class DropDownChoiceComponentFactory extends DropDownChoice<ComponentFactory> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final IModel<?> underlyingModel;
-	private final String underlyingId;
-	private MarkupContainer container;
+    private static final long serialVersionUID = 1L;
 
-	private static final class ComponentFactoryChoiceRenderer implements
-	IChoiceRenderer<ComponentFactory> {
-		private static final long serialVersionUID = 1L;
-	
-		@Override
-		public Object getDisplayValue(ComponentFactory object) {
-			return object.getName();
-		}
-	
-		@Override
-		public String getIdValue(ComponentFactory object, int index) {
-			return Integer.toString(index);
-		}
-	}
+    private final IModel<?> underlyingModel;
+    private final String underlyingId;
+    private final MarkupContainer container;
 
-	/**
-	 * @param id - id to use for the drop down
-	 * @param selectedComponentFactoryModel - currently selected in the drop-down
-	 * @param componentFactories - list of {@link ComponentFactory}s to show in drop-down
-	 * @param container - the container that should contain the {@link Component} created by the selected {@link ComponentFactory} 
-	 * @param underlyingId - the id of the {@link Component} created
-	 * @param underlyingModel - the model for the {@link Component}, ie as passed to {@link Components#findComponentFactories(org.starobjects.wicket.viewer.components.ComponentType, IModel)}
-	 */
-	public DropDownChoiceComponentFactory(String id,
-			Model<ComponentFactory> selectedComponentFactoryModel,
-			List<? extends ComponentFactory> componentFactories,
-			MarkupContainer container, 
-			String underlyingId, 
-			IModel<?> underlyingModel) {
-		super(id, selectedComponentFactoryModel, componentFactories, new ComponentFactoryChoiceRenderer());
-		this.underlyingId = underlyingId;
-		this.underlyingModel = underlyingModel;
-		this.container = container;
-	}
+    private static final class ComponentFactoryChoiceRenderer implements IChoiceRenderer<ComponentFactory> {
+        private static final long serialVersionUID = 1L;
 
-	@Override
-	protected boolean wantOnSelectionChangedNotifications() {
-		return true;
-	}
+        @Override
+        public Object getDisplayValue(final ComponentFactory object) {
+            return object.getName();
+        }
 
-	@Override
-	protected void onSelectionChanged(ComponentFactory newSelection) {
-		ComponentFactory componentFactory = getModel().getObject();
-		if (componentFactory != null)
-			container.addOrReplace(componentFactory
-					.createComponent(underlyingId, underlyingModel));
-	}
+        @Override
+        public String getIdValue(final ComponentFactory object, final int index) {
+            return Integer.toString(index);
+        }
+    }
+
+    /**
+     * @param id
+     *            - id to use for the drop down
+     * @param selectedComponentFactoryModel
+     *            - currently selected in the drop-down
+     * @param componentFactories
+     *            - list of {@link ComponentFactory}s to show in drop-down
+     * @param container
+     *            - the container that should contain the {@link Component} created by the selected
+     *            {@link ComponentFactory}
+     * @param underlyingId
+     *            - the id of the {@link Component} created
+     * @param underlyingModel
+     *            - the model for the {@link Component}, ie as passed to
+     *            {@link Components#findComponentFactories(org.starobjects.wicket.viewer.components.ComponentType, IModel)}
+     */
+    public DropDownChoiceComponentFactory(final String id, final Model<ComponentFactory> selectedComponentFactoryModel,
+        final List<? extends ComponentFactory> componentFactories, final MarkupContainer container,
+        final String underlyingId, final IModel<?> underlyingModel) {
+        super(id, selectedComponentFactoryModel, componentFactories, new ComponentFactoryChoiceRenderer());
+        this.underlyingId = underlyingId;
+        this.underlyingModel = underlyingModel;
+        this.container = container;
+    }
+
+    @Override
+    protected boolean wantOnSelectionChangedNotifications() {
+        return true;
+    }
+
+    @Override
+    protected void onSelectionChanged(final ComponentFactory newSelection) {
+        final ComponentFactory componentFactory = getModel().getObject();
+        if (componentFactory != null) {
+            container.addOrReplace(componentFactory.createComponent(underlyingId, underlyingModel));
+        }
+    }
 }

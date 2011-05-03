@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnFacetHiding extends TableColumnFacet {
     public TableColumnFacetHiding(final ResourceContext resourceContext) {
         super("Hiding", resourceContext);

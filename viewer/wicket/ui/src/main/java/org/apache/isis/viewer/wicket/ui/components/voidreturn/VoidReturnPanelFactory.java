@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.voidreturn;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -31,25 +30,25 @@ import org.apache.wicket.model.IModel;
  * {@link ComponentFactory} to represent an action that returns void.
  * 
  * <p>
- * TODO: not yet implemented; what should we do here? Perhaps render the object on
- * which the action was invoked, along with an informational message?
+ * TODO: not yet implemented; what should we do here? Perhaps render the object on which the action was invoked, along
+ * with an informational message?
  */
 public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public VoidReturnPanelFactory() {
-		super(ComponentType.VOID_RETURN);
-	}
+    public VoidReturnPanelFactory() {
+        super(ComponentType.VOID_RETURN);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		return ApplicationAdvice.APPLIES;
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return ApplicationAdvice.APPLIES;
+    }
 
-	@Override
-	public Component createComponent(String id, IModel<?> model) {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        throw new NotYetImplementedException();
+    }
 
 }

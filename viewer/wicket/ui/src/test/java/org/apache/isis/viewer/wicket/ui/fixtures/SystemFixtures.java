@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -31,28 +30,29 @@ import org.jmock.Mockery;
 
 public final class SystemFixtures {
 
-	private Mockery context;
-	public SystemFixtures(Mockery context) {
-		this.context = context;
-	}
+    private final Mockery context;
 
-	public void enstringOid(final OidStringifier mockOidStringifier, final Oid mockOid, final String returns) {
-		context.checking(new Expectations() {
-			{
-				allowing(mockOidStringifier).enString(mockOid);
-				will(returnValue(returns));
-			}
-		});
-	}
+    public SystemFixtures(final Mockery context) {
+        this.context = context;
+    }
 
-	public <T> void newLink(final CssMenuLinkFactory mockLinkBuilder,
-			final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction noAction, final Link<T> returns) {
-		context.checking(new Expectations() {
-			{
-				allowing(mockLinkBuilder).newLink(adapterMemento, noAction, linkId);
-				will(returnValue(returns));
-			}
-		});
-	}
+    public void enstringOid(final OidStringifier mockOidStringifier, final Oid mockOid, final String returns) {
+        context.checking(new Expectations() {
+            {
+                allowing(mockOidStringifier).enString(mockOid);
+                will(returnValue(returns));
+            }
+        });
+    }
+
+    public <T> void newLink(final CssMenuLinkFactory mockLinkBuilder, final String linkId,
+        final ObjectAdapterMemento adapterMemento, final ObjectAction noAction, final Link<T> returns) {
+        context.checking(new Expectations() {
+            {
+                allowing(mockLinkBuilder).newLink(adapterMemento, noAction, linkId);
+                will(returnValue(returns));
+            }
+        });
+    }
 
 }

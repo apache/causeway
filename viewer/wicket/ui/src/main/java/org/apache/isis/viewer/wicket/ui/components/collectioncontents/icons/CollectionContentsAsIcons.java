@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons;
 
 import java.util.List;
@@ -30,34 +29,31 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
- * collection of entity}s rendered using a simple list of icons.
+ * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel collection of entity}s rendered using a
+ * simple list of icons.
  */
-public class CollectionContentsAsIcons extends
-		PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsAsIcons extends PanelAbstract<EntityCollectionModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ID_ENTITY_INSTANCE = "entityInstance";
+    private static final String ID_ENTITY_INSTANCE = "entityInstance";
 
-	public CollectionContentsAsIcons(final String id,
-			final EntityCollectionModel model) {
-		super(id, model);
-		buildGui();
-	}
+    public CollectionContentsAsIcons(final String id, final EntityCollectionModel model) {
+        super(id, model);
+        buildGui();
+    }
 
-	private void buildGui() {
-		EntityCollectionModel model = getModel();
-		List<ObjectAdapter> adapterList = model.getObject();
-		RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
-		add(entityInstances);
-		for (ObjectAdapter adapter : adapterList) {
-			String childId = entityInstances.newChildId();
-			EntityModel entityModel = new EntityModel(adapter);
-			EntitySummaryPanel entitySummaryPanel = new EntitySummaryPanel(
-					childId, entityModel);
-			entityInstances.add(entitySummaryPanel);
-		}
-	}
+    private void buildGui() {
+        final EntityCollectionModel model = getModel();
+        final List<ObjectAdapter> adapterList = model.getObject();
+        final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
+        add(entityInstances);
+        for (final ObjectAdapter adapter : adapterList) {
+            final String childId = entityInstances.newChildId();
+            final EntityModel entityModel = new EntityModel(adapter);
+            final EntitySummaryPanel entitySummaryPanel = new EntitySummaryPanel(childId, entityModel);
+            entityInstances.add(entitySummaryPanel);
+        }
+    }
 
 }

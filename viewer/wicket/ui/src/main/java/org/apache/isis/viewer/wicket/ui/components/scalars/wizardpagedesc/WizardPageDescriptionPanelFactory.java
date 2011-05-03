@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.wizardpagedesc;
 
 import org.apache.isis.viewer.wicket.metamodel.wizardpagedesc.WizardPageDescriptionFacet;
@@ -32,24 +31,25 @@ import org.apache.wicket.model.IModel;
  */
 public class WizardPageDescriptionPanelFactory extends ComponentFactoryScalarAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public WizardPageDescriptionPanelFactory() {
-		super(String.class);
-	}
+    public WizardPageDescriptionPanelFactory() {
+        super(String.class);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		final ApplicationAdvice applicationAdvice = super.appliesTo(model);
-		if (!applicationAdvice.applies()) {
-			return applicationAdvice;
-		}
-		ScalarModel scalarModel = (ScalarModel) model;
-		return appliesExclusivelyIf(scalarModel.getFacet(WizardPageDescriptionFacet.class) != null);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        final ApplicationAdvice applicationAdvice = super.appliesTo(model);
+        if (!applicationAdvice.applies()) {
+            return applicationAdvice;
+        }
+        final ScalarModel scalarModel = (ScalarModel) model;
+        return appliesExclusivelyIf(scalarModel.getFacet(WizardPageDescriptionFacet.class) != null);
+    }
 
-	public Component createComponent(String id, ScalarModel scalarModel) {
-		return new WizardPageDescriptionPanel(id, scalarModel);
-	}
+    @Override
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new WizardPageDescriptionPanel(id, scalarModel);
+    }
 
 }

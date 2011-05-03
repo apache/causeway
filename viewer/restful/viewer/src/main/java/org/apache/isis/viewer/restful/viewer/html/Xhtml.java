@@ -22,6 +22,7 @@ public final class Xhtml {
 
     public static final String NAMESPACE = "http://www.w3.org/1999/xhtml";
 
-    private Xhtml() {}
+    private Xhtml() {
+    }
 
 }

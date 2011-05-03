@@ -53,9 +53,10 @@ public final class HtmlClass {
     public static final String VISIBLE = "nof-visible";
     public static final String USABLE = "nof-usable";
     public static final String VALID = "nof-valid";
-    
+
     public static final String OBJECT_SPECS = "nof-object-specs";
 
-    private HtmlClass() {}
+    private HtmlClass() {
+    }
 
 }

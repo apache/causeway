@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import java.awt.Graphics2D;
@@ -33,43 +32,43 @@ import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 /**
- * {@link FormComponentPanel} representing a reference to an entity: a link and a findUsing button. 
+ * {@link FormComponentPanel} representing a reference to an entity: a link and a findUsing button.
  */
 public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
 
-	private static final long serialVersionUID = 1L;
-	   
+    private static final long serialVersionUID = 1L;
+
     private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_FEEDBACK = "feedback";
 
-	public JavaAwtImagePanel(String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-		buildGui();
-	}
+    public JavaAwtImagePanel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+        buildGui();
+    }
 
-
-	private void buildGui() {
-        String name = getModel().getName();
-        Label scalarName = new Label(ID_SCALAR_NAME, name);
+    private void buildGui() {
+        final String name = getModel().getName();
+        final Label scalarName = new Label(ID_SCALAR_NAME, name);
         addOrReplace(scalarName);
-        
+
         final ImageValueFacet imageValueFacet = getModel().getTypeOfSpecification().getFacet(ImageValueFacet.class);
         final ObjectAdapter adapter = getModel().getObject();
         if (adapter != null) {
             final java.awt.Image imageValue = imageValueFacet.getImage(adapter);
-            final RenderedDynamicImageResource imageResource = new RenderedDynamicImageResource(imageValue.getWidth(null), imageValue.getHeight(null)) {
-                
-                private static final long serialVersionUID = 1L;
-                
-                @Override
-                protected boolean render(Graphics2D graphics) {
-                    graphics.drawImage(imageValue, 0, 0, null);
-                    return true;
-                }
-                
-            };
-            Image image = new Image(ID_SCALAR_VALUE, imageResource);
+            final RenderedDynamicImageResource imageResource =
+                new RenderedDynamicImageResource(imageValue.getWidth(null), imageValue.getHeight(null)) {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    protected boolean render(final Graphics2D graphics) {
+                        graphics.drawImage(imageValue, 0, 0, null);
+                        return true;
+                    }
+
+                };
+            final Image image = new Image(ID_SCALAR_VALUE, imageResource);
             addOrReplace(image);
             addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, image));
         } else {
@@ -78,5 +77,3 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
     }
 
 }
-
-

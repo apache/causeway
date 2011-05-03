@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -35,30 +34,30 @@ import org.apache.wicket.model.Model;
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
 
-
     private static final long serialVersionUID = 1L;
-    
+
     private static final String ID_COLLECTION = "collection";
     private static final String ID_COLLECTION_NAME = "collectionName";
     private static final String ID_FEEDBACK = "feedback";
 
-	public CollectionPanel(String id, final EntityCollectionModel entityCollectionModel) {
-		super(id, entityCollectionModel);
-		
-		buildGui();
-	}
+    public CollectionPanel(final String id, final EntityCollectionModel entityCollectionModel) {
+        super(id, entityCollectionModel);
+
+        buildGui();
+    }
 
     private void buildGui() {
-        
+
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_COLLECTION);
-        
-        String name = getModel().getName();
+
+        final String name = getModel().getName();
         markupContainer.addOrReplace(new Label(ID_COLLECTION_NAME, Model.of(name)));
-        final Component collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS, getModel());
-        
+        final Component collectionContents =
+            getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS,
+                getModel());
+
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, collectionContents));
         addOrReplace(markupContainer);
     }
-
 
 }

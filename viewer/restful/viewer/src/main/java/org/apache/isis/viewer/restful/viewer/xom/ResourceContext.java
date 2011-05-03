@@ -25,7 +25,6 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-
 public class ResourceContext {
 
     private final HttpServletRequest httpServletRequest;
@@ -34,39 +33,35 @@ public class ResourceContext {
 
     private final Request request;
 
-	private final HttpHeaders httpHeaders;
+    private final HttpHeaders httpHeaders;
 
-	private final UriInfo uriInfo;
+    private final UriInfo uriInfo;
 
-	private final SecurityContext securityContext;
+    private final SecurityContext securityContext;
 
-    public ResourceContext(
-            final HttpHeaders httpHeaders,
-            final UriInfo uriInfo,
-            final Request request, 
-            final HttpServletRequest httpServletRequest, 
-            final HttpServletResponse httpServletResponse, 
-            final SecurityContext securityContext) {
-    	this.httpHeaders = httpHeaders;
-    	this.uriInfo = uriInfo;
-    	this.request = request;
+    public ResourceContext(final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request,
+        final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse,
+        final SecurityContext securityContext) {
+        this.httpHeaders = httpHeaders;
+        this.uriInfo = uriInfo;
+        this.request = request;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
     }
 
     public HttpHeaders getHttpHeaders() {
-		return httpHeaders;
-	}
-    
-    public UriInfo getUriInfo() {
-		return uriInfo;
-	}
-    
-    public Request getRequest() {
-    	return request;
+        return httpHeaders;
     }
-    
+
+    public UriInfo getUriInfo() {
+        return uriInfo;
+    }
+
+    public Request getRequest() {
+        return request;
+    }
+
     public HttpServletRequest getHttpServletRequest() {
         return httpServletRequest;
     }
@@ -76,6 +71,6 @@ public class ResourceContext {
     }
 
     public SecurityContext getSecurityContext() {
-		return securityContext;
-	}
+        return securityContext;
+    }
 }

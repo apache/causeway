@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -31,25 +30,24 @@ import org.apache.wicket.model.IModel;
 
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ObjectAdapterTitleColumn() {
-		super("Title"); // i18n
-	}
+    public ObjectAdapterTitleColumn() {
+        super("Title"); // i18n
+    }
 
+    @Override
+    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId,
+        final IModel<ObjectAdapter> rowModel) {
+        final Component component = createComponent(componentId, rowModel);
+        cellItem.add(component);
+    }
 
-	public void populateItem(Item<ICellPopulator<ObjectAdapter>> cellItem,
-			String componentId, IModel<ObjectAdapter> rowModel) {
-		Component component = createComponent(componentId, rowModel);
-		cellItem.add(component);
-	}
-
-	private Component createComponent(String id,
-			IModel<ObjectAdapter> rowModel) {
-		ObjectAdapter adapter = rowModel.getObject();
-		IModel<?> model = new EntityModel(adapter);
-		ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
-		return componentFactory.createComponent(id, model);
-	}
+    private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
+        final ObjectAdapter adapter = rowModel.getObject();
+        final IModel<?> model = new EntityModel(adapter);
+        final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
+        return componentFactory.createComponent(id, model);
+    }
 
 }

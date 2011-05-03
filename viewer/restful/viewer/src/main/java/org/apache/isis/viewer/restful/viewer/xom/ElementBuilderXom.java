@@ -22,7 +22,6 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
-
 public class ElementBuilderXom {
 
     /**
@@ -40,7 +39,8 @@ public class ElementBuilderXom {
      * <p>
      * Must be followed by a call to {@link #el(String)}.
      */
-    public ElementBuilderXom() {}
+    public ElementBuilderXom() {
+    }
 
     public ElementBuilderXom el(final String name) {
         assertNotInitialized();

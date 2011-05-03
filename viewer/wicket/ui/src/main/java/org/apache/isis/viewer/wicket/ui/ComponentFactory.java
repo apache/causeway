@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui;
 
 import java.io.Serializable;
@@ -27,64 +26,66 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 /**
- * Creates {@link Component}s of a specified {@link ComponentType}, optionally
- * {@link #appliesTo(ComponentType, IModel) dependent on} the provided {@link IModel model}.
+ * Creates {@link Component}s of a specified {@link ComponentType}, optionally {@link #appliesTo(ComponentType, IModel)
+ * dependent on} the provided {@link IModel model}.
  * 
  * <p>
- * This interface is at the very heart of the Wicket Objects' model, being an usage of the
- * chain-of-responsibility design pattern.  The available {@link ComponentFactory}s are
- * registered through {@link ComponentFactoryRegistry} (bootstrapped from the <tt>WicketObjectsApplication</tt>);
- * various adapters make it easy to lookup {@link Component}s from this registry.
+ * This interface is at the very heart of the Wicket Objects' model, being an usage of the chain-of-responsibility
+ * design pattern. The available {@link ComponentFactory}s are registered through {@link ComponentFactoryRegistry}
+ * (bootstrapped from the <tt>WicketObjectsApplication</tt>); various adapters make it easy to lookup {@link Component}s
+ * from this registry.
  */
 public interface ComponentFactory extends Serializable {
 
-	/**
-	 * The {@link ComponentType} with which this component factory has been registered.
-	 */
-	ComponentType getComponentType();
+    /**
+     * The {@link ComponentType} with which this component factory has been registered.
+     */
+    ComponentType getComponentType();
 
-	public enum ApplicationAdvice {
-		APPLIES(true,false),
-		APPLIES_EXCLUSIVELY(true,true),
-		DOES_NOT_APPLY(false,false);
-		private final boolean applies;
-		private final boolean exclusively;
-		private ApplicationAdvice(boolean applies, boolean exclusively) {
-			this.applies = applies;
-			this.exclusively = exclusively;
-		}
-		public boolean applies() {
-			return applies;
-		}
-		/**
-		 * Whether no other {@link ComponentFactory}s should apply (ie stop searching for other views).
-		 */
-		public boolean exclusively() {
-			return exclusively;
-		}
-	}
-	
-	/**
-	 * Whether the {@link Component} created by this factory applies to the
-	 * specified {@link ComponentType} and {@link IModel}.
-	 */
-	ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model);
+    public enum ApplicationAdvice {
+        APPLIES(true, false), APPLIES_EXCLUSIVELY(true, true), DOES_NOT_APPLY(false, false);
+        private final boolean applies;
+        private final boolean exclusively;
 
-	/**
-	 * Creates component, with id being derived from the {@link #getComponentType() component type} for this factory.
-	 * @param model
-	 * @return
-	 */
-	Component createComponent(IModel<?> model);
+        private ApplicationAdvice(final boolean applies, final boolean exclusively) {
+            this.applies = applies;
+            this.exclusively = exclusively;
+        }
 
-	/**
-	 * Creates component, with specified id.
-	 */
-	Component createComponent(String id, IModel<?> model);
+        public boolean applies() {
+            return applies;
+        }
 
-	/**
-	 * Used for rendering in drop-downs.
-	 */
-	String getName();
+        /**
+         * Whether no other {@link ComponentFactory}s should apply (ie stop searching for other views).
+         */
+        public boolean exclusively() {
+            return exclusively;
+        }
+    }
+
+    /**
+     * Whether the {@link Component} created by this factory applies to the specified {@link ComponentType} and
+     * {@link IModel}.
+     */
+    ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model);
+
+    /**
+     * Creates component, with id being derived from the {@link #getComponentType() component type} for this factory.
+     * 
+     * @param model
+     * @return
+     */
+    Component createComponent(IModel<?> model);
+
+    /**
+     * Creates component, with specified id.
+     */
+    Component createComponent(String id, IModel<?> model);
+
+    /**
+     * Used for rendering in drop-downs.
+     */
+    String getName();
 
 }

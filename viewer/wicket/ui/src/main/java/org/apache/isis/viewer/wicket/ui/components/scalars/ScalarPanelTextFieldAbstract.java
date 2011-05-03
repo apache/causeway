@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacet;
@@ -33,137 +32,134 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
 /**
- * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
- * using a simple {@link TextField}.
+ * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented using a simple {@link TextField}.
  */
 public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-	private static final String ID_SCALAR_NAME = "scalarName";
-	private static final String ID_FEEDBACK = "feedback";
+    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
+    private static final String ID_SCALAR_NAME = "scalarName";
+    private static final String ID_FEEDBACK = "feedback";
 
-	private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
+    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-	private TextField<T> textField;
+    private TextField<T> textField;
 
-	public ScalarPanelTextFieldAbstract(String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-	}
-	
-	protected TextField<T> getTextField() {
-		return textField;
-	}
+    public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+    }
 
-	protected FormComponentLabel addComponentForRegular() {
-		textField = createTextField();
-		textField.setOutputMarkupId(true);
+    protected TextField<T> getTextField() {
+        return textField;
+    }
 
-		addStandardSemantics();
-		addSemantics();
-		
-		FormComponentLabel labelIfRegular = createFormComponentLabel();
-		addOrReplace(labelIfRegular);
-		
-		addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
-		return labelIfRegular;
-	}
+    @Override
+    protected FormComponentLabel addComponentForRegular() {
+        textField = createTextField();
+        textField.setOutputMarkupId(true);
 
-	/**
-	 * Optional hook method
-	 */
-	protected void addSemantics() {
-		// we don't call textField.setType(), since in most cases NO does the
-		// parsing, not wicket
-	}
+        addStandardSemantics();
+        addSemantics();
 
+        final FormComponentLabel labelIfRegular = createFormComponentLabel();
+        addOrReplace(labelIfRegular);
 
-	protected abstract TextField<T> createTextField();
-	
-	private FormComponentLabel createFormComponentLabel() {
-		TextField<T> textField = getTextField();
-		String name = getModel().getName();
-		textField.setLabel(Model.of(name));
-		
-		FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR,textField);
-		
-		scalarNameAndValue.add(textField);
-		
-		Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(textField));
-		scalarNameAndValue.add(scalarName);
+        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
+        return labelIfRegular;
+    }
 
-		return scalarNameAndValue;
-	}
+    /**
+     * Optional hook method
+     */
+    protected void addSemantics() {
+        // we don't call textField.setType(), since in most cases NO does the
+        // parsing, not wicket
+    }
 
-	protected void addStandardSemantics() {
-		setRequiredIfSpecified();
-		setTextFieldSizeIfSpecified();
-	}
+    protected abstract TextField<T> createTextField();
 
-	private void setRequiredIfSpecified() {
-		ScalarModel scalarModel = getModel();
-		boolean required = scalarModel.isRequired();
-		textField.setRequired(required);
-	}
+    private FormComponentLabel createFormComponentLabel() {
+        final TextField<T> textField = getTextField();
+        final String name = getModel().getName();
+        textField.setLabel(Model.of(name));
 
-	private void setTextFieldSizeIfSpecified() {
-		int size = determineSize();
-		if (size != -1) {
-			textField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
-		}
-	}
+        final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, textField);
 
-	private int determineSize() {
-		ScalarModel scalarModel = getModel();
-		ObjectSpecification noSpec = scalarModel.getTypeOfSpecification();
+        scalarNameAndValue.add(textField);
 
-		TypicalLengthFacet typicalLengthFacet = noSpec.getFacet(TypicalLengthFacet.class);
-		if (typicalLengthFacet != null) {
-			return typicalLengthFacet.value();
-		}
-		MaxLengthFacet maxLengthFacet = noSpec.getFacet(MaxLengthFacet.class);
-		if (maxLengthFacet != null) {
-			return maxLengthFacet.value();
-		}
-		return -1;
-	}
-	
-	/**
-	 * Mandatory hook method to build the component to render the model
-	 * when in {@link Format#COMPACT compact} format.
-	 */
-	protected Component addComponentForCompact() {
-		Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-		addOrReplace(labelIfCompact);
-		return labelIfCompact;
-	}
+        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(textField));
+        scalarNameAndValue.add(scalarName);
 
-	
-	
-	@Override
-	protected void onBeforeRenderWhenViewMode() {
-		super.onBeforeRenderWhenViewMode();
-		textField.setEnabled(false);
-		setTitleAttribute("");
-	}
+        return scalarNameAndValue;
+    }
 
-	@Override
-	protected void onBeforeRenderWhenDisabled(String disableReason) {
-		super.onBeforeRenderWhenDisabled(disableReason);
-		textField.setEnabled(false);
-		setTitleAttribute(disableReason);
-	}
+    protected void addStandardSemantics() {
+        setRequiredIfSpecified();
+        setTextFieldSizeIfSpecified();
+    }
 
-	@Override
-	protected void onBeforeRenderWhenEnabled() {
-		super.onBeforeRenderWhenEnabled();
-		textField.setEnabled(true);
-		setTitleAttribute("");
-	}
+    private void setRequiredIfSpecified() {
+        final ScalarModel scalarModel = getModel();
+        final boolean required = scalarModel.isRequired();
+        textField.setRequired(required);
+    }
 
-	private void setTitleAttribute(String titleAttribute) {
-		textField.add(new AttributeModifier("title", true, Model.of(titleAttribute)));
-	}
-	
+    private void setTextFieldSizeIfSpecified() {
+        final int size = determineSize();
+        if (size != -1) {
+            textField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
+        }
+    }
+
+    private int determineSize() {
+        final ScalarModel scalarModel = getModel();
+        final ObjectSpecification noSpec = scalarModel.getTypeOfSpecification();
+
+        final TypicalLengthFacet typicalLengthFacet = noSpec.getFacet(TypicalLengthFacet.class);
+        if (typicalLengthFacet != null) {
+            return typicalLengthFacet.value();
+        }
+        final MaxLengthFacet maxLengthFacet = noSpec.getFacet(MaxLengthFacet.class);
+        if (maxLengthFacet != null) {
+            return maxLengthFacet.value();
+        }
+        return -1;
+    }
+
+    /**
+     * Mandatory hook method to build the component to render the model when in {@link Format#COMPACT compact} format.
+     */
+    @Override
+    protected Component addComponentForCompact() {
+        final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+        addOrReplace(labelIfCompact);
+        return labelIfCompact;
+    }
+
+    @Override
+    protected void onBeforeRenderWhenViewMode() {
+        super.onBeforeRenderWhenViewMode();
+        textField.setEnabled(false);
+        setTitleAttribute("");
+    }
+
+    @Override
+    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+        super.onBeforeRenderWhenDisabled(disableReason);
+        textField.setEnabled(false);
+        setTitleAttribute(disableReason);
+    }
+
+    @Override
+    protected void onBeforeRenderWhenEnabled() {
+        super.onBeforeRenderWhenEnabled();
+        textField.setEnabled(true);
+        setTitleAttribute("");
+    }
+
+    private void setTitleAttribute(final String titleAttribute) {
+        textField.add(new AttributeModifier("title", true, Model.of(titleAttribute)));
+    }
+
 }

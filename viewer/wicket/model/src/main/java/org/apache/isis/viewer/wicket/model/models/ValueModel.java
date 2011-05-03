@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,16 +27,17 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
  */
 public class ValueModel extends ModelAbstract<ObjectAdapter> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ObjectAdapterMemento adapterMemento;
-	public ValueModel(ObjectAdapter adapter) {
-		adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
-	}
+    private final ObjectAdapterMemento adapterMemento;
 
-	@Override
-	protected ObjectAdapter load() {
-		return adapterMemento.getObjectAdapter();
-	}
+    public ValueModel(final ObjectAdapter adapter) {
+        adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
+    }
+
+    @Override
+    protected ObjectAdapter load() {
+        return adapterMemento.getObjectAdapter();
+    }
 
 }

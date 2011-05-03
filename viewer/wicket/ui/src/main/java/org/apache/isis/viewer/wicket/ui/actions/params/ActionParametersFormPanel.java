@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.actions.params;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,13 +24,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
-
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.repeater.RepeatingView;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -45,92 +37,94 @@ import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.repeater.RepeatingView;
+
+import com.google.common.collect.Lists;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action invocation.
  */
 public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ID_OK_BUTTON = "okButton";
-	private static final String ID_ACTION_PARAMETERS = "parameters";
-	
-	private final ActionExecutor actionExecutor;
+    private static final String ID_OK_BUTTON = "okButton";
+    private static final String ID_ACTION_PARAMETERS = "parameters";
 
-	public ActionParametersFormPanel(String id, ActionModel model) {
-		super(id, model);
+    private final ActionExecutor actionExecutor;
 
-		Ensure.ensureThatArg(model.getExecutor(), is(not(nullValue())));
-		
-		this.actionExecutor = model.getExecutor();
-		buildGui();
-	}
+    public ActionParametersFormPanel(final String id, final ActionModel model) {
+        super(id, model);
 
-	private void buildGui() {
-		add(new ActionParameterForm("inputForm", getModel()));
-	}
+        Ensure.ensureThatArg(model.getExecutor(), is(not(nullValue())));
 
-	class ActionParameterForm extends Form<ObjectAdapter> {
+        this.actionExecutor = model.getExecutor();
+        buildGui();
+    }
 
-		private static final long serialVersionUID = 1L;
-		
-		private static final String ID_FEEDBACK = "feedback";
+    private void buildGui() {
+        add(new ActionParameterForm("inputForm", getModel()));
+    }
 
-		public ActionParameterForm(String id, ActionModel actionModel) {
-			super(id, actionModel);
+    class ActionParameterForm extends Form<ObjectAdapter> {
 
-			addParameters();
+        private static final long serialVersionUID = 1L;
 
-			addOrReplace(new FormFeedbackPanel(ID_FEEDBACK));
-			addOkButton();
-		}
+        private static final String ID_FEEDBACK = "feedback";
 
-		private ActionModel getActionModel() {
-			return (ActionModel) super.getModel();
-		}
+        public ActionParameterForm(final String id, final ActionModel actionModel) {
+            super(id, actionModel);
 
-		private void addParameters() {
-			ActionModel actionModel = getActionModel();
-			final ObjectAction ObjectAction = actionModel
-					.getActionMemento().getAction();
+            addParameters();
 
-			List<ObjectActionParameter> parameters = ObjectAction
-					.getParameters();
+            addOrReplace(new FormFeedbackPanel(ID_FEEDBACK));
+            addOkButton();
+        }
 
-			RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
-			add(rv);
-			List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
-			for (ActionParameterMemento apm : mementos) {
-				WebMarkupContainer container = new WebMarkupContainer(rv
-						.newChildId());
-				rv.add(container);
+        private ActionModel getActionModel() {
+            return (ActionModel) super.getModel();
+        }
 
-				ScalarModel argumentModel = actionModel.getArgumentModel(apm);
-				getComponentFactoryRegistry().addOrReplaceComponent(container,
-						ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
-			}
-		}
+        private void addParameters() {
+            final ActionModel actionModel = getActionModel();
+            final ObjectAction ObjectAction = actionModel.getActionMemento().getAction();
 
-		private void addOkButton() {
-			add(new Button(ID_OK_BUTTON) {
-				private static final long serialVersionUID = 1L;
+            final List<ObjectActionParameter> parameters = ObjectAction.getParameters();
 
-				@Override
+            final RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
+            add(rv);
+            final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
+            for (final ActionParameterMemento apm : mementos) {
+                final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
+                rv.add(container);
+
+                final ScalarModel argumentModel = actionModel.getArgumentModel(apm);
+                getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE,
+                    argumentModel);
+            }
+        }
+
+        private void addOkButton() {
+            add(new Button(ID_OK_BUTTON) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
                 public void onSubmit() {
-					actionExecutor.executeActionAndProcessResults();
-				};
-			});
-		}
+                    actionExecutor.executeActionAndProcessResults();
+                };
+            });
+        }
 
-		private List<ActionParameterMemento> buildParameterMementos(
-				List<ObjectActionParameter> parameters) {
-			List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, Mementos.fromActionParameter());
-			// we copy into a new array list otherwise we get lazy evaluation =
-			// reference to a non-serializable object
-			return Lists.newArrayList(parameterMementoList);
-		}
-	}
-	
+        private List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
+            final List<ActionParameterMemento> parameterMementoList =
+                Lists.transform(parameters, Mementos.fromActionParameter());
+            // we copy into a new array list otherwise we get lazy evaluation =
+            // reference to a non-serializable object
+            return Lists.newArrayList(parameterMementoList);
+        }
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.nof;
 
 import java.util.Collection;
@@ -39,151 +38,146 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 
 /**
- * Implementation of Isis' {@link IsisContext}, associating a
- * {@link IsisSession} with a Wicket {@link Session}.
+ * Implementation of Isis' {@link IsisContext}, associating a {@link IsisSession} with a Wicket {@link Session}.
  * 
  * <p>
- * This implementation also takes multi-threading into account, so that the browser can submit multiple
- * requests on the same session simultaneously (eg to render an image of a pojo).
+ * This implementation also takes multi-threading into account, so that the browser can submit multiple requests on the
+ * same session simultaneously (eg to render an image of a pojo).
  */
 public class IsisContextForWicket extends IsisContext {
 
-	public static class WicketContextCategory extends ContextCategory {
+    public static class WicketContextCategory extends ContextCategory {
 
-		@Override
-		public boolean canSpecifyViewers(List<String> viewers) {
-			return false;
-		}
+        @Override
+        public boolean canSpecifyViewers(final List<String> viewers) {
+            return false;
+        }
 
-		@Override
-		public void initContext(IsisSessionFactory sessionFactory) {
-			new IsisContextForWicket(
-					ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE, sessionFactory);
-		}
-	}
-	
-	private static final class GetSessionIdFunction implements
-			Function<Session, String> {
-		@Override
-		public String apply(Session from) {
-			return from.getId();
-		}
-	}
+        @Override
+        public void initContext(final IsisSessionFactory sessionFactory) {
+            new IsisContextForWicket(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE,
+                sessionFactory);
+        }
+    }
 
-	/**
-	 * Only used while bootstrapping, corresponding to the {@link InitialisationSession}.
-	 */
-	private IsisSession bootstrapSession;
-	/**
-	 * Maps (our custom) {@link AuthenticatedWebSessionForIsis Wicket session}s to vanilla {@link IsisSession}s.
-	 */
-	private Map<AuthenticatedWebSessionForIsis, IsisSession> sessionMap = Maps.newHashMap();
+    private static final class GetSessionIdFunction implements Function<Session, String> {
+        @Override
+        public String apply(final Session from) {
+            return from.getId();
+        }
+    }
 
-	protected IsisContextForWicket(ContextReplacePolicy replacePolicy,
-			SessionClosePolicy sessionClosePolicy,
-			IsisSessionFactory sessionFactory) {
-		super(replacePolicy, sessionClosePolicy, sessionFactory);
-	}
+    /**
+     * Only used while bootstrapping, corresponding to the {@link InitialisationSession}.
+     */
+    private IsisSession bootstrapSession;
+    /**
+     * Maps (our custom) {@link AuthenticatedWebSessionForIsis Wicket session}s to vanilla {@link IsisSession}s.
+     */
+    private final Map<AuthenticatedWebSessionForIsis, IsisSession> sessionMap = Maps.newHashMap();
 
-	@Override
-	public String[] allSessionIds() {
-		Collection<String> transform = Collections2.transform(
-				sessionMap.keySet(), new GetSessionIdFunction());
-		return transform.toArray(new String[0]);
-	}
+    protected IsisContextForWicket(final ContextReplacePolicy replacePolicy,
+        final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
+        super(replacePolicy, sessionClosePolicy, sessionFactory);
+    }
 
-	@Override
-	protected void closeAllSessionsInstance() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public String[] allSessionIds() {
+        final Collection<String> transform = Collections2.transform(sessionMap.keySet(), new GetSessionIdFunction());
+        return transform.toArray(new String[0]);
+    }
 
-	@Override
-	protected IsisSession getSessionInstance(String sessionId) {
-		throw new NotYetImplementedException();
-	}
-	
-	@Override
-	public IsisSession getSessionInstance() {
-		// special case handling if still bootstrapping
-		if (bootstrapSession != null) {
-			return bootstrapSession;
-		}
-		
-		Session session = Session.get();
-		IsisSession isisSession = sessionMap.get(session);
-		return isisSession;
-	}
+    @Override
+    protected void closeAllSessionsInstance() {
+        throw new NotYetImplementedException();
+    }
 
-	@Override
-	public IsisSession openSessionInstance(AuthenticationSession session) {
-		
-		// special case handling if still bootstrapping
-		if (session instanceof InitialisationSession) {
-			bootstrapSession = getSessionFactory().openSession(session);
-			bootstrapSession.open();
-			return bootstrapSession;
-		}
+    @Override
+    protected IsisSession getSessionInstance(final String sessionId) {
+        throw new NotYetImplementedException();
+    }
 
-		// otherwise, regular processing
-		return openSessionOrRegisterUsageOnExisting(session);
-	}
+    @Override
+    public IsisSession getSessionInstance() {
+        // special case handling if still bootstrapping
+        if (bootstrapSession != null) {
+            return bootstrapSession;
+        }
 
-	private synchronized IsisSession openSessionOrRegisterUsageOnExisting(
-			AuthenticationSession authSession) {
-		// we don't apply any session close policy here;
-		// there could be multiple threads using a session.
-		
-		AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
-		webSession.registerUseByThread();
-		
-		IsisSession isisSession = sessionMap.get(webSession);
-		if (isisSession == null) {
-			isisSession = getSessionFactoryInstance().openSession(authSession);
-			// put into map prior to opening, so that subsequent calls to
-			// getSessionInstance() will find this new session.
-			sessionMap.put(webSession, isisSession);
-			isisSession.open();
-		}
+        final Session session = Session.get();
+        final IsisSession isisSession = sessionMap.get(session);
+        return isisSession;
+    }
 
-		return isisSession;
-	}
+    @Override
+    public IsisSession openSessionInstance(final AuthenticationSession session) {
 
-	@Override
-	public synchronized void closeSessionInstance() {
-		// special case handling if still bootstrapping
-		if (bootstrapSession != null) {
+        // special case handling if still bootstrapping
+        if (session instanceof InitialisationSession) {
+            bootstrapSession = getSessionFactory().openSession(session);
+            bootstrapSession.open();
+            return bootstrapSession;
+        }
 
-			bootstrapSession.close();
-			bootstrapSession = null;
-			return;
-		}
-		
-		// otherwise, regular processing
-		closeSessionOrDeregisterUsageOnExisting();
-	}
+        // otherwise, regular processing
+        return openSessionOrRegisterUsageOnExisting(session);
+    }
 
-	private synchronized void closeSessionOrDeregisterUsageOnExisting() {
-		AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
-		boolean shouldClose = webSession.deregisterUseByThread();
-		
-		IsisSession isisSession = sessionMap.get(webSession);
-		if (isisSession == null) {
-			// nothing to be done
-			return;
-		}
+    private synchronized IsisSession openSessionOrRegisterUsageOnExisting(final AuthenticationSession authSession) {
+        // we don't apply any session close policy here;
+        // there could be multiple threads using a session.
 
-		if (shouldClose) {
-			isisSession.close();
-			// remove after closing, so that any calls to getSessionInstance()
-			// made while closing will still find this session
-			sessionMap.remove(webSession);
-		}
-		
-	}
+        final AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
+        webSession.registerUseByThread();
 
-	@Override
-	public String debugTitle() {
-		return "Wicket Context";
-	}
+        IsisSession isisSession = sessionMap.get(webSession);
+        if (isisSession == null) {
+            isisSession = getSessionFactoryInstance().openSession(authSession);
+            // put into map prior to opening, so that subsequent calls to
+            // getSessionInstance() will find this new session.
+            sessionMap.put(webSession, isisSession);
+            isisSession.open();
+        }
+
+        return isisSession;
+    }
+
+    @Override
+    public synchronized void closeSessionInstance() {
+        // special case handling if still bootstrapping
+        if (bootstrapSession != null) {
+
+            bootstrapSession.close();
+            bootstrapSession = null;
+            return;
+        }
+
+        // otherwise, regular processing
+        closeSessionOrDeregisterUsageOnExisting();
+    }
+
+    private synchronized void closeSessionOrDeregisterUsageOnExisting() {
+        final AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
+        final boolean shouldClose = webSession.deregisterUseByThread();
+
+        final IsisSession isisSession = sessionMap.get(webSession);
+        if (isisSession == null) {
+            // nothing to be done
+            return;
+        }
+
+        if (shouldClose) {
+            isisSession.close();
+            // remove after closing, so that any calls to getSessionInstance()
+            // made while closing will still find this session
+            sessionMap.remove(webSession);
+        }
+
+    }
+
+    @Override
+    public String debugTitle() {
+        return "Wicket Context";
+    }
 
 }

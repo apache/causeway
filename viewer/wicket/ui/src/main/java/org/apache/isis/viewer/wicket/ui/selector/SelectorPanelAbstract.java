@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.selector;
 
 import java.util.List;
@@ -34,65 +33,58 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-public abstract class SelectorPanelAbstract<T extends IModel<?>> extends
-		PanelAbstract<T> {
+public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ID_VIEWS = "views";
-	private static final String ID_VIEWS_DROP_DOWN = "viewsDropDown";
+    private static final String ID_VIEWS = "views";
+    private static final String ID_VIEWS_DROP_DOWN = "viewsDropDown";
 
     private final ComponentType componentType;
 
-    public SelectorPanelAbstract(final String id,
-            final String underlyingId, final T model, final ComponentFactory factory) {
+    public SelectorPanelAbstract(final String id, final String underlyingId, final T model,
+        final ComponentFactory factory) {
         super(id, model);
-        
+
         componentType = factory.getComponentType();
 
         addUnderlyingViews(underlyingId, model, factory);
     }
 
-    private void addUnderlyingViews(final String underlyingId, final T model,
-            final ComponentFactory factory) {
-        List<ComponentFactory> componentFactories = findOtherComponentFactories(
-				model, factory);
-		ComponentFactory firstComponentFactory = componentFactories.get(0);
-		final Model<ComponentFactory> componentFactoryModel = new Model<ComponentFactory>();
-		componentFactoryModel.setObject(firstComponentFactory);
+    private void addUnderlyingViews(final String underlyingId, final T model, final ComponentFactory factory) {
+        final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
+        final ComponentFactory firstComponentFactory = componentFactories.get(0);
+        final Model<ComponentFactory> componentFactoryModel = new Model<ComponentFactory>();
+        componentFactoryModel.setObject(firstComponentFactory);
 
-		if (componentFactories.size()>1) {
-			WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
-			DropDownChoiceComponentFactory viewsDropDown = new DropDownChoiceComponentFactory(ID_VIEWS_DROP_DOWN,
-					componentFactoryModel,
-					componentFactories,
-					this, underlyingId, model);
-			views.addOrReplace(viewsDropDown);
-			addOrReplace(views);
-		} else {
-			permanentlyHide(ID_VIEWS);
-		}
-		addOrReplace(firstComponentFactory.createComponent(underlyingId, model));
+        if (componentFactories.size() > 1) {
+            final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
+            final DropDownChoiceComponentFactory viewsDropDown =
+                new DropDownChoiceComponentFactory(ID_VIEWS_DROP_DOWN, componentFactoryModel, componentFactories, this,
+                    underlyingId, model);
+            views.addOrReplace(viewsDropDown);
+            addOrReplace(views);
+        } else {
+            permanentlyHide(ID_VIEWS);
+        }
+        addOrReplace(firstComponentFactory.createComponent(underlyingId, model));
     }
 
-	private List<ComponentFactory> findOtherComponentFactories(
-			T model, final ComponentFactory ignoreFactory) {
-		List<ComponentFactory> componentFactories = getComponentFactoryRegistry()
-				.findComponentFactories(componentType, model);
-		return Lists.newArrayList(Collections2.filter(componentFactories,
-				new Predicate<ComponentFactory>() {
-					@Override
-					public boolean apply(ComponentFactory input) {
-						return input != ignoreFactory;
-					}
-				}));
-	}
+    private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {
+        final List<ComponentFactory> componentFactories =
+            getComponentFactoryRegistry().findComponentFactories(componentType, model);
+        return Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+            @Override
+            public boolean apply(final ComponentFactory input) {
+                return input != ignoreFactory;
+            }
+        }));
+    }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         renderHead(response, SelectorPanelAbstract.class);
     }
-
 
 }

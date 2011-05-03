@@ -27,7 +27,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restful.viewer.util.OidUtils;
 
-
 public abstract class TableColumnAbstract<T> implements TableColumn<T> {
     private final String headerText;
 
@@ -48,16 +47,19 @@ public abstract class TableColumnAbstract<T> implements TableColumn<T> {
         return resourceContext.getHttpServletRequest().getContextPath();
     }
 
+    @Override
     public String getHeaderText() {
         return headerText;
     }
 
+    @Override
     public Element th() {
         final Element th = new Element("th");
         th.appendChild(headerText);
         return th;
     }
 
+    @Override
     public Element td(final T t) {
         final Element td = new Element("td");
         final Element doTd = doTd(t);
@@ -69,27 +71,24 @@ public abstract class TableColumnAbstract<T> implements TableColumn<T> {
 
     protected abstract Element doTd(T t);
 
+    protected String getOidStr(final ObjectAdapter adapter) {
+        return OidUtils.getOidStr(adapter, getOidStringifier());
+    }
 
-	protected String getOidStr(ObjectAdapter adapter) {
-		return OidUtils.getOidStr(adapter, getOidStringifier());
-	}
-
-	
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
-    ////////////////////////////////////////////////////////////////
-    
-	private static PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    // //////////////////////////////////////////////////////////////
 
-	private static OidGenerator getOidGenerator() {
-		return getPersistenceSession().getOidGenerator();
-	}
+    private static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
-	private static OidStringifier getOidStringifier() {
-		return getOidGenerator().getOidStringifier();
-	}
-	
+    private static OidGenerator getOidGenerator() {
+        return getPersistenceSession().getOidGenerator();
+    }
+
+    private static OidStringifier getOidStringifier() {
+        return getOidGenerator().getOidStringifier();
+    }
 
 }

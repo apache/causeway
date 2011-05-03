@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import static org.hamcrest.Matchers.is;
@@ -41,99 +40,91 @@ import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 /**
- * Viewer-specific implementation of {@link AuthenticatedWebSession}, which delegates to
- * the Isis' configured {@link AuthenticationManager}, and which also tracks
- * threadusage (so that multiple concurrent requests are all associated with the same
- * session).
+ * Viewer-specific implementation of {@link AuthenticatedWebSession}, which delegates to the Isis' configured
+ * {@link AuthenticationManager}, and which also tracks threadusage (so that multiple concurrent requests are all
+ * associated with the same session).
  */
 public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionAccessor {
-	
-	private static final long serialVersionUID = 1L;
 
-	private static final String USER_ROLE = "org.starobjects.wicket.roles.USER";
-	
-	public static AuthenticatedWebSessionForIsis get() {
-		return (AuthenticatedWebSessionForIsis) Session.get();
-	}
-	
-	private AuthenticationSession authenticationSession;
-	private int threadUsages;
-	
-	public AuthenticatedWebSessionForIsis(Request request) {
-		super(Ensure.ensureThatArg(request, is(not(nullValue(Request.class)))));
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public boolean authenticate(final String username, final String password) {
-		AuthenticationRequest authenticationRequest;
-		authenticationRequest = new AuthenticationRequestPassword(username, password);
-		authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
-		authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
-		return authenticationSession != null;
-	}
-	
-	public AuthenticationSession getAuthenticationSession() {
-		return authenticationSession;
-	}
+    private static final String USER_ROLE = "org.starobjects.wicket.roles.USER";
 
-	@Override
-	public Roles getRoles() {
-		if (!isSignedIn()) {
-			return null;
-		} 
-		List<String> roles = authenticationSession.getRoles();
-		return new Roles(roles.toArray(new String[]{}));
-	}
-	
-	
-	
-	/**
-	 * Simply downcasts, for convenience of callers.
-	 */
-	@Override
-	public WebClientInfo getClientInfo() {
-		return (WebClientInfo) super.getClientInfo();
-	}
+    public static AuthenticatedWebSessionForIsis get() {
+        return (AuthenticatedWebSessionForIsis) Session.get();
+    }
 
-	
-	///////////////////////////////////////////////////////////
-	// Thread counting
-	///////////////////////////////////////////////////////////
-	
-	/**
-	 * Capture fact that this session is currently being used by a
-	 * thread.
-	 * 
-	 * <p>
-	 * There could be several concurrent requests all of which will
-	 * use the same Session; for example to obtain img resources for
-	 * entities.  This counter keeps track of one of these threadUsages,
-	 * when it gets back down to zero then we can close the thread.
-	 * 
-	 * @see #deregisterUseByThread()
-	 */
-	public void registerUseByThread() {
-		threadUsages++;
-	}
-	
-	/**
-	 * @see #registerUseByThread()
-	 * @return whether the session is no longer used by any threadUsages.
-	 */
-	public boolean deregisterUseByThread() {
-		threadUsages--;
-		return threadUsages<=0;
-	}
+    private AuthenticationSession authenticationSession;
+    private int threadUsages;
 
-	public int getThreadUsage() {
-		return threadUsages;
-	}
-	
-	
-	
-	protected AuthenticationManager getAuthenticationManager() {
-		return IsisContext.getAuthenticationManager();
-	}
+    public AuthenticatedWebSessionForIsis(final Request request) {
+        super(Ensure.ensureThatArg(request, is(not(nullValue(Request.class)))));
+    }
 
-	
+    @Override
+    public boolean authenticate(final String username, final String password) {
+        AuthenticationRequest authenticationRequest;
+        authenticationRequest = new AuthenticationRequestPassword(username, password);
+        authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
+        authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
+        return authenticationSession != null;
+    }
+
+    @Override
+    public AuthenticationSession getAuthenticationSession() {
+        return authenticationSession;
+    }
+
+    @Override
+    public Roles getRoles() {
+        if (!isSignedIn()) {
+            return null;
+        }
+        final List<String> roles = authenticationSession.getRoles();
+        return new Roles(roles.toArray(new String[] {}));
+    }
+
+    /**
+     * Simply downcasts, for convenience of callers.
+     */
+    @Override
+    public WebClientInfo getClientInfo() {
+        return (WebClientInfo) super.getClientInfo();
+    }
+
+    // /////////////////////////////////////////////////////////
+    // Thread counting
+    // /////////////////////////////////////////////////////////
+
+    /**
+     * Capture fact that this session is currently being used by a thread.
+     * 
+     * <p>
+     * There could be several concurrent requests all of which will use the same Session; for example to obtain img
+     * resources for entities. This counter keeps track of one of these threadUsages, when it gets back down to zero
+     * then we can close the thread.
+     * 
+     * @see #deregisterUseByThread()
+     */
+    public void registerUseByThread() {
+        threadUsages++;
+    }
+
+    /**
+     * @see #registerUseByThread()
+     * @return whether the session is no longer used by any threadUsages.
+     */
+    public boolean deregisterUseByThread() {
+        threadUsages--;
+        return threadUsages <= 0;
+    }
+
+    public int getThreadUsage() {
+        return threadUsages;
+    }
+
+    protected AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
+    }
+
 }

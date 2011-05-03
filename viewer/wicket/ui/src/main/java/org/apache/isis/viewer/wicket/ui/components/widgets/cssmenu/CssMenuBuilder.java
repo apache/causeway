@@ -17,17 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.wicket.Application;
-
-import com.google.common.collect.Collections2;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -38,53 +33,51 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.util.Actions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
+import org.apache.wicket.Application;
+
+import com.google.common.collect.Collections2;
 
 /**
- * Used to build a {@link CssMenuItem} hierarchy from a {@link ObjectAdapterMemento object adapter}'s
- * actions and any contributed actions from services.
+ * Used to build a {@link CssMenuItem} hierarchy from a {@link ObjectAdapterMemento object adapter}'s actions and any
+ * contributed actions from services.
  */
-public class CssMenuBuilder  {
+public class CssMenuBuilder {
 
-	private ObjectAdapterMemento adapterMemento;
-	private List<ObjectAdapter> serviceAdapters;
-	private List<ObjectAction> actions;
+    private final ObjectAdapterMemento adapterMemento;
+    private final List<ObjectAdapter> serviceAdapters;
+    private final List<ObjectAction> actions;
 
-	private CssMenuLinkFactory cssMenuLinkFactory;
-	
-	public CssMenuBuilder(ObjectAdapterMemento adapterMemento, List<ObjectAdapter> serviceAdapters, List<ObjectAction> actions, CssMenuLinkFactory cssMenuLinkFactory) {
-		this.adapterMemento = adapterMemento;
-		this.serviceAdapters = serviceAdapters;
-		this.actions = actions;
-		this.cssMenuLinkFactory = cssMenuLinkFactory;
-	}
+    private final CssMenuLinkFactory cssMenuLinkFactory;
 
-	public CssMenuPanel buildPanel(String wicketId, String rootName) {
-		CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
-		addMenuItems(findUsing, actions);
-		CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId,
-				Style.SMALL, Collections.singletonList(findUsing));
-		return cssMenuPanel;
-	}
+    public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters,
+        final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
+        this.adapterMemento = adapterMemento;
+        this.serviceAdapters = serviceAdapters;
+        this.actions = actions;
+        this.cssMenuLinkFactory = cssMenuLinkFactory;
+    }
 
+    public CssMenuPanel buildPanel(final String wicketId, final String rootName) {
+        final CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
+        addMenuItems(findUsing, actions);
+        final CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId, Style.SMALL, Collections.singletonList(findUsing));
+        return cssMenuPanel;
+    }
 
-	private void addMenuItems(CssMenuItem parent,
-			List<ObjectAction> actions) {
-		addMenuItemsForActionsOfType(parent, actions, ActionType.SET);
-		addMenuItemsForActionsOfType(parent, actions,
-				ActionType.USER);
-		if (isExplorationMode()) {
-			addMenuItemsForActionsOfType(parent, actions,
-					ActionType.EXPLORATION);
-		}
-		if (isDebugMode()) {
-			addMenuItemsForActionsOfType(parent, actions,
-					ActionType.DEBUG);
-		}
-	}
+    private void addMenuItems(final CssMenuItem parent, final List<ObjectAction> actions) {
+        addMenuItemsForActionsOfType(parent, actions, ActionType.SET);
+        addMenuItemsForActionsOfType(parent, actions, ActionType.USER);
+        if (isExplorationMode()) {
+            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION);
+        }
+        if (isDebugMode()) {
+            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG);
+        }
+    }
 
-	/**
-	 * Protected so can be overridden in testing if required.
-	 */
+    /**
+     * Protected so can be overridden in testing if required.
+     */
     protected boolean isExplorationMode() {
         return Application.get().getConfigurationType().equalsIgnoreCase(Application.DEVELOPMENT);
     }
@@ -98,75 +91,72 @@ public class CssMenuBuilder  {
         return true;
     }
 
-    private void addMenuItemsForActionsOfType(CssMenuItem parent,
-			List<ObjectAction> actions, final ActionType type) {
-		Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Actions.ofType(type));
-		for (ObjectAction action : filterActionsOfType) {
-			addMenuItem(parent, action);
-		}
-	}
+    private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions,
+        final ActionType type) {
+        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Actions.ofType(type));
+        for (final ObjectAction action : filterActionsOfType) {
+            addMenuItem(parent, action);
+        }
+    }
 
-	private void addMenuItems(CssMenuItem parent, ObjectAction[] actions) {
-		addMenuItems(parent, Arrays.asList(actions));
-	}
+    private void addMenuItems(final CssMenuItem parent, final ObjectAction[] actions) {
+        addMenuItems(parent, Arrays.asList(actions));
+    }
 
-	private void addMenuItem(CssMenuItem parent, ObjectAction action) {
-		if (action.getType() == ActionType.SET) {
-			addMenuItemForActionSet(parent, action);
-		} else {
-			addMenuItemForAction(parent, action);
-		}
-	}
+    private void addMenuItem(final CssMenuItem parent, final ObjectAction action) {
+        if (action.getType() == ActionType.SET) {
+            addMenuItemForActionSet(parent, action);
+        } else {
+            addMenuItemForAction(parent, action);
+        }
+    }
 
-	private void addMenuItemForActionSet(CssMenuItem parent,
-			ObjectAction action) {
-		Builder builder = parent.newSubMenuItem(action.getName());
-		List<ObjectAction> actions = action.getActions();
-		addMenuItems(builder.itemBeingBuilt(), actions);
-		if (builder.itemBeingBuilt().hasSubMenuItems()) {
-			builder.build();
-		}
-	}
+    private void addMenuItemForActionSet(final CssMenuItem parent, final ObjectAction action) {
+        final Builder builder = parent.newSubMenuItem(action.getName());
+        final List<ObjectAction> actions = action.getActions();
+        addMenuItems(builder.itemBeingBuilt(), actions);
+        if (builder.itemBeingBuilt().hasSubMenuItems()) {
+            builder.build();
+        }
+    }
 
-	private void addMenuItemForAction(CssMenuItem parent,
-			ObjectAction contributedAction) {
+    private void addMenuItemForAction(final CssMenuItem parent, final ObjectAction contributedAction) {
 
         // skip if annotated to not be contributed
         if (contributedAction.getFacet(NotContributedFacet.class) != null) {
             return;
         }
 
-	    ObjectAdapterMemento serviceAdapterMemento = determineAdapterFor(contributedAction);
+        final ObjectAdapterMemento serviceAdapterMemento = determineAdapterFor(contributedAction);
 
-		final Builder subMenuItemBuilder = parent.newSubMenuItem(serviceAdapterMemento, contributedAction, cssMenuLinkFactory);
-		if (subMenuItemBuilder != null) {
-		    // could be null if invisible
-		    subMenuItemBuilder.build();
-		}
-	}
+        final Builder subMenuItemBuilder =
+            parent.newSubMenuItem(serviceAdapterMemento, contributedAction, cssMenuLinkFactory);
+        if (subMenuItemBuilder != null) {
+            // could be null if invisible
+            subMenuItemBuilder.build();
+        }
+    }
 
-	/**
-	 * It's a bit hokey to have to do this, but the
-	 * {@link ObjectSpecification#getServiceActionsReturning(ActionType...)
-	 * method we call} on {@link ObjectSpecification}, while nicely
-	 * traversing the services for us, unfortunately does not pass us back the
-	 * service adapters also.
-	 */
-	private ObjectAdapterMemento determineAdapterFor(
-			ObjectAction action) {
-		// search through service adapters first
-		ObjectSpecification onType = action.getOnType();
-		for (ObjectAdapter serviceAdapter : getServiceAdapters()) {
-			if (serviceAdapter.getSpecification() == onType) {
-				return ObjectAdapterMemento.createOrNull(serviceAdapter);
-			}
-		}
-		// otherwise, specified adapter
-		return adapterMemento;
-	}
+    /**
+     * It's a bit hokey to have to do this, but the
+     * {@link ObjectSpecification#getServiceActionsReturning(ActionType...) method we call} on
+     * {@link ObjectSpecification}, while nicely traversing the services for us, unfortunately does not pass us back the
+     * service adapters also.
+     */
+    private ObjectAdapterMemento determineAdapterFor(final ObjectAction action) {
+        // search through service adapters first
+        final ObjectSpecification onType = action.getOnType();
+        for (final ObjectAdapter serviceAdapter : getServiceAdapters()) {
+            if (serviceAdapter.getSpecification() == onType) {
+                return ObjectAdapterMemento.createOrNull(serviceAdapter);
+            }
+        }
+        // otherwise, specified adapter
+        return adapterMemento;
+    }
 
-	protected List<ObjectAdapter> getServiceAdapters() {
-		return serviceAdapters;
-	}
+    protected List<ObjectAdapter> getServiceAdapters() {
+        return serviceAdapters;
+    }
 
 }

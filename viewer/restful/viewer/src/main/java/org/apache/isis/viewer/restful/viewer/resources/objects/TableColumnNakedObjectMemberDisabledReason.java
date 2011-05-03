@@ -27,14 +27,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnNakedObjectMemberDisabledReason<T extends ObjectMember> extends
-        TableColumnNakedObjectMember<T> {
+    TableColumnNakedObjectMember<T> {
 
-    public TableColumnNakedObjectMemberDisabledReason(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnNakedObjectMemberDisabledReason(final AuthenticationSession session,
+        final ObjectAdapter nakedObject, final ResourceContext resourceContext) {
         super("Disabled Reason", session, nakedObject, resourceContext);
     }
 

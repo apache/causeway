@@ -23,7 +23,6 @@ import java.util.List;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
-
 public class XhtmlRendererXom {
 
     public Element div_p(final String paragraphText, final String htmlClassAttribute) {
@@ -50,31 +49,21 @@ public class XhtmlRendererXom {
         return ul;
     }
 
-    public Element li_a(
-            final String uri,
-            final String aHrefText,
-            final String aHrefRel,
-            final String aHrefRev,
-            final String htmlClassAttribute) {
+    public Element li_a(final String uri, final String aHrefText, final String aHrefRel, final String aHrefRev,
+        final String htmlClassAttribute) {
         final Element li = new Element("li");
         li.appendChild(aHref(uri, aHrefText, aHrefRel, aHrefRev, htmlClassAttribute));
         return li;
     }
 
-    public Element li_p(
-            final String paragraphText,
-            final String htmlClassAttribute) {
+    public Element li_p(final String paragraphText, final String htmlClassAttribute) {
         final Element li = new Element("li");
         li.appendChild(p(paragraphText, htmlClassAttribute));
         return li;
     }
 
-    public Element aHref(
-            final String aHref,
-            final String aHrefText,
-            final String aHrefRel,
-            final String aHrefRev,
-            final String htmlClassAttribute) {
+    public Element aHref(final String aHref, final String aHrefText, final String aHrefRel, final String aHrefRev,
+        final String htmlClassAttribute) {
         final Element a = new Element("a");
         a.appendChild(aHrefText);
         a.addAttribute(new Attribute("href", aHref));

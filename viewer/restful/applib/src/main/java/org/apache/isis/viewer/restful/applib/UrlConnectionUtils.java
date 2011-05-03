@@ -34,50 +34,46 @@ import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
-
 /**
  * Not API, so intentionally not visible outside this package.
  */
 final class UrlConnectionUtils {
-	
-	private UrlConnectionUtils() {}
 
-	static void writeMapToConnectionOutputStream(Map<String,String> formArgumentsByParameter,
-			HttpURLConnection connection) throws IOException {
-		OutputStream os = connection.getOutputStream();
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
-		StringUtils.writeMap(formArgumentsByParameter, writer);
-	}
+    private UrlConnectionUtils() {
+    }
 
-	static Document readDocFromConnectionInputStream(
-			HttpURLConnection connection) throws ParsingException,
-			ValidityException, IOException {
-		InputStream stream = connection.getInputStream();
-		return new Builder().build(stream);
-	}
+    static void writeMapToConnectionOutputStream(final Map<String, String> formArgumentsByParameter,
+        final HttpURLConnection connection) throws IOException {
+        final OutputStream os = connection.getOutputStream();
+        final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
+        StringUtils.writeMap(formArgumentsByParameter, writer);
+    }
 
-	static HttpURLConnection createConnection(String uri)
-	throws MalformedURLException, IOException {
-		URL url = new URL(uri);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setInstanceFollowRedirects(false);
-		connection.setRequestProperty("Content-Type", AbstractRestfulClient.MIME_TYPE);
-		return connection;
-	}
+    static Document readDocFromConnectionInputStream(final HttpURLConnection connection) throws ParsingException,
+        ValidityException, IOException {
+        final InputStream stream = connection.getInputStream();
+        return new Builder().build(stream);
+    }
 
-	static HttpURLConnection createPostConnection(String uri) throws IOException,
-			ProtocolException {
-		HttpURLConnection connection = createConnection(uri);
-		connection.setDoOutput(true);
-		connection.setRequestMethod("POST");
-		return connection;
-	}
+    static HttpURLConnection createConnection(final String uri) throws MalformedURLException, IOException {
+        final URL url = new URL(uri);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setInstanceFollowRedirects(false);
+        connection.setRequestProperty("Content-Type", AbstractRestfulClient.MIME_TYPE);
+        return connection;
+    }
 
-	static HttpURLConnection createGetConnection(String uri) throws IOException,
-			ProtocolException {
-		HttpURLConnection connection = createConnection(uri);
-		connection.setRequestMethod("GET");
-		return connection;
-	}
+    static HttpURLConnection createPostConnection(final String uri) throws IOException, ProtocolException {
+        final HttpURLConnection connection = createConnection(uri);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        return connection;
+    }
+
+    static HttpURLConnection createGetConnection(final String uri) throws IOException, ProtocolException {
+        final HttpURLConnection connection = createConnection(uri);
+        connection.setRequestMethod("GET");
+        return connection;
+    }
 
 }

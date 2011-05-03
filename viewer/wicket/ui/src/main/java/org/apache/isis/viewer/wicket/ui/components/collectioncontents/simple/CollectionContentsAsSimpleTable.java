@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.simple;
 
 import java.util.List;
-
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -32,49 +28,49 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.RepeatingView;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel collection of entity}s
- * rendered using a simple HTML table.  
+ * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel collection of entity}s rendered using a
+ * simple HTML table.
  */
-public class CollectionContentsAsSimpleTable extends
-		PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsAsSimpleTable extends PanelAbstract<EntityCollectionModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CollectionContentsAsSimpleTable(String id, EntityCollectionModel model) {
-		super(id, model);
+    public CollectionContentsAsSimpleTable(final String id, final EntityCollectionModel model) {
+        super(id, model);
 
-		buildGui();
-	}
+        buildGui();
+    }
 
-	private void buildGui() {
-		addTableHeader();
-		addTableRows();
-	}
+    private void buildGui() {
+        addTableHeader();
+        addTableRows();
+    }
 
-	private void addTableHeader() {
-		EntityCollectionModel model = getModel();
-		ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-		RepeatingView propertyNames = new RepeatingView("propertyName");
-		add(propertyNames);
+    private void addTableHeader() {
+        final EntityCollectionModel model = getModel();
+        final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+        final RepeatingView propertyNames = new RepeatingView("propertyName");
+        add(propertyNames);
 
-		List<? extends ObjectAssociation> propertyList = typeOfSpec
-				.getAssociations(ObjectAssociationFilters.PROPERTIES);
-		for (ObjectAssociation property : propertyList) {
-			propertyNames.add(new Label(property.getId(), property.getName()));
-		}
-	}
+        final List<? extends ObjectAssociation> propertyList =
+            typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+        for (final ObjectAssociation property : propertyList) {
+            propertyNames.add(new Label(property.getId(), property.getName()));
+        }
+    }
 
-	private void addTableRows() {
-		EntityCollectionModel model = getModel();
-		List<ObjectAdapter> adapterList = model.getObject();
-		RepeatingView entityInstances = new RepeatingView("entityInstance");
-		add(entityInstances);
-		for (ObjectAdapter adapter : adapterList) {
-			String childId = entityInstances.newChildId();
-			entityInstances.add(new CollectionContentsInstanceAsTableRow(childId,
-					new EntityModel(adapter)));
-		}
-	}
+    private void addTableRows() {
+        final EntityCollectionModel model = getModel();
+        final List<ObjectAdapter> adapterList = model.getObject();
+        final RepeatingView entityInstances = new RepeatingView("entityInstance");
+        add(entityInstances);
+        for (final ObjectAdapter adapter : adapterList) {
+            final String childId = entityInstances.newChildId();
+            entityInstances.add(new CollectionContentsInstanceAsTableRow(childId, new EntityModel(adapter)));
+        }
+    }
 }

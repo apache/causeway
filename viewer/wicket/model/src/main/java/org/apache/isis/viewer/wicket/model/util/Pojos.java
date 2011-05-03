@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
-
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -30,30 +28,32 @@ import com.google.common.base.Function;
 
 public final class Pojos {
 
-	private Pojos(){}
+    private Pojos() {
+    }
 
-	public static Function<Object, Oid> toOid() {
-		return new Function<Object, Oid>() {
-			public Oid apply(Object pojo) {
-				ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
-				return adapter.getOid();
-			}
+    public static Function<Object, Oid> toOid() {
+        return new Function<Object, Oid>() {
+            @Override
+            public Oid apply(final Object pojo) {
+                final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+                return adapter.getOid();
+            }
 
-		};
-	}
-	
-	public static Function<ObjectAdapter, Object> forAdapter() {
-		return new Function<ObjectAdapter, Object>() {
-			
-			public Object apply(ObjectAdapter from) {
-				return from.getObject();
-			}
-		};
-	}
+        };
+    }
 
-	private static AdapterManager getAdapterManager() {
-		return IsisContext.getPersistenceSession().getAdapterManager();
-	}
+    public static Function<ObjectAdapter, Object> forAdapter() {
+        return new Function<ObjectAdapter, Object>() {
 
+            @Override
+            public Object apply(final ObjectAdapter from) {
+                return from.getObject();
+            }
+        };
+    }
+
+    private static AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
+    }
 
 }

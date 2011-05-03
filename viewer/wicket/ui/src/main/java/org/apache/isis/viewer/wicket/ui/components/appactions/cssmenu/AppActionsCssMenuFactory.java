@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 
 import java.util.ArrayList;
@@ -37,103 +36,101 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 /**
- * {@link ComponentFactory} for a {@link CssMenuPanel} to represent the {@link ApplicationActionsModel application action}s.
+ * {@link ComponentFactory} for a {@link CssMenuPanel} to represent the {@link ApplicationActionsModel application
+ * action}s.
  */
 public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
-	private final CssMenuLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
+    private static final long serialVersionUID = 1L;
+    private final CssMenuLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
 
-	public AppActionsCssMenuFactory() {
-		super(ComponentType.APPLICATION_ACTIONS);
-	}
+    public AppActionsCssMenuFactory() {
+        super(ComponentType.APPLICATION_ACTIONS);
+    }
 
-	/**
-	 * Generic, so applies to all models.
-	 */
-	@Override
-	protected ApplicationAdvice appliesTo(IModel<?> model) {
-		return appliesIf(model instanceof ApplicationActionsModel);
-	}
-	
-	public Component createComponent(String id, IModel<?> model) {
-		ApplicationActionsModel applicationActionsModel = (ApplicationActionsModel) model;
-		return new CssMenuPanel(id, CssMenuPanel.Style.REGULAR, buildMenu(applicationActionsModel));
-	}
-	
+    /**
+     * Generic, so applies to all models.
+     */
+    @Override
+    protected ApplicationAdvice appliesTo(final IModel<?> model) {
+        return appliesIf(model instanceof ApplicationActionsModel);
+    }
 
-	private List<CssMenuItem> buildMenu(ApplicationActionsModel cssModel) {
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final ApplicationActionsModel applicationActionsModel = (ApplicationActionsModel) model;
+        return new CssMenuPanel(id, CssMenuPanel.Style.REGULAR, buildMenu(applicationActionsModel));
+    }
 
-		List<ObjectAdapter> serviceAdapters = cssModel.getObject();
-		List<CssMenuItem> menuItems = new ArrayList<CssMenuItem>();
-		for (ObjectAdapter serviceAdapter : serviceAdapters) {
-			addMenuItemsIfVisible(menuItems, serviceAdapter);
-		}
-		
-		//addPlaytimeMenu(menuItems);
+    private List<CssMenuItem> buildMenu(final ApplicationActionsModel cssModel) {
 
-		return menuItems;
-	}
+        final List<ObjectAdapter> serviceAdapters = cssModel.getObject();
+        final List<CssMenuItem> menuItems = new ArrayList<CssMenuItem>();
+        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
+            addMenuItemsIfVisible(menuItems, serviceAdapter);
+        }
 
-	private void addMenuItemsIfVisible(List<CssMenuItem> menuItems,
-			ObjectAdapter serviceAdapter) {
-		ObjectSpecification serviceSpec = serviceAdapter
-				.getSpecification();
-		if (serviceSpec.isHidden()) {
-		    return;
-		}
-		final ObjectAdapterMemento serviceAdapterMemento = ObjectAdapterMemento.createOrNull(serviceAdapter);
-		String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
-		CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName)
-				.build();
+        // addPlaytimeMenu(menuItems);
 
-		addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem);
-		if (serviceMenuItem.hasSubMenuItems()) {
-			menuItems.add(serviceMenuItem);
-		}
-	}
+        return menuItems;
+    }
 
-//	@SuppressWarnings("unused")
-//	private void addPlaytimeMenu(List<CssMenuItem> applicationActionMenuItems) {
-//		CssMenuItem menuItem = CssMenuItem.newMenuItem("Playtime")
-//		.build();
-//		applicationActionMenuItems.add(menuItem);
-//		menuItem.newSubMenuItem("Css").link(CssPlaytimePage.class).build();
-//	}
+    private void addMenuItemsIfVisible(final List<CssMenuItem> menuItems, final ObjectAdapter serviceAdapter) {
+        final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+        if (serviceSpec.isHidden()) {
+            return;
+        }
+        final ObjectAdapterMemento serviceAdapterMemento = ObjectAdapterMemento.createOrNull(serviceAdapter);
+        final String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
+        final CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName).build();
 
-	private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento,
-			CssMenuItem serviceMenuItem) {
+        addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem);
+        if (serviceMenuItem.hasSubMenuItems()) {
+            menuItems.add(serviceMenuItem);
+        }
+    }
 
-		ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter()
-				.getSpecification();
+    // @SuppressWarnings("unused")
+    // private void addPlaytimeMenu(List<CssMenuItem> applicationActionMenuItems) {
+    // CssMenuItem menuItem = CssMenuItem.newMenuItem("Playtime")
+    // .build();
+    // applicationActionMenuItems.add(menuItem);
+    // menuItem.newSubMenuItem("Css").link(CssPlaytimePage.class).build();
+    // }
 
-		for (final ObjectAction noAction : serviceSpec.getObjectActions(ActionType.USER)) {
+    private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento,
+        final CssMenuItem serviceMenuItem) {
 
-		    // skip if annotated to not be included in repository menu
-		    if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {
-		        continue;
-		    }
-			final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, noAction, getLinkFactory());
-			if(subMenuItemBuilder!=null) {
-			    // not visible
-			    subMenuItemBuilder.build();
-			}
-		}
-	}
+        final ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter().getSpecification();
 
-	private CssMenuLinkFactory getLinkFactory() {
-		return cssMenuLinkFactory;
-	}
+        for (final ObjectAction noAction : serviceSpec.getObjectActions(ActionType.USER)) {
 
-	static OidStringifier getOidStringifier() {
-		return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
-	}
-	
+            // skip if annotated to not be included in repository menu
+            if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {
+                continue;
+            }
+            final Builder subMenuItemBuilder =
+                serviceMenuItem.newSubMenuItem(serviceAdapterMemento, noAction, getLinkFactory());
+            if (subMenuItemBuilder != null) {
+                // not visible
+                subMenuItemBuilder.build();
+            }
+        }
+    }
+
+    private CssMenuLinkFactory getLinkFactory() {
+        return cssMenuLinkFactory;
+    }
+
+    static OidStringifier getOidStringifier() {
+        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+
 }

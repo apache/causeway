@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.common;
 
 import java.io.Serializable;
@@ -25,11 +24,10 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 
 /**
- * Decouples the mechanism for letting the user acknowledge that no results returned from action
- * (eg an 'OK' button).
+ * Decouples the mechanism for letting the user acknowledge that no results returned from action (eg an 'OK' button).
  */
 public interface NoResultsHandler extends Serializable {
 
-	void onNoResults(Component context);
+    void onNoResults(Component context);
 
 }

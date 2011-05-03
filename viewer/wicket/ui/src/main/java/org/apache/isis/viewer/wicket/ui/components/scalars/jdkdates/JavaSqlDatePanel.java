@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.sql.Date;
@@ -30,16 +29,16 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
  */
 public class JavaSqlDatePanel extends ScalarPanelTextFieldParseableAbstract {
 
-	private static final long serialVersionUID = 1L;
-	private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final long serialVersionUID = 1L;
+    private static final String ID_SCALAR_VALUE = "scalarValue";
 
-	public JavaSqlDatePanel(String id, final ScalarModel scalarModel) {
-		super(id, ID_SCALAR_VALUE, scalarModel);
-	}
-	
-	@Override
-	protected void addSemantics() {
-		super.addSemantics();
-	}
-	
+    public JavaSqlDatePanel(final String id, final ScalarModel scalarModel) {
+        super(id, ID_SCALAR_VALUE, scalarModel);
+    }
+
+    @Override
+    protected void addSemantics() {
+        super.addSemantics();
+    }
+
 }

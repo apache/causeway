@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,54 +36,52 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 /**
- * A {@link ColumnAbstract column} within a {@link CollectionContentsAsAjaxTable}
- * representing a single property of the provided {@link ObjectAdapter}.
+ * A {@link ColumnAbstract column} within a {@link CollectionContentsAsAjaxTable} representing a single property of the
+ * provided {@link ObjectAdapter}.
  * 
  * <p>
- * Looks up the {@link ComponentFactory} to render the property from the
- * {@link ComponentFactoryRegistry}. 
+ * Looks up the {@link ComponentFactory} to render the property from the {@link ComponentFactoryRegistry}.
  */
 public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdapter> {
-	
-	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unused")
-	private String sortProperty;
-	private String propertyExpression;
+    private static final long serialVersionUID = 1L;
 
-	public ObjectAdapterPropertyColumn(IModel<String> columnNameModel, String sortProperty,
-			String propertyName) {
-		super(columnNameModel);
-		this.sortProperty = sortProperty;
-		this.propertyExpression = propertyName;
-	}
+    @SuppressWarnings("unused")
+    private final String sortProperty;
+    private final String propertyExpression;
 
+    public ObjectAdapterPropertyColumn(final IModel<String> columnNameModel, final String sortProperty,
+        final String propertyName) {
+        super(columnNameModel);
+        this.sortProperty = sortProperty;
+        this.propertyExpression = propertyName;
+    }
 
-	@Override
-	public void populateItem(Item<ICellPopulator<ObjectAdapter>> cellItem,
-			String componentId, IModel<ObjectAdapter> rowModel) {
-		Component component = createComponent(componentId, rowModel);
-		cellItem.add(component);
-	}
+    @Override
+    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId,
+        final IModel<ObjectAdapter> rowModel) {
+        final Component component = createComponent(componentId, rowModel);
+        cellItem.add(component);
+    }
 
-	private Component createComponent(String id,
-			IModel<ObjectAdapter> rowModel) {
-		
-		ObjectAdapter adapter = rowModel.getObject();
-		EntityModel model = new EntityModel(adapter);
-		OneToOneAssociation property = 
-			(OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
-		PropertyMemento pm = new PropertyMemento(property);
-		ScalarModel scalarModel = model.getPropertyModel(pm);
-		
-		ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-		Component component = componentFactory.createComponent(id, scalarModel);
-		if (component instanceof ScalarPanelAbstract) {
-			ScalarPanelAbstract scalarPanel = (ScalarPanelAbstract) component;
-			scalarPanel.setFormat(Format.COMPACT);
-			scalarModel.toViewMode();
-		}
-		return component;
-	}
+    private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
+
+        final ObjectAdapter adapter = rowModel.getObject();
+        final EntityModel model = new EntityModel(adapter);
+        final OneToOneAssociation property =
+            (OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
+        final PropertyMemento pm = new PropertyMemento(property);
+        final ScalarModel scalarModel = model.getPropertyModel(pm);
+
+        final ComponentFactory componentFactory =
+            findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+        final Component component = componentFactory.createComponent(id, scalarModel);
+        if (component instanceof ScalarPanelAbstract) {
+            final ScalarPanelAbstract scalarPanel = (ScalarPanelAbstract) component;
+            scalarPanel.setFormat(Format.COMPACT);
+            scalarModel.toViewMode();
+        }
+        return component;
+    }
 
 }

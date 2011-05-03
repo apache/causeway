@@ -75,32 +75,32 @@ import org.apache.isis.viewer.restful.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.restful.viewer.xom.TableColumn;
 
 /**
- * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than
- * the interface (at least under RestEasy 1.0.2 and 1.1-RC2).
+ * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
+ * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
 @Path("/object")
 public class ObjectResourceImpl extends ResourceAbstract implements ObjectResource {
 
-	@Override
-    public String object(
-			final String oidEncodedStr) {
+    @Override
+    public String object(final String oidEncodedStr) {
         init();
-        String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
 
         final ObjectAdapter nakedObject = getNakedObject(oidStr);
         if (nakedObject == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
-        String javascriptFile = isJavascriptDebug()?
-        		Constants.XMLHTTP_REQUEST_SRC_JS:Constants.XMLHTTP_REQUEST_JS;
+        final String javascriptFile =
+            isJavascriptDebug() ? Constants.XMLHTTP_REQUEST_SRC_JS : Constants.XMLHTTP_REQUEST_JS;
         // html template
-        final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString(), getServletRequest(), 
-        		javascriptFile, Constants.NOF_REST_SUPPORT_JS);
-        
+        final XhtmlTemplate xhtml =
+            new XhtmlTemplate(nakedObject.titleString(), getServletRequest(), javascriptFile,
+                Constants.NOF_REST_SUPPORT_JS);
+
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
-        
+
         // object div
         final Element objectDiv = div(HtmlClass.OBJECT);
         xhtml.appendToBody(objectDiv);
@@ -108,22 +108,22 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // title & Oid
         final Element objectSpecsDiv = asDivTableObjectDetails(nakedObject);
         xhtml.appendToDiv(objectDiv, objectSpecsDiv);
-        //xhtml.appendToBody(div);
+        // xhtml.appendToBody(div);
 
         // properties (in line table)
         final Element propertiesTableEl = asDivTableProperties(getSession(), nakedObject);
         xhtml.appendToDiv(objectDiv, propertiesTableEl);
-        //xhtml.appendToBody(propertiesTableEl);
+        // xhtml.appendToBody(propertiesTableEl);
 
         // collections
         final Element collectionsDivEl = asDivTableCollections(getSession(), nakedObject);
         xhtml.appendToDiv(objectDiv, collectionsDivEl);
-        //xhtml.appendToBody(collectionsDivEl);
+        // xhtml.appendToBody(collectionsDivEl);
 
         // actions
         final Element actionsDivEl = asDivTableActions(getSession(), nakedObject);
         xhtml.appendToDiv(objectDiv, actionsDivEl);
-        //xhtml.appendToBody(actionsDivEl);
+        // xhtml.appendToBody(actionsDivEl);
 
         return xhtml.toXML();
     }
@@ -136,11 +136,15 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         final List<TableColumn<OneToOneAssociation>> columns = new ArrayList<TableColumn<OneToOneAssociation>>();
         columns.add(new TableColumnOneToOneAssociationName(noSpec, session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectAssociationType<OneToOneAssociation>(session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectMemberHidden<OneToOneAssociation>(session, nakedObject, getResourceContext()));
+        columns.add(new TableColumnNakedObjectAssociationType<OneToOneAssociation>(session, nakedObject,
+            getResourceContext()));
+        columns.add(new TableColumnNakedObjectMemberHidden<OneToOneAssociation>(session, nakedObject,
+            getResourceContext()));
         columns.add(new TableColumnOneToOneAssociationAccess(session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectMemberDisabled<OneToOneAssociation>(session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectMemberDisabledReason<OneToOneAssociation>(session, nakedObject, getResourceContext()));
+        columns.add(new TableColumnNakedObjectMemberDisabled<OneToOneAssociation>(session, nakedObject,
+            getResourceContext()));
+        columns.add(new TableColumnNakedObjectMemberDisabledReason<OneToOneAssociation>(session, nakedObject,
+            getResourceContext()));
         columns.add(new TableColumnOneToOneAssociationParseable(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnOneToOneAssociationModify(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnOneToOneAssociationClear(session, nakedObject, getResourceContext()));
@@ -159,9 +163,12 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         final List<TableColumn<OneToManyAssociation>> columns = new ArrayList<TableColumn<OneToManyAssociation>>();
         columns.add(new TableColumnOneToManyAssociationName(noSpec, session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectAssociationType<OneToManyAssociation>(session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectMemberHidden<OneToManyAssociation>(session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectMemberDisabled<OneToManyAssociation>(session, nakedObject, getResourceContext()));
+        columns.add(new TableColumnNakedObjectAssociationType<OneToManyAssociation>(session, nakedObject,
+            getResourceContext()));
+        columns.add(new TableColumnNakedObjectMemberHidden<OneToManyAssociation>(session, nakedObject,
+            getResourceContext()));
+        columns.add(new TableColumnNakedObjectMemberDisabled<OneToManyAssociation>(session, nakedObject,
+            getResourceContext()));
         columns.add(new TableColumnOneToManyAssociationAccess(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnOneToManyAssociationAddTo(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnOneToManyAssociationRemoveFrom(session, nakedObject, getResourceContext()));
@@ -191,7 +198,8 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         columns.add(new TableColumnNakedObjectActionParamCount(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnNakedObjectMemberHidden<ObjectAction>(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnNakedObjectMemberDisabled<ObjectAction>(session, nakedObject, getResourceContext()));
-        columns.add(new TableColumnNakedObjectMemberDisabledReason<ObjectAction>(session, nakedObject, getResourceContext()));
+        columns.add(new TableColumnNakedObjectMemberDisabledReason<ObjectAction>(session, nakedObject,
+            getResourceContext()));
         columns.add(new TableColumnNakedObjectActionRealTarget(session, nakedObject, getResourceContext()));
         columns.add(new TableColumnNakedObjectActionInvoke(session, nakedObject, getResourceContext()));
 
@@ -205,14 +213,12 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String modifyProperty(
-            final String oidEncodedStr,
-            final String propertyEncodedId,
-            final String proposedEncodedValue) {
+    public String modifyProperty(final String oidEncodedStr, final String propertyEncodedId,
+        final String proposedEncodedValue) {
         init();
-        String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
-        String proposedValue = UrlDecoderUtils.urlDecode(proposedEncodedValue);
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        final String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
+        final String proposedValue = UrlDecoderUtils.urlDecode(proposedEncodedValue);
 
         final ObjectAdapter nakedObject = getNakedObject(oidStr);
         if (nakedObject == null) {
@@ -227,26 +233,24 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         // make sure we have a value (should be using clear otherwise)
         if (proposedValueNO == null) {
-        	throw new WebApplicationException(responseOfBadRequest("null argument"));
+            throw new WebApplicationException(responseOfBadRequest("null argument"));
         }
 
         // validate
         final Consent consent = property.isAssociationValid(nakedObject, proposedValueNO);
         if (consent.isVetoed()) {
-        	throw new WebApplicationException(responseOfBadRequest(consent));
+            throw new WebApplicationException(responseOfBadRequest(consent));
         }
 
-        
         // html template
-        final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
+        final XhtmlTemplate xhtml =
+            new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
 
-
         // title & Oid
-        Element div = asDivTableObjectDetails(nakedObject);
+        final Element div = asDivTableObjectDetails(nakedObject);
         xhtml.appendToBody(div);
-
 
         // if valid, then set
         property.setAssociation(nakedObject, proposedValueNO);
@@ -255,16 +259,14 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     }
 
     @Override
-    public String clearProperty(
-    		final String oidEncodedStr, 
-    		final String propertyEncodedId) {
+    public String clearProperty(final String oidEncodedStr, final String propertyEncodedId) {
         init();
-        String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        final String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
 
         final ObjectAdapter nakedObject = getNakedObject(oidStr);
         if (nakedObject == null) {
-        	throw new WebApplicationException(responseOfGone("could not determine object"));
+            throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
         final ObjectSpecification noSpec = nakedObject.getSpecification();
@@ -274,20 +276,18 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // validate
         final Consent consent = property.isAssociationValid(nakedObject, null);
         if (consent.isVetoed()) {
-        	throw new WebApplicationException(responseOfBadRequest(consent));
+            throw new WebApplicationException(responseOfBadRequest(consent));
         }
 
         // html template
-        final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
+        final XhtmlTemplate xhtml =
+            new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
 
-
         // title & Oid
-        Element div = asDivTableObjectDetails(nakedObject);
+        final Element div = asDivTableObjectDetails(nakedObject);
         xhtml.appendToBody(div);
-
-
 
         // if valid, then clear
         property.clearAssociation(nakedObject);
@@ -304,29 +304,27 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     }
 
     @Override
-    public String accessCollection(
-    		final String oidEncodedStr, 
-    		final String collectionEncodedId) {
+    public String accessCollection(final String oidEncodedStr, final String collectionEncodedId) {
         init();
-        String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        final String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
 
         final ObjectAdapter nakedObject = getNakedObject(oidStr);
         if (nakedObject == null) {
-        	throw new WebApplicationException(responseOfGone("could not determine object"));
+            throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
         final ObjectSpecification noSpec = nakedObject.getSpecification();
         final ObjectAssociation association = noSpec.getAssociation(collectionId);
         if (!association.isOneToManyAssociation()) {
-        	throw new WebApplicationException(responseOfBadRequest("Not a collection"));
+            throw new WebApplicationException(responseOfBadRequest("Not a collection"));
         }
 
         // html template
-        final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
+        final XhtmlTemplate xhtml =
+            new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
-
 
         // title & Oid
         Element div = asDivTableObjectDetails(nakedObject);
@@ -353,34 +351,29 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     }
 
     @Override
-    public String addToCollection(
-            final String oidStr,
-            final String collectionEncodedId,
-            final String proposedValueEncodedOidStr) {
-        return modifyCollection(oidStr, collectionEncodedId, proposedValueEncodedOidStr, CollectionModificationType.ADD_TO);
+    public String addToCollection(final String oidStr, final String collectionEncodedId,
+        final String proposedValueEncodedOidStr) {
+        return modifyCollection(oidStr, collectionEncodedId, proposedValueEncodedOidStr,
+            CollectionModificationType.ADD_TO);
     }
 
     @Override
-    public String removeFromCollection(
-            final String oidStr,
-            final String collectionEncodedId,
-            final String proposedValueEncodedOidStr) {
-        return modifyCollection(oidStr, collectionEncodedId, proposedValueEncodedOidStr, CollectionModificationType.REMOVE_FROM);
+    public String removeFromCollection(final String oidStr, final String collectionEncodedId,
+        final String proposedValueEncodedOidStr) {
+        return modifyCollection(oidStr, collectionEncodedId, proposedValueEncodedOidStr,
+            CollectionModificationType.REMOVE_FROM);
     }
 
-    private String modifyCollection(
-            final String oidEncodedStr,
-            final String collectionEncodedId,
-            final String proposedValueEncodedOidStr,
-            final CollectionModificationType modification) {
+    private String modifyCollection(final String oidEncodedStr, final String collectionEncodedId,
+        final String proposedValueEncodedOidStr, final CollectionModificationType modification) {
         init();
-        String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
-        String proposedValueOidStr = UrlDecoderUtils.urlDecode(proposedValueEncodedOidStr);
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        final String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
+        final String proposedValueOidStr = UrlDecoderUtils.urlDecode(proposedValueEncodedOidStr);
 
         final ObjectAdapter nakedObject = getNakedObject(oidStr);
         if (nakedObject == null) {
-        	throw new WebApplicationException(responseOfGone("could not determine object"));
+            throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
         final ObjectSpecification noSpec = nakedObject.getSpecification();
@@ -391,27 +384,26 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         proposedValueNO = getNakedObject(proposedValueOidStr);
 
         if (proposedValueNO == null) {
-        	throw new WebApplicationException(responseOfGone("could not determine proposed value"));
+            throw new WebApplicationException(responseOfGone("could not determine proposed value"));
         }
 
         // validate
-        final Consent consent = modification == CollectionModificationType.ADD_TO ? collection.isValidToAdd(nakedObject,
-                proposedValueNO) : collection.isValidToRemove(nakedObject, proposedValueNO);
+        final Consent consent =
+            modification == CollectionModificationType.ADD_TO ? collection.isValidToAdd(nakedObject, proposedValueNO)
+                : collection.isValidToRemove(nakedObject, proposedValueNO);
         if (consent.isVetoed()) {
-        	throw new WebApplicationException(responseOfBadRequest(consent));
+            throw new WebApplicationException(responseOfBadRequest(consent));
         }
 
-
         // html template
-        final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
+        final XhtmlTemplate xhtml =
+            new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
         xhtml.appendToBody(asDivNofSession());
         xhtml.appendToBody(resourcesDiv());
 
-
         // title & Oid
-        Element div = asDivTableObjectDetails(nakedObject);
+        final Element div = asDivTableObjectDetails(nakedObject);
         xhtml.appendToBody(div);
-
 
         // if valid, then set
         if (modification == CollectionModificationType.ADD_TO) {
@@ -428,96 +420,91 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     // /////////////////////////////////////////////////////////////////////
 
     @Override
-    public String invokeAction(
-            final String oidEncodedStr,
-            final String actionEncodedId,
-            final InputStream body) {
-		init();
-		
-        String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        String actionId = UrlDecoderUtils.urlDecode(actionEncodedId);
-		final List<String> argsEncodedArray = InputStreamUtil.getArgs(body);
-		String[] argsEncoded = argsEncodedArray.toArray(new String[] {});
-		final String[] args = urlDecode(argsEncoded);
-		
-		final ObjectAdapter nakedObject = getNakedObject(oidStr);
-		if (nakedObject == null) {
-			throw new WebApplicationException(responseOfGone("could not determine object"));
-		}
-		
-		final ObjectSpecification noSpec = nakedObject.getSpecification();
-		final ObjectAction action = getObjectAction(noSpec, actionId);
-		
-		final List<ObjectActionParameter> parameters = action.getParameters();
-		final int parameterCount = parameters.size();
-		final int argumentCount = args.length;
-		if (parameterCount > argumentCount) {
-		    // this isn't an != check because JAX-RS will always give us 10 args, but some/all will be null.
-		    String reason = MessageFormat.format("provided {0} parameters but {1} arguments", parameterCount, argumentCount);
-		    throw new WebApplicationException(responseOfBadRequest(reason));
-		}
-		
-		final ObjectAdapter[] proposedArguments = new ObjectAdapter[parameterCount];
-		for (int i = 0; i < parameters.size(); i++) {
-		    final String proposedArg = args[i];
-		    if (proposedArg != null) {
-		        final ObjectAdapter argNO = getObjectAdapter(proposedArg, nakedObject, parameters.get(i));
-		
-		        if (argNO == null) {
-		        	throw new WebApplicationException(responseOfGone("could not determine proposed value"));
-		        }
-		        proposedArguments[i] = argNO;
-		    }
-		}
-		
-		// html template
-		final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + actionId, getServletRequest());
-		xhtml.appendToBody(asDivNofSession());
-		
-		
-		// title & Oid
-		Element div = asDivTableObjectDetails(nakedObject);
-		xhtml.appendToBody(div);
-		
-		// action Name
-		div = xhtmlRenderer.div_p(actionId, HtmlClass.COLLECTION);
-		xhtml.appendToBody(div);
-		
-		
-		// TODO: should be checking if enabled, or indeed, if visible?
-		// probably for modifying properties and collections too.
-		
-		
-		// validate
-		final Consent consent = action.isProposedArgumentSetValid(nakedObject, proposedArguments);
-		if (consent.isVetoed()) {
-			throw new WebApplicationException(responseOfBadRequest(consent));
-		}
-		
-		// invoke the action
-		final ActionInvocationFacet actionInvocationFacet = action.getFacet(ActionInvocationFacet.class);
-		final ObjectAdapter result = actionInvocationFacet.invoke(nakedObject, proposedArguments);
-		if (result == null) {
-			// do nothing; 
-			// NB: this is not a response of NO_CONTENT 
-			// (not sure if it ought to be, can't see how you would return it)
-		} else {
-		    final Object object = result.getObject();
-		    xhtml.appendToBody(actionResult(object));
-		}
-		
-		return xhtml.toXML();
+    public String invokeAction(final String oidEncodedStr, final String actionEncodedId, final InputStream body) {
+        init();
+
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        final String actionId = UrlDecoderUtils.urlDecode(actionEncodedId);
+        final List<String> argsEncodedArray = InputStreamUtil.getArgs(body);
+        final String[] argsEncoded = argsEncodedArray.toArray(new String[] {});
+        final String[] args = urlDecode(argsEncoded);
+
+        final ObjectAdapter nakedObject = getNakedObject(oidStr);
+        if (nakedObject == null) {
+            throw new WebApplicationException(responseOfGone("could not determine object"));
+        }
+
+        final ObjectSpecification noSpec = nakedObject.getSpecification();
+        final ObjectAction action = getObjectAction(noSpec, actionId);
+
+        final List<ObjectActionParameter> parameters = action.getParameters();
+        final int parameterCount = parameters.size();
+        final int argumentCount = args.length;
+        if (parameterCount > argumentCount) {
+            // this isn't an != check because JAX-RS will always give us 10 args, but some/all will be null.
+            final String reason =
+                MessageFormat.format("provided {0} parameters but {1} arguments", parameterCount, argumentCount);
+            throw new WebApplicationException(responseOfBadRequest(reason));
+        }
+
+        final ObjectAdapter[] proposedArguments = new ObjectAdapter[parameterCount];
+        for (int i = 0; i < parameters.size(); i++) {
+            final String proposedArg = args[i];
+            if (proposedArg != null) {
+                final ObjectAdapter argNO = getObjectAdapter(proposedArg, nakedObject, parameters.get(i));
+
+                if (argNO == null) {
+                    throw new WebApplicationException(responseOfGone("could not determine proposed value"));
+                }
+                proposedArguments[i] = argNO;
+            }
+        }
+
+        // html template
+        final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + actionId, getServletRequest());
+        xhtml.appendToBody(asDivNofSession());
+
+        // title & Oid
+        Element div = asDivTableObjectDetails(nakedObject);
+        xhtml.appendToBody(div);
+
+        // action Name
+        div = xhtmlRenderer.div_p(actionId, HtmlClass.COLLECTION);
+        xhtml.appendToBody(div);
+
+        // TODO: should be checking if enabled, or indeed, if visible?
+        // probably for modifying properties and collections too.
+
+        // validate
+        final Consent consent = action.isProposedArgumentSetValid(nakedObject, proposedArguments);
+        if (consent.isVetoed()) {
+            throw new WebApplicationException(responseOfBadRequest(consent));
+        }
+
+        // invoke the action
+        final ActionInvocationFacet actionInvocationFacet = action.getFacet(ActionInvocationFacet.class);
+        final ObjectAdapter result = actionInvocationFacet.invoke(nakedObject, proposedArguments);
+        if (result == null) {
+            // do nothing;
+            // NB: this is not a response of NO_CONTENT
+            // (not sure if it ought to be, can't see how you would return it)
+        } else {
+            final Object object = result.getObject();
+            xhtml.appendToBody(actionResult(object));
+        }
+
+        return xhtml.toXML();
     }
 
-    private static String[] urlDecode(String[] encodedStrings) {
-    	String[] strings = new String[encodedStrings.length];
-    	for (int i = 0; i < encodedStrings.length; i++) {
-			strings[i] = UrlDecoderUtils.urlDecode(encodedStrings[i]);
-		}
-		return strings;
-	}
+    private static String[] urlDecode(final String[] encodedStrings) {
+        final String[] strings = new String[encodedStrings.length];
+        for (int i = 0; i < encodedStrings.length; i++) {
+            strings[i] = UrlDecoderUtils.urlDecode(encodedStrings[i]);
+        }
+        return strings;
+    }
 
-	// TODO: this is horrid - shouldn't have to search in this way...
+    // TODO: this is horrid - shouldn't have to search in this way...
     private ObjectAction getObjectAction(final ObjectSpecification noSpec, final String actionId) {
         ObjectAction action = null;
         action = noSpec.getObjectAction(ActionType.USER, actionId);
@@ -560,11 +547,10 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         return toAHref(result);
     }
 
-    
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Helpers
-    ////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////
+
     private Element toLiAHref(final Object object) {
         final Element li = new Element("li");
         li.appendChild(toAHref(object));
@@ -583,15 +569,14 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     }
 
     private Element toAHref(final ObjectAdapter nakedObject) {
-        final String uri = MessageFormat.format("{0}/object/{1}", getServletRequest().getContextPath(), getOidStr(nakedObject));
+        final String uri =
+            MessageFormat.format("{0}/object/{1}", getServletRequest().getContextPath(), getOidStr(nakedObject));
         return xhtmlRenderer.aHref(uri, nakedObject.titleString(), "object", "results", HtmlClass.ACTION_RESULT);
     }
 
-    private ObjectAdapter getObjectAdapter(
-            final String proposedValue,
-            final ObjectAdapter nakedObject,
-            final ObjectFeature nakedObjectFeature) {
-    	ObjectAdapter proposedValueNO = null;
+    private ObjectAdapter getObjectAdapter(final String proposedValue, final ObjectAdapter nakedObject,
+        final ObjectFeature nakedObjectFeature) {
+        ObjectAdapter proposedValueNO = null;
         ParseableFacet parseable = nakedObjectFeature.getFacet(ParseableFacet.class);
         if (parseable == null) {
             parseable = nakedObjectFeature.getSpecification().getFacet(ParseableFacet.class);
@@ -606,8 +591,8 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         return proposedValueNO;
     }
 
-	private boolean isJavascriptDebug() {
-		return IsisContext.getConfiguration().getBoolean(Constants.JAVASCRIPT_DEBUG_KEY, true);
-	}
+    private boolean isJavascriptDebug() {
+        return IsisContext.getConfiguration().getBoolean(Constants.JAVASCRIPT_DEBUG_KEY, true);
+    }
 
 }

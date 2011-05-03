@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages.action;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -29,30 +28,30 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 
 /**
- * Web page representing an action invocation. 
+ * Web page representing an action invocation.
  */
 @AuthorizeInstantiation("org.starobjects.wicket.roles.USER")
 public class ActionPage extends PageAbstract {
 
-	/**
-	 * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
-	 */
-	public ActionPage(ActionModel actionModel) {
-		super(new PageParameters(), ComponentType.ACTION);
-		addChildComponents(actionModel);
-	}
+    /**
+     * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
+     */
+    public ActionPage(final ActionModel actionModel) {
+        super(new PageParameters(), ComponentType.ACTION);
+        addChildComponents(actionModel);
+    }
 
-	/**
-	 * For use through {@link BookmarkablePageLink}s.
-	 */
-	public ActionPage(PageParameters pageParameters) {
-		super(pageParameters, ComponentType.ACTION);
-		IModel<?> model = buildModel();
-		addChildComponents(model);
-	}
-	
-	private IModel<?> buildModel() {
-		return ActionModel.createForPersistent(getPageParameters(), getOidStringifier());
-	}
-	
+    /**
+     * For use through {@link BookmarkablePageLink}s.
+     */
+    public ActionPage(final PageParameters pageParameters) {
+        super(pageParameters, ComponentType.ACTION);
+        final IModel<?> model = buildModel();
+        addChildComponents(model);
+    }
+
+    private IModel<?> buildModel() {
+        return ActionModel.createForPersistent(getPageParameters(), getOidStringifier());
+    }
+
 }

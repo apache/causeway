@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
@@ -31,53 +30,59 @@ import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
  */
 public class SpecMemento implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Class<?> type;
-	private transient ObjectSpecification specification;
-	
-	/**
-	 * Factory method.
-	 * @param className
-	 * @return may return null if className is null
-	 */
-	public static SpecMemento representing(String className) {
-		if (className == null) { return null; }
-		return new SpecMemento(ClassLoaders.forName(className));
-	}
+    private final Class<?> type;
+    private transient ObjectSpecification specification;
 
-	public static SpecMemento representing(Class<?> type) {
-		if (type == null) { return null; }
-		return new SpecMemento(type);
-	}
+    /**
+     * Factory method.
+     * 
+     * @param className
+     * @return may return null if className is null
+     */
+    public static SpecMemento representing(final String className) {
+        if (className == null) {
+            return null;
+        }
+        return new SpecMemento(ClassLoaders.forName(className));
+    }
 
-	public static SpecMemento representing(ObjectSpecification specification) {
-		if (specification == null) { return null; }
-		return new SpecMemento(specification);
-	}
+    public static SpecMemento representing(final Class<?> type) {
+        if (type == null) {
+            return null;
+        }
+        return new SpecMemento(type);
+    }
 
-	public SpecMemento(ObjectSpecification specification) {
-		this(ClassLoaders.forName(specification));
-		this.specification = specification;
-	}
-	
-	private SpecMemento(Class<?> type) {
-		this.type = type;
-	}
+    public static SpecMemento representing(final ObjectSpecification specification) {
+        if (specification == null) {
+            return null;
+        }
+        return new SpecMemento(specification);
+    }
 
+    public SpecMemento(final ObjectSpecification specification) {
+        this(ClassLoaders.forName(specification));
+        this.specification = specification;
+    }
 
-	public Class<?> getType() {
-		return type;
-	}
+    private SpecMemento(final Class<?> type) {
+        this.type = type;
+    }
 
-	/**
-	 * Lazy loaded from {@link #getType()}.
-	 */
-	public ObjectSpecification getSpecification() {
-		if (specification == null) {
-			specification = IsisContext.getSpecificationLoader().loadSpecification(type);
-		}
-		return specification;
-	}
+    public Class<?> getType() {
+        return type;
+    }
+
+    /**
+     * Lazy loaded from {@link #getType()}.
+     */
+    public ObjectSpecification getSpecification() {
+        if (specification == null) {
+            specification = IsisContext.getSpecificationLoader().loadSpecification(type);
+        }
+        return specification;
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -26,31 +25,29 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
- * Adapter for {@link LoadableDetachableModel}s, providing access to some
- * of the Isis' dependencies.
+ * Adapter for {@link LoadableDetachableModel}s, providing access to some of the Isis' dependencies.
  */
 public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ModelAbstract() {
-	}
-	
-	public ModelAbstract(T t) {
-		super(t);
-	}
+    public ModelAbstract() {
+    }
 
-	
-	////////////////////////////////////////////////////////////////
-	// Dependencies
-	////////////////////////////////////////////////////////////////
-	
-	protected PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    public ModelAbstract(final T t) {
+        super(t);
+    }
 
-	protected AdapterManager getAdapterManager() {
-		return getPersistenceSession().getAdapterManager();
-	}
+    // //////////////////////////////////////////////////////////////
+    // Dependencies
+    // //////////////////////////////////////////////////////////////
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
 
 }

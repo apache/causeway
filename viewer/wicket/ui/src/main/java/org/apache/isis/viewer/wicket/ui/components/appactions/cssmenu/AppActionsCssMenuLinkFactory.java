@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -36,36 +35,34 @@ import org.apache.wicket.markup.html.link.Link;
 
 class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
 
-	private static final long serialVersionUID = 1L;
-	
-    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento,
-			final ObjectAction action, final String linkId) {
-		PageParameters pageParameters = ActionModel.createPageParameters(
-				adapterMemento.getObjectAdapter(), action, AppActionsCssMenuFactory.getOidStringifier(), null, ActionModel.SingleResultsMode.REDIRECT);
-		
-		Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
-				
-		final Link<? extends Page> link = createLink(linkId, pageParameters, pageClass);
-		final String actionLabel = Actions.labelFor(action);
-		
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action,
+        final String linkId) {
+        final PageParameters pageParameters =
+            ActionModel.createPageParameters(adapterMemento.getObjectAdapter(), action,
+                AppActionsCssMenuFactory.getOidStringifier(), null, ActionModel.SingleResultsMode.REDIRECT);
+
+        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
+
+        final Link<? extends Page> link = createLink(linkId, pageParameters, pageClass);
+        final String actionLabel = Actions.labelFor(action);
+
         return new LinkAndLabel(link, actionLabel);
-	}
-
-    private <T extends Page> Link<T> createLink(final String linkId, PageParameters pageParameters,
-			Class<T> pageClass) {
-		return new BookmarkablePageLink<T>(linkId,
-				pageClass, pageParameters);
-	}
-
-    
-    //////////////////////////////////////////////////////////////
-    // Dependencies
-    //////////////////////////////////////////////////////////////
-    
-    protected PageClassRegistry getPageClassRegistry() {
-        return ((PageClassRegistryAccessor)Application.get()).getPageClassRegistry();
     }
 
+    private <T extends Page> Link<T> createLink(final String linkId, final PageParameters pageParameters,
+        final Class<T> pageClass) {
+        return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
+    }
 
+    // ////////////////////////////////////////////////////////////
+    // Dependencies
+    // ////////////////////////////////////////////////////////////
+
+    protected PageClassRegistry getPageClassRegistry() {
+        return ((PageClassRegistryAccessor) Application.get()).getPageClassRegistry();
+    }
 
 }

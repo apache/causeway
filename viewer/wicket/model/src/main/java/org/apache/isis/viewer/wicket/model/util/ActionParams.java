@@ -17,23 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-
-
-
 public final class ActionParams {
 
-	private ActionParams(){}
-
-    public static boolean compatibleWith(ObjectAdapter contextAdapter,
-            ObjectActionParameter actionParam) {
-        return contextAdapter != null && contextAdapter.getSpecification().isOfType(
-                actionParam.getSpecification());
+    private ActionParams() {
     }
-	
+
+    public static boolean compatibleWith(final ObjectAdapter contextAdapter, final ObjectActionParameter actionParam) {
+        return contextAdapter != null && contextAdapter.getSpecification().isOfType(actionParam.getSpecification());
+    }
+
 }

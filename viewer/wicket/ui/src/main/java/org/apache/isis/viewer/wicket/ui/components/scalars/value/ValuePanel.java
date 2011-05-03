@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.value;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -25,25 +24,25 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * Panel for rendering any value types that do not have their own custom {@link ScalarPanelAbstract panel}
- * to render them.
- *
+ * Panel for rendering any value types that do not have their own custom {@link ScalarPanelAbstract panel} to render
+ * them.
+ * 
  * <p>
- * This is a fallback panel; values are expected to be {@link Parser parseable} (typically
- * through the Isis' {@link Value} annotation.
+ * This is a fallback panel; values are expected to be {@link Parser parseable} (typically through the Isis'
+ * {@link Value} annotation.
  */
 public class ValuePanel extends ScalarPanelTextFieldParseableAbstract {
 
-	private static final long serialVersionUID = 1L;
-	private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final long serialVersionUID = 1L;
+    private static final String ID_SCALAR_VALUE = "scalarValue";
 
-	public ValuePanel(String id, final ScalarModel scalarModel) {
-		super(id, ID_SCALAR_VALUE, scalarModel);
-	}
+    public ValuePanel(final String id, final ScalarModel scalarModel) {
+        super(id, ID_SCALAR_VALUE, scalarModel);
+    }
 
-	@Override
-	protected void addSemantics() {
-		super.addSemantics();
-	}
+    @Override
+    protected void addSemantics() {
+        super.addSemantics();
+    }
 
 }

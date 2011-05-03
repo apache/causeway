@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -28,29 +27,30 @@ import org.apache.wicket.model.IModel;
 
 public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final Class<?>[] scalarTypes;
+    private static final long serialVersionUID = 1L;
 
-	public ComponentFactoryScalarAbstract(final Class<?>... scalarTypes) {
-		super(ComponentType.SCALAR_NAME_AND_VALUE);
-		this.scalarTypes = scalarTypes;
-	}
+    private final Class<?>[] scalarTypes;
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof ScalarModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		ScalarModel scalarModel = (ScalarModel) model;
-		return appliesIf(scalarModel.isScalarTypeAnyOf(scalarTypes));
-	}
+    public ComponentFactoryScalarAbstract(final Class<?>... scalarTypes) {
+        super(ComponentType.SCALAR_NAME_AND_VALUE);
+        this.scalarTypes = scalarTypes;
+    }
 
-	public final Component createComponent(String id, IModel<?> model) {
-		ScalarModel scalarModel = (ScalarModel) model;
-		return createComponent(id, scalarModel);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof ScalarModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final ScalarModel scalarModel = (ScalarModel) model;
+        return appliesIf(scalarModel.isScalarTypeAnyOf(scalarTypes));
+    }
 
-	protected abstract Component createComponent(String id, ScalarModel scalarModel);
+    @Override
+    public final Component createComponent(final String id, final IModel<?> model) {
+        final ScalarModel scalarModel = (ScalarModel) model;
+        return createComponent(id, scalarModel);
+    }
+
+    protected abstract Component createComponent(String id, ScalarModel scalarModel);
 
 }

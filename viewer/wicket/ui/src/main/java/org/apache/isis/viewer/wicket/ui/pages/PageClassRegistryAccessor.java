@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.io.Serializable;
-
 
 /**
  * API to obtain the {@link PageClassRegistry}.

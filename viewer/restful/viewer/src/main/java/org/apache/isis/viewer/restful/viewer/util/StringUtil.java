@@ -18,11 +18,10 @@
  */
 package org.apache.isis.viewer.restful.viewer.util;
 
-
-
 public final class StringUtil {
 
-    private StringUtil() {}
+    private StringUtil() {
+    }
 
     public static String concat(final String... lines) {
         final StringBuilder buf = new StringBuilder();

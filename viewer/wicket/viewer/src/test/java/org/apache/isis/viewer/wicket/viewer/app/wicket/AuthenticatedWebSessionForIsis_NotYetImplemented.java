@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import org.junit.Before;
@@ -26,13 +25,13 @@ import org.junit.Test;
 
 public class AuthenticatedWebSessionForIsis_NotYetImplemented {
 
-	@Before
-	public void setUp() throws Exception {
-	}
-	
-	@Ignore("not yet implemented")
-	@Test
-	public void testIsDebugMode() {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @Ignore("not yet implemented")
+    @Test
+    public void testIsDebugMode() {
+    }
 
 }

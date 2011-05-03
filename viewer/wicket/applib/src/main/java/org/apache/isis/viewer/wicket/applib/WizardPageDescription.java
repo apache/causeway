@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.applib;
 
 import java.lang.annotation.ElementType;
@@ -30,7 +29,7 @@ import java.lang.annotation.Target;
  * Property to provides a description of a wizard page.
  */
 @Inherited
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WizardPageDescription {
 

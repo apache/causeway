@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.hamcrest.Matchers.is;
@@ -36,31 +35,33 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class AuthenticatedWebSessionForIsis_ThreadManagement {
 
-	private FixtureMockery context = new FixtureMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
-	
-	private AuthenticatedWebSessionForIsis webSession;
-	private Request stubRequest;
-	
-	@Before
-	public void setUp() throws Exception {
-		stubRequest = context.fixture(Fixture_Request_Stub.class).object();
-		webSession = new AuthenticatedWebSessionForIsis(stubRequest);
-	}
+    private final FixtureMockery context = new FixtureMockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	@Test
-	public void testRegisterUseByThread() {
-		assertThat(webSession.getThreadUsage(), is(0));
-		webSession.registerUseByThread();
-		assertThat(webSession.getThreadUsage(), is(1));
-	}
+    private AuthenticatedWebSessionForIsis webSession;
+    private Request stubRequest;
 
-	@Test
-	public void testDeregisterUseByThread() {
-		webSession.registerUseByThread();
-		assertThat(webSession.getThreadUsage(), is(1));
-		webSession.deregisterUseByThread();
-		assertThat(webSession.getThreadUsage(), is(0));
-	}
+    @Before
+    public void setUp() throws Exception {
+        stubRequest = context.fixture(Fixture_Request_Stub.class).object();
+        webSession = new AuthenticatedWebSessionForIsis(stubRequest);
+    }
+
+    @Test
+    public void testRegisterUseByThread() {
+        assertThat(webSession.getThreadUsage(), is(0));
+        webSession.registerUseByThread();
+        assertThat(webSession.getThreadUsage(), is(1));
+    }
+
+    @Test
+    public void testDeregisterUseByThread() {
+        webSession.registerUseByThread();
+        assertThat(webSession.getThreadUsage(), is(1));
+        webSession.deregisterUseByThread();
+        assertThat(webSession.getThreadUsage(), is(0));
+    }
 }

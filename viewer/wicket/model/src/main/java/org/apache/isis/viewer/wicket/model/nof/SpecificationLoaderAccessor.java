@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.nof;
 
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public interface SpecificationLoaderAccessor {
 
-	SpecificationLoader getSpecificationLoader();
+    SpecificationLoader getSpecificationLoader();
 }

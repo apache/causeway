@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.hamcrest.Matchers.is;
@@ -42,53 +41,55 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
-	private FixtureMockery context = new FixtureMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
-	
-	private AuthenticatedWebSessionForIsis webSession;
-	private Request stubRequest;
-	
-	@Before
-	public void setUp() throws Exception {
-		stubRequest = context.fixture(Fixture_Request_Stub.class).object();
-	}
-	
-	@Test
-	public void delegatesToAuthenticationManagerAndCachesAuthSessionIfOk() {
-		final AuthenticationManager mockAuthMgr = context.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
-		webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
-			private static final long serialVersionUID = 1L;
+    private final FixtureMockery context = new FixtureMockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-			@Override
-			protected AuthenticationManager getAuthenticationManager() {
-				return mockAuthMgr;
-			}
-		};
-		assertThat(webSession.authenticate("jsmith", "secret"), is(true));
-		assertThat(webSession.getAuthenticationSession(), is(not(nullValue())));
-	}
+    private AuthenticatedWebSessionForIsis webSession;
+    private Request stubRequest;
 
-	
-	@Test
-	public void delegatesToAuthenticationManagerAndHandlesIfNotAuthenticated() {
-		final AuthenticationManager mockAuthMgr = context.mock(AuthenticationManager.class);
-		context.checking(new Expectations() {
-			{
-				one(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
-				will(returnValue(null));
-			}
-		});
-		webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
-			private static final long serialVersionUID = 1L;
+    @Before
+    public void setUp() throws Exception {
+        stubRequest = context.fixture(Fixture_Request_Stub.class).object();
+    }
 
-			@Override
-			protected AuthenticationManager getAuthenticationManager() {
-				return mockAuthMgr;
-			}
-		};
-		assertThat(webSession.authenticate("jsmith", "secret"), is(false));
-		assertThat(webSession.getAuthenticationSession(), is(nullValue()));
-	}
+    @Test
+    public void delegatesToAuthenticationManagerAndCachesAuthSessionIfOk() {
+        final AuthenticationManager mockAuthMgr =
+            context.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
+        webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected AuthenticationManager getAuthenticationManager() {
+                return mockAuthMgr;
+            }
+        };
+        assertThat(webSession.authenticate("jsmith", "secret"), is(true));
+        assertThat(webSession.getAuthenticationSession(), is(not(nullValue())));
+    }
+
+    @Test
+    public void delegatesToAuthenticationManagerAndHandlesIfNotAuthenticated() {
+        final AuthenticationManager mockAuthMgr = context.mock(AuthenticationManager.class);
+        context.checking(new Expectations() {
+            {
+                one(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
+                will(returnValue(null));
+            }
+        });
+        webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected AuthenticationManager getAuthenticationManager() {
+                return mockAuthMgr;
+            }
+        };
+        assertThat(webSession.authenticate("jsmith", "secret"), is(false));
+        assertThat(webSession.getAuthenticationSession(), is(nullValue()));
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.wizardpagedesc;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -30,13 +29,13 @@ import org.apache.wicket.model.Model;
  */
 public class WizardPageDescriptionPanel extends PanelAbstract<ScalarModel> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_VALUE = "value";
-	
-	public WizardPageDescriptionPanel(String id, ScalarModel scalarModel) {
-		super(id, scalarModel);
-		final String objectAsString = scalarModel.getObjectAsString();
-		addOrReplace(new Label(ID_VALUE, Model.of(objectAsString)));
-	}
+    private static final long serialVersionUID = 1L;
+
+    private static final String ID_VALUE = "value";
+
+    public WizardPageDescriptionPanel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+        final String objectAsString = scalarModel.getObjectAsString();
+        addOrReplace(new Label(ID_VALUE, Model.of(objectAsString)));
+    }
 }

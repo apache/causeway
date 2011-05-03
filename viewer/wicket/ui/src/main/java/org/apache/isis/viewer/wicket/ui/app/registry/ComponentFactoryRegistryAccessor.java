@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.app.registry;
 
 import java.io.Serializable;
-
-
 
 /**
  * For obtaining the {@link ComponentFactoryRegistry}.

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.models;
 
 import static org.hamcrest.Matchers.is;
@@ -27,17 +26,15 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.junit.Test;
-
 
 public class ActionModelTest {
 
-	@Test
-	public void whenParseThenParses() throws Exception {
-		Map.Entry<Integer, String> parsed = ActionModel.parse("3=OBJECT_OID:123");
-		assertThat(parsed, is(not(nullValue())));
-		assertThat(parsed.getKey(), is(3));
-		assertThat(parsed.getValue(), is("OBJECT_OID:123"));
-	}
+    @Test
+    public void whenParseThenParses() throws Exception {
+        final Map.Entry<Integer, String> parsed = ActionModel.parse("3=OBJECT_OID:123");
+        assertThat(parsed, is(not(nullValue())));
+        assertThat(parsed.getKey(), is(3));
+        assertThat(parsed.getValue(), is("OBJECT_OID:123"));
+    }
 }

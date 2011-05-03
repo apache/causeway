@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.metamodel.wizardpagedesc;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public class WizardPageDescriptionFacetAbstract extends
-		MarkerFacetAbstract implements WizardPageDescriptionFacet {
+public class WizardPageDescriptionFacetAbstract extends MarkerFacetAbstract implements WizardPageDescriptionFacet {
 
     public static Class<? extends Facet> type() {
         return WizardPageDescriptionFacet.class;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.wicket.Component;
@@ -42,146 +41,131 @@ import com.google.common.collect.Multimaps;
 import com.google.inject.Singleton;
 
 /**
- * Implementation of {@link ComponentFactoryRegistry} that delegates to a
- * provided {@link ComponentFactoryList}.
+ * Implementation of {@link ComponentFactoryRegistry} that delegates to a provided {@link ComponentFactoryList}.
  */
 @Singleton
-public class ComponentFactoryRegistryDefault implements
-		ComponentFactoryRegistry {
+public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
 
-	private final Multimap<ComponentType, ComponentFactory> componentFactoriesByType;
+    private final Multimap<ComponentType, ComponentFactory> componentFactoriesByType;
 
-	public ComponentFactoryRegistryDefault() {
-		this(new ComponentFactoryListDefault());
-	}
+    public ComponentFactoryRegistryDefault() {
+        this(new ComponentFactoryListDefault());
+    }
 
-	public ComponentFactoryRegistryDefault(
-			ComponentFactoryList componentFactoryList) {
-		componentFactoriesByType = Multimaps.newListMultimap(
-				new HashMap<ComponentType, Collection<ComponentFactory>>(),
-				new Supplier<List<ComponentFactory>>() {
-					public List<ComponentFactory> get() {
-						return Lists.<ComponentFactory> newArrayList();
-					}
-				});
+    public ComponentFactoryRegistryDefault(final ComponentFactoryList componentFactoryList) {
+        componentFactoriesByType =
+            Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(),
+                new Supplier<List<ComponentFactory>>() {
+                    @Override
+                    public List<ComponentFactory> get() {
+                        return Lists.<ComponentFactory> newArrayList();
+                    }
+                });
 
-		registerComponentFactories(componentFactoryList);
-	}
+        registerComponentFactories(componentFactoryList);
+    }
 
-	// ///////////////////////////////////////////////////////
-	// Registration
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Registration
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * Registers the provided set of component factories.
-	 */
-	protected void registerComponentFactories(
-			ComponentFactoryList componentFactoryList) {
-		List<ComponentFactory> componentFactories = Lists.newArrayList();
-		componentFactoryList.addComponentFactories(componentFactories);
+    /**
+     * Registers the provided set of component factories.
+     */
+    protected void registerComponentFactories(final ComponentFactoryList componentFactoryList) {
+        final List<ComponentFactory> componentFactories = Lists.newArrayList();
+        componentFactoryList.addComponentFactories(componentFactories);
 
-		for (ComponentFactory componentFactory : componentFactories) {
-			registerComponentFactory(componentFactory);
-		}
+        for (final ComponentFactory componentFactory : componentFactories) {
+            registerComponentFactory(componentFactory);
+        }
 
-		ensureAllComponentTypesRegistered();
-	}
+        ensureAllComponentTypesRegistered();
+    }
 
-	protected synchronized void registerComponentFactory(
-			ComponentFactory componentFactory) {
-		componentFactoriesByType.put(componentFactory.getComponentType(),
-				componentFactory);
-	}
+    protected synchronized void registerComponentFactory(final ComponentFactory componentFactory) {
+        componentFactoriesByType.put(componentFactory.getComponentType(), componentFactory);
+    }
 
-	private void ensureAllComponentTypesRegistered() {
-		for (ComponentType componentType : ComponentType.values()) {
-			Collection<ComponentFactory> componentFactories = componentFactoriesByType
-					.get(componentType);
-			if (componentFactories.isEmpty()) {
-				throw new IllegalStateException(
-						"No component factories registered for "
-								+ componentType);
-			}
-		}
-	}
+    private void ensureAllComponentTypesRegistered() {
+        for (final ComponentType componentType : ComponentType.values()) {
+            final Collection<ComponentFactory> componentFactories = componentFactoriesByType.get(componentType);
+            if (componentFactories.isEmpty()) {
+                throw new IllegalStateException("No component factories registered for " + componentType);
+            }
+        }
+    }
 
-	// ///////////////////////////////////////////////////////
-	// Public API
-	// ///////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Public API
+    // ///////////////////////////////////////////////////////
 
-	public Component addOrReplaceComponent(MarkupContainer markupContainer,
-			ComponentType componentType, IModel<?> model) {
-		Component component = createComponent(componentType, model);
-		markupContainer.addOrReplace(component);
-		return component;
-	}
+    @Override
+    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType,
+        final IModel<?> model) {
+        final Component component = createComponent(componentType, model);
+        markupContainer.addOrReplace(component);
+        return component;
+    }
 
-	@Override
-	public Component addOrReplaceComponent(MarkupContainer markupContainer,
-			String id, ComponentType componentType, IModel<?> model) {
-		Component component = createComponent(componentType, id, model);
-		markupContainer.addOrReplace(component);
-		return component;
-	}
+    @Override
+    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final String id,
+        final ComponentType componentType, final IModel<?> model) {
+        final Component component = createComponent(componentType, id, model);
+        markupContainer.addOrReplace(component);
+        return component;
+    }
 
-	public Component createComponent(ComponentType componentType,
-			IModel<?> model) {
-		ComponentFactory componentFactory = findComponentFactoryElseFailFast(
-				componentType, model);
-		Component component = componentFactory.createComponent(model);
-		return component;
-	}
+    @Override
+    public Component createComponent(final ComponentType componentType, final IModel<?> model) {
+        final ComponentFactory componentFactory = findComponentFactoryElseFailFast(componentType, model);
+        final Component component = componentFactory.createComponent(model);
+        return component;
+    }
 
-	@Override
-	public Component createComponent(ComponentType componentType, String id,
-			IModel<?> model) {
-		ComponentFactory componentFactory = findComponentFactoryElseFailFast(
-				componentType, model);
-		Component component = componentFactory.createComponent(id, model);
-		return component;
-	}
+    @Override
+    public Component createComponent(final ComponentType componentType, final String id, final IModel<?> model) {
+        final ComponentFactory componentFactory = findComponentFactoryElseFailFast(componentType, model);
+        final Component component = componentFactory.createComponent(id, model);
+        return component;
+    }
 
-	public List<ComponentFactory> findComponentFactories(
-			final ComponentType componentType, final IModel<?> model) {
-		Collection<ComponentFactory> componentFactoryList = componentFactoriesByType
-				.get(componentType);
-		final ArrayList<ComponentFactory> matching = new ArrayList<ComponentFactory>();
-		for (ComponentFactory componentFactory : componentFactoryList) {
-			final ApplicationAdvice appliesTo = componentFactory.appliesTo(componentType, model);
-			if (appliesTo.applies()) {
-				matching.add(componentFactory);
-			}
-			if (appliesTo.exclusively()) {
-				break;
-			}
-		}
-		return matching;
-	}
+    @Override
+    public List<ComponentFactory> findComponentFactories(final ComponentType componentType, final IModel<?> model) {
+        final Collection<ComponentFactory> componentFactoryList = componentFactoriesByType.get(componentType);
+        final ArrayList<ComponentFactory> matching = new ArrayList<ComponentFactory>();
+        for (final ComponentFactory componentFactory : componentFactoryList) {
+            final ApplicationAdvice appliesTo = componentFactory.appliesTo(componentType, model);
+            if (appliesTo.applies()) {
+                matching.add(componentFactory);
+            }
+            if (appliesTo.exclusively()) {
+                break;
+            }
+        }
+        return matching;
+    }
 
-	public ComponentFactory findComponentFactory(ComponentType componentType,
-			IModel<?> model) {
-		Collection<ComponentFactory> componentFactories = findComponentFactories(
-				componentType, model);
-		return firstOrNull(componentFactories);
-	}
+    @Override
+    public ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
+        final Collection<ComponentFactory> componentFactories = findComponentFactories(componentType, model);
+        return firstOrNull(componentFactories);
+    }
 
-	public ComponentFactory findComponentFactoryElseFailFast(
-			ComponentType componentType, IModel<?> model) {
-		ComponentFactory componentFactory = findComponentFactory(componentType,
-				model);
-		if (componentFactory == null) {
-			throw new RuntimeException(
-					String
-							.format(
-									"could not find component for componentType = '%s'; model object is of type %s",
-									componentType, model.getClass().getName()));
-		}
-		return componentFactory;
-	}
+    @Override
+    public ComponentFactory findComponentFactoryElseFailFast(final ComponentType componentType, final IModel<?> model) {
+        final ComponentFactory componentFactory = findComponentFactory(componentType, model);
+        if (componentFactory == null) {
+            throw new RuntimeException(String.format(
+                "could not find component for componentType = '%s'; model object is of type %s", componentType, model
+                    .getClass().getName()));
+        }
+        return componentFactory;
+    }
 
-	private static <T> T firstOrNull(Collection<T> collection) {
-		Iterator<T> iterator = collection.iterator();
-		return iterator.hasNext() ? iterator.next() : null;
-	}
+    private static <T> T firstOrNull(final Collection<T> collection) {
+        final Iterator<T> iterator = collection.iterator();
+        return iterator.hasNext() ? iterator.next() : null;
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.actions.params;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -32,20 +31,21 @@ import org.apache.wicket.model.IModel;
  */
 public class ActionParametersFormPanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ActionParametersFormPanelFactory() {
-		super(ComponentType.PARAMETERS);
-	}
+    public ActionParametersFormPanelFactory() {
+        super(ComponentType.PARAMETERS);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		return appliesIf(model instanceof ActionModel);
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return appliesIf(model instanceof ActionModel);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		ActionModel actionModel = (ActionModel) model;
-		return new ActionParametersFormPanel(id, actionModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final ActionModel actionModel = (ActionModel) model;
+        return new ActionParametersFormPanel(id, actionModel);
+    }
 
 }

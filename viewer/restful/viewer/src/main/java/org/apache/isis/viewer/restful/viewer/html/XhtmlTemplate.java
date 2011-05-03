@@ -32,18 +32,18 @@ import nu.xom.Serializer;
 
 import org.apache.isis.viewer.restful.viewer.Constants;
 
-
 /**
  * TODO: add in support for base URI in generated XML docs?
  */
 public class XhtmlTemplate {
 
     private final Element html;
-	private Element head;
-	private Element body;
+    private Element head;
+    private Element body;
 
-    public XhtmlTemplate(final String titleStr, final HttpServletRequest servletRequest, final String... javaScriptFiles) {
-    	this(titleStr, servletRequest.getSession().getServletContext(), javaScriptFiles);
+    public XhtmlTemplate(final String titleStr, final HttpServletRequest servletRequest,
+        final String... javaScriptFiles) {
+        this(titleStr, servletRequest.getSession().getServletContext(), javaScriptFiles);
     }
 
     private XhtmlTemplate(final String titleStr, final ServletContext servletContext, final String... javaScriptFiles) {
@@ -71,8 +71,7 @@ public class XhtmlTemplate {
      * Adds a &lt;body id=&quot;body&quot;> element.
      * 
      * <p>
-     * The <tt>id</tt> attribute is so that Javascript can use
-     * <tt>document.getElementById(&quot;body&quot;);</tt>
+     * The <tt>id</tt> attribute is so that Javascript can use <tt>document.getElementById(&quot;body&quot;);</tt>
      * 
      */
     private void addBody() {
@@ -91,54 +90,55 @@ public class XhtmlTemplate {
         }
         return this;
     }
-    
-    public Element appendToDiv(final Element div, final Element... elements){
-    	for (final Element element: elements){
-    		div.appendChild(element);
-    	}
-    	return div;
+
+    public Element appendToDiv(final Element div, final Element... elements) {
+        for (final Element element : elements) {
+            div.appendChild(element);
+        }
+        return div;
     }
-    
-	public Document getDocument() {
-		Document document = new Document(html);
-		return document;
-	}
 
-	/**
-	 * 
-	 * TODO: would rather be using the serializer, to ensure charset encoding is correct? 
-	 * @return
-	 */
-	public String toXML() {
-		// return xmlUsingSerializer();
-		return xmlUsingToXmlMethod();
-	}
+    public Document getDocument() {
+        final Document document = new Document(html);
+        return document;
+    }
 
-	private String xmlUsingToXmlMethod() {
-		return getDocument().toXML();
-	}
+    /**
+     * 
+     * TODO: would rather be using the serializer, to ensure charset encoding is correct?
+     * 
+     * @return
+     */
+    public String toXML() {
+        // return xmlUsingSerializer();
+        return xmlUsingToXmlMethod();
+    }
 
-	/**
-	 * Not playing ball...
-	 */
-	@SuppressWarnings("unused")
-	private String xmlUsingSerializer() {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			Serializer serializer = new Serializer(baos, Constants.URL_ENCODING_CHAR_SET);
-			
-			serializer.setPreserveBaseURI(true);
-			
-			//no need for pretty printing
-			//serializer.setIndent(4);
-			//serializer.setMaxLength(64);
-			
-			serializer.write(getDocument());
-			serializer.flush();
-			return new String(baos.toByteArray(), Constants.URL_ENCODING_CHAR_SET);
-		} catch (IOException e) {
-			throw new WebApplicationException(e);
-		}
-	}
+    private String xmlUsingToXmlMethod() {
+        return getDocument().toXML();
+    }
+
+    /**
+     * Not playing ball...
+     */
+    @SuppressWarnings("unused")
+    private String xmlUsingSerializer() {
+        try {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final Serializer serializer = new Serializer(baos, Constants.URL_ENCODING_CHAR_SET);
+
+            serializer.setPreserveBaseURI(true);
+
+            // no need for pretty printing
+            // serializer.setIndent(4);
+            // serializer.setMaxLength(64);
+
+            serializer.write(getDocument());
+            serializer.flush();
+            return new String(baos.toByteArray(), Constants.URL_ENCODING_CHAR_SET);
+        } catch (final IOException e) {
+            throw new WebApplicationException(e);
+        }
+    }
 
 }

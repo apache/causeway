@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.Arrays;
@@ -38,219 +37,201 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} representing an action invocation, backed by an
- * {@link ActionModel}.
+ * {@link PanelAbstract Panel} representing an action invocation, backed by an {@link ActionModel}.
  * 
  * <p>
- * Based on the {@link ActionModel.Mode mode}, will render either parameter
- * dialog or the results.
+ * Based on the {@link ActionModel.Mode mode}, will render either parameter dialog or the results.
  * 
  * <p>
  * TODO: on results panel, have a button to resubmit?
  */
-public class ActionPanel extends PanelAbstract<ActionModel> implements
-		ActionExecutor {
+public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExecutor {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * The various component types, one of which will be rendered.
-	 * 
-	 * @see #hideAllBut(ComponentType)
-	 */
-	private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(
-			ComponentType.PARAMETERS, ComponentType.ENTITY_LINK,
-			ComponentType.ENTITY, ComponentType.VALUE,
-			ComponentType.EMPTY_COLLECTION, ComponentType.VOID_RETURN,
-			ComponentType.COLLECTION_CONTENTS);
+    /**
+     * The various component types, one of which will be rendered.
+     * 
+     * @see #hideAllBut(ComponentType)
+     */
+    private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(ComponentType.PARAMETERS,
+        ComponentType.ENTITY_LINK, ComponentType.ENTITY, ComponentType.VALUE, ComponentType.EMPTY_COLLECTION,
+        ComponentType.VOID_RETURN, ComponentType.COLLECTION_CONTENTS);
 
-	public ActionPanel(String id, ActionModel actionModel) {
-		super(id, actionModel);
-		actionModel.setExecutor(this);
-		buildGui(actionModel);
-	}
+    public ActionPanel(final String id, final ActionModel actionModel) {
+        super(id, actionModel);
+        actionModel.setExecutor(this);
+        buildGui(actionModel);
+    }
 
-	private void buildGui(ActionModel actionModel) {
-		if (actionModel.getActionMode() == ActionModel.Mode.PARAMETERS) {
-			buildGuiForParameters();
-		} else {
-			executeActionAndProcessResults();
-		}
-	}
+    private void buildGui(final ActionModel actionModel) {
+        if (actionModel.getActionMode() == ActionModel.Mode.PARAMETERS) {
+            buildGuiForParameters();
+        } else {
+            executeActionAndProcessResults();
+        }
+    }
 
-	private ActionModel getActionModel() {
-		return (ActionModel) super.getModel();
-	}
+    private ActionModel getActionModel() {
+        return super.getModel();
+    }
 
-	private void buildGuiForParameters() {
-		hideAllBut(ComponentType.PARAMETERS);
-		getComponentFactoryRegistry().addOrReplaceComponent(this,
-				ComponentType.PARAMETERS, getActionModel());
-	}
+    private void buildGuiForParameters() {
+        hideAllBut(ComponentType.PARAMETERS);
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
+    }
 
-	public void executeActionAndProcessResults() {
+    @Override
+    public void executeActionAndProcessResults() {
 
-		final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
+        final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
 
-		ActionModel actionModel = getActionModel();
-		String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
-		if (invalidReasonIfAny != null) {
-			error(invalidReasonIfAny);
-			return;
-		}
+        final ActionModel actionModel = getActionModel();
+        final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
+        if (invalidReasonIfAny != null) {
+            error(invalidReasonIfAny);
+            return;
+        }
 
-		// executes the action
-		ObjectAdapter resultAdapter = actionModel.getObject();
-		if (resultAdapter == null) {
-			// TODO: a void; should indicate somehow
-			resultAdapter = targetAdapter;
-		}
+        // executes the action
+        ObjectAdapter resultAdapter = actionModel.getObject();
+        if (resultAdapter == null) {
+            // TODO: a void; should indicate somehow
+            resultAdapter = targetAdapter;
+        }
 
-		ResultType resultType = ResultType.determineFor(resultAdapter);
+        final ResultType resultType = ResultType.determineFor(resultAdapter);
 
-		resultType.addResults(this, resultAdapter);
-	}
+        resultType.addResults(this, resultAdapter);
+    }
 
-	enum ResultType {
-		OBJECT {
-			@Override
-			public void addResults(ActionPanel panel, ObjectAdapter resultAdapter) {
+    enum ResultType {
+        OBJECT {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
 
-				ObjectAdapter actualAdapter = determineActualAdapter(
-						resultAdapter, panel);
+                final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, panel);
 
-				addResultsAccordingToSingleResultsMode(panel, actualAdapter);
-			}
+                addResultsAccordingToSingleResultsMode(panel, actualAdapter);
+            }
 
-			private ObjectAdapter determineActualAdapter(
-					ObjectAdapter resultAdapter, PersistenceSessionAccessor psa) {
-				ObjectAdapter actualAdapter;
-				if (resultAdapter.getSpecification().isNotCollection()) {
-					actualAdapter = resultAdapter;
-				} else {
-					// will only be a single element
-					List<Object> pojoList = asList(resultAdapter);
-					Object pojo = pojoList.get(0);
-					actualAdapter = adapterFor(pojo, psa);
-				}
-				return actualAdapter;
-			}
+            private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter,
+                final PersistenceSessionAccessor psa) {
+                ObjectAdapter actualAdapter;
+                if (resultAdapter.getSpecification().isNotCollection()) {
+                    actualAdapter = resultAdapter;
+                } else {
+                    // will only be a single element
+                    final List<Object> pojoList = asList(resultAdapter);
+                    final Object pojo = pojoList.get(0);
+                    actualAdapter = adapterFor(pojo, psa);
+                }
+                return actualAdapter;
+            }
 
-			private void addResultsAccordingToSingleResultsMode(
-					ActionPanel panel, ObjectAdapter actualAdapter) {
-				final ActionModel actionModel = panel.getActionModel();
-				ActionModel.SingleResultsMode singleResultsMode = actionModel
-						.getSingleResultsMode();
+            private void addResultsAccordingToSingleResultsMode(final ActionPanel panel,
+                final ObjectAdapter actualAdapter) {
+                final ActionModel actionModel = panel.getActionModel();
+                final ActionModel.SingleResultsMode singleResultsMode = actionModel.getSingleResultsMode();
 
-				if (singleResultsMode == ActionModel.SingleResultsMode.REDIRECT) {
-					panel.setResponsePage(new EntityPage(actualAdapter));
-				} else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
-					actionModel.getSelectionHandler().onSelected(panel, actualAdapter);
-				} else if (singleResultsMode == ActionModel.SingleResultsMode.INLINE) {
-					ComponentType componentType = ComponentType.ENTITY;
-					panel.hideAllBut(componentType);
-					panel.addOrReplace(componentType, new EntityModel(
-							actualAdapter));
-				} else {
-					ComponentType componentType = ComponentType.ENTITY_LINK;
-					panel.hideAllBut(componentType);
-					panel.addOrReplace(componentType, new EntityModel(
-							actualAdapter));
-				}
-			}
+                if (singleResultsMode == ActionModel.SingleResultsMode.REDIRECT) {
+                    panel.setResponsePage(new EntityPage(actualAdapter));
+                } else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
+                    actionModel.getSelectionHandler().onSelected(panel, actualAdapter);
+                } else if (singleResultsMode == ActionModel.SingleResultsMode.INLINE) {
+                    final ComponentType componentType = ComponentType.ENTITY;
+                    panel.hideAllBut(componentType);
+                    panel.addOrReplace(componentType, new EntityModel(actualAdapter));
+                } else {
+                    final ComponentType componentType = ComponentType.ENTITY_LINK;
+                    panel.hideAllBut(componentType);
+                    panel.addOrReplace(componentType, new EntityModel(actualAdapter));
+                }
+            }
 
-			private ObjectAdapter adapterFor(Object pojo,
-					PersistenceSessionAccessor psa) {
-				return psa.getPersistenceSession().getAdapterManager()
-						.adapterFor(pojo);
-			}
-		},
-		COLLECTION {
-			@Override
-			public void addResults(ActionPanel panel, ObjectAdapter resultAdapter) {
-				panel.hideAllBut(ComponentType.COLLECTION_CONTENTS);
-				addOrReplaceCollectionResultsPanel(panel, resultAdapter);
-			}
+            private ObjectAdapter adapterFor(final Object pojo, final PersistenceSessionAccessor psa) {
+                return psa.getPersistenceSession().getAdapterManager().adapterFor(pojo);
+            }
+        },
+        COLLECTION {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.hideAllBut(ComponentType.COLLECTION_CONTENTS);
+                addOrReplaceCollectionResultsPanel(panel, resultAdapter);
+            }
 
-			private void addOrReplaceCollectionResultsPanel(ActionPanel panel,
-					ObjectAdapter resultAdapter) {
-				EntityCollectionModel collectionModel = EntityCollectionModel
-						.createStandalone(resultAdapter);
-				SelectionHandler selectionHandler = panel.getModel()
-						.getSelectionHandler();
-				if (selectionHandler != null) {
-					collectionModel.setSelectionHandler(selectionHandler);
-				}
-				panel.getComponentFactoryRegistry().addOrReplaceComponent(
-						panel, ComponentType.COLLECTION_CONTENTS,
-						collectionModel);
-			}
-		},
-		EMPTY {
-			@Override
-			public void addResults(final ActionPanel panel, ObjectAdapter resultAdapter) {
-				panel.hideAllBut(ComponentType.EMPTY_COLLECTION);
-				final ActionModel actionModel = panel.getActionModel();
-				panel.getComponentFactoryRegistry().addOrReplaceComponent(
-						panel, ComponentType.EMPTY_COLLECTION,
-						actionModel);
-			}
-		},
-		VALUE {
-			@Override
-			public void addResults(ActionPanel panel, ObjectAdapter resultAdapter) {
-				panel.hideAllBut(ComponentType.VALUE);
-				panel.getComponentFactoryRegistry().addOrReplaceComponent(
-						panel, ComponentType.VALUE,
-						new ValueModel(resultAdapter));
-			}
-		},
-		VOID {
-			@Override
-			public void addResults(ActionPanel panel, ObjectAdapter resultAdapter) {
-				panel.hideAllBut(ComponentType.VOID_RETURN);
+            private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
+                final SelectionHandler selectionHandler = panel.getModel().getSelectionHandler();
+                if (selectionHandler != null) {
+                    collectionModel.setSelectionHandler(selectionHandler);
+                }
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS,
+                    collectionModel);
+            }
+        },
+        EMPTY {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.hideAllBut(ComponentType.EMPTY_COLLECTION);
+                final ActionModel actionModel = panel.getActionModel();
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.EMPTY_COLLECTION,
+                    actionModel);
+            }
+        },
+        VALUE {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.hideAllBut(ComponentType.VALUE);
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VALUE,
+                    new ValueModel(resultAdapter));
+            }
+        },
+        VOID {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.hideAllBut(ComponentType.VOID_RETURN);
 
-				// TODO: implement panel for void
-				panel.permanentlyHide(ComponentType.VOID_RETURN);
-			}
-		};
+                // TODO: implement panel for void
+                panel.permanentlyHide(ComponentType.VOID_RETURN);
+            }
+        };
 
-		public abstract void addResults(ActionPanel panel,
-				ObjectAdapter resultAdapter);
+        public abstract void addResults(ActionPanel panel, ObjectAdapter resultAdapter);
 
-		static ResultType determineFor(ObjectAdapter resultAdapter) {
-			ObjectSpecification resultSpec = resultAdapter.getSpecification();
-			if (resultSpec.isNotCollection()) {
-				if (resultSpec.getFacet(ValueFacet.class) != null) {
-					return ResultType.VALUE;
-				} else {
-					return ResultType.OBJECT;
-				}
-			} else {
-				List<Object> pojoList = asList(resultAdapter);
-				switch (pojoList.size()) {
-				case 0:
-					return ResultType.EMPTY;
-				case 1:
-					return ResultType.OBJECT;
-				default:
-					return ResultType.COLLECTION;
-				}
-			}
-		}
+        static ResultType determineFor(final ObjectAdapter resultAdapter) {
+            final ObjectSpecification resultSpec = resultAdapter.getSpecification();
+            if (resultSpec.isNotCollection()) {
+                if (resultSpec.getFacet(ValueFacet.class) != null) {
+                    return ResultType.VALUE;
+                } else {
+                    return ResultType.OBJECT;
+                }
+            } else {
+                final List<Object> pojoList = asList(resultAdapter);
+                switch (pojoList.size()) {
+                    case 0:
+                        return ResultType.EMPTY;
+                    case 1:
+                        return ResultType.OBJECT;
+                    default:
+                        return ResultType.COLLECTION;
+                }
+            }
+        }
 
-		@SuppressWarnings("unchecked")
-		private static List<Object> asList(ObjectAdapter resultAdapter) {
-			return (List<Object>) resultAdapter.getObject();
-		}
-	}
+        @SuppressWarnings("unchecked")
+        private static List<Object> asList(final ObjectAdapter resultAdapter) {
+            return (List<Object>) resultAdapter.getObject();
+        }
+    }
 
-	private void hideAllBut(ComponentType visibleComponentType) {
-		for (ComponentType componentType : COMPONENT_TYPES) {
-			if (componentType != visibleComponentType) {
-				permanentlyHide(componentType);
-			}
-		}
-	}
+    private void hideAllBut(final ComponentType visibleComponentType) {
+        for (final ComponentType componentType : COMPONENT_TYPES) {
+            if (componentType != visibleComponentType) {
+                permanentlyHide(componentType);
+            }
+        }
+    }
 
 }

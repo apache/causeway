@@ -26,13 +26,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnNakedObjectActionParamCount extends TableColumnNakedObjectAction {
 
-    public TableColumnNakedObjectActionParamCount(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnNakedObjectActionParamCount(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("# Params", session, nakedObject, resourceContext);
     }
 

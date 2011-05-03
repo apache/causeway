@@ -17,8 +17,6 @@
  *  under the License.
  */
 
-
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import static org.hamcrest.Matchers.is;
@@ -28,20 +26,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.util.tester.WicketTester;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -57,123 +41,134 @@ import org.apache.isis.viewer.wicket.ui.fixtures.AdapterFixtures;
 import org.apache.isis.viewer.wicket.ui.fixtures.Customers;
 import org.apache.isis.viewer.wicket.ui.fixtures.SpecFixtures;
 import org.apache.isis.viewer.wicket.ui.fixtures.SystemFixtures;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.util.tester.WicketTester;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
 public class CssMenuUtilsTest {
 
-	private Mockery context = new JUnit4Mockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
+    private final Mockery context = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	private ObjectAdapter mockAdapter;
-	private ObjectAdapterMemento mockAdapterMemento;
-	private Oid mockOid;
+    private ObjectAdapter mockAdapter;
+    private ObjectAdapterMemento mockAdapterMemento;
+    private Oid mockOid;
 
-	private ObjectAction setAction;
+    private ObjectAction setAction;
 
-	private ObjectAction mockUserAction;
-	private ObjectSpecification mockUserActionOnTypeSpec;
+    private ObjectAction mockUserAction;
+    private ObjectSpecification mockUserActionOnTypeSpec;
 
-	private CssMenuLinkFactory mockLinkBuilder;
-	private RuntimeContext mockRuntimeContext;
+    private CssMenuLinkFactory mockLinkBuilder;
+    private RuntimeContext mockRuntimeContext;
 
-	@SuppressWarnings("unused")
-	private WicketTester wicketTester;
+    @SuppressWarnings("unused")
+    private WicketTester wicketTester;
 
-	private Link<String> fakeLink;
+    private Link<String> fakeLink;
 
+    @Before
+    public void setUp() throws Exception {
+        wicketTester = new WicketTester();
 
+        mockAdapter = context.mock(ObjectAdapter.class);
+        mockAdapterMemento = context.mock(ObjectAdapterMemento.class);
+        mockOid = context.mock(Oid.class);
 
-	@Before
-	public void setUp() throws Exception {
-		wicketTester = new WicketTester();
-		
-		mockAdapter = context.mock(ObjectAdapter.class);
-		mockAdapterMemento = context.mock(ObjectAdapterMemento.class);
-		mockOid = context.mock(Oid.class);
+        mockUserAction = context.mock(ObjectAction.class, "userAction");
+        mockUserActionOnTypeSpec = context.mock(ObjectSpecification.class);
 
-		mockUserAction = context.mock(ObjectAction.class, "userAction");
-		mockUserActionOnTypeSpec = context.mock(ObjectSpecification.class);
-		
-		fakeLink = new Link<String>(CssMenuItem.ID_MENU_LINK){
-			private static final long serialVersionUID = 1L;
+        fakeLink = new Link<String>(CssMenuItem.ID_MENU_LINK) {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onClick() {
-			}};
+            @Override
+            public void onClick() {
+            }
+        };
 
-		mockLinkBuilder = context.mock(CssMenuLinkFactory.class);
-		mockRuntimeContext = context.mock(RuntimeContext.class);
-	}
+        mockLinkBuilder = context.mock(CssMenuLinkFactory.class);
+        mockRuntimeContext = context.mock(RuntimeContext.class);
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		wicketTester = null;
-	}
-	
-	@Ignore("broken...")
-	@Test
-	public void whenUserActionThenSingleMenuItem() throws Exception {
+    @After
+    public void tearDown() throws Exception {
+        wicketTester = null;
+    }
 
-		new ActionFixtures(context).isVisible(mockUserAction, true);
-		new ActionFixtures(context).isUsable(mockUserAction, true);
-		
-		new ActionFixtures(context).getName(mockUserAction, "findCustomers");
-		
-		new ActionFixtures(context).getParameterCount(mockUserAction, 0);
-		new AdapterFixtures(context).getOid(mockAdapter, mockOid);
-		new ActionFixtures(context).getOnType(mockUserAction, mockUserActionOnTypeSpec);
-		new SpecFixtures(context).getFullName(mockUserActionOnTypeSpec, Customers.class.getName());
-		new ActionFixtures(context).getType(mockUserAction, ActionType.USER);
-		new ActionFixtures(context).getIdentifier(context, mockUserAction, Identifier.actionIdentifier(Customers.class, "findCustomers", new Class[0]));
+    @Ignore("broken...")
+    @Test
+    public void whenUserActionThenSingleMenuItem() throws Exception {
 
-		new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, mockUserAction, fakeLink);
+        new ActionFixtures(context).isVisible(mockUserAction, true);
+        new ActionFixtures(context).isUsable(mockUserAction, true);
 
-		CssMenuItem parentMenuItem = CssMenuItem.newMenuItem("parent").build();
-		parentMenuItem.newSubMenuItem(mockAdapterMemento, mockUserAction, mockLinkBuilder).build();
-		
-		assertThat(parentMenuItem.hasSubMenuItems(), is(true));
-		assertThat(parentMenuItem.getSubMenuItems().size(), is(1));
-	}
+        new ActionFixtures(context).getName(mockUserAction, "findCustomers");
 
-	
-	@Ignore("broken...")
-	@Test
-	public void whenSetActionWithNoChildrenThenNoMenuItem() throws Exception {
+        new ActionFixtures(context).getParameterCount(mockUserAction, 0);
+        new AdapterFixtures(context).getOid(mockAdapter, mockOid);
+        new ActionFixtures(context).getOnType(mockUserAction, mockUserActionOnTypeSpec);
+        new SpecFixtures(context).getFullName(mockUserActionOnTypeSpec, Customers.class.getName());
+        new ActionFixtures(context).getType(mockUserAction, ActionType.USER);
+        new ActionFixtures(context).getIdentifier(context, mockUserAction,
+            Identifier.actionIdentifier(Customers.class, "findCustomers", new Class[0]));
 
-		setAction = new ObjectActionSet("customers", "Customers", Lists.<ObjectAction>newArrayList());
+        new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, mockUserAction, fakeLink);
 
-		new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, setAction, fakeLink);
+        final CssMenuItem parentMenuItem = CssMenuItem.newMenuItem("parent").build();
+        parentMenuItem.newSubMenuItem(mockAdapterMemento, mockUserAction, mockLinkBuilder).build();
 
-		new AdapterFixtures(context).getOid(mockAdapter, mockOid);
+        assertThat(parentMenuItem.hasSubMenuItems(), is(true));
+        assertThat(parentMenuItem.getSubMenuItems().size(), is(1));
+    }
 
+    @Ignore("broken...")
+    @Test
+    public void whenSetActionWithNoChildrenThenNoMenuItem() throws Exception {
 
-		CssMenuItem parentMenuItem = CssMenuItem.newMenuItem("parent").build();
-		parentMenuItem.newSubMenuItem(mockAdapterMemento, setAction, mockLinkBuilder);
-		
-		assertThat(parentMenuItem.hasSubMenuItems(), is(false));
-	}
+        setAction = new ObjectActionSet("customers", "Customers", Lists.<ObjectAction> newArrayList());
 
-	
-	@Ignore("broken...")
-	@Test
-	public void whenSetActionWithOneChildThenMenuItemForSetActionAndMenuItemUnderneath() throws Exception {
+        new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, setAction, fakeLink);
 
-		setAction = new ObjectActionSet("customers", "Customers", Collections.singletonList(mockUserAction));
+        new AdapterFixtures(context).getOid(mockAdapter, mockOid);
 
-		new AdapterFixtures(context).getOid(mockAdapter, mockOid);
+        final CssMenuItem parentMenuItem = CssMenuItem.newMenuItem("parent").build();
+        parentMenuItem.newSubMenuItem(mockAdapterMemento, setAction, mockLinkBuilder);
 
-		new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, setAction, fakeLink);
+        assertThat(parentMenuItem.hasSubMenuItems(), is(false));
+    }
 
-		CssMenuItem parentMenuItem = CssMenuItem.newMenuItem("parent").build();
-		parentMenuItem.newSubMenuItem(mockAdapterMemento, setAction, mockLinkBuilder).build();
-		
-		assertThat(parentMenuItem.hasSubMenuItems(), is(true));
-		List<CssMenuItem> subMenuItems = parentMenuItem.getSubMenuItems();
-		assertThat(subMenuItems.size(), is(1));
-		CssMenuItem childMenuItem = subMenuItems.get(0);
-		assertThat(childMenuItem, is(not(nullValue(CssMenuItem.class))));
-	}
+    @Ignore("broken...")
+    @Test
+    public void whenSetActionWithOneChildThenMenuItemForSetActionAndMenuItemUnderneath() throws Exception {
 
+        setAction = new ObjectActionSet("customers", "Customers", Collections.singletonList(mockUserAction));
+
+        new AdapterFixtures(context).getOid(mockAdapter, mockOid);
+
+        new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, setAction, fakeLink);
+
+        final CssMenuItem parentMenuItem = CssMenuItem.newMenuItem("parent").build();
+        parentMenuItem.newSubMenuItem(mockAdapterMemento, setAction, mockLinkBuilder).build();
+
+        assertThat(parentMenuItem.hasSubMenuItems(), is(true));
+        final List<CssMenuItem> subMenuItems = parentMenuItem.getSubMenuItems();
+        assertThat(subMenuItems.size(), is(1));
+        final CssMenuItem childMenuItem = subMenuItems.get(0);
+        assertThat(childMenuItem, is(not(nullValue(CssMenuItem.class))));
+    }
 
 }

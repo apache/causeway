@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-
 /**
- * Decouples the {@link ActionModel}, which needs to delegate the actual execution of
- * an action, from its implementor.
+ * Decouples the {@link ActionModel}, which needs to delegate the actual execution of an action, from its implementor.
  */
 public interface ActionExecutor extends Serializable {
 
-	void executeActionAndProcessResults();
+    void executeActionAndProcessResults();
 
 }

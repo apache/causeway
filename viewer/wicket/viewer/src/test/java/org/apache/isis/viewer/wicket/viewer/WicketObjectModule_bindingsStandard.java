@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -31,7 +30,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketModule;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
@@ -50,20 +48,18 @@ public class WicketObjectModule_bindingsStandard {
 
     private IsisWicketModule wicketObjectsModule;
     private Injector injector;
-    private Class<?> from;
-    private Class<?> to;
-    
+    private final Class<?> from;
+    private final Class<?> to;
+
     @Parameters
     public static Collection<Object[]> params() {
-        return Arrays.asList(new Object[][]{
-                {ComponentFactoryList.class, ComponentFactoryListDefault.class},
-                {ComponentFactoryRegistry.class, ComponentFactoryRegistryDefault.class},
-                {PageClassList.class, PageClassListDefault.class},
-                {PageClassRegistry.class, PageClassRegistryDefault.class},
-                });
+        return Arrays.asList(new Object[][] { { ComponentFactoryList.class, ComponentFactoryListDefault.class },
+            { ComponentFactoryRegistry.class, ComponentFactoryRegistryDefault.class },
+            { PageClassList.class, PageClassListDefault.class },
+            { PageClassRegistry.class, PageClassRegistryDefault.class }, });
     }
-    
-    public WicketObjectModule_bindingsStandard(Class<?> from, Class<?> to) {
+
+    public WicketObjectModule_bindingsStandard(final Class<?> from, final Class<?> to) {
         this.from = from;
         this.to = to;
     }
@@ -74,11 +70,10 @@ public class WicketObjectModule_bindingsStandard {
         injector = Guice.createInjector(wicketObjectsModule);
     }
 
-	@Test
-	public void binding() {
-		final Object instance = injector.getInstance(from);
-		assertThat(instance, is(instanceOf(to)));
-	}
-
+    @Test
+    public void binding() {
+        final Object instance = injector.getInstance(from);
+        assertThat(instance, is(instanceOf(to)));
+    }
 
 }

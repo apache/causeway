@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.wicket.behavior.AttributeAppender;
@@ -25,20 +24,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * Implementation of {@link AttributeAppender} that appends the
- * provided CSS <tt>class</tt> attribute.
+ * Implementation of {@link AttributeAppender} that appends the provided CSS <tt>class</tt> attribute.
  */
 public class CssClassAppender extends AttributeAppender {
-	
-	private static final long serialVersionUID = 1L;
-	
-	public CssClassAppender(IModel<String> appendModel) {
-		super("class", appendModel, " ");
-	}
 
-	public CssClassAppender(String append) {
-		this(Model.of(append));
-	}
+    private static final long serialVersionUID = 1L;
 
+    public CssClassAppender(final IModel<String> appendModel) {
+        super("class", appendModel, " ");
+    }
+
+    public CssClassAppender(final String append) {
+        this(Model.of(append));
+    }
 
 }

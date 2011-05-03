@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
-
 public final class Generics {
-	
-	private Generics(){}
 
-	public static <T> T coalesce(T... candidates) {
-		for (T t : candidates) {
-			if (t != null) {
-				return t;
-			}
-		}
-		return null;
-	}
+    private Generics() {
+    }
 
-	
+    public static <T> T coalesce(final T... candidates) {
+        for (final T t : candidates) {
+            if (t != null) {
+                return t;
+            }
+        }
+        return null;
+    }
+
 }

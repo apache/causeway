@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.Iterator;
@@ -37,29 +36,33 @@ import org.apache.wicket.model.IModel;
  */
 public class CollectionContentsSortableDataProvider extends SortableDataProvider<ObjectAdapter> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private EntityCollectionModel model;
+    private final EntityCollectionModel model;
 
-	public CollectionContentsSortableDataProvider(EntityCollectionModel model) {
-		this.model = model;
-	}
+    public CollectionContentsSortableDataProvider(final EntityCollectionModel model) {
+        this.model = model;
+    }
 
-	public Iterator<ObjectAdapter> iterator(int first, int count) {
-		return model.getObject().subList(first, first+count).iterator();
-	}
+    @Override
+    public Iterator<ObjectAdapter> iterator(final int first, final int count) {
+        return model.getObject().subList(first, first + count).iterator();
+    }
 
-	public IModel<ObjectAdapter> model(ObjectAdapter adapter) {
-		return new EntityModel(adapter);
-	}
+    @Override
+    public IModel<ObjectAdapter> model(final ObjectAdapter adapter) {
+        return new EntityModel(adapter);
+    }
 
-	public int size() {
-		return model.getObject().size();
-	}
+    @Override
+    public int size() {
+        return model.getObject().size();
+    }
 
-	public void detach() {
-		super.detach();
-		model.detach();
-	}
+    @Override
+    public void detach() {
+        super.detach();
+        model.detach();
+    }
 
 }

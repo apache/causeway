@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.combined;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -25,22 +24,21 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} to represent an entity on a single page
- * made up of several &lt;div&gt; regions.
+ * {@link PanelAbstract Panel} to represent an entity on a single page made up of several &lt;div&gt; regions.
  */
 public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntityCombinedPanel(String id, final EntityModel entityModel) {
-		super(id, entityModel);
-		buildGui();
-	}
+    public EntityCombinedPanel(final String id, final EntityModel entityModel) {
+        super(id, entityModel);
+        buildGui();
+    }
 
-	private void buildGui() {
-		EntityModel model = getModel();
-		
-		addOrReplace(ComponentType.ENTITY_SUMMARY, model);
-		addOrReplace(ComponentType.ENTITY_PROPERTIES_AND_COLLECTIONS, model);
-	}
+    private void buildGui() {
+        final EntityModel model = getModel();
+
+        addOrReplace(ComponentType.ENTITY_SUMMARY, model);
+        addOrReplace(ComponentType.ENTITY_PROPERTIES_AND_COLLECTIONS, model);
+    }
 }

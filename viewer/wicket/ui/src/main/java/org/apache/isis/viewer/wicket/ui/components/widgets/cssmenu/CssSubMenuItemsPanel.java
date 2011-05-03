@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.util.List;
@@ -31,30 +30,29 @@ import org.apache.wicket.model.util.ListModel;
  */
 public class CssSubMenuItemsPanel extends CssMenuItemPanelAbstract<CssSubMenuItemsPanel.MyModel> {
 
-	private static final long serialVersionUID = 1L;
-	
-	static class MyModel extends ListModel<CssMenuItem>{
+    private static final long serialVersionUID = 1L;
 
-		private static final long serialVersionUID = 1L;
-		
-		public MyModel(List<CssMenuItem> cssMenuItems) {
-			super(cssMenuItems);
-		}
-	}
+    static class MyModel extends ListModel<CssMenuItem> {
 
+        private static final long serialVersionUID = 1L;
 
-	public CssSubMenuItemsPanel(String id, List<CssMenuItem> subMenuItems) {
-		super(id, new MyModel(subMenuItems));
-		setRenderBodyOnly(true);
-		
-		RepeatingView menuItemRv = new RepeatingView(getId());
-		add(menuItemRv);
-		for (CssMenuItem cssMenuItem : getModel().getObject()) {
-			WebMarkupContainer menuItemMarkup = new WebMarkupContainer(menuItemRv.newChildId());
-			menuItemRv.add(menuItemMarkup);
-			
-			addSubMenuItems(menuItemMarkup, cssMenuItem);
-		}
-	}
+        public MyModel(final List<CssMenuItem> cssMenuItems) {
+            super(cssMenuItems);
+        }
+    }
+
+    public CssSubMenuItemsPanel(final String id, final List<CssMenuItem> subMenuItems) {
+        super(id, new MyModel(subMenuItems));
+        setRenderBodyOnly(true);
+
+        final RepeatingView menuItemRv = new RepeatingView(getId());
+        add(menuItemRv);
+        for (final CssMenuItem cssMenuItem : getModel().getObject()) {
+            final WebMarkupContainer menuItemMarkup = new WebMarkupContainer(menuItemRv.newChildId());
+            menuItemRv.add(menuItemMarkup);
+
+            addSubMenuItems(menuItemMarkup, cssMenuItem);
+        }
+    }
 
 }

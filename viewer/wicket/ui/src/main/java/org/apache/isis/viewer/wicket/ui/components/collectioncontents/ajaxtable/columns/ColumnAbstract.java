@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -39,24 +38,23 @@ import org.apache.wicket.model.Model;
  */
 public abstract class ColumnAbstract<T> extends AbstractColumn<T> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ColumnAbstract(String columnName) {
-		this(Model.of(columnName));
-	}
+    public ColumnAbstract(final String columnName) {
+        this(Model.of(columnName));
+    }
 
-	public ColumnAbstract(IModel<String> columnNameModel) {
-		super(columnNameModel);
-	}
+    public ColumnAbstract(final IModel<String> columnNameModel) {
+        super(columnNameModel);
+    }
 
-	protected ComponentFactory findComponentFactory(ComponentType componentType,
-			IModel<?> model) {
-		return getComponentRegistry().findComponentFactory(componentType, model);
-	}
+    protected ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
+        return getComponentRegistry().findComponentFactory(componentType, model);
+    }
 
-	protected ComponentFactoryRegistry getComponentRegistry() {
-		final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) Application.get();
+    protected ComponentFactoryRegistry getComponentRegistry() {
+        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) Application.get();
         return cfra.getComponentFactoryRegistry();
-	}
+    }
 
 }

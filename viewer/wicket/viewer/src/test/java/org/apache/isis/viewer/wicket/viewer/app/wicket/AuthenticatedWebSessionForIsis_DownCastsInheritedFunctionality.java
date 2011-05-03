@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import org.junit.Before;
@@ -26,19 +25,18 @@ import org.junit.Test;
 
 public class AuthenticatedWebSessionForIsis_DownCastsInheritedFunctionality {
 
-	@Before
-	public void setUp() throws Exception {
-	}
-	
-	@Ignore("thread-safe downcast of inherited functionality")
-	@Test
-	public void testGet() {
-	}
-	
-	@Ignore("thread-safe downcast of inherited functionality")
-	@Test
-	public void testGetClientInfo() {
-	}
-	
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @Ignore("thread-safe downcast of inherited functionality")
+    @Test
+    public void testGet() {
+    }
+
+    @Ignore("thread-safe downcast of inherited functionality")
+    @Test
+    public void testGetClientInfo() {
+    }
 
 }

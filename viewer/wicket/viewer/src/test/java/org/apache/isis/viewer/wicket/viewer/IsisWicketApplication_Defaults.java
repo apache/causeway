@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import static org.hamcrest.Matchers.is;
@@ -28,7 +27,6 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.testsupport.jmock.FixtureMockery;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.wicket.IConverterLocator;
@@ -46,42 +44,42 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class IsisWicketApplication_Defaults {
 
-	private FixtureMockery context = new FixtureMockery() {
-		{
-			setImposteriser(ClassImposteriser.INSTANCE);
-		}
-	};
-	
-	private IsisWicketApplication application;
+    private final FixtureMockery context = new FixtureMockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	@Before
-	public void setUp() throws Exception {
-		application = new IsisWicketApplication();
-	}
+    private IsisWicketApplication application;
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+        application = new IsisWicketApplication();
+    }
 
-	@Test
-	public void usesCustomSubclassOfAuthenticatedWebSession() {
-		final Class<? extends AuthenticatedWebSession> webSessionClass = application.getWebSessionClass();
-		assertThat(webSessionClass.equals(AuthenticatedWebSessionForIsis.class), is(true));
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test
-	public void providesCustomRequestCycle() {
-		final WebRequest mockRequest = context.mock(WebRequest.class);
-		final Response mockResponse = context.mock(Response.class);
-		final RequestCycle newRequestCycle = application.newRequestCycle(mockRequest, mockResponse);
-		assertThat(newRequestCycle, is(WebRequestCycleForIsis.class));
-	}
+    @Test
+    public void usesCustomSubclassOfAuthenticatedWebSession() {
+        final Class<? extends AuthenticatedWebSession> webSessionClass = application.getWebSessionClass();
+        assertThat(webSessionClass.equals(AuthenticatedWebSessionForIsis.class), is(true));
+    }
 
-	@Test
-	public void providesConverterLocatorRegistersIsisSpecificConverters() {
-		final IConverterLocator converterLocator = application.newConverterLocator();
-		assertThat(converterLocator.getConverter(ObjectAdapter.class), is(not(nullValue())));
-		assertThat(converterLocator.getConverter(ObjectAdapterMemento.class), is(not(nullValue())));
-	}
+    @Test
+    public void providesCustomRequestCycle() {
+        final WebRequest mockRequest = context.mock(WebRequest.class);
+        final Response mockResponse = context.mock(Response.class);
+        final RequestCycle newRequestCycle = application.newRequestCycle(mockRequest, mockResponse);
+        assertThat(newRequestCycle, is(WebRequestCycleForIsis.class));
+    }
+
+    @Test
+    public void providesConverterLocatorRegistersIsisSpecificConverters() {
+        final IConverterLocator converterLocator = application.newConverterLocator();
+        assertThat(converterLocator.getConverter(ObjectAdapter.class), is(not(nullValue())));
+        assertThat(converterLocator.getConverter(ObjectAdapterMemento.class), is(not(nullValue())));
+    }
 
 }

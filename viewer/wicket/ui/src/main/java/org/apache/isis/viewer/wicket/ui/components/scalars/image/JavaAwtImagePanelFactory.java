@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,24 +29,25 @@ import org.apache.wicket.model.IModel;
 
 public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public JavaAwtImagePanelFactory() {
-		super(ComponentType.SCALAR_NAME_AND_VALUE);
-	}
+    public JavaAwtImagePanelFactory() {
+        super(ComponentType.SCALAR_NAME_AND_VALUE);
+    }
 
-	@Override
-	public ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof ScalarModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-        ScalarModel scalarModel = (ScalarModel) model;
-		ObjectSpecification specification = scalarModel.getTypeOfSpecification();
-		return appliesIf(specification != null && specification.containsFacet(ImageValueFacet.class));
-	}
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof ScalarModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final ScalarModel scalarModel = (ScalarModel) model;
+        final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
+        return appliesIf(specification != null && specification.containsFacet(ImageValueFacet.class));
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-	    ScalarModel scalarModel = (ScalarModel) model;
-		return new JavaAwtImagePanel(id, scalarModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final ScalarModel scalarModel = (ScalarModel) model;
+        return new JavaAwtImagePanel(id, scalarModel);
+    }
 }

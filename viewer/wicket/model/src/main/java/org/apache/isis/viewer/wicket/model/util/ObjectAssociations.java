@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -27,15 +26,16 @@ import com.google.common.base.Function;
 
 public final class ObjectAssociations {
 
-	private ObjectAssociations(){}
+    private ObjectAssociations() {
+    }
 
-	public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification noSpec) {
-		return new Function<String, OneToOneAssociation>() {
-			@Override
-			public OneToOneAssociation apply(String from) {
-				return (OneToOneAssociation) noSpec.getAssociation(from);
-			}
-		};
-	}
+    public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification noSpec) {
+        return new Function<String, OneToOneAssociation>() {
+            @Override
+            public OneToOneAssociation apply(final String from) {
+                return (OneToOneAssociation) noSpec.getAssociation(from);
+            }
+        };
+    }
 
 }

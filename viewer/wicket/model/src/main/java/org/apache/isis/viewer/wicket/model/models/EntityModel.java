@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
@@ -40,98 +39,86 @@ import com.google.common.collect.Maps;
  * Backing model to represent a {@link ObjectAdapter}.
  * 
  * <p>
- * So that the model is {@link Serializable}, the {@link ObjectAdapter} is stored
- * as a {@link ObjectAdapterMemento}.
+ * So that the model is {@link Serializable}, the {@link ObjectAdapter} is stored as a {@link ObjectAdapterMemento}.
  */
 public class EntityModel extends ModelAbstract<ObjectAdapter> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
-	/**
-	 * Factory method for creating {@link PageParameters} to represent
-	 * an entity.
-	 */
-	public static PageParameters createPageParameters(
-			final ObjectAdapter adapter, OidStringifier oidStringifier) {
+    /**
+     * Factory method for creating {@link PageParameters} to represent an entity.
+     */
+    public static PageParameters createPageParameters(final ObjectAdapter adapter, final OidStringifier oidStringifier) {
 
-		PageParameters pageParameters = new PageParameters();
+        final PageParameters pageParameters = new PageParameters();
 
-		Boolean persistent = adapter.isPersistent();
-		PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent
-				.toString());
+        final Boolean persistent = adapter.isPersistent();
+        PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent.toString());
 
-		if (persistent) {
-			String oidStr = oidStringifier.enString(adapter.getOid());
-			ObjectSpecification noSpec = adapter.getSpecification();
+        if (persistent) {
+            final String oidStr = oidStringifier.enString(adapter.getOid());
+            final ObjectSpecification noSpec = adapter.getSpecification();
 
-			PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);
-			PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec
-					.getFullIdentifier());
-		} else {
-			// don't do anything; instead the page should be redirected back to
-			// an EntityPage so that the underlying EntityModel that contains the
-			// memento for the transient ObjectAdapter can be accessed.
-		}
+            PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);
+            PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec.getFullIdentifier());
+        } else {
+            // don't do anything; instead the page should be redirected back to
+            // an EntityPage so that the underlying EntityModel that contains the
+            // memento for the transient ObjectAdapter can be accessed.
+        }
 
-		return pageParameters;
-	}
+        return pageParameters;
+    }
 
-	public enum Mode {
-		VIEW, EDIT;
-	}
+    public enum Mode {
+        VIEW, EDIT;
+    }
 
-	private ObjectAdapterMemento adapterMemento;
-	private Mode mode = Mode.VIEW;
-	private Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps
-			.newHashMap();
+    private ObjectAdapterMemento adapterMemento;
+    private Mode mode = Mode.VIEW;
+    private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
 
     /**
      * Toggled by 'entityDetailsButton'.
      */
     private boolean entityDetailsVisible;
 
-    
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // constructors
-    ////////////////////////////////////////////////////////////
-    
-	public EntityModel() {
-	}
+    // //////////////////////////////////////////////////////////
 
-	public EntityModel(PageParameters pageParameters,
-			OidStringifier oidStringifier) {
-		this(ObjectAdapterMemento.createPersistent(
-				oidStringifier.deString(PageParameterNames.OBJECT_OID
-						.getFrom(pageParameters)), SpecMemento
-						.representing(PageParameterNames.OBJECT_SPEC
-								.getFrom(pageParameters))));
-	}
+    public EntityModel() {
+    }
 
-	public EntityModel(ObjectAdapter adapter) {
-		this(ObjectAdapterMemento.createOrNull(adapter));
-		setObject(adapter);
-	}
+    public EntityModel(final PageParameters pageParameters, final OidStringifier oidStringifier) {
+        this(ObjectAdapterMemento.createPersistent(
+            oidStringifier.deString(PageParameterNames.OBJECT_OID.getFrom(pageParameters)),
+            SpecMemento.representing(PageParameterNames.OBJECT_SPEC.getFrom(pageParameters))));
+    }
 
-	public EntityModel(ObjectAdapterMemento adapterMemento) {
-		this.adapterMemento = adapterMemento;
-	}
+    public EntityModel(final ObjectAdapter adapter) {
+        this(ObjectAdapterMemento.createOrNull(adapter));
+        setObject(adapter);
+    }
 
-	
-    ////////////////////////////////////////////////////////////
+    public EntityModel(final ObjectAdapterMemento adapterMemento) {
+        this.adapterMemento = adapterMemento;
+    }
+
+    // //////////////////////////////////////////////////////////
     // ObjectAdapterMemento, typeOfSpecification
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
-	public ObjectAdapterMemento getObjectAdapterMemento() {
-		return adapterMemento;
-	}
+    public ObjectAdapterMemento getObjectAdapterMemento() {
+        return adapterMemento;
+    }
 
     /**
-     * Overridable for submodels (eg {@link ScalarModel}) that know the type of
-     * the adapter without there being one.
+     * Overridable for submodels (eg {@link ScalarModel}) that know the type of the adapter without there being one.
      */
     public ObjectSpecification getTypeOfSpecification() {
         if (adapterMemento == null) {
@@ -140,179 +127,171 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         return adapterMemento.getSpecMemento().getSpecification();
     }
 
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // load, setObject
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
-	@Override
-	protected ObjectAdapter load() {
-		if (adapterMemento == null) {
-			return null;
-		}
-		return adapterMemento.getObjectAdapter();
-	}
+    @Override
+    protected ObjectAdapter load() {
+        if (adapterMemento == null) {
+            return null;
+        }
+        return adapterMemento.getObjectAdapter();
+    }
 
-	@Override
-	public void setObject(ObjectAdapter adapter) {
-		super.setObject(adapter);
-		adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
-	}
+    @Override
+    public void setObject(final ObjectAdapter adapter) {
+        super.setObject(adapter);
+        adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
+    }
 
-	@Override
-	public void detach() {
-		if (isAttached()) {
-			if (adapterMemento != null) {
-				adapterMemento
-						.captureTitleHintIfPossible(adapterMemento
-								.getObjectAdapter());
-			}
-		}
-		super.detach();
-	}
+    @Override
+    public void detach() {
+        if (isAttached()) {
+            if (adapterMemento != null) {
+                adapterMemento.captureTitleHintIfPossible(adapterMemento.getObjectAdapter());
+            }
+        }
+        super.detach();
+    }
 
+    // hmmm... doesn't seem to be used; get rid of if come back.
+    // I'm guessing the property models stuff below superceded this.
 
-	// hmmm... doesn't seem to be used; get rid of if come back.
-	// I'm guessing the property models stuff below superceded this.
-	
-//    ////////////////////////////////////////////////////////////
-//    // child (property) model objects;
-//    ////////////////////////////////////////////////////////////
-//	
-//	public void setChildModelObject(String propertyIdentifier,
-//			ObjectAdapter associatedAdapter) {
-//		ObjectAdapter adapter = getObject();
-//		if (adapter == null) {
-//			// let's fail fast, because this presumably ought not to happen
-//			throw new IllegalStateException(
-//					"no adapter set for the EntityModel");
-//		}
-//		ObjectSpecification noSpec = adapter.getSpecification();
-//		ObjectAssociation association = noSpec.getAssociation(propertyIdentifier);
-//		if (association == null) {
-//			throw new IllegalArgumentException(String.format(
-//					"Id '%s' does not represent an association in spec '%s'",
-//					propertyIdentifier, noSpec.getFullName()));
-//		}
-//		if (association.isOneToManyAssociation()) {
-//			throw new IllegalArgumentException(String.format(
-//					"Association '%s' is not a property in spec '%s'",
-//					propertyIdentifier, noSpec.getFullName()));
-//		}
-//		OneToOneAssociation property = (OneToOneAssociation) association;
-//
-//		// TODO: need to add in validation here.
-//		// Also, not sure if should be copying into a pending value rather than
-//		// apply directly.
-//
-//		if (associatedAdapter != null) {
-//			property.set(adapter, associatedAdapter);
-//		} else {
-//			property.clearAssociation(adapter);
-//		}
-//	}
+    // ////////////////////////////////////////////////////////////
+    // // child (property) model objects;
+    // ////////////////////////////////////////////////////////////
+    //
+    // public void setChildModelObject(String propertyIdentifier,
+    // ObjectAdapter associatedAdapter) {
+    // ObjectAdapter adapter = getObject();
+    // if (adapter == null) {
+    // // let's fail fast, because this presumably ought not to happen
+    // throw new IllegalStateException(
+    // "no adapter set for the EntityModel");
+    // }
+    // ObjectSpecification noSpec = adapter.getSpecification();
+    // ObjectAssociation association = noSpec.getAssociation(propertyIdentifier);
+    // if (association == null) {
+    // throw new IllegalArgumentException(String.format(
+    // "Id '%s' does not represent an association in spec '%s'",
+    // propertyIdentifier, noSpec.getFullName()));
+    // }
+    // if (association.isOneToManyAssociation()) {
+    // throw new IllegalArgumentException(String.format(
+    // "Association '%s' is not a property in spec '%s'",
+    // propertyIdentifier, noSpec.getFullName()));
+    // }
+    // OneToOneAssociation property = (OneToOneAssociation) association;
+    //
+    // // TODO: need to add in validation here.
+    // // Also, not sure if should be copying into a pending value rather than
+    // // apply directly.
+    //
+    // if (associatedAdapter != null) {
+    // property.set(adapter, associatedAdapter);
+    // } else {
+    // property.clearAssociation(adapter);
+    // }
+    // }
 
-	
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // PropertyModels
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
-	/**
-	 * Lazily populates with the current value of each property.
-	 */
-	public ScalarModel getPropertyModel(PropertyMemento pm) {
-		ScalarModel scalarModel = propertyScalarModels.get(pm);
-		if (scalarModel == null) {
-			scalarModel = new ScalarModel(getObjectAdapterMemento(), pm);
-			if (isViewMode()) {
-				scalarModel.toViewMode();
-			} else {
-				scalarModel.toEditMode();
-			}
-			propertyScalarModels.put(pm, scalarModel);
-		}
-		return scalarModel;
-		
-	}
+    /**
+     * Lazily populates with the current value of each property.
+     */
+    public ScalarModel getPropertyModel(final PropertyMemento pm) {
+        ScalarModel scalarModel = propertyScalarModels.get(pm);
+        if (scalarModel == null) {
+            scalarModel = new ScalarModel(getObjectAdapterMemento(), pm);
+            if (isViewMode()) {
+                scalarModel.toViewMode();
+            } else {
+                scalarModel.toEditMode();
+            }
+            propertyScalarModels.put(pm, scalarModel);
+        }
+        return scalarModel;
 
-	/**
-	 * Resets the {@link #propertyScalarModels hash} of {@link ScalarModel}s for
-	 * each {@link PropertyMemento property} to the value held in the underlying
-	 * {@link #getObject() entity}.
-	 */
-	public void resetPropertyModels() {
-		for (PropertyMemento pm : propertyScalarModels.keySet()) {
-			ScalarModel scalarModel = propertyScalarModels.get(pm);
-			ObjectAdapter associatedAdapter = pm.getProperty().get(getObject());
-			scalarModel.setObject(associatedAdapter);
-		}
-	}
+    }
 
-	
-	////////////////////////////////////////////////////////////
-	// Mode, entityDetailsVisible
-    ////////////////////////////////////////////////////////////
-	
-	public Mode getMode() {
-		return mode;
-	}
+    /**
+     * Resets the {@link #propertyScalarModels hash} of {@link ScalarModel}s for each {@link PropertyMemento property}
+     * to the value held in the underlying {@link #getObject() entity}.
+     */
+    public void resetPropertyModels() {
+        for (final PropertyMemento pm : propertyScalarModels.keySet()) {
+            final ScalarModel scalarModel = propertyScalarModels.get(pm);
+            final ObjectAdapter associatedAdapter = pm.getProperty().get(getObject());
+            scalarModel.setObject(associatedAdapter);
+        }
+    }
 
-	protected void setMode(Mode mode) {
-		this.mode = mode;
-	}
+    // //////////////////////////////////////////////////////////
+    // Mode, entityDetailsVisible
+    // //////////////////////////////////////////////////////////
 
-	public boolean isViewMode() {
-		return mode == Mode.VIEW;
-	}
+    public Mode getMode() {
+        return mode;
+    }
+
+    protected void setMode(final Mode mode) {
+        this.mode = mode;
+    }
+
+    public boolean isViewMode() {
+        return mode == Mode.VIEW;
+    }
 
     public boolean isEditMode() {
         return mode == Mode.EDIT;
     }
 
-	public EntityModel toEditMode() {
-		setMode(Mode.EDIT);
-		for (ScalarModel scalarModel : propertyScalarModels.values()) {
-			scalarModel.toEditMode();
-		}
-		return this;
-	}
+    public EntityModel toEditMode() {
+        setMode(Mode.EDIT);
+        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
+            scalarModel.toEditMode();
+        }
+        return this;
+    }
 
-	public EntityModel toViewMode() {
-		setMode(Mode.VIEW);
-		for (ScalarModel scalarModel : propertyScalarModels.values()) {
-			scalarModel.toViewMode();
-		}
-		return this;
-	}
+    public EntityModel toViewMode() {
+        setMode(Mode.VIEW);
+        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
+            scalarModel.toViewMode();
+        }
+        return this;
+    }
 
     public boolean isEntityDetailsVisible() {
         return entityDetailsVisible;
     }
-    
+
     public void toggleDetails() {
         entityDetailsVisible = !entityDetailsVisible;
     }
 
-
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // Mode
-    ////////////////////////////////////////////////////////////
-	
-	public String getReasonInvalidIfAny() {
-		ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter();
-		Consent validity = adapter.getSpecification().isValid(adapter);
-		return validity.isAllowed() ? null : validity.getReason();
-	}
+    // //////////////////////////////////////////////////////////
 
-	public void apply() {
-		ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter();
-		for (ScalarModel scalarModel : propertyScalarModels.values()) {
-			OneToOneAssociation property = scalarModel.getPropertyMemento()
-					.getProperty();
-			ObjectAdapter associate = scalarModel.getObject();
-			property.set(adapter, associate);
-		}
-		getObjectAdapterMemento().setAdapter(adapter);
-		toViewMode();
-	}
+    public String getReasonInvalidIfAny() {
+        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter();
+        final Consent validity = adapter.getSpecification().isValid(adapter);
+        return validity.isAllowed() ? null : validity.getReason();
+    }
+
+    public void apply() {
+        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter();
+        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
+            final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
+            final ObjectAdapter associate = scalarModel.getObject();
+            property.set(adapter, associate);
+        }
+        getObjectAdapterMemento().setAdapter(adapter);
+        toViewMode();
+    }
 
 }

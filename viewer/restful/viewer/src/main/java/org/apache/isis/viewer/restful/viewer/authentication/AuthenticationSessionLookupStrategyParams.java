@@ -30,20 +30,20 @@ import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStra
 public class AuthenticationSessionLookupStrategyParams extends AuthenticationSessionLookupStrategyDefault {
 
     @Override
-    public AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse) {
-        AuthenticationSession session = super.lookup(servletRequest, servletResponse);
+    public AuthenticationSession lookup(final ServletRequest servletRequest, final ServletResponse servletResponse) {
+        final AuthenticationSession session = super.lookup(servletRequest, servletResponse);
         if (session != null) {
             return session;
         }
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String user = httpServletRequest.getParameter("user");
-        String password = httpServletRequest.getParameter("password");
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        final String user = httpServletRequest.getParameter("user");
+        final String password = httpServletRequest.getParameter("password");
 
         if (user == null || password == null) {
             return null;
         }
-        AuthenticationRequestPassword request = new AuthenticationRequestPassword(user, password);
+        final AuthenticationRequestPassword request = new AuthenticationRequestPassword(user, password);
         return IsisContext.getAuthenticationManager().authenticate(request);
     }
 }

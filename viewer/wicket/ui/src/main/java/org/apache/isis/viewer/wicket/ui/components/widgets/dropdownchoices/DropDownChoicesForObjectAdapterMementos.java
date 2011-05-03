@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices;
 
 import java.util.List;
@@ -31,22 +30,19 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
-public class DropDownChoicesForObjectAdapterMementos extends
-        DropDownChoice<ObjectAdapterMemento> {
-    
-    private final static class ObjectAdapterMementoRenderer implements
-            IChoiceRenderer<ObjectAdapterMemento> {
-        
+public class DropDownChoicesForObjectAdapterMementos extends DropDownChoice<ObjectAdapterMemento> {
+
+    private final static class ObjectAdapterMementoRenderer implements IChoiceRenderer<ObjectAdapterMemento> {
+
         private static final long serialVersionUID = 1L;
 
         @Override
-        public Object getDisplayValue(ObjectAdapterMemento nom) {
+        public Object getDisplayValue(final ObjectAdapterMemento nom) {
             return nom.getObjectAdapter().titleString();
         }
 
         @Override
-        public String getIdValue(ObjectAdapterMemento nom,
-                int index) {
+        public String getIdValue(final ObjectAdapterMemento nom, final int index) {
             final Oid oid = nom.getObjectAdapter().getOid();
             return getOidStringifier().enString(oid);
         }
@@ -54,6 +50,7 @@ public class DropDownChoicesForObjectAdapterMementos extends
         protected OidStringifier getOidStringifier() {
             return getPersistenceSession().getOidGenerator().getOidStringifier();
         }
+
         protected PersistenceSession getPersistenceSession() {
             return IsisContext.getPersistenceSession();
         }
@@ -61,16 +58,14 @@ public class DropDownChoicesForObjectAdapterMementos extends
 
     private static final long serialVersionUID = 1L;
 
-    public DropDownChoicesForObjectAdapterMementos(String id,
-            IModel<ObjectAdapterMemento> model,
-            IModel<? extends List<? extends ObjectAdapterMemento>> choices) {
+    public DropDownChoicesForObjectAdapterMementos(final String id, final IModel<ObjectAdapterMemento> model,
+        final IModel<? extends List<? extends ObjectAdapterMemento>> choices) {
         this(id, model, choices, new ObjectAdapterMementoRenderer());
     }
 
-    private DropDownChoicesForObjectAdapterMementos(String id,
-            IModel<ObjectAdapterMemento> model,
-            IModel<? extends List<? extends ObjectAdapterMemento>> choices,
-            IChoiceRenderer<? super ObjectAdapterMemento> renderer) {
+    private DropDownChoicesForObjectAdapterMementos(final String id, final IModel<ObjectAdapterMemento> model,
+        final IModel<? extends List<? extends ObjectAdapterMemento>> choices,
+        final IChoiceRenderer<? super ObjectAdapterMemento> renderer) {
         super(id, model, choices, renderer);
     }
 

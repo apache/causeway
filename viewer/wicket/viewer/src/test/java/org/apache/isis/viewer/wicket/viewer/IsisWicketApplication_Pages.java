@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import static org.hamcrest.Matchers.is;
@@ -27,7 +26,6 @@ import org.apache.isis.core.testsupport.jmock.FixtureMockery;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.jmock.Expectations;
@@ -39,62 +37,62 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class IsisWicketApplication_Pages {
 
-	private FixtureMockery context = new FixtureMockery() {
-		{
-			setImposteriser(ClassImposteriser.INSTANCE);
-		}
-	};
+    private final FixtureMockery context = new FixtureMockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	private IsisWicketApplication application;
+    private IsisWicketApplication application;
 
-	@Test
-	public void delegatesToPageClassRegistryToObtainPageTypes() {
-		final PageType pageType = PageType.HOME;
-		final Class<HomePage> expectedPageClass = HomePage.class;
+    @Test
+    public void delegatesToPageClassRegistryToObtainPageTypes() {
+        final PageType pageType = PageType.HOME;
+        final Class<HomePage> expectedPageClass = HomePage.class;
 
-		final PageClassRegistry mockPageClassRegistry = context.mock(PageClassRegistry.class);
-		application = new IsisWicketApplication() {
+        final PageClassRegistry mockPageClassRegistry = context.mock(PageClassRegistry.class);
+        application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;
 
             @Override
-			public PageClassRegistry getPageClassRegistry() {
-				return mockPageClassRegistry;
-			}
+            public PageClassRegistry getPageClassRegistry() {
+                return mockPageClassRegistry;
+            }
 
-		};
-		context.checking(new Expectations() {
-			{
-				one(mockPageClassRegistry).getPageClass(pageType);
-				will(returnValue(expectedPageClass));
-			}
-		});
-		final Class<? extends Page> pageClass = application.getHomePage();
-		assertThat(expectedPageClass.isAssignableFrom(pageClass), is(true));
-	}
+        };
+        context.checking(new Expectations() {
+            {
+                one(mockPageClassRegistry).getPageClass(pageType);
+                will(returnValue(expectedPageClass));
+            }
+        });
+        final Class<? extends Page> pageClass = application.getHomePage();
+        assertThat(expectedPageClass.isAssignableFrom(pageClass), is(true));
+    }
 
-	@Test
-	public void delegatesToPageClassRegistryToObtainPageTypes_ForSignIn() {
+    @Test
+    public void delegatesToPageClassRegistryToObtainPageTypes_ForSignIn() {
 
-		final PageType pageType = PageType.SIGN_IN;
-		final Class<WebPage> expectedPageClass = WebPage.class;
+        final PageType pageType = PageType.SIGN_IN;
+        final Class<WebPage> expectedPageClass = WebPage.class;
 
-		final PageClassRegistry mockPageClassRegistry = context.mock(PageClassRegistry.class);
-		application = new IsisWicketApplication() {
+        final PageClassRegistry mockPageClassRegistry = context.mock(PageClassRegistry.class);
+        application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;
 
             @Override
-			public PageClassRegistry getPageClassRegistry() {
-				return mockPageClassRegistry;
-			}
-		};
-		context.checking(new Expectations() {
-			{
-				one(mockPageClassRegistry).getPageClass(pageType);
-				will(returnValue(expectedPageClass));
-			}
-		});
-		final Class<? extends Page> pageClass = application.getSignInPageClass();
-		assertThat(expectedPageClass.isAssignableFrom(pageClass), is(true));
-	}
+            public PageClassRegistry getPageClassRegistry() {
+                return mockPageClassRegistry;
+            }
+        };
+        context.checking(new Expectations() {
+            {
+                one(mockPageClassRegistry).getPageClass(pageType);
+                will(returnValue(expectedPageClass));
+            }
+        });
+        final Class<? extends Page> pageClass = application.getSignInPageClass();
+        assertThat(expectedPageClass.isAssignableFrom(pageClass), is(true));
+    }
 
 }

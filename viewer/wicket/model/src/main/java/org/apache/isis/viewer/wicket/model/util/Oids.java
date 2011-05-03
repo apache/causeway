@@ -17,50 +17,46 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
-
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-
 public final class Oids {
 
-	private Oids(){}
+    private Oids() {
+    }
 
-	public static Matcher<Oid> isTransient() {
-		return new TypeSafeMatcher<Oid>() {
-	
-			@Override
-			public boolean matchesSafely(Oid item) {
-				return item.isTransient();
-			}
-	
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("is transient");
-			}
-		};
-	}
+    public static Matcher<Oid> isTransient() {
+        return new TypeSafeMatcher<Oid>() {
 
-	public static Matcher<Oid> isPersistent() {
-		return new TypeSafeMatcher<Oid>() {
-	
-			@Override
-			public boolean matchesSafely(Oid item) {
-				return !item.isTransient();
-			}
-	
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("is persistent");
-			}
-		};
-	}
-	
+            @Override
+            public boolean matchesSafely(final Oid item) {
+                return item.isTransient();
+            }
 
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("is transient");
+            }
+        };
+    }
+
+    public static Matcher<Oid> isPersistent() {
+        return new TypeSafeMatcher<Oid>() {
+
+            @Override
+            public boolean matchesSafely(final Oid item) {
+                return !item.isTransient();
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("is persistent");
+            }
+        };
+    }
 
 }

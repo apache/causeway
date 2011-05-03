@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Locale;
@@ -30,46 +29,47 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.wicket.util.convert.IConverter;
 
-
 /**
- * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s, 
- * converting to-and-from their {@link Oid}'s string representation.
+ * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s, converting to-and-from their {@link Oid}'s
+ * string representation.
  */
 public class ConverterForObjectAdapter implements IConverter {
 
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Converts {@link OidStringifier stringified} {@link Oid} to {@link ObjectAdapter}.
-	 */
-	public Object convertToObject(String value, Locale locale) {
-		Oid oid = getOidStringifier().deString(value);
-		return getAdapterManager().getAdapterFor(oid);
-	}
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Converts {@link ObjectAdapter} to {@link OidStringifier stringified} {@link Oid}.
-	 */
-	public String convertToString(Object object, Locale locale) {
-		ObjectAdapter adapter = (ObjectAdapter) object;
-		Oid oid = adapter.getOid();
-		if (oid == null) {
-			// values don't have an Oid
-			return null;
-		}
-		return getOidStringifier().enString(oid);
-	}
-	
-	protected AdapterManager getAdapterManager() {
-		return getPersistenceSession().getAdapterManager();
-	}
+    /**
+     * Converts {@link OidStringifier stringified} {@link Oid} to {@link ObjectAdapter}.
+     */
+    @Override
+    public Object convertToObject(final String value, final Locale locale) {
+        final Oid oid = getOidStringifier().deString(value);
+        return getAdapterManager().getAdapterFor(oid);
+    }
 
-	protected OidStringifier getOidStringifier() {
-		return getPersistenceSession().getOidGenerator().getOidStringifier();
-	}
+    /**
+     * Converts {@link ObjectAdapter} to {@link OidStringifier stringified} {@link Oid}.
+     */
+    @Override
+    public String convertToString(final Object object, final Locale locale) {
+        final ObjectAdapter adapter = (ObjectAdapter) object;
+        final Oid oid = adapter.getOid();
+        if (oid == null) {
+            // values don't have an Oid
+            return null;
+        }
+        return getOidStringifier().enString(oid);
+    }
 
-	protected PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    protected OidStringifier getOidStringifier() {
+        return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
 }

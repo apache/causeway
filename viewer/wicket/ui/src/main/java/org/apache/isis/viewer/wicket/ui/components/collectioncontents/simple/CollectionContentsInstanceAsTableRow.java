@@ -17,14 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.simple;
 
 import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -33,6 +28,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.RepeatingView;
 
 /**
  * Renders a single entity instance within the HTML table.
@@ -42,44 +40,41 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  */
 class CollectionContentsInstanceAsTableRow extends PanelAbstract<EntityModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CollectionContentsInstanceAsTableRow(String id, EntityModel model) {
-		super(id, model);
+    public CollectionContentsInstanceAsTableRow(final String id, final EntityModel model) {
+        super(id, model);
 
-		addTableRow(model);
-	}
+        addTableRow(model);
+    }
 
-	private void addTableRow(EntityModel model) {
-		
-		ObjectAdapter adapter = model.getObject();
-		ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-		List<? extends ObjectAssociation> propertyList = typeOfSpec
-				.getAssociations(ObjectAssociationFilters.PROPERTIES);
+    private void addTableRow(final EntityModel model) {
 
-		add(new Label("title", adapter.titleString()));
+        final ObjectAdapter adapter = model.getObject();
+        final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+        final List<? extends ObjectAssociation> propertyList =
+            typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
 
-		RepeatingView propertyValues = new RepeatingView("propertyValue");
-		add(propertyValues);
+        add(new Label("title", adapter.titleString()));
 
-		for (ObjectAssociation property : propertyList) {
-			ObjectAdapter propertyValueAdapter = property.get(adapter);
-			Component component;
-			if (propertyValueAdapter == null) {
-				component = new Label(property.getId(), "(null)");
-			} else {
-				if (propertyValueAdapter.getSpecification().getFacet(
-						ValueFacet.class) == null) {
-					// TODO: make more sophisticated, eg with Links if an object
-					component = new Label(property.getId(),
-							propertyValueAdapter.titleString());
-				} else {
-					component = new Label(property.getId(),
-							propertyValueAdapter.titleString());
-				}
-			}
-			propertyValues.add(component);
-		}
-	}
+        final RepeatingView propertyValues = new RepeatingView("propertyValue");
+        add(propertyValues);
+
+        for (final ObjectAssociation property : propertyList) {
+            final ObjectAdapter propertyValueAdapter = property.get(adapter);
+            Component component;
+            if (propertyValueAdapter == null) {
+                component = new Label(property.getId(), "(null)");
+            } else {
+                if (propertyValueAdapter.getSpecification().getFacet(ValueFacet.class) == null) {
+                    // TODO: make more sophisticated, eg with Links if an object
+                    component = new Label(property.getId(), propertyValueAdapter.titleString());
+                } else {
+                    component = new Label(property.getId(), propertyValueAdapter.titleString());
+                }
+            }
+            propertyValues.add(component);
+        }
+    }
 
 }

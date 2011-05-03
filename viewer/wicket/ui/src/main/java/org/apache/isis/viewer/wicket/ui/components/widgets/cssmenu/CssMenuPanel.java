@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.util.Arrays;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.viewer.wicket.model.util.Strings;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,91 +31,85 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
 
 /**
- * Top level panel for a CSS menu, consisting of a number of unparented
- * {@link CssMenuItem}s.
+ * Top level panel for a CSS menu, consisting of a number of unparented {@link CssMenuItem}s.
  * 
  * <p>
  * The {@link Style} enum allows the presentation to be altered.
  */
 public class CssMenuPanel extends PanelAbstract<CssMenuPanel.MyModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public enum Style {
-		REGULAR {
-			@Override
-			public String getAppendValue() {
-				return null; // ie, append nothing
-			}
-		}, 
-		SMALL {
-			@Override
-			public String getAppendValue() {
-				return toString();
-			}
-		};
-		public String toString() {
-			return Strings.toCamelCase(name());
-		}
+    public enum Style {
+        REGULAR {
+            @Override
+            public String getAppendValue() {
+                return null; // ie, append nothing
+            }
+        },
+        SMALL {
+            @Override
+            public String getAppendValue() {
+                return toString();
+            }
+        };
+        @Override
+        public String toString() {
+            return Strings.toCamelCase(name());
+        }
 
-		public String getAppendValue() {
-			return toString();
-		}
-	}
+        public String getAppendValue() {
+            return toString();
+        }
+    }
 
-	static class MyModel extends ListModel<CssMenuItem> {
+    static class MyModel extends ListModel<CssMenuItem> {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		public MyModel(List<CssMenuItem> cssMenuItems) {
-			super(cssMenuItems);
-		}
-	}
+        public MyModel(final List<CssMenuItem> cssMenuItems) {
+            super(cssMenuItems);
+        }
+    }
 
-	public static CssMenuItem.Builder newMenuItem(String name) {
-		return CssMenuItem.newMenuItem(name);
-	}
+    public static CssMenuItem.Builder newMenuItem(final String name) {
+        return CssMenuItem.newMenuItem(name);
+    }
 
-	private StyleAppender styleAppender;
+    private final StyleAppender styleAppender;
     static final String ID_MENU_ITEMS = "menuItems";
     static final String ID_MENU_ITEM = "menuItem";
 
-	public CssMenuPanel(String id, final Style style,
-			List<CssMenuItem> topLevelMenuItems) {
-		super(id, new MyModel(topLevelMenuItems));
-		this.styleAppender = new StyleAppender(style);
+    public CssMenuPanel(final String id, final Style style, final List<CssMenuItem> topLevelMenuItems) {
+        super(id, new MyModel(topLevelMenuItems));
+        this.styleAppender = new StyleAppender(style);
 
-		add(styleAppender);
+        add(styleAppender);
 
-		RepeatingView menuItemRv = new RepeatingView(CssMenuPanel.ID_MENU_ITEMS);
-		add(menuItemRv);
+        final RepeatingView menuItemRv = new RepeatingView(CssMenuPanel.ID_MENU_ITEMS);
+        add(menuItemRv);
 
-		for (CssMenuItem cssMenuItem : this.getModel().getObject()) {
-			WebMarkupContainer menuItemMarkup = new WebMarkupContainer(
-					menuItemRv.newChildId());
-			menuItemRv.add(menuItemMarkup);
+        for (final CssMenuItem cssMenuItem : this.getModel().getObject()) {
+            final WebMarkupContainer menuItemMarkup = new WebMarkupContainer(menuItemRv.newChildId());
+            menuItemRv.add(menuItemMarkup);
 
-			menuItemMarkup.add(new CssMenuItemPanel(CssMenuPanel.ID_MENU_ITEM,
-					cssMenuItem));
-		}
+            menuItemMarkup.add(new CssMenuItemPanel(CssMenuPanel.ID_MENU_ITEM, cssMenuItem));
+        }
 
-	}
+    }
 
-	public CssMenuPanel(ComponentType componentType, Style style, CssMenuItem... topLevelMenuItems) {
-		this(componentType.getWicketId(), style, Arrays.asList(topLevelMenuItems));
-	}
-	
-	static final class StyleAppender extends CssClassAppender {
-		
-		private static final long serialVersionUID = 1L;
-		
-		public StyleAppender(Style style) {
-			super(style.getAppendValue());
-		}
-		
-	}
+    public CssMenuPanel(final ComponentType componentType, final Style style, final CssMenuItem... topLevelMenuItems) {
+        this(componentType.getWicketId(), style, Arrays.asList(topLevelMenuItems));
+    }
+
+    static final class StyleAppender extends CssClassAppender {
+
+        private static final long serialVersionUID = 1L;
+
+        public StyleAppender(final Style style) {
+            super(style.getAppendValue());
+        }
+
+    }
 
 }
-
-
-

@@ -26,13 +26,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnNakedObjectMemberHidden<T extends ObjectMember> extends TableColumnNakedObjectMember<T> {
 
-    public TableColumnNakedObjectMemberHidden(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnNakedObjectMemberHidden(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("Hidden", session, nakedObject, resourceContext);
     }
 

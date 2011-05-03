@@ -18,22 +18,21 @@
  */
 package org.apache.isis.viewer.restful.viewer.embedded;
 
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
-
 import org.apache.isis.core.commons.lang.MapUtils;
-import org.apache.isis.core.webapp.content.StaticContentFilter;
 import org.apache.isis.core.webapp.content.ResourceServlet;
+import org.apache.isis.core.webapp.content.StaticContentFilter;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
 import org.apache.isis.viewer.restful.viewer.RestfulApplication;
 import org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted;
+import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
 final class EmbeddedWebViewerRestful extends EmbeddedWebViewer {
     @Override
     public WebAppSpecification getWebAppSpecification() {
-        WebAppSpecification webAppSpec = new WebAppSpecification();
+        final WebAppSpecification webAppSpec = new WebAppSpecification();
 
         webAppSpec.addContextParams("isis.viewers", "restful");
 

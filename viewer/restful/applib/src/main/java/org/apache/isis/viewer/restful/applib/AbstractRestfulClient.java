@@ -37,79 +37,79 @@ import nu.xom.ValidityException;
 import org.apache.log4j.Logger;
 
 public abstract class AbstractRestfulClient {
-	
-	private static Logger LOG = Logger.getLogger(AbstractRestfulClient.class); 
 
-	static final String MIME_TYPE = "application/xhtml+xml";
+    private static Logger LOG = Logger.getLogger(AbstractRestfulClient.class);
 
-	private final String hostUri;
-	public String getHostUri() {
-		return hostUri;
-	}
+    static final String MIME_TYPE = "application/xhtml+xml";
 
-	public AbstractRestfulClient(String hostUri) {
-		this.hostUri = hostUri;
-	}
-	
-	public Document get(String uri) throws RestfulClientException {
-		if (LOG.isInfoEnabled()) {
-			LOG.info("getting from '" + uri + "'");
-		}
-		try {
-			HttpURLConnection connection = createGetConnection(uri);
-			Document document = readDocFromConnectionInputStream(connection);
-			if (LOG.isTraceEnabled()) {
-				LOG.trace(document.toXML());
-			}
-			return document;
-		} catch (ProtocolException e) {
-			throw new RestfulClientException(e);
-		} catch (IOException e) {
-			throw new RestfulClientException(e);
-		} catch (ValidityException e) {
-			throw new RestfulClientException(e);
-		} catch (ParsingException e) {
-			throw new RestfulClientException(e);
-		}
-	}
+    private final String hostUri;
 
-	public Document post(String uri, String... paramArgs) {
-		return post(uri, StringUtils.asMap(paramArgs));
-	}
+    public String getHostUri() {
+        return hostUri;
+    }
 
-	private Document post(String uri, Map<String,String> formArgumentsByParameter) {
-		if (LOG.isInfoEnabled()) {
-			LOG.info("posting form arguments to '" + uri + "'");
-			LOG.info(asString(formArgumentsByParameter));
-		}
-		try {
-			Map<String, String> encodedMap = urlEncode(formArgumentsByParameter);
-			if (LOG.isTraceEnabled()) {
-				LOG.trace(asString(encodedMap));
-			}
-			HttpURLConnection connection = createPostConnection(uri);
-			writeMapToConnectionOutputStream(encodedMap, connection);
-			return readDocFromConnectionInputStream(connection);
-		} catch (IOException e) {
-			throw new RestfulClientException(e);
-		} catch (ValidityException e) {
-			throw new RestfulClientException(e);
-		} catch (ParsingException e) {
-			throw new RestfulClientException(e);
-		}
-	}
+    public AbstractRestfulClient(final String hostUri) {
+        this.hostUri = hostUri;
+    }
 
-	
-	////////////////////////////////////////////////////////////////////////
-	// Helpers: string
-	////////////////////////////////////////////////////////////////////////
-	
-	protected static String combine(String... pathParts ) {
-		StringBuilder buf = new StringBuilder();
-		for (String part : pathParts) {
-			buf.append(part);
-		}
-		return buf.toString();
-	}
+    public Document get(final String uri) throws RestfulClientException {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("getting from '" + uri + "'");
+        }
+        try {
+            final HttpURLConnection connection = createGetConnection(uri);
+            final Document document = readDocFromConnectionInputStream(connection);
+            if (LOG.isTraceEnabled()) {
+                LOG.trace(document.toXML());
+            }
+            return document;
+        } catch (final ProtocolException e) {
+            throw new RestfulClientException(e);
+        } catch (final IOException e) {
+            throw new RestfulClientException(e);
+        } catch (final ValidityException e) {
+            throw new RestfulClientException(e);
+        } catch (final ParsingException e) {
+            throw new RestfulClientException(e);
+        }
+    }
+
+    public Document post(final String uri, final String... paramArgs) {
+        return post(uri, StringUtils.asMap(paramArgs));
+    }
+
+    private Document post(final String uri, final Map<String, String> formArgumentsByParameter) {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("posting form arguments to '" + uri + "'");
+            LOG.info(asString(formArgumentsByParameter));
+        }
+        try {
+            final Map<String, String> encodedMap = urlEncode(formArgumentsByParameter);
+            if (LOG.isTraceEnabled()) {
+                LOG.trace(asString(encodedMap));
+            }
+            final HttpURLConnection connection = createPostConnection(uri);
+            writeMapToConnectionOutputStream(encodedMap, connection);
+            return readDocFromConnectionInputStream(connection);
+        } catch (final IOException e) {
+            throw new RestfulClientException(e);
+        } catch (final ValidityException e) {
+            throw new RestfulClientException(e);
+        } catch (final ParsingException e) {
+            throw new RestfulClientException(e);
+        }
+    }
+
+    // //////////////////////////////////////////////////////////////////////
+    // Helpers: string
+    // //////////////////////////////////////////////////////////////////////
+
+    protected static String combine(final String... pathParts) {
+        final StringBuilder buf = new StringBuilder();
+        for (final String part : pathParts) {
+            buf.append(part);
+        }
+        return buf.toString();
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import static org.hamcrest.Matchers.is;
@@ -27,7 +26,6 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketModule;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -46,11 +44,11 @@ public class IsisWicket_providers {
         injector = Guice.createInjector(wicketObjectsModule);
     }
 
-	@Test
-	public void deploymentType() {
-	    final DeploymentType instance = injector.getInstance(DeploymentType.class);
-	    assertThat(instance, is(notNullValue()));
-	}
+    @Test
+    public void deploymentType() {
+        final DeploymentType instance = injector.getInstance(DeploymentType.class);
+        assertThat(instance, is(notNullValue()));
+    }
 
     @Test
     public void configurationBuilder() {
@@ -58,8 +56,8 @@ public class IsisWicket_providers {
         assertThat(instance, is(notNullValue()));
     }
 
-
-    @Ignore // need to handle config
+    @Ignore
+    // need to handle config
     @Test
     public void isisSystem() {
         final IsisSystem instance = injector.getInstance(IsisSystem.class);

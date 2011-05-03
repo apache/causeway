@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 /**
- * {@link FormComponent}s that require explicit notification that their owning {@link Form}
- * has been cancelled should implement this interface.
+ * {@link FormComponent}s that require explicit notification that their owning {@link Form} has been cancelled should
+ * implement this interface.
  */
 public interface CancelHintRequired {
 
-	void onCancel();
+    void onCancel();
 }

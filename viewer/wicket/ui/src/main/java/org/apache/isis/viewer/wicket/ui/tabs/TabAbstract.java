@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.tabs;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -25,10 +24,10 @@ import org.apache.wicket.model.IModel;
 
 public class TabAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public TabAbstract(String id, T model) {
-		super(id, model);
-	}
+    public TabAbstract(final String id, final T model) {
+        super(id, model);
+    }
 
 }

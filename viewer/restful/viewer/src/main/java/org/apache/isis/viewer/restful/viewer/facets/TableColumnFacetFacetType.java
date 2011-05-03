@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnFacetFacetType extends TableColumnFacet {
     private final String pathPrefix;
 

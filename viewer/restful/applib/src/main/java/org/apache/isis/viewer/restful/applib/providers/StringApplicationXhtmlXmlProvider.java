@@ -33,9 +33,9 @@ import org.jboss.resteasy.plugins.providers.StringTextStar;
 @Consumes("application/xhtml+xml")
 public class StringApplicationXhtmlXmlProvider extends StringTextStar {
 
-	@Override
-	public long getSize(Object o, Class<?> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType) {
-		return o.toString().getBytes().length;
-	}
+    @Override
+    public long getSize(final Object o, final Class<?> type, final Type genericType, final Annotation[] annotations,
+        final MediaType mediaType) {
+        return o.toString().getBytes().length;
+    }
 }

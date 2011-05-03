@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.login;
 
 /**
  * TODO
  */
-public class UserPanel /* extends PanelAbstract */  {
+public class UserPanel /* extends PanelAbstract */{
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-//	public UserPanel(String id, Class<? extends Page> signoutClass) {
-//		super(id);
-//		AuthenticatedWebSessionForIsis session = getIsisAuthenticatedWebSession();
-//		add(new Label("fullname", session.getAuthenticationSession().getUserName()));
-//		add(new BookmarkablePageLink("signout", signoutClass));
-//	}
+    // public UserPanel(String id, Class<? extends Page> signoutClass) {
+    // super(id);
+    // AuthenticatedWebSessionForIsis session = getIsisAuthenticatedWebSession();
+    // add(new Label("fullname", session.getAuthenticationSession().getUserName()));
+    // add(new BookmarkablePageLink("signout", signoutClass));
+    // }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -28,16 +27,16 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
  */
 public class DoublePanel extends ScalarPanelTextFieldParseableAbstract {
 
-	private static final long serialVersionUID = 1L;
-	private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final long serialVersionUID = 1L;
+    private static final String ID_SCALAR_VALUE = "scalarValue";
 
-	public DoublePanel(String id, final ScalarModel scalarModel) {
-		super(id, ID_SCALAR_VALUE, scalarModel);
-	}
-	
-	@Override
-	protected void addSemantics() {
-		super.addSemantics();
-	}
+    public DoublePanel(final String id, final ScalarModel scalarModel) {
+        super(id, ID_SCALAR_VALUE, scalarModel);
+    }
+
+    @Override
+    protected void addSemantics() {
+        super.addSemantics();
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import java.util.Map;
@@ -36,61 +35,60 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
- * Default implementation of {@link PageClassRegistry}; just delegates to an underlying
- * {@link PageClassList}.
+ * Default implementation of {@link PageClassRegistry}; just delegates to an underlying {@link PageClassList}.
  */
 @Singleton
 public class PageClassRegistryDefault implements PageClassRegistry, PageRegistrySpi {
 
-	private Map<PageType, Class<? extends Page>> pagesByType = Maps.newHashMap();
-	
-	/**
-	 * {@link Inject}ed in {@link #PageClassRegistryDefault(PageClassList) constructor}.
-	 */
-	@SuppressWarnings("unused")
-	private final PageClassList pageClassList;
-	
-	@Inject
-	public PageClassRegistryDefault(final PageClassList pageClassList) {
-		this.pageClassList = pageClassList;
-		pageClassList.registerPages(this);
-		ensureAllPageTypesRegistered();
-	}
+    private final Map<PageType, Class<? extends Page>> pagesByType = Maps.newHashMap();
 
-	private void ensureAllPageTypesRegistered() {
-		for (PageType pageType : PageType.values()) {
-			if (getPageClass(pageType) == null) {
-				throw new IllegalStateException("No page registered for " + pageType);
-			}
-		}
-	}
-	
-	///////////////////////////////////////////////////////////
-	// API
-	///////////////////////////////////////////////////////////
+    /**
+     * {@link Inject}ed in {@link #PageClassRegistryDefault(PageClassList) constructor}.
+     */
+    @SuppressWarnings("unused")
+    private final PageClassList pageClassList;
 
-	@Override
-	public final Class<? extends Page> getPageClass(PageType pageType) {
-		return pagesByType.get(pageType);
-	}
-	
-	///////////////////////////////////////////////////////////
-	// API
-	///////////////////////////////////////////////////////////
+    @Inject
+    public PageClassRegistryDefault(final PageClassList pageClassList) {
+        this.pageClassList = pageClassList;
+        pageClassList.registerPages(this);
+        ensureAllPageTypesRegistered();
+    }
 
-	public final void registerPage(PageType pageType, Class<? extends Page> pageClass) {
-		ensureThatArg(pageClass, Classes.isSubclassOf(pageType.getPageClass()));
-		pagesByType.put(pageType, pageClass);
-	}
+    private void ensureAllPageTypesRegistered() {
+        for (final PageType pageType : PageType.values()) {
+            if (getPageClass(pageType) == null) {
+                throw new IllegalStateException("No page registered for " + pageType);
+            }
+        }
+    }
 
-	///////////////////////////////////////////////////////////
-	// Helpers
-	///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
+    // API
+    // /////////////////////////////////////////////////////////
 
-	@SuppressWarnings("unchecked")
-	private static void ensureThatArg(Class<? extends Page> cls, Matcher clsMatcher) {
-		Ensure.ensureThatArg(cls, clsMatcher);		
-	}
+    @Override
+    public final Class<? extends Page> getPageClass(final PageType pageType) {
+        return pagesByType.get(pageType);
+    }
 
+    // /////////////////////////////////////////////////////////
+    // API
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public final void registerPage(final PageType pageType, final Class<? extends Page> pageClass) {
+        ensureThatArg(pageClass, Classes.isSubclassOf(pageType.getPageClass()));
+        pagesByType.put(pageType, pageClass);
+    }
+
+    // /////////////////////////////////////////////////////////
+    // Helpers
+    // /////////////////////////////////////////////////////////
+
+    @SuppressWarnings("unchecked")
+    private static void ensureThatArg(final Class<? extends Page> cls, final Matcher clsMatcher) {
+        Ensure.ensureThatArg(cls, clsMatcher);
+    }
 
 }

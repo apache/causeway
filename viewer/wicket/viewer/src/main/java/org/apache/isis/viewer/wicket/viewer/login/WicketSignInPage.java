@@ -17,35 +17,33 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.login;
 
+import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.authentication.pages.SignInPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-
-import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
 public final class WicketSignInPage extends SignInPage {
-	public WicketSignInPage() {
-	}
+    public WicketSignInPage() {
+    }
 
-	public WicketSignInPage(final PageParameters parameters) {
-	}
-	
-   /**
+    public WicketSignInPage(final PageParameters parameters) {
+    }
+
+    /**
      * Renders the application-supplied CSS, if any.
      */
     @Override
-    public void renderHead(HtmlHeaderContainer container) {
+    public void renderHead(final HtmlHeaderContainer container) {
         super.renderHead(container);
         final ApplicationCssRenderer applicationCssRenderer = getApplicationCssRenderer();
         applicationCssRenderer.renderApplicationCss(container);
     }
-    
+
     protected ApplicationCssRenderer getApplicationCssRenderer() {
         return (ApplicationCssRenderer) getApplication();
     }

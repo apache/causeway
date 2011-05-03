@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import org.apache.isis.core.testsupport.jmock.FixtureMockery;
@@ -32,19 +31,21 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class AuthenticatedWebSessionForIsis_Instantiation {
 
-	private FixtureMockery context = new FixtureMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
-	
-	@Test
-	public void canInstantiateIfProvideRequest() {
-		final Request stubRequest = context.fixture(Fixture_Request_Stub.class).object();
-		new AuthenticatedWebSessionForIsis(stubRequest);
-	}
+    private final FixtureMockery context = new FixtureMockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	@Test(expected=IllegalArgumentException.class)
-	public void requestMustBeProvided() {
-		new AuthenticatedWebSessionForIsis(null);
-	}
+    @Test
+    public void canInstantiateIfProvideRequest() {
+        final Request stubRequest = context.fixture(Fixture_Request_Stub.class).object();
+        new AuthenticatedWebSessionForIsis(stubRequest);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void requestMustBeProvided() {
+        new AuthenticatedWebSessionForIsis(null);
+    }
 
 }

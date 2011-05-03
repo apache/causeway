@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -30,14 +29,15 @@ import org.apache.wicket.Component;
  */
 public class IsisDatePanelFactory extends ComponentFactoryScalarAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public IsisDatePanelFactory() {
-		super(org.apache.isis.applib.value.Date.class);
-	}
+    public IsisDatePanelFactory() {
+        super(org.apache.isis.applib.value.Date.class);
+    }
 
-	public Component createComponent(String id, ScalarModel scalarModel) {
-		return new IsisDatePanel(id, scalarModel);
-	}
+    @Override
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new IsisDatePanel(id, scalarModel);
+    }
 
 }

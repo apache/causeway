@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -32,16 +31,17 @@ import org.apache.wicket.model.IModel;
  */
 public class EntityTabbedPanelFactory extends EntityComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String NAME = "tabbed";
+    private static final String NAME = "tabbed";
 
-	public EntityTabbedPanelFactory() {
-		super(ComponentType.ENTITY, NAME);
-	}
+    public EntityTabbedPanelFactory() {
+        super(ComponentType.ENTITY, NAME);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityModel entityModel = (EntityModel) model;
-		return new EntityTabbedPanel(id, entityModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityTabbedPanel(id, entityModel);
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -33,14 +32,15 @@ import org.apache.wicket.model.IModel;
  */
 public class EntityCollectionsPanelFactory extends EntityComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntityCollectionsPanelFactory() {
-		super(ComponentType.ENTITY_COLLECTIONS);
-	}
+    public EntityCollectionsPanelFactory() {
+        super(ComponentType.ENTITY_COLLECTIONS);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityModel entityModel = (EntityModel) model;
-		return new EntityPropertiesAndOrCollectionsPanel(id, entityModel, Render.COLLECTIONS_ONLY);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityPropertiesAndOrCollectionsPanel(id, entityModel, Render.COLLECTIONS_ONLY);
+    }
 }

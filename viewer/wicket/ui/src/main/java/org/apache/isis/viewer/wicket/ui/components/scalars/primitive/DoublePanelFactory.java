@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -30,14 +29,15 @@ import org.apache.wicket.Component;
  */
 public class DoublePanelFactory extends ComponentFactoryScalarAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public DoublePanelFactory() {
-		super(double.class, Double.class);
-	}
+    public DoublePanelFactory() {
+        super(double.class, Double.class);
+    }
 
-	public Component createComponent(String id, ScalarModel scalarModel) {
-		return new DoublePanel(id, scalarModel);
-	}
+    @Override
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new DoublePanel(id, scalarModel);
+    }
 
 }

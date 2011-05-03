@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
 import org.hamcrest.BaseMatcher;
@@ -26,20 +25,20 @@ import org.hamcrest.Matcher;
 
 public final class Classes {
 
-	@SuppressWarnings("unchecked")
-	public static Matcher isSubclassOf(final Class superClass) {
-		return new BaseMatcher(){
-			@Override
-			public boolean matches(Object item) {
-				Class cls = (Class) item;
-				return superClass.isAssignableFrom(cls);
-			}
-	
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("is subclass of " + superClass.getName());
-			}
-		};	
-	}
+    @SuppressWarnings("unchecked")
+    public static Matcher isSubclassOf(final Class superClass) {
+        return new BaseMatcher() {
+            @Override
+            public boolean matches(final Object item) {
+                final Class cls = (Class) item;
+                return superClass.isAssignableFrom(cls);
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("is subclass of " + superClass.getName());
+            }
+        };
+    }
 
 }

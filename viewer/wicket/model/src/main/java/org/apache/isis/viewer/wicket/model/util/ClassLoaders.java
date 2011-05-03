@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
 import java.util.Arrays;
@@ -30,42 +29,44 @@ import com.google.common.collect.Maps;
 
 public final class ClassLoaders {
 
-	private static Map<String, Class<?>> primitives = Maps.newHashMap();
-	
-	static {
-		@SuppressWarnings("unchecked")
-		List<Class> primitiveClasses = Arrays.<Class>asList(boolean.class, byte.class, short.class, int.class, long.class, float.class, double.class, char.class);
-		for (Class<?> cls : primitiveClasses) {
-			primitives.put(cls.getName(), cls);
-		}
-	}
-	
-	public static Class<?> forName(ObjectSpecification noSpec) {
-		String fullName = noSpec.getFullIdentifier();
-		return forName(fullName);
-	}
+    private static Map<String, Class<?>> primitives = Maps.newHashMap();
 
-	public static Class<?> forName(String fullName) {
-		Class<?> primitiveCls = primitives.get(fullName);
-		if (primitiveCls != null) {
-			return primitiveCls;
-		}
-		try {
-			return Thread.currentThread().getContextClassLoader().loadClass(fullName);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    static {
+        @SuppressWarnings("unchecked")
+        final List<Class> primitiveClasses =
+            Arrays.<Class> asList(boolean.class, byte.class, short.class, int.class, long.class, float.class,
+                double.class, char.class);
+        for (final Class<?> cls : primitiveClasses) {
+            primitives.put(cls.getName(), cls);
+        }
+    }
 
-	public static Class<?> forNameElseNull(String fullName) {
-		if (fullName == null) {
-			return null;
-		}
-		try {
-			return Thread.currentThread().getContextClassLoader().loadClass(fullName);
-		} catch (ClassNotFoundException e) {
-			return null;
-		}
-	}
+    public static Class<?> forName(final ObjectSpecification noSpec) {
+        final String fullName = noSpec.getFullIdentifier();
+        return forName(fullName);
+    }
+
+    public static Class<?> forName(final String fullName) {
+        final Class<?> primitiveCls = primitives.get(fullName);
+        if (primitiveCls != null) {
+            return primitiveCls;
+        }
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(fullName);
+        } catch (final ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Class<?> forNameElseNull(final String fullName) {
+        if (fullName == null) {
+            return null;
+        }
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(fullName);
+        } catch (final ClassNotFoundException e) {
+            return null;
+        }
+    }
 
 }

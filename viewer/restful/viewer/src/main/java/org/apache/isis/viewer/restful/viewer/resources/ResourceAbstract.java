@@ -61,7 +61,6 @@ import org.apache.isis.viewer.restful.viewer.facets.TableColumnFacetHiding;
 import org.apache.isis.viewer.restful.viewer.facets.TableColumnFacetImplementation;
 import org.apache.isis.viewer.restful.viewer.facets.TableColumnFacetValidating;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
-import org.apache.isis.viewer.restful.viewer.util.ListUtils;
 import org.apache.isis.viewer.restful.viewer.util.OidUtils;
 import org.apache.isis.viewer.restful.viewer.xom.DtDd;
 import org.apache.isis.viewer.restful.viewer.xom.ElementBuilderXom;
@@ -69,30 +68,26 @@ import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 import org.apache.isis.viewer.restful.viewer.xom.TableColumn;
 import org.apache.isis.viewer.restful.viewer.xom.XhtmlRendererXom;
 
-
 public abstract class ResourceAbstract {
 
-    public final static ActionType[] ACTION_TYPES = { 
-    	ActionType.USER,
-        ActionType.DEBUG, 
-        ActionType.EXPLORATION,
-        // SET is excluded; we simply flatten contributed actions.
-    };
+    public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
+    // SET is excluded; we simply flatten contributed actions.
+        };
 
     protected final XhtmlRendererXom xhtmlRenderer;
     protected final ElementBuilderXom elementBuilder;
-    
+
     @Context
     HttpHeaders httpHeaders;
 
     @Context
     UriInfo uriInfo;
-    
+
     @Context
     Request request;
 
     @Context
-	HttpServletRequest httpServletRequest;
+    HttpServletRequest httpServletRequest;
 
     @Context
     HttpServletResponse httpServletResponse;
@@ -103,67 +98,67 @@ public abstract class ResourceAbstract {
     private ResourceContext resourceContext;
 
     protected ResourceAbstract() {
-    	this.xhtmlRenderer = new XhtmlRendererXom();
-    	this.elementBuilder = new ElementBuilderXom();
+        this.xhtmlRenderer = new XhtmlRendererXom();
+        this.elementBuilder = new ElementBuilderXom();
     }
-    
+
     protected void init() {
-        this.resourceContext = 
-        	new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext);
+        this.resourceContext =
+            new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext);
     }
 
-	protected ResourceContext getResourceContext() {
-		return resourceContext;
-	}
+    protected ResourceContext getResourceContext() {
+        return resourceContext;
+    }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Isis integration
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     protected static ObjectSpecification getSpecification(final String specFullName) {
         return getSpecificationLoader().loadSpecification(specFullName);
     }
 
-	protected ObjectAdapter getNakedObject(final String oidEncodedStr) {
-		return OidUtils.getNakedObject(oidEncodedStr, getOidStringifier());
+    protected ObjectAdapter getNakedObject(final String oidEncodedStr) {
+        return OidUtils.getNakedObject(oidEncodedStr, getOidStringifier());
     }
 
-	protected String getOidStr(final ObjectAdapter nakedObject) {
-		return OidUtils.getOidStr(nakedObject, getOidStringifier());
+    protected String getOidStr(final ObjectAdapter nakedObject) {
+        return OidUtils.getOidStr(nakedObject, getOidStringifier());
     }
 
-	
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Rendering
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
-	protected Element asDivNofSession() {
+    protected Element asDivNofSession() {
         final Element div = xhtmlRenderer.div_p("Logged in as", null);
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.SESSION);
         ul.appendChild(xhtmlRenderer.li_a("/user", getSession().getUserName(), "user", "resource", HtmlClass.USER));
         div.appendChild(ul);
-        
+
         return div;
     }
 
-	protected Element resourcesDiv() {
-		final Element div = xhtmlRenderer.div_p("Resources", HtmlClass.SECTION);
+    protected Element resourcesDiv() {
+        final Element div = xhtmlRenderer.div_p("Resources", HtmlClass.SECTION);
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.RESOURCES);
-        
+
         ul.appendChild(xhtmlRenderer.li_a("/services", "Services", "services", "resources", HtmlClass.RESOURCE));
-        ul.appendChild(xhtmlRenderer.li_a("/specs", "Specifications (MetaModel)", "specs", "resources", HtmlClass.RESOURCE));
+        ul.appendChild(xhtmlRenderer.li_a("/specs", "Specifications (MetaModel)", "specs", "resources",
+            HtmlClass.RESOURCE));
         ul.appendChild(xhtmlRenderer.li_a("/user", "User (Security)", "user", "resources", HtmlClass.RESOURCE));
-        
+
         div.appendChild(ul);
-		return div;
-	}
-	
-	protected Element div(final String htmlClassAttribute){
-		return xhtmlRenderer.div(htmlClassAttribute);
-	}
-	
+        return div;
+    }
+
+    protected Element div(final String htmlClassAttribute) {
+        return xhtmlRenderer.div(htmlClassAttribute);
+    }
+
     protected Element asDivTableFacets(final FacetHolder facetHolder, final String pathPrefix) {
         final Element div = xhtmlRenderer.div_p("Facets", HtmlClass.FACETS);
         final List<Facet> rows = facetHolder.getFacets(FacetFilters.ANY);
@@ -180,8 +175,9 @@ public abstract class ResourceAbstract {
         return div;
     }
 
-    public Element divFacetElements(final String facetTypeName, final FacetHolder facetHolder) throws ClassNotFoundException,
-            IntrospectionException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public Element divFacetElements(final String facetTypeName, final FacetHolder facetHolder)
+        throws ClassNotFoundException, IntrospectionException, IllegalArgumentException, IllegalAccessException,
+        InvocationTargetException {
         final Element div = xhtmlRenderer.div_p("Facet Elements", HtmlClass.FACET_ELEMENTS);
         final Class<? extends Facet> facetType = CastUtils.cast(Class.forName(facetTypeName));
         final Facet facet = facetHolder.getFacet(facetType);
@@ -194,8 +190,8 @@ public abstract class ResourceAbstract {
             final Method readMethod = descriptor.getReadMethod();
             if (readMethod != null) {
                 final Object value = readMethod.invoke(facet);
-                String ddText = value!=null?value.toString():"(null)";
-				final DtDd dt_dd = xhtmlRenderer.dt_dd(name, ddText, HtmlClass.FACET_ELEMENT);
+                final String ddText = value != null ? value.toString() : "(null)";
+                final DtDd dt_dd = xhtmlRenderer.dt_dd(name, ddText, HtmlClass.FACET_ELEMENT);
                 dt_dd.appendTo(dl);
             }
         }
@@ -219,7 +215,9 @@ public abstract class ResourceAbstract {
         value = xhtmlRenderer.p(nakedObject.titleString(), null);
         createRow(table, "Object title", value, HtmlClass.TITLE);
 
-        value = xhtmlRenderer.aHref(MessageFormat.format("{0}/object/{1}", getServletRequest().getContextPath(), oidStr), oidStr, "object", "object", HtmlClass.OID);
+        value =
+            xhtmlRenderer.aHref(MessageFormat.format("{0}/object/{1}", getServletRequest().getContextPath(), oidStr),
+                oidStr, "object", "object", HtmlClass.OID);
         createRow(table, "OID", value, HtmlClass.OID);
         final String noSpecFullName = noSpec.getFullIdentifier();
 
@@ -246,50 +244,50 @@ public abstract class ResourceAbstract {
         tr.appendChild(td);
     }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Responses
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
-	protected Response responseOfOk() {
-		return Response.ok().build();
-	}
-	
-	protected Response responseOfGone(String reason) {
-		return Response.status(Status.GONE).header("nof-reason", reason).build();
-	}
-	
-	protected Response responseOfBadRequest(final Consent consent) {
-		return responseOfBadRequest(consent.getReason());
-	}
+    protected Response responseOfOk() {
+        return Response.ok().build();
+    }
 
-	protected Response responseOfNoContent(String reason) {
-		return Response.status(Status.NO_CONTENT).header("nof-reason", reason).build();
-	}
+    protected Response responseOfGone(final String reason) {
+        return Response.status(Status.GONE).header("nof-reason", reason).build();
+    }
 
-	protected Response responseOfBadRequest(String reason) {
-		return Response.status(Status.BAD_REQUEST).header("nof-reason", reason).build();
-	}
+    protected Response responseOfBadRequest(final Consent consent) {
+        return responseOfBadRequest(consent.getReason());
+    }
 
-	protected Response responseOfNotFound(final IllegalArgumentException e) {
-		return responseOfNotFound(e.getMessage());
-	}
+    protected Response responseOfNoContent(final String reason) {
+        return Response.status(Status.NO_CONTENT).header("nof-reason", reason).build();
+    }
 
-	protected Response responseOfNotFound(String reason) {
-		return Response.status(Status.NOT_FOUND).header("nof-reason", reason).build();
-	}
+    protected Response responseOfBadRequest(final String reason) {
+        return Response.status(Status.BAD_REQUEST).header("nof-reason", reason).build();
+    }
 
-	protected Response responseOfInternalServerError(final Exception ex) {
-		return responseOfInternalServerError(ex.getMessage());
-	}
+    protected Response responseOfNotFound(final IllegalArgumentException e) {
+        return responseOfNotFound(e.getMessage());
+    }
 
-	protected Response responseOfInternalServerError(String reason) {
-		return Response.status(Status.INTERNAL_SERVER_ERROR).header("nof-reason", reason).build();
-	}
-    
-    ////////////////////////////////////////////////////////////////
+    protected Response responseOfNotFound(final String reason) {
+        return Response.status(Status.NOT_FOUND).header("nof-reason", reason).build();
+    }
+
+    protected Response responseOfInternalServerError(final Exception ex) {
+        return responseOfInternalServerError(ex.getMessage());
+    }
+
+    protected Response responseOfInternalServerError(final String reason) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).header("nof-reason", reason).build();
+    }
+
+    // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
-    ////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////
+
     protected static AuthenticationSession getSession() {
         return IsisContext.getAuthenticationSession();
     }
@@ -298,30 +296,28 @@ public abstract class ResourceAbstract {
         return IsisContext.getSpecificationLoader();
     }
 
-	public static AdapterManager getAdapterManager() {
-		return getPersistenceSession().getAdapterManager();
-	}
+    public static AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
 
-	protected static PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    protected static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
-	private static OidGenerator getOidGenerator() {
-		return getPersistenceSession().getOidGenerator();
-	}
+    private static OidGenerator getOidGenerator() {
+        return getPersistenceSession().getOidGenerator();
+    }
 
-	private static OidStringifier getOidStringifier() {
-		return getOidGenerator().getOidStringifier();
-	}
-	
+    private static OidStringifier getOidStringifier() {
+        return getOidGenerator().getOidStringifier();
+    }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Dependencies (injected via @Context)
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
-	protected HttpServletRequest getServletRequest() {
-		return getResourceContext().getHttpServletRequest();
-	}
+    protected HttpServletRequest getServletRequest() {
+        return getResourceContext().getHttpServletRequest();
+    }
 
-	
 }

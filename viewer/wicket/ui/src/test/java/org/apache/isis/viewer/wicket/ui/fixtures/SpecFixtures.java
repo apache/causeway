@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -26,21 +25,19 @@ import org.jmock.Mockery;
 
 public final class SpecFixtures {
 
-	private Mockery context;
+    private final Mockery context;
 
-	public SpecFixtures(Mockery context) {
-		this.context = context;
-	}
+    public SpecFixtures(final Mockery context) {
+        this.context = context;
+    }
 
-	public void getFullName(final ObjectSpecification mockNoSpec,
-			final String returns) {
-		context.checking(new Expectations() {
-			{
-				allowing(mockNoSpec).getFullIdentifier();
-				will(returnValue(returns));
-			}
-		});
-	}
-
+    public void getFullName(final ObjectSpecification mockNoSpec, final String returns) {
+        context.checking(new Expectations() {
+            {
+                allowing(mockNoSpec).getFullIdentifier();
+                will(returnValue(returns));
+            }
+        });
+    }
 
 }

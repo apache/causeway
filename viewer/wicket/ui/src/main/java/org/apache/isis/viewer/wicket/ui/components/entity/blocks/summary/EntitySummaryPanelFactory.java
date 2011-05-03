@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -32,14 +31,15 @@ import org.apache.wicket.model.IModel;
  */
 public class EntitySummaryPanelFactory extends EntityComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntitySummaryPanelFactory() {
-		super(ComponentType.ENTITY_SUMMARY);
-	}
+    public EntitySummaryPanelFactory() {
+        super(ComponentType.ENTITY_SUMMARY);
+    }
 
-	public Component createComponent(String id, IModel<?> model) {
-		EntityModel entityModel = (EntityModel) model;
-		return new EntitySummaryPanel(id, entityModel);
-	}
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntitySummaryPanel(id, entityModel);
+    }
 }

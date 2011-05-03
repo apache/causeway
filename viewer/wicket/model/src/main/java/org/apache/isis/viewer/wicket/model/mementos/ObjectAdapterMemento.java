@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
@@ -35,203 +34,196 @@ import org.apache.isis.viewer.wicket.model.util.Oids;
 
 public class ObjectAdapterMemento implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Factory method
-	 */
-	public static ObjectAdapterMemento createOrNull(ObjectAdapter adapter) {
-		if (adapter == null)
-			return null;
-		return new ObjectAdapterMemento(adapter);
-	}
-	
+    /**
+     * Factory method
+     */
+    public static ObjectAdapterMemento createOrNull(final ObjectAdapter adapter) {
+        if (adapter == null) {
+            return null;
+        }
+        return new ObjectAdapterMemento(adapter);
+    }
 
-	/**
-	 * Factory method
-	 */
-	public static ObjectAdapterMemento createPersistent(Oid oid,
-			SpecMemento specMemento) {
-		return new ObjectAdapterMemento(oid, specMemento);
-	}
+    /**
+     * Factory method
+     */
+    public static ObjectAdapterMemento createPersistent(final Oid oid, final SpecMemento specMemento) {
+        return new ObjectAdapterMemento(oid, specMemento);
+    }
 
+    private final SpecMemento specMemento;
+    private String titleHint;
 
-	private SpecMemento specMemento;
-	private String titleHint;
+    enum Type {
+        /**
+         * The {@link ObjectAdapter} that this is the memento for directly has an {@link EncodableFacet} (it is almost
+         * certainly a value), and so is stored directly.
+         */
+        ENCODEABLE {
+            @Override
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
+                final EncodableFacet encodableFacet = nom.specMemento.getSpecification().getFacet(EncodableFacet.class);
+                return encodableFacet.fromEncodedString(nom.encodableValue);
+            }
 
-	enum Type {
-		/**
-		 * The {@link ObjectAdapter} that this is the memento for directly 
-		 * has an {@link EncodableFacet} (it is almost certainly a value), and
-		 * so is stored directly.
-		 */
-		ENCODEABLE {
-			@Override
-			ObjectAdapter recreateAdapter(ObjectAdapterMemento nom) {
-				EncodableFacet encodableFacet = nom.specMemento.getSpecification().getFacet(EncodableFacet.class);
-				return encodableFacet.fromEncodedString(nom.encodableValue);
-			}
+            @Override
+            public String toString(final ObjectAdapterMemento nom) {
+                return nom.encodableValue;
+            }
+        },
+        /**
+         * The {@link ObjectAdapter} that this is for is already known by its (persistent) {@link Oid}.
+         */
+        PERSISTENT {
+            @Override
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
+                return getPersistenceSession().recreateAdapter(nom.persistentOid,
+                    nom.getSpecMemento().getSpecification());
+            }
 
-			@Override
-			public String toString(ObjectAdapterMemento nom) {
-				return nom.encodableValue;
-			}
-		},
-		/**
-		 * The {@link ObjectAdapter} that this is for is already known by its
-		 * (persistent) {@link Oid}.
-		 */
-		PERSISTENT {
-			@Override
-			ObjectAdapter recreateAdapter(ObjectAdapterMemento nom) {
-				return getPersistenceSession().recreateAdapter(nom.persistentOid, nom.getSpecMemento().getSpecification());
-			}
+            private PersistenceSession getPersistenceSession() {
+                return IsisContext.getPersistenceSession();
+            }
 
-			private PersistenceSession getPersistenceSession() {
-				return IsisContext.getPersistenceSession();
-			}
+            @Override
+            public String toString(final ObjectAdapterMemento nom) {
+                return nom.persistentOid.toString();
+            }
+        },
+        /**
+         * Uses Isis' own {@link Memento}, to capture the state of a transient object.
+         */
+        TRANSIENT {
+            @Override
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
+                final ObjectAdapter adapter = nom.transientMemento.recreateObject();
+                return adapter;
+            }
 
-			@Override
-			public String toString(ObjectAdapterMemento nom) {
-				return nom.persistentOid.toString();
-			}
-		},
-		/**
-		 * Uses Isis' own {@link Memento}, to capture the
-		 * state of a transient object.
-		 */
-		TRANSIENT {
-			@Override
-			ObjectAdapter recreateAdapter(ObjectAdapterMemento nom) {
-				ObjectAdapter adapter = nom.transientMemento.recreateObject();
-				return adapter;
-			}
+            @Override
+            public String toString(final ObjectAdapterMemento nom) {
+                return nom.transientMemento.toString();
+            }
+        };
 
-			@Override
-			public String toString(ObjectAdapterMemento nom) {
-				return nom.transientMemento.toString();
-			}
-		};
+        public synchronized ObjectAdapter getAdapter(final ObjectAdapterMemento nom) {
+            return recreateAdapter(nom);
+        }
 
-		public synchronized ObjectAdapter getAdapter(ObjectAdapterMemento nom) {
-			return recreateAdapter(nom);
-		}
+        abstract ObjectAdapter recreateAdapter(ObjectAdapterMemento nom);
 
-		abstract ObjectAdapter recreateAdapter(ObjectAdapterMemento nom);
+        public abstract String toString(ObjectAdapterMemento adapterMemento);
+    }
 
-		public abstract String toString(ObjectAdapterMemento adapterMemento);
-	}
-	
-	private Type type;
-	
-	/**
-	 * The current value, if {@link Type#ENCODEABLE}.
-	 * 
-	 * <p>
-	 * Will be <tt>null</tt> otherwise.
-	 */
-	private String encodableValue;
-	/**
-	 * The current value, if {@link Type#PERSISTENT}.
-	 * 
-	 * <p>
-	 * Will be <tt>null</tt> otherwise.
-	 */
-	private Oid persistentOid;
+    private Type type;
 
-	/**
-	 * The current value, if {@link Type#TRANSIENT}.
-	 * 
-	 * <p>
-	 * Will be <tt>null</tt> otherwise.
-	 */
-	private Memento transientMemento;
+    /**
+     * The current value, if {@link Type#ENCODEABLE}.
+     * 
+     * <p>
+     * Will be <tt>null</tt> otherwise.
+     */
+    private String encodableValue;
+    /**
+     * The current value, if {@link Type#PERSISTENT}.
+     * 
+     * <p>
+     * Will be <tt>null</tt> otherwise.
+     */
+    private Oid persistentOid;
 
-	private ObjectAdapterMemento(Oid oid, SpecMemento specMemento) {
-		Ensure.ensureThatArg(oid, Oids.isPersistent());
-		this.persistentOid = oid;
-		this.specMemento = specMemento;
-		this.type = Type.PERSISTENT;
-	}
+    /**
+     * The current value, if {@link Type#TRANSIENT}.
+     * 
+     * <p>
+     * Will be <tt>null</tt> otherwise.
+     */
+    private Memento transientMemento;
 
-	private ObjectAdapterMemento(ObjectAdapter adapter) {
-		if (adapter == null) {
-			throw new IllegalArgumentException("adapter cannot be null");
-		}
-		ObjectSpecification specification = adapter.getSpecification();
-		specMemento = new SpecMemento(specification);
-		init(adapter);
-		captureTitleHintIfPossible(adapter);
-	}
+    private ObjectAdapterMemento(final Oid oid, final SpecMemento specMemento) {
+        Ensure.ensureThatArg(oid, Oids.isPersistent());
+        this.persistentOid = oid;
+        this.specMemento = specMemento;
+        this.type = Type.PERSISTENT;
+    }
 
+    private ObjectAdapterMemento(final ObjectAdapter adapter) {
+        if (adapter == null) {
+            throw new IllegalArgumentException("adapter cannot be null");
+        }
+        final ObjectSpecification specification = adapter.getSpecification();
+        specMemento = new SpecMemento(specification);
+        init(adapter);
+        captureTitleHintIfPossible(adapter);
+    }
 
-	private void init(ObjectAdapter adapter) {
-		ObjectSpecification specification = specMemento.getSpecification();
-		EncodableFacet encodableFacet = specification.getFacet(EncodableFacet.class);
-		boolean isEncodable = encodableFacet != null;
-		if (isEncodable) {
-			encodableValue = encodableFacet.toEncodedString(adapter);
-			type = Type.ENCODEABLE;
-		} else {
-			Oid oid = adapter.getOid();
-			if (oid.isTransient()) {
-				transientMemento = new Memento(adapter);
-				type = Type.TRANSIENT;
-			} else {
-				persistentOid = oid;
-				type = Type.PERSISTENT;
-			}
-		}
-	}
-	
-	public void captureTitleHintIfPossible(ObjectAdapter adapter) {
-		if (adapter == null) {
-			return;
-		}
-		ResolveState resolveState = adapter.getResolveState();
-		if (resolveState.isValue() || resolveState.isResolved()) {
-			this.titleHint = adapter.titleString();
-		}
-	}
+    private void init(final ObjectAdapter adapter) {
+        final ObjectSpecification specification = specMemento.getSpecification();
+        final EncodableFacet encodableFacet = specification.getFacet(EncodableFacet.class);
+        final boolean isEncodable = encodableFacet != null;
+        if (isEncodable) {
+            encodableValue = encodableFacet.toEncodedString(adapter);
+            type = Type.ENCODEABLE;
+        } else {
+            final Oid oid = adapter.getOid();
+            if (oid.isTransient()) {
+                transientMemento = new Memento(adapter);
+                type = Type.TRANSIENT;
+            } else {
+                persistentOid = oid;
+                type = Type.PERSISTENT;
+            }
+        }
+    }
 
-	public String getTitleHint() {
-		return titleHint;
-	}
+    public void captureTitleHintIfPossible(final ObjectAdapter adapter) {
+        if (adapter == null) {
+            return;
+        }
+        final ResolveState resolveState = adapter.getResolveState();
+        if (resolveState.isValue() || resolveState.isResolved()) {
+            this.titleHint = adapter.titleString();
+        }
+    }
 
-	/**
-	 * Lazily looks up {@link ObjectAdapter} if required.
-	 * 
-	 * <p>
-	 * For transient objects, be aware that calling this method more than once will cause
-	 * the underlying {@link ObjectAdapter} to be recreated, overwriting any changes that may
-	 * have been made.  In general then it's best to call once and then hold onto the value thereafter.
-	 * Alternatively, can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.  
-	 */
-	public ObjectAdapter getObjectAdapter() {
-		return type.getAdapter(this);
-	}
+    public String getTitleHint() {
+        return titleHint;
+    }
 
-	/**
-	 * Updates the memento if the adapter's state has changed.
-	 * 
-	 * <p>
-	 * This is a no-op for 
-	 * @param adapter
-	 */
-	public void setAdapter(ObjectAdapter adapter) {
-		init(adapter);
-	}
-	
-	public SpecMemento getSpecMemento() {
-		return specMemento;
-	}
+    /**
+     * Lazily looks up {@link ObjectAdapter} if required.
+     * 
+     * <p>
+     * For transient objects, be aware that calling this method more than once will cause the underlying
+     * {@link ObjectAdapter} to be recreated, overwriting any changes that may have been made. In general then it's best
+     * to call once and then hold onto the value thereafter. Alternatively, can call {@link #setAdapter(ObjectAdapter)}
+     * to keep this memento in sync.
+     */
+    public ObjectAdapter getObjectAdapter() {
+        return type.getAdapter(this);
+    }
 
-	
-	@Override
-	public String toString() {
-		return type.toString(this);
-	}
+    /**
+     * Updates the memento if the adapter's state has changed.
+     * 
+     * <p>
+     * This is a no-op for
+     * 
+     * @param adapter
+     */
+    public void setAdapter(final ObjectAdapter adapter) {
+        init(adapter);
+    }
 
+    public SpecMemento getSpecMemento() {
+        return specMemento;
+    }
 
+    @Override
+    public String toString() {
+        return type.toString(this);
+    }
 
 }

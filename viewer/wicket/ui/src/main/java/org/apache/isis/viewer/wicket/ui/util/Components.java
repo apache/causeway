@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -27,61 +26,60 @@ import org.apache.wicket.markup.html.basic.Label;
 
 public final class Components {
 
-	private Components() {
-	}
+    private Components() {
+    }
 
-	/**
-	 * Permanently hides by replacing with a {@link Label} that has an empty string for its caption.
-	 */
-	public static void permanentlyHide(MarkupContainer container, String... ids) {
-		for (String id : ids) {
-			permanentlyHideSingle(container, id);
-		}
-	}
+    /**
+     * Permanently hides by replacing with a {@link Label} that has an empty string for its caption.
+     */
+    public static void permanentlyHide(final MarkupContainer container, final String... ids) {
+        for (final String id : ids) {
+            permanentlyHideSingle(container, id);
+        }
+    }
 
-	/**
-	 * @see #permanentlyHide(MarkupContainer, String...)
-	 */
-	public static void permanentlyHide(MarkupContainer container,
-			ComponentType... componentIds) {
-		for (ComponentType componentType : componentIds) {
-			String wicketId = componentType.getWicketId();
-			permanentlyHideSingle(container, wicketId);
-		}
-	}
-	
-	/**
-	 * Not overloaded because - although compiles ok on JDK6u20 (Mac), fails to on JDK6u18 (Ubuntu)
-	 */
-	private static void permanentlyHideSingle(MarkupContainer container, String id) {
-		Label label = new Label(id, "");
-		label.setVisible(false);
-		container.addOrReplace(label);
-	}
+    /**
+     * @see #permanentlyHide(MarkupContainer, String...)
+     */
+    public static void permanentlyHide(final MarkupContainer container, final ComponentType... componentIds) {
+        for (final ComponentType componentType : componentIds) {
+            final String wicketId = componentType.getWicketId();
+            permanentlyHideSingle(container, wicketId);
+        }
+    }
 
-	/**
-	 * Sets the visibility of the child component(s) within the supplied container.
-	 */
-	public static void setVisible(MarkupContainer container, boolean visibility, String... ids) {
-		for (String id : ids) {
-			setVisible(container, visibility, id);
-		}
-	}
+    /**
+     * Not overloaded because - although compiles ok on JDK6u20 (Mac), fails to on JDK6u18 (Ubuntu)
+     */
+    private static void permanentlyHideSingle(final MarkupContainer container, final String id) {
+        final Label label = new Label(id, "");
+        label.setVisible(false);
+        container.addOrReplace(label);
+    }
 
-	/**
-	 * @see #setVisible(MarkupContainer, boolean, String...)
-	 */
-	public static void setVisible(MarkupContainer container, boolean visibility, ComponentType... componentTypes) {
-		for (ComponentType componentType: componentTypes) {
-			String wicketId = componentType.getWicketId();
-			setVisible(container, visibility, wicketId);
-		}
-	}
+    /**
+     * Sets the visibility of the child component(s) within the supplied container.
+     */
+    public static void setVisible(final MarkupContainer container, final boolean visibility, final String... ids) {
+        for (final String id : ids) {
+            setVisible(container, visibility, id);
+        }
+    }
 
-	private static void setVisible(MarkupContainer container,
-			boolean visibility, String wicketId) {
-		Component childComponent = container.get(wicketId);
-		childComponent.setVisible(visibility);
-	}
+    /**
+     * @see #setVisible(MarkupContainer, boolean, String...)
+     */
+    public static void setVisible(final MarkupContainer container, final boolean visibility,
+        final ComponentType... componentTypes) {
+        for (final ComponentType componentType : componentTypes) {
+            final String wicketId = componentType.getWicketId();
+            setVisible(container, visibility, wicketId);
+        }
+    }
+
+    private static void setVisible(final MarkupContainer container, final boolean visibility, final String wicketId) {
+        final Component childComponent = container.get(wicketId);
+        childComponent.setVisible(visibility);
+    }
 
 }

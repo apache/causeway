@@ -28,14 +28,11 @@ import org.apache.isis.viewer.restful.viewer.resources.objects.TableColumnNakedO
 import org.apache.isis.viewer.restful.viewer.util.StringUtil;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnOneToOneAssociationClear extends
-        TableColumnNakedObjectAssociationModifyAbstract<OneToOneAssociation> {
+    TableColumnNakedObjectAssociationModifyAbstract<OneToOneAssociation> {
 
-    public TableColumnOneToOneAssociationClear(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnOneToOneAssociationClear(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("Clear", session, nakedObject, resourceContext, false);
     }
 

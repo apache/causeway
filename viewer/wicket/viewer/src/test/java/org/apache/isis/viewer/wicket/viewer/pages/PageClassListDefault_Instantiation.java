@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.pages;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -36,35 +35,34 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class PageClassListDefault_Instantiation {
 
-	private Mockery context = new JUnit4Mockery();
-	
-	
-	@Before
-	public void setUp() throws Exception {
-	}
+    private final Mockery context = new JUnit4Mockery();
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@Test
-	public void shouldCauseAllPagesToBeRegistered() {
-		// necessary to provide an implementation that will register
-		// all pages with the registry.
-		final PageClassListDefault pageClassList = new PageClassListDefault();
-		new PageClassRegistryDefault(pageClassList);
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test(expected=IllegalStateException.class)
-	public void shouldFailIfNoPagesRegistered() {
-		// no side effects, ie doesn't register
-		final PageClassList mockPageClassList = context.mock(PageClassList.class);
-		context.checking(new Expectations() {
-			{
-				mockPageClassList.registerPages(with(any(PageRegistrySpi.class)));
-			}
-		});
-		new PageClassRegistryDefault(mockPageClassList);
-	}
+    @Test
+    public void shouldCauseAllPagesToBeRegistered() {
+        // necessary to provide an implementation that will register
+        // all pages with the registry.
+        final PageClassListDefault pageClassList = new PageClassListDefault();
+        new PageClassRegistryDefault(pageClassList);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldFailIfNoPagesRegistered() {
+        // no side effects, ie doesn't register
+        final PageClassList mockPageClassList = context.mock(PageClassList.class);
+        context.checking(new Expectations() {
+            {
+                mockPageClassList.registerPages(with(any(PageRegistrySpi.class)));
+            }
+        });
+        new PageClassRegistryDefault(mockPageClassList);
+    }
 
 }

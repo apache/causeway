@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import java.util.List;
@@ -45,84 +44,82 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 /**
- * Convenience adapter for {@link FormComponent}s 
- * that are implemented using the Wicket {@link FormComponentPanel}, providing
- * the ability to build up the panel using other {@link ComponentType}s.
+ * Convenience adapter for {@link FormComponent}s that are implemented using the Wicket {@link FormComponentPanel},
+ * providing the ability to build up the panel using other {@link ComponentType}s.
  */
-public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements PersistenceSessionAccessor, AuthenticationSessionAccessor {
+public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements
+    PersistenceSessionAccessor, AuthenticationSessionAccessor {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ComponentType componentType;
+    private ComponentType componentType;
 
-	public FormComponentPanelAbstract(ComponentType componentType) {
-		this(componentType, null);
-	}
+    public FormComponentPanelAbstract(final ComponentType componentType) {
+        this(componentType, null);
+    }
 
-	public FormComponentPanelAbstract(String id) {
-		this(id, null);
-	}
+    public FormComponentPanelAbstract(final String id) {
+        this(id, null);
+    }
 
-	public FormComponentPanelAbstract(ComponentType componentType, IModel<T> model) {
-		this(componentType.getWicketId(), model);
-	}
+    public FormComponentPanelAbstract(final ComponentType componentType, final IModel<T> model) {
+        this(componentType.getWicketId(), model);
+    }
 
-	public FormComponentPanelAbstract(String id, IModel<T> model) {
-		super(id, model);
-		this.componentType = ComponentType.lookup(id);
-	}
+    public FormComponentPanelAbstract(final String id, final IModel<T> model) {
+        super(id, model);
+        this.componentType = ComponentType.lookup(id);
+    }
 
+    public ComponentType getComponentType() {
+        return componentType;
+    }
 
-	public ComponentType getComponentType() {
-		return componentType;
-	}
-	
-	
-	/**
-	 * For subclasses
-	 * @return 
-	 */
-	protected Component addOrReplace(ComponentType componentType, IModel<?> model) {
-		return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
-	}
+    /**
+     * For subclasses
+     * 
+     * @return
+     */
+    protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
+        return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
+    }
 
-	/**
-	 * For subclasses
-	 */
-	protected void permanentlyHide(ComponentType... componentIds) {
-		permanentlyHide(this, componentIds);
-	}
+    /**
+     * For subclasses
+     */
+    protected void permanentlyHide(final ComponentType... componentIds) {
+        permanentlyHide(this, componentIds);
+    }
 
-	/**
-	 * For subclasses
-	 */
-	public void permanentlyHide(String... ids) {
-		permanentlyHide(this, ids);
-	}
+    /**
+     * For subclasses
+     */
+    public void permanentlyHide(final String... ids) {
+        permanentlyHide(this, ids);
+    }
 
-	/**
-	 * For subclasses
-	 */
-	protected void permanentlyHide(MarkupContainer container, ComponentType... componentIds) {
-		Components.permanentlyHide(container, componentIds);
-	}
+    /**
+     * For subclasses
+     */
+    protected void permanentlyHide(final MarkupContainer container, final ComponentType... componentIds) {
+        Components.permanentlyHide(container, componentIds);
+    }
 
-	/**
-	 * For subclasses
-	 */
-	public void permanentlyHide(MarkupContainer container, String... ids) {
-		Components.permanentlyHide(container, ids);
-	}
+    /**
+     * For subclasses
+     */
+    public void permanentlyHide(final MarkupContainer container, final String... ids) {
+        Components.permanentlyHide(container, ids);
+    }
 
+    // ///////////////////////////////////////////////////////////////////
+    // Convenience
+    // ///////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////
-	// Convenience
-	/////////////////////////////////////////////////////////////////////
-
-	protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-		final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor)getApplication();
+    protected ComponentFactoryRegistry getComponentFactoryRegistry() {
+        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
-	}
+    }
 
     protected PageClassRegistry getPageClassRegistry() {
         final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
@@ -130,36 +127,35 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     }
 
     protected ImageCache getImageCache() {
-        final ImageCacheAccessor ica = (ImageCacheAccessor)getApplication();
+        final ImageCacheAccessor ica = (ImageCacheAccessor) getApplication();
         return ica.getImageCache();
     }
 
+    /**
+     * The underlying {@link AuthenticationSession Isis session} wrapped in the {@link #getWebSession() Wicket session}.
+     * 
+     * @return
+     */
+    @Override
+    public AuthenticationSession getAuthenticationSession() {
+        return ((AuthenticationSessionAccessor) Session.get()).getAuthenticationSession();
+    }
 
+    // ///////////////////////////////////////////////////////////////////
+    // Dependencies (from IsisContext)
+    // ///////////////////////////////////////////////////////////////////
 
-	/**
-	 * The underlying {@link AuthenticationSession Isis session} wrapped in the
-	 * {@link #getWebSession() Wicket session}.
-	 * @return
-	 */
-	public AuthenticationSession getAuthenticationSession() {
-		return ((AuthenticationSessionAccessor) Session.get()).getAuthenticationSession();
-	}
+    @Override
+    public PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
-	/////////////////////////////////////////////////////////////////////
-	// Dependencies (from IsisContext)
-	/////////////////////////////////////////////////////////////////////
-	
-	public PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
-	
-	protected List<ObjectAdapter> getServiceAdapters() {
-		return getPersistenceSession().getServices();
-	}
+    protected List<ObjectAdapter> getServiceAdapters() {
+        return getPersistenceSession().getServices();
+    }
 
-	protected OidStringifier getOidStringifier() {
-		return getPersistenceSession().getOidGenerator().getOidStringifier();
-	}
+    protected OidStringifier getOidStringifier() {
+        return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
 
-	
 }

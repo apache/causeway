@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnFacetValidating extends TableColumnFacet {
     public TableColumnFacetValidating(final ResourceContext resourceContext) {
         super("Validating", resourceContext);

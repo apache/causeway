@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -29,11 +28,10 @@ import org.apache.isis.viewer.wicket.ui.tabs.TabAbstract;
  */
 class EntitySummaryTab extends TabAbstract<EntityModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntitySummaryTab(String id, EntityModel entityModel)
-    {
+    public EntitySummaryTab(final String id, final EntityModel entityModel) {
         super(id, entityModel);
-		addOrReplace(ComponentType.ENTITY_SUMMARY, entityModel);
+        addOrReplace(ComponentType.ENTITY_SUMMARY, entityModel);
     }
 }

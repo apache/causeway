@@ -17,31 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;
 
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-
 public class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
-	
+
     private static final long serialVersionUID = 1L;
 
     public static AnonymousWebSessionForIsis get() {
-		return (AnonymousWebSessionForIsis) Session.get();
-	}
+        return (AnonymousWebSessionForIsis) Session.get();
+    }
 
     private final AuthenticationManager authenticationManager;
 
-    public AnonymousWebSessionForIsis(Request request, AuthenticationManager authenticationManager) {
+    public AnonymousWebSessionForIsis(final Request request, final AuthenticationManager authenticationManager) {
         super(request);
         this.authenticationManager = authenticationManager;
     }
-	
-	@Override
+
+    @Override
     protected AuthenticationManager getAuthenticationManager() {
-		return authenticationManager;
-	}
+        return authenticationManager;
+    }
 }

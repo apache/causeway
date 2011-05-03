@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.tabs;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -25,21 +24,20 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 /**
- * Adapter class for tabbed panels; does very little in itself, but does ensure that
- * the CSS needed is rendered.
+ * Adapter class for tabbed panels; does very little in itself, but does ensure that the CSS needed is rendered.
  */
 public abstract class TabbedPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 
-	private static final long serialVersionUID = 1L;
-	
-	public TabbedPanelAbstract(String id, final T model) {
-		super(id, model);
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		renderHead(response, TabbedPanelAbstract.class);
-	}
+    public TabbedPanelAbstract(final String id, final T model) {
+        super(id, model);
+    }
+
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        renderHead(response, TabbedPanelAbstract.class);
+    }
 
 }

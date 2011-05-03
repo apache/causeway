@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.util.List;
@@ -39,60 +38,60 @@ import com.google.common.collect.Lists;
  */
 public class ContainedButton extends PanelAbstract<Model<String>> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_CONTAINER = "container";
-	private static final String ID_FORM = "form";
-	private static final String ID_BUTTON = "button";
+    private static final long serialVersionUID = 1L;
 
-	private Button button;
-	private List<Component> componentsToRerender = Lists.newArrayList();
+    private static final String ID_CONTAINER = "container";
+    private static final String ID_FORM = "form";
+    private static final String ID_BUTTON = "button";
 
-	public ContainedButton(String id, final String caption) {
-		super(id);
+    private final Button button;
+    private final List<Component> componentsToRerender = Lists.newArrayList();
 
-		final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_CONTAINER);
-		add(markupContainer);
-		Form<Object> form = new Form<Object>(ID_FORM);
-		markupContainer.add(form);
-		button = new AjaxButton(ID_BUTTON, Model.of(caption)){
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				setDefaultFormProcessing(false);
-				ContainedButton.this.onSubmit();
-				if (target != null) {
-					for (Component component : componentsToRerender) {
-						target.addComponent(component);
-					}
-				}
-			}};
-		form.add(button);
-	}
-	
+    public ContainedButton(final String id, final String caption) {
+        super(id);
 
-	public void addComponentToRerender(Component component) {
-		component.setOutputMarkupPlaceholderTag(true);
-		componentsToRerender.add(component);
-	}
-	
-	public void setCaption(String string) {
-		button.setModelValue(new String[]{string});
-	}
+        final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_CONTAINER);
+        add(markupContainer);
+        final Form<Object> form = new Form<Object>(ID_FORM);
+        markupContainer.add(form);
+        button = new AjaxButton(ID_BUTTON, Model.of(caption)) {
+            private static final long serialVersionUID = 1L;
 
-	public void setLabel(Model<String> labelModel) {
-		button.setLabel(labelModel);
-	}
+            @Override
+            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                setDefaultFormProcessing(false);
+                ContainedButton.this.onSubmit();
+                if (target != null) {
+                    for (final Component component : componentsToRerender) {
+                        target.addComponent(component);
+                    }
+                }
+            }
+        };
+        form.add(button);
+    }
 
-	/**
-	 * Hook method for (typically anonymous) subclasses to override.
-	 */
-	public void onSubmit() {
-	}
-	
-	@Override
-	public void renderHead(HtmlHeaderContainer container) {
-		super.renderHead(container);
-	}
+    public void addComponentToRerender(final Component component) {
+        component.setOutputMarkupPlaceholderTag(true);
+        componentsToRerender.add(component);
+    }
+
+    public void setCaption(final String string) {
+        button.setModelValue(new String[] { string });
+    }
+
+    public void setLabel(final Model<String> labelModel) {
+        button.setLabel(labelModel);
+    }
+
+    /**
+     * Hook method for (typically anonymous) subclasses to override.
+     */
+    public void onSubmit() {
+    }
+
+    @Override
+    public void renderHead(final HtmlHeaderContainer container) {
+        super.renderHead(container);
+    }
 }

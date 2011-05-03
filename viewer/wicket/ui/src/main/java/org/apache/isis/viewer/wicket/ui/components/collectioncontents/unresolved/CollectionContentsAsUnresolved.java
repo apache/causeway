@@ -17,29 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} that represents a placeholder for a {@link EntityCollectionModel
- * collection of entity}s so that they can be only lazily resolved.
+ * {@link PanelAbstract Panel} that represents a placeholder for a {@link EntityCollectionModel collection of entity}s
+ * so that they can be only lazily resolved.
  */
-public class CollectionContentsAsUnresolved extends
-		PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsAsUnresolved extends PanelAbstract<EntityCollectionModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CollectionContentsAsUnresolved(final String id,
-			final EntityCollectionModel model) {
-		super(id, model);
-		buildGui();
-	}
+    public CollectionContentsAsUnresolved(final String id, final EntityCollectionModel model) {
+        super(id, model);
+        buildGui();
+    }
 
-	private void buildGui() {
-	    // nothing
-	}
+    private void buildGui() {
+        // nothing
+    }
 
 }

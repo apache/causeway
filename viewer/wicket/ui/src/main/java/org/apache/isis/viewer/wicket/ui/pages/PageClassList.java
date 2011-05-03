@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.pages;
-
 
 /**
  * Specify the pages to use for each {@link PageType}.
- *
+ * 
  * <p>
- * The <tt>PageClassListDefault</tt> default implementation returns pages that all
- * inherit from {@link PageAbstract} and which (by component markup inheritance) therefore
- * define a set of CSS, along with the overall layout of each pages.  This interface
- * can be used to selectively replace some or all of these pages.
+ * The <tt>PageClassListDefault</tt> default implementation returns pages that all inherit from {@link PageAbstract} and
+ * which (by component markup inheritance) therefore define a set of CSS, along with the overall layout of each pages.
+ * This interface can be used to selectively replace some or all of these pages.
  */
 public interface PageClassList {
 
-	void registerPages(PageRegistrySpi pageRegistry);
+    void registerPages(PageRegistrySpi pageRegistry);
 
 }

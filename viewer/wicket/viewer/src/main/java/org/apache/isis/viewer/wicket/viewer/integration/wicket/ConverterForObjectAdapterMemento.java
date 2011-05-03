@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Locale;
@@ -32,53 +31,55 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.wicket.util.convert.IConverter;
 
-
 /**
- * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapterMemento}s, 
- * converting to-and-from their {@link Oid}'s string representation.
+ * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapterMemento}s, converting to-and-from their
+ * {@link Oid}'s string representation.
  */
 public class ConverterForObjectAdapterMemento implements IConverter {
 
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Converts {@link OidStringifier stringified} {@link Oid} to {@link ObjectAdapterMemento}.
-	 */
-	public Object convertToObject(String value, Locale locale) {
-		if (StringUtils.isEmpty(value)) {
-			return null;
-		}
-		Oid oid = getOidStringifier().deString(value);
-		ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
-		return ObjectAdapterMemento.createOrNull(adapter);
-	}
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Converts {@link ObjectAdapterMemento} to {@link OidStringifier stringified} {@link Oid}.
-	 */
-	public String convertToString(Object object, Locale locale) {
-		if (object == null) {
-			return null;
-		}
-		ObjectAdapterMemento memento = (ObjectAdapterMemento) object;
-		Oid oid = memento.getObjectAdapter().getOid();
-		if (oid == null) {
-			// values don't have an Oid, but we don't support 'em
-			throw new IllegalStateException("cannot convert memento to OBJECT_OID; memento's adapter is a value so has no OBJECT_OID");
-		}
-		return getOidStringifier().enString(oid);
-	}
-	
-	protected AdapterManager getAdapterManager() {
-		return getPersistenceSession().getAdapterManager();
-	}
+    /**
+     * Converts {@link OidStringifier stringified} {@link Oid} to {@link ObjectAdapterMemento}.
+     */
+    @Override
+    public Object convertToObject(final String value, final Locale locale) {
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        final Oid oid = getOidStringifier().deString(value);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+        return ObjectAdapterMemento.createOrNull(adapter);
+    }
 
-	protected OidStringifier getOidStringifier() {
-		return getPersistenceSession().getOidGenerator().getOidStringifier();
-	}
+    /**
+     * Converts {@link ObjectAdapterMemento} to {@link OidStringifier stringified} {@link Oid}.
+     */
+    @Override
+    public String convertToString(final Object object, final Locale locale) {
+        if (object == null) {
+            return null;
+        }
+        final ObjectAdapterMemento memento = (ObjectAdapterMemento) object;
+        final Oid oid = memento.getObjectAdapter().getOid();
+        if (oid == null) {
+            // values don't have an Oid, but we don't support 'em
+            throw new IllegalStateException(
+                "cannot convert memento to OBJECT_OID; memento's adapter is a value so has no OBJECT_OID");
+        }
+        return getOidStringifier().enString(oid);
+    }
 
-	protected PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    protected OidStringifier getOidStringifier() {
+        return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
 }

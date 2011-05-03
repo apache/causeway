@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,35 +29,35 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 /**
- * Convenience adapter for a number of {@link ComponentFactoryAbstract component factory}s that
- * where the created {@link Component} are backed by an {@link EntityModel}.
+ * Convenience adapter for a number of {@link ComponentFactoryAbstract component factory}s that where the created
+ * {@link Component} are backed by an {@link EntityModel}.
  */
 public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EntityComponentFactoryAbstract(ComponentType componentType) {
-		super(componentType);
-	}
+    public EntityComponentFactoryAbstract(final ComponentType componentType) {
+        super(componentType);
+    }
 
-	public EntityComponentFactoryAbstract(ComponentType componentType, String name) {
-		super(componentType, name);
-	}
+    public EntityComponentFactoryAbstract(final ComponentType componentType, final String name) {
+        super(componentType, name);
+    }
 
-	@Override
-	protected ApplicationAdvice appliesTo(IModel<?> model) {
-		if (!(model instanceof EntityModel)) {
-			return ApplicationAdvice.DOES_NOT_APPLY;
-		}
-		EntityModel entityModel = (EntityModel) model;
-		ObjectAdapter adapter = entityModel.getObject();
-		if (adapter == null) {
-			// is ok;
-		}
-		ObjectSpecification specification = entityModel.getTypeOfSpecification();
-		final boolean isObject = specification.isNotCollection();
-		final boolean isValue = specification.containsFacet(ValueFacet.class);
-		return appliesIf(isObject && !isValue);
-	}
+    @Override
+    protected ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof EntityModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final EntityModel entityModel = (EntityModel) model;
+        final ObjectAdapter adapter = entityModel.getObject();
+        if (adapter == null) {
+            // is ok;
+        }
+        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
+        final boolean isObject = specification.isNotCollection();
+        final boolean isValue = specification.containsFacet(ValueFacet.class);
+        return appliesIf(isObject && !isValue);
+    }
 
 }

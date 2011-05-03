@@ -21,11 +21,9 @@
  */
 package org.apache.isis.viewer.restful.viewer.facets;
 
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 import org.apache.isis.viewer.restful.viewer.xom.TableColumnAbstract;
-
 
 public abstract class TableColumnFacet extends TableColumnAbstract<Facet> {
 

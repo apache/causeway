@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.hamcrest.Matchers.is;
@@ -38,30 +37,33 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class AuthenticatedWebSessionForIsis_SignIn {
 
-	private FixtureMockery context = new FixtureMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
-	
-	private AuthenticatedWebSessionForIsis webSession;
-	private Request stubRequest;
-	
-	@Before
-	public void setUp() throws Exception {
-		stubRequest = context.fixture(Fixture_Request_Stub.class).object();
-	}
-	
-	@Test
-	public void signInJustDelegatesToAuthenticateAndSavesState() {
-		final AuthenticationManager mockAuthMgr = context.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
-		webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
-			private static final long serialVersionUID = 1L;
+    private final FixtureMockery context = new FixtureMockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-			@Override
-			protected AuthenticationManager getAuthenticationManager() {
-				return mockAuthMgr;
-			}
-		};
-		webSession.signIn("john", "secret");
-		assertThat(webSession.isSignedIn(), is(true));
-	}
+    private AuthenticatedWebSessionForIsis webSession;
+    private Request stubRequest;
+
+    @Before
+    public void setUp() throws Exception {
+        stubRequest = context.fixture(Fixture_Request_Stub.class).object();
+    }
+
+    @Test
+    public void signInJustDelegatesToAuthenticateAndSavesState() {
+        final AuthenticationManager mockAuthMgr =
+            context.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
+        webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected AuthenticationManager getAuthenticationManager() {
+                return mockAuthMgr;
+            }
+        };
+        webSession.signIn("john", "secret");
+        assertThat(webSession.isSignedIn(), is(true));
+    }
 }

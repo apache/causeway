@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -32,13 +31,14 @@ import org.jmock.Mockery;
  */
 public class Fixture_AuthenticationManager_AuthenticateOk extends MockFixtureAdapter<AuthenticationManager> {
 
-	public void setUp(MockFixture.Context fixtureContext) {
-		final Mockery mockery = fixtureContext.getMockery();
-		final AuthenticationManager mock = createMock(fixtureContext, AuthenticationManager.class);
-		mockery.checking(new Expectations() {
-			{
-				one(mock).authenticate(with(any(AuthenticationRequest.class)));
-			}
-		});
-	}
+    @Override
+    public void setUp(final MockFixture.Context fixtureContext) {
+        final Mockery mockery = fixtureContext.getMockery();
+        final AuthenticationManager mock = createMock(fixtureContext, AuthenticationManager.class);
+        mockery.checking(new Expectations() {
+            {
+                one(mock).authenticate(with(any(AuthenticationRequest.class)));
+            }
+        });
+    }
 }

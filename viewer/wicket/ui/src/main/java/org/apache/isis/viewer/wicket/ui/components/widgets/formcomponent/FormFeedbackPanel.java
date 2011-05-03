@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import org.apache.wicket.feedback.FeedbackMessage;
@@ -26,24 +25,22 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 /**
- * {@link FeedbackPanel} designed for forms; filters out any {@link FeedbackMessage}s from
- * {@link FormComponent}s (the idea being that they will have their own {@link FeedbackPanel}s.
+ * {@link FeedbackPanel} designed for forms; filters out any {@link FeedbackMessage}s from {@link FormComponent}s (the
+ * idea being that they will have their own {@link FeedbackPanel}s.
  */
 public class FormFeedbackPanel extends FeedbackPanel {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public FormFeedbackPanel(String id) {
-		super(id);
-		setFilter(
-			new IFeedbackMessageFilter() {
-					
-				private static final long serialVersionUID = 1L;
-					
-				@Override
-				public boolean accept(FeedbackMessage message) {
-					return !(message.getReporter() instanceof FormComponent<?>);
-				}
-			}
-		);
-	}
+    public FormFeedbackPanel(final String id) {
+        super(id);
+        setFilter(new IFeedbackMessageFilter() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final FeedbackMessage message) {
+                return !(message.getReporter() instanceof FormComponent<?>);
+            }
+        });
+    }
 }

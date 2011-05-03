@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,33 +26,32 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-public final class ObjectAdapterSelectColumn extends
-		ColumnAbstract<ObjectAdapter> {
-	
-	private static final long serialVersionUID = 1L;
+public final class ObjectAdapterSelectColumn extends ColumnAbstract<ObjectAdapter> {
 
-	private final SelectionHandler handler;
+    private static final long serialVersionUID = 1L;
 
-	public ObjectAdapterSelectColumn(IModel<String> columnNameModel,
-			SelectionHandler handler) {
-		super(columnNameModel);
-		this.handler = handler;
-	}
+    private final SelectionHandler handler;
 
-	public void populateItem(
-			Item<ICellPopulator<ObjectAdapter>> cellItem,
-			String componentId, final IModel<ObjectAdapter> rowModel) {
+    public ObjectAdapterSelectColumn(final IModel<String> columnNameModel, final SelectionHandler handler) {
+        super(columnNameModel);
+        this.handler = handler;
+    }
 
-		// TODO: i18n
-		cellItem.add(new ContainedButton(componentId, "select") {
+    @Override
+    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId,
+        final IModel<ObjectAdapter> rowModel) {
 
-			private static final long serialVersionUID = 1L;
+        // TODO: i18n
+        cellItem.add(new ContainedButton(componentId, "select") {
 
-			public void onSubmit() {
-				IModel<ObjectAdapter> o = rowModel;
-				ObjectAdapter selectedAdapter = o.getObject();
-				handler.onSelected(this, selectedAdapter);
-			}
-		});
-	}
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit() {
+                final IModel<ObjectAdapter> o = rowModel;
+                final ObjectAdapter selectedAdapter = o.getObject();
+                handler.onSelected(this, selectedAdapter);
+            }
+        });
+    }
 }

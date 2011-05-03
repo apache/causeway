@@ -17,33 +17,31 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.model.util;
 
-
 public final class Strings {
-	
-	private Strings(){}
 
-	public static String toCamelCase(String name) {
-		String nameLower = name.toLowerCase();
-		StringBuilder buf = new StringBuilder();
-		boolean capitalizeNext = false;
-		for (int i = 0; i < nameLower.length(); i++) {
-			char ch = nameLower.charAt(i);
-			if (ch == '_') {
-				capitalizeNext = true;
-			} else {
-				if (capitalizeNext) {
-					buf.append(Character.toUpperCase(ch));
-				} else {
-					buf.append(ch);
-				}
-				capitalizeNext = false;
-			}
-		}
-		return buf.toString();
-	}
+    private Strings() {
+    }
 
-	
+    public static String toCamelCase(final String name) {
+        final String nameLower = name.toLowerCase();
+        final StringBuilder buf = new StringBuilder();
+        boolean capitalizeNext = false;
+        for (int i = 0; i < nameLower.length(); i++) {
+            final char ch = nameLower.charAt(i);
+            if (ch == '_') {
+                capitalizeNext = true;
+            } else {
+                if (capitalizeNext) {
+                    buf.append(Character.toUpperCase(ch));
+                } else {
+                    buf.append(ch);
+                }
+                capitalizeNext = false;
+            }
+        }
+        return buf.toString();
+    }
+
 }

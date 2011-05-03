@@ -17,16 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary;
 
 import java.util.List;
-
-import org.apache.wicket.markup.html.PackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-
-import com.google.inject.Inject;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -43,13 +36,17 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilde
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+
+import com.google.inject.Inject;
 
 /**
- * {@link PanelAbstract Panel} representing the summary details (title, icon and
- * actions) of an entity, as per the provided {@link EntityModel}.
+ * {@link PanelAbstract Panel} representing the summary details (title, icon and actions) of an entity, as per the
+ * provided {@link EntityModel}.
  */
-public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements
-        ActionInvokeHandler {
+public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements ActionInvokeHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,7 +58,7 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements
 
     private ImageCache imageCache;
 
-    public EntitySummaryPanel(String id, final EntityModel entityModel) {
+    public EntitySummaryPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         linkFactory = new EntityActionLinkFactory(getEntityModel(), this);
     }
@@ -85,27 +82,26 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements
     }
 
     private void addOrReplaceTitleAndImage() {
-        String titleString = determineTitle();
+        final String titleString = determineTitle();
         addOrReplace(new Label(ID_ENTITY_TITLE, titleString));
         addOrReplaceImage();
     }
 
     private String determineTitle() {
-    	ObjectAdapter adapter = getModel().getObject();
-        String titleString = adapter != null ? adapter.titleString()
-                : "(no object)"; // TODO: i18n
+        final ObjectAdapter adapter = getModel().getObject();
+        final String titleString = adapter != null ? adapter.titleString() : "(no object)"; // TODO: i18n
         return titleString;
     }
 
     private void addOrReplaceImage() {
-    	ObjectAdapter adapter = getModel().getObject();
+        final ObjectAdapter adapter = getModel().getObject();
         ObjectSpecification typeOfSpec;
         PackageResource imageResource = null;
         if (adapter != null) {
             typeOfSpec = adapter.getSpecification();
-            IconFacet iconFacet = typeOfSpec.getFacet(IconFacet.class);
+            final IconFacet iconFacet = typeOfSpec.getFacet(IconFacet.class);
             if (iconFacet != null) {
-                String iconName = iconFacet.iconName(adapter);
+                final String iconName = iconFacet.iconName(adapter);
                 imageResource = getImageCache().findImage(iconName);
             }
         }
@@ -122,17 +118,16 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements
     }
 
     private void buildEntityActionsGui() {
-        EntityModel model = getModel();
-        ObjectAdapter adapter = model.getObject();
+        final EntityModel model = getModel();
+        final ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER);
+            final List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER);
 
-            CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento,
-                    getServiceAdapters(), userActions, linkFactory);
+            final CssMenuBuilder cssMenuBuilder =
+                new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
             // TODO: i18n
-            CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(
-                    ID_ENTITY_ACTIONS, "Actions");
+            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
             this.addOrReplace(cssMenuPanel);
         } else {
@@ -141,21 +136,20 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements
     }
 
     @Override
-    public void onClick(ActionModel actionModel) {
+    public void onClick(final ActionModel actionModel) {
         setResponsePage(new ActionPage(actionModel));
     }
 
-    
-    /////////////////////////////////////////////////
+    // ///////////////////////////////////////////////
     // Dependency Injection
-    /////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////
+
     protected ImageCache getImageCache() {
         return imageCache;
     }
 
     @Inject
-    public void setImageCache(ImageCache imageCache) {
+    public void setImageCache(final ImageCache imageCache) {
         this.imageCache = imageCache;
     }
 

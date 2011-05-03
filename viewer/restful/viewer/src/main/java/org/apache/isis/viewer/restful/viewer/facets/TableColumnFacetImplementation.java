@@ -23,7 +23,6 @@ import nu.xom.Element;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnFacetImplementation extends TableColumnFacet {
 
     public TableColumnFacetImplementation(final ResourceContext resourceContext) {

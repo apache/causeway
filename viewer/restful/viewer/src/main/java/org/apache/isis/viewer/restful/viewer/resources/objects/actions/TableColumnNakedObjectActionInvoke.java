@@ -32,15 +32,12 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
-
 public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedObjectAction {
 
     private final static String INPUT_FIELD_NAME_PREFIX = "arg";
 
-    public TableColumnNakedObjectActionInvoke(
-            final AuthenticationSession session,
-            final ObjectAdapter nakedObject,
-            final ResourceContext resourceContext) {
+    public TableColumnNakedObjectActionInvoke(final AuthenticationSession session, final ObjectAdapter nakedObject,
+        final ResourceContext resourceContext) {
         super("Invoke", session, nakedObject, resourceContext);
     }
 
@@ -50,8 +47,9 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
         final String actionId = actionIdentifier.toNameParmsIdentityString();
 
         final String formName = "action-" + actionId;
-        final String uri = MessageFormat.format("{0}/object/{1}/action/{2}",
-                resourceContext.getHttpServletRequest().getContextPath(), getOidStrRealTarget(action), actionId);
+        final String uri =
+            MessageFormat.format("{0}/object/{1}/action/{2}", resourceContext.getHttpServletRequest().getContextPath(),
+                getOidStrRealTarget(action), actionId);
         final List<ObjectActionParameter> parameters = action.getParameters();
 
         final Element div = xhtmlRenderer.div(HtmlClass.ACTION);
@@ -59,11 +57,11 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
         return div;
     }
 
-	private Element renderForm(final String formName, final String uri, final List<ObjectActionParameter> parameters) {
+    private Element renderForm(final String formName, final String uri, final List<ObjectActionParameter> parameters) {
 
         final Element form = xhtmlRenderer.form(formName, HtmlClass.ACTION);
         form.addAttribute(new Attribute("method", "POST"));
-        form.addAttribute(new Attribute("action", uri));        
+        form.addAttribute(new Attribute("action", uri));
 
         renderInputFieldsForParameters(parameters, form);
 
@@ -72,13 +70,13 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
         return form;
     }
 
-   	private void renderInputFieldsForParameters(final List<ObjectActionParameter> parameters, final Element form) {
+    private void renderInputFieldsForParameters(final List<ObjectActionParameter> parameters, final Element form) {
         for (int i = 0; i < parameters.size(); i++) {
             final ObjectActionParameter parameter = parameters.get(i);
             final String inputFieldName = INPUT_FIELD_NAME_PREFIX + i;
 
             final Element inputLabel = new Element("p");
-            inputLabel.appendChild(parameter.getName());           
+            inputLabel.appendChild(parameter.getName());
             form.appendChild(inputLabel);
 
             final Element inputValue = new Element("input");
@@ -95,6 +93,5 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
         inputButton.addAttribute(new Attribute("value", "Invoke"));
         form.appendChild(inputButton);
     }
-
 
 }

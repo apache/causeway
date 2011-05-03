@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
@@ -39,78 +38,78 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionAccessor, PersistenceSessionAccessor {
+public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor,
+    PageClassRegistryAccessor, AuthenticationSessionAccessor, PersistenceSessionAccessor {
 
-	private static final long serialVersionUID = 1L;
-	
-	public FormAbstract(String id) {
-		super(id);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public FormAbstract(String id, IModel<T> model) {
-		super(id, model);
-	}
+    public FormAbstract(final String id) {
+        super(id);
+    }
 
-
+    public FormAbstract(final String id, final IModel<T> model) {
+        super(id, model);
+    }
 
     // ///////////////////////////////////////////////////////////////////
     // IHeaderContributor
     // ///////////////////////////////////////////////////////////////////
 
-	/**
-	 * Automatically reference any corresponding CSS.
-	 */
-	@Override
-	public void renderHead(IHeaderResponse response) {
-	    super.renderHead(response);
-	    renderHead(response, this.getClass());
-	}
-	
-   /**
-     * Factored out to allow non-concrete subclasses to additionally render
-     * their own CSS if required.
+    /**
+     * Automatically reference any corresponding CSS.
      */
-    protected void renderHead(IHeaderResponse response, final Class<?> cls) {
-        String url = cls.getSimpleName() + ".css";
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        renderHead(response, this.getClass());
+    }
+
+    /**
+     * Factored out to allow non-concrete subclasses to additionally render their own CSS if required.
+     */
+    protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
+        final String url = cls.getSimpleName() + ".css";
         response.renderCSSReference(new ResourceReference(cls, url));
     }
 
+    // ///////////////////////////////////////////////////////////////////
+    // Convenience
+    // ///////////////////////////////////////////////////////////////////
 
-	// ///////////////////////////////////////////////////////////////////
-	// Convenience
-	// ///////////////////////////////////////////////////////////////////
+    @Override
+    public ComponentFactoryRegistry getComponentFactoryRegistry() {
+        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
+    }
 
-	public ComponentFactoryRegistry getComponentFactoryRegistry() {
-		return ((ComponentFactoryRegistryAccessor)getApplication()).getComponentFactoryRegistry();
-	}
+    @Override
+    public PageClassRegistry getPageClassRegistry() {
+        return ((PageClassRegistryAccessor) getApplication()).getPageClassRegistry();
+    }
 
-	public PageClassRegistry getPageClassRegistry() {
-		return ((PageClassRegistryAccessor) getApplication()).getPageClassRegistry();
-	}
+    // ///////////////////////////////////////////////////////////////////
+    // Dependencies (from IsisContext)
+    // ///////////////////////////////////////////////////////////////////
 
-	// ///////////////////////////////////////////////////////////////////
-	// Dependencies (from IsisContext)
-	// ///////////////////////////////////////////////////////////////////
+    public IsisContext getIsisContext() {
+        return IsisContext.getInstance();
+    }
 
-	public IsisContext getIsisContext() {
-		return IsisContext.getInstance();
-	}
-	
-	public PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
-	
-	public AuthenticationSession getAuthenticationSession() {
-	    return IsisContext.getAuthenticationSession();
-	}
+    @Override
+    public PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
-	protected List<ObjectAdapter> getServiceAdapters() {
-		return getPersistenceSession().getServices();
-	}
+    @Override
+    public AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
-	protected OidStringifier getOidStringifier() {
-		return getPersistenceSession().getOidGenerator().getOidStringifier();
-	}
+    protected List<ObjectAdapter> getServiceAdapters() {
+        return getPersistenceSession().getServices();
+    }
 
+    protected OidStringifier getOidStringifier() {
+        return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
 
 }

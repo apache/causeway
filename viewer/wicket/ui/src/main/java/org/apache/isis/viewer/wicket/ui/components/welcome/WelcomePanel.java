@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.ui.components.welcome;
 
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
@@ -30,13 +29,13 @@ import org.apache.wicket.markup.html.basic.Label;
  */
 public class WelcomePanel extends PanelAbstract<WelcomeModel> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ID_MESSAGE = "message";
+    private static final String ID_MESSAGE = "message";
 
-	public WelcomePanel(String id, WelcomeModel model) {
-		super(id, model);
-		add(new Label(ID_MESSAGE, model.getObject()));
-	}
+    public WelcomePanel(final String id, final WelcomeModel model) {
+        super(id, model);
+        add(new Label(ID_MESSAGE, model.getObject()));
+    }
 
 }
