@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixturedomainservice;
 
 import java.io.File;
@@ -48,14 +47,13 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Sets;
 
-
 public class ObjectFixtureService {
 
     private static final Logger LOG = Logger.getLogger(ObjectFixtureService.class);
     private static final String DATA_FILEPATH = ConfigurationConstants.ROOT + "exploration-objects.file";
     private static final String DEFAULT_FILEPATH = "fixture-data";
-    
-    private ObjectFixtureFilePersistor persistor = new ObjectFixtureFilePersistor();
+
+    private final ObjectFixtureFilePersistor persistor = new ObjectFixtureFilePersistor();
     private Set<Object> objects = Sets.newHashSet();
 
     // {{ title, Id
@@ -70,14 +68,15 @@ public class ObjectFixtureService {
     public String iconName() {
         return "Fixture";
     }
+
     // }}
 
     // {{ action: save
     @DescribedAs("Add this object to the set of saved objects")
     @MemberOrder(sequence = "1")
     @Exploration
-    public void save(Object object) {
-        ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+    public void save(final Object object) {
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
         if (adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
             LOG.info("Saving object for fixture: " + adapter);
             addObjectAndAssociates(adapter);
@@ -85,15 +84,15 @@ public class ObjectFixtureService {
         }
     }
 
-    private void addObjectAndAssociates(ObjectAdapter adapter) {
+    private void addObjectAndAssociates(final ObjectAdapter adapter) {
         if (objects.contains(adapter.getObject())) {
             return;
         }
         objects.add(adapter.getObject());
 
-        ObjectSpecification adapterSpec = adapter.getSpecification();
+        final ObjectSpecification adapterSpec = adapter.getSpecification();
         final List<ObjectAssociation> associations = adapterSpec.getAssociations();
-        for (ObjectAssociation association : associations) {
+        for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;
             }
@@ -104,8 +103,8 @@ public class ObjectFixtureService {
                 continue;
             }
             if (association.isOneToManyAssociation()) {
-                CollectionFacet facet = associatedObject.getSpecification().getFacet(CollectionFacet.class);
-                for (ObjectAdapter element : facet.iterable(associatedObject)) {
+                final CollectionFacet facet = associatedObject.getSpecification().getFacet(CollectionFacet.class);
+                for (final ObjectAdapter element : facet.iterable(associatedObject)) {
                     addObjectAndAssociates(element);
                 }
             } else if (association.isOneToOneAssociation() && !association.getSpecification().isParseable()) {
@@ -114,33 +113,33 @@ public class ObjectFixtureService {
         }
     }
 
-    public String validateSave(Object object) {
+    public String validateSave(final Object object) {
         if (object == this || object instanceof AbstractService) {
             return "Can't add/remove a service";
         }
         return objects.contains(object) ? "This object has already been saved" : null;
     }
+
     // }}
 
-    
     // {{ action: remove
     @DescribedAs("Remove this object from the set of saved objects")
     @MemberOrder(sequence = "2")
     @Exploration
-    public void remove(Object object) {
+    public void remove(final Object object) {
         objects.remove(object);
         saveAll();
     }
 
-    public String validateRemove(Object object) {
+    public String validateRemove(final Object object) {
         if (object == this || object instanceof AbstractService) {
             return "Can't add/remove a service";
         }
         return objects.contains(object) ? null : "Can't remove an object that has not been saved";
     }
+
     // }}
 
-    
     // {{ action: all Saved Objects
     @DescribedAs("Retrieved all the saved objects")
     @MemberOrder(sequence = "4")
@@ -148,9 +147,9 @@ public class ObjectFixtureService {
     public Set<Object> allSavedObjects() {
         return objects;
     }
+
     // }}
-    
-    
+
     // {{ action: saveAll
     @DescribedAs("Save the current state of the saved objects")
     @MemberOrder(sequence = "3")
@@ -158,54 +157,54 @@ public class ObjectFixtureService {
     public void saveAll() {
         FileWriter out = null;
         try {
-            File file = file(true);
+            final File file = file(true);
             out = new FileWriter(file);
             persistor.save(objects, out);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IsisException(e);
         } finally {
             if (out != null) {
                 try {
                     out.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new IsisException(e);
                 }
             }
         }
     }
+
     // }}
 
-
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // programmatic
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Hidden
     public void loadFile() {
         FileReader reader = null;
         try {
-            File file = file(false);
+            final File file = file(false);
             reader = new FileReader(file);
             objects = persistor.loadData(reader);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             return;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IsisException(e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new IsisException(e);
                 }
             }
         }
     }
 
-    private File file(boolean createFileIfDoesntExist) throws IOException {
-        String fixturePath = getConfiguration().getString(DATA_FILEPATH, DEFAULT_FILEPATH);
-        File file = new File(fixturePath);
-        File directory = file.getParentFile();
+    private File file(final boolean createFileIfDoesntExist) throws IOException {
+        final String fixturePath = getConfiguration().getString(DATA_FILEPATH, DEFAULT_FILEPATH);
+        final File file = new File(fixturePath);
+        final File directory = file.getParentFile();
         mkdirIfRequired(directory);
         if (!file.exists() && createFileIfDoesntExist) {
             createFile(file);
@@ -214,22 +213,21 @@ public class ObjectFixtureService {
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
-    private void mkdirIfRequired(File directory) {
+    private void mkdirIfRequired(final File directory) {
         if (directory != null && !directory.exists()) {
             directory.mkdirs();
         }
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
-    private void createFile(File file) throws IOException {
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
+    private void createFile(final File file) throws IOException {
         file.createNewFile();
     }
 
-
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // from context
-    ////////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////////
+
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -242,6 +240,4 @@ public class ObjectFixtureService {
         return IsisContext.getConfiguration();
     }
 
-
 }
-

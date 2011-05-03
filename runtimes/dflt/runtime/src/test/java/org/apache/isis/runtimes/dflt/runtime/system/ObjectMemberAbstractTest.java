@@ -17,18 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -55,7 +48,11 @@ import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacetNon
 import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ObjectMemberAbstractTest {
 
@@ -74,17 +71,16 @@ public class ObjectMemberAbstractTest {
 
         testMember = new ObjectMemberAbstractImpl("id");
     }
-    
-    
+
     @After
     public void tearDown() throws Exception {
-        
+
     }
-    
 
     @Test
     public void testToString() throws Exception {
-        testMember.addFacet(new NamedFacetAbstract("", testMember) {});
+        testMember.addFacet(new NamedFacetAbstract("", testMember) {
+        });
         assertTrue(testMember.toString().length() > 0);
     }
 
@@ -97,7 +93,7 @@ public class ObjectMemberAbstractTest {
             }
         });
         final Consent usable = testMember.isUsable(null, testAdapter);
-        boolean allowed = usable.isAllowed();
+        final boolean allowed = usable.isAllowed();
         assertTrue(allowed);
     }
 
@@ -139,13 +135,15 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleDeclarativelyByDefault() {
-        testMember.addFacet(new HiddenFacetNever(testMember) {});
+        testMember.addFacet(new HiddenFacetNever(testMember) {
+        });
         assertTrue(testMember.isVisible(null, testAdapter).isAllowed());
     }
 
     @Test
     public void testVisibleDeclaratively() {
-        testMember.addFacet(new HiddenFacetAlways(testMember) {});
+        testMember.addFacet(new HiddenFacetAlways(testMember) {
+        });
         assertFalse(testMember.isVisible(null, testAdapter).isAllowed());
     }
 
@@ -180,31 +178,34 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testName() throws Exception {
         final String name = "action name";
-        testMember.addFacet(new NamedFacetAbstract(name, testMember) {});
+        testMember.addFacet(new NamedFacetAbstract(name, testMember) {
+        });
         assertEquals(name, testMember.getName());
     }
 
     @Test
     public void testDescription() throws Exception {
         final String name = "description text";
-        testMember.addFacet(new DescribedAsFacetAbstract(name, testMember) {});
+        testMember.addFacet(new DescribedAsFacetAbstract(name, testMember) {
+        });
         assertEquals(name, testMember.getDescription());
     }
 }
 
 class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
-    public static class Customer{
+    public static class Customer {
         private String firstName;
+
         public String getFirstName() {
             return firstName;
         }
     }
-    
-    protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(null, null, null, null));
-    }
 
+    protected ObjectMemberAbstractImpl(final String id) {
+        super(FacetedMethod.createProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(
+            null, null, null, null));
+    }
 
     @Override
     public String debugData() {
@@ -221,29 +222,24 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return new PropertyUsabilityContext(session, invocationMethod, target, getIdentifier());
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return new PropertyVisibilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier());
     }
 
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
+    public Instance getInstance(final ObjectAdapter adapter) {
         return null;
     }
 
 }
-

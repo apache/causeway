@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi;
 
 import java.util.List;
@@ -27,38 +26,37 @@ import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
-
 public abstract class IsisViewerInstallerAbstract extends InstallerAbstract implements IsisViewerInstaller {
 
-	private SystemDependencyInjector installerLookup;
+    private SystemDependencyInjector installerLookup;
 
-	public IsisViewerInstallerAbstract(String name) {
-		super(IsisViewerInstaller.TYPE, name);
-	}
-	
+    public IsisViewerInstallerAbstract(final String name) {
+        super(IsisViewerInstaller.TYPE, name);
+    }
+
+    @Override
     public IsisViewer createViewer() {
         return injectDependenciesInto(doCreateViewer());
     }
-    
+
     /**
      * Subclasses should override (or else override {@link #createViewer()} if they need to do anything more elaborate.
      */
     protected IsisViewer doCreateViewer() {
-    	return null;
+        return null;
     }
 
-    protected <T> T injectDependenciesInto(T candidate) {
-    	return installerLookup.injectDependenciesInto(candidate);
+    protected <T> T injectDependenciesInto(final T candidate) {
+        return installerLookup.injectDependenciesInto(candidate);
     }
-    
-	public void setInstallerLookup(InstallerLookup installerLookup) {
-		this.installerLookup = installerLookup;
-	}
 
-	
-	@Override
-	public List<Class<?>> getTypes() {
-		return listOf(IsisViewer.class);
-	}
+    @Override
+    public void setInstallerLookup(final InstallerLookup installerLookup) {
+        this.installerLookup = installerLookup;
+    }
+
+    @Override
+    public List<Class<?>> getTypes() {
+        return listOf(IsisViewer.class);
+    }
 }
-

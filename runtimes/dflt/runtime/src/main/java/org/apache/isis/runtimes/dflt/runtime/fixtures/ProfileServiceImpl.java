@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
 
 import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
@@ -33,129 +32,127 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 
 public class ProfileServiceImpl implements UserProfileService {
 
-	@Override
+    @Override
     public Profile newUserProfile() {
-		return new ProfileImpl();
-	}
+        return new ProfileImpl();
+    }
 
-	@Override
-    public Profile newUserProfile(Profile profileTemplate) {
-		return new ProfileImpl((ProfileImpl) profileTemplate);
-	}
+    @Override
+    public Profile newUserProfile(final Profile profileTemplate) {
+        return new ProfileImpl((ProfileImpl) profileTemplate);
+    }
 
-	@Override
-    public void saveAsDefault(Profile profile) {
-		getUserProfileLoader().saveAsDefault(createUserProfile(profile));
-	}
+    @Override
+    public void saveAsDefault(final Profile profile) {
+        getUserProfileLoader().saveAsDefault(createUserProfile(profile));
+    }
 
-	@Override
-    public void saveForUser(String name, Profile profile) {
-		getUserProfileLoader().saveForUser(name, createUserProfile(profile));
-	}
+    @Override
+    public void saveForUser(final String name, final Profile profile) {
+        getUserProfileLoader().saveForUser(name, createUserProfile(profile));
+    }
 
-	private UserProfile createUserProfile(Profile profile) {
-		return ((ProfileImpl) profile).getUserProfile();
-	}
+    private UserProfile createUserProfile(final Profile profile) {
+        return ((ProfileImpl) profile).getUserProfile();
+    }
 
-	public void injectInto(Object fixture) {
-		if (fixture instanceof UserProfileServiceAware) {
-			UserProfileServiceAware serviceAware = (UserProfileServiceAware) fixture;
-			serviceAware.setService(this);
-		}
-	}
+    public void injectInto(final Object fixture) {
+        if (fixture instanceof UserProfileServiceAware) {
+            final UserProfileServiceAware serviceAware = (UserProfileServiceAware) fixture;
+            serviceAware.setService(this);
+        }
+    }
 
-	private static UserProfileLoader getUserProfileLoader() {
-		return IsisContext.getUserProfileLoader();
-	}
+    private static UserProfileLoader getUserProfileLoader() {
+        return IsisContext.getUserProfileLoader();
+    }
 
 }
 
 class ProfileImpl implements Profile {
-	private final UserProfile userProfile;
+    private final UserProfile userProfile;
 
-	public ProfileImpl(ProfileImpl profileTemplate) {
-		this();
-		userProfile.copy(profileTemplate.userProfile);
-	}
+    public ProfileImpl(final ProfileImpl profileTemplate) {
+        this();
+        userProfile.copy(profileTemplate.userProfile);
+    }
 
-	public ProfileImpl() {
-		userProfile = new UserProfile();
-	}
+    public ProfileImpl() {
+        userProfile = new UserProfile();
+    }
 
-	public UserProfile getUserProfile() {
-		return userProfile;
-	}
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
 
-	@Override
-    public void addToOptions(String name, String value) {
-		userProfile.addToOptions(name, value);
-	}
+    @Override
+    public void addToOptions(final String name, final String value) {
+        userProfile.addToOptions(name, value);
+    }
 
-	@Override
-    public void addToPerspectives(Perspective perspective) {
-		userProfile.addToPerspectives(((PerspectiveImpl) perspective)
-				.getPerspectiveEntry());
-	}
+    @Override
+    public void addToPerspectives(final Perspective perspective) {
+        userProfile.addToPerspectives(((PerspectiveImpl) perspective).getPerspectiveEntry());
+    }
 
-	@Override
-    public Perspective getPerspective(String name) {
-		PerspectiveEntry perspectiveEntry = userProfile.getPerspective(name);
-		if (perspectiveEntry == null) {
-			throw new IsisException("No perspective found for "
-					+ name);
-		}
-		return new PerspectiveImpl(perspectiveEntry);
-	}
+    @Override
+    public Perspective getPerspective(final String name) {
+        final PerspectiveEntry perspectiveEntry = userProfile.getPerspective(name);
+        if (perspectiveEntry == null) {
+            throw new IsisException("No perspective found for " + name);
+        }
+        return new PerspectiveImpl(perspectiveEntry);
+    }
 
-	@Override
-    public Perspective newPerspective(String name) {
-		PerspectiveEntry perspectiveEntry = userProfile.newPerspective(name);
-		return new PerspectiveImpl(perspectiveEntry);
-	}
+    @Override
+    public Perspective newPerspective(final String name) {
+        final PerspectiveEntry perspectiveEntry = userProfile.newPerspective(name);
+        return new PerspectiveImpl(perspectiveEntry);
+    }
 
 }
 
 class PerspectiveImpl implements Perspective {
-	private final PerspectiveEntry entry;
+    private final PerspectiveEntry entry;
 
-	public PerspectiveImpl(PerspectiveEntry perspectiveEntry) {
-		entry = perspectiveEntry;
-	}
+    public PerspectiveImpl(final PerspectiveEntry perspectiveEntry) {
+        entry = perspectiveEntry;
+    }
 
-	public PerspectiveEntry getPerspectiveEntry() {
-		return entry;
-	}
+    public PerspectiveEntry getPerspectiveEntry() {
+        return entry;
+    }
 
-	@Override
-    public void addGenericRepository(Class<?>... classes) {
-		for (Class<?> cls : classes) {
-			Object service = getPersistenceSession().getService("repository#" + cls.getName()).getObject();
+    @Override
+    public void addGenericRepository(final Class<?>... classes) {
+        for (final Class<?> cls : classes) {
+            final Object service = getPersistenceSession().getService("repository#" + cls.getName()).getObject();
             entry.addToServices(service);
-		}
-	}
+        }
+    }
 
-	@Override
-    public void addToObjects(Object... objects) {
-		for (Object object : objects) {
-			entry.addToObjects(object);
-		}
-	}
+    @Override
+    public void addToObjects(final Object... objects) {
+        for (final Object object : objects) {
+            entry.addToObjects(object);
+        }
+    }
 
-	@Override
-    public Object addToServices(Class<?> serviceType) {
-		Object service = findService(serviceType);
+    @Override
+    public Object addToServices(final Class<?> serviceType) {
+        final Object service = findService(serviceType);
         entry.addToServices(service);
         return service;
-	}
-	
-	@Override
-	public void removeFromServices(Class<?> serviceType) {
-        Object service = findService(serviceType);
-	    entry.removeFromServices(service);
-	}
+    }
 
-    private Object findService(Class<?> serviceType) {
-        for (Object service : IsisContext.getServices()) {
+    @Override
+    public void removeFromServices(final Class<?> serviceType) {
+        final Object service = findService(serviceType);
+        entry.removeFromServices(service);
+    }
+
+    private Object findService(final Class<?> serviceType) {
+        for (final Object service : IsisContext.getServices()) {
             if (service.getClass().isAssignableFrom(serviceType)) {
                 return service;
             }
@@ -163,26 +160,22 @@ class PerspectiveImpl implements Perspective {
         throw new IsisException("No service of type " + serviceType.getName());
     }
 
+    @Override
+    public void addToServices(final Class<?>... classes) {
+        for (final Class<?> cls : classes) {
+            addToServices(cls);
+        }
+    }
 
-	
-	@Override
-    public void addToServices(Class<?>... classes) {
-		for (Class<?> cls : classes) {
-			addToServices(cls);
-		}
-	}
-
-	@Override
-    public void removeFromServices(Class<?>... classes) {
-		for (Class<?> cls : classes) {
-			removeFromServices(cls);
-		}
-	}
+    @Override
+    public void removeFromServices(final Class<?>... classes) {
+        for (final Class<?> cls : classes) {
+            removeFromServices(cls);
+        }
+    }
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-

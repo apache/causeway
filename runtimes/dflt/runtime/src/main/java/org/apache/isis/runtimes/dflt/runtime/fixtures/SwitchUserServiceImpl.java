@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
 
 import java.util.List;
@@ -31,7 +30,6 @@ import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.Authenticat
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
-
 public class SwitchUserServiceImpl implements SwitchUserService {
 
     public SwitchUserServiceImpl() {
@@ -41,36 +39,34 @@ public class SwitchUserServiceImpl implements SwitchUserService {
     public void switchUser(final String username, final List<String> roles) {
         switchUser(new LogonFixture(username, roles));
     }
-    
+
     @Override
     public void switchUser(final String username, final String... roles) {
         switchUser(new LogonFixture(username, roles));
     }
 
-    private void switchUser(LogonFixture logonFixture) {
+    private void switchUser(final LogonFixture logonFixture) {
         getTransactionManager().endTransaction();
-    	IsisContext.closeSession();
-    	AuthenticationRequestLogonFixture authRequest = new AuthenticationRequestLogonFixture(logonFixture);
-    	AuthenticationSession session = getAuthenticationManager().authenticate(authRequest);
+        IsisContext.closeSession();
+        final AuthenticationRequestLogonFixture authRequest = new AuthenticationRequestLogonFixture(logonFixture);
+        final AuthenticationSession session = getAuthenticationManager().authenticate(authRequest);
         IsisContext.openSession(session);
         getTransactionManager().startTransaction();
     }
 
-	public void injectInto(Object fixture) {
-    	if (fixture instanceof SwitchUserServiceAware) {
-    		SwitchUserServiceAware serviceAware = (SwitchUserServiceAware) fixture;
-    		serviceAware.setService(this);
-    	}
-	}
+    public void injectInto(final Object fixture) {
+        if (fixture instanceof SwitchUserServiceAware) {
+            final SwitchUserServiceAware serviceAware = (SwitchUserServiceAware) fixture;
+            serviceAware.setService(this);
+        }
+    }
 
-	
-	protected AuthenticationManager getAuthenticationManager() {
-		return IsisContext.getAuthenticationManager();
-	}
-	
-	protected IsisTransactionManager getTransactionManager() {
-		return IsisContext.getTransactionManager();
-	}
-	
+    protected AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
+    }
+
+    protected IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
+    }
+
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.exploration;
 
 import java.util.ArrayList;
@@ -29,22 +28,19 @@ import java.util.StringTokenizer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-
 
 /**
  * Creates a session suitable for {@link DeploymentType#EXPLORATION exploration} mode.
  * 
  * <p>
- * If the {@link IsisConfiguration} contains the key
- * {@value ExplorationAuthenticatorConstants#NAKEDOBJECTS_USERS} then returns a
- * {@link MultiUserExplorationSession} which encapsulates the details of several users (and their roles).
- * Viewers that are aware of this capability can offer the convenient ability to switch between these users.
- * For viewers that are not aware, the {@link MultiUserExplorationSession} appears as a regular
- * {@link SimpleSession session}, with the Id of the first user listed.
+ * If the {@link IsisConfiguration} contains the key {@value ExplorationAuthenticatorConstants#NAKEDOBJECTS_USERS} then
+ * returns a {@link MultiUserExplorationSession} which encapsulates the details of several users (and their roles).
+ * Viewers that are aware of this capability can offer the convenient ability to switch between these users. For viewers
+ * that are not aware, the {@link MultiUserExplorationSession} appears as a regular {@link SimpleSession session}, with
+ * the Id of the first user listed.
  * 
  * <p>
  * The format of the {@value ExplorationAuthenticatorConstants#NAKEDOBJECTS_USERS} key should be:
@@ -70,20 +66,20 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
         }
     }
 
-    private List<SimpleSession> parseUsers(String users) {
+    private List<SimpleSession> parseUsers(final String users) {
         final List<SimpleSession> registeredUsers = new ArrayList<SimpleSession>();
 
         final StringTokenizer st = new StringTokenizer(users, ",");
         while (st.hasMoreTokens()) {
             final String token = st.nextToken();
-            int end = token.indexOf(':');
-            List<String> roles = new ArrayList<String>();
+            final int end = token.indexOf(':');
+            final List<String> roles = new ArrayList<String>();
             final String userName;
             if (end == -1) {
                 userName = token.trim();
             } else {
                 userName = token.substring(0, end).trim();
-                String roleList = token.substring(end + 1);
+                final String roleList = token.substring(end + 1);
                 final StringTokenizer st2 = new StringTokenizer(roleList, "|");
                 while (st2.hasMoreTokens()) {
                     final String role = st2.nextToken().trim();
@@ -95,7 +91,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
         return registeredUsers;
     }
 
-    private SimpleSession createSimpleSession(final String userName, List<String> roles) {
+    private SimpleSession createSimpleSession(final String userName, final List<String> roles) {
         return new SimpleSession(userName, roles.toArray(new String[roles.size()]));
     }
 
@@ -106,6 +102,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
     /**
      * Can authenticate if a {@link AuthenticationRequestExploration}.
      */
+    @Override
     public final boolean canAuthenticate(final AuthenticationRequest request) {
         return request instanceof AuthenticationRequestExploration;
     }
@@ -113,16 +110,18 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
     /**
      * Valid providing running in {@link DeploymentType#isExploring() exploration} mode.
      */
+    @Override
     public final boolean isValid(final AuthenticationRequest request) {
         return getDeploymentType().isExploring();
     }
 
     @Override
     public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
-        AuthenticationRequestExploration authenticationRequestExploration = (AuthenticationRequestExploration) request;
+        final AuthenticationRequestExploration authenticationRequestExploration =
+            (AuthenticationRequestExploration) request;
         if (!authenticationRequestExploration.isDefaultUser()) {
             registeredSessions.add(createSimpleSession(authenticationRequestExploration.getName(),
-                    authenticationRequestExploration.getRoles()));
+                authenticationRequestExploration.getRoles()));
         }
         if (registeredSessions.size() > 1) {
             return new MultiUserExplorationSession(registeredSessions, code);
@@ -134,4 +133,3 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
     }
 
 }
-

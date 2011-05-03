@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem.tests;
 
 import static org.junit.Assert.assertEquals;
@@ -25,10 +24,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -39,8 +34,10 @@ import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyException;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
-
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CreateTransientObjectsTest {
 
@@ -97,14 +94,14 @@ public class CreateTransientObjectsTest {
         assertEquals(adapter, a);
     }
 
-    
     @Test
     public void testAddedToPersistor() {
         system.resetLoader();
         try {
             getPersistenceSession().loadObject(oid, adapter.getSpecification());
             fail();
-        } catch (final TestProxyException expected) {}
+        } catch (final TestProxyException expected) {
+        }
     }
 
     @Test
@@ -116,9 +113,7 @@ public class CreateTransientObjectsTest {
     public void testOidHasNoPrevious() throws Exception {
         assertNull(oid.getPrevious());
     }
-    
 
-    
     private PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
@@ -126,6 +121,5 @@ public class CreateTransientObjectsTest {
     private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
-    
-}
 
+}

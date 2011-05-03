@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.USER_LONG_OPT;
@@ -27,7 +26,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -36,32 +34,35 @@ import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 public class OptionHandlerUser extends OptionHandlerAbstract {
 
-	private String userName;
+    private String userName;
 
-	public OptionHandlerUser() {
-		super();
-	}
+    public OptionHandlerUser() {
+        super();
+    }
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-        Option option = OptionBuilder.withArgName("user name").hasArg().withLongOpt(USER_LONG_OPT).withDescription(
-        	"user name to log in with").create(USER_OPT);
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Option option =
+            OptionBuilder.withArgName("user name").hasArg().withLongOpt(USER_LONG_OPT)
+                .withDescription("user name to log in with").create(USER_OPT);
         options.addOption(option);
 
-	}
+    }
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		userName = commandLine.getOptionValue(Constants.USER_OPT);
-		return true;		
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		isisConfigurationBuilder.add(SystemConstants.USER_KEY, userName);
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        userName = commandLine.getOptionValue(Constants.USER_OPT);
+        return true;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.USER_KEY, userName);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 
 }

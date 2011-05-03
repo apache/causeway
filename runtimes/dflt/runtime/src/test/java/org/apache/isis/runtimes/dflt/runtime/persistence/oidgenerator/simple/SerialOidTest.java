@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -28,10 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.junit.Test;
-
-
 
 public class SerialOidTest {
 
@@ -112,22 +108,20 @@ public class SerialOidTest {
         assertEquals(oid1.getPrevious(), SerialOid.createTransient(123));
     }
 
-    
     @Test
     public void testGetPrevious() {
         final SerialOid oid1 = SerialOid.createTransient(123);
 
         assertNull(oid1.getPrevious());
-        
-        SerialOid oidCopy = SerialOid.createTransient(0);
+
+        final SerialOid oidCopy = SerialOid.createTransient(0);
         oidCopy.copyFrom(oid1);
-        
+
         oid1.setId(567);
         oid1.makePersistent();
-        
+
         assertThat(oid1.getPrevious().hashCode(), is(equalTo(oidCopy.hashCode())));
         assertThat(oid1.getPrevious().equals(oidCopy), is(true));
     }
 
-    
 }

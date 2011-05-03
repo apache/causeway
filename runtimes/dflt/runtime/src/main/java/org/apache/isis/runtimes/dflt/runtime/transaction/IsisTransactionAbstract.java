@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 public abstract class IsisTransactionAbstract implements IsisTransaction {
 
@@ -40,61 +39,56 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
     private final UpdateNotifier updateNotifier;
-    
+
     private State state;
 
     private RuntimeException cause;
-    
-    public IsisTransactionAbstract(
-            final IsisTransactionManager transactionManager, 
-            final MessageBroker messageBroker, 
-            final UpdateNotifier updateNotifier) {
-        
+
+    public IsisTransactionAbstract(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
+        final UpdateNotifier updateNotifier) {
+
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
         ensureThatArg(updateNotifier, is(not(nullValue())), "update notifier is required");
-        
+
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
-        
+
         this.state = State.IN_PROGRESS;
     }
 
+    // ////////////////////////////////////////////////////////////////
+    // State
+    // ////////////////////////////////////////////////////////////////
 
-
-    //////////////////////////////////////////////////////////////////
-    // State 
-    //////////////////////////////////////////////////////////////////
-
+    @Override
     public State getState() {
         return state;
     }
-    
-    private void setState(State state) {
+
+    private void setState(final State state) {
         this.state = state;
     }
 
-    
-    //////////////////////////////////////////////////////////////////
-    // commit, abort 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // commit, abort
+    // ////////////////////////////////////////////////////////////////
 
     public final void flush() {
         ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
         if (LOG.isInfoEnabled()) {
             LOG.info("flush transaction " + this);
         }
-        
+
         try {
             doFlush();
-        } catch(RuntimeException ex) {
+        } catch (final RuntimeException ex) {
             setState(State.MUST_ABORT);
             setAbortCause(ex);
             throw ex;
         }
     }
-
 
     public final void commit() {
         ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
@@ -112,7 +106,7 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
         try {
             doFlush();
             setState(State.COMMITTED);
-        } catch(RuntimeException ex) {
+        } catch (final RuntimeException ex) {
             setAbortCause(ex);
             throw ex;
         }
@@ -126,7 +120,7 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
 
         try {
             doAbort();
-        } catch(RuntimeException ex) {
+        } catch (final RuntimeException ex) {
             setAbortCause(ex);
             throw ex;
         } finally {
@@ -141,13 +135,19 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
      * Called by both {@link #commit()} and by {@link #flush()}:
      * <table>
      * <tr>
-     * <th>called from</th><th>next {@link #getState() state} if ok</th><th>next {@link #getState() state} if exception</th>
+     * <th>called from</th>
+     * <th>next {@link #getState() state} if ok</th>
+     * <th>next {@link #getState() state} if exception</th>
      * </tr>
      * <tr>
-     * <td>{@link #commit()}</td><td>{@link State#COMMITTED}</td><td>{@link State#ABORTED}</td>
+     * <td>{@link #commit()}</td>
+     * <td>{@link State#COMMITTED}</td>
+     * <td>{@link State#ABORTED}</td>
      * </tr>
      * <tr>
-     * <td>{@link #flush()}</td><td>{@link State#IN_PROGRESS}</td><td>{@link State#MUST_ABORT}</td>
+     * <td>{@link #flush()}</td>
+     * <td>{@link State#IN_PROGRESS}</td>
+     * <td>{@link State#MUST_ABORT}</td>
      * </tr>
      * </table>
      */
@@ -157,54 +157,52 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
      * Mandatory hook method for subclasses to perform additional processing on abort.
      * 
      * <p>
-     * After this call the {@link #getState() state} will always be set to 
-     * {@link State#ABORTED}, irrespective of whether an exception is thrown or not.
+     * After this call the {@link #getState() state} will always be set to {@link State#ABORTED}, irrespective of
+     * whether an exception is thrown or not.
      */
     protected abstract void doAbort();
 
+    // ////////////////////////////////////////////////////////////////
+    // Abort Cause
+    // ////////////////////////////////////////////////////////////////
 
-
-    //////////////////////////////////////////////////////////////////
-    // Abort Cause 
-    //////////////////////////////////////////////////////////////////
-
-    protected void setAbortCause(RuntimeException cause) {
+    protected void setAbortCause(final RuntimeException cause) {
         this.cause = cause;
     }
+
     /**
      * The cause (if any) for the transaction being aborted.
      * 
      * <p>
-     * There will be a cause if an exception is thrown either by {@link #doFlush()} or
-     * {@link #doAbort()}.
+     * There will be a cause if an exception is thrown either by {@link #doFlush()} or {@link #doAbort()}.
      */
+    @Override
     public RuntimeException getAbortCause() {
         return cause;
     }
 
+    // ////////////////////////////////////////////////////////////////
+    // toString
+    // ////////////////////////////////////////////////////////////////
 
-
-    //////////////////////////////////////////////////////////////////
-    // toString 
-    //////////////////////////////////////////////////////////////////
-    
     @Override
     public String toString() {
         return appendTo(new ToString(this)).toString();
     }
 
-    protected ToString appendTo(ToString str) {
+    protected ToString appendTo(final ToString str) {
         str.append("state", state);
         return str;
     }
 
-    //////////////////////////////////////////////////////////////////
-    // Depenendencies  (from constructor) 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // Depenendencies (from constructor)
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Injected in constructor
      */
+    @Override
     public IsisTransactionManager getTransactionManager() {
         return transactionManager;
     }
@@ -212,19 +210,17 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
     /**
      * Injected in constructor
      */
+    @Override
     public MessageBroker getMessageBroker() {
         return messageBroker;
     }
-    
+
     /**
      * Injected in constructor
      */
+    @Override
     public UpdateNotifier getUpdateNotifier() {
         return updateNotifier;
     }
-    
 
-    
 }
-
-

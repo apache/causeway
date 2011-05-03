@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import java.io.IOException;
@@ -30,38 +29,39 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 public class ObjectData extends Data {
-	
+
     private static final long serialVersionUID = 7121411963269613347L;
     private final static Encodable NO_ENTRY = new Null();
-    private final Map<String,Object> fields = new HashMap<String,Object>();
+    private final Map<String, Object> fields = new HashMap<String, Object>();
 
     private static enum As {
-    	OBJECT(0),
-    	NULL(1),
-    	STRING(2);
-    	static Map<Integer, As> cache = new HashMap<Integer, As>();
-    	static {
-    		for(As as: values()) {
-    			cache.put(as.idx, as);
-    		}
-    	}
-    	private final int idx;
-    	private As(int idx) {
-    		this.idx = idx;
-    	}
-    	static As get(int idx) {
-    		return cache.get(idx); 
-    	}
-		public static As readFrom(DataInputExtended input) throws IOException {
-			return get(input.readByte());
-		}
-		public void writeTo(DataOutputExtended output) throws IOException {
-			output.writeByte(idx);
-		}
+        OBJECT(0), NULL(1), STRING(2);
+        static Map<Integer, As> cache = new HashMap<Integer, As>();
+        static {
+            for (final As as : values()) {
+                cache.put(as.idx, as);
+            }
+        }
+        private final int idx;
+
+        private As(final int idx) {
+            this.idx = idx;
+        }
+
+        static As get(final int idx) {
+            return cache.get(idx);
+        }
+
+        public static As readFrom(final DataInputExtended input) throws IOException {
+            return get(input.readByte());
+        }
+
+        public void writeTo(final DataOutputExtended output) throws IOException {
+            output.writeByte(idx);
+        }
     }
-    
+
     public ObjectData(final Oid oid, final String resolveState, final String className) {
         super(oid, resolveState, className);
         initialized();
@@ -88,21 +88,21 @@ public class ObjectData extends Data {
     }
 
     @Override
-    public void encode(DataOutputExtended output) throws IOException {
+    public void encode(final DataOutputExtended output) throws IOException {
         super.encode(output);
 
         output.writeInt(fields.size());
 
-        for (final String key: fields.keySet()) {
+        for (final String key : fields.keySet()) {
             final Object value = fields.get(key);
 
             output.writeUTF(key);
-			if (value instanceof Data) {
-				As.OBJECT.writeTo(output);
+            if (value instanceof Data) {
+                As.OBJECT.writeTo(output);
                 output.writeEncodable(value);
             } else if (value instanceof Null) {
                 As.NULL.writeTo(output);
-            	// nothing to do; if read back corresponds to NO_ENTRY
+                // nothing to do; if read back corresponds to NO_ENTRY
             } else {
                 As.STRING.writeTo(output);
                 output.writeUTF((String) value);
@@ -110,15 +110,14 @@ public class ObjectData extends Data {
         }
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
-    
+    // ///////////////////////////////////////////////////////
+
     public void addField(final String fieldName, final Object entry) {
         if (fields.containsKey(fieldName)) {
             throw new IllegalArgumentException("Field already entered " + fieldName);
@@ -129,7 +128,7 @@ public class ObjectData extends Data {
     public boolean containsField() {
         return fields != null && fields.size() > 0;
     }
-    
+
     public Object getEntry(final String fieldName) {
         final Object entry = fields.get(fieldName);
         return entry == null || entry.getClass() == NO_ENTRY.getClass() ? null : entry;
@@ -143,7 +142,7 @@ public class ObjectData extends Data {
     @Override
     public void debug(final DebugBuilder debug) {
         super.debug(debug);
-        for (String key: fields.keySet()) {
+        for (final String key : fields.keySet()) {
             final Object value = fields.get(key);
 
             debug.appendln(key, value);
@@ -151,6 +150,5 @@ public class ObjectData extends Data {
             // TODO recurse!
         }
     }
-
 
 }

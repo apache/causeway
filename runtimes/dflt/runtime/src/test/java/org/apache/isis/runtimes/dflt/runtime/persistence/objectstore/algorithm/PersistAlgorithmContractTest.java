@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
 import java.util.ArrayList;
@@ -26,11 +25,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-
 
 public abstract class PersistAlgorithmContractTest extends ProxyJunit3TestCase {
 
@@ -41,10 +37,12 @@ public abstract class PersistAlgorithmContractTest extends ProxyJunit3TestCase {
             return persistedObjects;
         }
 
+        @Override
         public void addPersistedObject(final ObjectAdapter object) {
             persistedObjects.add(object);
         }
 
+        @Override
         public void remapAsPersistent(final ObjectAdapter object) {
             object.changeState(ResolveState.RESOLVED);
         }
@@ -79,4 +77,3 @@ public abstract class PersistAlgorithmContractTest extends ProxyJunit3TestCase {
     }
 
 }
-

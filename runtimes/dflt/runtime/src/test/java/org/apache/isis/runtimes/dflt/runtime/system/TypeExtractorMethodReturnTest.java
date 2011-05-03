@@ -17,37 +17,38 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.containsElementThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.containsElementThat;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.junit.Test;
-
 import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodReturn;
+import org.junit.Test;
 
 public class TypeExtractorMethodReturnTest {
 
     @Test
     public void shouldFindGenericTypes() throws Exception {
 
-        class Customer {}
+        class Customer {
+        }
         class CustomerRepository {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
-            public List<Customer> findCustomers() { return null; }
+            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
+            public List<Customer> findCustomers() {
+                return null;
+            }
         }
 
-        Class<?> clazz = CustomerRepository.class;
-        Method method = clazz.getMethod("findCustomers");
+        final Class<?> clazz = CustomerRepository.class;
+        final Method method = clazz.getMethod("findCustomers");
 
-        TypeExtractorMethodReturn extractor = new TypeExtractorMethodReturn(method);
+        final TypeExtractorMethodReturn extractor = new TypeExtractorMethodReturn(method);
 
         assertThat(extractor.getClasses().size(), is(2));
         assertThat(extractor.getClasses(), containsElementThat(equalTo(java.util.List.class)));
@@ -59,18 +60,17 @@ public class TypeExtractorMethodReturnTest {
 
         class CustomerRepository {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
-            public void findCustomers(){ }
+            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
+            public void findCustomers() {
+            }
         }
 
-        Class<?> clazz = CustomerRepository.class;
-        Method method = clazz.getMethod("findCustomers");
+        final Class<?> clazz = CustomerRepository.class;
+        final Method method = clazz.getMethod("findCustomers");
 
-        TypeExtractorMethodReturn extractor = new TypeExtractorMethodReturn(method);
+        final TypeExtractorMethodReturn extractor = new TypeExtractorMethodReturn(method);
 
         assertThat(extractor.getClasses().size(), is(0));
     }
-
-
 
 }

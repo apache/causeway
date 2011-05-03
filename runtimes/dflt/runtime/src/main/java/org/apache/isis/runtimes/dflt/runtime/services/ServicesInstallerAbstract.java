@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.services;
 
 import static org.apache.isis.core.commons.lang.CastUtils.collectionOf;
@@ -29,15 +28,13 @@ import java.util.List;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-
-
 public abstract class ServicesInstallerAbstract extends InstallerAbstract implements ServicesInstaller {
     private final List<Object> services = new ArrayList<Object>();
 
-    public ServicesInstallerAbstract(String name) {
-    	super(ServicesInstaller.TYPE, name);
+    public ServicesInstallerAbstract(final String name) {
+        super(ServicesInstaller.TYPE, name);
     }
-    
+
     /**
      * Add this service, automatically unravelling if is a {@link Collection} of services.
      * 
@@ -59,6 +56,7 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
         addService(new SimpleRepository(cls));
     }
 
+    @Override
     public List<Object> getServices(final DeploymentType deploymentType) {
         return services;
     }
@@ -72,4 +70,3 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
     }
 
 }
-

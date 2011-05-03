@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webapp.auth;
 
 import javax.servlet.ServletContext;
@@ -25,23 +24,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
+public abstract class AuthenticationSessionLookupStrategyAbstract implements AuthenticationSessionLookupStrategy {
 
-public abstract class AuthenticationSessionLookupStrategyAbstract implements
-		AuthenticationSessionLookupStrategy {
+    protected HttpSession getHttpSession(final ServletRequest servletRequest) {
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        return httpServletRequest.getSession();
+    }
 
-	protected HttpSession getHttpSession(ServletRequest servletRequest) {
-		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-		return httpServletRequest.getSession();
-	}
+    protected ServletContext getServletContext(final ServletRequest servletRequest) {
+        final HttpSession httpSession = getHttpSession(servletRequest);
+        return httpSession.getServletContext();
+    }
 
-	protected ServletContext getServletContext(ServletRequest servletRequest) {
-		HttpSession httpSession = getHttpSession(servletRequest);
-		return httpSession.getServletContext();
-	}
-	
 }

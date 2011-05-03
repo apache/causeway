@@ -17,18 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor;
 
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 
-
-
 public class ClassSubstitutorIdentity extends ClassSubstitutorAbstract {
 
-    
     public ClassSubstitutorIdentity() {
     }
-    
-    
+
 }

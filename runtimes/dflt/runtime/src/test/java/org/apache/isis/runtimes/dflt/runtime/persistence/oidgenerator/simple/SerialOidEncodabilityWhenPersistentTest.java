@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public class SerialOidEncodabilityWhenPersistentTest extends SerialOidEncodabilityAbstractTest {
 
-	protected Encodable createEncodable() {
-		return SerialOid.createPersistent(456L);
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return SerialOid.createPersistent(456L);
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory;
 
 import java.lang.reflect.Modifier;
@@ -27,32 +26,28 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFac
 
 public class ObjectFactoryBasic extends ObjectFactoryAbstract {
 
+    public ObjectFactoryBasic() {
+    }
 
-    public ObjectFactoryBasic() {}
-    
-    public ObjectFactoryBasic(Mode mode) {
+    public ObjectFactoryBasic(final Mode mode) {
         super(mode);
     }
 
-    
     /**
      * Simply instantiates reflectively, does not enhance bytecode etc in any way.
      */
     @Override
-    protected <T> T doInstantiate(Class<T> cls) throws ObjectInstantiationException {
+    protected <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
         }
         try {
             return cls.newInstance();
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new ObjectInstantiationException(e);
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             throw new ObjectInstantiationException(e);
         }
     }
-
-
-
 
 }

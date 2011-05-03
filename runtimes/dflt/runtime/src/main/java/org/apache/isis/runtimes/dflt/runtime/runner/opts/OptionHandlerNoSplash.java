@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.NO_SPLASH_LONG_OPT;
@@ -25,12 +24,10 @@ import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.NO_SPLASH_O
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
-
 
 public class OptionHandlerNoSplash extends OptionHandlerAbstract {
 
@@ -40,20 +37,23 @@ public class OptionHandlerNoSplash extends OptionHandlerAbstract {
         super();
     }
 
-    public void addOption(Options options) {
+    @Override
+    public void addOption(final Options options) {
         options.addOption(NO_SPLASH_OPT, NO_SPLASH_LONG_OPT, false, "don't show splash window");
     }
 
-    public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
         noSplash = commandLine.hasOption(NO_SPLASH_OPT);
         return true;
     }
 
-    public void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
         if (noSplash) {
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
         }
- //       configurationBuilder.add(SystemConstants.NOSPLASH_KEY, noSplash ? "true" : "false");
+        // configurationBuilder.add(SystemConstants.NOSPLASH_KEY, noSplash ? "true" : "false");
     }
 
 }

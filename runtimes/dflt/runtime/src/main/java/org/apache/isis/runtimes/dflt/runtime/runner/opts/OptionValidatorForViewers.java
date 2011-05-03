@@ -17,40 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import java.util.List;
 
 import org.apache.isis.applib.maybe.Maybe;
-import org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-public final class OptionValidatorForViewers implements
-        OptionValidator {
+public final class OptionValidatorForViewers implements OptionValidator {
     private final OptionHandlerViewer optionHandlerViewer;
 
-    public OptionValidatorForViewers(
-            OptionHandlerViewer optionHandlerViewer) {
+    public OptionValidatorForViewers(final OptionHandlerViewer optionHandlerViewer) {
         this.optionHandlerViewer = optionHandlerViewer;
     }
 
     @Override
-    public Maybe<String> validate(DeploymentType deploymentType) {
-        List<String> viewerNames = optionHandlerViewer.getViewerNames();
+    public Maybe<String> validate(final DeploymentType deploymentType) {
+        final List<String> viewerNames = optionHandlerViewer.getViewerNames();
 
-        boolean fail = !deploymentType.canSpecifyViewers(viewerNames);
-        String failMsg = String
-                .format(
-                        "Error: cannot specify %s viewer%s for deployment type %s\n",
-                        Strings.plural(viewerNames, "more than one",
-                                "any"), Strings.plural(
-                                viewerNames, "", "s"),
-                        deploymentType
-                                .nameLowerCase());
-        return Maybe
-                .setIf(
-                        fail,
-                        failMsg);
+        final boolean fail = !deploymentType.canSpecifyViewers(viewerNames);
+        final String failMsg =
+            String.format("Error: cannot specify %s viewer%s for deployment type %s\n",
+                Strings.plural(viewerNames, "more than one", "any"), Strings.plural(viewerNames, "", "s"),
+                deploymentType.nameLowerCase());
+        return Maybe.setIf(fail, failMsg);
     }
 }

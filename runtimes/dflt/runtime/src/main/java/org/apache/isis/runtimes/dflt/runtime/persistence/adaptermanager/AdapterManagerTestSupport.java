@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,25 +24,23 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public interface AdapterManagerTestSupport {
 
-
     /**
-     * For testing purposes, creates an {@link ObjectAdapter adapter} for the supplied domain object 
-     * with the specified {@link Oid}.
+     * For testing purposes, creates an {@link ObjectAdapter adapter} for the supplied domain object with the specified
+     * {@link Oid}.
      * 
      * <p>
-     * The usual way of creating {@link ObjectAdapter adapter}s is using {@link #adapterFor(Object)}, using
-     * the <tt>OidGenerator</tt> to obtain an {@link Oid}.  This test-support method differs because it allows 
-     * the {@link Oid} to be specified explicitly. 
-     *  
+     * The usual way of creating {@link ObjectAdapter adapter}s is using {@link #adapterFor(Object)}, using the
+     * <tt>OidGenerator</tt> to obtain an {@link Oid}. This test-support method differs because it allows the
+     * {@link Oid} to be specified explicitly.
+     * 
      * <p>
-     * Note that the {@link Oid} must represent a {@link Oid#isTransient() transient} object.  If an
-     * {@link ObjectAdapter adapter} is required for a persistent {@link Oid}, just use {@link #recreateRootAdapter(Object, Oid)}.
+     * Note that the {@link Oid} must represent a {@link Oid#isTransient() transient} object. If an
+     * {@link ObjectAdapter adapter} is required for a persistent {@link Oid}, just use
+     * {@link #recreateRootAdapter(Object, Oid)}.
      * 
      * @see #adapterFor(Object)
-     * @see #recreateRootAdapter(Object, Oid) 
+     * @see #recreateRootAdapter(Object, Oid)
      */
     ObjectAdapter testCreateTransient(Object pojo, Oid oid);
 
 }
-
-

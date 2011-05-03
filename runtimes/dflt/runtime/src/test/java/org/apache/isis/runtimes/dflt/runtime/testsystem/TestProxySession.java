@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 
-
 public class TestProxySession extends AuthenticationSessionAbstract {
-	
-	private static final long serialVersionUID = 1L;
-	
-    public TestProxySession() {
-		super("unit tester", null);
-	}
-    
-}
 
+    private static final long serialVersionUID = 1L;
+
+    public TestProxySession() {
+        super("unit tester", null);
+    }
+
+}

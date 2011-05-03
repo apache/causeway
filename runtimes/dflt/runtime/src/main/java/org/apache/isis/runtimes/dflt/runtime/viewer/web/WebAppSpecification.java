@@ -17,128 +17,121 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.viewer.web;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.lang.MapUtils;
 
-
 /**
  * Defines what servlets, mappings etc are required from an embedded web server.
  */
 public final class WebAppSpecification {
-	
-	private Map<String,String> contextParams = new LinkedHashMap<String, String>();
-    private List<Class<?>> servletContextListeners = new ArrayList<Class<?>>();
-    private List<ServletSpecification> servletSpecifications = new ArrayList<ServletSpecification>();
-    private List<FilterSpecification> filterSpecifications = new ArrayList<FilterSpecification>();
-    private List<String> resourcePaths = new ArrayList<String>();
-    private List<String> welcomeFiles = new ArrayList<String>();
-	private String logHint;
 
-    
+    private Map<String, String> contextParams = new LinkedHashMap<String, String>();
+    private final List<Class<?>> servletContextListeners = new ArrayList<Class<?>>();
+    private final List<ServletSpecification> servletSpecifications = new ArrayList<ServletSpecification>();
+    private final List<FilterSpecification> filterSpecifications = new ArrayList<FilterSpecification>();
+    private final List<String> resourcePaths = new ArrayList<String>();
+    private final List<String> welcomeFiles = new ArrayList<String>();
+    private String logHint;
 
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
     // Context Params
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
 
-	public void addContextParams(String... contextParams) {
-		this.contextParams = MapUtils.asMap(contextParams);
-	}
-	
-	public Map<String, String> getContextParams() {
-		return Collections.unmodifiableMap(contextParams);
-	}
-
-	
-    /////////////////////////////////////////////////////////////
-    // Servlet Context Listeners
-    /////////////////////////////////////////////////////////////
-    
-    public void addServletContextListener(Class<?> servletContextListenerClass) {
-        servletContextListeners.add(servletContextListenerClass);        
+    public void addContextParams(final String... contextParams) {
+        this.contextParams = MapUtils.asMap(contextParams);
     }
-    
+
+    public Map<String, String> getContextParams() {
+        return Collections.unmodifiableMap(contextParams);
+    }
+
+    // ///////////////////////////////////////////////////////////
+    // Servlet Context Listeners
+    // ///////////////////////////////////////////////////////////
+
+    public void addServletContextListener(final Class<?> servletContextListenerClass) {
+        servletContextListeners.add(servletContextListenerClass);
+    }
+
     public List<Class<?>> getServletContextListeners() {
         return servletContextListeners;
     }
 
-
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
     // Servlet Mappings
-    /////////////////////////////////////////////////////////////
-    
-    public void addServletSpecification(Class<?> servletClass, String... pathSpecs) {
-        servletSpecifications.add(new ServletSpecification(servletClass, pathSpecs));        
+    // ///////////////////////////////////////////////////////////
+
+    public void addServletSpecification(final Class<?> servletClass, final String... pathSpecs) {
+        servletSpecifications.add(new ServletSpecification(servletClass, pathSpecs));
     }
-    
-    public void addServletSpecification(Class<?> servletClass, Map<String,String> initParams, String... pathSpecs) {
-        servletSpecifications.add(new ServletSpecification(servletClass, initParams, pathSpecs));        
+
+    public void addServletSpecification(final Class<?> servletClass, final Map<String, String> initParams,
+        final String... pathSpecs) {
+        servletSpecifications.add(new ServletSpecification(servletClass, initParams, pathSpecs));
     }
-    
+
     public List<ServletSpecification> getServletSpecifications() {
         return servletSpecifications;
     }
 
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
     // Filter Mappings
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
 
-    public void addFilterSpecification(Class<?> filterClass, String... pathSpecs) {
+    public void addFilterSpecification(final Class<?> filterClass, final String... pathSpecs) {
         filterSpecifications.add(new FilterSpecification(filterClass, pathSpecs));
     }
 
-    public void addFilterSpecification(Class<?> filterClass, Map<String,String> initParams, String... pathSpecs) {
+    public void addFilterSpecification(final Class<?> filterClass, final Map<String, String> initParams,
+        final String... pathSpecs) {
         filterSpecifications.add(new FilterSpecification(filterClass, initParams, pathSpecs));
     }
 
     public List<FilterSpecification> getFilterSpecifications() {
         return filterSpecifications;
     }
-    
-    /////////////////////////////////////////////////////////////
-    // Resources
-    /////////////////////////////////////////////////////////////
 
-    public void addResourcePath(String path) {
+    // ///////////////////////////////////////////////////////////
+    // Resources
+    // ///////////////////////////////////////////////////////////
+
+    public void addResourcePath(final String path) {
         resourcePaths.add(path);
     }
+
     public List<String> getResourcePaths() {
         return resourcePaths;
     }
 
-
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
     // Welcome Files
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
 
-    public void addWelcomeFile(String path) {
+    public void addWelcomeFile(final String path) {
         welcomeFiles.add(path);
     }
-    
+
     public List<String> getWelcomeFiles() {
         return welcomeFiles;
     }
 
-    
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
     // Candifloss
-    /////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////
 
-	public String getLogHint() {
-		return logHint;
-	}
+    public String getLogHint() {
+        return logHint;
+    }
 
-	public void setLogHint(String logHint) {
-		this.logHint = logHint;
-	}
+    public void setLogHint(final String logHint) {
+        this.logHint = logHint;
+    }
 
 }
-

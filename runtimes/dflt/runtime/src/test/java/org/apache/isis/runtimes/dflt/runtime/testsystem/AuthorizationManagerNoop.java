@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.applib.Identifier;
@@ -27,19 +26,23 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 public class AuthorizationManagerNoop implements AuthorizationManager {
 
-	public void init() {
-	}
-	
-	public void shutdown() {
-	}
-	
-	public boolean isUsable(AuthenticationSession session, ObjectAdapter target, Identifier identifier) {
-		return true;
-	}
+    @Override
+    public void init() {
+    }
 
-	public boolean isVisible(AuthenticationSession session,
-			ObjectAdapter target, Identifier identifier) {
-		return true;
-	}
+    @Override
+    public void shutdown() {
+    }
+
+    @Override
+    public boolean isUsable(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target,
+        final Identifier identifier) {
+        return true;
+    }
 
 }

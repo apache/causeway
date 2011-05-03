@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.systemconsole;
 
 public interface QuitListener {
@@ -31,4 +30,3 @@ public interface QuitListener {
 
     public void shutdown();
 }
-

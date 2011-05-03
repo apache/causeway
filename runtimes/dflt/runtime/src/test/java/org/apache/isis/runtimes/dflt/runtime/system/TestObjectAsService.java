@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 public class TestObjectAsService {
@@ -26,12 +25,13 @@ public class TestObjectAsService {
         return null;
     }
 
-    public void init() {}
+    public void init() {
+    }
 
-    public void action() {}
+    public void action() {
+    }
 
     public String title() {
         return null;
     }
 }
-

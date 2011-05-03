@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.exploration;
 
 import java.util.List;
@@ -25,35 +24,31 @@ import java.util.List;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 
-
-
-
 /**
  * For testing purposes, requests corresponding to an {@link ExplorationSession}.
  */
 public class AuthenticationRequestExploration extends AuthenticationRequestAbstract {
-	
-	private static final String EXPLORATION_USER = "exploration";
-	
-	private final LogonFixture logonFixture;
-	
+
+    private static final String EXPLORATION_USER = "exploration";
+
+    private final LogonFixture logonFixture;
+
     public AuthenticationRequestExploration() {
-    	this(null);
+        this(null);
     }
-    
-    public AuthenticationRequestExploration(LogonFixture logonFixture) {
-    	super(logonFixture != null? logonFixture.getUsername(): EXPLORATION_USER);
-    	this.logonFixture = logonFixture;
+
+    public AuthenticationRequestExploration(final LogonFixture logonFixture) {
+        super(logonFixture != null ? logonFixture.getUsername() : EXPLORATION_USER);
+        this.logonFixture = logonFixture;
     }
-    
+
     @Override
     public List<String> getRoles() {
-    	return logonFixture!=null? logonFixture.getRoles(): super.getRoles();
+        return logonFixture != null ? logonFixture.getRoles() : super.getRoles();
     }
 
-	public boolean isDefaultUser() {
-		return EXPLORATION_USER.equals(getName());
-	}
+    public boolean isDefaultUser() {
+        return EXPLORATION_USER.equals(getName());
+    }
 
 }
-

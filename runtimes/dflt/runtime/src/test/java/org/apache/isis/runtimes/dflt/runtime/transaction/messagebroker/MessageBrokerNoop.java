@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
 
 import java.util.List;
@@ -27,30 +26,39 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 
 public class MessageBrokerNoop implements MessageBroker, Noop {
 
-    public void addMessage(String message) {}
+    @Override
+    public void addMessage(final String message) {
+    }
 
-    public void addWarning(String message) {}
+    @Override
+    public void addWarning(final String message) {
+    }
 
-    public void reset() {}
+    public void reset() {
+    }
 
-    public void ensureEmpty() {}
+    @Override
+    public void ensureEmpty() {
+    }
 
+    @Override
     public List<String> getMessages() {
         return null;
     }
 
+    @Override
     public String getMessagesCombined() {
         return null;
     }
 
+    @Override
     public List<String> getWarnings() {
         return null;
     }
 
+    @Override
     public String getWarningsCombined() {
         return null;
     }
 
 }
-
-

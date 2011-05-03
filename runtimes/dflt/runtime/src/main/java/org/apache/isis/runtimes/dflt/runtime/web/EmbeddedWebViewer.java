@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.web;
 
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract;
@@ -25,5 +24,3 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract;
 public abstract class EmbeddedWebViewer extends IsisViewerAbstract {
 
 }
-
-

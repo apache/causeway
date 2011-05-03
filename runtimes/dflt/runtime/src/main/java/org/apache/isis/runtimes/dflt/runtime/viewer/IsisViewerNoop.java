@@ -17,37 +17,38 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.viewer;
 
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 
 public class IsisViewerNoop implements IsisViewer, Noop {
 
-    public void init() {}
-
-    public void shutdown() {}
-
-
-	public void setConfigurationBuilder(IsisConfigurationBuilder configurationLoader) {
-	}
+    @Override
+    public void init() {
+    }
 
     @Override
-    public void setSystemDependencyInjector(SystemDependencyInjector dependencyInjector) {
+    public void shutdown() {
+    }
+
+    @Override
+    public void setConfigurationBuilder(final IsisConfigurationBuilder configurationLoader) {
+    }
+
+    @Override
+    public void setSystemDependencyInjector(final SystemDependencyInjector dependencyInjector) {
     }
 
     public boolean bootstrapsSystem() {
-		return false;
-	}
+        return false;
+    }
 
-	public WebAppSpecification getWebAppSpecification() {
-	    return null;
-	}
+    @Override
+    public WebAppSpecification getWebAppSpecification() {
+        return null;
+    }
 
 }
-
-

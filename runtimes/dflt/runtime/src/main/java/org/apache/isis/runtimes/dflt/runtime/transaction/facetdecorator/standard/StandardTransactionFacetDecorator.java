@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standard;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -37,59 +36,58 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.facets.CollectionRemove
 import org.apache.isis.runtimes.dflt.runtime.transaction.facets.PropertyClearFacetWrapTransaction;
 import org.apache.isis.runtimes.dflt.runtime.transaction.facets.PropertySetterFacetWrapTransaction;
 
-
 public class StandardTransactionFacetDecorator extends TransactionFacetDecoratorAbstract {
 
-    public StandardTransactionFacetDecorator(IsisConfiguration configuration) {
+    public StandardTransactionFacetDecorator(final IsisConfiguration configuration) {
         super(configuration);
     }
 
-    public Facet decorate(final Facet facet, FacetHolder requiredHolder) {
+    @Override
+    public Facet decorate(final Facet facet, final FacetHolder requiredHolder) {
         final Class<? extends Facet> facetType = facet.facetType();
         if (facetType == ActionInvocationFacet.class) {
-            ActionInvocationFacet decoratedFacet = (ActionInvocationFacet) facet;
-            Facet decoratingFacet = new ActionInvocationFacetWrapTransaction(decoratedFacet);
+            final ActionInvocationFacet decoratedFacet = (ActionInvocationFacet) facet;
+            final Facet decoratingFacet = new ActionInvocationFacetWrapTransaction(decoratedFacet);
             requiredHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
+            return decoratingFacet;
         }
 
         if (facetType == CollectionAddToFacet.class) {
-            CollectionAddToFacet decoratedFacet = (CollectionAddToFacet) facet;
-            Facet decoratingFacet = new CollectionAddToFacetWrapTransaction(decoratedFacet);
+            final CollectionAddToFacet decoratedFacet = (CollectionAddToFacet) facet;
+            final Facet decoratingFacet = new CollectionAddToFacetWrapTransaction(decoratedFacet);
             requiredHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
+            return decoratingFacet;
         }
 
         if (facetType == CollectionClearFacet.class) {
-            CollectionClearFacet decoratedFacet = (CollectionClearFacet) facet;
-            Facet decoratingFacet = new CollectionClearFacetWrapTransaction(decoratedFacet);
+            final CollectionClearFacet decoratedFacet = (CollectionClearFacet) facet;
+            final Facet decoratingFacet = new CollectionClearFacetWrapTransaction(decoratedFacet);
             requiredHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
+            return decoratingFacet;
         }
 
         if (facetType == CollectionRemoveFromFacet.class) {
-            CollectionRemoveFromFacet decoratedFacet = (CollectionRemoveFromFacet) facet;
-            Facet decoratingFacet = new CollectionRemoveFromFacetWrapTransaction(decoratedFacet);
+            final CollectionRemoveFromFacet decoratedFacet = (CollectionRemoveFromFacet) facet;
+            final Facet decoratingFacet = new CollectionRemoveFromFacetWrapTransaction(decoratedFacet);
             requiredHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
+            return decoratingFacet;
         }
 
         if (facetType == PropertyClearFacet.class) {
-            PropertyClearFacet decoratedFacet = (PropertyClearFacet) facet;
-            Facet decoratingFacet = new PropertyClearFacetWrapTransaction(decoratedFacet);
+            final PropertyClearFacet decoratedFacet = (PropertyClearFacet) facet;
+            final Facet decoratingFacet = new PropertyClearFacetWrapTransaction(decoratedFacet);
             requiredHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
+            return decoratingFacet;
         }
 
         if (facetType == PropertySetterFacet.class) {
-            PropertySetterFacet decoratedFacet = (PropertySetterFacet) facet;
-            Facet decoratingFacet = new PropertySetterFacetWrapTransaction(decoratedFacet);
-			requiredHolder.addFacet(decoratingFacet);
-			return decoratingFacet;
+            final PropertySetterFacet decoratedFacet = (PropertySetterFacet) facet;
+            final Facet decoratingFacet = new PropertySetterFacetWrapTransaction(decoratedFacet);
+            requiredHolder.addFacet(decoratingFacet);
+            return decoratingFacet;
         }
 
         return facet;
     }
 
 }
-

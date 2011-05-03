@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webserver;
 
 import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT;
@@ -29,45 +28,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.webapp.WebAppContext;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisBootstrapper;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 import com.google.inject.Injector;
 
-final class WebServerBootstrapper implements
-        IsisBootstrapper {
+final class WebServerBootstrapper implements IsisBootstrapper {
     private static final String SRC_MAIN_WEBAPP = "src/main/webapp";
     private final IsisRunner runner;
 
-    WebServerBootstrapper(IsisRunner runner) {
+    WebServerBootstrapper(final IsisRunner runner) {
         this.runner = runner;
     }
 
     /**
      * ignores the arguments and just bootstraps JettyViewer, come what may.
      */
-    public void bootstrap(Injector injector) {
+    @Override
+    public void bootstrap(final Injector injector) {
 
-        IsisConfigurationBuilder isisConfigurationBuilder = injector.getInstance(IsisConfigurationBuilder.class);
+        final IsisConfigurationBuilder isisConfigurationBuilder = injector.getInstance(IsisConfigurationBuilder.class);
 
         // we don't actually bootstrap the system here; instead we expect it to be bootstrapped
         // from the ServletContextInitializer in the web.xml
-        IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
-        int port = configuration.getInteger(EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
-        String webappContextPath = configuration.getString(EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY,
-                EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT);
+        final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+        final int port = configuration.getInteger(EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
+        final String webappContextPath =
+            configuration.getString(EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT);
 
-        Server server = new Server(port);
-        WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
+        final Server server = new Server(port);
+        final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
 
         copyConfigurationPrimersIntoServletContext(context);
 
@@ -75,23 +73,25 @@ final class WebServerBootstrapper implements
         try {
             server.start();
             server.join();
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new IsisException("Unable to start Jetty server", ex);
         }
     }
 
     /**
-     * Bound to the {@link WebAppContext} so that they can be used when bootstrapping. 
+     * Bound to the {@link WebAppContext} so that they can be used when bootstrapping.
+     * 
      * @param context
      */
     @SuppressWarnings("unchecked")
-    private void copyConfigurationPrimersIntoServletContext(WebAppContext context) {
-        List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) (List<?>) runner.getOptionHandlers();
+    private void copyConfigurationPrimersIntoServletContext(final WebAppContext context) {
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers =
+            (List<IsisConfigurationBuilderPrimer>) (List<?>) runner.getOptionHandlers();
         context.setAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY, isisConfigurationBuilderPrimers);
     }
 
     @SuppressWarnings("unused")
-    private void copyDeploymentTypeIntoInitParams(WebAppContext context) {
+    private void copyDeploymentTypeIntoInitParams(final WebAppContext context) {
         Map<String, String> initParams = CastUtils.cast(context.getInitParams());
         initParams = new HashMap<String, String>(initParams);
         context.setInitParams(initParams);

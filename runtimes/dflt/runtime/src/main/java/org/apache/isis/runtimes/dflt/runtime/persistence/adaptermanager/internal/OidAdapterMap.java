@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal;
 
 import org.apache.isis.core.commons.components.Resettable;
@@ -25,7 +24,6 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-
 
 /**
  * A map of the objects' identities and the adapters' of the objects.

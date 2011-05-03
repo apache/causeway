@@ -17,42 +17,43 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webserver.internal;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
 
 public final class OptionHandlerResourceBase implements OptionHandler {
-	private String resourceBase;
-	static final String RESOURCE_BASE_LONG_OPT = "webapp";
-	static final String RESOURCE_BASE_OPT = "w";
+    private String resourceBase;
+    static final String RESOURCE_BASE_LONG_OPT = "webapp";
+    static final String RESOURCE_BASE_OPT = "w";
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-	    Option option = OptionBuilder.withArgName("webapp directory").hasArg().withLongOpt(OptionHandlerResourceBase.RESOURCE_BASE_LONG_OPT).withDescription(
-	    "directory holding webapp").create(OptionHandlerResourceBase.RESOURCE_BASE_OPT);
-	    options.addOption(option);
-	}
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Option option =
+            OptionBuilder.withArgName("webapp directory").hasArg()
+                .withLongOpt(OptionHandlerResourceBase.RESOURCE_BASE_LONG_OPT)
+                .withDescription("directory holding webapp").create(OptionHandlerResourceBase.RESOURCE_BASE_OPT);
+        options.addOption(option);
+    }
 
-	public boolean handle(CommandLine commandLine,
-			BootPrinter bootPrinter, Options options) {
-	    resourceBase = commandLine.getOptionValue(OptionHandlerResourceBase.RESOURCE_BASE_OPT, resourceBase);
-		return true;
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        resourceBase = commandLine.getOptionValue(OptionHandlerResourceBase.RESOURCE_BASE_OPT, resourceBase);
+        return true;
+    }
 
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		if (resourceBase == null) {
-			return;
-		}
-		isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, resourceBase);
-	}
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        if (resourceBase == null) {
+            return;
+        }
+        isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, resourceBase);
+    }
 }

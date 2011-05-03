@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import java.io.IOException;
@@ -28,13 +27,12 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 public class CollectionData extends Data {
-	
+
     private final static long serialVersionUID = 1L;
     final Data[] elements;
 
-    public CollectionData(final Oid oid, ResolveState resolveState, final String className, final Data[] elements) {
+    public CollectionData(final Oid oid, final ResolveState resolveState, final String className, final Data[] elements) {
         super(oid, resolveState.name(), className);
         this.elements = elements;
         initialized();
@@ -52,9 +50,9 @@ public class CollectionData extends Data {
         output.writeEncodables(elements);
     }
 
-	public void initialized() {
-		// nothing to do
-	}
+    public void initialized() {
+        // nothing to do
+    }
 
     @Override
     public void debug(final DebugBuilder debug) {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import java.io.IOException;
@@ -29,58 +28,52 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
  */
 public class PersistenceQueryFindUsingApplibQuerySerializable extends PersistenceQueryAbstract {
-	
-    private final Query<?> query;
-	private QueryCardinality cardinality;
 
-    public PersistenceQueryFindUsingApplibQuerySerializable(
-    		final ObjectSpecification specification, 
-    		final Query<?> query, 
-    		final QueryCardinality cardinality) {
+    private final Query<?> query;
+    private final QueryCardinality cardinality;
+
+    public PersistenceQueryFindUsingApplibQuerySerializable(final ObjectSpecification specification,
+        final Query<?> query, final QueryCardinality cardinality) {
         super(specification);
         this.query = query;
         this.cardinality = cardinality;
         initialized();
     }
 
-    public PersistenceQueryFindUsingApplibQuerySerializable(
-			DataInputExtended input) throws IOException {
-		super(input);
+    public PersistenceQueryFindUsingApplibQuerySerializable(final DataInputExtended input) throws IOException {
+        super(input);
         this.query = input.readSerializable(Query.class);
         this.cardinality = QueryCardinality.valueOf(input.readUTF());
         initialized();
-	}
-
+    }
 
     @Override
-    public void encode(DataOutputExtended output) throws IOException {
-    	super.encode(output);
-    	output.writeSerializable(query);
-    	output.writeUTF(cardinality.name());
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+        output.writeSerializable(query);
+        output.writeUTF(cardinality.name());
     }
 
-	private void initialized() {
-    	// nothing to do
+    private void initialized() {
+        // nothing to do
     }
-    
-    /////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-    
     public Query getApplibQuery() {
         return query;
     }
-    
+
     public QueryCardinality getCardinality() {
-		return cardinality;
-	}
-    
+        return cardinality;
+    }
+
     @Override
     public String toString() {
         final ToString str = ToString.createAnonymous(this);

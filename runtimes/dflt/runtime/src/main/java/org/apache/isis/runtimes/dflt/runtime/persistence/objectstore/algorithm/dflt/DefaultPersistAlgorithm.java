@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
 
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -36,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
+import org.apache.log4j.Logger;
 
 public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
     private static final Logger LOG = Logger.getLogger(DefaultPersistAlgorithm.class);
@@ -57,7 +54,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
                 object.changeState(ResolveState.RESOLVED);
             }
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(object);
-            for (ObjectAdapter element: facet.iterable(object)) {
+            for (final ObjectAdapter element : facet.iterable(object)) {
                 persist(element, toPersistObjectSet);
             }
         } else {
@@ -70,14 +67,14 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
         if (alreadyPersistedOrNotPersistableOrServiceOrStandalone(object)) {
             return;
         }
-        
+
         final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
         if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
             LOG.info("make persistent " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
-            object.changeState(ResolveState.SERIALIZING_RESOLVED); 
-            
+            object.changeState(ResolveState.SERIALIZING_RESOLVED);
+
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAssociation field = fields.get(i);
                 if (field.isNotPersisted()) {
@@ -86,9 +83,8 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
                 if (field.isOneToManyAssociation()) {
                     final ObjectAdapter collection = field.get(object);
                     if (collection == null) {
-                        throw new ObjectPersistenceException(
-                                "Collection " + field.getName() + 
-                                " does not exist in " + object.getSpecification().getFullIdentifier());
+                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in "
+                            + object.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {
@@ -101,9 +97,9 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             }
             toPersistObjectSet.addPersistedObject(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
-            object.changeState(ResolveState.SERIALIZING_RESOLVED.getEndState()); 
+            object.changeState(ResolveState.SERIALIZING_RESOLVED.getEndState());
         }
-        
+
     }
 
     @Override

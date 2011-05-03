@@ -26,8 +26,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -59,6 +57,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAware;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.log4j.Logger;
 
 public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware,
     SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebuggableWithTitle {
@@ -209,19 +208,21 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         return map(createOrRecreateRootAdapter(pojo));
     }
 
-    public ObjectAdapter adapterForAggregated(Object pojo, ObjectAdapter parent) {
+    @Override
+    public ObjectAdapter adapterForAggregated(final Object pojo, final ObjectAdapter parent) {
         final ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter != null) {
             return adapter;
         }
-        String id = getOidGenerator().createAggregateId(pojo);
+        final String id = getOidGenerator().createAggregateId(pojo);
         final Oid aggregatedOid = new AggregatedOid(parent.getOid(), id);
-        AggregateAdapters aggregatedAdapter = createOrRecreateRootAdapter(pojo, aggregatedOid);
+        final AggregateAdapters aggregatedAdapter = createOrRecreateRootAdapter(pojo, aggregatedOid);
         return map(aggregatedAdapter);
     }
 
     @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
+        final IdentifiedHolder identifiedHolder) {
 
         // attempt to locate adapter for the pojo
         final ObjectAdapter adapter = getAdapterFor(pojo);
@@ -243,7 +244,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         // can only do this if have been given an ownerAdapter & identified arguments to act as context.
         if (ownerAdapter != null && identifiedHolder != null) {
             if (specIsAggregated(noSpec) || referenceIsAggregated(identifiedHolder)) {
-                ObjectAdapter newAdapter = createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
+                final ObjectAdapter newAdapter = createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
                 return mapAndInjectServices(newAdapter);
             }
         }
@@ -256,7 +257,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         return noSpec.containsFacet(AggregatedFacet.class);
     }
 
-    private boolean referenceIsAggregated(IdentifiedHolder identifiedHolder) {
+    private boolean referenceIsAggregated(final IdentifiedHolder identifiedHolder) {
         return identifiedHolder.containsFacet(AggregatedFacet.class);
     }
 
@@ -357,17 +358,17 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         // don't do this because the Oid has been updated already
         // ensureMapsConsistent(adapter);
 
-        AggregateAdapters aggregateAdapters = aggregateAdaptersFor(adapter);
+        final AggregateAdapters aggregateAdapters = aggregateAdaptersFor(adapter);
         remapAsPersistent(aggregateAdapters);
     }
 
     private AggregateAdapters aggregateAdaptersFor(final ObjectAdapter rootAdapter) {
-        AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
-        Oid rootOid = rootAdapter.getOid();
+        final AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
+        final Oid rootOid = rootAdapter.getOid();
 
-        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
-            AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getName());
-            ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
+        for (final OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
+            final AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getName());
+            final ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
                 aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
@@ -378,7 +379,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
 
     private void remapAsPersistent(final AggregateAdapters aggregateAdapters) {
 
-        ObjectAdapter rootAdapter = aggregateAdapters.getRootAdapter();
+        final ObjectAdapter rootAdapter = aggregateAdapters.getRootAdapter();
         // although the Oid reference doesn't change, the Oid internal values will change
         final Oid oid = rootAdapter.getOid();
         if (LOG.isDebugEnabled()) {
@@ -397,8 +398,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         if (LOG.isDebugEnabled()) {
             LOG.debug("removing collection adapter(s) from oid map");
         }
-        for (ObjectAdapter collectionAdapter : aggregateAdapters) {
-            Oid collectionOid = collectionAdapter.getOid();
+        for (final ObjectAdapter collectionAdapter : aggregateAdapters) {
+            final Oid collectionOid = collectionAdapter.getOid();
             removed = getOidAdapterMap().remove(collectionOid);
             if (!removed) {
                 LOG.warn("could not remove collectionOid: " + collectionOid);
@@ -421,8 +422,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         if (LOG.isDebugEnabled()) {
             LOG.debug("re-adding collection adapter(s) to oid map");
         }
-        for (ObjectAdapter collectionAdapter : aggregateAdapters) {
-            AggregatedOid previousCollectionOid = (AggregatedOid) collectionAdapter.getOid();
+        for (final ObjectAdapter collectionAdapter : aggregateAdapters) {
+            final AggregatedOid previousCollectionOid = (AggregatedOid) collectionAdapter.getOid();
             getOidAdapterMap().add(previousCollectionOid, collectionAdapter);
         }
 
@@ -430,11 +431,11 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         if (LOG.isDebugEnabled()) {
             LOG.debug("replacing any collection pojos, remapping in pojo map");
         }
-        for (OneToManyAssociation otma : aggregateAdapters.getCollections()) {
-            ObjectAdapter collectionAdapter = aggregateAdapters.getCollectionAdapter(otma);
+        for (final OneToManyAssociation otma : aggregateAdapters.getCollections()) {
+            final ObjectAdapter collectionAdapter = aggregateAdapters.getCollectionAdapter(otma);
 
-            Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
-            Object collectionPojoOnRootPojo = getCollectionPojo(otma, rootAdapter);
+            final Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
+            final Object collectionPojoOnRootPojo = getCollectionPojo(otma, rootAdapter);
 
             if (collectionPojoOnRootPojo != collectionPojoWrappedByAdapter) {
                 getPojoAdapterMap().remove(collectionAdapter);
@@ -452,7 +453,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     public Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
-        final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
+        final PropertyOrCollectionAccessorFacet accessor =
+            association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter);
     }
 
@@ -482,7 +484,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * @see #createOid(Object)
      */
     protected AggregateAdapters createOrRecreateRootAdapter(final Object pojo) {
-        Oid transientOid = createOid(pojo);
+        final Oid transientOid = createOid(pojo);
         return createOrRecreateRootAdapter(pojo, transientOid);
     }
 
@@ -508,25 +510,27 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * (specifically, the XML object store at time of writing) do not support aggregated Oids for anything other than
      * collections.
      */
-    protected ObjectAdapter createAggregatedAdapter(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+    protected ObjectAdapter createAggregatedAdapter(final Object pojo, final ObjectAdapter ownerAdapter,
+        final IdentifiedHolder identifiedHolder) {
 
-        Identifier identifier = identifiedHolder.getIdentifier();
+        final Identifier identifier = identifiedHolder.getIdentifier();
         ensureMapsConsistent(ownerAdapter);
         Assert.assertNotNull(pojo);
 
         if (!(identifiedHolder instanceof OneToManyAssociation)) {
             throw new IsisException("only applicable to collections " + pojo + " in " + identifiedHolder);
         }
-        
+
         // persistence of aggregated follows the parent
         final Oid aggregatedOid = new AggregatedOid(ownerAdapter.getOid(), identifier.getMemberName());
-        ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
+        final ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
 
         // we copy over the type onto the adapter itself
         // [not sure why this is really needed, surely we have enough info in the adapter
         // to look this up on the fly?]
         final TypeOfFacet facet = identifiedHolder.getFacet(TypeOfFacet.class);
-        aggregatedAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
+        aggregatedAdapter
+            .setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
 
         // same locking as parent
         aggregatedAdapter.setOptimisticLock(ownerAdapter.getVersion());
@@ -541,7 +545,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Should only be called if the pojo is known not to be {@link #getAdapterFor(Object) mapped}, and for immutable
      * value types referenced.
      */
-    private ObjectAdapter createStandaloneAdapter(Object pojo) {
+    private ObjectAdapter createStandaloneAdapter(final Object pojo) {
         return createOrRecreateAdapter(pojo, null);
     }
 
@@ -559,9 +563,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * </ul>
      */
     private AggregateAdapters createOrRecreateRootAdapter(final Object pojo, final Oid oid) {
-        ObjectAdapter rootAdapter = createOrRecreateAdapter(pojo, oid);
+        final ObjectAdapter rootAdapter = createOrRecreateAdapter(pojo, oid);
 
-        AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
+        final AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
 
         // failed experiment to try to ensure that all adapters are loaded for the root;
         // left in in case we want to re-instate
@@ -570,17 +574,18 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     @SuppressWarnings("unused")
-    private void eagerlyCreateCollectionAdapters(ObjectAdapter rootAdapter, AggregateAdapters aggregateAdapters) {
-        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
-            Object referencedCollection = getCollectionPojo(otma, rootAdapter);
-            ObjectAdapter collectionAdapter = createAggregatedAdapter(referencedCollection, rootAdapter, otma);
+    private void eagerlyCreateCollectionAdapters(final ObjectAdapter rootAdapter,
+        final AggregateAdapters aggregateAdapters) {
+        for (final OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
+            final Object referencedCollection = getCollectionPojo(otma, rootAdapter);
+            final ObjectAdapter collectionAdapter = createAggregatedAdapter(referencedCollection, rootAdapter, otma);
 
             aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
         }
     }
 
     private ObjectAdapter createOrRecreateAdapter(final Object pojo, final Oid oid) {
-        ObjectAdapter adapter = getAdapterFactory().createAdapter(pojo, oid);
+        final ObjectAdapter adapter = getAdapterFactory().createAdapter(pojo, oid);
         if (oid == null) {
             adapter.changeState(ResolveState.VALUE);
         } else {
@@ -595,9 +600,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
 
     private ObjectAdapter map(final AggregateAdapters aggregateAdapters) {
         Assert.assertNotNull(aggregateAdapters);
-        ObjectAdapter adapter = aggregateAdapters.getRootAdapter();
+        final ObjectAdapter adapter = aggregateAdapters.getRootAdapter();
         mapAndInjectServices(adapter);
-        for (ObjectAdapter collectionAdapter : aggregateAdapters) {
+        for (final ObjectAdapter collectionAdapter : aggregateAdapters) {
             mapAndInjectServices(collectionAdapter);
         }
         return adapter;
@@ -626,7 +631,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         }
 
         // add all aggregated collections
-        ObjectSpecification noSpec = adapter.getSpecification();
+        final ObjectSpecification noSpec = adapter.getSpecification();
         if (!adapter.isAggregated() || adapter.isAggregated() && !noSpec.isImmutable()) {
             getPojoAdapterMap().add(pojo, adapter);
         }
@@ -681,7 +686,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         //
         // ensureThat(oid.hasPrevious(), is(false), "adapter's Oid has a previous value.");
 
-        ObjectAdapter adapter = getOidAdapterMap().getAdapter(oid);
+        final ObjectAdapter adapter = getOidAdapterMap().getAdapter(oid);
         if (adapter == null) {
             return;
         }
@@ -690,16 +695,16 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
-        Object adapterPojo = adapter.getObject();
-        ObjectAdapter adapterAccordingToPojoAdapterMap = getPojoAdapterMap().getAdapter(adapterPojo);
+        final Object adapterPojo = adapter.getObject();
+        final ObjectAdapter adapterAccordingToPojoAdapterMap = getPojoAdapterMap().getAdapter(adapterPojo);
         ensureThatArg(adapter, is(adapterAccordingToPojoAdapterMap), "mismatch in PojoAdapterMap: adapter's Pojo: "
             + adapterPojo + ", \n" + "provided adapter: " + adapter + "; \n" + " but map's adapter was : "
             + adapterAccordingToPojoAdapterMap);
     }
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
-        Oid adapterOid = adapter.getOid();
-        ObjectAdapter adapterAccordingToOidAdapterMap = getOidAdapterMap().getAdapter(adapterOid);
+        final Oid adapterOid = adapter.getOid();
+        final ObjectAdapter adapterAccordingToOidAdapterMap = getOidAdapterMap().getAdapter(adapterOid);
         ensureThatArg(adapter, is(adapterAccordingToOidAdapterMap), "mismatch in OidAdapter map: " + "adapter's Oid: "
             + adapterOid + ", " + "provided adapter: " + adapter + "; " + "map's adapter: "
             + adapterAccordingToOidAdapterMap);
@@ -887,7 +892,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Injected.
      */
     @Override
-    public void setAdapterFactory(ObjectAdapterFactory adapterFactory) {
+    public void setAdapterFactory(final ObjectAdapterFactory adapterFactory) {
         this.adapterFactory = adapterFactory;
     }
 
@@ -902,7 +907,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Injected.
      */
     @Override
-    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
 
@@ -917,7 +922,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Injected.
      */
     @Override
-    public void setOidGenerator(OidGenerator oidGenerator) {
+    public void setOidGenerator(final OidGenerator oidGenerator) {
         this.oidGenerator = oidGenerator;
     }
 
@@ -925,7 +930,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Injected.
      */
     @Override
-    public void setServicesInjector(ServicesInjector servicesInjector) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
     }
 

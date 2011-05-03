@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 public interface MessageBroker {
 
     List<String> getMessages();
-    
+
     String getMessagesCombined();
 
     List<String> getWarnings();

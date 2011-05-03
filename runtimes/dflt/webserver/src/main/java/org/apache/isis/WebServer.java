@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis;
 
 public class WebServer {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         org.apache.isis.runtimes.dflt.webserver.WebServer.main(args);
     }
-    
 
 }

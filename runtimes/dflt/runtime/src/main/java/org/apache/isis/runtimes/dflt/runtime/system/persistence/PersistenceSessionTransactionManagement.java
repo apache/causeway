@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -31,12 +30,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
  * <p>
  * Dirtiable support.
  */
-public interface PersistenceSessionTransactionManagement { 
+public interface PersistenceSessionTransactionManagement {
 
     /**
-     * Mark as {@link #objectChanged(ObjectAdapter) changed } all {@link Dirtiable} 
-     * objects that have been {@link Dirtiable#markDirty(ObjectAdapter) manually marked}
-     * as dirty.
+     * Mark as {@link #objectChanged(ObjectAdapter) changed } all {@link Dirtiable} objects that have been
+     * {@link Dirtiable#markDirty(ObjectAdapter) manually marked} as dirty.
      * 
      * <p>
      * Called by the {@link IsisTransactionManager}.
@@ -46,5 +44,5 @@ public interface PersistenceSessionTransactionManagement {
     void clearAllDirty();
 
     ObjectAdapter reload(Oid oid);
-     
+
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,12 +28,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 
-
 public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbstract implements
-        DecoratingFacet<CollectionAddToFacet> {
+    DecoratingFacet<CollectionAddToFacet> {
 
     private final CollectionAddToFacet underlyingFacet;
 
+    @Override
     public CollectionAddToFacet getDecoratedFacet() {
         return underlyingFacet;
     }
@@ -44,17 +43,19 @@ public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbs
         this.underlyingFacet = underlyingFacet;
     }
 
+    @Override
     public void add(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
         if (adapter.isTransient()) {
-        	// NOT !adapter.isPersistent();
-        	// (value adapters are neither persistent or transient) 
+            // NOT !adapter.isPersistent();
+            // (value adapters are neither persistent or transient)
             underlyingFacet.add(adapter, referencedAdapter);
         } else {
-	    	getTransactionManager().executeWithinTransaction(
-				new TransactionalClosureAbstract(){
-					public void execute() {
-						underlyingFacet.add(adapter, referencedAdapter);
-					}});
+            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+                @Override
+                public void execute() {
+                    underlyingFacet.add(adapter, referencedAdapter);
+                }
+            });
         }
     }
 
@@ -63,11 +64,10 @@ public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbs
         return super.toString() + " --> " + underlyingFacet.toString();
     }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////
+
     private static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
@@ -76,7 +76,4 @@ public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbs
         return IsisContext.getPersistenceSession();
     }
 
-
- 
 }
-

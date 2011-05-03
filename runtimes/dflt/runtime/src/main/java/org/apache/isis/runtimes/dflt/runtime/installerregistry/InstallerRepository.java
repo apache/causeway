@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry;
 
 import org.apache.isis.core.commons.components.Installer;
@@ -27,5 +26,3 @@ public interface InstallerRepository {
     public Installer[] getInstallers(final Class<?> cls);
 
 }
-
-

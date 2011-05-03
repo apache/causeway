@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webserver.embedded.jetty;
 
 import java.util.List;
@@ -29,22 +28,22 @@ import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 
 /**
- * Not to be confused with {@link IsisViewerInstaller}, this installer
- * is for a component to <i>host</i> any {@link EmbeddedWebViewer} implementations.
+ * Not to be confused with {@link IsisViewerInstaller}, this installer is for a component to <i>host</i> any
+ * {@link EmbeddedWebViewer} implementations.
  */
 public class JettyEmbeddedWebServerInstaller extends InstallerAbstract implements EmbeddedWebServerInstaller {
 
     public JettyEmbeddedWebServerInstaller() {
-		super(EmbeddedWebServerInstaller.TYPE, "jetty");
-	}
+        super(EmbeddedWebServerInstaller.TYPE, "jetty");
+    }
 
+    @Override
     public EmbeddedWebServer createEmbeddedWebServer() {
         return new EmbeddedWebServerJetty();
     }
 
+    @Override
     public List<Class<?>> getTypes() {
-    	return listOf(EmbeddedWebServer.class);
+        return listOf(EmbeddedWebServer.class);
     }
 }
-
-

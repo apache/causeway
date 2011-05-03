@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import java.util.Vector;
 
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
-
 
 public class TestObjectWithCollection extends TestPojo {
     private final Vector arrayList;
@@ -87,21 +85,25 @@ public class TestObjectWithCollection extends TestPojo {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        TestObjectWithCollection other = (TestObjectWithCollection) obj;
+        }
+        final TestObjectWithCollection other = (TestObjectWithCollection) obj;
         if (arrayList == null) {
-            if (other.arrayList != null)
+            if (other.arrayList != null) {
                 return false;
-        } else if (!arrayList.equals(other.arrayList))
+            }
+        } else if (!arrayList.equals(other.arrayList)) {
             return false;
+        }
         return true;
     }
 
 }
-

@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -42,16 +41,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
-
 /**
- * The installers correspond more-or-less to the configurable top-level components of
- * {@link IsisSystem}.
+ * The installers correspond more-or-less to the configurable top-level components of {@link IsisSystem}.
  * 
  * <p>
- * The methods of {@link InstallerRepository} may be called without {@link #init() initializing} this class,
- * but other methods may not.
+ * The methods of {@link InstallerRepository} may be called without {@link #init() initializing} this class, but other
+ * methods may not.
  */
-public interface InstallerLookup extends InstallerRepository, ApplicationScopedComponent, IsisConfigurationBuilderAware, Injectable, SystemDependencyInjector {
+public interface InstallerLookup extends InstallerRepository, ApplicationScopedComponent,
+    IsisConfigurationBuilderAware, Injectable, SystemDependencyInjector {
 
     // /////////////////////////////////////////////////////////
     // metamodel
@@ -73,9 +71,11 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
 
     TemplateImageLoaderInstaller templateImageLoaderInstaller(String requested);
 
-    PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType);
+    PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested,
+        final DeploymentType deploymentType);
 
-    UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested, DeploymentType deploymentType);
+    UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested,
+        DeploymentType deploymentType);
 
     IsisViewerInstaller viewerInstaller(final String requested, final String defaultName);
 
@@ -91,8 +91,7 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
      * {@link PersistenceMechanismInstaller} (may be a <tt>ProxyPersistor</tt>)</li>
      * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> also uses this to lookup the
      * {@link FacetDecoratorInstaller}; adds in remoting facets.</li>
-     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the
-     * {@link AuthenticationManagerInstaller}.</li>
+     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the {@link AuthenticationManagerInstaller}.</li>
      * </ul>
      */
     ClientConnectionInstaller clientConnectionInstaller(final String requested);
@@ -117,8 +116,7 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
      * Returns a <i>snapshot</i> of the current {@link IsisConfiguration}.
      * 
      * <p>
-     * The {@link IsisConfiguration} could subsequently be appended to if further {@link Installer}s
-     * are loaded.
+     * The {@link IsisConfiguration} could subsequently be appended to if further {@link Installer}s are loaded.
      */
     IsisConfiguration getConfiguration();
 
@@ -132,4 +130,3 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
     IsisConfigurationBuilder getConfigurationBuilder();
 
 }
-

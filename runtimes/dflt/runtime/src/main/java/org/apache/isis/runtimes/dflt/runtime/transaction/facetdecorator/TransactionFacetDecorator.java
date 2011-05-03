@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator;
 
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 
-
 public interface TransactionFacetDecorator extends FacetDecorator {
 
 }
-

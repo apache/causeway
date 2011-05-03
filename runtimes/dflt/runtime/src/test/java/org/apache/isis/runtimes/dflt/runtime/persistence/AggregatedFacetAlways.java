@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
-
 
 public class AggregatedFacetAlways extends MarkerFacetAbstract {
 

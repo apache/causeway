@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
@@ -26,5 +25,3 @@ public interface AdapterFactoryAware {
 
     void setAdapterFactory(ObjectAdapterFactory adapterFactory);
 }
-
-

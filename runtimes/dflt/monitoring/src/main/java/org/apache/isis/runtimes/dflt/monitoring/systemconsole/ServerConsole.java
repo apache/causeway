@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.systemconsole;
 
 public interface ServerConsole {
@@ -30,4 +29,3 @@ public interface ServerConsole {
 
     void log(String message);
 }
-

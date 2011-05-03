@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal;
 
 import org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor.CglibClassSubstitutor;
 
-
 /**
- * Marker interface that we make entities implement so easy to spot in the
- * {@link CglibClassSubstitutor}.
+ * Marker interface that we make entities implement so easy to spot in the {@link CglibClassSubstitutor}.
  */
 public interface CglibEnhanced {
 

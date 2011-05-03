@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import org.apache.isis.applib.maybe.Maybe;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.systemconsole;
 
 public interface Server {
@@ -25,4 +24,3 @@ public interface Server {
     void shutdown();
 
 }
-

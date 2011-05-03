@@ -17,31 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
+public abstract class AdapterManagerAbstract implements AdapterManagerExtended {
 
-
-public abstract class AdapterManagerAbstract implements AdapterManagerExtended  {
-
-
-    public void removeAdapter(Oid oid) {
-        ObjectAdapter adapter = getAdapterFor(oid);
+    @Override
+    public void removeAdapter(final Oid oid) {
+        final ObjectAdapter adapter = getAdapterFor(oid);
         if (adapter != null) {
-        	removeAdapter(adapter);
+            removeAdapter(adapter);
         }
     }
 
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
-            AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+            final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
             cast.setAdapterManager(this);
         }
     }
 
-
 }
-

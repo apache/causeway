@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -27,31 +26,33 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.junit.Test;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodParameters;
+import org.junit.Test;
 
 public class TypeExtractorMethodsParametersTest {
 
     @Test
     public void shouldFindGenericTypes() throws Exception {
 
-        class Customer {}
+        class Customer {
+        }
         class CustomerRepository {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
-            public void filterCustomers(List<Customer> customerList){ ; }
+            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
+            public void filterCustomers(final List<Customer> customerList) {
+                ;
+            }
         }
 
-        Class<?> clazz = CustomerRepository.class;
-        Method method = clazz.getMethod("filterCustomers", List.class);
+        final Class<?> clazz = CustomerRepository.class;
+        final Method method = clazz.getMethod("filterCustomers", List.class);
 
-        TypeExtractorMethodParameters extractor = new TypeExtractorMethodParameters(method);
+        final TypeExtractorMethodParameters extractor = new TypeExtractorMethodParameters(method);
 
         assertThat(extractor.getClasses().size(), is(2));
         assertThat(extractor.getClasses(), IsisMatchers.containsElementThat(equalTo(java.util.List.class)));
         assertThat(extractor.getClasses(), IsisMatchers.containsElementThat(equalTo(Customer.class)));
     }
-
 
 }

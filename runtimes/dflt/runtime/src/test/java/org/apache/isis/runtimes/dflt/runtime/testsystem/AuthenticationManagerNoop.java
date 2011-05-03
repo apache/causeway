@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -27,22 +26,29 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public class AuthenticationManagerNoop implements AuthenticationManager, Noop {
 
-    public void init() {}
-    
-    public void shutdown() {}
-    
-    public AuthenticationSession authenticate(AuthenticationRequest request) {
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public void shutdown() {
+    }
+
+    @Override
+    public AuthenticationSession authenticate(final AuthenticationRequest request) {
         return null;
     }
 
-    public void closeSession(AuthenticationSession session) {}
+    @Override
+    public void closeSession(final AuthenticationSession session) {
+    }
 
-    public boolean isSessionValid(AuthenticationSession session) {
+    @Override
+    public boolean isSessionValid(final AuthenticationSession session) {
         return false;
     }
 
-    public void testSetSession(AuthenticationSession authenticationSession) {}
+    public void testSetSession(final AuthenticationSession authenticationSession) {
+    }
 
 }
-
-

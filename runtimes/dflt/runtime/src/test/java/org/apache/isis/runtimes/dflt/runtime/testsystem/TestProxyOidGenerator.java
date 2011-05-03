@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 
-
 public class TestProxyOidGenerator extends OidGeneratorAbstract {
     private int transientId = 1;
     private int persistentId = 90000;
 
-    
     private TestProxyOid createOid() {
         return new TestProxyOid(transientId++);
     }
@@ -38,26 +35,30 @@ public class TestProxyOidGenerator extends OidGeneratorAbstract {
         return "";
     }
 
+    @Override
     public TestProxyOid createTransientOid(final Object object) {
         return createOid();
     }
 
+    @Override
     public void convertTransientToPersistentOid(final Oid oid) {
-    	TestProxyOid testProxyOid = (TestProxyOid) oid;
-    	testProxyOid.setNewId(persistentId++);
+        final TestProxyOid testProxyOid = (TestProxyOid) oid;
+        testProxyOid.setNewId(persistentId++);
         testProxyOid.makePersistent();
     }
-    
-    public String createAggregateId(Object pojo) {
+
+    @Override
+    public String createAggregateId(final Object pojo) {
         return "8";
     }
 
-    public void debugData(final DebugBuilder debug) {}
+    @Override
+    public void debugData(final DebugBuilder debug) {
+    }
 
+    @Override
     public String debugTitle() {
         return null;
     }
-
-
 
 }

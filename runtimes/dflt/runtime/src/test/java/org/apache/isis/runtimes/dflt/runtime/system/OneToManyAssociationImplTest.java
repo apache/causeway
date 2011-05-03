@@ -23,15 +23,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,6 +37,14 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class OneToManyAssociationImplTest {
@@ -54,15 +53,17 @@ public class OneToManyAssociationImplTest {
 
     public static class Customer {
     }
+
     public static class Order {
     }
 
-    
     private static final Class<?> COLLECTION_TYPE = Order.class;
 
-    private Mockery context = new JUnit4Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+    private final Mockery context = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
     private ObjectAdapter mockOwnerAdapter;
     private ObjectAdapter mockAssociatedAdapter;
@@ -78,13 +79,12 @@ public class OneToManyAssociationImplTest {
     private NamedFacet mockNamedFacet;
     private CollectionAddToFacet mockCollectionAddToFacet;
 
-
     @Before
     public void setUp() {
 
         mockOwnerAdapter = context.mock(ObjectAdapter.class, "owner");
         mockAssociatedAdapter = context.mock(ObjectAdapter.class, "associated");
-        
+
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
         mockSpecificationLookup = context.mock(SpecificationLookup.class);
         mockAdapterManager = context.mock(AdapterMap.class);
@@ -93,11 +93,13 @@ public class OneToManyAssociationImplTest {
 
         mockNamedFacet = context.mock(NamedFacet.class);
         mockCollectionAddToFacet = context.mock(CollectionAddToFacet.class);
-        
+
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberContext(mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter));
+        association =
+            new OneToManyAssociationImpl(mockPeer, new ObjectMemberContext(mockAuthenticationSessionProvider,
+                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter));
     }
 
     private void allowingSpecLoaderToReturnSpecs() {
@@ -119,10 +121,9 @@ public class OneToManyAssociationImplTest {
         assertThat(association.getName(), is(equalTo("My name")));
     }
 
-
     @Test
     public void delegatesToUnderlying() {
-        ObjectSpecification spec = association.getSpecification();
+        final ObjectSpecification spec = association.getSpecification();
     }
 
     @Test
@@ -131,16 +132,16 @@ public class OneToManyAssociationImplTest {
             {
                 one(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
-                
+
                 one(mockOwnerAdapter).isPersistent();
                 will(returnValue(true));
 
                 one(mockAssociatedAdapter).isTransient();
                 will(returnValue(false));
-                
+
                 one(mockPeer).getFacet(CollectionAddToFacet.class);
                 will(returnValue(mockCollectionAddToFacet));
-                
+
                 one(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter);
             }
         });
@@ -180,7 +181,7 @@ public class OneToManyAssociationImplTest {
             {
                 one(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
-                
+
                 one(mockNamedFacet).value();
                 will(returnValue("My name"));
             }

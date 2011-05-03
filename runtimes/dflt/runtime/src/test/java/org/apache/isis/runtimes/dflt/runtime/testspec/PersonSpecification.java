@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testspec;
 
 import java.util.Arrays;
@@ -33,11 +32,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestSpecification;
-import org.apache.isis.core.testsupport.testdomain.Person;
-
-
 
 class PersonNameField extends ValueFieldTest {
 
@@ -93,7 +90,7 @@ class PersonNameField extends ValueFieldTest {
     }
 
     @Override
-    public void set(ObjectAdapter owner, ObjectAdapter newValue) {
+    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
         setAssociation(owner, newValue);
     }
 
@@ -108,7 +105,7 @@ public class PersonSpecification extends TestProxySpecification {
 
     public PersonSpecification() {
         super(Person.class);
-        fields = Arrays.asList( (ObjectAssociation)new PersonNameField() );
+        fields = Arrays.asList((ObjectAssociation) new PersonNameField());
     }
 
     @Override
@@ -122,10 +119,8 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public ObjectAction getObjectAction(
-            final ActionType type,
-            final String name,
-            final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name,
+        final List<ObjectSpecification> parameters) {
         return null;
     }
 
@@ -150,7 +145,7 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter, Localization localization) {
+    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
         return ((Person) adapter.getObject()).title();
     }
 
@@ -164,5 +159,3 @@ public class PersonSpecification extends TestProxySpecification {
         return new Person();
     }
 }
-
-

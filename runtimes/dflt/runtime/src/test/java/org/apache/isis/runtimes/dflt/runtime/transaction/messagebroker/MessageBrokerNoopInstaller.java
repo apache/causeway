@@ -17,32 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
 
 import java.util.List;
 
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerInstaller;
-
 
 public class MessageBrokerNoopInstaller extends InstallerAbstract implements MessageBrokerInstaller {
 
-	
     public MessageBrokerNoopInstaller() {
-		super(MessageBrokerInstaller.TYPE, "noop");
-	}
-
-    public MessageBroker createMessageBroker() {
-    	return new MessageBrokerNoop();
+        super(MessageBrokerInstaller.TYPE, "noop");
     }
-    
+
+    @Override
+    public MessageBroker createMessageBroker() {
+        return new MessageBrokerNoop();
+    }
+
     @Override
     public List<Class<?>> getTypes() {
-    	return listOf(MessageBroker.class);
+        return listOf(MessageBroker.class);
     }
-    
+
 }
-
-

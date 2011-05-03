@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import java.util.List;
@@ -28,29 +27,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 public final class OptionValidatorForConnector implements OptionValidator {
     private final OptionHandlerConnector optionHandlerClientConnection;
 
-    public OptionValidatorForConnector(
-            OptionHandlerConnector optionHandlerClientConnection) {
+    public OptionValidatorForConnector(final OptionHandlerConnector optionHandlerClientConnection) {
         this.optionHandlerClientConnection = optionHandlerClientConnection;
     }
 
     @Override
-    public Maybe<String> validate(DeploymentType deploymentType) {
-        List<String> connectorNames = optionHandlerClientConnection
-                .getConnectorNames();
+    public Maybe<String> validate(final DeploymentType deploymentType) {
+        final List<String> connectorNames = optionHandlerClientConnection.getConnectorNames();
 
-        boolean fail = !deploymentType
-                .canSpecifyConnectors(connectorNames);
-        String failMsg = String
-                .format(
-                        "Error: cannot specify %s connector%s for deployment type %s\n",
-                        Strings.plural(connectorNames, "more than one",
-                                "any"), Strings.plural(
-                                connectorNames, "", "s"),
-                        deploymentType
-                                .nameLowerCase());
-        return Maybe
-                .setIf(
-                        fail,
-                        failMsg);
+        final boolean fail = !deploymentType.canSpecifyConnectors(connectorNames);
+        final String failMsg =
+            String.format("Error: cannot specify %s connector%s for deployment type %s\n",
+                Strings.plural(connectorNames, "more than one", "any"), Strings.plural(connectorNames, "", "s"),
+                deploymentType.nameLowerCase());
+        return Maybe.setIf(fail, failMsg);
     }
 }

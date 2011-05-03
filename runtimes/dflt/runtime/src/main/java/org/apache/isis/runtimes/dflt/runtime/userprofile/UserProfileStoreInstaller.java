@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.userprofile;
 
 import org.apache.isis.core.commons.components.Installer;
@@ -26,10 +25,8 @@ import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 public interface UserProfileStoreInstaller extends Installer {
 
-	public static String TYPE = "user-profile-store";
+    public static String TYPE = "user-profile-store";
 
     UserProfileStore createUserProfileStore(final IsisConfiguration objectConfiguration);
 
 }
-
-

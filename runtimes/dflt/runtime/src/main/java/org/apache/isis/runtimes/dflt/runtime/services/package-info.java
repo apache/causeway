@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Used to specify the set of services (including repositories) to inject into
  * domain objects.

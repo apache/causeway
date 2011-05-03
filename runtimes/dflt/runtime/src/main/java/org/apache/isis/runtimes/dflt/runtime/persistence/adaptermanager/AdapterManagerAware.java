@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -25,4 +24,3 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 public interface AdapterManagerAware {
     void setAdapterManager(AdapterManager adapterManager);
 }
-

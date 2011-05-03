@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
 public interface PersistenceCommandContext {
@@ -27,5 +26,3 @@ public interface PersistenceCommandContext {
     void end();
 
 }
-
-

@@ -17,27 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.specpeer;
 
 import java.util.Vector;
 
 import junit.framework.Assert;
 
-
 @SuppressWarnings("unchecked")
 public class ExpectedCalls {
-	private final Vector expectedObjects = new Vector();
+    private final Vector expectedObjects = new Vector();
     private final Vector actualObjects = new Vector();
 
     private void assertExpectedNoMoreThanActuals() {
         Assert.assertTrue("More actuals than expected; didn't expect call " + actualObjects.lastElement(),
-                actualObjects.size() <= expectedObjects.size());
+            actualObjects.size() <= expectedObjects.size());
     }
 
     public void verify() {
         assertLastMethodsParametersCorrect();
-        Assert.assertTrue("Too few calls added\n  Expected " + expectedObjects, actualObjects.size() == expectedObjects.size());
+        Assert.assertTrue("Too few calls added\n  Expected " + expectedObjects,
+            actualObjects.size() == expectedObjects.size());
     }
 
     private void assertLastMethodsParametersCorrect() {
@@ -49,7 +48,7 @@ public class ExpectedCalls {
             final int actualParameterSize = lastActualCall.paramters.size();
             final int expectedParameterSize = lastExpectedCall.paramters.size();
             Assert.assertEquals("Method " + lastExpectedCall.name + " parameters incorrect; ", expectedParameterSize,
-                    actualParameterSize);
+                actualParameterSize);
         }
     }
 
@@ -89,13 +88,12 @@ public class ExpectedCalls {
         final int expectedParameterSize = expectedCall.paramters.size();
         if (parameterElement >= expectedParameterSize) {
             Assert.fail("Unexpected number of parameters; expected " + expectedParameterSize + ", but got "
-                    + actual.paramters.size());
+                + actual.paramters.size());
         }
 
         final Object expected = expectedCall.parameterAt(parameterElement);
-        Assert.assertEquals(
-                "Actual parameter (" + parameterElement + ") in " + expectedCall.name + " does not match expected.\n", expected,
-                value);
+        Assert.assertEquals("Actual parameter (" + parameterElement + ") in " + expectedCall.name
+            + " does not match expected.\n", expected, value);
     }
 
 }
@@ -103,7 +101,7 @@ public class ExpectedCalls {
 @SuppressWarnings("unchecked")
 class ExpectedCall {
     String name;
-	Vector paramters = new Vector();
+    Vector paramters = new Vector();
 
     public ExpectedCall(final String name) {
         this.name = name;

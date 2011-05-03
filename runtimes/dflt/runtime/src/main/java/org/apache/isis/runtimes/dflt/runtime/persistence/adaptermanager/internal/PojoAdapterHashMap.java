@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal;
 
 import java.util.HashMap;
@@ -25,11 +24,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.collections.map.IdentityMap;
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
+import org.apache.log4j.Logger;
 
 /**
  * TODO: an alternative might be to use {@link IdentityMap}.
@@ -37,17 +35,19 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 public class PojoAdapterHashMap implements PojoAdapterMap {
 
     private static class IdentityHashKey {
-        private Object pojo;
+        private final Object pojo;
 
-        public IdentityHashKey(Object pojo) {
+        public IdentityHashKey(final Object pojo) {
             this.pojo = pojo;
         }
 
+        @Override
         public int hashCode() {
             return System.identityHashCode(pojo);
         }
 
-        public boolean equals(Object obj) {
+        @Override
+        public boolean equals(final Object obj) {
             return obj == this || (obj instanceof IdentityHashKey && ((IdentityHashKey) obj).pojo == pojo);
         }
     }
@@ -67,7 +67,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
 
     public PojoAdapterHashMap(final int capacity) {
         adapterByPojoMap = new HashMap<Object, ObjectAdapter>(capacity);
-        //adapterByPojoMap = new IdentityMap(capacity);
+        // adapterByPojoMap = new IdentityMap(capacity);
     }
 
     @Override
@@ -80,10 +80,12 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // open, close
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public void open() {
-    // nothing to do
+        // nothing to do
     }
 
+    @Override
     public void close() {
         LOG.debug("close");
         adapterByPojoMap.clear();
@@ -93,32 +95,36 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // reset
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public void reset() {
         LOG.debug("reset");
-        for (Iterator<Map.Entry<Object, ObjectAdapter>> iterator = adapterByPojoMap.entrySet().iterator(); iterator.hasNext();) {
-        	Map.Entry<Object, ObjectAdapter> entry = iterator.next();
-        	ObjectAdapter adapter = entry.getValue();
-			if (!adapter.getSpecification().isService()) {
-        		iterator.remove();
-        	}
-		}
+        for (final Iterator<Map.Entry<Object, ObjectAdapter>> iterator = adapterByPojoMap.entrySet().iterator(); iterator
+            .hasNext();) {
+            final Map.Entry<Object, ObjectAdapter> entry = iterator.next();
+            final ObjectAdapter adapter = entry.getValue();
+            if (!adapter.getSpecification().isService()) {
+                iterator.remove();
+            }
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // add, remove
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public void add(final Object pojo, final ObjectAdapter adapter) {
         adapterByPojoMap.put(key(pojo), adapter);
-        LOG.debug("add adapter: #" + Long.toHexString(pojo.hashCode()) +  " -> #" + Long.toHexString(adapter.hashCode()));
+        LOG.debug("add adapter: #" + Long.toHexString(pojo.hashCode()) + " -> #" + Long.toHexString(adapter.hashCode()));
         // log at end so that if toString needs adapters they're in maps.
         if (adapter.getResolveState().isResolved()) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("add " + new ToString(pojo) + " as " + adapter);
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("add " + new ToString(pojo) + " as " + adapter);
+            }
         }
     }
 
+    @Override
     public void remove(final ObjectAdapter object) {
         LOG.debug("remove adapater: " + object);
         adapterByPojoMap.remove(key(object.getObject()));
@@ -128,6 +134,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // contains
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean containsPojo(final Object pojo) {
         return adapterByPojoMap.containsKey(key(pojo));
     }
@@ -136,6 +143,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // get
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getAdapter(final Object pojo) {
         return adapterByPojoMap.get(key(pojo));
     }
@@ -144,11 +152,12 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // elements
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public Iterator<ObjectAdapter> iterator() {
         return adapterByPojoMap.values().iterator();
     }
 
-    private Object key(Object pojo) {
+    private Object key(final Object pojo) {
         return new IdentityHashKey(pojo);
     }
 
@@ -156,6 +165,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // Debugging
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         int count = 0;
         for (final Object pojo : adapterByPojoMap.keySet()) {
@@ -168,6 +178,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
         }
     }
 
+    @Override
     public String debugTitle() {
         return "POJO Adapter Hashtable";
     }

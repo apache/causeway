@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import java.text.DateFormat;
@@ -27,15 +26,14 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-
 public class ConcurrencyException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;
     private Oid source;
 
     public ConcurrencyException(final ObjectAdapter object, final Version updated) {
         this(object.getVersion().getUser() + " changed " + object.titleString() + " at "
-                + DateFormat.getDateTimeInstance().format(object.getVersion().getTime()) + "\n\n" + object.getVersion() + " ~ " + updated + "", object
-                .getOid());
+            + DateFormat.getDateTimeInstance().format(object.getVersion().getTime()) + "\n\n" + object.getVersion()
+            + " ~ " + updated + "", object.getOid());
     }
 
     public ConcurrencyException(final String message, final Oid source) {

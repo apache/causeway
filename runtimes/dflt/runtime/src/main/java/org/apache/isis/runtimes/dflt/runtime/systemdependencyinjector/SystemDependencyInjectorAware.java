@@ -17,14 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector;
 
-
-
-
-public interface SystemDependencyInjectorAware  {
+public interface SystemDependencyInjectorAware {
 
     void setSystemDependencyInjector(final SystemDependencyInjector dependencyInjector);
 }
-

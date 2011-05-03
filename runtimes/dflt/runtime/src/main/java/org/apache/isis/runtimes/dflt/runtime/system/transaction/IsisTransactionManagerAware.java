@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.transaction;
-
 
 public interface IsisTransactionManagerAware {
 
     public void setTransactionManager(IsisTransactionManager transactionManager);
 }
-
-

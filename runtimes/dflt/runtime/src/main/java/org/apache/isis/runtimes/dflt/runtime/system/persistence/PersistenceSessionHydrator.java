@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.core.commons.components.Injectable;
@@ -26,22 +25,21 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public interface PersistenceSessionHydrator extends Injectable {
 
     /**
      * Returns an {@link ObjectAdapter adapter} of the {@link ObjectSpecification type} specified.
      * 
      * <p>
-     * If an adapter exists in the {@link AdapterManager map} then that adapter is returned immediately.
-     * Otherwise a new domain object of the type specified is {@link ObjectFactory created} and then an
-     * adapter is recreated as per {@link #recreateAdapter(Oid, Object)}.
+     * If an adapter exists in the {@link AdapterManager map} then that adapter is returned immediately. Otherwise a new
+     * domain object of the type specified is {@link ObjectFactory created} and then an adapter is recreated as per
+     * {@link #recreateAdapter(Oid, Object)}.
      * 
      * <p>
-     * Note: the similar looking method
-     * {@link PersistenceSessionContainer#loadObject(Oid, ObjectSpecification)} retrieves the existing
-     * object from the persistent store (if not available in the {@link AdapterManager maps} . Once the object
-     * has been retrieved, the object store calls back to {@link #recreateAdapter(Oid, Object)} to map it.
+     * Note: the similar looking method {@link PersistenceSessionContainer#loadObject(Oid, ObjectSpecification)}
+     * retrieves the existing object from the persistent store (if not available in the {@link AdapterManager maps} .
+     * Once the object has been retrieved, the object store calls back to {@link #recreateAdapter(Oid, Object)} to map
+     * it.
      * 
      * @see #recreateAdapter(Oid, Object)
      * @see PersistenceSessionContainer#loadObject(Oid, ObjectSpecification)
@@ -52,12 +50,10 @@ public interface PersistenceSessionHydrator extends Injectable {
      * Returns an adapter for the provided {@link Oid}, wrapping the provided domain object.
      * 
      * <p>
-     * If an adapter exists in the {@link AdapterManager map} for either the {@link Oid} or the domain object
-     * then that adapter is returned immediately. Otherwise a new adapter is created using the specified
-     * {@link Oid} and its resolved state set to either {@link ResolveState#TRANSIENT} or
-     * {@link ResolveState#GHOST} based on whether the {@link Oid} is {@link Oid#isTransient() transient} or
-     * not.
+     * If an adapter exists in the {@link AdapterManager map} for either the {@link Oid} or the domain object then that
+     * adapter is returned immediately. Otherwise a new adapter is created using the specified {@link Oid} and its
+     * resolved state set to either {@link ResolveState#TRANSIENT} or {@link ResolveState#GHOST} based on whether the
+     * {@link Oid} is {@link Oid#isTransient() transient} or not.
      */
     ObjectAdapter recreateAdapter(Oid oid, Object pojo);
 }
-

@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
-
 public class TestPojoSimple extends TestPojo {
     private String name;
-    private  TestPojoSimple object;
+    private TestPojoSimple object;
 
-    public TestPojoSimple() {}
+    public TestPojoSimple() {
+    }
 
     public TestPojoSimple(final String name) {
         this.name = name;
@@ -40,10 +39,9 @@ public class TestPojoSimple extends TestPojo {
     }
 
     @SuppressWarnings("UWF_UNWRITTEN_FIELD")
-    public TestPojoSimple getObject(){
+    public TestPojoSimple getObject() {
         return object;
     }
-
 
     @Override
     public int hashCode() {
@@ -55,27 +53,32 @@ public class TestPojoSimple extends TestPojo {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        TestPojoSimple other = (TestPojoSimple) obj;
+        }
+        final TestPojoSimple other = (TestPojoSimple) obj;
         if (name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
-        } else if (!name.equals(other.name))
+            }
+        } else if (!name.equals(other.name)) {
             return false;
+        }
         if (object == null) {
-            if (other.object != null)
+            if (other.object != null) {
                 return false;
-        } else if (!object.equals(other.object))
+            }
+        } else if (!object.equals(other.object)) {
             return false;
+        }
         return true;
     }
 
-
 }
-

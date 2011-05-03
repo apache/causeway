@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.specpeer;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-
 
 public class ExpectedCallsTest extends TestCase {
 
@@ -68,8 +66,7 @@ public class ExpectedCallsTest extends TestCase {
          * 
          * calls.addActualMethod("testMethod2"); calls.addActualParameter("param1");
          * 
-         * calls.addActualMethod("testMethod3"); calls.addActualParameter("param1");
-         * calls.addActualParameter("param2");
+         * calls.addActualMethod("testMethod3"); calls.addActualParameter("param1"); calls.addActualParameter("param2");
          */
         calls.addActualMethod("testMethod4");
         calls.addActualParameter("param1");

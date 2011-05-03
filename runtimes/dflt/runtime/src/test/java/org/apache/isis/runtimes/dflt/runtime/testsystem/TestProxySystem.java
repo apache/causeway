@@ -108,7 +108,7 @@ public class TestProxySystem {
     public void init() {
         reflector.setRuntimeContext(new RuntimeContextFromSession());
 
-        IsisSessionFactory sessionFactory =
+        final IsisSessionFactory sessionFactory =
             new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, noopTemplateImageLoader,
                 reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory,
                 servicesList);
@@ -188,7 +188,7 @@ public class TestProxySystem {
     public void setPersistenceSession(final PersistenceSession persistor) {
         this.persistenceSession = persistor;
         if (context != null) {
-            IsisSessionDefault current = (IsisSessionDefault) context.getSessionInstance();
+            final IsisSessionDefault current = (IsisSessionDefault) context.getSessionInstance();
             current.testSetObjectPersistor(persistor);
         }
     }

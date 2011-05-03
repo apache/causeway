@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner;
 
 import java.util.Collections;
@@ -32,7 +31,6 @@ import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFactory;
-import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
@@ -54,26 +52,25 @@ public class IsisModule extends AbstractModule {
     private static InstallerLookupDefault defaultInstallerLookup() {
         return new InstallerLookupDefault(IsisModule.class);
     }
-    
+
     private static IsisConfigurationBuilderDefault defaultConfigurationBuider() {
         return new IsisConfigurationBuilderDefault();
     }
-    
-    public IsisModule(DeploymentType deploymentType) {
+
+    public IsisModule(final DeploymentType deploymentType) {
         this(deploymentType, defaultConfigurationBuider(), defaultInstallerLookup());
     }
 
-    public IsisModule(DeploymentType deploymentType, IsisConfigurationBuilder isisConfigurationBuilder) {
+    public IsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         this(deploymentType, isisConfigurationBuilder, defaultInstallerLookup());
     }
-    
-    public IsisModule(DeploymentType deploymentType, InstallerLookup installerLookup) {
+
+    public IsisModule(final DeploymentType deploymentType, final InstallerLookup installerLookup) {
         this(deploymentType, defaultConfigurationBuider(), installerLookup);
     }
-    
-    public IsisModule(DeploymentType deploymentType,
-            IsisConfigurationBuilder isisConfigurationBuilder,
-            InstallerLookup installerLookup) {
+
+    public IsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder,
+        final InstallerLookup installerLookup) {
         this.installerLookup = installerLookup;
         this.isisConfigurationBuilder = isisConfigurationBuilder;
         this.deploymentType = deploymentType;
@@ -100,13 +97,12 @@ public class IsisModule extends AbstractModule {
     }
 
     private IsisConfigurationBuilder primeConfiguration(final IsisConfigurationBuilder configBuilder) {
-        for (IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(configBuilder);
         }
         return configBuilder;
     }
 
-    
     /**
      * As passed in or defaulted by the constructors.
      */
@@ -114,30 +110,28 @@ public class IsisModule extends AbstractModule {
     @Provides
     @Singleton
     @Inject
-    private InstallerLookup providesInstallerLookup(
-            IsisConfigurationBuilder configBuilder) {
+    private InstallerLookup providesInstallerLookup(final IsisConfigurationBuilder configBuilder) {
         // wire up and initialize installer lookup
         configBuilder.injectInto(installerLookup);
         installerLookup.init();
         return installerLookup;
     }
-    
 
     /**
      * Adjustment (as per GOOS book)
      */
-    public void addConfigurationPrimers(List<? extends IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers) {
+    public void addConfigurationPrimers(
+        final List<? extends IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers) {
         this.isisConfigurationBuilderPrimers.addAll(isisConfigurationBuilderPrimers);
     }
 
     /**
      * Adjustment (as per GOOS book)
      */
-    public void addViewerNames(List<String> viewerNames) {
+    public void addViewerNames(final List<String> viewerNames) {
         this.viewerNames.addAll(viewerNames);
     }
 
-    
     @Override
     protected void configure() {
         requireBinding(DeploymentType.class);
@@ -145,14 +139,13 @@ public class IsisModule extends AbstractModule {
         requireBinding(InstallerLookup.class);
     }
 
-    
-    
     @SuppressWarnings("unused")
     @Provides
     @Inject
     @Singleton
     private IsisSystemFactory provideIsisSystemFactory(final InstallerLookup installerLookup) {
-        IsisSystemThatUsesInstallersFactory systemFactory = new IsisSystemThatUsesInstallersFactory(installerLookup);
+        final IsisSystemThatUsesInstallersFactory systemFactory =
+            new IsisSystemThatUsesInstallersFactory(installerLookup);
         systemFactory.init();
         return systemFactory;
     }
@@ -161,16 +154,16 @@ public class IsisModule extends AbstractModule {
     @Provides
     @Inject
     @Singleton
-    private IsisSystem provideIsisSystem(final DeploymentType deploymentType, IsisSystemFactory systemFactory) {
+    private IsisSystem provideIsisSystem(final DeploymentType deploymentType, final IsisSystemFactory systemFactory) {
         final IsisSystem system = systemFactory.createSystem(deploymentType);
         system.init();
         return system;
     }
 
-
     public static class ViewerList {
-        private List<IsisViewer> viewers;
-        public ViewerList(List<IsisViewer> viewers) {
+        private final List<IsisViewer> viewers;
+
+        public ViewerList(final List<IsisViewer> viewers) {
             this.viewers = Collections.unmodifiableList(viewers);
         }
 
@@ -178,26 +171,23 @@ public class IsisModule extends AbstractModule {
             return viewers;
         }
     }
-    
+
     @SuppressWarnings("unused")
     @Provides
     @Inject
     @Singleton
-    private ViewerList lookupViewers(InstallerLookup installerLookup, DeploymentType deploymentType) {
-        
-        List<String> viewersToStart = Lists.newArrayList(viewerNames);
+    private ViewerList lookupViewers(final InstallerLookup installerLookup, final DeploymentType deploymentType) {
+
+        final List<String> viewersToStart = Lists.newArrayList(viewerNames);
         deploymentType.addDefaultViewer(viewersToStart);
 
-        List<IsisViewer> viewers = Lists.newArrayList();
-        for (String requestedViewer : viewersToStart) {
-            final IsisViewerInstaller viewerInstaller = installerLookup
-                    .viewerInstaller(requestedViewer);
+        final List<IsisViewer> viewers = Lists.newArrayList();
+        for (final String requestedViewer : viewersToStart) {
+            final IsisViewerInstaller viewerInstaller = installerLookup.viewerInstaller(requestedViewer);
             final IsisViewer viewer = viewerInstaller.createViewer();
             viewers.add(viewer);
         }
         return new ViewerList(viewers);
     }
 
-
-    
 }

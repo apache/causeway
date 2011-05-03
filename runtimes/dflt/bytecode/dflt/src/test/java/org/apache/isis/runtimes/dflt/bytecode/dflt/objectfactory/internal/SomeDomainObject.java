@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal;
 
 public class SomeDomainObject {
 
-	private String name;
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
+    public void setName(final String name) {
+        this.name = name;
+    }
+
 }

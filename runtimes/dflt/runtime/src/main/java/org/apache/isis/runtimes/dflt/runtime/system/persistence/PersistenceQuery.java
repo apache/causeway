@@ -17,16 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 /**
- * Defines a criteria for including instances in set, 
- * corresponds to {@link Query} in the applib.
+ * Defines a criteria for including instances in set, corresponds to {@link Query} in the applib.
  */
 public interface PersistenceQuery {
 

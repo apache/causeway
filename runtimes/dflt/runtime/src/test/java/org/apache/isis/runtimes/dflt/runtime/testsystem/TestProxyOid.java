@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 public class TestProxyOid implements Oid {
-    
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,7 +35,6 @@ public class TestProxyOid implements Oid {
     public boolean isTransient = true;
 
     private int hashCode;
-
 
     /**
      * Creates transient.
@@ -55,37 +52,43 @@ public class TestProxyOid implements Oid {
         cacheHashCode();
     }
 
-    public void encode(DataOutputExtended outputStream) {
+    @Override
+    public void encode(final DataOutputExtended outputStream) {
         throw new UnsupportedOperationException();
     }
 
-
+    @Override
     public boolean hasPrevious() {
         return previous != null;
     }
 
+    @Override
     public Oid getPrevious() {
         return previous;
     }
 
+    @Override
     public void copyFrom(final Oid oid) {
         this.id = ((TestProxyOid) oid).id;
         this.isTransient = ((TestProxyOid) oid).isTransient;
         cacheHashCode();
     }
 
+    @Override
     public boolean isTransient() {
         return isTransient;
     }
 
     /**
      * Should be called prior to makePersistent
+     * 
      * @param id
      */
     public void setId(final int id) {
         this.id = id;
     }
 
+    @Override
     public void makePersistent() {
         this.previous = new TestProxyOid(this.id, !this.isTransient);
         this.isTransient = false;
@@ -96,31 +99,36 @@ public class TestProxyOid implements Oid {
         this.previous = previous;
     }
 
+    @Override
     public void clearPrevious() {
         previous = null;
     }
 
-	public void setNewId(int newId) {
-		this.newId = newId;
-		
-	}
+    public void setNewId(final int newId) {
+        this.newId = newId;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        TestProxyOid other = (TestProxyOid) obj;
-        if (id != other.id)
-            return false;
-        if (isTransient != other.isTransient)
-            return false;
-        return true;
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TestProxyOid other = (TestProxyOid) obj;
+        if (id != other.id) {
+            return false;
+        }
+        if (isTransient != other.isTransient) {
+            return false;
+        }
+        return true;
+    }
 
     private void cacheHashCode() {
         final int prime = 31;
@@ -137,8 +145,8 @@ public class TestProxyOid implements Oid {
 
     @Override
     public String toString() {
-        return "Oid#" + id + (isTransient ? " T" : "") + (hasPrevious() ? " (" + previous + ")" : "; hashCode=" + hashCode);
+        return "Oid#" + id + (isTransient ? " T" : "")
+            + (hasPrevious() ? " (" + previous + ")" : "; hashCode=" + hashCode);
     }
-
 
 }

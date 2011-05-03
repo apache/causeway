@@ -17,28 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory;
 
 import java.lang.reflect.Method;
 
 public class MethodUtils {
 
-    public static boolean isGetter(Method method) {
-        String name = method.getName();
+    public static boolean isGetter(final Method method) {
+        final String name = method.getName();
         if (name.startsWith("get") && name.length() > 3) {
-        	return true;
+            return true;
         }
         if (name.startsWith("is") && name.length() > 2) {
-        	return true;
+            return true;
         }
         return false;
     }
 
-    public static boolean isSetter(Method method) {
-        String name = method.getName();
+    public static boolean isSetter(final Method method) {
+        final String name = method.getName();
         return name.startsWith("set") && name.length() > 3;
     }
-
 
 }

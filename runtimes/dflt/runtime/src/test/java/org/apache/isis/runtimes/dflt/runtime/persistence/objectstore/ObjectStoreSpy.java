@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
 import java.util.List;
@@ -32,8 +31,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -41,7 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
 
 public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManagement {
 
@@ -55,59 +51,66 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
         super();
     }
 
-
+    @Override
     public String name() {
         return null;
     }
 
-
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Open, Close
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
-    public void open() throws ObjectPersistenceException {}
+    @Override
+    public void open() throws ObjectPersistenceException {
+    }
 
-    public void close() {}
+    @Override
+    public void close() {
+    }
 
+    @Override
     public void reset() {
         actions.removeAllElements();
     }
 
-
-
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Transactions
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
+    @Override
     public void startTransaction() {
         actions.addElement("startTransaction");
     }
 
+    @Override
     public void abortTransaction() {
         actions.addElement("abortTransaction");
     }
 
+    @Override
     public void endTransaction() {
         actions.addElement("endTransaction");
     }
 
+    @Override
     public boolean isFixturesInstalled() {
         return true;
     }
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // getObject, resolve etc
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
     /**
      * Not API
      */
-    public void setGetObject(ObjectAdapter getObject) {
+    public void setGetObject(final ObjectAdapter getObject) {
         this.getObject = getObject;
     }
 
+    @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
-            ObjectPersistenceException {
+        ObjectPersistenceException {
         if (getObject == null) {
             Assert.fail("no object expected");
         }
@@ -115,112 +118,131 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
         return getObject;
     }
 
+    @Override
+    public void resolveImmediately(final ObjectAdapter object) {
+    }
 
+    @Override
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field)
+        throws ObjectPersistenceException {
+    }
 
-    public void resolveImmediately(final ObjectAdapter object) {}
-
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {}
-
-
+    @Override
     public boolean hasInstances(final ObjectSpecification cls) {
         return hasInstances;
     }
 
+    @Override
     public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException,
-            UnsupportedFindException {
+        UnsupportedFindException {
         actions.addElement("getInstances " + criteria);
         return new ObjectAdapter[0];
     }
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // save
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
+    @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         actions.addElement("createObject " + object);
         return new CreateObjectCommand() {
 
-            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {}
+            @Override
+            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+            }
 
             @Override
             public String toString() {
                 return "CreateObjectCommand " + object.toString();
             }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
         };
     }
 
+    @Override
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
         actions.addElement("destroyObject " + object);
         return new DestroyObjectCommand() {
 
-            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {}
+            @Override
+            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+            }
 
             @Override
             public String toString() {
                 return "DestroyObjectCommand " + object.toString();
             }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
         };
     }
 
+    @Override
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
         actions.addElement("saveObject " + object);
         return new SaveObjectCommand() {
 
-            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {}
+            @Override
+            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+            }
 
             @Override
             public String toString() {
                 return "DestroyObjectCommand " + object.toString();
             }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
         };
     }
 
+    @Override
     public void execute(final List<PersistenceCommand> commands) throws ObjectPersistenceException {
-        for (PersistenceCommand command: commands) {
+        for (final PersistenceCommand command : commands) {
             actions.addElement("execute " + command);
             command.execute(null);
         }
     }
 
-
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Services
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
-    public void registerService(final String name, final Oid oid) {}
+    @Override
+    public void registerService(final String name, final Oid oid) {
+    }
 
+    @Override
     public Oid getOidForService(final String name) {
         return null;
     }
 
-
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Debugging
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
+    @Override
+    public void debugData(final DebugBuilder debug) {
+    }
 
-    public void debugData(final DebugBuilder debug) {}
-
+    @Override
     public String debugTitle() {
         return null;
     }
 
-
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Non API
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
     /**
      * non API
@@ -228,7 +250,6 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
     public Vector<String> getActions() {
         return actions;
     }
-
 
     /**
      * Non API

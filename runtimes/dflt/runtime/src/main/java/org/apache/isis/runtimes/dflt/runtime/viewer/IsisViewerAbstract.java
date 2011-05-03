@@ -17,19 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.viewer;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
@@ -37,11 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 
 public abstract class IsisViewerAbstract implements IsisViewer {
 
@@ -63,23 +59,25 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     // Settings
     // ////////////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
 
         ensureDependenciesInjected();
 
-        IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+        final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
         deploymentType = DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
 
-        String user = configuration.getString(SystemConstants.USER_KEY);
-        String password = configuration.getString(SystemConstants.PASSWORD_KEY);
+        final String user = configuration.getString(SystemConstants.USER_KEY);
+        final String password = configuration.getString(SystemConstants.PASSWORD_KEY);
 
         if (user != null) {
             authenticationRequestViaArgs = new AuthenticationRequestPassword(user, password);
         }
     }
 
+    @Override
     public void shutdown() {
-    // does nothing
+        // does nothing
     }
 
     // ////////////////////////////////////////////////////////////////
@@ -91,9 +89,9 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     }
 
     /**
-     * Default implementation to return null, indicating that this viewer should not be run in a web
-     * container.
+     * Default implementation to return null, indicating that this viewer should not be run in a web container.
      */
+    @Override
     public WebAppSpecification getWebAppSpecification() {
         return null;
     }
@@ -127,17 +125,19 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     /**
      * Injected by virtue of being {@link SystemDependencyInjectorAware}.
      */
-    public void setSystemDependencyInjector(SystemDependencyInjector dependencyInjector) {
+    @Override
+    public void setSystemDependencyInjector(final SystemDependencyInjector dependencyInjector) {
         this.systemDependencyInjector = dependencyInjector;
     }
 
     protected IsisConfigurationBuilder getConfigurationBuilder() {
-		return isisConfigurationBuilder;
-	}
+        return isisConfigurationBuilder;
+    }
 
     /**
      * Injected by virtue of being {@link IsisConfigurationBuilderAware}.
      */
+    @Override
     public void setConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
         this.isisConfigurationBuilder = isisConfigurationBuilder;
     }

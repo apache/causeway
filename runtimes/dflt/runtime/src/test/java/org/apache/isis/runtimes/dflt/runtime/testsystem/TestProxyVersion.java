@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.version.Version;
-
 
 public class TestProxyVersion implements Version {
     private static final long serialVersionUID = 1L;
@@ -37,6 +35,7 @@ public class TestProxyVersion implements Version {
         this.value = value;
     }
 
+    @Override
     public boolean different(final Version version) {
         return value != ((TestProxyVersion) version).value;
     }
@@ -50,16 +49,20 @@ public class TestProxyVersion implements Version {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        TestProxyVersion other = (TestProxyVersion) obj;
-        if (value != other.value)
+        }
+        final TestProxyVersion other = (TestProxyVersion) obj;
+        if (value != other.value) {
             return false;
+        }
         return true;
     }
 
@@ -68,10 +71,12 @@ public class TestProxyVersion implements Version {
         return "Version#" + value;
     }
 
+    @Override
     public String getUser() {
         return "USER";
     }
 
+    @Override
     public Date getTime() {
         return new Date(0);
     }
@@ -80,6 +85,7 @@ public class TestProxyVersion implements Version {
         return new TestProxyVersion(value + 1);
     }
 
+    @Override
     public String sequence() {
         return "" + value;
     }

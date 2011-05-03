@@ -17,19 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
-
+import org.junit.Before;
+import org.junit.Test;
 
 public class MementoTest extends ProxyJunit4TestCase {
 
@@ -60,17 +56,16 @@ public class MementoTest extends ProxyJunit4TestCase {
         assertEquals(originalAdapter.getSpecification(), returnedAdapter.getSpecification());
     }
 
-//    @Ignore("TODO need to add reflective code to test system for this to work")
-//    @Test
-//    public void testName() throws Exception {
-//        @SuppressWarnings("unused")
-//        final TestPojoSimple originalPojo = (TestPojoSimple) originalAdapter.getObject();
-//
-//        @SuppressWarnings("unused")
-//        final TestPojoSimple returnedPojo = (TestPojoSimple) returnedAdapter.getObject();
-//
-//        // assertEquals(originalPojo.getName(), returnedPojo.getName());
-//    }
+    // @Ignore("TODO need to add reflective code to test system for this to work")
+    // @Test
+    // public void testName() throws Exception {
+    // @SuppressWarnings("unused")
+    // final TestPojoSimple originalPojo = (TestPojoSimple) originalAdapter.getObject();
+    //
+    // @SuppressWarnings("unused")
+    // final TestPojoSimple returnedPojo = (TestPojoSimple) returnedAdapter.getObject();
+    //
+    // // assertEquals(originalPojo.getName(), returnedPojo.getName());
+    // }
 
 }
-

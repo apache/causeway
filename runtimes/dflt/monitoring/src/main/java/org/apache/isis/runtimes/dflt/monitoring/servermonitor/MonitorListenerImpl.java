@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 
 import java.io.IOException;
@@ -27,11 +26,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-
 
 public class MonitorListenerImpl implements MonitorListener {
     private final List<MonitorEvent> requests = new ArrayList<MonitorEvent>();
@@ -40,6 +38,7 @@ public class MonitorListenerImpl implements MonitorListener {
         org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor.addListener(this);
     }
 
+    @Override
     public void postEvent(final MonitorEvent event) {
         // TODO use a stack of limited size so we have FIFO list
         if (requests.size() > 50) {
@@ -59,10 +58,10 @@ public class MonitorListenerImpl implements MonitorListener {
         writer.println("<h1>" + sectionName + "</h1>");
 
         final StringBuffer navigation = new StringBuffer("<p>");
-//        final String[] options = target.debugSectionNames();
-        DebuggableWithTitle[] infos = IsisContext.debugSystem();
+        // final String[] options = target.debugSectionNames();
+        final DebuggableWithTitle[] infos = IsisContext.debugSystem();
         for (int i = 0; i < infos.length; i++) {
-            String name = infos[i].debugTitle();
+            final String name = infos[i].debugTitle();
             appendNavigationLink(navigation, name, i > 0);
         }
         appendNavigationLink(navigation, "Requests", true);
@@ -72,26 +71,26 @@ public class MonitorListenerImpl implements MonitorListener {
         writer.println("<pre>");
         if (sectionName.equals("Requests")) {
             int i = 1;
-            for(MonitorEvent event: requests) {
-                writer.print("<a href=\"monitor?request=" + event.getSerialId() +"\">");
+            for (final MonitorEvent event : requests) {
+                writer.print("<a href=\"monitor?request=" + event.getSerialId() + "\">");
                 writer.print(i++ + ". " + event);
                 writer.println("</a>");
             }
         } else if (sectionName.startsWith("request=")) {
-            int requestId = Integer.valueOf(sectionName.substring("request=".length())).intValue();
-            for (MonitorEvent request : requests) {
+            final int requestId = Integer.valueOf(sectionName.substring("request=".length())).intValue();
+            for (final MonitorEvent request : requests) {
                 if (request.getSerialId() == requestId) {
                     writer.println(request.getDebug());
                     break;
                 }
             }
         } else {
-            for (int i = 0; i < infos.length; i++) {
-                if(infos[i].debugTitle().equals(sectionName)) {
+            for (final DebuggableWithTitle info : infos) {
+                if (info.debugTitle().equals(sectionName)) {
                     // TODO use an HTML debug string
                     final DebugString debug = new DebugString();
-                    infos[i].debugData(debug);
-                    writer.println(debug.toString());          
+                    info.debugData(debug);
+                    writer.println(debug.toString());
                     break;
                 }
             }
@@ -102,8 +101,8 @@ public class MonitorListenerImpl implements MonitorListener {
         writer.println("</BODY></HTML>");
     }
 
-    private void appendNavigationLink(final StringBuffer navigation, String name, boolean appendDivider)
-            throws UnsupportedEncodingException {
+    private void appendNavigationLink(final StringBuffer navigation, final String name, final boolean appendDivider)
+        throws UnsupportedEncodingException {
         if (appendDivider) {
             navigation.append(" | ");
         }
@@ -121,34 +120,31 @@ public class MonitorListenerImpl implements MonitorListener {
 
         writer.println(sectionName);
 
-        DebuggableWithTitle[] infos = IsisContext.debugSystem();
+        final DebuggableWithTitle[] infos = IsisContext.debugSystem();
         if (sectionName.equals("Events")) {
             int i = 1;
-            for(MonitorEvent event: requests) {
+            for (final MonitorEvent event : requests) {
                 writer.println(i++ + ". " + event);
             }
             // TODO add clause for request
         } else {
-            for (int i = 0; i < infos.length; i++) {
-                if(infos[i].debugTitle().equals(sectionName)) {           
+            for (final DebuggableWithTitle info : infos) {
+                if (info.debugTitle().equals(sectionName)) {
                     final DebugString debug = new DebugString();
-                    infos[i].debugData(debug);
-                    writer.println(debug.toString());         
+                    info.debugData(debug);
+                    writer.println(debug.toString());
                 }
             }
         }
 
         writer.print("[Options: ");
-//        final String[] options = target.debugSectionNames();
-        for (int i = 0; i < infos.length; i++) {
-            writer.print(infos[i].debugTitle() + " ");
+        // final String[] options = target.debugSectionNames();
+        for (final DebuggableWithTitle info : infos) {
+            writer.print(info.debugTitle() + " ");
         }
-        //writer.println();
+        // writer.println();
     }
-/*
-    public void setTarget(final DebugSelection debugInfo2) {
-        target = debugInfo2;
-    }
-    */
+    /*
+     * public void setTarget(final DebugSelection debugInfo2) { target = debugInfo2; }
+     */
 }
-

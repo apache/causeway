@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.apache.isis.applib.security.UserMemento;
-
 
 public class JavaObjectWithBasicProgramConventions implements Interface1, Interface2 {
     public static String classActionValid;
@@ -45,7 +43,8 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "";
     }
 
-    public static void setFour(final String value) {}
+    public static void setFour(final String value) {
+    }
 
     public String getOne() {
         return "";
@@ -59,7 +58,8 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return new String[] { "four", "five", "six" };
     }
 
-    public void setOne(final String value) {}
+    public void setOne(final String value) {
+    }
 
     public static boolean optionalOne() {
         return true;
@@ -107,7 +107,8 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "";
     }
 
-    public void setSix(final String value) {}
+    public void setSix(final String value) {
+    }
 
     public String disableSeven() {
         return "no changes";
@@ -117,7 +118,8 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "";
     }
 
-    public void setSeven(final String value) {}
+    public void setSeven(final String value) {
+    }
 
     public static boolean protectEight() {
         return true;
@@ -127,9 +129,11 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "";
     }
 
-    public void setEight(final String value) {}
+    public void setEight(final String value) {
+    }
 
-    public void setValue(final String value) {}
+    public void setValue(final String value) {
+    }
 
     public static String nameStop() {
         return "object action name";
@@ -143,7 +147,8 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return objectActionValid;
     }
 
-    public void stop() {}
+    public void stop() {
+    }
 
     public static boolean[] optionalStart() {
         return new boolean[] { true };
@@ -157,7 +162,8 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return new String[][] { { "one", "two", "three" } };
     }
 
-    public void start2(final String name) {}
+    public void start2(final String name) {
+    }
 
     public Object[] choicesStart2() {
         return new Object[] { new String[] { "three", "two", "one" } };
@@ -183,9 +189,11 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "class action description";
     }
 
-    public static void top() {}
+    public static void top() {
+    }
 
-    public static void bottom(final String param) {}
+    public static void bottom(final String param) {
+    }
 
     public static String actionOrder() {
         // make sure there is an action which doesn't exist
@@ -205,29 +213,34 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return true;
     }
 
-    public void hiddenAction(final String param) {}
+    public void hiddenAction(final String param) {
+    }
 
     // tests the hide method with no paramaters
     public static boolean alwaysHideHiddenAction2() {
         return true;
     }
 
-    public void hiddenAction2(final String param1, final String param2) {}
+    public void hiddenAction2(final String param1, final String param2) {
+    }
 
     public static boolean hideHiddenToUser(final UserMemento user) {
         Assert.assertEquals("unit tester", user.getName());
         return true;
     }
 
-    public void hiddenToUser() {}
+    public void hiddenToUser() {
+    }
 
     public List<Object> getFive() {
         return collection;
     }
 
-    public void addToFive(final JavaReferencedObject person) {}
+    public void addToFive(final JavaReferencedObject person) {
+    }
 
-    public void removeFromFive(final JavaReferencedObject person) {}
+    public void removeFromFive(final JavaReferencedObject person) {
+    }
 
     public static String nameFive() {
         return "five";
@@ -238,10 +251,12 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
     }
 
     // method that would be run on client
-    public void localRunOnClient() {}
+    public void localRunOnClient() {
+    }
 
     // method that would be run on the server
-    public void remoteRunOnServer() {}
+    public void remoteRunOnServer() {
+    }
 
     // method for debug access
     public String debugTwo(final String parameter) {
@@ -249,7 +264,9 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
     }
 
     // exploration method
-    public void explorationSetUp() {}
+    public void explorationSetUp() {
+    }
 }
 
-interface Interface2 {}
+interface Interface2 {
+}

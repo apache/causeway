@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,23 +24,21 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
 
-
 public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
 
-    
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // init, shutdown
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
-    public void init() {}
+    public void init() {
+    }
 
-    public void shutdown() {}
+    public void shutdown() {
+    }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // helpers
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Whether the persist algorithm should skip over this object.
@@ -50,49 +47,40 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
      * There are various reasons why an object should not be persisted:
      * <ul>
      * <li>it is already persisted
-     * <li>its {@link ObjectSpecification specification} indicates instances of its
-     * type should not be persisted.
+     * <li>its {@link ObjectSpecification specification} indicates instances of its type should not be persisted.
      * <li>it is {@link ResolveState#VALUE standalone}
      * <li>it is a {@link ObjectSpecification#isService() service}.
      * </ul>
      * 
      * <p>
-     * Implementation note: the only reason that this method has not been combined with
-     * the weaker check in {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)} is because of 
-     * existing code that throws an exception if the latter is not fulfilled.  
-     * <b><i>REVIEW: should try to combine and remove the other method</i></b>. 
+     * Implementation note: the only reason that this method has not been combined with the weaker check in
+     * {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)} is because of existing code that throws an exception if
+     * the latter is not fulfilled. <b><i>REVIEW: should try to combine and remove the other method</i></b>.
      */
     protected boolean alreadyPersistedOrNotPersistableOrServiceOrStandalone(final ObjectAdapter adapter) {
-        return objectIsStandalone(adapter) || 
-               objectSpecIsService(adapter) ||
-               alreadyPersistedOrNotPersistable(adapter); 
+        return objectIsStandalone(adapter) || objectSpecIsService(adapter) || alreadyPersistedOrNotPersistable(adapter);
     }
 
     /**
-     * If has a {@link ResolveState} that is already persisted or has a
-     * {@link ObjectSpecification specification} that indicates instances of its
-     * type should not be persisted.
+     * If has a {@link ResolveState} that is already persisted or has a {@link ObjectSpecification specification} that
+     * indicates instances of its type should not be persisted.
      * 
      * @see #alreadyPersistedOrNotPersistableOrServiceOrStandalone(ObjectAdapter)
      */
     protected boolean alreadyPersistedOrNotPersistable(final ObjectAdapter adapter) {
-        return adapter.isPersistent() || 
-               objectSpecNotPersistable(adapter);
+        return adapter.isPersistent() || objectSpecNotPersistable(adapter);
     }
 
-
     /**
-     * As per {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)}, ensures object can be
-     * persisted else throws {@link NotPersistableException}. 
+     * As per {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)}, ensures object can be persisted else throws
+     * {@link NotPersistableException}.
      */
     protected void assertObjectNotPersistentAndPersistable(final ObjectAdapter object) {
         if (alreadyPersistedOrNotPersistable(object)) {
-            throw new NotPersistableException(
-                    "can't make object persistent - either already persistent, " +
-                    "or transient only: " + object);
+            throw new NotPersistableException("can't make object persistent - either already persistent, "
+                + "or transient only: " + object);
         }
     }
-
 
     private boolean objectIsStandalone(final ObjectAdapter adapter) {
         return adapter.getResolveState().isValue();
@@ -105,6 +93,5 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
     private boolean objectSpecIsService(final ObjectAdapter adapter) {
         return adapter.getSpecification().isService();
     }
-
 
 }

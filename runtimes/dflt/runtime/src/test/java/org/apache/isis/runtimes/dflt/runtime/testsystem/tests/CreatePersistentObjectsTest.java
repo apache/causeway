@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem.tests;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,7 +25,6 @@ import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-
 
 public class CreatePersistentObjectsTest extends ProxyJunit3TestCase {
 
@@ -72,18 +70,15 @@ public class CreatePersistentObjectsTest extends ProxyJunit3TestCase {
         assertEquals(new TestProxyOid(90000, true), oid);
     }
 
-    
     public void testOidHasPrevious() throws Exception {
-    	assertNotNull(oid.getPrevious());
+        assertNotNull(oid.getPrevious());
         assertEquals(new TestProxyOid(1, false), oid.getPrevious());
     }
-    
+
     public void testPreviousOidIsRemovedFromMap() throws Exception {
         final ObjectAdapter a = getAdapterManager().getAdapterFor(oid.getPrevious());
         assertNull(a);
     }
-
-
 
     public void testIsAddedToMap() throws Exception {
         final ObjectAdapter a = getAdapterManager().getAdapterFor(oid);
@@ -95,7 +90,4 @@ public class CreatePersistentObjectsTest extends ProxyJunit3TestCase {
         assertEquals(adapter, a);
     }
 
-    
-
 }
-

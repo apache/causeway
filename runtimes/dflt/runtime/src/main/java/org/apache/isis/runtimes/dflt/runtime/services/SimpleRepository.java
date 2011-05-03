@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.services;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
 
 public final class SimpleRepository {
 
@@ -124,7 +122,6 @@ public final class SimpleRepository {
         return true;
     }
 
-
     // //////////////////////////////////////////////////////
     // Dependencies (from singleton)
     // //////////////////////////////////////////////////////
@@ -134,4 +131,3 @@ public final class SimpleRepository {
     }
 
 }
-

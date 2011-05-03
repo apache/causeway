@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -46,30 +43,28 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
-
-
+import org.apache.log4j.Logger;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
-    
+
     private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
-    
+
     private static final int INCOMPLETE_COLLECTION = -1;
-    
+
     private Object pojo;
-    
+
     private transient ResolveState resolveState;
-    
+
     private Oid oid;
     private Version version;
-    
+
     private String defaultTitle;
 
     private ElementSpecificationProvider elementSpecificationProvider;
 
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Constructor, finalizer
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     public PojoAdapter(final Object pojo, final Oid oid) {
         if (pojo instanceof ObjectAdapter) {
@@ -84,28 +79,28 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     protected void finalize() throws Throwable {
         super.finalize();
         if (LOG.isDebugEnabled()) {
-        	
-        	// be careful not to touch the pojo
-        	// this method is called by the FinalizerThread so could be called at any time.
-        	// for Hibernate-based object stores (and similar), it may no longer be valid to
-        	// touch the pojo (although arguably, closing the session should detach these pojos)
 
-        	// we also mustn't touch the adapter's specification.  That's because the loading
-        	// of specifications isn't threadsafe, due to the way in which we put non-introspected
-        	// specifications into the SpecificationCache to prevent infinite loops. 
-        	
-        	// better safe than sorry, though
-        	// LOG.debug("finalizing pojo, oid: " + getOid());
+            // be careful not to touch the pojo
+            // this method is called by the FinalizerThread so could be called at any time.
+            // for Hibernate-based object stores (and similar), it may no longer be valid to
+            // touch the pojo (although arguably, closing the session should detach these pojos)
+
+            // we also mustn't touch the adapter's specification. That's because the loading
+            // of specifications isn't threadsafe, due to the way in which we put non-introspected
+            // specifications into the SpecificationCache to prevent infinite loops.
+
+            // better safe than sorry, though
+            // LOG.debug("finalizing pojo, oid: " + getOid());
         }
     }
 
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Specification
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     protected ObjectSpecification loadSpecification() {
-        ObjectSpecification specification = getReflector().loadSpecification(getObject().getClass());
+        final ObjectSpecification specification = getReflector().loadSpecification(getObject().getClass());
         this.defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
         return specification;
     }
@@ -115,49 +110,46 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      */
     @Override
     public final ObjectSpecification getSpecification() {
-    	ObjectSpecification specification = (ObjectSpecification) super.getSpecification();
-		return specification;
+        final ObjectSpecification specification = (ObjectSpecification) super.getSpecification();
+        return specification;
     }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Object, replacePojo
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     public Object getObject() {
         return pojo;
     }
-    
+
     /**
-     * Sometimes it is necessary to manage the replacement of the underlying domain object (by another
-     * component such as an object store). This method allows the adapter to be kept while the domain object
-     * is replaced.
+     * Sometimes it is necessary to manage the replacement of the underlying domain object (by another component such as
+     * an object store). This method allows the adapter to be kept while the domain object is replaced.
      */
     @Override
     public void replacePojo(final Object pojo) {
         this.pojo = pojo;
     }
 
-    
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // ResolveState, changeState
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     public ResolveState getResolveState() {
         return resolveState;
     }
 
-
     @Override
     public void changeState(final ResolveState newState) {
-        
-        boolean validToChangeTo = resolveState.isValidToChangeTo(newState);
+
+        final boolean validToChangeTo = resolveState.isValidToChangeTo(newState);
         // don't call toString() since that could hit titleString() and we might be
         // in the process of transitioning to ghost
-        Assert.assertTrue("oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(), validToChangeTo);
+        Assert.assertTrue(
+            "oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(),
+            validToChangeTo);
 
         if (LOG.isTraceEnabled()) {
             String oidString;
@@ -176,10 +168,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return isTransient() || this.getResolveState().isResolved();
     }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // isPersistent, isTransient
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     /**
      * Just delegates to {@link #getResolveState() resolve state}.
@@ -187,10 +178,10 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      * @see ResolveState#isPersistent()
      * @see #isTransient()
      */
-	@Override
+    @Override
     public boolean isPersistent() {
-		return getResolveState().isPersistent();
-	}
+        return getResolveState().isPersistent();
+    }
 
     /**
      * Just delegates to {@link #getResolveState() resolve state}.
@@ -198,16 +189,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      * @see ResolveState#isTransient()
      * @see #isPersistent()
      */
-	@Override
+    @Override
     public boolean isTransient() {
-		return getResolveState().isTransient();
-	}
+        return getResolveState().isTransient();
+    }
 
-
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Oid
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     public Oid getOid() {
@@ -224,10 +213,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return getOid() instanceof AggregatedOid;
     }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Version
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     public Version getVersion() {
@@ -253,19 +241,17 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return this.version == null || version == null || version.different(this.version);
     }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Title, toString
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     /**
      * Returns the title from the underlying business object.
      * 
      * <p>
-     * If the object has not yet been resolved the specification will be asked for a unresolved title, 
-     * which could of been persisted by the persistence mechanism. If either of the above provides null 
-     * as the title then this method will return a title relating to the name of the object type, 
-     * e.g. "A Customer", "A Product".
+     * If the object has not yet been resolved the specification will be asked for a unresolved title, which could of
+     * been persisted by the persistence mechanism. If either of the above provides null as the title then this method
+     * will return a title relating to the name of the object type, e.g. "A Customer", "A Product".
      */
     @Override
     public String titleString() {
@@ -286,7 +272,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 return (String) getObject();
             }
             final ObjectSpecification specification = getSpecification();
-            Localization localization = IsisContext.getLocalization();
+            final Localization localization = IsisContext.getLocalization();
             String title = specification.getTitle(this, localization);
             if (title == null) {
                 if (resolveState.isGhost()) {
@@ -300,7 +286,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 title = getDefaultTitle();
             }
             return title;
-            }
+        }
     }
 
     private String collectionTitleString(final CollectionFacet facet) {
@@ -308,25 +294,25 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         final ObjectSpecification elementSpecification = getElementSpecification();
         if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
             switch (size) {
-            case -1:
-                return "Objects";
-            case 0:
-                return "No objects";
-            case 1:
-                return "1 object";
-            default:
-                return size + " objects";
+                case -1:
+                    return "Objects";
+                case 0:
+                    return "No objects";
+                case 1:
+                    return "1 object";
+                default:
+                    return size + " objects";
             }
         } else {
             switch (size) {
-            case -1:
-                return elementSpecification.getPluralName();
-            case 0:
-                return "No " + elementSpecification.getPluralName();
-            case 1:
-                return "1 " + elementSpecification.getSingularName();
-            default:
-                return size + " " + elementSpecification.getPluralName();
+                case -1:
+                    return elementSpecification.getPluralName();
+                case 0:
+                    return "No " + elementSpecification.getPluralName();
+                case 1:
+                    return "1 " + elementSpecification.getSingularName();
+                default:
+                    return size + " " + elementSpecification.getPluralName();
             }
         }
     }
@@ -336,9 +322,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         final ToString str = new ToString(this);
         toString(str);
 
-        // don't do title of any entities.  For persistence entities, might forces an unwanted resolve 
-        // of the object.  For transient objects, may not be fully initialized.
-        
+        // don't do title of any entities. For persistence entities, might forces an unwanted resolve
+        // of the object. For transient objects, may not be fully initialized.
+
         str.append("pojo-toString", pojo.toString());
         str.appendAsHex("pojo-hash", pojo.hashCode());
         return str.toString();
@@ -366,10 +352,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         str.append("version", version == null ? null : version.sequence());
     }
 
-    
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // IconName
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     /**
      * Returns the name of the icon to use to represent this object.
@@ -379,60 +364,54 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return getSpecification().getIconName(this);
     }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // ElementType
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     public ObjectSpecification getElementSpecification() {
-        if(elementSpecificationProvider==null) {
+        if (elementSpecificationProvider == null) {
             return null;
         }
         return elementSpecificationProvider.getElementType();
     }
 
     @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
         this.elementSpecificationProvider = elementSpecificationProvider;
     }
-
-
 
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     /**
      * Not supported by this implementation.
      */
     @Override
-    public Instance getInstance(Specification specification) {
+    public Instance getInstance(final Specification specification) {
         throw new UnsupportedOperationException();
     }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Fire Changes
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Guaranteed to be called whenever this object is known to have changed
-     * (specifically, by the <tt>ObjectStorePersistor</tt>).
+     * Guaranteed to be called whenever this object is known to have changed (specifically, by the
+     * <tt>ObjectStorePersistor</tt>).
      * 
      * <p>
-     * This implementation does nothing, but subclasses (for example <tt>PojoAdapterX</tt>)
-     * might provide listeners. 
+     * This implementation does nothing, but subclasses (for example <tt>PojoAdapterX</tt>) might provide listeners.
      */
     @Override
     public void fireChangedEvent() {
     }
 
-    
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Dependencies (from singleton)
-    /////////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////////
+
     private SpecificationLoader getReflector() {
         return IsisContext.getSpecificationLoader();
     }
@@ -444,17 +423,17 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public ObjectAdapter getAggregateRoot() {
         if (getSpecification().isAggregated()) {
-            Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
+            final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
             return getAdapterManager().getAdapterFor(parentOid);
         } else {
             return this;
         }
     }
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -462,8 +441,5 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-
-
-
 
 }

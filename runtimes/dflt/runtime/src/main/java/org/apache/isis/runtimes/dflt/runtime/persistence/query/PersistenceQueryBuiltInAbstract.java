@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import java.io.IOException;
@@ -29,18 +28,15 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 /**
  * Corresponds to {@link QueryBuiltInAbstract}.
  */
-public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements PersistenceQueryBuiltIn {
+public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements
+    PersistenceQueryBuiltIn {
 
-	public PersistenceQueryBuiltInAbstract(
-			ObjectSpecification specification) {
-		super(specification);
-	}
+    public PersistenceQueryBuiltInAbstract(final ObjectSpecification specification) {
+        super(specification);
+    }
 
-	public PersistenceQueryBuiltInAbstract(DataInputExtended input)
-			throws IOException {
-		super(input);
-	}
+    public PersistenceQueryBuiltInAbstract(final DataInputExtended input) throws IOException {
+        super(input);
+    }
 
-	
 }
-

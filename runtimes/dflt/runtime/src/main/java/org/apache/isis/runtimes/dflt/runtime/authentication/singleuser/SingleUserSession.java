@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.singleuser;
 
 import java.io.IOException;
@@ -28,36 +27,35 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 
 public final class SingleUserSession extends AuthenticationSessionAbstract implements Encodable {
-	
-	private static final long serialVersionUID = 1L;
-	
+
+    private static final long serialVersionUID = 1L;
+
     private static final String DEFAULT_USER_NAME = "exploration";
 
     /**
      * Defaults validation code to <tt>""</tt>.
      */
     public SingleUserSession() {
-    	this("");
+        this("");
     }
 
-    public SingleUserSession(String code) {
+    public SingleUserSession(final String code) {
         super(DEFAULT_USER_NAME, code);
         initialized();
     }
 
-	public SingleUserSession(DataInputExtended input) throws IOException {
-		super(input);
-		initialized();
-	}
+    public SingleUserSession(final DataInputExtended input) throws IOException {
+        super(input);
+        initialized();
+    }
 
-	@Override
-	public void encode(DataOutputExtended output)
-			throws IOException {
-		super.encode(output);
-	}
-	
-	private void initialized() {
-		// nothing to do
-	}
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+    }
+
+    private void initialized() {
+        // nothing to do
+    }
 
 }

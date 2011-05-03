@@ -17,23 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
-
-import org.jmock.integration.junit4.JMock;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.jmock.integration.junit4.JMock;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class SimpleSessionEncodabilityWithRolesTest extends SimpleSessionEncodabilityTestAbstract {
 
-	@Override
-	protected Encodable createEncodable() {
-		return new SimpleSession("joe", new String[]{"role1", "role2"});
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new SimpleSession("joe", new String[] { "role1", "role2" });
+    }
 
 }
-
-

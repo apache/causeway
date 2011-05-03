@@ -17,10 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
-import org.apache.log4j.Logger;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
@@ -32,38 +34,36 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClo
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerDefault;
 import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifierDefault;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import org.apache.log4j.Logger;
 
 public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> implements IsisTransactionManager {
 
     private static final Logger LOG = Logger.getLogger(IsisTransactionManagerAbstract.class);
 
     private IsisSession session;
-    
+
     /**
      * Holds the current or most recently completed transaction.
      */
     private T transaction;
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // constructor
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
-    
     public IsisTransactionManagerAbstract() {
     }
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // open, close
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
+    @Override
     public void open() {
         ensureThatState(session, is(notNullValue()), "session is required");
     }
 
+    @Override
     public void close() {
         if (getTransaction() != null) {
             try {
@@ -75,99 +75,98 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
         session = null;
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // current transaction (if any)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * Current transaction (if any).
      */
+    @Override
     public T getTransaction() {
         return transaction;
     }
 
     /**
-     * Convenience method returning the {@link UpdateNotifier}
-     * of the {@link #getTransaction() current transaction}.
+     * Convenience method returning the {@link UpdateNotifier} of the {@link #getTransaction() current transaction}.
      */
     protected UpdateNotifier getUpdateNotifier() {
         return getTransaction().getUpdateNotifier();
     }
 
     /**
-     * Convenience method returning the {@link MessageBroker}
-     * of the {@link #getTransaction() current transaction}.
+     * Convenience method returning the {@link MessageBroker} of the {@link #getTransaction() current transaction}.
      */
     protected MessageBroker getMessageBroker() {
         return getTransaction().getMessageBroker();
     }
 
-    
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Transactional Execution
-    //////////////////////////////////////////////////////////////////
-    
-	public void executeWithinTransaction(TransactionalClosure closure) {
-		boolean initiallyInTransaction = inTransaction();
-		if(!initiallyInTransaction) {
-			startTransaction();
-		}
-		try {
-			closure.preExecute();
-			closure.execute();
-			closure.onSuccess();
-			if(!initiallyInTransaction) {
-				endTransaction();
-			}
-		} catch (RuntimeException ex) {
-			closure.onFailure();
-			if(!initiallyInTransaction) {
-			    // temp TODO fix swallowing of exception
-		//	    System.out.println(ex.getMessage());
-		//	    ex.printStackTrace();
-			    try {
-			        abortTransaction();
-			    } catch (Exception e) {
-			        LOG.error("Abort failure after exception", e);
-	          //      System.out.println(e.getMessage());
-	          //      e.printStackTrace();
-			        throw new IsisTransactionManagerException("Abort failure: " + e.getMessage(), ex);
+    // ////////////////////////////////////////////////////////////////
+
+    @Override
+    public void executeWithinTransaction(final TransactionalClosure closure) {
+        final boolean initiallyInTransaction = inTransaction();
+        if (!initiallyInTransaction) {
+            startTransaction();
+        }
+        try {
+            closure.preExecute();
+            closure.execute();
+            closure.onSuccess();
+            if (!initiallyInTransaction) {
+                endTransaction();
+            }
+        } catch (final RuntimeException ex) {
+            closure.onFailure();
+            if (!initiallyInTransaction) {
+                // temp TODO fix swallowing of exception
+                // System.out.println(ex.getMessage());
+                // ex.printStackTrace();
+                try {
+                    abortTransaction();
+                } catch (final Exception e) {
+                    LOG.error("Abort failure after exception", e);
+                    // System.out.println(e.getMessage());
+                    // e.printStackTrace();
+                    throw new IsisTransactionManagerException("Abort failure: " + e.getMessage(), ex);
                 }
-			}
-			throw ex;
-		}
-	}
+            }
+            throw ex;
+        }
+    }
 
-	public <Q> Q executeWithinTransaction(TransactionalClosureWithReturn<Q> closure) {
-		boolean initiallyInTransaction = inTransaction();
-		if(!initiallyInTransaction) {
-			startTransaction();
-		}
-		try {
-			closure.preExecute();
-			Q retVal = closure.execute();
-			closure.onSuccess();
-			if(!initiallyInTransaction) {
-				endTransaction();
-			}
-			return retVal;
-		} catch (RuntimeException ex) {
-			closure.onFailure();
-			if(!initiallyInTransaction) {
-				abortTransaction();
-			}
-			throw ex;
-		}
-	}
+    @Override
+    public <Q> Q executeWithinTransaction(final TransactionalClosureWithReturn<Q> closure) {
+        final boolean initiallyInTransaction = inTransaction();
+        if (!initiallyInTransaction) {
+            startTransaction();
+        }
+        try {
+            closure.preExecute();
+            final Q retVal = closure.execute();
+            closure.onSuccess();
+            if (!initiallyInTransaction) {
+                endTransaction();
+            }
+            return retVal;
+        } catch (final RuntimeException ex) {
+            closure.onFailure();
+            if (!initiallyInTransaction) {
+                abortTransaction();
+            }
+            throw ex;
+        }
+    }
 
-	public boolean inTransaction() {
-		return getTransaction() != null && !getTransaction().getState().isComplete();
-	}
-    
-    //////////////////////////////////////////////////////////////////
+    public boolean inTransaction() {
+        return getTransaction() != null && !getTransaction().getState().isComplete();
+    }
+
+    // ////////////////////////////////////////////////////////////////
     // create transaction, + hooks
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Creates a new transaction and saves, to be accessible in {@link #getTransaction()}.
@@ -177,13 +176,12 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
         return transaction;
     }
 
-    
     /**
      * Overridable hook.
      * 
      * <p>
-     * The provided {@link MessageBroker} and {@link UpdateNotifier} are obtained from
-     * the hook methods ({@link #createMessageBroker()} and {@link #createUpdateNotifier()}).
+     * The provided {@link MessageBroker} and {@link UpdateNotifier} are obtained from the hook methods (
+     * {@link #createMessageBroker()} and {@link #createUpdateNotifier()}).
      * 
      * @see #createMessageBroker()
      * @see #createUpdateNotifier()
@@ -193,81 +191,70 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     /**
      * Overridable hook, used in {@link #createTransaction(MessageBroker, UpdateNotifier)
      * 
-     * <p>
-     * Called when a new {@link IsisTransaction} is created.
+     * <p> Called when a new {@link IsisTransaction} is created.
      */
     protected MessageBroker createMessageBroker() {
         return new MessageBrokerDefault();
     }
-    
+
     /**
      * Overridable hook, used in {@link #createTransaction(MessageBroker, UpdateNotifier)
      * 
-     * <p>
-     * Called when a new {@link IsisTransaction} is created.
+     * <p> Called when a new {@link IsisTransaction} is created.
      */
     protected UpdateNotifier createUpdateNotifier() {
         return new UpdateNotifierDefault();
     }
 
-
-    
-    
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // helpers
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     protected void ensureTransactionInProgress() {
-        ensureThatState(
-                getTransaction() != null && !getTransaction().getState().isComplete(), 
-                is(true), "No transaction in progress");
+        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(true),
+            "No transaction in progress");
     }
 
     protected void ensureTransactionNotInProgress() {
-        ensureThatState(
-                getTransaction() != null && !getTransaction().getState().isComplete(), 
-                is(false), "Transaction in progress");
+        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(false),
+            "Transaction in progress");
     }
-
 
     // ////////////////////////////////////////////////////////////////////
     // injectInto
     // ////////////////////////////////////////////////////////////////////
 
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (IsisTransactionManagerAware.class.isAssignableFrom(candidate.getClass())) {
-            IsisTransactionManagerAware cast = IsisTransactionManagerAware.class.cast(candidate);
+            final IsisTransactionManagerAware cast = IsisTransactionManagerAware.class.cast(candidate);
             cast.setTransactionManager(this);
         }
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // debugging
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("Transaction", getTransaction());
     }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (injected)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
+    @Override
     public IsisSession getSession() {
         return session;
     }
 
-
     /**
      * Should be injected prior to {@link #open() opening}
      */
-    public void setSession(IsisSession session) {
+    public void setSession(final IsisSession session) {
         this.session = session;
     }
 
-
 }
-
-

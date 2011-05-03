@@ -17,16 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 /**
  * @see DeploymentType
  */
 public enum DeploymentCategory {
-    EXPLORING,
-    PROTOTYPING,
-    PRODUCTION;
+    EXPLORING, PROTOTYPING, PRODUCTION;
 }
-
-

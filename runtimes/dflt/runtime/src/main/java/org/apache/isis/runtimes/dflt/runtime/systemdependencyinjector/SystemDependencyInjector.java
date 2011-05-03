@@ -18,7 +18,7 @@ package org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector;
 
 /**
  * 
- *
+ * 
  * @version $Rev$ $Date$
  */
 public interface SystemDependencyInjector {

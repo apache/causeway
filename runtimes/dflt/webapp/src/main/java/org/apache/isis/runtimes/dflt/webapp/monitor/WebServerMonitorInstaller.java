@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webapp.monitor;
 
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
@@ -25,19 +24,18 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 
-
 public class WebServerMonitorInstaller extends IsisViewerInstallerAbstract {
 
-	public WebServerMonitorInstaller() {
-		super("web-monitor");
-	}
+    public WebServerMonitorInstaller() {
+        super("web-monitor");
+    }
 
     @Override
     public IsisViewer doCreateViewer() {
         return new EmbeddedWebViewer() {
-        	@Override
+            @Override
             public WebAppSpecification getWebAppSpecification() {
-                WebAppSpecification requirements = new WebAppSpecification();
+                final WebAppSpecification requirements = new WebAppSpecification();
                 requirements.addServletSpecification(MonitorServlet.class, "/monitor/*");
                 return requirements;
             }
@@ -45,5 +43,3 @@ public class WebServerMonitorInstaller extends IsisViewerInstallerAbstract {
     }
 
 }
-
-

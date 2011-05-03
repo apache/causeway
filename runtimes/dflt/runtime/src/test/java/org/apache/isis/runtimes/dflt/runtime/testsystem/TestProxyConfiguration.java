@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.awt.Color;
@@ -33,10 +32,9 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
-
 public class TestProxyConfiguration implements IsisConfiguration {
 
-    private final Hashtable<String,String> valueByKey = new Hashtable<String,String>();
+    private final Hashtable<String, String> valueByKey = new Hashtable<String, String>();
 
     public void add(final String key, final String value) {
         if (key == null) {
@@ -149,13 +147,14 @@ public class TestProxyConfiguration implements IsisConfiguration {
         throw new NotYetImplementedException();
     }
 
-	@Override
+    @Override
     public ResourceStreamSource getResourceStreamSource() {
-		return null;
-	}
+        return null;
+    }
 
     @Override
-    public void debugData(final DebugBuilder debug) {}
+    public void debugData(final DebugBuilder debug) {
+    }
 
     @Override
     public String debugTitle() {
@@ -163,7 +162,7 @@ public class TestProxyConfiguration implements IsisConfiguration {
     }
 
     @Override
-    public void injectInto(Object candidate) {}
-
+    public void injectInto(final Object candidate) {
+    }
 
 }

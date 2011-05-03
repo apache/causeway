@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner;
 
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
@@ -29,8 +28,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
 public final class Constants {
-    
-    private Constants() {}
+
+    private Constants() {
+    }
 
     public static final String TYPE_OPT = "t";
     public static final String TYPE_LONG_OPT = "type";
@@ -41,7 +41,7 @@ public final class Constants {
     public static final String TYPE_SERVER_EXPLORATION = DeploymentType.SERVER_EXPLORATION.friendlyName();
     public static final String TYPE_SERVER_PROTOTYPE = DeploymentType.SERVER_PROTOTYPE.friendlyName();
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
-    
+
     public static final String REFLECTOR_OPT = "l";
     public static final String REFLECTOR_LONG_OPT = ObjectReflectorInstaller.TYPE;
 
@@ -59,7 +59,7 @@ public final class Constants {
 
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";
-    
+
     public static final String FIXTURE_OPT = "f";
     public static final String FIXTURE_LONG_OPT = "fixture";
 
@@ -68,7 +68,7 @@ public final class Constants {
 
     public static final String NO_SPLASH_OPT = "s";
     public static final String NO_SPLASH_LONG_OPT = "nosplash";
-    
+
     public static final String USER_OPT = "u";
     public static final String USER_LONG_OPT = "user";
 
@@ -77,11 +77,11 @@ public final class Constants {
 
     public static final String DIAGNOSTICS_OPT = "diagnostics";
     public static final String VERSION_OPT = "version";
-    
+
     public static final String DEBUG_OPT = LoggingConstants.DEBUG_OPT;
     public static final String VERBOSE_OPT = LoggingConstants.VERBOSE_OPT;
     public static final String QUIET_OPT = LoggingConstants.QUIET_OPT;
-    
+
     public static final String ADDITIONAL_PROPERTY = "D";
 
 }

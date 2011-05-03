@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facets;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
@@ -30,15 +28,16 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
-
+import org.apache.log4j.Logger;
 
 public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetAbstract implements
-        DecoratingFacet<ActionInvocationFacet> {
+    DecoratingFacet<ActionInvocationFacet> {
 
     private final static Logger LOG = Logger.getLogger(ActionInvocationFacetWrapTransaction.class);
 
     private final ActionInvocationFacet underlyingFacet;
 
+    @Override
     public ActionInvocationFacet getDecoratedFacet() {
         return underlyingFacet;
     }
@@ -48,18 +47,23 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
         this.underlyingFacet = underlyingFacet;
     }
 
+    @Override
     public ObjectAdapter invoke(final ObjectAdapter targetAdapter, final ObjectAdapter[] parameterAdapters) {
-    	return getTransactionManager().executeWithinTransaction(
-			new TransactionalClosureWithReturnAbstract<ObjectAdapter>(){
-				public ObjectAdapter execute() {
-					return underlyingFacet.invoke(targetAdapter, parameterAdapters);
-				}});
+        return getTransactionManager().executeWithinTransaction(
+            new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+                @Override
+                public ObjectAdapter execute() {
+                    return underlyingFacet.invoke(targetAdapter, parameterAdapters);
+                }
+            });
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         return underlyingFacet.getReturnType();
     }
 
+    @Override
     public ObjectSpecification getOnType() {
         return underlyingFacet.getOnType();
     }
@@ -68,12 +72,11 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
     public String toString() {
         return super.toString() + " --> " + underlyingFacet.toString();
     }
-    
-    
-    /////////////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////
+
     private static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
@@ -82,7 +85,4 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
         return IsisContext.getPersistenceSession();
     }
 
-
-
 }
-

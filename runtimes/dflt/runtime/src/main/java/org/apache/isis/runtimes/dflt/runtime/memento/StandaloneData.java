@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import java.io.IOException;
@@ -34,96 +33,98 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class StandaloneData extends Data {
 
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     private static enum As {
-    	ENCODED_STRING(0),
-    	SERIALIZABLE(1);
-    	static Map<Integer, As> cache = new HashMap<Integer, As>();
-    	static {
-    		for(As as: values()) {
-    			cache.put(as.idx, as);
-    		}
-    	}
-    	private final int idx;
-    	private As(int idx) {
-    		this.idx = idx;
-    	}
-    	static As get(int idx) {
-    		return cache.get(idx); 
-    	}
-		public static As readFrom(DataInputExtended input) throws IOException {
-			return get(input.readByte());
-		}
-		public void writeTo(DataOutputExtended output) throws IOException {
-			output.writeByte(idx);
-		}
+        ENCODED_STRING(0), SERIALIZABLE(1);
+        static Map<Integer, As> cache = new HashMap<Integer, As>();
+        static {
+            for (final As as : values()) {
+                cache.put(as.idx, as);
+            }
+        }
+        private final int idx;
+
+        private As(final int idx) {
+            this.idx = idx;
+        }
+
+        static As get(final int idx) {
+            return cache.get(idx);
+        }
+
+        public static As readFrom(final DataInputExtended input) throws IOException {
+            return get(input.readByte());
+        }
+
+        public void writeTo(final DataOutputExtended output) throws IOException {
+            output.writeByte(idx);
+        }
     }
 
-	
-	private String objectAsEncodedString;
-	private Serializable objectAsSerializable;
+    private String objectAsEncodedString;
+    private Serializable objectAsSerializable;
 
-	public StandaloneData(ObjectAdapter adapter) {
-		super(null, adapter.getResolveState().name(), adapter.getSpecification().getFullIdentifier());
-		
-		Object object = adapter.getObject();
-		if (object instanceof Serializable) {
-			this.objectAsSerializable = (Serializable) object;
-			initialized();
-			return;
-		}
-		
-		EncodableFacet encodeableFacet = adapter.getSpecification().getFacet(EncodableFacet.class);
-		if (encodeableFacet != null) {
-			this.objectAsEncodedString = encodeableFacet.toEncodedString(adapter);
-			initialized();
-			return;
-		}
-		
-		throw new IllegalArgumentException("Object wrapped by standalone adapter is not serializable and its specificatoin does not have an EncodeableFacet");
-	}
-	
-	public StandaloneData(DataInputExtended input) throws IOException {
-		super(input);
-		As as = As.readFrom(input);
-		if (as == As.SERIALIZABLE) {
-			this.objectAsSerializable = input.readSerializable(Serializable.class);
-		} else {
-			this.objectAsEncodedString = input.readUTF();
-		}
-		initialized();
-	}
+    public StandaloneData(final ObjectAdapter adapter) {
+        super(null, adapter.getResolveState().name(), adapter.getSpecification().getFullIdentifier());
 
-	public void encode(DataOutputExtended output) throws IOException {
-		super.encode(output);
-		if(objectAsSerializable != null) {
-			As.SERIALIZABLE.writeTo(output);
-			output.writeSerializable(objectAsSerializable);
-		} else {
-			As.ENCODED_STRING.writeTo(output);
-			output.writeUTF(objectAsEncodedString);
-		}
-	}
+        final Object object = adapter.getObject();
+        if (object instanceof Serializable) {
+            this.objectAsSerializable = (Serializable) object;
+            initialized();
+            return;
+        }
 
-	private void initialized() {
-		// nothing to do
-	}
+        final EncodableFacet encodeableFacet = adapter.getSpecification().getFacet(EncodableFacet.class);
+        if (encodeableFacet != null) {
+            this.objectAsEncodedString = encodeableFacet.toEncodedString(adapter);
+            initialized();
+            return;
+        }
 
-    /////////////////////////////////////////////////////////
+        throw new IllegalArgumentException(
+            "Object wrapped by standalone adapter is not serializable and its specificatoin does not have an EncodeableFacet");
+    }
+
+    public StandaloneData(final DataInputExtended input) throws IOException {
+        super(input);
+        final As as = As.readFrom(input);
+        if (as == As.SERIALIZABLE) {
+            this.objectAsSerializable = input.readSerializable(Serializable.class);
+        } else {
+            this.objectAsEncodedString = input.readUTF();
+        }
+        initialized();
+    }
+
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+        if (objectAsSerializable != null) {
+            As.SERIALIZABLE.writeTo(output);
+            output.writeSerializable(objectAsSerializable);
+        } else {
+            As.ENCODED_STRING.writeTo(output);
+            output.writeUTF(objectAsEncodedString);
+        }
+    }
+
+    private void initialized() {
+        // nothing to do
+    }
+
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
 
-
-	public ObjectAdapter getAdapter() {
-		if (objectAsSerializable != null) {
-			return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(objectAsSerializable);
-		} else {
-			ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(getClassName());
-			EncodableFacet encodeableFacet = spec.getFacet(EncodableFacet.class);
-			return encodeableFacet.fromEncodedString(objectAsEncodedString);
-		}
-	}
+    public ObjectAdapter getAdapter() {
+        if (objectAsSerializable != null) {
+            return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(objectAsSerializable);
+        } else {
+            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(getClassName());
+            final EncodableFacet encodeableFacet = spec.getFacet(EncodableFacet.class);
+            return encodeableFacet.fromEncodedString(objectAsEncodedString);
+        }
+    }
 
 }

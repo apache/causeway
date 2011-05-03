@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import java.util.List;
 
 final class Strings {
-    
-    private Strings(){}
 
-    static String plural(List<String> collection, String moreThanOne,
-            String ifNone) {
+    private Strings() {
+    }
+
+    static String plural(final List<String> collection, final String moreThanOne, final String ifNone) {
         return (collection.size() > 1 ? moreThanOne : ifNone);
     }
 

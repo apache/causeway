@@ -21,20 +21,19 @@ package org.apache.isis.runtimes.dflt.runtime.testsystem.tests;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.core.testsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 
 public class TestProxyOid_ValueType extends ValueTypeContractTestAbstract<TestProxyOid> {
 
-	@Override
-	protected List<TestProxyOid> getObjectsWithSameValue() {
-		return Arrays.asList(new TestProxyOid(1, true), new TestProxyOid(1, true));
-	}
+    @Override
+    protected List<TestProxyOid> getObjectsWithSameValue() {
+        return Arrays.asList(new TestProxyOid(1, true), new TestProxyOid(1, true));
+    }
 
-	@Override
-	protected List<TestProxyOid> getObjectsWithDifferentValue() {
-		return Arrays.asList(new TestProxyOid(1, false), new TestProxyOid(2, true));
-	}
-
+    @Override
+    protected List<TestProxyOid> getObjectsWithDifferentValue() {
+        return Arrays.asList(new TestProxyOid(1, false), new TestProxyOid(2, true));
+    }
 
 }

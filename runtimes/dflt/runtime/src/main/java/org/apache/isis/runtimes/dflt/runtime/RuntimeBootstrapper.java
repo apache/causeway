@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime;
 
 import java.util.ArrayList;
@@ -28,92 +27,81 @@ import org.apache.commons.collections.Predicate;
 import org.apache.isis.core.commons.lang.Threads;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisBootstrapper;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule.ViewerList;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 
-final class RuntimeBootstrapper implements
-        IsisBootstrapper {
-
+final class RuntimeBootstrapper implements IsisBootstrapper {
 
     @Override
-    public void bootstrap(
-            Injector injector) {
+    public void bootstrap(final Injector injector) {
 
         bootstrapSystem(injector);
         bootstrapViewers(injector);
     }
 
-    private void bootstrapSystem(Injector injector) {
+    private void bootstrapSystem(final Injector injector) {
 
         // sufficient just to look it up
         @SuppressWarnings("unused")
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("DLS_DEAD_LOCAL_STORE")
-        IsisSystem system = injector.getInstance(IsisSystem.class);
+        final IsisSystem system = injector.getInstance(IsisSystem.class);
     }
 
-    private void bootstrapViewers(Injector injector) {
-        List<IsisViewer> viewers = lookupViewers(injector);
+    private void bootstrapViewers(final Injector injector) {
+        final List<IsisViewer> viewers = lookupViewers(injector);
 
         // split viewers into web viewers and non-web viewers
-        List<IsisViewer> webViewers = findWebViewers(viewers);
-        List<IsisViewer> nonWebViewers = findNonWebViewers(viewers,
-                webViewers);
+        final List<IsisViewer> webViewers = findWebViewers(viewers);
+        final List<IsisViewer> nonWebViewers = findNonWebViewers(viewers, webViewers);
 
         startNonWebViewers(nonWebViewers);
         startWebViewers(injector, webViewers);
     }
 
-    private List<IsisViewer> lookupViewers(Injector injector) {
-        List<IsisViewer> viewers = injector.getInstance(ViewerList.class).getViewers();
+    private List<IsisViewer> lookupViewers(final Injector injector) {
+        final List<IsisViewer> viewers = injector.getInstance(ViewerList.class).getViewers();
 
         // looking up viewers may have merged in some further config files,
         // so update the NOContext global
         // REVIEW: would rather inject this
-        InstallerLookup installerLookup = injector.getInstance(InstallerLookup.class);
+        final InstallerLookup installerLookup = injector.getInstance(InstallerLookup.class);
         IsisContext.setConfiguration(installerLookup.getConfiguration());
 
         return viewers;
     }
 
-    private List<IsisViewer> findWebViewers(
-            List<IsisViewer> viewers) {
-        List<IsisViewer> webViewers = new ArrayList<IsisViewer>(
-                viewers);
+    private List<IsisViewer> findWebViewers(final List<IsisViewer> viewers) {
+        final List<IsisViewer> webViewers = new ArrayList<IsisViewer>(viewers);
         CollectionUtils.filter(webViewers, new Predicate() {
-            public boolean evaluate(Object object) {
-                IsisViewer viewer = (IsisViewer) object;
+            @Override
+            public boolean evaluate(final Object object) {
+                final IsisViewer viewer = (IsisViewer) object;
                 return viewer.getWebAppSpecification() != null;
             }
         });
         return webViewers;
     }
 
-    private List<IsisViewer> findNonWebViewers(
-            List<IsisViewer> viewers,
-            List<IsisViewer> webViewers) {
-        List<IsisViewer> nonWebViewers = new ArrayList<IsisViewer>(
-                viewers);
+    private List<IsisViewer> findNonWebViewers(final List<IsisViewer> viewers, final List<IsisViewer> webViewers) {
+        final List<IsisViewer> nonWebViewers = new ArrayList<IsisViewer>(viewers);
         nonWebViewers.removeAll(webViewers);
         return nonWebViewers;
     }
 
     /**
-     * Starts each (non web) {@link IsisViewer viewer} in its own
-     * thread.
+     * Starts each (non web) {@link IsisViewer viewer} in its own thread.
      */
-    private void startNonWebViewers(List<IsisViewer> viewers) {
+    private void startNonWebViewers(final List<IsisViewer> viewers) {
         for (final IsisViewer viewer : viewers) {
-            Runnable target = new Runnable() {
+            final Runnable target = new Runnable() {
+                @Override
                 public void run() {
                     viewer.init();
                 }
@@ -123,25 +111,21 @@ final class RuntimeBootstrapper implements
     }
 
     /**
-     * Starts all the web {@link IsisViewer viewer}s in an instance of
-     * an {@link EmbeddedWebServer}.
+     * Starts all the web {@link IsisViewer viewer}s in an instance of an {@link EmbeddedWebServer}.
      */
-    private void startWebViewers(final Injector injector,
-            final List<IsisViewer> webViewers) {
+    private void startWebViewers(final Injector injector, final List<IsisViewer> webViewers) {
         if (webViewers.size() == 0) {
             return;
         }
 
-        InstallerLookup installerLookup = injector.getInstance(InstallerLookup.class);
+        final InstallerLookup installerLookup = injector.getInstance(InstallerLookup.class);
 
         // TODO: we could potentially offer pluggability here
-        EmbeddedWebServerInstaller webServerInstaller = installerLookup
-                .embeddedWebServerInstaller(Isis.DEFAULT_EMBEDDED_WEBSERVER);
-        EmbeddedWebServer embeddedWebServer = webServerInstaller
-                .createEmbeddedWebServer();
+        final EmbeddedWebServerInstaller webServerInstaller =
+            installerLookup.embeddedWebServerInstaller(Isis.DEFAULT_EMBEDDED_WEBSERVER);
+        final EmbeddedWebServer embeddedWebServer = webServerInstaller.createEmbeddedWebServer();
         for (final IsisViewer viewer : webViewers) {
-            WebAppSpecification webContainerRequirements = viewer
-                    .getWebAppSpecification();
+            final WebAppSpecification webContainerRequirements = viewer.getWebAppSpecification();
             embeddedWebServer.addWebAppSpecification(webContainerRequirements);
         }
         embeddedWebServer.init();

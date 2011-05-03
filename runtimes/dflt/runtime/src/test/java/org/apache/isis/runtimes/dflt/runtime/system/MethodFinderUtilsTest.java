@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,15 +28,14 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.isis.core.commons.lang.MethodUtils;
+import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.apache.isis.core.commons.lang.MethodUtils;
-import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
 
 @RunWith(Parameterized.class)
 public class MethodFinderUtilsTest {
@@ -63,13 +61,15 @@ public class MethodFinderUtilsTest {
     @Parameters
     public static Collection parameters() {
         return Arrays.asList(new Object[][] { { MethodScope.OBJECT, staticMethod, false },
-                { MethodScope.CLASS, staticMethod, true }, { MethodScope.OBJECT, instanceMethod, true },
-                { MethodScope.CLASS, instanceMethod, false }, });
+            { MethodScope.CLASS, staticMethod, true }, { MethodScope.OBJECT, instanceMethod, true },
+            { MethodScope.CLASS, instanceMethod, false }, });
     }
 
-    public static void someStaticMethod() {}
+    public static void someStaticMethod() {
+    }
 
-    public void someInstanceMethod() {}
+    public void someInstanceMethod() {
+    }
 
     public MethodFinderUtilsTest(final MethodScope methodScope, final Method method, final boolean result) {
         this.methodScope = methodScope;
@@ -83,4 +83,3 @@ public class MethodFinderUtilsTest {
     }
 
 }
-

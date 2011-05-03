@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webserver.internal;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_SERVER;
@@ -27,10 +26,10 @@ import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_SERVER
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerDeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-
 public class OptionHandlerDeploymentTypeWebServer extends OptionHandlerDeploymentType {
-    
+
     public OptionHandlerDeploymentTypeWebServer() {
-        super(DeploymentType.SERVER_PROTOTYPE, TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + " (default); " + TYPE_SERVER);
+        super(DeploymentType.SERVER_PROTOTYPE, TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + " (default); "
+            + TYPE_SERVER);
     }
 }

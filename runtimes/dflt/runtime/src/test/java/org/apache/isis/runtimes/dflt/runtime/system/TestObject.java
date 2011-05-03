@@ -17,8 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
-public class TestObject {}
-
+public class TestObject {
+}

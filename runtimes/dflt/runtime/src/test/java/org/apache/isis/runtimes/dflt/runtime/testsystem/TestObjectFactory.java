@@ -29,7 +29,7 @@ public class TestObjectFactory extends ObjectFactoryAbstract {
     public TestObjectFactory() {
     }
 
-    public TestObjectFactory(Mode mode) {
+    public TestObjectFactory(final Mode mode) {
         super(mode);
     }
 
@@ -37,15 +37,15 @@ public class TestObjectFactory extends ObjectFactoryAbstract {
      * Simply instantiates reflectively, does not enhance bytecode etc in any way.
      */
     @Override
-    protected <T> T doInstantiate(Class<T> cls) throws ObjectInstantiationException {
+    protected <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
         }
         try {
             return cls.newInstance();
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new ObjectInstantiationException(e);
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             throw new ObjectInstantiationException(e);
         }
     }

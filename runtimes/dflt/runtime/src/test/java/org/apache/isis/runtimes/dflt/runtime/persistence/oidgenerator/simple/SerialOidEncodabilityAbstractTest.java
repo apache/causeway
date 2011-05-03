@@ -17,26 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public abstract class SerialOidEncodabilityAbstractTest extends EncodabilityContractTest {
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		SerialOid decoded = (SerialOid) decodedEncodable;
-		SerialOid original = (SerialOid) originalEncodable;
-		
-		assertThat(decoded.equals(original), is(true));
-		assertThat(decoded.hasPrevious(), is(original.hasPrevious()));
-		assertThat(decoded.getPrevious(), is(original.getPrevious()));
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final SerialOid decoded = (SerialOid) decodedEncodable;
+        final SerialOid original = (SerialOid) originalEncodable;
+
+        assertThat(decoded.equals(original), is(true));
+        assertThat(decoded.hasPrevious(), is(original.hasPrevious()));
+        assertThat(decoded.getPrevious(), is(original.getPrevious()));
+    }
 }

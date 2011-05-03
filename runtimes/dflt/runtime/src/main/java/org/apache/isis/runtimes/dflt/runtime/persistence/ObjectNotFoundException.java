@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
 
 public class ObjectNotFoundException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;
@@ -35,7 +33,7 @@ public class ObjectNotFoundException extends ObjectPersistenceException {
         super("Object not found in store with oid " + oid);
     }
 
-    public ObjectNotFoundException(final Oid oid, Throwable cause) {
+    public ObjectNotFoundException(final Oid oid, final Throwable cause) {
         super("Object not found in store with oid " + oid, cause);
     }
 

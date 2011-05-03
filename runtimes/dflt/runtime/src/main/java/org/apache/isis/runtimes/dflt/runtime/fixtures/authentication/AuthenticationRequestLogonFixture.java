@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures.authentication;
 
 import java.util.List;
@@ -26,9 +25,6 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 
-
-
-
 /**
  * For testing purposes, request corresponding to a {@link LogonFixture}.
  * 
@@ -36,16 +32,14 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticationManage
  * Understood directly by {@link AuthenticationManagerStandard}.
  */
 public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbstract {
-	
-    public AuthenticationRequestLogonFixture(LogonFixture logonFixture) {
-    	this(logonFixture.getUsername(), logonFixture.getRoles());
+
+    public AuthenticationRequestLogonFixture(final LogonFixture logonFixture) {
+        this(logonFixture.getUsername(), logonFixture.getRoles());
     }
 
     public AuthenticationRequestLogonFixture(final String name, final List<String> roles) {
-    	super(name);
+        super(name);
         setRoles(roles);
     }
 
-
 }
-

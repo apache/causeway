@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 /**
  * Provides a mechanism for providing a series of DebugInfo objects, keyed on name.
- */ 
+ */
 public interface DebugSelection {
 
     DebuggableWithTitle debugSection(String sectionName);

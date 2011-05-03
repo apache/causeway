@@ -17,31 +17,31 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 
+
 /**
  * A particular mechanism to install fixtures.
  */
 public interface FixturesInstaller extends Installer {
-	
-	/**
-	 * NB: this has the suffix '-installer' because in the command line we must 
-	 * distinguish from the '--fixture' flag meaning a particular fixture to be installed.
-	 */
-	static String TYPE = "fixtures-installer";
-	
-	void installFixtures();
 
     /**
-     * The {@link Fixture} (if any) added via {@link #installFixture(Fixture)} that is an 
-     * instance of {@link LogonFixture}.
+     * NB: this has the suffix '-installer' because in the command line we must distinguish from the '--fixture' flag
+     * meaning a particular fixture to be installed.
+     */
+    static String TYPE = "fixtures-installer";
+
+    void installFixtures();
+
+    /**
+     * The {@link InstallableFixture} (if any) that is an instance of
+     * {@link LogonFixture}.
      * 
      * <p>
      * If there is more than one {@link LogonFixture}, then the last one installed is returned.
      */
-	LogonFixture getLogonFixture();
+    LogonFixture getLogonFixture();
 }

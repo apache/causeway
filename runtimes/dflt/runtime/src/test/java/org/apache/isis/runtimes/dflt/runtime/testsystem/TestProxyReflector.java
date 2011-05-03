@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.inject.internal.Maps;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -39,10 +37,11 @@ import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
+import com.google.inject.internal.Maps;
+
 public class TestProxyReflector implements ObjectReflector {
 
-    private final Map<String, ObjectSpecification> specificationByFullName =
-        Maps.newHashMap();
+    private final Map<String, ObjectSpecification> specificationByFullName = Maps.newHashMap();
 
     private final ObjectFactory objectFactory = new TestObjectFactory();
     private final ClassSubstitutor classSubstitutor = new TestClassSubstitutor();
@@ -67,7 +66,7 @@ public class TestProxyReflector implements ObjectReflector {
     @Override
     public void debugData(final DebugBuilder debug) {
         final Collection<ObjectSpecification> list = allSpecifications();
-        for (ObjectSpecification objectSpecification : list) {
+        for (final ObjectSpecification objectSpecification : list) {
             debug.appendln(objectSpecification.getFullIdentifier());
         }
     }
@@ -114,28 +113,28 @@ public class TestProxyReflector implements ObjectReflector {
         return objectFactory;
     }
 
-    public void setCache(SpecificationCache cache) {
+    public void setCache(final SpecificationCache cache) {
         // ignored.
     }
 
-    public void setObjectPersistor(PersistenceSession objectPersistor) {
+    public void setObjectPersistor(final PersistenceSession objectPersistor) {
         // ignored.
     }
 
     @Override
-    public boolean loaded(Class<?> cls) {
+    public boolean loaded(final Class<?> cls) {
         return false;
     }
 
     @Override
-    public boolean loaded(String fullyQualifiedClassName) {
+    public boolean loaded(final String fullyQualifiedClassName) {
         return false;
     }
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (SpecificationLoaderAware.class.isAssignableFrom(candidate.getClass())) {
-            SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
+            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
             cast.setSpecificationLoader(this);
         }
     }
@@ -145,22 +144,22 @@ public class TestProxyReflector implements ObjectReflector {
     }
 
     @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
+    public void setRuntimeContext(final RuntimeContext runtimeContext) {
         // ignored
     }
 
     @Override
-    public void setServiceClasses(List<Class<?>> serviceClasses) {
+    public void setServiceClasses(final List<Class<?>> serviceClasses) {
         // ignored.
     }
 
     @Override
-    public boolean loadSpecifications(List<Class<?>> typesToLoad, Class<?> typeToIgnore) {
+    public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
         return false;
     }
 
     @Override
-    public boolean loadSpecifications(List<Class<?>> typesToLoad) {
+    public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return false;
     }
 

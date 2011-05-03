@@ -24,8 +24,8 @@ import java.util.List;
 import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugList;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -284,7 +284,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
      */
     public static void closeAllSessions() {
         LOG.info("closing all instances");
-        IsisContext instance = getInstance();
+        final IsisContext instance = getInstance();
         if (instance != null) {
             instance.closeAllSessionsInstance();
         }
@@ -315,7 +315,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         // return getSessionFactory().getConfiguration();
     }
 
-    public static void setConfiguration(IsisConfiguration configuration) {
+    public static void setConfiguration(final IsisConfiguration configuration) {
         IsisContext.configuration = configuration;
     }
 
@@ -377,7 +377,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
     // ///////////////////////////////////////////////////////////
 
     public static boolean inSession() {
-        IsisSession session = getInstance().getSessionInstance();
+        final IsisSession session = getInstance().getSessionInstance();
         return session != null;
     }
 
@@ -385,7 +385,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * Convenience method returning the current {@link IsisSession}.
      */
     public static IsisSession getSession() {
-        IsisSession session = getInstance().getSessionInstance();
+        final IsisSession session = getInstance().getSessionInstance();
         if (session == null) {
             throw new IllegalStateException("No Session opened for this thread");
         }
@@ -490,7 +490,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
     // ///////////////////////////////////////////////////////////
 
     public static DebuggableWithTitle[] debugSystem() {
-        DebugList debugList = new DebugList("Apache Isis System");
+        final DebugList debugList = new DebugList("Apache Isis System");
         debugList.add("Context", getInstance());
         debugList.add("Apache Isis session factory", getSessionFactory());
         debugList.add("  Authentication manager", getSessionFactory().getAuthenticationManager());
@@ -508,7 +508,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     public static DebuggableWithTitle[] debugSession() {
-        DebugList debugList = new DebugList("Apache Isis Session");
+        final DebugList debugList = new DebugList("Apache Isis Session");
         debugList.add("Apache Isis session", getSession());
         debugList.add("Authentication session", getAuthenticationSession());
         debugList.add("User profile", getUserProfile());
@@ -529,6 +529,5 @@ public abstract class IsisContext implements DebuggableWithTitle {
     public void debugData(final DebugBuilder debug) {
         debug.appendln("context ", this);
     }
-
 
 }

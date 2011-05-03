@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 
 public interface MonitorListener {
     void postEvent(MonitorEvent event);
 }
-

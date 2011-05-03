@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
 
 import java.util.Collections;
@@ -28,35 +27,35 @@ import org.apache.isis.core.commons.config.InstallerAbstract;
 
 public abstract class FixturesInstallerAbstract extends InstallerAbstract implements FixturesInstaller {
 
-	private final FixturesInstallerDelegate delegate = new FixturesInstallerDelegate();
-    
-	private LogonFixture logonFixture;
+    private final FixturesInstallerDelegate delegate = new FixturesInstallerDelegate();
 
-    public FixturesInstallerAbstract(String name) {
-		super(FixturesInstaller.TYPE, name);
-	}
+    private LogonFixture logonFixture;
 
+    public FixturesInstallerAbstract(final String name) {
+        super(FixturesInstaller.TYPE, name);
+    }
+
+    @Override
     public void installFixtures() {
-    	addFixturesTo(delegate);
-    	
+        addFixturesTo(delegate);
+
         delegate.installFixtures();
         logonFixture = delegate.getLogonFixture();
     }
 
     /**
-     * Add fixtures to {@link FixturesInstallerDelegate#addFixture(Object) delegate}; these
-     * are then installed.
+     * Add fixtures to {@link FixturesInstallerDelegate#addFixture(Object) delegate}; these are then installed.
      */
     protected abstract void addFixturesTo(FixturesInstallerDelegate delegate);
 
+    @Override
     public LogonFixture getLogonFixture() {
-    	return logonFixture;
+        return logonFixture;
     }
 
     @Override
     public List<Class<?>> getTypes() {
-    	return Collections.emptyList();
+        return Collections.emptyList();
     }
-
 
 }

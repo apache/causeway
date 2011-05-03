@@ -17,22 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
-
-import java.util.List;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -41,12 +29,19 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.authentication.standard.RandomCodeGenerator;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticationTest {
 
-	private Mockery mockery = new JUnit4Mockery();
-	
+    private final Mockery mockery = new JUnit4Mockery();
+
     private AuthenticationManagerStandard authenticationManager;
 
     private IsisConfiguration mockConfiguration;
@@ -54,52 +49,48 @@ public class StandardAuthenticationManager_AuthenticationTest {
     private Authenticator mockAuthenticator;
     private AuthenticationSession mockAuthSession;
 
-    
     @Before
     public void setUp() throws Exception {
-    	mockConfiguration = mockery.mock(IsisConfiguration.class);
-    	mockRandomCodeGenerator = mockery.mock(RandomCodeGenerator.class);
-    	mockAuthenticator = mockery.mock(Authenticator.class);
-    	mockAuthSession = mockery.mock(AuthenticationSession.class);
-    	
+        mockConfiguration = mockery.mock(IsisConfiguration.class);
+        mockRandomCodeGenerator = mockery.mock(RandomCodeGenerator.class);
+        mockAuthenticator = mockery.mock(Authenticator.class);
+        mockAuthSession = mockery.mock(AuthenticationSession.class);
+
         authenticationManager = new AuthenticationManagerStandard(mockConfiguration);
         authenticationManager.addAuthenticator(mockAuthenticator);
-		authenticationManager.setRandomCodeGenerator(mockRandomCodeGenerator);
+        authenticationManager.setRandomCodeGenerator(mockRandomCodeGenerator);
 
-    	mockery.checking(new Expectations(){{
-    		allowing(mockAuthenticator).canAuthenticate(with(any(AuthenticationRequest.class)));
-    		will(returnValue(true));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockAuthenticator).canAuthenticate(with(any(AuthenticationRequest.class)));
+                will(returnValue(true));
 
-    		allowing(mockAuthenticator).authenticate(
-    				with(any(AuthenticationRequest.class)), 
-    				with(any(String.class)));
-    		will(returnValue(mockAuthSession));
+                allowing(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)),
+                    with(any(String.class)));
+                will(returnValue(mockAuthSession));
 
-    		allowing(mockRandomCodeGenerator).generateRandomCode();
-    		will(returnValue("123456"));
-    		
-    		allowing(mockAuthSession).getValidationCode();
-    		will(returnValue("123456"));
+                allowing(mockRandomCodeGenerator).generateRandomCode();
+                will(returnValue("123456"));
 
-    		allowing(mockAuthSession).hasUserNameOf("foo");
-    		will(returnValue(true));
+                allowing(mockAuthSession).getValidationCode();
+                will(returnValue("123456"));
 
-    		allowing(mockAuthSession).getUserName();
-    		will(returnValue("foo"));
+                allowing(mockAuthSession).hasUserNameOf("foo");
+                will(returnValue(true));
 
-    	}});
+                allowing(mockAuthSession).getUserName();
+                will(returnValue("foo"));
+
+            }
+        });
     }
-
 
     @Test
     public void newlyCreatedAuthenticationSessionShouldBeValid() throws Exception {
-    	AuthenticationRequestPassword request = new AuthenticationRequestPassword("foo", "bar");
-		AuthenticationSession session = authenticationManager.authenticate(request);
-		
-		assertThat(authenticationManager.isSessionValid(session), is(true));
+        final AuthenticationRequestPassword request = new AuthenticationRequestPassword("foo", "bar");
+        final AuthenticationSession session = authenticationManager.authenticate(request);
+
+        assertThat(authenticationManager.isSessionValid(session), is(true));
     }
 
-
 }
-
-

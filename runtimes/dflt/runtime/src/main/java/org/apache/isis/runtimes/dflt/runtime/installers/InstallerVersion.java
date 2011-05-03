@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installers;
 
 import java.io.IOException;
@@ -36,41 +35,45 @@ public class InstallerVersion implements ComponentDetails {
 
     private final Installer installer;
 
-    public InstallerVersion(Installer installer) {
-        this.installer = installer;}
+    public InstallerVersion(final Installer installer) {
+        this.installer = installer;
+    }
 
+    @Override
     public String getName() {
         return installer.getName();
     }
-    
+
+    @Override
     public String getModule() {
-       return  "org.apache.isis.plugins:dndviewer";
+        return "org.apache.isis.plugins:dndviewer";
     }
-    
+
+    @Override
     public String getVersion() {
         return findVersion(getModule());
     }
-    
+
+    @Override
     public boolean isInstalled() {
         return false;
     }
-    
+
     private String findVersion(final String moduleId) {
         try {
-            String module = moduleId.replace(":", "/");
-            InputStream resourceAsStream = AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
+            final String module = moduleId.replace(":", "/");
+            final InputStream resourceAsStream =
+                AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
             if (resourceAsStream == null) {
                 return "no version";
             }
-            Properties p = new Properties();
+            final Properties p = new Properties();
             p.load(resourceAsStream);
-            String version = p.getProperty("version");
+            final String version = p.getProperty("version");
             return version;
-        } catch (IOException e) {
-           throw new IsisException(e);
+        } catch (final IOException e) {
+            throw new IsisException(e);
         }
     }
 
 }
-
-

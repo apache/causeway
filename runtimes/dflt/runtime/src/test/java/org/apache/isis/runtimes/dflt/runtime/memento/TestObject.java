@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 public class TestObject {
     private String name;
 
-    public TestObject() {}
+    public TestObject() {
+    }
 
     public TestObject(final String name) {
         this.name = name;
@@ -32,10 +32,8 @@ public class TestObject {
     public String getName() {
         return name;
     }
-    
-    public void setName(String name) {
+
+    public void setName(final String name) {
         this.name = name;
     }
 }
-
-

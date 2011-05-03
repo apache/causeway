@@ -59,8 +59,9 @@ public interface PersistenceSessionContainer {
     ObjectAdapter createInstance(ObjectSpecification specification);
 
     /**
-     * Creates a new instance of the specified type and returns an adapter with an aggregated OID that show that this new object belongs to the specified parent.
-     * The new object's resolved state is set to {@link ResolveState#RESOLVED} as it state is part of it parent. 
+     * Creates a new instance of the specified type and returns an adapter with an aggregated OID that show that this
+     * new object belongs to the specified parent. The new object's resolved state is set to
+     * {@link ResolveState#RESOLVED} as it state is part of it parent.
      * 
      * <p>
      * While creating the object it will be initialised with default values and its created lifecycle method (its

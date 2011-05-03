@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import java.io.IOException;
@@ -33,71 +32,63 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
  */
 public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQueryAbstract {
-	
-	private final String queryName;
-	private final QueryCardinality cardinality;
-	private final Map<String, ObjectAdapter> argumentsAdaptersByParameterName;
 
-    public PersistenceQueryFindUsingApplibQueryDefault(
-    		final ObjectSpecification specification, 
-    		final String queryName, 
-    		final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, 
-    		final QueryCardinality cardinality) {
+    private final String queryName;
+    private final QueryCardinality cardinality;
+    private final Map<String, ObjectAdapter> argumentsAdaptersByParameterName;
+
+    public PersistenceQueryFindUsingApplibQueryDefault(final ObjectSpecification specification, final String queryName,
+        final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, final QueryCardinality cardinality) {
         super(specification);
         this.queryName = queryName;
         this.cardinality = cardinality;
         this.argumentsAdaptersByParameterName = argumentsAdaptersByParameterName;
         initialized();
     }
-    
-    public PersistenceQueryFindUsingApplibQueryDefault(DataInputExtended input)
-			throws IOException {
-		super(input);
-		this.queryName = input.readUTF();
-		this.cardinality = QueryCardinality.valueOf(input.readUTF());
-		// TODO: need to read from input
-		this.argumentsAdaptersByParameterName = new HashMap<String, ObjectAdapter>();
-		initialized();
-	}
 
-    
+    public PersistenceQueryFindUsingApplibQueryDefault(final DataInputExtended input) throws IOException {
+        super(input);
+        this.queryName = input.readUTF();
+        this.cardinality = QueryCardinality.valueOf(input.readUTF());
+        // TODO: need to read from input
+        this.argumentsAdaptersByParameterName = new HashMap<String, ObjectAdapter>();
+        initialized();
+    }
+
     @Override
-    public void encode(DataOutputExtended output) throws IOException {
-    	super.encode(output);
-    	output.writeUTF(queryName);
-    	output.writeUTF(cardinality.name());
-		// TODO: need to write to output
-    	// ... this.argumentsAdaptersByParameterName....
-    	
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+        output.writeUTF(queryName);
+        output.writeUTF(cardinality.name());
+        // TODO: need to write to output
+        // ... this.argumentsAdaptersByParameterName....
+
     }
 
     private void initialized() {
-    	// nothing to do
+        // nothing to do
     }
-    
-    /////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
+    public String getQueryName() {
+        return queryName;
+    }
 
-
-	public String getQueryName() {
-		return queryName;
-	}
-    
     public Map<String, ObjectAdapter> getArgumentsAdaptersByParameterName() {
-		return Collections.unmodifiableMap(argumentsAdaptersByParameterName);
-	}
-    
+        return Collections.unmodifiableMap(argumentsAdaptersByParameterName);
+    }
+
     public QueryCardinality getCardinality() {
-		return cardinality;
-	}
-    
+        return cardinality;
+    }
+
     @Override
     public String toString() {
         final ToString str = ToString.createAnonymous(this);

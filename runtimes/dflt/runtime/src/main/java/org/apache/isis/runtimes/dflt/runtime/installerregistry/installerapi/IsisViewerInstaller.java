@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
-
 public interface IsisViewerInstaller extends Installer, InstallerLookupAware {
 
-	static String TYPE = "viewer";
+    static String TYPE = "viewer";
 
     IsisViewer createViewer();
 }
-

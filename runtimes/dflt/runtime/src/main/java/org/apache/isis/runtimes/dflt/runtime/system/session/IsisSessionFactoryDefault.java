@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.session;
 
 import java.util.List;
@@ -32,24 +31,18 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * As its superclass, but provides a default for some of more basic components (that
- * is, where the core framework offers only a single implementation). 
+ * As its superclass, but provides a default for some of more basic components (that is, where the core framework offers
+ * only a single implementation).
  */
 public class IsisSessionFactoryDefault extends IsisSessionFactoryAbstract {
 
-    public IsisSessionFactoryDefault(
-            final DeploymentType deploymentType, 
-            final IsisConfiguration configuration, 
-            final TemplateImageLoader templateImageLoader, 
-            final SpecificationLoader specificationLoader, 
-            final AuthenticationManager authenticationManager, 
-            AuthorizationManager authorizationManager,
-            final UserProfileLoader userProfileLoader,
-            final PersistenceSessionFactory persistenceSessionFactory, final List<Object> servicesList) {
-        super(deploymentType, configuration, specificationLoader, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
+    public IsisSessionFactoryDefault(final DeploymentType deploymentType, final IsisConfiguration configuration,
+        final TemplateImageLoader templateImageLoader, final SpecificationLoader specificationLoader,
+        final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
+        final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory,
+        final List<Object> servicesList) {
+        super(deploymentType, configuration, specificationLoader, templateImageLoader, authenticationManager,
+            authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
     }
 
-
 }
-
-

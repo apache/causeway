@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.List;
@@ -42,15 +41,14 @@ import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-
 public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
 
     private final String id;
-	private final RuntimeContext runtimeContext;
+    private final RuntimeContext runtimeContext;
 
     public TestProxyAction(final String id) {
         this.id = id;
-		runtimeContext = new RuntimeContextNoRuntime();
+        runtimeContext = new RuntimeContextNoRuntime();
     }
 
     @Override
@@ -166,7 +164,7 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     public boolean isAlwaysHidden() {
         return false;
     }
-    
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
@@ -193,30 +191,23 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter object,
-            final ObjectAdapter[] candidateArguments) {
+    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter object,
+        final ObjectAdapter[] candidateArguments) {
         return null;
     }
-
 
     // /////////////////////////////////////////////////////////////
     // isAction, isAssociation
@@ -231,10 +222,12 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     public boolean isPropertyOrCollection() {
         return false;
     }
+
     @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+
     @Override
     public boolean isOneToOneAssociation() {
         return false;
@@ -243,20 +236,19 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
+    public Instance getInstance(final ObjectAdapter adapter) {
         return null;
     }
 
-    
     // /////////////////////////////////////////////////////////////
     // RuntimeContext
     // /////////////////////////////////////////////////////////////
 
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    public RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
 
     @Override
     public FeatureType getFeatureType() {
@@ -264,4 +256,3 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
 }
-

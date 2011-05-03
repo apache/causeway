@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.facets.CollectionClearFacetWrapTransaction;
-
+import org.apache.log4j.Logger;
 
 public class TransactionUtils {
     private final static Logger LOG = Logger.getLogger(CollectionClearFacetWrapTransaction.class);
 
-    private TransactionUtils() {}
+    private TransactionUtils() {
+    }
 
     public static void abort(final IsisTransactionManager transactionManager, final FacetHolder holder) {
         LOG.info("exception executing " + holder + ", aborting transaction");
@@ -49,4 +47,3 @@ public class TransactionUtils {
     }
 
 }
-

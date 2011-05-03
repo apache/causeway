@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,39 +26,40 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
 
 public final class OptionHandlerPort implements OptionHandler {
-	private Integer port;
-	static final String PORT_LONG_OPT = "port";
-	static final String PORT_OPT = "p";
+    private Integer port;
+    static final String PORT_LONG_OPT = "port";
+    static final String PORT_OPT = "p";
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-	    OptionBuilder.withArgName("port");
-		Option option = OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT)
-	    .withDescription("port to listen on").create(OptionHandlerPort.PORT_OPT);
-	    options.addOption(option);
-	}
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        OptionBuilder.withArgName("port");
+        final Option option =
+            OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on")
+                .create(OptionHandlerPort.PORT_OPT);
+        options.addOption(option);
+    }
 
-	public boolean handle(CommandLine commandLine,
-			BootPrinter bootPrinter, Options options) {
-	    String portStr = commandLine.getOptionValue(OptionHandlerPort.PORT_OPT);
-	    if (portStr != null){
-	    	port = Integer.parseInt(portStr);
-	    }
-	    return true;
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        final String portStr = commandLine.getOptionValue(OptionHandlerPort.PORT_OPT);
+        if (portStr != null) {
+            port = Integer.parseInt(portStr);
+        }
+        return true;
+    }
 
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		if (port == null) {
-			return;
-		}
-		isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY, ""+port);
-	}
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        if (port == null) {
+            return;
+        }
+        isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY, "" + port);
+    }
 }

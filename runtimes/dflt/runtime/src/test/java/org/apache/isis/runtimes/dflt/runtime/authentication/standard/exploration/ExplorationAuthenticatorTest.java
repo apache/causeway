@@ -17,19 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard.exploration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
@@ -38,85 +29,101 @@ import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.Explorat
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationAuthenticatorConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ExplorationAuthenticatorTest {
-	
-	private Mockery mockery = new JUnit4Mockery();
 
-	private IsisConfiguration mockConfiguration;
+    private final Mockery mockery = new JUnit4Mockery();
+
+    private IsisConfiguration mockConfiguration;
     private ExplorationAuthenticator authenticator;
 
-	private AuthenticationRequestExploration explorationRequest;
+    private AuthenticationRequestExploration explorationRequest;
 
-	private SomeOtherAuthenticationRequest someOtherRequest;
+    private SomeOtherAuthenticationRequest someOtherRequest;
 
     private static class SomeOtherAuthenticationRequest extends AuthenticationRequestAbstract {
-		public SomeOtherAuthenticationRequest() {
-			super("other");
-		}
-	}
+        public SomeOtherAuthenticationRequest() {
+            super("other");
+        }
+    }
 
     @Before
     public void setUp() {
-    	mockConfiguration = mockery.mock(IsisConfiguration.class);
+        mockConfiguration = mockery.mock(IsisConfiguration.class);
 
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
-    		will(returnValue(DeploymentType.EXPLORATION.name()));
-    	}});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                will(returnValue(DeploymentType.EXPLORATION.name()));
+            }
+        });
 
-    	explorationRequest = new AuthenticationRequestExploration();
-    	someOtherRequest = new SomeOtherAuthenticationRequest();
-    	 
-    	authenticator = new ExplorationAuthenticator(mockConfiguration);
+        explorationRequest = new AuthenticationRequestExploration();
+        someOtherRequest = new SomeOtherAuthenticationRequest();
+
+        authenticator = new ExplorationAuthenticator(mockConfiguration);
     }
 
     @Test
     public void canAuthenticateExplorationRequest() throws Exception {
-    	assertThat(authenticator.canAuthenticate(explorationRequest), is(true));
+        assertThat(authenticator.canAuthenticate(explorationRequest), is(true));
     }
 
     @Test
     public void canAuthenticateSomeOtherTypeOfRequest() throws Exception {
-		assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
+        assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
     }
 
     @Test
     public void isValidExplorationRequestWhenRunningInExplorationMode() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-    		will(returnValue(DeploymentType.EXPLORATION.name()));
-    	}});
-		assertThat(authenticator.isValid(explorationRequest), is(true));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+                will(returnValue(DeploymentType.EXPLORATION.name()));
+            }
+        });
+        assertThat(authenticator.isValid(explorationRequest), is(true));
     }
 
     @Test
     public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationMode() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-    		will(returnValue(DeploymentType.PROTOTYPE.name()));
-    	}});
-    	assertThat(authenticator.isValid(explorationRequest), is(false));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+                will(returnValue(DeploymentType.PROTOTYPE.name()));
+            }
+        });
+        assertThat(authenticator.isValid(explorationRequest), is(false));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void expectsThereToBeADeploymentTypeInIsisConfiguration() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-    		will(returnValue(null));
-    	}});
-    	authenticator.isValid(explorationRequest);
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+                will(returnValue(null));
+            }
+        });
+        authenticator.isValid(explorationRequest);
     }
 
     @Test
     public void isValidSomeOtherTypeOfRequest() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-    		will(returnValue(DeploymentType.EXPLORATION.name()));
-    	}});
-    	assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+                will(returnValue(DeploymentType.EXPLORATION.name()));
+            }
+        });
+        assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
     }
 
 }
-

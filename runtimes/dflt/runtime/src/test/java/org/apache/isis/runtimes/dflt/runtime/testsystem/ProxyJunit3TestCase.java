@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerPersist;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerTestSupport;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -31,7 +28,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public abstract class ProxyJunit3TestCase extends TestCase {
 
@@ -52,7 +50,6 @@ public abstract class ProxyJunit3TestCase extends TestCase {
         system = new TestProxySystem();
     }
 
-    
     protected static IsisSession getSession() {
         return IsisContext.getSession();
     }
@@ -64,7 +61,7 @@ public abstract class ProxyJunit3TestCase extends TestCase {
     protected static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
-    
+
     protected static AdapterManagerTestSupport getAdapterManagerTestSupport() {
         return (AdapterManagerTestSupport) IsisContext.getPersistenceSession().getAdapterManager();
     }
@@ -77,8 +74,4 @@ public abstract class ProxyJunit3TestCase extends TestCase {
         return getPersistenceSession().getTransactionManager();
     }
 
-    
-    
-
 }
-

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 public enum Splash {
-    SHOW(true),
-    NO_SHOW(false);
+    SHOW(true), NO_SHOW(false);
 
     private final boolean show;
 
@@ -34,7 +32,7 @@ public enum Splash {
         return show;
     }
 
-    public static Splash lookup(boolean showSplash) {
+    public static Splash lookup(final boolean showSplash) {
         return showSplash ? Splash.SHOW : Splash.NO_SHOW;
     }
 }

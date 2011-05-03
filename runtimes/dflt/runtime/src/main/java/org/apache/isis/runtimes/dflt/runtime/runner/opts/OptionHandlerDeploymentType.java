@@ -17,14 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
+
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_LONG_OPT;
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -33,10 +34,6 @@ import org.apache.isis.runtimes.dflt.runtime.runner.Constants;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
-import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_LONG_OPT;
-import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.TYPE_OPT;
-
-
 public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract {
 
     private final DeploymentType defaultDeploymentType;
@@ -44,37 +41,34 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
 
     private DeploymentType deploymentType;
 
-    public OptionHandlerDeploymentType(
-            final DeploymentType defaultDeploymentType, String types) {
+    public OptionHandlerDeploymentType(final DeploymentType defaultDeploymentType, final String types) {
         this.defaultDeploymentType = defaultDeploymentType;
         this.types = types;
     }
 
+    @Override
     @SuppressWarnings("static-access")
-    public void addOption(Options options) {
-        Option option = OptionBuilder.withArgName("name").hasArg().withLongOpt(
-                TYPE_LONG_OPT).withDescription(
-                "deployment type: " + types).create(TYPE_OPT);
+    public void addOption(final Options options) {
+        final Option option =
+            OptionBuilder.withArgName("name").hasArg().withLongOpt(TYPE_LONG_OPT)
+                .withDescription("deployment type: " + types).create(TYPE_OPT);
         options.addOption(option);
     }
 
-    public boolean handle(CommandLine commandLine, BootPrinter bootPrinter,
-            Options options) {
-        String deploymentTypeName = commandLine
-                .getOptionValue(Constants.TYPE_OPT);
-        
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        final String deploymentTypeName = commandLine.getOptionValue(Constants.TYPE_OPT);
+
         if (deploymentTypeName == null) {
             deploymentType = defaultDeploymentType;
             return true;
         }
 
-        deploymentType = DeploymentType
-                .lookup(deploymentTypeName.toUpperCase());
+        deploymentType = DeploymentType.lookup(deploymentTypeName.toUpperCase());
         if (deploymentType != null) {
             return true;
         }
-        bootPrinter.printErrorAndHelp(options,
-                "Unable to determine deployment type");
+        bootPrinter.printErrorAndHelp(options, "Unable to determine deployment type");
         return false;
     }
 
@@ -85,14 +79,12 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
         return deploymentType;
     }
 
-    public void primeConfigurationBuilder(
-            IsisConfigurationBuilder isisConfigurationBuilder) {
-        String type = deploymentType.nameLowerCase();
-        isisConfigurationBuilder.addConfigurationResource(type + ".properties",
-                NotFoundPolicy.CONTINUE);
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        final String type = deploymentType.nameLowerCase();
+        isisConfigurationBuilder.addConfigurationResource(type + ".properties", NotFoundPolicy.CONTINUE);
 
-        isisConfigurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY,
-                deploymentType.name());
+        isisConfigurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
     }
 
 }

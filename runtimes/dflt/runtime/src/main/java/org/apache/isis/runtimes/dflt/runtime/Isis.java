@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime;
-
 
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerDeploymentTypeIsis;
@@ -28,36 +26,33 @@ import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerUser;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorUserAndPasswordCombo;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
-
 public class Isis {
-	
-	static final String DEFAULT_EMBEDDED_WEBSERVER = SystemConstants.WEBSERVER_DEFAULT;
-	
+
+    static final String DEFAULT_EMBEDDED_WEBSERVER = SystemConstants.WEBSERVER_DEFAULT;
+
     public static void main(final String[] args) {
         new Isis().run(args);
-	}
+    }
+
     private void run(final String[] args) {
-        IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeIsis());
+        final IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeIsis());
 
         addOptionHandlersAndValidators(runner);
-        
+
         if (!runner.parseAndValidate()) {
             return;
         }
         runner.bootstrap(new RuntimeBootstrapper());
     }
-    
-    private void addOptionHandlersAndValidators(IsisRunner runner) {
-        OptionHandlerUser optionHandlerUser = new OptionHandlerUser();
-        OptionHandlerPassword optionHandlerPassword = new OptionHandlerPassword();
+
+    private void addOptionHandlersAndValidators(final IsisRunner runner) {
+        final OptionHandlerUser optionHandlerUser = new OptionHandlerUser();
+        final OptionHandlerPassword optionHandlerPassword = new OptionHandlerPassword();
 
         runner.addOptionHandler(optionHandlerUser);
         runner.addOptionHandler(optionHandlerPassword);
 
-        runner.addValidator(new OptionValidatorUserAndPasswordCombo(optionHandlerUser,
-                optionHandlerPassword));
+        runner.addValidator(new OptionValidatorUserAndPasswordCombo(optionHandlerUser, optionHandlerPassword));
     }
-
-
 
 }

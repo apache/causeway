@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 
 public class TestProxyAdapter implements ObjectAdapter {
-    
+
     private final Hashtable fieldContents = new Hashtable();
     private Object object;
     private Oid oid;
@@ -183,7 +183,7 @@ public class TestProxyAdapter implements ObjectAdapter {
     }
 
     @Override
-    public Instance getInstance(Specification specification) {
+    public Instance getInstance(final Specification specification) {
         return null;
     }
 
@@ -198,8 +198,7 @@ public class TestProxyAdapter implements ObjectAdapter {
     }
 
     @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
     }
-
 
 }

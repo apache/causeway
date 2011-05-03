@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.FIXTURE_LONG_OPT;
@@ -27,7 +26,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -36,28 +34,30 @@ import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 public class OptionHandlerFixture extends OptionHandlerAbstract {
 
-	private String fixture;
+    private String fixture;
 
-	public OptionHandlerFixture() {
-		super();
-	}
+    public OptionHandlerFixture() {
+        super();
+    }
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-		Option option = OptionBuilder.withArgName("class name").hasArg().withLongOpt(FIXTURE_LONG_OPT).withDescription(
-        "fully qualified fixture class").create(FIXTURE_OPT);
-		options.addOption(option);
-	}
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Option option =
+            OptionBuilder.withArgName("class name").hasArg().withLongOpt(FIXTURE_LONG_OPT)
+                .withDescription("fully qualified fixture class").create(FIXTURE_OPT);
+        options.addOption(option);
+    }
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		fixture = commandLine.getOptionValue(Constants.FIXTURE_OPT);		
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		isisConfigurationBuilder.add(SystemConstants.FIXTURE_KEY, fixture);
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        fixture = commandLine.getOptionValue(Constants.FIXTURE_OPT);
+        return true;
+    }
 
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.FIXTURE_KEY, fixture);
+    }
 
 }

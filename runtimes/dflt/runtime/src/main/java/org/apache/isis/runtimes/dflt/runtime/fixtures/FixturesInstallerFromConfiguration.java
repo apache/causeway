@@ -17,56 +17,54 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.domainservice.ObjectLoaderFixture;
-
+import org.apache.log4j.Logger;
 
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
-	
-	private static final Logger LOG = Logger.getLogger(FixturesInstallerFromConfiguration.class);
+
+    private static final Logger LOG = Logger.getLogger(FixturesInstallerFromConfiguration.class);
     private static final String NAKEDOBJECTS_FIXTURES = ConfigurationConstants.ROOT + "fixtures";
     private static final String NAKEDOBJECTS_FIXTURES_PREFIX = ConfigurationConstants.ROOT + "fixtures.prefix";
     private static final String EXPLORATION_OBJECTS = ConfigurationConstants.ROOT + "exploration-objects";
-    
+
     public FixturesInstallerFromConfiguration() {
-    	super("configuration");
+        super("configuration");
     }
-    
-    protected void addFixturesTo(FixturesInstallerDelegate delegate) {
+
+    @Override
+    protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
         String fixturePrefix = getConfiguration().getString(NAKEDOBJECTS_FIXTURES_PREFIX);
         fixturePrefix = fixturePrefix == null ? "" : fixturePrefix.trim();
         if (fixturePrefix.length() > 0 && !fixturePrefix.endsWith(ConfigurationConstants.DELIMITER)) {
             fixturePrefix = fixturePrefix + ConfigurationConstants.DELIMITER;
         }
 
-		try {
-	        final String[] fixtureList = getConfiguration().getList(NAKEDOBJECTS_FIXTURES);
-	        boolean fixtureLoaded = false;
-            for (int i = 0; i < fixtureList.length; i++) {
-                String fixtureFullyQualifiedName = fixturePrefix + fixtureList[i];
+        try {
+            final String[] fixtureList = getConfiguration().getList(NAKEDOBJECTS_FIXTURES);
+            boolean fixtureLoaded = false;
+            for (final String element : fixtureList) {
+                final String fixtureFullyQualifiedName = fixturePrefix + element;
                 LOG.info("  adding fixture " + fixtureFullyQualifiedName);
-				final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
-				fixtureLoaded = true;
-				delegate.addFixture(fixture);
+                final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
+                fixtureLoaded = true;
+                delegate.addFixture(fixture);
             }
-            if (getConfiguration().getBoolean(EXPLORATION_OBJECTS)){
+            if (getConfiguration().getBoolean(EXPLORATION_OBJECTS)) {
                 delegate.addFixture(new ObjectLoaderFixture());
             }
-	        if (!fixtureLoaded) {
-	        	LOG.warn("No fixtures loaded from configuration");
-	        }
-		} catch (IllegalArgumentException e) {
+            if (!fixtureLoaded) {
+                LOG.warn("No fixtures loaded from configuration");
+            }
+        } catch (final IllegalArgumentException e) {
             throw new IsisException(e);
-		} catch (SecurityException e) {
-			throw new IsisException(e);
-		}
+        } catch (final SecurityException e) {
+            throw new IsisException(e);
+        }
     }
 
 }

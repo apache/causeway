@@ -17,24 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.context;
 
-import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
-import com.google.inject.Injector;
-
-
 /**
- * Provides <i>access to</i> the current {@link IsisSession} in a single-user {@link DeploymentType
- * deployment} (and thus implemented as a <tt>static</tt> singleton).
+ * Provides <i>access to</i> the current {@link IsisSession} in a single-user {@link DeploymentType deployment} (and
+ * thus implemented as a <tt>static</tt> singleton).
  */
 public class IsisContextStatic extends IsisContext {
 
@@ -46,7 +40,7 @@ public class IsisContextStatic extends IsisContext {
 
     public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
         return new IsisContextStatic(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE,
-                sessionFactory);
+            sessionFactory);
     }
 
     /**
@@ -56,10 +50,8 @@ public class IsisContextStatic extends IsisContext {
         return new IsisContextStatic(ContextReplacePolicy.REPLACEABLE, SessionClosePolicy.AUTO_CLOSE, sessionFactory);
     }
 
-    protected IsisContextStatic(
-            final ContextReplacePolicy replacePolicy,
-            final SessionClosePolicy sessionClosePolicy,
-            final IsisSessionFactory sessionFactory) {
+    protected IsisContextStatic(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy,
+        final IsisSessionFactory sessionFactory) {
         super(replacePolicy, sessionClosePolicy, sessionFactory);
     }
 
@@ -72,14 +64,15 @@ public class IsisContextStatic extends IsisContext {
     // open, close
     // //////////////////////////////////////////////
 
-    public IsisSession openSessionInstance(AuthenticationSession authenticationSession) {
-    	applySessionClosePolicy();
-		session = getSessionFactoryInstance().openSession(authenticationSession);
-		session.open();
+    @Override
+    public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
+        applySessionClosePolicy();
+        session = getSessionFactoryInstance().openSession(authenticationSession);
+        session.open();
         return session;
     }
 
-	@Override
+    @Override
     public void doClose() {
         session = null;
     }
@@ -104,9 +97,9 @@ public class IsisContextStatic extends IsisContext {
 
     @Override
     public void closeAllSessionsInstance() {
-        IsisSession sessionInstance = getSessionInstance();
+        final IsisSession sessionInstance = getSessionInstance();
         if (sessionInstance != null) {
-        	sessionInstance.closeAll();
+            sessionInstance.closeAll();
         }
     }
 
@@ -114,6 +107,7 @@ public class IsisContextStatic extends IsisContext {
     // Debugging
     // //////////////////////////////////////////////
 
+    @Override
     public String debugTitle() {
         return "Static Context";
     }

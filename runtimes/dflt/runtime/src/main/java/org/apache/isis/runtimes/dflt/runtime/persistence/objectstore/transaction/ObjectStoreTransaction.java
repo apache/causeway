@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -33,19 +31,16 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionAbstract;
+import org.apache.log4j.Logger;
 
-
-public class ObjectStoreTransaction extends IsisTransactionAbstract  {
+public class ObjectStoreTransaction extends IsisTransactionAbstract {
     private static final Logger LOG = Logger.getLogger(ObjectStoreTransaction.class);
-    
+
     private final ObjectStoreTransactionManagement objectStore;
     private final List<PersistenceCommand> commands = new ArrayList<PersistenceCommand>();
-    
-    public ObjectStoreTransaction(           
-            final IsisTransactionManager transactionManager, 
-            final MessageBroker messageBroker, 
-            final UpdateNotifier updateNotifier,
-            final ObjectStoreTransactionManagement objectStore) {
+
+    public ObjectStoreTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
+        final UpdateNotifier updateNotifier, final ObjectStoreTransactionManagement objectStore) {
         super(transactionManager, messageBroker, updateNotifier);
         this.objectStore = objectStore;
         if (LOG.isDebugEnabled()) {
@@ -53,10 +48,9 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
         }
     }
 
-    
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // Commands
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
     /**
      * Add the non-null command to the list of commands to execute at the end of the transaction.
@@ -101,13 +95,13 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
                     LOG.info("removed prior save command " + command);
                 }
             }
-            
+
             if (alreadyHasDestroy(onObject)) {
                 if (LOG.isInfoEnabled()) {
                     LOG.info("ignored command " + command + " as command already recorded");
                 }
                 return;
-            }            
+            }
         }
 
         if (LOG.isDebugEnabled()) {
@@ -116,27 +110,25 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
         commands.add(command);
     }
 
-    
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // abort
-    ////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////
+
     @Override
     public void doAbort() {
     }
 
-
-    ////////////////////////////////////////////////////////////
-    // commit 
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
+    // commit
+    // //////////////////////////////////////////////////////////
 
     @Override
     public void doFlush() {
 
         if (commands.size() > 0) {
             objectStore.execute(Collections.unmodifiableList(commands));
-            
-            for (final PersistenceCommand command: commands) {
+
+            for (final PersistenceCommand command : commands) {
                 if (command instanceof DestroyObjectCommand) {
                     final ObjectAdapter adapter = command.onObject();
                     adapter.setOptimisticLock(null);
@@ -147,10 +139,9 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
         }
     }
 
-    
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // Helpers
-    ////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
 
     private boolean alreadyHasCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
         return getCommand(commandClass, onObject) != null;
@@ -169,7 +160,7 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
     }
 
     private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        for (PersistenceCommand command: commands) {
+        for (final PersistenceCommand command : commands) {
             if (command.onObject().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
@@ -199,5 +190,4 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract  {
         return str;
     }
 
-    
 }

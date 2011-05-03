@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner;
 
 import java.io.File;
@@ -29,11 +28,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
 import org.apache.isis.applib.maybe.Maybe;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
@@ -68,38 +66,33 @@ import com.google.inject.internal.Lists;
 public class IsisRunner {
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
-    
+
     private final String[] args;
     private final OptionHandlerDeploymentType optionHandlerDeploymentType;
     private final InstallerLookup installerLookup;
-    
-    private OptionHandlerViewer optionHandlerViewer;
+
+    private final OptionHandlerViewer optionHandlerViewer;
 
     private final List<OptionHandler> optionHandlers = Lists.newArrayList();
     private final List<OptionValidator> validators = Lists.newArrayList();
     private IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault();
 
-    private Injector globalInjector;
-;
-
+    private Injector globalInjector;;
 
     // ///////////////////////////////////////////////////////////////////////////////////////
     // Construction and adjustments
     // ///////////////////////////////////////////////////////////////////////////////////////
 
-    public IsisRunner(final String[] args,
-            OptionHandlerDeploymentType optionHandlerDeploymentType) {
+    public IsisRunner(final String[] args, final OptionHandlerDeploymentType optionHandlerDeploymentType) {
 
         this.args = args;
         this.optionHandlerDeploymentType = optionHandlerDeploymentType;
 
         // setup logging immediately
-        loggingConfigurer.configureLogging(determineConfigDirectory(),
-        args);
+        loggingConfigurer.configureLogging(determineConfigDirectory(), args);
 
-        this.installerLookup = new InstallerLookupDefault(
-                IsisRunner.class);
-        
+        this.installerLookup = new InstallerLookupDefault(IsisRunner.class);
+
         addOptionHandler(optionHandlerDeploymentType);
         this.optionHandlerViewer = addStandardOptionHandlersAndValidators(this.installerLookup);
     }
@@ -112,50 +105,41 @@ public class IsisRunner {
         }
     }
 
-
     /**
-     * Adds additional option handlers; may also require additional
-     * {@link OptionValidator validator}s to be
+     * Adds additional option handlers; may also require additional {@link OptionValidator validator}s to be
      * {@link #addValidator(OptionValidator) add}ed.
      * <p>
      * An adjustment (as per GOOS book).
      */
-    public final boolean addOptionHandler(OptionHandler optionHandler) {
+    public final boolean addOptionHandler(final OptionHandler optionHandler) {
         return optionHandlers.add(optionHandler);
     }
 
-
     /**
-     * Adds additional validators; typically goes hand-in-hand will calls to
-     * {@link #addOptionHandler(OptionHandler)}.
+     * Adds additional validators; typically goes hand-in-hand will calls to {@link #addOptionHandler(OptionHandler)}.
      * <p>
      * An adjustment (as per GOOS book).
      */
-    public void addValidator(OptionValidator validator) {
+    public void addValidator(final OptionValidator validator) {
         validators.add(validator);
     }
 
     /**
-     * The default implementation is a {@link IsisConfigurationBuilderDefault},
-     * which looks to the <tt>config/</tt> directory, the
-     * <tt>src/main/webapp/WEB-INF</tt> directory, and then finally to the
-     * classpath. However, this could be a security concern in a production
-     * environment; a user could edit the <tt>isis.properties</tt>
-     * config files to disable security, for example.
+     * The default implementation is a {@link IsisConfigurationBuilderDefault}, which looks to the <tt>config/</tt>
+     * directory, the <tt>src/main/webapp/WEB-INF</tt> directory, and then finally to the classpath. However, this could
+     * be a security concern in a production environment; a user could edit the <tt>isis.properties</tt> config files to
+     * disable security, for example.
      * <p>
-     * This method therefore allows this system to be configured using a
-     * different {@link IsisConfigurationBuilder}. For example, a security-conscious
-     * subclass could return a {@link IsisConfigurationBuilder} that only reads from
-     * the classpath. This would allow the application to be deployed as a
-     * single sealed JAR that could not be tampered with.
+     * This method therefore allows this system to be configured using a different {@link IsisConfigurationBuilder}. For
+     * example, a security-conscious subclass could return a {@link IsisConfigurationBuilder} that only reads from the
+     * classpath. This would allow the application to be deployed as a single sealed JAR that could not be tampered
+     * with.
      * <p>
      * An adjustment (as per GOOS book).
      */
-    public void setConfigurationBuilder(
-            IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void setConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
         this.isisConfigurationBuilder = isisConfigurationBuilder;
     }
-
 
     // ///////////////////////////////////////////////////////////////////////////////////////
     // parse and validate
@@ -167,24 +151,23 @@ public class IsisRunner {
         final Options options = createOptions();
 
         // parse & validate options from the cmd line
-        BootPrinter printer = new BootPrinter(getClass());
-        return parseOptions(options, printer) &&
-                validateOptions(options, printer);
+        final BootPrinter printer = new BootPrinter(getClass());
+        return parseOptions(options, printer) && validateOptions(options, printer);
     }
 
     private Options createOptions() {
         final Options options = new Options();
-        for (OptionHandler optionHandler : optionHandlers) {
+        for (final OptionHandler optionHandler : optionHandlers) {
             optionHandler.addOption(options);
         }
         return options;
     }
 
-    private boolean parseOptions(final Options options, BootPrinter printer) {
+    private boolean parseOptions(final Options options, final BootPrinter printer) {
         final CommandLineParser parser = new BasicParser();
         try {
-            CommandLine commandLine = parser.parse(options, args);
-            for (OptionHandler optionHandler : optionHandlers) {
+            final CommandLine commandLine = parser.parse(options, args);
+            for (final OptionHandler optionHandler : optionHandlers) {
                 if (!optionHandler.handle(commandLine, printer, options)) {
                     return false;
                 }
@@ -197,47 +180,41 @@ public class IsisRunner {
         return true;
     }
 
-    private boolean validateOptions(final Options options, BootPrinter printer) {
-        final DeploymentType deploymentType = optionHandlerDeploymentType
-                .getDeploymentType();
+    private boolean validateOptions(final Options options, final BootPrinter printer) {
+        final DeploymentType deploymentType = optionHandlerDeploymentType.getDeploymentType();
 
-        for (OptionValidator validator : validators) {
-            Maybe<String> errorMessage = validator.validate(deploymentType);
+        for (final OptionValidator validator : validators) {
+            final Maybe<String> errorMessage = validator.validate(deploymentType);
             if (errorMessage.isSet()) {
-                printer.printErrorAndHelp(
-                        options,
-                        errorMessage.get());
+                printer.printErrorAndHelp(options, errorMessage.get());
                 return false;
             }
         }
         return true;
     }
 
-
     // ///////////////////////////////////////////////////////////////////////////////////////
     // Bootstrapping
     // ///////////////////////////////////////////////////////////////////////////////////////
 
-    public final void bootstrap(IsisBootstrapper bootstrapper) {
+    public final void bootstrap(final IsisBootstrapper bootstrapper) {
 
-        final DeploymentType deploymentType = optionHandlerDeploymentType
-                .getDeploymentType();
-        
-        this.globalInjector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
+        final DeploymentType deploymentType = optionHandlerDeploymentType.getDeploymentType();
+
+        this.globalInjector =
+            createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
 
         bootstrapper.bootstrap(globalInjector);
     }
 
-    private Injector createGuiceInjector(DeploymentType deploymentType,
-            IsisConfigurationBuilder isisConfigurationBuilder,
-            InstallerLookup installerLookup,
-            List<OptionHandler> optionHandlers) {
-        IsisModule isisModule = new IsisModule(deploymentType,isisConfigurationBuilder, installerLookup);
+    private Injector createGuiceInjector(final DeploymentType deploymentType,
+        final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup,
+        final List<OptionHandler> optionHandlers) {
+        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         isisModule.addConfigurationPrimers(optionHandlers);
         isisModule.addViewerNames(optionHandlerViewer.getViewerNames());
         return Guice.createInjector(isisModule);
     }
-
 
     // ///////////////////////////////////////////////////////////////////////////////////////
     // Handlers & Validators
@@ -247,22 +224,17 @@ public class IsisRunner {
         return Collections.unmodifiableList(optionHandlers);
     }
 
-
-    private OptionHandlerViewer addStandardOptionHandlersAndValidators(
-            InstallerLookup installerLookup) {
+    private OptionHandlerViewer addStandardOptionHandlersAndValidators(final InstallerLookup installerLookup) {
 
         addOptionHandler(new OptionHandlerConfiguration());
 
         OptionHandlerConnector optionHandlerClientConnection;
         OptionHandlerPersistor optionHandlerPersistor;
         OptionHandlerViewer optionHandlerViewer;
-        
-        addOptionHandler(optionHandlerClientConnection = new OptionHandlerConnector(
-                installerLookup));
-        addOptionHandler(optionHandlerPersistor = new OptionHandlerPersistor(
-                installerLookup));
-        addOptionHandler(optionHandlerViewer = new OptionHandlerViewer(
-                installerLookup));
+
+        addOptionHandler(optionHandlerClientConnection = new OptionHandlerConnector(installerLookup));
+        addOptionHandler(optionHandlerPersistor = new OptionHandlerPersistor(installerLookup));
+        addOptionHandler(optionHandlerViewer = new OptionHandlerViewer(installerLookup));
 
         addOptionHandler(new OptionHandlerReflector(installerLookup));
         addOptionHandler(new OptionHandlerUserProfileStore(installerLookup));
@@ -283,9 +255,8 @@ public class IsisRunner {
         addValidator(new OptionValidatorForViewers(optionHandlerViewer));
         addValidator(new OptionValidatorForConnector(optionHandlerClientConnection));
         addValidator(new OptionValidatorForPersistor(optionHandlerPersistor));
-        
+
         return optionHandlerViewer;
     }
-
 
 }

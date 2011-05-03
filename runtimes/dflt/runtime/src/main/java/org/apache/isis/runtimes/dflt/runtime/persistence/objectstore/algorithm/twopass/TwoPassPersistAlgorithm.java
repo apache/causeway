@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.twopass;
 
 import java.util.Enumeration;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
-
+import org.apache.log4j.Logger;
 
 public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
     private static final Logger LOG = Logger.getLogger(TwoPassPersistAlgorithm.class);
@@ -46,7 +43,6 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
     public String name() {
         return "Two pass,  bottom up persistence walker";
     }
-
 
     @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
@@ -91,16 +87,13 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
                     final ObjectAdapter collection = field.get(object);
                     makeCollectionPersistent(collection, toPersistObjectSet);
                     /**
-                    if (collection == null) {
-                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in "
-                                + object.getSpecification().getFullName());
-                    }
-                    makePersistent(collection, toPersistObjectSet);
-                    final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-                    final Enumeration elements = facet.elements(collection);
-                    while (elements.hasMoreElements()) {
-                        makePersistent((ObjectAdapter) elements.nextElement(), toPersistObjectSet);
-                    }*/
+                     * if (collection == null) { throw new ObjectPersistenceException("Collection " + field.getName() +
+                     * " does not exist in " + object.getSpecification().getFullName()); } makePersistent(collection,
+                     * toPersistObjectSet); final CollectionFacet facet =
+                     * CollectionFacetUtils.getCollectionFacetFromSpec(collection); final Enumeration elements =
+                     * facet.elements(collection); while (elements.hasMoreElements()) { makePersistent((ObjectAdapter)
+                     * elements.nextElement(), toPersistObjectSet); }
+                     */
                 } else {
                     // skip in second pass
                     continue;
@@ -111,7 +104,6 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
         }
     }
-
 
     private void makeCollectionPersistent(final ObjectAdapter collection, final ToPersistObjectSet toPersistObjectSet) {
         LOG.info("persist " + collection);
@@ -124,7 +116,6 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
             makePersistent((ObjectAdapter) elements.nextElement(), toPersistObjectSet);
         }
     }
-
 
     @Override
     public String toString() {

@@ -17,11 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -30,94 +34,92 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.MultiUserExplorationSession;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
-
 @RunWith(JMock.class)
 public class AuthenticatorAbstractForDfltRuntimeTest {
-	
-	private Mockery mockery = new JUnit4Mockery();
 
-	private IsisConfiguration mockConfiguration;
+    private final Mockery mockery = new JUnit4Mockery();
+
+    private IsisConfiguration mockConfiguration;
     private AuthenticatorAbstractForDfltRuntime authenticator;
-
 
     @Before
     public void setUp() {
-    	mockConfiguration = mockery.mock(IsisConfiguration.class);
-    	 
-    	authenticator = new AuthenticatorAbstractForDfltRuntime(mockConfiguration){
-			public boolean canAuthenticate(AuthenticationRequest request) {
-				return false;
-			}
-			public boolean isValid(AuthenticationRequest request) {
-				return false;
-			}};
+        mockConfiguration = mockery.mock(IsisConfiguration.class);
+
+        authenticator = new AuthenticatorAbstractForDfltRuntime(mockConfiguration) {
+            @Override
+            public boolean canAuthenticate(final AuthenticationRequest request) {
+                return false;
+            }
+
+            @Override
+            public boolean isValid(final AuthenticationRequest request) {
+                return false;
+            }
+        };
     }
 
     @Test
     public void getConfiguration() throws Exception {
-    	assertThat(authenticator.getConfiguration(), is(mockConfiguration));
+        assertThat(authenticator.getConfiguration(), is(mockConfiguration));
     }
-
 
     @Test
     public void getDeploymentTypeForExploration() throws Exception {
-    	final DeploymentType deploymentType = DeploymentType.EXPLORATION;
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(deploymentType.name()));
-    	}});
-    	assertThat(authenticator.getDeploymentType(), is(deploymentType));
+        final DeploymentType deploymentType = DeploymentType.EXPLORATION;
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(deploymentType.name()));
+            }
+        });
+        assertThat(authenticator.getDeploymentType(), is(deploymentType));
     }
 
     @Test
     public void getDeploymentTypeForPrototype() throws Exception {
-    	final DeploymentType deploymentType = DeploymentType.PROTOTYPE;
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(deploymentType.name()));
-    	}});
-    	assertThat(authenticator.getDeploymentType(), is(deploymentType));
+        final DeploymentType deploymentType = DeploymentType.PROTOTYPE;
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(deploymentType.name()));
+            }
+        });
+        assertThat(authenticator.getDeploymentType(), is(deploymentType));
     }
 
     @Test
     public void getDeploymentTypeForServer() throws Exception {
-    	final DeploymentType deploymentType = DeploymentType.SERVER;
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(deploymentType.name()));
-    	}});
-    	assertThat(authenticator.getDeploymentType(), is(deploymentType));
+        final DeploymentType deploymentType = DeploymentType.SERVER;
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(deploymentType.name()));
+            }
+        });
+        assertThat(authenticator.getDeploymentType(), is(deploymentType));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void expectsThereToBeADeploymentTypeInIsisConfiguration() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(null));
-    	}});
-    	authenticator.getDeploymentType();
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(null));
+            }
+        });
+        authenticator.getDeploymentType();
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void expectsThereToBeAValidDeploymentTypeInIsisConfiguration() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue("GARBAGE"));
-    	}});
-    	authenticator.getDeploymentType();
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue("GARBAGE"));
+            }
+        });
+        authenticator.getDeploymentType();
     }
 
 }
-

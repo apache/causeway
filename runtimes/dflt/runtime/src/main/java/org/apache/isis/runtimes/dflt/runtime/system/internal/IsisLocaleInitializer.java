@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.internal;
 
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.log4j.Logger;
 
 public class IsisLocaleInitializer {
 
     public static final Logger LOG = Logger.getLogger(IsisLocaleInitializer.class);
-    
-    public void initLocale(IsisConfiguration configuration) {
+
+    public void initLocale(final IsisConfiguration configuration) {
         final String localeSpec = configuration.getString(SystemConstants.LOCALE_KEY);
         if (localeSpec != null) {
             final int pos = localeSpec.indexOf('_');
@@ -50,5 +48,3 @@ public class IsisLocaleInitializer {
     }
 
 }
-
-

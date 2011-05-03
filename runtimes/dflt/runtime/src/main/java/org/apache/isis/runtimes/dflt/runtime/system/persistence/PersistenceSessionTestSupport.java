@@ -17,22 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
-
 
 /**
  * Support for tests.
  */
 public interface PersistenceSessionTestSupport {
 
-
     /**
      * Only for testing purposes.
      */
     public void testReset();
 
-
 }
-
-

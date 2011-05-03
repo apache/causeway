@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.internal;
 
 import java.io.IOException;
@@ -26,15 +25,15 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 
 public final class InitialisationSession extends AuthenticationSessionAbstract {
-	
-	private static final long serialVersionUID = 1L;
 
-	public InitialisationSession() {
-		super("initialisation", "");
-	}
+    private static final long serialVersionUID = 1L;
 
-	public InitialisationSession(DataInputExtended input) throws IOException {
-		super(input);
-	}
-	
+    public InitialisationSession() {
+        super("initialisation", "");
+    }
+
+    public InitialisationSession(final DataInputExtended input) throws IOException {
+        super(input);
+    }
+
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import org.apache.isis.applib.Identifier;
@@ -39,19 +38,18 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-
 public class TestProxyField extends FacetHolderImpl implements ObjectAssociation {
 
     private final String name;
     private final ObjectSpecification spec;
-    private Identifier identifier;
-	private final RuntimeContext runtimeContext;
+    private final Identifier identifier;
+    private final RuntimeContext runtimeContext;
 
     public TestProxyField(final String name, final ObjectSpecification spec) {
         this.name = name;
         this.spec = spec;
         identifier = Identifier.propertyOrCollectionIdentifier(spec.getFullIdentifier(), name);
-		runtimeContext = new RuntimeContextNoRuntime();
+        runtimeContext = new RuntimeContextNoRuntime();
     }
 
     @Override
@@ -107,7 +105,7 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     public boolean isAlwaysHidden() {
         return false;
     }
-    
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
@@ -119,7 +117,8 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     }
 
     @Override
-    public void toDefault(final ObjectAdapter target) {}
+    public void toDefault(final ObjectAdapter target) {
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -162,29 +161,24 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
-    public ValidityContext<?> createValidateInteractionContext(
-            final AuthenticationSession session,
-            final ObjectAdapter parent,
-            final ObjectAdapter newValue) {
+    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session,
+        final ObjectAdapter parent, final ObjectAdapter newValue) {
         return null;
     }
 
-    public InteractionResultSet isAssociationValidResultSet(final ObjectAdapter targetObject, final ObjectAdapter newValue) {
+    public InteractionResultSet isAssociationValidResultSet(final ObjectAdapter targetObject,
+        final ObjectAdapter newValue) {
         return new InteractionResultSet();
     }
 
@@ -195,7 +189,6 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     public InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target) {
         return null;
     }
-
 
     // /////////////////////////////////////////////////////////////
     // isAction, isAssociation
@@ -216,24 +209,21 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
         return FeatureType.PROPERTY;
     }
 
-
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
-    
+
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
+    public Instance getInstance(final ObjectAdapter adapter) {
         return null;
     }
 
-    
     // /////////////////////////////////////////////////////////////
     // RuntimeContext
     // /////////////////////////////////////////////////////////////
 
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    public RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
 
 }
-

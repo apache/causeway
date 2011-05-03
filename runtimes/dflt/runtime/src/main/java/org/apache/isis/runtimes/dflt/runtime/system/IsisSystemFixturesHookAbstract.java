@@ -22,11 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.system;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -37,20 +33,18 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession;
-import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.SplashWindow;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
+import org.apache.log4j.Logger;
 
 /**
- * An implementation of {@link IsisSystem} that has a hook for installing
- * fixtures but does not install them itself.
+ * An implementation of {@link IsisSystem} that has a hook for installing fixtures but does not install them itself.
  */
 public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
@@ -76,8 +70,8 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         this(deploymentType, new IsisLocaleInitializer(), new IsisTimeZoneInitializer());
     }
 
-    public IsisSystemFixturesHookAbstract(final DeploymentType deploymentType, final IsisLocaleInitializer localeInitializer,
-        final IsisTimeZoneInitializer timeZoneInitializer) {
+    public IsisSystemFixturesHookAbstract(final DeploymentType deploymentType,
+        final IsisLocaleInitializer localeInitializer, final IsisTimeZoneInitializer timeZoneInitializer) {
         this.deploymentType = deploymentType;
         this.localeInitializer = localeInitializer;
         this.timeZoneInitializer = timeZoneInitializer;
@@ -114,23 +108,22 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
         int splashDelay = SPLASH_DELAY_DEFAULT;
         try {
-            TemplateImageLoader splashLoader = obtainTemplateImageLoader();
+            final TemplateImageLoader splashLoader = obtainTemplateImageLoader();
             splashLoader.init();
             showSplash(splashLoader);
 
             sessionFactory = doCreateSessionFactory(deploymentType);
-            
+
             // temporarily make a configuration available
             // REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
             IsisContext.setConfiguration(getConfiguration());
-
 
             initContext(sessionFactory);
             sessionFactory.init();
 
             installFixturesIfRequired();
 
-        } catch (IsisSystemException ex) {
+        } catch (final IsisSystemException ex) {
             LOG.error("failed to initialise", ex);
             splashDelay = 0;
             throw new RuntimeException(ex);
@@ -139,8 +132,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         }
     }
 
-
-    private void initContext(IsisSessionFactory sessionFactory) {
+    private void initContext(final IsisSessionFactory sessionFactory) {
         getDeploymentType().initContext(sessionFactory);
     }
 
@@ -212,14 +204,11 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // Fixtures (hooks)
     // ///////////////////////////////////////////
 
-    
     /**
-     * Optional hook for appending debug information pertaining to
-     * fixtures installer if required.
+     * Optional hook for appending debug information pertaining to fixtures installer if required.
      */
-    protected void appendFixturesInstallerDebug(DebugBuilder debug) {
+    protected void appendFixturesInstallerDebug(final DebugBuilder debug) {
     }
-
 
     /**
      * The {@link LogonFixture}, if any, obtained by running fixtures.
@@ -246,7 +235,6 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     protected void installFixturesIfRequired() throws IsisSystemException {
     }
 
-
     // ///////////////////////////////////////////
     // Authentication Manager
     // ///////////////////////////////////////////
@@ -266,15 +254,13 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
     protected abstract List<Object> obtainServices();
 
-    
-
     // ///////////////////////////////////////////
     // Splash
     // ///////////////////////////////////////////
 
-    private void showSplash(TemplateImageLoader imageLoader) {
+    private void showSplash(final TemplateImageLoader imageLoader) {
 
-        boolean vetoSplashFromConfig =
+        final boolean vetoSplashFromConfig =
             getConfiguration().getBoolean(SystemConstants.NOSPLASH_KEY, SystemConstants.NOSPLASH_DEFAULT);
         if (!vetoSplashFromConfig && getDeploymentType().shouldShowSplash()) {
             splashWindow = new SplashWindow(imageLoader);
@@ -308,7 +294,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     }
 
     @Override
-    public DebuggableWithTitle debugSection(String selectionName) {
+    public DebuggableWithTitle debugSection(final String selectionName) {
         // DebugInfo deb;
         if (selectionName.equals("Configuration")) {
             return getConfiguration();
@@ -333,10 +319,10 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
     private void debugListContexts(final DebugBuilder debug) {
         final String[] contextIds = IsisContext.getInstance().allSessionIds();
-        for (int i = 0; i < contextIds.length; i++) {
-            debug.appendln(contextIds[i]);
+        for (final String contextId : contextIds) {
+            debug.appendln(contextId);
             debug.appendln("-----");
-            final IsisSession d = IsisContext.getSession(contextIds[i]);
+            final IsisSession d = IsisContext.getSession(contextId);
             d.debug(debug);
             debug.appendln();
         }
@@ -382,15 +368,14 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
             debug.appendln("Configuration", getConfiguration().getClass().getName());
 
             final DebuggableWithTitle[] inf = IsisContext.debugSystem();
-            for (int i = 0; i < inf.length; i++) {
-                if (inf[i] != null) {
-                    inf[i].debugData(debug);
+            for (final DebuggableWithTitle element : inf) {
+                if (element != null) {
+                    element.debugData(debug);
                 }
             }
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug.appendException(e);
         }
     }
-
 
 }

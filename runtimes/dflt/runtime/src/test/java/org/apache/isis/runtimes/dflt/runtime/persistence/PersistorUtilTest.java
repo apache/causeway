@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
-
 
 public class PersistorUtilTest extends ProxyJunit3TestCase {
 
@@ -57,4 +55,3 @@ public class PersistorUtilTest extends ProxyJunit3TestCase {
     }
 
 }
-

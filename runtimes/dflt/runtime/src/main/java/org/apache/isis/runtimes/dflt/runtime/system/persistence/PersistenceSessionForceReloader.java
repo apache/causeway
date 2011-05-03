@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,4 +28,3 @@ public interface PersistenceSessionForceReloader {
      */
     void reload(ObjectAdapter object);
 }
-

@@ -17,45 +17,42 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-
+import org.apache.log4j.Logger;
 
 public class PersistorUtil {
 
     private static final Logger LOG = Logger.getLogger(PersistorUtil.class);
 
-    private PersistorUtil() {}
-
+    private PersistorUtil() {
+    }
 
     // //////////////////////////////////////////////////////////////////
     // update resolve state
     // //////////////////////////////////////////////////////////////////
 
     public static void start(final ObjectAdapter object, final ResolveState state) {
-    	if (LOG.isTraceEnabled()) {
-    		LOG.trace("start " + object + " as " + state.name());
-    	}
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("start " + object + " as " + state.name());
+        }
         object.changeState(state);
     }
 
     /**
-     * Marks the specified object as loaded: resolved, partly resolve or updated as specified by the second
-     * parameter. Attempting to specify any other state throws a run time exception.
+     * Marks the specified object as loaded: resolved, partly resolve or updated as specified by the second parameter.
+     * Attempting to specify any other state throws a run time exception.
      */
     public static void end(final ObjectAdapter object) {
         final ResolveState endState = object.getResolveState().getEndState();
         Assert.assertNotNull("end state required", endState);
         if (LOG.isTraceEnabled()) {
-        	LOG.trace("end " + object + " as " + endState.name());
+            LOG.trace("end " + object + " as " + endState.name());
         }
         object.changeState(endState);
     }
 
 }
-

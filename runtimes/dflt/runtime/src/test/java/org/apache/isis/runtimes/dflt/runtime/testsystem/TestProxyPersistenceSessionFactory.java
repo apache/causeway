@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.Collections;
@@ -32,52 +31,58 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class TestProxyPersistenceSessionFactory implements PersistenceSessionFactory {
 
     private PersistenceSession persistenceSession;
-	private List<Object> services;
+    private List<Object> services;
 
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
-    public void shutdown() {}
-
+    @Override
+    public void shutdown() {
+    }
 
     public TestProxyPersistenceSessionFactory() {
-		services = Collections.emptyList();
+        services = Collections.emptyList();
     }
-    
-    /**
-     * Not API.
-     */
-    public void setServices(List<Object> services) {
-		this.services = services;
-	}
 
     /**
      * Not API.
      */
-    public void setPersistenceSessionToCreate(PersistenceSession persistenceSession) {
-		this.persistenceSession = persistenceSession;
-	}
+    @Override
+    public void setServices(final List<Object> services) {
+        this.services = services;
+    }
 
+    /**
+     * Not API.
+     */
+    public void setPersistenceSessionToCreate(final PersistenceSession persistenceSession) {
+        this.persistenceSession = persistenceSession;
+    }
+
+    @Override
     public PersistenceSession createPersistenceSession() {
         return persistenceSession;
     }
 
+    @Override
     public DeploymentType getDeploymentType() {
         throw new NotYetImplementedException();
     }
 
-    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
+    @Override
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         // does nothing
     }
 
-	public SpecificationLoader getSpecificationLoader() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public SpecificationLoader getSpecificationLoader() {
+        throw new NotYetImplementedException();
+    }
 
-	public List<Object> getServices() {
-		return services;
-	}
-
+    @Override
+    public List<Object> getServices() {
+        return services;
+    }
 
 }
-
-

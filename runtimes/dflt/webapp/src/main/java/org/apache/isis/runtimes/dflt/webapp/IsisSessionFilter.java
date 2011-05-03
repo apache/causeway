@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webapp;
 
 import java.io.IOException;
@@ -38,7 +37,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 
-
 public class IsisSessionFilter implements Filter {
 
     /**
@@ -49,12 +47,12 @@ public class IsisSessionFilter implements Filter {
     /**
      * Default value for {@link #AUTHENTICATION_SESSION_LOOKUP_STRATEGY_KEY} if not specified.
      */
-    public static final String AUTHENTICATION_SESSION_LOOKUP_STRATEGY_DEFAULT = AuthenticationSessionLookupStrategyDefault.class
-            .getName();
+    public static final String AUTHENTICATION_SESSION_LOOKUP_STRATEGY_DEFAULT =
+        AuthenticationSessionLookupStrategyDefault.class.getName();
 
     /**
-     * Init parameter key for (typically, a logon) page to redirect to if the {@link AuthenticationSession}
-     * cannot be found or is invalid.
+     * Init parameter key for (typically, a logon) page to redirect to if the {@link AuthenticationSession} cannot be
+     * found or is invalid.
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
 
@@ -65,40 +63,45 @@ public class IsisSessionFilter implements Filter {
     // init, destroy
     // /////////////////////////////////////////////////////////////////
 
-    public void init(FilterConfig config) throws ServletException {
+    @Override
+    public void init(final FilterConfig config) throws ServletException {
         lookupAuthenticationSessionLookupStrategy(config);
         lookupRedirectIfNoSessionKey(config);
     }
 
-    private void lookupAuthenticationSessionLookupStrategy(FilterConfig config) {
+    private void lookupAuthenticationSessionLookupStrategy(final FilterConfig config) {
         String authLookupStrategyClassName = config.getInitParameter(AUTHENTICATION_SESSION_LOOKUP_STRATEGY_KEY);
         if (authLookupStrategyClassName == null) {
             authLookupStrategyClassName = AUTHENTICATION_SESSION_LOOKUP_STRATEGY_DEFAULT;
         }
-        authSessionLookupStrategy = (AuthenticationSessionLookupStrategy) InstanceUtil
-                .createInstance(authLookupStrategyClassName);
+        authSessionLookupStrategy =
+            (AuthenticationSessionLookupStrategy) InstanceUtil.createInstance(authLookupStrategyClassName);
     }
 
-    private void lookupRedirectIfNoSessionKey(FilterConfig config) {
+    private void lookupRedirectIfNoSessionKey(final FilterConfig config) {
         redirectResourceIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
     }
 
-    public void destroy() {}
+    @Override
+    public void destroy() {
+    }
 
     // /////////////////////////////////////////////////////////////////
     // doFilter
     // /////////////////////////////////////////////////////////////////
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-            ServletException {
+    @Override
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+        throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        final HttpServletRequest httpRequest = (HttpServletRequest) request;
+        final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         // forward/redirect as required
-        AuthenticationSession authSession = authSessionLookupStrategy.lookup(request, response);
+        final AuthenticationSession authSession = authSessionLookupStrategy.lookup(request, response);
         if (!isValid(authSession)) {
-            if (redirectResourceIfNoSession != null && !redirectResourceIfNoSession.equals(httpRequest.getServletPath())) {
+            if (redirectResourceIfNoSession != null
+                && !redirectResourceIfNoSession.equals(httpRequest.getServletPath())) {
                 httpResponse.sendRedirect(redirectResourceIfNoSession);
             } else {
                 // the destination servlet is expected to know that there
@@ -115,7 +118,7 @@ public class IsisSessionFilter implements Filter {
         }
     }
 
-    private boolean isValid(AuthenticationSession authSession) {
+    private boolean isValid(final AuthenticationSession authSession) {
         return authSession != null && getAuthenticationManager().isSessionValid(authSession);
     }
 

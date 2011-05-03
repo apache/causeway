@@ -31,8 +31,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -124,9 +124,9 @@ public class IsisSessionDefault implements IsisSession {
         shutdownIfRequired(persistenceSession);
     }
 
-    private void shutdownIfRequired(Object o) {
+    private void shutdownIfRequired(final Object o) {
         if (o instanceof SessionScopedComponent) {
-            SessionScopedComponent requiresSetup = (SessionScopedComponent) o;
+            final SessionScopedComponent requiresSetup = (SessionScopedComponent) o;
             requiresSetup.close();
         }
     }
@@ -222,7 +222,7 @@ public class IsisSessionDefault implements IsisSession {
         return accessTime;
     }
 
-    private void setSessionOpenTime(long accessTime) {
+    private void setSessionOpenTime(final long accessTime) {
         this.accessTime = accessTime;
     }
 
@@ -245,7 +245,7 @@ public class IsisSessionDefault implements IsisSession {
     /**
      * Should only be called in tests.
      */
-    public void testSetObjectPersistor(PersistenceSession objectPersistor) {
+    public void testSetObjectPersistor(final PersistenceSession objectPersistor) {
         this.persistenceSession = objectPersistor;
     }
 

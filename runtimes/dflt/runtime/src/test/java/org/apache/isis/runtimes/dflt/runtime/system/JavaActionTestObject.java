@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 public class JavaActionTestObject {
@@ -39,7 +38,8 @@ public class JavaActionTestObject {
         return "invalid";
     }
 
-    public void actionWithParam(final String str) {}
+    public void actionWithParam(final String str) {
+    }
 
     public static boolean[] mandatoryMethod(final String str) {
         return new boolean[] { true };

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.session;
 
 import java.util.List;
@@ -34,23 +33,20 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-
 /**
  * Analogous to a Hibernate <tt>SessionFactory</tt>.
  * 
  * @see IsisSession
  */
 public interface IsisSessionFactory extends ApplicationScopedComponent {
-    
 
     /**
      * Creates and {@link IsisSession#open() open}s the {@link IsisSession}.
      */
     IsisSession openSession(final AuthenticationSession session);
 
-
     /**
-     * The {@link ApplicationScopedComponent application-scoped} {@link DeploymentType}. 
+     * The {@link ApplicationScopedComponent application-scoped} {@link DeploymentType}.
      */
     public DeploymentType getDeploymentType();
 
@@ -60,7 +56,7 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
     public IsisConfiguration getConfiguration();
 
     /**
-     * The {@link ApplicationScopedComponent application-scoped} {@link SpecificationLoader}. 
+     * The {@link ApplicationScopedComponent application-scoped} {@link SpecificationLoader}.
      */
     public SpecificationLoader getSpecificationLoader();
 
@@ -70,16 +66,15 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
     public TemplateImageLoader getTemplateImageLoader();
 
     /**
-     * The {@link AuthenticationManager} that will be used to authenticate and create
-     * {@link AuthenticationSession}s {@link IsisSession#getAuthenticationSession() within}
-     * the {@link IsisSession}.
+     * The {@link AuthenticationManager} that will be used to authenticate and create {@link AuthenticationSession}s
+     * {@link IsisSession#getAuthenticationSession() within} the {@link IsisSession}.
      */
     public AuthenticationManager getAuthenticationManager();
 
     /**
      * The {@link AuthorizationManager} that will be used to authorize access to domain objects.
      */
-	public AuthorizationManager getAuthorizationManager();
+    public AuthorizationManager getAuthorizationManager();
 
     /**
      * The {@link PersistenceSessionFactory} that will be used to create {@link PersistenceSession}
@@ -89,9 +84,6 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
 
     public UserProfileLoader getUserProfileLoader();
 
-
-	List<Object> getServices();
+    List<Object> getServices();
 
 }
-
-

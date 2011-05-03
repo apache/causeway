@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-
 
 /**
  * Implementation that just delegates to a supplied {@link PersistenceSessionFactory}.
@@ -46,13 +44,13 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
 
     private Boolean fixturesInstalled;
 
-	public PersistenceSessionFactoryDelegating(
-            final DeploymentType deploymentType,
-            final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public PersistenceSessionFactoryDelegating(final DeploymentType deploymentType,
+        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         this.deploymentType = deploymentType;
         this.persistenceSessionFactoryDelegate = persistenceSessionFactoryDelegate;
     }
 
+    @Override
     public DeploymentType getDeploymentType() {
         return deploymentType;
     }
@@ -61,23 +59,23 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
         return persistenceSessionFactoryDelegate;
     }
 
+    @Override
     public PersistenceSession createPersistenceSession() {
         return persistenceSessionFactoryDelegate.createPersistenceSession(this);
     }
 
-
+    @Override
     public final void init() {
-    	// check prereq dependencies injected
-    	ensureThatState(specificationLoader, is(notNullValue()));
-    	ensureThatState(serviceList, is(notNullValue()));
-    	
-        
+        // check prereq dependencies injected
+        ensureThatState(specificationLoader, is(notNullValue()));
+        ensureThatState(serviceList, is(notNullValue()));
+
         // a bit of a workaround, but required if anything in the metamodel (for example, a
         // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
         // we do this after loading the services to allow a service to prime a different clock
         // implementation (eg to use an NTP time service).
         if (!deploymentType.isProduction() && !Clock.isInitialized()) {
-        	FixtureClock.initialize();
+            FixtureClock.initialize();
         }
 
         doInit();
@@ -86,8 +84,10 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
     /**
      * Optional hook method for implementation-specific initialization.
      */
-    protected void doInit() {}
+    protected void doInit() {
+    }
 
+    @Override
     public final void shutdown() {
         doShutdown();
         // other
@@ -96,36 +96,41 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
     /**
      * Optional hook method for implementation-specific shutdown.
      */
-    protected void doShutdown() {}
+    protected void doShutdown() {
+    }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // FixturesInstalledFlag impl
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public Boolean isFixturesInstalled() {
-		return fixturesInstalled;
-	}
-	public void setFixturesInstalled(Boolean fixturesInstalled) {
-		this.fixturesInstalled = fixturesInstalled;
-	}
+        return fixturesInstalled;
+    }
 
-    
-    ////////////////////////////////////////////////////////
+    @Override
+    public void setFixturesInstalled(final Boolean fixturesInstalled) {
+        this.fixturesInstalled = fixturesInstalled;
+    }
+
+    // //////////////////////////////////////////////////////
     // Dependencies (injected via setters)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public List<Object> getServices() {
         return serviceList;
     }
 
-    public void setServices(List<Object> serviceList) {
-    	this.serviceList = serviceList;
+    @Override
+    public void setServices(final List<Object> serviceList) {
+        this.serviceList = serviceList;
     }
 
     /**
      * @see #setSpecificationLoader(SpecificationLoader)
      */
+    @Override
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
@@ -133,12 +138,9 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
     /**
      * Injected prior to {@link #init()}.
      */
-    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
+    @Override
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
 
-    
-    
-
 }
-

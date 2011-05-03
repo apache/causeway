@@ -38,7 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 
 public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScopedComponent {
 
-
     /**
      * The name of this component.
      */

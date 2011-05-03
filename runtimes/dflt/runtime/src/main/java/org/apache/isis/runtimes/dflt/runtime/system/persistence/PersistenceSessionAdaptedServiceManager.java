@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import java.util.List;
@@ -25,9 +24,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface PersistenceSessionAdaptedServiceManager {
-	
+
     ObjectAdapter getService(String id);
 
-    List<ObjectAdapter> getServices();    
+    List<ObjectAdapter> getServices();
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 public class TestPojo {
@@ -33,7 +32,7 @@ public class TestPojo {
     @Override
     public boolean equals(final Object other) {
         if (other == null) {
-            return false; 
+            return false;
         }
         if (other == this) {
             return true;
@@ -51,4 +50,3 @@ public class TestPojo {
     }
 
 }
-

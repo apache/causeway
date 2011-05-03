@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -30,12 +29,12 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 
+public abstract class TransactionFacetDecoratorAbstract extends FacetDecoratorAbstract implements
+    TransactionFacetDecorator {
 
-public abstract class TransactionFacetDecoratorAbstract  extends FacetDecoratorAbstract implements TransactionFacetDecorator {
+    private final IsisConfiguration configuration;
 
-    private IsisConfiguration configuration;
-
-    public TransactionFacetDecoratorAbstract(IsisConfiguration configuration) {
+    public TransactionFacetDecoratorAbstract(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -43,15 +42,9 @@ public abstract class TransactionFacetDecoratorAbstract  extends FacetDecoratorA
         return configuration;
     }
 
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
-        return new Class[] { 
-                ActionInvocationFacet.class,
-                PropertyClearFacet.class, 
-                PropertySetterFacet.class,  
-                CollectionAddToFacet.class, 
-                CollectionRemoveFromFacet.class, 
-                CollectionClearFacet.class 
-            };
+        return new Class[] { ActionInvocationFacet.class, PropertyClearFacet.class, PropertySetterFacet.class,
+            CollectionAddToFacet.class, CollectionRemoveFromFacet.class, CollectionClearFacet.class };
     }
 }
-

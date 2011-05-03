@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 public class TestProxyException extends RuntimeException {
@@ -40,4 +39,3 @@ public class TestProxyException extends RuntimeException {
     }
 
 }
-

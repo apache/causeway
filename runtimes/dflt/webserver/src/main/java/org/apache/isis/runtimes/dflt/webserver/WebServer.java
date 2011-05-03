@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webserver;
-
-
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner;
@@ -29,26 +26,25 @@ import org.apache.isis.runtimes.dflt.webserver.internal.OptionHandlerDeploymentT
 import org.apache.isis.runtimes.dflt.webserver.internal.OptionHandlerPort;
 import org.apache.isis.runtimes.dflt.webserver.internal.OptionHandlerResourceBase;
 
-
 public class WebServer {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         new WebServer().run(ArrayUtils.append(args, "--nosplash"));
     }
-    
-	public void run(final String[] args) {
-	    final IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeWebServer());
 
-		// adjustments
-	    runner.addOptionHandler(new OptionHandlerPort());
-	    runner.addOptionHandler(new OptionHandlerAddress());
-	    runner.addOptionHandler(new OptionHandlerResourceBase());
-        
+    public void run(final String[] args) {
+        final IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeWebServer());
+
+        // adjustments
+        runner.addOptionHandler(new OptionHandlerPort());
+        runner.addOptionHandler(new OptionHandlerAddress());
+        runner.addOptionHandler(new OptionHandlerResourceBase());
+
         if (!runner.parseAndValidate()) {
             return;
         }
 
         runner.bootstrap(new WebServerBootstrapper(runner));
-	}
+    }
 
 }

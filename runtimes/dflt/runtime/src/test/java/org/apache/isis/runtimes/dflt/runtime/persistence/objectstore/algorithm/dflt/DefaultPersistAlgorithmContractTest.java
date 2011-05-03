@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt.DefaultPersistAlgorithm;
-
 
 public class DefaultPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 
@@ -33,4 +30,3 @@ public class DefaultPersistAlgorithmContractTest extends PersistAlgorithmContrac
     }
 
 }
-

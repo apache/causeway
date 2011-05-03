@@ -17,15 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.exploration;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 
 public final class ExplorationAuthenticatorConstants {
-	
-	public static final String NAKEDOBJECTS_USERS = ConfigurationConstants.ROOT + "exploration.users";
 
-	private ExplorationAuthenticatorConstants() {}
+    public static final String NAKEDOBJECTS_USERS = ConfigurationConstants.ROOT + "exploration.users";
+
+    private ExplorationAuthenticatorConstants() {
+    }
 
 }

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory;
 
 public interface ObjectResolver {
 
-	void resolve(Object domainObject, String propertyName);
-
+    void resolve(Object domainObject, String propertyName);
 
 }

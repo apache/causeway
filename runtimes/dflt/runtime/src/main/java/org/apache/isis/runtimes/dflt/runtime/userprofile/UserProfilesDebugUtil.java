@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.userprofile;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -37,38 +36,37 @@ public final class UserProfilesDebugUtil {
 
     public static DebuggableWithTitle asDebuggableWithTitle(final UserProfile userProfile) {
         return new DebuggableWithTitle() {
-            
+
             @Override
-            public void debugData(DebugBuilder debug) {
+            public void debugData(final DebugBuilder debug) {
                 debug.appendTitle("Options");
                 debug.indent();
                 debug.append(userProfile.getOptions());
                 debug.unindent();
 
                 debug.appendTitle("Perspectives");
-                for (PerspectiveEntry entry : userProfile.getEntries()) {
+                for (final PerspectiveEntry entry : userProfile.getEntries()) {
                     asDebuggableWithTitle(entry).debugData(debug);
                 }
             }
-            
-             @Override
+
+            @Override
             public String debugTitle() {
                 return toString();
             }
         };
     }
 
-
     public static DebuggableWithTitle asDebuggableWithTitle(final PerspectiveEntry perspectiveEntry) {
         return new DebuggableWithTitle() {
-            
+
             @Override
-            public void debugData(DebugBuilder debug) {
+            public void debugData(final DebugBuilder debug) {
                 debug.appendln("Name", perspectiveEntry.getName());
                 debug.blankLine();
                 debug.appendTitle("Services (Ids)");
                 debug.indent();
-                for (Object service : perspectiveEntry.getServices()) {
+                for (final Object service : perspectiveEntry.getServices()) {
                     debug.appendln(ServiceUtil.id(service));
                 }
                 debug.unindent();
@@ -76,8 +74,8 @@ public final class UserProfilesDebugUtil {
                 debug.blankLine();
                 debug.appendTitle("Objects");
                 debug.indent();
-                AdapterMap adapterMap = getAdapterMap();
-                for (Object obj : perspectiveEntry.getObjects()) {
+                final AdapterMap adapterMap = getAdapterMap();
+                for (final Object obj : perspectiveEntry.getObjects()) {
                     debug.appendln(adapterMap.adapterFor(obj).toString());
                 }
                 debug.unindent();
@@ -90,9 +88,9 @@ public final class UserProfilesDebugUtil {
         };
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Dependencies (from Context)
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private static AdapterMap getAdapterMap() {
         return getPersistenceSession().getAdapterManager();
@@ -102,7 +100,4 @@ public final class UserProfilesDebugUtil {
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-
-

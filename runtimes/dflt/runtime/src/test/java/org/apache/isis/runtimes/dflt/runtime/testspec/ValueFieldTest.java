@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testspec;
 
 import org.apache.isis.applib.Identifier;
@@ -35,23 +34,23 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 
-
 public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOneAssociation {
 
     private final RuntimeContext runtimeContext;
 
     public ValueFieldTest() {
-    	runtimeContext = new RuntimeContextFromSession();
+        runtimeContext = new RuntimeContextFromSession();
     }
-    
+
     public RuntimeContext getRuntimeContext() {
-    	return runtimeContext;
+        return runtimeContext;
     }
 
     @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+
     @Override
     public boolean isOneToOneAssociation() {
         return true;
@@ -106,7 +105,7 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
     public boolean isAlwaysHidden() {
         return false;
     }
-    
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
@@ -154,7 +153,8 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
     }
 
     @Override
-    public void toDefault(final ObjectAdapter target) {}
+    public void toDefault(final ObjectAdapter target) {
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -162,41 +162,33 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ValidityContext<?> createValidateInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter owningObjectAdapter,
-            final ObjectAdapter newValue) {
+    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter owningObjectAdapter,
+        final ObjectAdapter newValue) {
         return null;
     }
 
     @Override
-    public PropertyAccessContext createAccessInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod interactionMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
-        OneToOneAssociation specification = this;
+    public Instance getInstance(final ObjectAdapter adapter) {
+        final OneToOneAssociation specification = this;
         return adapter.getInstance(specification);
     }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.session;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -30,73 +29,61 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 
-
 /**
- * Analogous to a Hibernate <tt>Session</tt>, holds the current set of components for a 
- * specific execution context (such as on a thread).
+ * Analogous to a Hibernate <tt>Session</tt>, holds the current set of components for a specific execution context (such
+ * as on a thread).
  * 
  * <p>
- * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for locating
- * the current execution context.
+ * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for locating the current execution context.
  * 
  * @see IsisSessionFactory
  */
 public interface IsisSession extends SessionScopedComponent {
 
-    
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // ExecutionContextFactory
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * The creating {@link IsisSessionFactory factory}.
      * 
      * <p>
-     * Note that from the factory we can {@link IsisSessionFactory#getIsisSystem() get to} 
-     * the {@link IsisSystem}, and thus other {@link ApplicationScopedComponent}s.
+     * Note that from the factory we can {@link IsisSessionFactory#getIsisSystem() get to} the {@link IsisSystem}, and
+     * thus other {@link ApplicationScopedComponent}s.
      */
     public IsisSessionFactory getSessionFactory();
-    
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // closeAll
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
     /**
-     * Normal lifecycle is managed using callbacks in {@link SessionScopedComponent}.
-     * This method is to allow the outer {@link ApplicationScopedComponent}s to 
-     * shutdown, closing any and all running {@link IsisSession}s.
+     * Normal lifecycle is managed using callbacks in {@link SessionScopedComponent}. This method is to allow the outer
+     * {@link ApplicationScopedComponent}s to shutdown, closing any and all running {@link IsisSession}s.
      */
     public void closeAll();
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Id
-    ////////////////////////////////////////////////////////
-
+    // //////////////////////////////////////////////////////
 
     /**
      * A descriptive identifier for this {@link IsisSession}.
      */
     public String getId();
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Authentication Session
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link AuthenticationSession} representing this user 
-     * for this {@link IsisSession}.
+     * Returns the {@link AuthenticationSession} representing this user for this {@link IsisSession}.
      */
     public AuthenticationSession getAuthenticationSession();
 
-
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Persistence Session
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * The {@link PersistenceSession} within this {@link IsisSession}.
@@ -107,38 +94,31 @@ public interface IsisSession extends SessionScopedComponent {
      */
     public PersistenceSession getPersistenceSession();
 
-    
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Perspective
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link ObjectAdapter adapted} <tt>Perspective</tt> for the user 
-     * who is using this {@link IsisSession}.
+     * Returns the {@link ObjectAdapter adapted} <tt>Perspective</tt> for the user who is using this {@link IsisSession}
+     * .
      */
 
     public UserProfile getUserProfile();
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Transaction (if in progress)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     public IsisTransaction getCurrentTransaction();
 
-    
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Debugging
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     public void debugAll(DebugBuilder debug);
 
     public void debug(DebugBuilder debug);
 
     public void debugState(DebugBuilder debug);
-
-
 
 }

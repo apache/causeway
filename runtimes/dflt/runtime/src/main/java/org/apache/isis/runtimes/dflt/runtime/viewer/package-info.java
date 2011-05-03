@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Viewer API.
  */

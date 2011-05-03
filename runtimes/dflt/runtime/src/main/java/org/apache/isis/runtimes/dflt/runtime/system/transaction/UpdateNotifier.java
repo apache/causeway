@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import java.util.List;
@@ -27,56 +26,52 @@ import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * UpdateNotifier provides updates to client making available lists of the
- * latest changed and disposed objects.
+ * UpdateNotifier provides updates to client making available lists of the latest changed and disposed objects.
  */
 public interface UpdateNotifier extends TransactionScopedComponent, Injectable {
 
-	// //////////////////////////////////////////////////
-	// Changed Objects
-	// //////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
+    // Changed Objects
+    // //////////////////////////////////////////////////
 
-	/**
-	 * Used by the framework to add objects that have just changed.
-	 */
-	void addChangedObject(ObjectAdapter object);
+    /**
+     * Used by the framework to add objects that have just changed.
+     */
+    void addChangedObject(ObjectAdapter object);
 
-	/**
-	 * Returns an immutable {@link List} of changed objects.
-	 * 
-	 * <p>
-	 * Each changed object that was added is only ever provided during one call
-	 * to this method so the list must be processed fully to avoid missing
-	 * updates.
-	 */
-	List<ObjectAdapter> getChangedObjects();
+    /**
+     * Returns an immutable {@link List} of changed objects.
+     * 
+     * <p>
+     * Each changed object that was added is only ever provided during one call to this method so the list must be
+     * processed fully to avoid missing updates.
+     */
+    List<ObjectAdapter> getChangedObjects();
 
-	// //////////////////////////////////////////////////
-	// Disposed Objects
-	// //////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
+    // Disposed Objects
+    // //////////////////////////////////////////////////
 
-	/**
-	 * Used by the framework to add objects that have just been disposed of.
-	 */
-	void addDisposedObject(ObjectAdapter adapter);
+    /**
+     * Used by the framework to add objects that have just been disposed of.
+     */
+    void addDisposedObject(ObjectAdapter adapter);
 
-	/**
-	 * Returns an immutable {@link List} of disposed objects.
-	 * 
-	 * <p>
-	 * Each object that was disposed of is only ever provided during one call to
-	 * this method so the list must be processed fully to avoid missing
-	 * deletions.
-	 */
-	public List<ObjectAdapter> getDisposedObjects();
+    /**
+     * Returns an immutable {@link List} of disposed objects.
+     * 
+     * <p>
+     * Each object that was disposed of is only ever provided during one call to this method so the list must be
+     * processed fully to avoid missing deletions.
+     */
+    public List<ObjectAdapter> getDisposedObjects();
 
-	// //////////////////////////////////////////////////
-	// Empty, Clear
-	// //////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
+    // Empty, Clear
+    // //////////////////////////////////////////////////
 
-	void ensureEmpty();
+    void ensureEmpty();
 
-	void clear();
+    void clear();
 
 }
-

@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.profiler;
-
-import org.apache.isis.core.runtime.profiler.Profiler;
 
 import junit.framework.TestCase;
 
+import org.apache.isis.core.runtime.profiler.Profiler;
 
 public class ProfilerTest extends TestCase {
     public static void main(final String[] args) {

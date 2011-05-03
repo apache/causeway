@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-
 
 public class PojoAdapterTest extends ProxyJunit3TestCase {
 
@@ -68,6 +65,7 @@ public class PojoAdapterTest extends ProxyJunit3TestCase {
         try {
             adapter.checkLock(new TestProxyVersion(2));
             fail();
-        } catch (final ConcurrencyException expected) {}
+        } catch (final ConcurrencyException expected) {
+        }
     }
 }

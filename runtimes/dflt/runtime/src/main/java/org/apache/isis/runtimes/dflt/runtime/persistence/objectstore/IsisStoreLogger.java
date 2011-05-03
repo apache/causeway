@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
 import java.util.List;
@@ -39,7 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-
 public class IsisStoreLogger extends Logger implements ObjectStore {
     private final ObjectStore decorated;
 
@@ -52,30 +50,36 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
         this.decorated = decorated;
     }
 
+    @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         log("create object " + object);
         return decorated.createCreateObjectCommand(object);
     }
 
+    @Override
     public void registerService(final String name, final Oid oid) {
         log("register service " + name + " as " + oid);
         decorated.registerService(name, oid);
     }
 
+    @Override
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
         log("destroy object " + object);
         return decorated.createDestroyObjectCommand(object);
     }
 
+    @Override
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
         log("save object " + object);
         return decorated.createSaveObjectCommand(object);
     }
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         decorated.debugData(debug);
     }
 
+    @Override
     public String debugTitle() {
         return decorated.debugTitle();
     }
@@ -85,84 +89,99 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
         return decorated.getClass();
     }
 
+    @Override
     public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException,
-            UnsupportedFindException {
+        UnsupportedFindException {
         log("get instances matching " + criteria);
         return decorated.getInstances(criteria);
     }
 
+    @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
-            ObjectPersistenceException {
+        ObjectPersistenceException {
         final ObjectAdapter object = decorated.getObject(oid, hint);
         log("get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
         return object;
     }
 
+    @Override
     public Oid getOidForService(final String name) {
         final Oid oid = decorated.getOidForService(name);
         log("get OID for service " + name + ": " + oid);
         return oid;
     }
 
-    public boolean hasInstances(final ObjectSpecification specification)
-            throws ObjectPersistenceException {
+    @Override
+    public boolean hasInstances(final ObjectSpecification specification) throws ObjectPersistenceException {
         final boolean hasInstances = decorated.hasInstances(specification);
         log("has instances of " + specification.getShortIdentifier(), "" + hasInstances);
         return hasInstances;
     }
 
+    @Override
     public boolean isFixturesInstalled() {
         final boolean isInitialized = decorated.isFixturesInstalled();
         log("is initialized: " + isInitialized);
         return isInitialized;
     }
 
+    @Override
     public void open() throws IsisConfigurationException, InstanceCreationException, ObjectPersistenceException {
         log("opening " + name());
         decorated.open();
     }
 
+    @Override
     public String name() {
         return decorated.name();
     }
 
+    @Override
     public void reset() {
         log("reset");
         decorated.reset();
     }
 
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
+    @Override
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field)
+        throws ObjectPersistenceException {
         log("resolve eagerly object in field " + field + " of " + object);
         decorated.resolveField(object, field);
     }
 
+    @Override
     public void resolveImmediately(final ObjectAdapter object) throws ObjectPersistenceException {
         log("resolve immediately: " + object);
         decorated.resolveImmediately(object);
     }
 
+    @Override
     public void execute(final List<PersistenceCommand> commands) throws ObjectPersistenceException {
         log("execute commands");
         int i = 0;
-        for (PersistenceCommand command: commands) {
+        for (final PersistenceCommand command : commands) {
             log("  " + (i++) + " " + command);
         }
         decorated.execute(commands);
     }
 
+    @Override
     public void close() throws ObjectPersistenceException {
         log("closing " + decorated);
         decorated.close();
     }
 
+    @Override
     public void startTransaction() {
         decorated.startTransaction();
     }
 
+    @Override
     public void endTransaction() {
         decorated.endTransaction();
     }
-    
+
+    @Override
     public void abortTransaction() {
         decorated.abortTransaction();
     }

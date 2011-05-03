@@ -17,36 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-public final class OptionValidatorForPersistor implements
-        OptionValidator {
+public final class OptionValidatorForPersistor implements OptionValidator {
     private final OptionHandlerPersistor optionHandlerPersistor;
 
-    public OptionValidatorForPersistor(
-            OptionHandlerPersistor optionHandlerPersistor) {
+    public OptionValidatorForPersistor(final OptionHandlerPersistor optionHandlerPersistor) {
         this.optionHandlerPersistor = optionHandlerPersistor;
     }
 
     @Override
-    public Maybe<String> validate(DeploymentType deploymentType) {
-        String objectPersistorName = optionHandlerPersistor
-                .getPersistorName();
-        boolean fail = (!StringUtils.isNullOrEmpty(objectPersistorName))
-                && !deploymentType.canSpecifyObjectStore();
-        String failMsg = String
-                .format(
-                        "Error: cannot specify an object store (persistor) for deployment type %s\n",
-                        deploymentType.name()
-                                .toLowerCase());
-        return Maybe
-                .setIf(
-                        fail,
-                        failMsg);
+    public Maybe<String> validate(final DeploymentType deploymentType) {
+        final String objectPersistorName = optionHandlerPersistor.getPersistorName();
+        final boolean fail =
+            (!StringUtils.isNullOrEmpty(objectPersistorName)) && !deploymentType.canSpecifyObjectStore();
+        final String failMsg =
+            String.format("Error: cannot specify an object store (persistor) for deployment type %s\n", deploymentType
+                .name().toLowerCase());
+        return Maybe.setIf(fail, failMsg);
     }
 }

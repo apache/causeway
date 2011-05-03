@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -26,20 +25,19 @@ public class IsisTransactionManagerException extends IsisException {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisTransactionManagerException() {}
+    public IsisTransactionManagerException() {
+    }
 
-    public IsisTransactionManagerException(String message) {
+    public IsisTransactionManagerException(final String message) {
         super(message);
     }
 
-    public IsisTransactionManagerException(Throwable cause) {
+    public IsisTransactionManagerException(final Throwable cause) {
         super(cause);
     }
 
-    public IsisTransactionManagerException(String message, Throwable cause) {
+    public IsisTransactionManagerException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
 }
-
-

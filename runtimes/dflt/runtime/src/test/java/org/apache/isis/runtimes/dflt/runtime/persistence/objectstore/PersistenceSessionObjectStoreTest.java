@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dummy.DummyPersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
@@ -74,8 +73,8 @@ public class PersistenceSessionObjectStoreTest {
 
         objectStore = new ObjectStoreSpy();
 
-        RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
-        DomainObjectContainerDefault container = new DomainObjectContainerDefault();
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);

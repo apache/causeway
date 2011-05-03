@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
 
 import java.util.ArrayList;
@@ -39,8 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Ser
 import org.apache.isis.runtimes.dflt.runtime.testspec.OneToOneAssociationTest;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
-
-
 
 public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
 
@@ -77,24 +74,27 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
         // object.setupResolveState(ResolveState.TRANSIENT);
 
         final TestProxySpecification spec = system.getSpecification(object);
-        final List<ObjectAssociation> fields = Arrays.asList( (ObjectAssociation)new OneToOneAssociationTest() {
+        final List<ObjectAssociation> fields = Arrays.asList((ObjectAssociation) new OneToOneAssociationTest() {
 
             @Override
-            public void initAssociation(ObjectAdapter inObject, ObjectAdapter associate) {}
+            public void initAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
+            }
 
             @Override
-            public Consent isAssociationValid(ObjectAdapter inObject, ObjectAdapter associate) {
+            public Consent isAssociationValid(final ObjectAdapter inObject, final ObjectAdapter associate) {
                 return null;
             }
 
             @Override
-            public void setAssociation(ObjectAdapter inObject, ObjectAdapter associate) {}
+            public void setAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
+            }
 
             @Override
-            public void set(ObjectAdapter owner, ObjectAdapter newValue) {}
+            public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
+            }
 
             @Override
-            public ObjectAdapter get(ObjectAdapter target) {
+            public ObjectAdapter get(final ObjectAdapter target) {
                 return null;
             }
 
@@ -123,8 +123,7 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
                 return FeatureType.PROPERTY;
             }
 
-        }
-        );
+        });
         spec.setupFields(fields);
 
         fieldsObject = new TestProxyAdapter();
@@ -139,14 +138,16 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
         try {
             algorithm.makePersistent(object, adder);
             fail();
-        } catch (final NotPersistableException expected) {}
+        } catch (final NotPersistableException expected) {
+        }
     }
 
     public void testMakePersistentFailsIfObjectMustBeTransient() {
         try {
             system.getSpecification(object).setupPersistable(Persistability.TRANSIENT);
             algorithm.makePersistent(object, adder);
-        } catch (final NotPersistableException expected) {}
+        } catch (final NotPersistableException expected) {
+        }
     }
 
     public void testMakePersistent() {
@@ -227,4 +228,3 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
     }
 
 }
-

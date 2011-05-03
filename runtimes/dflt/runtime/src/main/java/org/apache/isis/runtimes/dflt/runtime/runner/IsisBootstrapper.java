@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
 package org.apache.isis.runtimes.dflt.runtime.runner;
-
-import java.util.List;
 
 import com.google.inject.Injector;
 

@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis;
 
 public class Isis {
-	
+
     public static void main(final String[] args) {
-    	org.apache.isis.runtimes.dflt.runtime.Isis.main(args);
-	}
+        org.apache.isis.runtimes.dflt.runtime.Isis.main(args);
+    }
 }

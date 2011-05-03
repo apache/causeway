@@ -131,9 +131,9 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
      */
     @Override
     public boolean isFixturesInstalled() {
-        PersistenceSessionFactory persistenceSessionFactory = getPersistenceSessionFactory();
+        final PersistenceSessionFactory persistenceSessionFactory = getPersistenceSessionFactory();
         if (persistenceSessionFactory instanceof FixturesInstalledFlag) {
-            FixturesInstalledFlag fixturesInstalledFlag = (FixturesInstalledFlag) persistenceSessionFactory;
+            final FixturesInstalledFlag fixturesInstalledFlag = (FixturesInstalledFlag) persistenceSessionFactory;
             if (fixturesInstalledFlag.isFixturesInstalled() == null) {
                 fixturesInstalledFlag.setFixturesInstalled(objectStore.isFixturesInstalled());
             }
@@ -170,7 +170,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
         ensureThatArg(oid, is(notNullValue()));
         ensureThatArg(hintSpec, is(notNullValue()));
 
-        ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         }
@@ -217,8 +217,8 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             resolveImmediatelyFromPersistenceLayer(adapter);
             if (LOG.isInfoEnabled()) {
                 // don't log object - its toString() may use the unresolved field, or unresolved collection
-                LOG.info("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code() + " "
-                    + adapter.getOid());
+                LOG.info("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code()
+                    + " " + adapter.getOid());
             }
         }
     }
@@ -263,9 +263,9 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
         if (LOG.isInfoEnabled()) {
             // don't log object - it's toString() may use the unresolved field
             // or unresolved collection
-            LOG.info("resolve field " + objectAdapter.getSpecification().getShortIdentifier() + "." + field.getId() + ": "
-                + referenceAdapter.getSpecification().getShortIdentifier() + " " + referenceAdapter.getResolveState().code()
-                + " " + referenceAdapter.getOid());
+            LOG.info("resolve field " + objectAdapter.getSpecification().getShortIdentifier() + "." + field.getId()
+                + ": " + referenceAdapter.getSpecification().getShortIdentifier() + " "
+                + referenceAdapter.getResolveState().code() + " " + referenceAdapter.getOid());
         }
         resolveFieldFromPersistenceLayer(objectAdapter, field);
     }
@@ -384,7 +384,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
 
             @Override
             public void execute() {
-                SaveObjectCommand saveObjectCommand = objectStore.createSaveObjectCommand(adapter);
+                final SaveObjectCommand saveObjectCommand = objectStore.createSaveObjectCommand(adapter);
                 getTransactionManager().addCommand(saveObjectCommand);
             }
 
@@ -430,7 +430,8 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             @Override
             public void execute() {
                 if (adapter.getVersion() == null) {
-                    throw new ObjectPersistenceException("Object to be deleted does not have a version (maybe it should be resolved first): " + adapter);
+                    throw new ObjectPersistenceException(
+                        "Object to be deleted does not have a version (maybe it should be resolved first): " + adapter);
                 }
                 final DestroyObjectCommand command = objectStore.createDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);

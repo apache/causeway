@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public interface PersistenceCommand {
     void execute(PersistenceCommandContext context);

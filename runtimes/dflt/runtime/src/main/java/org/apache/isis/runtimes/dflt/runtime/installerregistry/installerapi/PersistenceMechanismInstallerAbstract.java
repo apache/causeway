@@ -27,8 +27,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -49,10 +47,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
+import org.apache.log4j.Logger;
 
 /**
- * An abstract implementation of {@link PersistenceMechanismInstaller} that will lookup the {@link ObjectAdapterFactory} and
- * {@link ObjectFactory} from the supplied {@link IsisConfiguration}.
+ * An abstract implementation of {@link PersistenceMechanismInstaller} that will lookup the {@link ObjectAdapterFactory}
+ * and {@link ObjectFactory} from the supplied {@link IsisConfiguration}.
  * 
  * <p>
  * If none can be found, then will default to the {@link PojoAdapterFactory} and
@@ -68,22 +67,22 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
 
     private SystemDependencyInjector installerLookup;
 
-    public PersistenceMechanismInstallerAbstract(String name) {
+    public PersistenceMechanismInstallerAbstract(final String name) {
         super(PersistenceMechanismInstaller.TYPE, name);
     }
 
     /**
      * For subclasses that need to specify a different type.
      */
-    public PersistenceMechanismInstallerAbstract(String type, String name) {
+    public PersistenceMechanismInstallerAbstract(final String type, final String name) {
         super(type, name);
     }
 
     /**
      * Creates a {@link PersistenceSession} that is initialized with the various hook methods.
      * 
-     * @see #createPersistenceSession(PersistenceSessionFactory, AdapterManagerExtended, ObjectAdapterFactory, ObjectFactory,
-     *      OidGenerator, ServicesInjector)
+     * @see #createPersistenceSession(PersistenceSessionFactory, AdapterManagerExtended, ObjectAdapterFactory,
+     *      ObjectFactory, OidGenerator, ServicesInjector)
      * @see #createAdapterFactory(IsisConfiguration)
      * @see #createAdapterManager(IsisConfiguration)
      * @see #createContainer(IsisConfiguration)
@@ -131,7 +130,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
                 oidGenerator, servicesInjector);
 
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
-            String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "info");
+            final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "info");
             persistenceSession = new PersistenceSessionLogger(persistenceSession, level);
         }
 
@@ -184,8 +183,8 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String configuredClassName =
             configuration.getString(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME,
                 PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName,
-            PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT, ObjectFactory.class);
+        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT,
+            ObjectFactory.class);
     }
 
     /**
@@ -196,7 +195,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * {@link PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME}. If no implementation is specified, then defaults to
      * {@value PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME_DEFAULT}.
      */
-    protected ServicesInjector createServicesInjector(IsisConfiguration configuration) {
+    protected ServicesInjector createServicesInjector(final IsisConfiguration configuration) {
         final String configuredClassName =
             configuration.getString(PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME,
                 PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME_DEFAULT);
@@ -235,14 +234,14 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * By default, returns a {@link RuntimeContextFromSession}.
      */
     protected RuntimeContext createRuntimeContext(final IsisConfiguration configuration) {
-        Properties properties = new Properties();
-        IsisConfiguration applicationConfiguration = configuration.getProperties("application");
-        for (String key : applicationConfiguration) {
-            String value = applicationConfiguration.getString(key);
-            String newKey = key.substring("application.".length());
+        final Properties properties = new Properties();
+        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
+        for (final String key : applicationConfiguration) {
+            final String value = applicationConfiguration.getString(key);
+            final String newKey = key.substring("application.".length());
             properties.setProperty(newKey, value);
         }
-        RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
         runtimeContext.setProperties(properties);
         return runtimeContext;
     }

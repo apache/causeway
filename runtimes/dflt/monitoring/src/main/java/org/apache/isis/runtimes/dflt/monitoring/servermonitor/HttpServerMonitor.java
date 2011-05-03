@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 
 import java.io.IOException;
@@ -25,16 +24,14 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-
+import org.apache.log4j.Logger;
 
 public class HttpServerMonitor extends AbstractServerMonitor {
     private static final Logger LOG = Logger.getLogger(HttpServerMonitor.class);
-   private static final int DEFAULT_PORT = 8081;
+    private static final int DEFAULT_PORT = 8081;
     private static final String PORT = ConfigurationConstants.ROOT + "monitor.http.port";
     private final MonitorListenerImpl monitor = new MonitorListenerImpl();
 
@@ -61,14 +58,13 @@ public class HttpServerMonitor extends AbstractServerMonitor {
             return false;
         }
 
-
         String query = st.nextToken();
         query = URLDecoder.decode(query, "UTF-8");
 
         if (query.equals("/")) {
             query = "/monitor";
         }
-        
+
         if (query.startsWith("/monitor")) {
             query = query.substring("/monitor".length());
 
@@ -101,8 +97,7 @@ public class HttpServerMonitor extends AbstractServerMonitor {
 
     @Override
     public void setTarget(final IsisSystem system) {
-        //monitor.setTarget(system);
+        // monitor.setTarget(system);
     }
 
 }
-

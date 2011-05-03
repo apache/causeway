@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import java.util.Collections;
@@ -31,38 +30,44 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class AggregateAdapters implements Iterable<ObjectAdapter> {
-	
-	private final ObjectAdapter rootAdapter;
-	private final Map<OneToManyAssociation,ObjectAdapter> collectionAdapters = new LinkedHashMap<OneToManyAssociation,ObjectAdapter>();
-	
-	public AggregateAdapters(ObjectAdapter rootAdapter) {
+
+    private final ObjectAdapter rootAdapter;
+    private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters =
+        new LinkedHashMap<OneToManyAssociation, ObjectAdapter>();
+
+    public AggregateAdapters(final ObjectAdapter rootAdapter) {
         Assert.assertNotNull(rootAdapter);
-		this.rootAdapter = rootAdapter;
-	}
-	public ObjectAdapter getRootAdapter() {
-		return rootAdapter;
-	}
-	public void addCollectionAdapter(OneToManyAssociation otma, ObjectAdapter collectionAdapter) {
+        this.rootAdapter = rootAdapter;
+    }
+
+    public ObjectAdapter getRootAdapter() {
+        return rootAdapter;
+    }
+
+    public void addCollectionAdapter(final OneToManyAssociation otma, final ObjectAdapter collectionAdapter) {
         Assert.assertNotNull(otma);
         Assert.assertNotNull(collectionAdapter);
-		collectionAdapters.put(otma, collectionAdapter);
-	}
-	public Map<OneToManyAssociation, ObjectAdapter> getCollectionAdapters() {
-		return Collections.unmodifiableMap(collectionAdapters);
-	}
-	
-	/**
-	 * Iterate over the {@link #addCollectionAdapter(OneToManyAssociation, ObjectAdapter) collection adapter}s 
-	 * (does not include the {@link #getRootAdapter() root adapter}.
-	 */
-	public Iterator<ObjectAdapter> iterator() {
-		return getCollectionAdapters().values().iterator();
-	}
-	
-	public Set<OneToManyAssociation> getCollections() {
-		return getCollectionAdapters().keySet();
-	}
-	public ObjectAdapter getCollectionAdapter(OneToManyAssociation otma) {
-		return collectionAdapters.get(otma);
-	}
+        collectionAdapters.put(otma, collectionAdapter);
+    }
+
+    public Map<OneToManyAssociation, ObjectAdapter> getCollectionAdapters() {
+        return Collections.unmodifiableMap(collectionAdapters);
+    }
+
+    /**
+     * Iterate over the {@link #addCollectionAdapter(OneToManyAssociation, ObjectAdapter) collection adapter}s (does not
+     * include the {@link #getRootAdapter() root adapter}.
+     */
+    @Override
+    public Iterator<ObjectAdapter> iterator() {
+        return getCollectionAdapters().values().iterator();
+    }
+
+    public Set<OneToManyAssociation> getCollections() {
+        return getCollectionAdapters().keySet();
+    }
+
+    public ObjectAdapter getCollectionAdapter(final OneToManyAssociation otma) {
+        return collectionAdapters.get(otma);
+    }
 }

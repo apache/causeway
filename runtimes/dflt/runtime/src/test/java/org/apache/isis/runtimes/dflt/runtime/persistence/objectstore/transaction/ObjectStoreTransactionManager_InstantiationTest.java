@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
-
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.junit.Test;
-
 
 public class ObjectStoreTransactionManager_InstantiationTest extends ObjectStoreTransactionManagerAbstractTestCase {
 
-
     @Test
     public void canInstantiate() throws Exception {
-        transactionManager = new ObjectStoreTransactionManager(
-                mockPersistenceSession, mockObjectStore);
+        transactionManager = new ObjectStoreTransactionManager(mockPersistenceSession, mockObjectStore);
     }
 
 }

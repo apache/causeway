@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem.tests;
 
 import junit.framework.TestCase;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
-
 
 public class TestProxyConfigurationTest extends TestCase {
 
@@ -53,4 +51,3 @@ public class TestProxyConfigurationTest extends TestCase {
         assertEquals("abc", properties.getString("one"));
     }
 }
-

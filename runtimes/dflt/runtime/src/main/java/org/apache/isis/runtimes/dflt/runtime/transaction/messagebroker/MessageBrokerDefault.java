@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
 
 import java.util.ArrayList;
@@ -30,25 +29,24 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 
-
 public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle {
-    
+
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();
 
     public MessageBrokerDefault() {
     }
 
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Reset / ensureEmpty
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     public void reset() {
         warnings.clear();
         messages.clear();
     }
-    
+
+    @Override
     public void ensureEmpty() {
         if (warnings.size() > 0) {
             throw new IsisException("Message broker still has warnings");
@@ -58,47 +56,53 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
         }
     }
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Messages
-    ////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////
+
+    @Override
     public List<String> getMessages() {
         return copyAndClear(messages);
     }
 
+    @Override
     public void addMessage(final String message) {
         messages.add(message);
     }
 
+    @Override
     public String getMessagesCombined() {
-        List<String> x = messages;
-        String string = StringUtils.combine(x);
+        final List<String> x = messages;
+        final String string = StringUtils.combine(x);
         return string;
     }
 
-
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Warnings
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
+    @Override
     public List<String> getWarnings() {
         return copyAndClear(warnings);
     }
 
+    @Override
     public void addWarning(final String message) {
         warnings.add(message);
     }
-    
+
+    @Override
     public String getWarningsCombined() {
-        List<String> x = warnings;
-        String string = StringUtils.combine(x);
+        final List<String> x = warnings;
+        final String string = StringUtils.combine(x);
         return string;
     }
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Debugging
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         debugArray(debug, "Messages", messages);
         debugArray(debug, "Warnings", messages);
@@ -110,28 +114,26 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
         if (vector.size() == 0) {
             debug.appendln("none");
         } else {
-            for(String text: vector) {
+            for (final String text : vector) {
                 debug.appendln(text);
             }
         }
         debug.unindent();
     }
 
+    @Override
     public String debugTitle() {
         return "Simple Message Broker";
     }
 
-
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Helpers
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
-    private List<String> copyAndClear(List<String> messages) {
-        List<String> copy = Collections.unmodifiableList(new ArrayList<String>(messages));
+    private List<String> copyAndClear(final List<String> messages) {
+        final List<String> copy = Collections.unmodifiableList(new ArrayList<String>(messages));
         messages.clear();
         return copy;
     }
-
-
 
 }

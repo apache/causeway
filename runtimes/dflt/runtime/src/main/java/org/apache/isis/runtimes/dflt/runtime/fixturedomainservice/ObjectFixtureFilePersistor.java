@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixturedomainservice;
 
 import java.io.BufferedReader;
@@ -31,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -42,18 +39,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.log4j.Logger;
 
 public class ObjectFixtureFilePersistor {
 
     private static final Logger LOG = Logger.getLogger(ObjectFixtureFilePersistor.class);
-    
+
     private static class SavedObjects {
         private int id = 1;
-        private Map<ObjectAdapter, String> idMap = new HashMap<ObjectAdapter, String>();
+        private final Map<ObjectAdapter, String> idMap = new HashMap<ObjectAdapter, String>();
 
-        public String getId(ObjectAdapter object) {
+        public String getId(final ObjectAdapter object) {
             String idString = idMap.get(object);
-            if (idString == null) { 
+            if (idString == null) {
                 id++;
                 idMap.put(object, "" + id);
                 idString = "" + id;
@@ -63,22 +61,24 @@ public class ObjectFixtureFilePersistor {
     }
 
     private static class LoadedObjects {
-        private Map<String, ObjectAdapter> idMap = new HashMap<String, ObjectAdapter>();
+        private final Map<String, ObjectAdapter> idMap = new HashMap<String, ObjectAdapter>();
         private final Set<Object> objects;
 
-        public LoadedObjects(Set<Object> objects) {
-            this.objects = objects;}
+        public LoadedObjects(final Set<Object> objects) {
+            this.objects = objects;
+        }
 
-        public ObjectAdapter get(String data) {
-            int pos = data.indexOf('#');
+        public ObjectAdapter get(final String data) {
+            final int pos = data.indexOf('#');
             if (pos == -1) {
                 throw new FixtureException("load failed - trying to read non-reference data as a reference: " + data);
             }
-            String id = data.substring(pos + 1);
+            final String id = data.substring(pos + 1);
             ObjectAdapter object = idMap.get(id);
             if (object == null) {
-                String className = data.substring(0, pos);
-                ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
+                final String className = data.substring(0, pos);
+                final ObjectSpecification specification =
+                    IsisContext.getSpecificationLoader().loadSpecification(className);
                 object = IsisContext.getPersistenceSession().createInstance(specification);
                 idMap.put(id, object);
                 objects.add(object.getObject());
@@ -88,11 +88,11 @@ public class ObjectFixtureFilePersistor {
 
     }
 
-    public Set<Object> loadData(Reader reader) throws IOException {
+    public Set<Object> loadData(final Reader reader) throws IOException {
         final Set<Object> objects = new HashSet<Object>();
 
-        BufferedReader buffer = new BufferedReader(reader);
-        LoadedObjects loaded = new LoadedObjects(objects);
+        final BufferedReader buffer = new BufferedReader(reader);
+        final LoadedObjects loaded = new LoadedObjects(objects);
         String line;
         ObjectAdapter object = null;
         int lineNo = 0;
@@ -114,19 +114,19 @@ public class ObjectFixtureFilePersistor {
             if (object != null && !object.isPersistent()) {
                 IsisContext.getPersistenceSession().makePersistent(object);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new FixtureException("failed to load data at line " + lineNo, e);
         }
-        
+
         return objects;
     }
-    
-    private void loadFieldData(ObjectAdapter object, LoadedObjects loaded, String line) {
-        int pos = line.indexOf(':');
+
+    private void loadFieldData(final ObjectAdapter object, final LoadedObjects loaded, final String line) {
+        final int pos = line.indexOf(':');
         if (pos == -1) {
             throw new FixtureException("no colon (:) in: " + line.trim());
         }
-        String name = line.substring(0, pos).trim();
+        final String name = line.substring(0, pos).trim();
         String data = line.substring(pos + 1).trim();
         try {
             final ObjectAssociation association = object.getSpecification().getAssociation(name);
@@ -136,13 +136,13 @@ public class ObjectFixtureFilePersistor {
                 }
             } else {
                 if (association.isOneToManyAssociation()) {
-                    String[] ids = data.split(" ");
-                    ObjectAdapter[] elements = new ObjectAdapter[ids.length];
+                    final String[] ids = data.split(" ");
+                    final ObjectAdapter[] elements = new ObjectAdapter[ids.length];
                     for (int i = 0; i < ids.length; i++) {
                         elements[i] = loaded.get(ids[i]);
                     }
-                    ObjectAdapter collection = association.get(object);
-                    CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+                    final ObjectAdapter collection = association.get(object);
+                    final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
                     facet.init(collection, elements);
                 } else if (association.getSpecification().isParseable()) {
                     data = data.replaceAll("\\n", "\n");
@@ -150,36 +150,36 @@ public class ObjectFixtureFilePersistor {
                     final ObjectAdapter value = facet.parseTextEntry(null, data);
                     ((OneToOneAssociation) association).initAssociation(object, value);
                 } else if (association.isOneToOneAssociation()) {
-                    ObjectAdapter value = loaded.get(data);
+                    final ObjectAdapter value = loaded.get(data);
                     ((OneToOneAssociation) association).initAssociation(object, value);
                 }
             }
-        } catch (ObjectSpecificationException e) {
+        } catch (final ObjectSpecificationException e) {
             LOG.info("no field for '" + name + "', skipping entry: " + data);
         }
     }
 
-    public void save(Set<Object> objects, Writer out) throws IOException {
-        PrintWriter writer = new PrintWriter(out);
-        SavedObjects saved = new SavedObjects();
-        for (Object object : objects) {
-            ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(object);
+    public void save(final Set<Object> objects, final Writer out) throws IOException {
+        final PrintWriter writer = new PrintWriter(out);
+        final SavedObjects saved = new SavedObjects();
+        for (final Object object : objects) {
+            final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(object);
             saveData(writer, adapter, saved);
         }
         out.close();
     }
 
-    private void saveData(PrintWriter writer, ObjectAdapter adapter, SavedObjects saved) {
-        String id = saved.getId(adapter);
+    private void saveData(final PrintWriter writer, final ObjectAdapter adapter, final SavedObjects saved) {
+        final String id = saved.getId(adapter);
         writer.println(adapter.getSpecification().getFullIdentifier() + "#" + id);
 
-        ObjectSpecification adapterSpec = adapter.getSpecification();
+        final ObjectSpecification adapterSpec = adapter.getSpecification();
         final List<ObjectAssociation> associations = adapterSpec.getAssociations();
-        for (ObjectAssociation association : associations) {
+        for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;
             }
-            
+
             final ObjectAdapter associatedObject = association.get(adapter);
             final boolean isEmpty = association.isEmpty(adapter);
             final String associationId = association.getId();
@@ -190,10 +190,10 @@ public class ObjectFixtureFilePersistor {
             }
 
             if (association.isOneToManyAssociation()) {
-                CollectionFacet facet = associatedObject.getSpecification().getFacet(CollectionFacet.class);
-                for (ObjectAdapter element : facet.iterable(associatedObject)) {
-                    String refId = saved.getId(element);
-                    String cls = element.getSpecification().getFullIdentifier();
+                final CollectionFacet facet = associatedObject.getSpecification().getFacet(CollectionFacet.class);
+                for (final ObjectAdapter element : facet.iterable(associatedObject)) {
+                    final String refId = saved.getId(element);
+                    final String cls = element.getSpecification().getFullIdentifier();
                     writer.print(cls + "#" + refId + " ");
                 }
                 writer.println();
@@ -203,13 +203,11 @@ public class ObjectFixtureFilePersistor {
                 encodedValue = encodedValue.replaceAll("\n", "\\n");
                 writer.println(encodedValue);
             } else if (association.isOneToOneAssociation()) {
-                String refId = saved.getId(associatedObject);
-                String cls = associatedObject.getSpecification().getFullIdentifier();
+                final String refId = saved.getId(associatedObject);
+                final String cls = associatedObject.getSpecification().getFullIdentifier();
                 writer.println(cls + "#" + refId);
             }
         }
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -25,31 +24,26 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstrac
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
-
-
 public abstract class AuthenticatorAbstractForDfltRuntime extends AuthenticatorAbstract {
 
-	public AuthenticatorAbstractForDfltRuntime(IsisConfiguration configuration) {
-		super(configuration);
-	}
+    public AuthenticatorAbstractForDfltRuntime(final IsisConfiguration configuration) {
+        super(configuration);
+    }
 
-	
-	////////////////////////////////////////////////////////
-	// Helpers
-	////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
+    // Helpers
+    // //////////////////////////////////////////////////////
 
     /**
      * Helper method for convenience of implementations that depend on the {@link DeploymentType}.
      */
-	public DeploymentType getDeploymentType() {
-		String deploymentTypeStr = getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-		if(deploymentTypeStr==null) {
-			throw new IllegalStateException("Expect value for '" + SystemConstants.DEPLOYMENT_TYPE_KEY + "' to be bound into IsisConfiguration");
-		}
-    	return DeploymentType.lookup(deploymentTypeStr);
-	}
+    public DeploymentType getDeploymentType() {
+        final String deploymentTypeStr = getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        if (deploymentTypeStr == null) {
+            throw new IllegalStateException("Expect value for '" + SystemConstants.DEPLOYMENT_TYPE_KEY
+                + "' to be bound into IsisConfiguration");
+        }
+        return DeploymentType.lookup(deploymentTypeStr);
+    }
 
-
-	
 }
-

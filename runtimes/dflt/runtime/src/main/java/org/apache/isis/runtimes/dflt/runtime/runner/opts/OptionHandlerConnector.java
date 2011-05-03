@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.CONNECTOR_LONG_OPT;
@@ -29,7 +28,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -41,35 +39,42 @@ import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 public class OptionHandlerConnector extends OptionHandlerAbstract {
 
-	private InstallerRepository installerRepository;
-	private List<String> connectorNames;
-	
-	public OptionHandlerConnector(final InstallerRepository installerRepository) {
-		this.installerRepository = installerRepository;
-	}
+    private final InstallerRepository installerRepository;
+    private List<String> connectorNames;
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-        Object[] connectors = installerRepository.getInstallers(IsisViewerInstaller.class);
-        Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(CONNECTOR_LONG_OPT).withDescription(
-                "connector to use for client requests, or for server to listen on: " + availableInstallers(connectors)).create(
-                CONNECTOR_OPT);
+    public OptionHandlerConnector(final InstallerRepository installerRepository) {
+        this.installerRepository = installerRepository;
+    }
+
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Object[] connectors = installerRepository.getInstallers(IsisViewerInstaller.class);
+        final Option option =
+            OptionBuilder
+                .withArgName("name|class name")
+                .hasArg()
+                .withLongOpt(CONNECTOR_LONG_OPT)
+                .withDescription(
+                    "connector to use for client requests, or for server to listen on: "
+                        + availableInstallers(connectors)).create(CONNECTOR_OPT);
         options.addOption(option);
-		
-	}
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		connectorNames = getOptionValues(commandLine, Constants.CONNECTOR_OPT);
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		isisConfigurationBuilder.add(SystemConstants.CLIENT_CONNECTION_KEY, ListUtils.listToString(connectorNames));
-	}
-	
-	public List<String> getConnectorNames() {
-		return connectorNames;
-	}
+    }
+
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        connectorNames = getOptionValues(commandLine, Constants.CONNECTOR_OPT);
+        return true;
+    }
+
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.CLIENT_CONNECTION_KEY, ListUtils.listToString(connectorNames));
+    }
+
+    public List<String> getConnectorNames() {
+        return connectorNames;
+    }
 
 }

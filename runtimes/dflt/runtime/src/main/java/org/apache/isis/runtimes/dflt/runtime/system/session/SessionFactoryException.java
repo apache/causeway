@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.session;
 
 public class SessionFactoryException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public SessionFactoryException() {}
+    public SessionFactoryException() {
+    }
 
-    public SessionFactoryException(String message) {
+    public SessionFactoryException(final String message) {
         super(message);
     }
 
-    public SessionFactoryException(Throwable cause) {
+    public SessionFactoryException(final Throwable cause) {
         super(cause);
     }
 
-    public SessionFactoryException(String message, Throwable cause) {
+    public SessionFactoryException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
 }
-
-

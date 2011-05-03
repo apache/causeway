@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -28,27 +27,21 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNo
 
 public class IsisTransactionDefault extends IsisTransactionAbstract {
 
-    public IsisTransactionDefault(
-            final IsisTransactionManager transactionManager) {
+    public IsisTransactionDefault(final IsisTransactionManager transactionManager) {
         this(transactionManager, new MessageBrokerDefault(), new UpdateNotifierDefault());
     }
 
-
-    public IsisTransactionDefault(
-            IsisTransactionManager transactionManager,
-            MessageBroker messageBroker,
-            UpdateNotifier updateNotifier) {
+    public IsisTransactionDefault(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
+        final UpdateNotifier updateNotifier) {
         super(transactionManager, messageBroker, updateNotifier);
     }
 
+    @Override
+    protected void doAbort() {
+    }
 
     @Override
-    protected void doAbort() {}
-
-    @Override
-    protected void doFlush() {}
-
+    protected void doFlush() {
+    }
 
 }
-
-

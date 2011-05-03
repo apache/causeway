@@ -17,14 +17,19 @@
  *  under the License.
  */
 
-
-
 package org.apache.isis.runtimes.dflt.webserver.embedded.jetty;
 
 import java.util.List;
 
 import javax.servlet.ServletContextListener;
 
+import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.FilterSpecification;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.ServletSpecification;
+import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
+import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerAbstract;
+import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
+import org.apache.isis.runtimes.dflt.webserver.WebServerException;
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.NCSARequestLog;
@@ -39,14 +44,6 @@ import org.mortbay.jetty.servlet.ServletHandler;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.servlet.ServletMapping;
 import org.mortbay.jetty.servlet.SessionHandler;
-import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.runtimes.dflt.runtime.viewer.web.FilterSpecification;
-import org.apache.isis.runtimes.dflt.runtime.viewer.web.ServletSpecification;
-import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
-import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerAbstract;
-import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
-import org.apache.isis.runtimes.dflt.webserver.WebServerException;
-
 
 public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     private final static Logger LOG = Logger.getLogger(EmbeddedWebServerJetty.class);
@@ -55,6 +52,7 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     // init, shutdown
     // ///////////////////////////////////////////////////////
 
+    @Override
     public void init() {
         super.init();
 
@@ -62,10 +60,6 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
 
         final ContextHandler contextHandler = createContextHandler(handlers);
 
-        
-
-        
-        
         startServer(contextHandler);
     }
 
@@ -85,9 +79,9 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
         // handlers.addHandler(new DefaultHandler());
 
         // TODO use properties to set up
-        RequestLogHandler requestLogHandler = new RequestLogHandler();
+        final RequestLogHandler requestLogHandler = new RequestLogHandler();
         handlers.addHandler(requestLogHandler);
-        NCSARequestLog requestLog = new NCSARequestLog("./logs/jetty-yyyy_mm_dd.request.log");
+        final NCSARequestLog requestLog = new NCSARequestLog("./logs/jetty-yyyy_mm_dd.request.log");
         requestLog.setRetainDays(90);
         requestLog.setAppend(true);
         requestLog.setExtended(false);
@@ -101,16 +95,16 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
      * TODO: the welcome files don't seem to be picked up.
      * 
      * <p>
-     * not sure if meant to add welcome files here or at the context handler level, in fact, doesn't seem to
-     * work even when register in both...
+     * not sure if meant to add welcome files here or at the context handler level, in fact, doesn't seem to work even
+     * when register in both...
      * 
      * @see #setWelcomeFiles(ContextHandler)
      */
     private void addResourcesAndWelcomeFiles(final HandlerList handlers) {
-        for (WebAppSpecification specification : getSpecifications()) {
-            List<String> files = specification.getWelcomeFiles();
-            String[] welcomeFiles = files.toArray(new String[files.size()]);
-            for (String resourcePath : specification.getResourcePaths()) {
+        for (final WebAppSpecification specification : getSpecifications()) {
+            final List<String> files = specification.getWelcomeFiles();
+            final String[] welcomeFiles = files.toArray(new String[files.size()]);
+            for (final String resourcePath : specification.getResourcePaths()) {
                 final ResourceHandler resourceHandler = new ResourceHandler();
                 resourceHandler.setResourceBase(resourcePath);
                 resourceHandler.setWelcomeFiles(welcomeFiles);
@@ -120,20 +114,20 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     }
 
     private void addServletsAndFilters(final ServletHandler servletHandler) {
-        for (WebAppSpecification requirement : getSpecifications()) {
+        for (final WebAppSpecification requirement : getSpecifications()) {
             addServletMappings(servletHandler, requirement);
             addFilterMappings(servletHandler, requirement);
         }
     }
 
     private void addServletMappings(final ServletHandler servletHandler, final WebAppSpecification webAppSpec) {
-        for (ServletSpecification servletSpec : webAppSpec.getServletSpecifications()) {
+        for (final ServletSpecification servletSpec : webAppSpec.getServletSpecifications()) {
 
-            ServletHolder servletHolder = new ServletHolder(servletSpec.getServletClass());
+            final ServletHolder servletHolder = new ServletHolder(servletSpec.getServletClass());
             servletHolder.setInitParameters(servletSpec.getInitParams());
             servletHandler.addServlet(servletHolder);
 
-            ServletMapping servletMapping = new ServletMapping();
+            final ServletMapping servletMapping = new ServletMapping();
             servletMapping.setServletName(servletHolder.getName());
             servletMapping.setPathSpecs(servletSpec.getPathSpecs().toArray(new String[] {}));
 
@@ -142,13 +136,13 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     }
 
     private void addFilterMappings(final ServletHandler servletHandler, final WebAppSpecification webAppSpec) {
-        for (FilterSpecification filterSpec : webAppSpec.getFilterSpecifications()) {
+        for (final FilterSpecification filterSpec : webAppSpec.getFilterSpecifications()) {
 
-            FilterHolder filterHolder = new FilterHolder(filterSpec.getFilterClass());
+            final FilterHolder filterHolder = new FilterHolder(filterSpec.getFilterClass());
             filterHolder.setInitParameters(filterSpec.getInitParams());
             servletHandler.addFilter(filterHolder);
 
-            FilterMapping filterMapping = new FilterMapping();
+            final FilterMapping filterMapping = new FilterMapping();
             filterMapping.setFilterName(filterHolder.getName());
             filterMapping.setPathSpecs(filterSpec.getPathSpecs().toArray(new String[] {}));
             filterMapping.setDispatches(Handler.DEFAULT);
@@ -172,16 +166,16 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     }
 
     private void addContextParams(final ContextHandler contextHandler) {
-        for (WebAppSpecification specification : getSpecifications()) {
+        for (final WebAppSpecification specification : getSpecifications()) {
             contextHandler.setInitParams(specification.getContextParams());
         }
     }
 
     private void addServletContextListeners(final ContextHandler contextHandler) {
-        for (WebAppSpecification specification : getSpecifications()) {
-            for (Class<?> servletContextListenerClass : specification.getServletContextListeners()) {
-                ServletContextListener servletContext = (ServletContextListener) InstanceUtil
-                        .createInstance(servletContextListenerClass);
+        for (final WebAppSpecification specification : getSpecifications()) {
+            for (final Class<?> servletContextListenerClass : specification.getServletContextListeners()) {
+                final ServletContextListener servletContext =
+                    (ServletContextListener) InstanceUtil.createInstance(servletContextListenerClass);
                 contextHandler.addEventListener(servletContext);
             }
         }
@@ -191,24 +185,25 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
      * TODO: this doesn't seem to be being picked up
      * 
      * <p>
-     * not sure if meant to add welcome files here or at the resource base level, in fact, doesn't seem to
-     * work even when register in both...
+     * not sure if meant to add welcome files here or at the resource base level, in fact, doesn't seem to work even
+     * when register in both...
      * 
      * @see #addResourcesAndWelcomeFiles(HandlerList)
      */
     private void setWelcomeFiles(final ContextHandler contextHandler) {
-        for (WebAppSpecification specification : getSpecifications()) {
+        for (final WebAppSpecification specification : getSpecifications()) {
             contextHandler.setWelcomeFiles(specification.getWelcomeFiles().toArray(new String[] {}));
         }
     }
 
     private void startServer(final ContextHandler contextHandler) {
-        final int port = getConfiguration().getInteger(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY,
+        final int port =
+            getConfiguration().getInteger(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY,
                 WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT);
         if (LOG.isInfoEnabled()) {
             LOG.info("Starting web server on http://localhost:" + port);
-            for (WebAppSpecification specification : getSpecifications()) {
-                String logHint = specification.getLogHint();
+            for (final WebAppSpecification specification : getSpecifications()) {
+                final String logHint = specification.getLogHint();
                 if (logHint != null) {
                     LOG.info(logHint);
                 }
@@ -225,8 +220,9 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
         }
     }
 
+    @Override
     public void shutdown() {
-    // does nothing
+        // does nothing
     }
 
 }

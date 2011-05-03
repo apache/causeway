@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.runtime.optionhandler.BootPrinter;
-import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.DEBUG_OPT;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.runtime.optionhandler.BootPrinter;
+import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 
 public class OptionHandlerDebug extends OptionHandlerAbstract {
 
@@ -36,15 +33,18 @@ public class OptionHandlerDebug extends OptionHandlerAbstract {
         super();
     }
 
-    public void addOption(Options options) {
+    @Override
+    public void addOption(final Options options) {
         options.addOption(DEBUG_OPT, false, "print debugging messages");
     }
 
-    public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
         return true;
     }
 
-    public void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
         // TODO need to prime or otherwise set logging.
     }
 

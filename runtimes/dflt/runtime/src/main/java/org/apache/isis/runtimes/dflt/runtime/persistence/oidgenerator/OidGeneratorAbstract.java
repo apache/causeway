@@ -17,68 +17,67 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator;
 
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
-
-
 public abstract class OidGeneratorAbstract implements OidGenerator {
 
-
     private final OidStringifier oidStringifier;
-    
+
     /**
-     * Defaults to using the {@link OidStringifierHex} for {@link #getOidStringifier()}.
-     * Subclasses can replace by calling {@link #OidGeneratorAbstract(OidStringifier)} instead.
+     * Defaults to using the {@link OidStringifierHex} for {@link #getOidStringifier()}. Subclasses can replace by
+     * calling {@link #OidGeneratorAbstract(OidStringifier)} instead.
      */
     public OidGeneratorAbstract() {
-    	this(new OidStringifierHex());
+        this(new OidStringifierHex());
     }
 
     public OidGeneratorAbstract(final OidStringifier oidStringifier) {
-    	this.oidStringifier = oidStringifier;
+        this.oidStringifier = oidStringifier;
     }
 
-	////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // open, close (session scoped)
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     /**
      * Default implementation does nothing.
      */
-    public void open() {}
-    
+    @Override
+    public void open() {
+    }
+
     /**
      * Default implementation does nothing.
      */
-    public void close() {}
+    @Override
+    public void close() {
+    }
 
-    
     /**
      * Default implemenation returns {@link OidStringifierHex}.
      * 
      * <p>
      * Subclasses can replace through constructor if required.
      */
+    @Override
     public final OidStringifier getOidStringifier() {
-    	return oidStringifier;
+        return oidStringifier;
     }
-    
+
     // ////////////////////////////////////////////////////////////////////
     // injectInto
     // ////////////////////////////////////////////////////////////////////
 
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (OidGeneratorAware.class.isAssignableFrom(candidate.getClass())) {
-            OidGeneratorAware cast = OidGeneratorAware.class.cast(candidate);
+            final OidGeneratorAware cast = OidGeneratorAware.class.cast(candidate);
             cast.setOidGenerator(this);
         }
     }
-
-
 
 }

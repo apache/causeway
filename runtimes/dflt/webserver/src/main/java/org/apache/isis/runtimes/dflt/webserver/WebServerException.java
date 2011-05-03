@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webserver;
 
 public class WebServerException extends RuntimeException {
@@ -29,4 +28,3 @@ public class WebServerException extends RuntimeException {
     }
 
 }
-

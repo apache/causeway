@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.services;
 
 import java.util.ArrayList;
@@ -35,42 +34,39 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-
 public final class RepositoryHelper {
-    
-    private RepositoryHelper(){}
+
+    private RepositoryHelper() {
+    }
 
     public static Object[] allInstances(final Class<?> cls) {
         return allInstances(getSpecificationLoader().loadSpecification(cls), cls);
     }
 
     public static <T> Object[] allInstances(final ObjectSpecification spec, final Class<T> cls) {
-        QueryFindAllInstances<T> query = new QueryFindAllInstances<T>(spec.getFullIdentifier());
+        final QueryFindAllInstances<T> query = new QueryFindAllInstances<T>(spec.getFullIdentifier());
         final ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.MULTIPLE);
         final Object[] array = convertToArray(instances, cls);
         return array;
     }
 
     public static List<Object> findByPersistenceQuery(final PersistenceQuery persistenceQuery, final Class<?> cls) {
-		final ObjectAdapter instances = getPersistenceSession().findInstances(persistenceQuery);
+        final ObjectAdapter instances = getPersistenceSession().findInstances(persistenceQuery);
         return convertToList(instances, cls);
     }
 
     public static List<Object> findByTitle(final Class<?> type, final String title) {
-        ObjectSpecification spec = getSpecificationLoader().loadSpecification(type);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(type);
         return findByTitle(spec, type, title);
     }
 
-    public static List<Object> findByTitle(
-            final ObjectSpecification spec,
-            final Class<?> cls,
-            final String title) {
+    public static List<Object> findByTitle(final ObjectSpecification spec, final Class<?> cls, final String title) {
         final PersistenceQuery criteria = new PersistenceQueryFindByTitle(spec, title);
         return findByPersistenceQuery(criteria, cls);
     }
 
     public static boolean hasInstances(final Class<?> type) {
-        ObjectSpecification spec = getSpecificationLoader().loadSpecification(type);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(type);
         return hasInstances(spec);
     }
 
@@ -78,15 +74,14 @@ public final class RepositoryHelper {
         return getPersistenceSession().hasInstances(spec);
     }
 
-    
-    ///////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////
     // Helpers
-    ///////////////////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////////////////
+
     private static List<Object> convertToList(final ObjectAdapter instances, final Class<?> cls) {
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(instances);
         final List<Object> list = new ArrayList<Object>();
-        for(final ObjectAdapter adapter: facet.iterable(instances)) {
+        for (final ObjectAdapter adapter : facet.iterable(instances)) {
             list.add(adapter.getObject());
         }
         return list;
@@ -96,18 +91,16 @@ public final class RepositoryHelper {
         return convertToList(instances, cls).toArray();
     }
 
-    
-    ///////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////
     // Context lookup
-    ///////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////
 
-	private static PersistenceSession getPersistenceSession() {
-		return IsisContext.getPersistenceSession();
-	}
+    private static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
-	private static SpecificationLoader getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
-
+    private static SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 }

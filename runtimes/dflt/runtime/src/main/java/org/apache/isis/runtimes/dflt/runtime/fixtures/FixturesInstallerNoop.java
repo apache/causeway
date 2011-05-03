@@ -17,31 +17,28 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Noop;
 
-
 public class FixturesInstallerNoop extends FixturesInstallerAbstract implements Noop {
 
     public FixturesInstallerNoop() {
-		super("noop");
-	}
+        super("noop");
+    }
 
-	@Override
-	public void installFixtures() {}
+    @Override
+    public void installFixtures() {
+    }
 
-	@Override
-	public LogonFixture getLogonFixture() {
-		return null;
-	}
+    @Override
+    public LogonFixture getLogonFixture() {
+        return null;
+    }
 
-	@Override
-	protected void addFixturesTo(FixturesInstallerDelegate delegate) {
-	}
+    @Override
+    protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
+    }
 
 }
-
-

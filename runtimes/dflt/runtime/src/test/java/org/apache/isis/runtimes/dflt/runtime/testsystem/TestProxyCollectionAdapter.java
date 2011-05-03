@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.Collection;
@@ -50,9 +49,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-
 public class TestProxyCollectionAdapter implements ObjectAdapter {
-    
+
     private Vector collection = new Vector();
     private Oid oid;
     private ResolveState resolveState = ResolveState.GHOST;
@@ -61,7 +59,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     private String removeValidMessage;
     private String addValidMessgae;
 
-    public TestProxyCollectionAdapter() {}
+    public TestProxyCollectionAdapter() {
+    }
 
     public TestProxyCollectionAdapter(final Object wrappedCollection) {
         if (wrappedCollection instanceof Collection) {
@@ -69,8 +68,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         } else if (wrappedCollection.getClass().isArray()) {
             final Object[] array = (Object[]) wrappedCollection;
             collection = new Vector(array.length);
-            for (int i = 0; i < array.length; i++) {
-                collection.add(array[i]);
+            for (final Object element : array) {
+                collection.add(element);
             }
         } else if (wrappedCollection instanceof ObjectList) {
             final Enumeration elements = ((ObjectList) wrappedCollection).elements();
@@ -82,7 +81,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     }
 
     @Override
-    public void checkLock(final Version version) {}
+    public void checkLock(final Version version) {
+    }
 
     boolean contains(final ObjectAdapter object) {
         return collection.contains(object);
@@ -120,15 +120,15 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         return resolveState;
     }
 
-	@Override
+    @Override
     public boolean isPersistent() {
-		return getResolveState().isPersistent();
-	}
+        return getResolveState().isPersistent();
+    }
 
-	@Override
+    @Override
     public boolean isTransient() {
-		return getResolveState().isTransient();
-	}
+        return getResolveState().isTransient();
+    }
 
     @Override
     public ObjectSpecification getSpecification() {
@@ -142,8 +142,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
 
     public void init(final ObjectAdapter[] initElements) {
         Assert.assertEquals("Collection not empty", 0, this.collection.size());
-        for (int i = 0; i < initElements.length; i++) {
-            collection.addElement(initElements[i]);
+        for (final ObjectAdapter initElement : initElements) {
+            collection.addElement(initElement);
         }
     }
 
@@ -153,7 +153,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     }
 
     @Override
-    public void setOptimisticLock(final Version version) {}
+    public void setOptimisticLock(final Version version) {
+    }
 
     public void setupResolveState(final ResolveState resolveState) {
         this.resolveState = resolveState;
@@ -185,7 +186,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     }
 
     @Override
-    public void changeState(final ResolveState newState) {}
+    public void changeState(final ResolveState newState) {
+    }
 
     public void add(final ObjectAdapter element) {
         collection.add(element);
@@ -216,13 +218,13 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     }
 
     @Override
-    public void fireChangedEvent() {}
+    public void fireChangedEvent() {
+    }
 
     @Override
     public ObjectSpecification getElementSpecification() {
         return null;
     }
-
 
     @Override
     public ObjectAdapter getOwner() {
@@ -230,7 +232,7 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     }
 
     @Override
-    public Instance getInstance(Specification specification) {
+    public Instance getInstance(final Specification specification) {
         return null;
     }
 
@@ -239,17 +241,16 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         return true;
     }
 
-    
     @Override
     public ObjectAdapter getAggregateRoot() {
-        Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
+        final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
         return getAdapterManager().getAdapterFor(parentOid);
     }
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -258,13 +259,17 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         return IsisContext.getPersistenceSession();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.core.metamodel.spec.ObjectMetaModel#setElementTypeProvider(org.apache.isis.core.metamodel.spec.ElementTypeProvider)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.isis.core.metamodel.spec.ObjectMetaModel#setElementTypeProvider(org.apache.isis.core.metamodel.spec
+     * .ElementTypeProvider)
      */
     @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }
@@ -283,9 +288,9 @@ class TestProxyCollectionFacet implements CollectionFacet {
 
     @Override
     public Enumeration elements(final ObjectAdapter collection) {
-        TestProxyCollectionAdapter collectionDowncasted = collectionDowncasted(collection);
-        List list = EnumerationUtils.toList(collectionDowncasted.elements());
-        Collection transformedCollection = CollectionUtils.collect(list, new ObjectToAdapterTransformer());
+        final TestProxyCollectionAdapter collectionDowncasted = collectionDowncasted(collection);
+        final List list = EnumerationUtils.toList(collectionDowncasted.elements());
+        final Collection transformedCollection = CollectionUtils.collect(list, new ObjectToAdapterTransformer());
         return new IteratorEnumeration(transformedCollection.iterator());
     }
 
@@ -295,7 +300,8 @@ class TestProxyCollectionFacet implements CollectionFacet {
     }
 
     @Override
-    public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {}
+    public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
+    }
 
     @Override
     public int size(final ObjectAdapter collection) {
@@ -308,16 +314,17 @@ class TestProxyCollectionFacet implements CollectionFacet {
     }
 
     @Override
-    public void setFacetHolder(final FacetHolder facetHolder) {}
+    public void setFacetHolder(final FacetHolder facetHolder) {
+    }
 
     @Override
     public boolean alwaysReplace() {
         return false;
     }
-    
+
     @Override
     public boolean isDerived() {
-    	return false;
+        return false;
     }
 
     @Override
@@ -336,29 +343,28 @@ class TestProxyCollectionFacet implements CollectionFacet {
     }
 
     @Override
-    public Iterator<ObjectAdapter> iterator(ObjectAdapter wrappedCollection) {
+    public Iterator<ObjectAdapter> iterator(final ObjectAdapter wrappedCollection) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Collection<ObjectAdapter> collection(ObjectAdapter wrappedCollection) {
+    public Collection<ObjectAdapter> collection(final ObjectAdapter wrappedCollection) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Iterable<ObjectAdapter> iterable(ObjectAdapter collectionAdapter) {
+    public Iterable<ObjectAdapter> iterable(final ObjectAdapter collectionAdapter) {
         throw new NotYetImplementedException();
     }
 
-	@Override
+    @Override
     public Facet getUnderlyingFacet() {
-		return null;
-	}
-	@Override
-    public void setUnderlyingFacet(Facet underlyingFacet) {
-		throw new UnsupportedOperationException();
-	}
+        return null;
+    }
 
-
+    @Override
+    public void setUnderlyingFacet(final Facet underlyingFacet) {
+        throw new UnsupportedOperationException();
+    }
 
 }

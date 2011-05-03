@@ -47,27 +47,27 @@ import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSessionLookupStrategyAbstract {
 
     @Override
-    public AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse) {
+    public AuthenticationSession lookup(final ServletRequest servletRequest, final ServletResponse servletResponse) {
 
         // use previously authenticated session if available.
-        HttpSession httpSession = getHttpSession(servletRequest);
+        final HttpSession httpSession = getHttpSession(servletRequest);
         AuthenticationSession authSession =
             (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authSession != null) {
-            boolean sessionValid = getAuthenticationManager().isSessionValid(authSession);
+            final boolean sessionValid = getAuthenticationManager().isSessionValid(authSession);
             if (sessionValid) {
                 return authSession;
             }
         }
 
         // otherwise, look for LogonFixture and try to authenticate
-        ServletContext servletContext = getServletContext(servletRequest);
-        IsisSystem system = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
+        final ServletContext servletContext = getServletContext(servletRequest);
+        final IsisSystem system = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
         if (system == null) {
             // not expected to happen...
             return null;
         }
-        LogonFixture logonFixture = system.getLogonFixture();
+        final LogonFixture logonFixture = system.getLogonFixture();
 
         // see if exploration is supported
         if (system.getDeploymentType().isExploring()) {
@@ -77,7 +77,7 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
             }
         }
 
-        boolean loggedInUsingLogonFixture =
+        final boolean loggedInUsingLogonFixture =
             httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
         if (logonFixture != null && !loggedInUsingLogonFixture) {
             httpSession.setAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY, true);
@@ -88,8 +88,9 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
     }
 
     @Override
-    public void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession) {
-        HttpSession httpSession = getHttpSession(servletRequest);
+    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse,
+        final AuthenticationSession authSession) {
+        final HttpSession httpSession = getHttpSession(servletRequest);
         httpSession.setAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
     }
 

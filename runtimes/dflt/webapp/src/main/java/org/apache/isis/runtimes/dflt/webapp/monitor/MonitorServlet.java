@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webapp.monitor;
 
 import java.io.IOException;
@@ -33,14 +32,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.MonitorListenerImpl;
 
-
 public class MonitorServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private MonitorListenerImpl monitor;
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-            IOException {
+        IOException {
         final String queryString = request.getQueryString();
         final String query = queryString == null ? "Overview" : URLDecoder.decode(queryString, "UTF-8");
         response.setContentType("text/html");
@@ -63,29 +61,20 @@ public class MonitorServlet extends HttpServlet {
     private static String listSessions() {
         final StringBuffer str = new StringBuffer();
         /*
-        final Iterator<?> it = SessionAccess.getSessions().iterator();
-        while (it.hasNext()) {
-            final HttpSession session = (HttpSession) it.next();
-            final String id = session.getId();
-            str.append(id);
-            str.append(" \t");
-
-            final long creationTime = session.getCreationTime();
-            str.append(new Date(creationTime));
-            str.append(" \t");
-
-            final long lastAccessedTime = session.getLastAccessedTime();
-            str.append(new Date(lastAccessedTime));
-            str.append(" \t");
-
-            final AuthenticationSession nofSession = (AuthenticationSession) session.getAttribute("NOF_SESSION_ATTRIBUTE");
-            if (nofSession != null) {
-                str.append(nofSession.getUserName());
-            }
-
-            str.append("\n");
-        }
-        */
+         * final Iterator<?> it = SessionAccess.getSessions().iterator(); while (it.hasNext()) { final HttpSession
+         * session = (HttpSession) it.next(); final String id = session.getId(); str.append(id); str.append(" \t");
+         * 
+         * final long creationTime = session.getCreationTime(); str.append(new Date(creationTime)); str.append(" \t");
+         * 
+         * final long lastAccessedTime = session.getLastAccessedTime(); str.append(new Date(lastAccessedTime));
+         * str.append(" \t");
+         * 
+         * final AuthenticationSession nofSession = (AuthenticationSession)
+         * session.getAttribute("NOF_SESSION_ATTRIBUTE"); if (nofSession != null) {
+         * str.append(nofSession.getUserName()); }
+         * 
+         * str.append("\n"); }
+         */
         return str.toString();
     }
 
@@ -95,4 +84,3 @@ public class MonitorServlet extends HttpServlet {
         monitor = new MonitorListenerImpl();
     }
 }
-

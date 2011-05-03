@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.exploration;
 
 import java.io.IOException;
@@ -33,78 +32,73 @@ import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 
-
 public final class MultiUserExplorationSession extends AuthenticationSessionAbstract implements Encodable {
-	
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 
     private final Set<SimpleSession> sessions = new LinkedHashSet<SimpleSession>();;
     private SimpleSession selectedSession;
-    
 
-	//////////////////////////////////////////////////////
-	// Constructors
-	//////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////
+    // Constructors
+    // ////////////////////////////////////////////////////
 
-    public MultiUserExplorationSession(Set<SimpleSession> sessions, String code) {
-    	super("unused", code);
+    public MultiUserExplorationSession(final Set<SimpleSession> sessions, final String code) {
+        super("unused", code);
         this.sessions.addAll(sessions);
         initialized();
     }
-    
-    public MultiUserExplorationSession(DataInputExtended input) throws IOException {
-    	super(input);
-    	sessions.addAll(Arrays.asList(input.readEncodables(SimpleSession.class)));
-    	selectedSession = input.readEncodable(SimpleSession.class);
-    	initialized();
+
+    public MultiUserExplorationSession(final DataInputExtended input) throws IOException {
+        super(input);
+        sessions.addAll(Arrays.asList(input.readEncodables(SimpleSession.class)));
+        selectedSession = input.readEncodable(SimpleSession.class);
+        initialized();
     }
-    
+
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
-    	output.writeEncodables(sessions.toArray());
-    	output.writeEncodable(selectedSession);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+        output.writeEncodables(sessions.toArray());
+        output.writeEncodable(selectedSession);
     }
-    
-	private void initialized() {
-		if (selectedSession == null && sessions.size() > 0) {
-			selectedSession = sessions.iterator().next();
-		}
-	}
 
-	
-	//////////////////////////////////////////////////////
-	// Overriding API
-	//////////////////////////////////////////////////////
+    private void initialized() {
+        if (selectedSession == null && sessions.size() > 0) {
+            selectedSession = sessions.iterator().next();
+        }
+    }
 
-	@Override
+    // ////////////////////////////////////////////////////
+    // Overriding API
+    // ////////////////////////////////////////////////////
+
+    @Override
     public String getUserName() {
         return selectedSession.getUserName();
     }
 
-	@Override
-	public boolean hasUserNameOf(String userName) {
-		for(SimpleSession session: sessions) {
-			if (session.hasUserNameOf(userName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	@Override
-    public List<String> getRoles() {
-    	return selectedSession.getRoles();
+    @Override
+    public boolean hasUserNameOf(final String userName) {
+        for (final SimpleSession session : sessions) {
+            if (session.hasUserNameOf(userName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-	
-	//////////////////////////////////////////////////////
-	// not API
-	//////////////////////////////////////////////////////
-	
-    public void setCurrentSession(String name) {
-        for (SimpleSession user : this.sessions) {
+    @Override
+    public List<String> getRoles() {
+        return selectedSession.getRoles();
+    }
+
+    // ////////////////////////////////////////////////////
+    // not API
+    // ////////////////////////////////////////////////////
+
+    public void setCurrentSession(final String name) {
+        for (final SimpleSession user : this.sessions) {
             if (user.getUserName().equals(name)) {
                 selectedSession = user;
                 break;
@@ -113,23 +107,20 @@ public final class MultiUserExplorationSession extends AuthenticationSessionAbst
     }
 
     public Set<String> getUserNames() {
-        Set<String> users = new LinkedHashSet<String>();
-        for (SimpleSession user : sessions) {
+        final Set<String> users = new LinkedHashSet<String>();
+        for (final SimpleSession user : sessions) {
             users.add(user.getUserName());
         }
         return users;
     }
 
+    // ////////////////////////////////////////////////////
+    // toString
+    // ////////////////////////////////////////////////////
 
-	//////////////////////////////////////////////////////
-	// toString
-	//////////////////////////////////////////////////////
-
-    
     @Override
     public String toString() {
         return new ToString(this).append("name", getUserNames()).append("userCount", sessions.size()).toString();
     }
-
 
 }

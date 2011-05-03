@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.List;
@@ -28,28 +27,42 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ServicesInjectorNoop implements ServicesInjector, Noop {
 
-    
-    public void open() {}
-    public void close() {}
-    
+    @Override
+    public void open() {
+    }
+
+    @Override
+    public void close() {
+    }
+
+    @Override
     public DomainObjectContainer getContainer() {
         return null;
     }
-    public void setContainer(DomainObjectContainer container) {}
-    
-    public void setServices(List<Object> services) {}
+
+    @Override
+    public void setContainer(final DomainObjectContainer container) {
+    }
+
+    @Override
+    public void setServices(final List<Object> services) {
+    }
+
+    @Override
     public List<Object> getRegisteredServices() {
         return null;
     }
 
-    public void injectDependencies(Object domainObject) {}
-    
-    public void injectDependencies(List<Object> objects) {}
-    
-    
-    public void injectInto(Object candidate) {}
-    
+    @Override
+    public void injectDependencies(final Object domainObject) {
+    }
+
+    @Override
+    public void injectDependencies(final List<Object> objects) {
+    }
+
+    @Override
+    public void injectInto(final Object candidate) {
+    }
 
 }
-
-

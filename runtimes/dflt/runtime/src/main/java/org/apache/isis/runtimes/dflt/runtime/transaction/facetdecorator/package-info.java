@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Transaction API.
  * 

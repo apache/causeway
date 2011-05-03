@@ -59,7 +59,6 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         super(deploymentType, localeInitializer, timeZoneInitializer);
     }
 
-
     @Override
     protected void installFixturesIfRequired() throws IsisSystemException {
         // some deployment types (eg CLIENT) do not support installing fixtures
@@ -86,10 +85,9 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         }
     }
 
-    private boolean isNoop(FixturesInstaller candidate) {
+    private boolean isNoop(final FixturesInstaller candidate) {
         return candidate == null || (fixtureInstaller instanceof Noop);
     }
-
 
     // ///////////////////////////////////////////
     // Fixtures
@@ -128,9 +126,8 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
     }
 
     @Override
-    protected void appendFixturesInstallerDebug(DebugBuilder debug) {
-        debug.appendln("Fixture Installer", fixtureInstaller == null ? "none" : fixtureInstaller.getClass()
-            .getName());
+    protected void appendFixturesInstallerDebug(final DebugBuilder debug) {
+        debug.appendln("Fixture Installer", fixtureInstaller == null ? "none" : fixtureInstaller.getClass().getName());
     }
 
 }

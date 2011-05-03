@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.List;
@@ -30,17 +29,18 @@ import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 
 import com.google.common.collect.Lists;
 
-
 /**
  * Has no functionality but makes it easier to write tests that require an instance of an {@link Identifier}.
  */
 public class FacetHolderNoop implements FacetHolder {
 
     @Override
-    public void addFacet(final Facet facet) {}
+    public void addFacet(final Facet facet) {
+    }
 
     @Override
-    public void addFacet(final MultiTypedFacet facet) {}
+    public void addFacet(final MultiTypedFacet facet) {
+    }
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
@@ -68,19 +68,22 @@ public class FacetHolderNoop implements FacetHolder {
     }
 
     @Override
-    public void removeFacet(final Facet facet) {}
+    public void removeFacet(final Facet facet) {
+    }
 
     @Override
-    public void removeFacet(final Class<? extends Facet> facetType) {}
+    public void removeFacet(final Class<? extends Facet> facetType) {
+    }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.isis.core.metamodel.facetapi.FacetHolder#containsDoOpFacet(java.lang.Class)
      */
     @Override
-    public boolean containsDoOpFacet(Class<? extends Facet> facetType) {
+    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
         // TODO Auto-generated method stub
         return false;
     }
 
 }
-

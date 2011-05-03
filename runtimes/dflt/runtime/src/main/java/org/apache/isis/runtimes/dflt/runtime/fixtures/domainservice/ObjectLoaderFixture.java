@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.fixtures.domainservice;
 
 import org.apache.isis.applib.annotation.Hidden;
@@ -25,24 +24,24 @@ import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
 
-
 public class ObjectLoaderFixture implements InstallableFixture {
-    
+
     private ObjectFixtureService service;
 
-    public void setService(ObjectFixtureService service){
+    public void setService(final ObjectFixtureService service) {
         this.service = service;
     }
-    
+
+    @Override
     public void install() {
         if (service != null) {
             service.loadFile();
         }
     }
 
+    @Override
     @Hidden
     public FixtureType getType() {
         return FixtureType.DOMAIN_OBJECTS;
     }
-}    
-
+}

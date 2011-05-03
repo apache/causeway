@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.ADDITIONAL_PROPERTY;
@@ -28,7 +27,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -36,44 +34,44 @@ import org.apache.isis.runtimes.dflt.runtime.runner.Constants;
 
 public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
 
-	private List<String> additionalProperties;
+    private List<String> additionalProperties;
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-        Option option = OptionBuilder.withArgName("property=value").hasArg().withValueSeparator().withDescription(
-        "use value for given property").create(ADDITIONAL_PROPERTY);
-		option.setArgs(Option.UNLIMITED_VALUES);
-		options.addOption(option);
-	}
-
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-        additionalProperties = getOptionValues(commandLine, Constants.ADDITIONAL_PROPERTY);
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
-	}
-
-    private void addConfigurationProperties(
-    		final IsisConfigurationBuilder isisConfigurationBuilder, 
-    		final List<String> additionalProperties) {
-        if (additionalProperties == null) {
-        	return;
-        } 
-        String key = null, value = null;
-		for (String additionalProperty: additionalProperties) {
-			if (key == null) {
-				key = additionalProperty;
-			} else {
-				value = additionalProperty;
-				isisConfigurationBuilder.add(key, value);
-				key = null;
-			}
-		}
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Option option =
+            OptionBuilder.withArgName("property=value").hasArg().withValueSeparator()
+                .withDescription("use value for given property").create(ADDITIONAL_PROPERTY);
+        option.setArgs(Option.UNLIMITED_VALUES);
+        options.addOption(option);
     }
 
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        additionalProperties = getOptionValues(commandLine, Constants.ADDITIONAL_PROPERTY);
+        return true;
+    }
 
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
+    }
+
+    private void addConfigurationProperties(final IsisConfigurationBuilder isisConfigurationBuilder,
+        final List<String> additionalProperties) {
+        if (additionalProperties == null) {
+            return;
+        }
+        String key = null, value = null;
+        for (final String additionalProperty : additionalProperties) {
+            if (key == null) {
+                key = additionalProperty;
+            } else {
+                value = additionalProperty;
+                isisConfigurationBuilder.add(key, value);
+                key = null;
+            }
+        }
+    }
 
 }

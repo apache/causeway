@@ -17,14 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
+
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.OBJECT_PERSISTENCE_LONG_OPT;
+import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.OBJECT_PERSISTENCE_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -33,40 +34,45 @@ import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.Pers
 import org.apache.isis.runtimes.dflt.runtime.runner.Constants;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
-import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.OBJECT_PERSISTENCE_LONG_OPT;
-import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.OBJECT_PERSISTENCE_OPT;
-
 public class OptionHandlerPersistor extends OptionHandlerAbstract {
 
-	private InstallerRepository installerRepository;
-	private String persistorName;
+    private final InstallerRepository installerRepository;
+    private String persistorName;
 
-	public OptionHandlerPersistor(final InstallerRepository installerRepository) {
-		this.installerRepository = installerRepository;
-	}
+    public OptionHandlerPersistor(final InstallerRepository installerRepository) {
+        this.installerRepository = installerRepository;
+    }
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-        Object[] objectPersistenceMechanisms = installerRepository.getInstallers(PersistenceMechanismInstaller.class);
-        Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(OBJECT_PERSISTENCE_LONG_OPT).withDescription(
-                "object persistence mechanism to use (ignored if type is prototype or client): " + availableInstallers(objectPersistenceMechanisms)
-                        + "; or class name").create(OBJECT_PERSISTENCE_OPT);
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Object[] objectPersistenceMechanisms =
+            installerRepository.getInstallers(PersistenceMechanismInstaller.class);
+        final Option option =
+            OptionBuilder
+                .withArgName("name|class name")
+                .hasArg()
+                .withLongOpt(OBJECT_PERSISTENCE_LONG_OPT)
+                .withDescription(
+                    "object persistence mechanism to use (ignored if type is prototype or client): "
+                        + availableInstallers(objectPersistenceMechanisms) + "; or class name")
+                .create(OBJECT_PERSISTENCE_OPT);
         options.addOption(option);
-	}
+    }
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		persistorName = commandLine.getOptionValue(Constants.OBJECT_PERSISTENCE_OPT);		
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY, persistorName);
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        persistorName = commandLine.getOptionValue(Constants.OBJECT_PERSISTENCE_OPT);
+        return true;
+    }
 
-	
-	public String getPersistorName() {
-		return persistorName;
-	}
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY, persistorName);
+    }
+
+    public String getPersistorName() {
+        return persistorName;
+    }
 
 }

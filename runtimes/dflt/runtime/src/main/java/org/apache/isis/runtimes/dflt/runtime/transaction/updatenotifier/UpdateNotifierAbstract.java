@@ -17,42 +17,37 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier;
 
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.log4j.Logger;
 
-
 public abstract class UpdateNotifierAbstract implements UpdateNotifier {
-	
-    @SuppressWarnings("unused")
-	private static final Logger LOG = Logger.getLogger(UpdateNotifierAbstract.class);
 
-    
-    ////////////////////////////////////////////////////
+    @SuppressWarnings("unused")
+    private static final Logger LOG = Logger.getLogger(UpdateNotifierAbstract.class);
+
+    // //////////////////////////////////////////////////
     // Constructor
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     public UpdateNotifierAbstract() {
         // does nothing
     }
-    
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Injectable
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     /**
      * Injects.
      */
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (UpdateNotifierAware.class.isAssignableFrom(candidate.getClass())) {
-        	UpdateNotifierAware cast = UpdateNotifierAware.class.cast(candidate);
+            final UpdateNotifierAware cast = UpdateNotifierAware.class.cast(candidate);
             cast.setUpdateNotifier(this);
         }
     }
-    
 
 }
-

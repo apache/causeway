@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,12 +28,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 
-
 public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFromFacetAbstract implements
-        DecoratingFacet<CollectionRemoveFromFacet> {
+    DecoratingFacet<CollectionRemoveFromFacet> {
 
     private final CollectionRemoveFromFacet underlyingFacet;
 
+    @Override
     public CollectionRemoveFromFacet getDecoratedFacet() {
         return underlyingFacet;
     }
@@ -44,17 +43,19 @@ public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFr
         this.underlyingFacet = underlyingFacet;
     }
 
+    @Override
     public void remove(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
         if (adapter.isTransient()) {
-        	// NOT !adapter.isPersistent();
-        	// (value adapters are neither persistent or transient) 
+            // NOT !adapter.isPersistent();
+            // (value adapters are neither persistent or transient)
             underlyingFacet.remove(adapter, referencedAdapter);
         } else {
-        	getTransactionManager().executeWithinTransaction(
-    			new TransactionalClosureAbstract(){
-    				public void execute() {
-    					underlyingFacet.remove(adapter, referencedAdapter);
-    				}});
+            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+                @Override
+                public void execute() {
+                    underlyingFacet.remove(adapter, referencedAdapter);
+                }
+            });
         }
     }
 
@@ -63,11 +64,10 @@ public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFr
         return super.toString() + " --> " + underlyingFacet.toString();
     }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////
+
     private static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
@@ -76,7 +76,4 @@ public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFr
         return IsisContext.getPersistenceSession();
     }
 
-
-
 }
-

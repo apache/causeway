@@ -17,26 +17,28 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dummy;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 
-
 public class DummyPersistAlgorithm implements PersistAlgorithm {
 
+    @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet adder) {
         adder.addPersistedObject(object);
     }
 
+    @Override
     public String name() {
         return null;
     }
 
-    public void init() {}
+    public void init() {
+    }
 
-    public void shutdown() {}
+    public void shutdown() {
+    }
 
 }

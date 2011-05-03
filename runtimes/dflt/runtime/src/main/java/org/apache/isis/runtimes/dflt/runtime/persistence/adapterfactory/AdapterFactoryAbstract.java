@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,28 +25,32 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public abstract class AdapterFactoryAbstract implements ObjectAdapterFactory {
 
+    @Override
     public abstract ObjectAdapter createAdapter(Object pojo, Oid oid);
 
     /**
      * Default implementation does nothing.
      */
-    public void open() {}
+    @Override
+    public void open() {
+    }
 
     /**
      * Default implementation does nothing.
      */
-    public void close() {}
-    
+    @Override
+    public void close() {
+    }
+
     /**
      * Injects.
      */
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         if (AdapterFactoryAware.class.isAssignableFrom(candidate.getClass())) {
-            AdapterFactoryAware cast = AdapterFactoryAware.class.cast(candidate);
+            final AdapterFactoryAware cast = AdapterFactoryAware.class.cast(candidate);
             cast.setAdapterFactory(this);
         }
     }
 
 }
-
-

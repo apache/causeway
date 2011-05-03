@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,35 +26,36 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
 
 public final class OptionHandlerAddress implements OptionHandler {
-	private String address;
-	static final String ADDRESS_OPT = "a";
-	static final String ADDRESS_LONG_OPT = "address";
+    private String address;
+    static final String ADDRESS_OPT = "a";
+    static final String ADDRESS_LONG_OPT = "address";
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-	    Option option = OptionBuilder.withArgName("address").hasArg().withLongOpt(OptionHandlerAddress.ADDRESS_LONG_OPT).withDescription(
-	    "address to listen on").create(OptionHandlerAddress.ADDRESS_OPT);
-	    options.addOption(option);
-	}
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Option option =
+            OptionBuilder.withArgName("address").hasArg().withLongOpt(OptionHandlerAddress.ADDRESS_LONG_OPT)
+                .withDescription("address to listen on").create(OptionHandlerAddress.ADDRESS_OPT);
+        options.addOption(option);
+    }
 
-	public boolean handle(CommandLine commandLine,
-			BootPrinter bootPrinter, Options options) {
-	    address = commandLine.getOptionValue(OptionHandlerAddress.ADDRESS_OPT);
-		return true;
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        address = commandLine.getOptionValue(OptionHandlerAddress.ADDRESS_OPT);
+        return true;
+    }
 
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		if (address == null) {
-			return;
-		}
-		isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_ADDRESS_KEY, address);
-	}
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        if (address == null) {
+            return;
+        }
+        isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_ADDRESS_KEY, address);
+    }
 }

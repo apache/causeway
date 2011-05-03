@@ -63,7 +63,7 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
 
     protected static class AdapterFactoryTestProxyAdapter extends AdapterFactoryAbstract {
         @Override
-        public TestProxyAdapter createAdapter(Object pojo, Oid oid) {
+        public TestProxyAdapter createAdapter(final Object pojo, final Oid oid) {
             final TestProxyAdapter testProxyObjectAdapter = new TestProxyAdapter();
             testProxyObjectAdapter.setupObject(pojo);
             testProxyObjectAdapter.setupOid(oid);
@@ -122,8 +122,8 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
         super(persistenceSessionFactory, new AdapterFactoryTestProxyAdapter(), new TestObjectFactory(Mode.RELAXED) {
         }, new ServicesInjectorDefault(), new TestProxyOidGenerator(), new AdapterManagerDefault());
 
-        RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
-        DomainObjectContainerDefault container = new DomainObjectContainerDefault();
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
 
@@ -145,7 +145,7 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter loadObject(Oid oid, ObjectSpecification spec) {
+    public ObjectAdapter loadObject(final Oid oid, final ObjectSpecification spec) {
         ensureThatArg(oid, is(notNullValue()));
         ensureThatArg(spec, is(notNullValue()));
 
@@ -167,7 +167,7 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     }
 
     @Override
-    public void makePersistent(ObjectAdapter object) {
+    public void makePersistent(final ObjectAdapter object) {
 
         // the object store implementation calls to the PersistAlgorithm that interacts with
         // the ObjectStore and then ultimately for each object invokes madePersistent.
@@ -179,13 +179,13 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     }
 
     @Override
-    public void objectChanged(ObjectAdapter object) {
+    public void objectChanged(final ObjectAdapter object) {
         actions.addElement("object changed " + object.getOid());
         object.setOptimisticLock(((TestProxyVersion) object.getVersion()).next());
     }
 
     @Override
-    public void destroyObject(ObjectAdapter object) {
+    public void destroyObject(final ObjectAdapter object) {
         actions.addElement("object deleted " + object.getOid());
     }
 
@@ -203,32 +203,32 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public void resolveImmediately(ObjectAdapter object) {
+    public void resolveImmediately(final ObjectAdapter object) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public void resolveField(ObjectAdapter object, ObjectAssociation association) {
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation association) {
         actions.addElement("object deleted " + object.getOid());
     }
 
     @Override
-    protected ObjectAdapter[] getInstances(PersistenceQuery criteria) {
+    protected ObjectAdapter[] getInstances(final PersistenceQuery criteria) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    protected Oid getOidForService(String name) {
+    protected Oid getOidForService(final String name) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    protected void registerService(String name, Oid oid) {
+    protected void registerService(final String name, final Oid oid) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public void reload(ObjectAdapter adapter) {
+    public void reload(final ObjectAdapter adapter) {
         throw new NotYetImplementedException();
     }
 
@@ -238,7 +238,7 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     }
 
     @Override
-    public boolean hasInstances(ObjectSpecification specification) {
+    public boolean hasInstances(final ObjectSpecification specification) {
         throw new NotYetImplementedException();
     }
 

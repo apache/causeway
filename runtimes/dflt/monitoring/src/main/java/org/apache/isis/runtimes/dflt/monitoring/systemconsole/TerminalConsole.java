@@ -94,7 +94,7 @@ public final class TerminalConsole implements ServerConsole, Runnable {
 
         try {
             while (running) {
-                String readLine = dis.readLine();
+                final String readLine = dis.readLine();
                 if (readLine == null) {
                     quit();
                     continue;

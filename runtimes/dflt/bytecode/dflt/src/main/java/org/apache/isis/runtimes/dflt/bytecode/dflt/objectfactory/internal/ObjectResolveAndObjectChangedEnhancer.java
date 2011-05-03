@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal;
 
 import java.lang.reflect.Method;
@@ -41,76 +40,70 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectRes
 
 public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjectChangedEnhancerAbstract {
 
-	private Callback callback;
+    private Callback callback;
 
-	/**
-	 * Cache of Enhancers, lazy populated.
-	 */
-	private final Map<Class<?>, Enhancer> enhancerByClass = new HashMap<Class<?>, Enhancer>();
+    /**
+     * Cache of Enhancers, lazy populated.
+     */
+    private final Map<Class<?>, Enhancer> enhancerByClass = new HashMap<Class<?>, Enhancer>();
 
-	public ObjectResolveAndObjectChangedEnhancer(
-			final ObjectResolver objectResolver,
-			final ObjectChanger objectChanger,
-			final SpecificationLoader specificationLoader) {
-		super(objectResolver, objectChanger, specificationLoader);
-		
-		createCallback();
-	}
+    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver,
+        final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+        super(objectResolver, objectChanger, specificationLoader);
 
-	@Override
-	protected void createCallback() {
-		this.callback = new MethodInterceptor() {
+        createCallback();
+    }
 
-			public Object intercept(
-					final Object proxied, 
-					final Method proxiedMethod,
-					final Object[] args, 
-					final MethodProxy proxyMethod) throws Throwable {
+    @Override
+    protected void createCallback() {
+        this.callback = new MethodInterceptor() {
 
-				boolean ignore = proxiedMethod.getDeclaringClass().equals(Object.class);
-				ImperativeFacetFlags flags = null;
-				
-				if (!ignore) {
-					final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(proxiedMethod);
-					final ObjectMember member = targetObjSpec.getMember(proxiedMethod);
-					
-					flags = ImperativeFacetUtils.getImperativeFacetFlags(member, proxiedMethod);
-					
-					if (flags.impliesResolve()) {
-						objectResolver.resolve(proxied, member.getName());
-					}
-				}
+            @Override
+            public Object intercept(final Object proxied, final Method proxiedMethod, final Object[] args,
+                final MethodProxy proxyMethod) throws Throwable {
 
-				final Object proxiedReturn = proxyMethod.invokeSuper(proxied, args);
+                final boolean ignore = proxiedMethod.getDeclaringClass().equals(Object.class);
+                ImperativeFacetFlags flags = null;
 
-				if (!ignore && flags.impliesObjectChanged()) {
-					objectChanger.objectChanged(proxied);
-				}
+                if (!ignore) {
+                    final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(proxiedMethod);
+                    final ObjectMember member = targetObjSpec.getMember(proxiedMethod);
 
-				return proxiedReturn;
-			}
+                    flags = ImperativeFacetUtils.getImperativeFacetFlags(member, proxiedMethod);
 
-		};
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T> T newInstance(Class<T> cls) {
-		Enhancer enhancer = lookupOrCreateEnhancerFor(cls);
-		return (T) enhancer.create();
-	}
-	
-	private Enhancer lookupOrCreateEnhancerFor(Class<?> cls) {
-		Enhancer enhancer = enhancerByClass.get(cls);
-		if (enhancer == null) {
-			enhancer = new Enhancer();
-			enhancer.setSuperclass(cls);
-			enhancer.setInterfaces(ArrayUtils.combine(
-					cls.getInterfaces(),
-					new Class<?>[] { CglibEnhanced.class }));
-			enhancer.setCallback(callback);
-			enhancerByClass.put(cls, enhancer);
-		}
-		return enhancer;
-	}
+                    if (flags.impliesResolve()) {
+                        objectResolver.resolve(proxied, member.getName());
+                    }
+                }
+
+                final Object proxiedReturn = proxyMethod.invokeSuper(proxied, args);
+
+                if (!ignore && flags.impliesObjectChanged()) {
+                    objectChanger.objectChanged(proxied);
+                }
+
+                return proxiedReturn;
+            }
+
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T newInstance(final Class<T> cls) {
+        final Enhancer enhancer = lookupOrCreateEnhancerFor(cls);
+        return (T) enhancer.create();
+    }
+
+    private Enhancer lookupOrCreateEnhancerFor(final Class<?> cls) {
+        Enhancer enhancer = enhancerByClass.get(cls);
+        if (enhancer == null) {
+            enhancer = new Enhancer();
+            enhancer.setSuperclass(cls);
+            enhancer.setInterfaces(ArrayUtils.combine(cls.getInterfaces(), new Class<?>[] { CglibEnhanced.class }));
+            enhancer.setCallback(callback);
+            enhancerByClass.put(cls, enhancer);
+        }
+        return enhancer;
+    }
 
 }

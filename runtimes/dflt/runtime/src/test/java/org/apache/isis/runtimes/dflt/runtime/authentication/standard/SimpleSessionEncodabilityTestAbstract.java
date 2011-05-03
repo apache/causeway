@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,17 +28,13 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 
 public abstract class SimpleSessionEncodabilityTestAbstract extends EncodabilityContractTest {
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		SimpleSession decoded = (SimpleSession) decodedEncodable;
-		SimpleSession original = (SimpleSession) originalEncodable;
-		
-		assertThat(decoded.getUserName(), is(equalTo(original.getUserName())));
-		assertThat(decoded.getRoles(), is(equalTo(original.getRoles())));
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final SimpleSession decoded = (SimpleSession) decodedEncodable;
+        final SimpleSession original = (SimpleSession) originalEncodable;
+
+        assertThat(decoded.getUserName(), is(equalTo(original.getUserName())));
+        assertThat(decoded.getRoles(), is(equalTo(original.getRoles())));
+    }
 
 }
-
-

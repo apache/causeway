@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.twopass;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.twopass.TwoPassPersistAlgorithm;
-
 
 public class TwoPassPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 
@@ -33,4 +30,3 @@ public class TwoPassPersistAlgorithmContractTest extends PersistAlgorithmContrac
     }
 
 }
-

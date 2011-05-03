@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * These interfaces are extended by {@link org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession}
  * and not intended to be implemented directly.

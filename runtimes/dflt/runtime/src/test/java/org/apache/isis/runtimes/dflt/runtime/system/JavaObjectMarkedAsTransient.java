@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import org.apache.isis.applib.marker.NonPersistable;
-
 
 public class JavaObjectMarkedAsTransient implements NonPersistable {
 

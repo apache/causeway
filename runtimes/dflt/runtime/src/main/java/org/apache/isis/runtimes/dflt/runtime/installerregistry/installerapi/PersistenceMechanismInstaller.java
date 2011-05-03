@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
@@ -26,15 +25,13 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-
 /**
  * Installs a {@link PersistenceSession} during system start up.
  */
 public interface PersistenceMechanismInstaller extends Installer, PersistenceSessionFactoryDelegate {
 
-	static String TYPE = "persistor";
-	
-    PersistenceSessionFactory createPersistenceSessionFactory(DeploymentType deploymentType);
+    static String TYPE = "persistor";
 
+    PersistenceSessionFactory createPersistenceSessionFactory(DeploymentType deploymentType);
 
 }

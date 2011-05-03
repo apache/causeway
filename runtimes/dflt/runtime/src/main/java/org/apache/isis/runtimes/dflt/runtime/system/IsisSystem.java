@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
@@ -28,7 +27,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 public interface IsisSystem extends DebugSelection, ApplicationScopedComponent {
 
     DeploymentType getDeploymentType();
-    
+
     LogonFixture getLogonFixture();
 
     /**
@@ -36,12 +35,10 @@ public interface IsisSystem extends DebugSelection, ApplicationScopedComponent {
      */
     public IsisSessionFactory getSessionFactory();
 
-	/**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration} (although
-     * once the {@link IsisSystem} is completely initialized, will effectively be immutable).
+    /**
+     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration} (although once the {@link IsisSystem} is
+     * completely initialized, will effectively be immutable).
      */
-	IsisConfiguration getConfiguration();
+    IsisConfiguration getConfiguration();
 
 }
-
-

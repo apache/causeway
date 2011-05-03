@@ -20,12 +20,12 @@
 package org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory;
 
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
+import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactoryAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
-import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 
 public class CglibObjectFactory extends ObjectFactoryAbstract {
 
@@ -42,17 +42,17 @@ public class CglibObjectFactory extends ObjectFactoryAbstract {
         changer = new DomainObjectContainerObjectChanged();
         resolver = new DomainObjectContainerResolve();
 
-        ObjectResolver objectResolver = new ObjectResolver() {
+        final ObjectResolver objectResolver = new ObjectResolver() {
             @Override
-            public void resolve(Object domainObject, String propertyName) {
+            public void resolve(final Object domainObject, final String propertyName) {
                 // TODO: could do better than this by maintaining a map of resolved
                 // properties on the ObjectAdapter adapter.
                 resolver.resolve(domainObject);
             }
         };
-        ObjectChanger objectChanger = new ObjectChanger() {
+        final ObjectChanger objectChanger = new ObjectChanger() {
             @Override
-            public void objectChanged(Object domainObject) {
+            public void objectChanged(final Object domainObject) {
                 changer.objectChanged(domainObject);
             }
         };
@@ -62,7 +62,7 @@ public class CglibObjectFactory extends ObjectFactoryAbstract {
     }
 
     @Override
-    public <T> T doInstantiate(Class<T> cls) throws ObjectInstantiationException {
+    public <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {
         return classEnhancer.newInstance(cls);
     }
 

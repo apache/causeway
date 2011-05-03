@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 
 /**
  * Corresponds to {@link QueryFindAllInstances}
@@ -37,6 +35,7 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
     /**
      * Returns true so it matches all instances.
      */
+    @Override
     public boolean matches(final ObjectAdapter object) {
         return true;
     }
@@ -48,4 +47,3 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
         return str.toString();
     }
 }
-

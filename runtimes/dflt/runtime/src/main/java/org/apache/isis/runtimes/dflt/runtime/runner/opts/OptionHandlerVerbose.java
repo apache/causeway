@@ -17,38 +17,36 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.VERBOSE_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 public class OptionHandlerVerbose extends OptionHandlerAbstract {
 
-	public OptionHandlerVerbose() {
-		super();
-	}
+    public OptionHandlerVerbose() {
+        super();
+    }
 
-	public void addOption(Options options) {
-		options.addOption(VERBOSE_OPT, false, "print information, warning and error messages");
-	}
+    @Override
+    public void addOption(final Options options) {
+        options.addOption(VERBOSE_OPT, false, "print information, warning and error messages");
+    }
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		// TODO need to do what, exactly???
-		
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        return true;
+    }
 
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        // TODO need to do what, exactly???
+
+    }
 
 }

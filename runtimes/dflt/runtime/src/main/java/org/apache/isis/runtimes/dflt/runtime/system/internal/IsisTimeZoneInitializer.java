@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.internal;
 
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.log4j.Logger;
 
 public class IsisTimeZoneInitializer {
 
     public static final Logger LOG = Logger.getLogger(IsisTimeZoneInitializer.class);
 
-    public void initTimeZone(IsisConfiguration configuration) {
+    public void initTimeZone(final IsisConfiguration configuration) {
         final String timeZoneSpec = configuration.getString(ConfigurationConstants.ROOT + "timezone");
         if (timeZoneSpec != null) {
             TimeZone timeZone;
@@ -42,7 +40,4 @@ public class IsisTimeZoneInitializer {
         LOG.debug("time zone is " + TimeZone.getDefault());
     }
 
-
 }
-
-

@@ -17,34 +17,32 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
-
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 public class MonitorEvent {
     private static int nextSerialId = 1;
     private final int serialId = nextSerialId++;
     private final String message;
     private final String category;
-    private DebugString debug;
+    private final DebugString debug;
 
-    public MonitorEvent(final String category, final String message, DebuggableWithTitle[] debugDetails) {
+    public MonitorEvent(final String category, final String message, final DebuggableWithTitle[] debugDetails) {
         this.message = message;
         this.category = category;
         debug = new DebugString();
         try {
             if (debugDetails != null) {
-                for (DebuggableWithTitle info : debugDetails) {
+                for (final DebuggableWithTitle info : debugDetails) {
                     debug.appendTitle(info.debugTitle());
                     debug.indent();
                     info.debugData(debug);
                     debug.unindent();
                 }
             }
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug.appendException(e);
         }
     }
@@ -70,4 +68,3 @@ public class MonitorEvent {
         return category + ": " + message;
     }
 }
-

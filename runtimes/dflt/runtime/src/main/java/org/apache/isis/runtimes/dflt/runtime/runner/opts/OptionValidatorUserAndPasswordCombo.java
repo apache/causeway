@@ -17,30 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-public final class OptionValidatorUserAndPasswordCombo implements
-        OptionValidator {
-    
+public final class OptionValidatorUserAndPasswordCombo implements OptionValidator {
+
     private final OptionHandlerUser optionHandlerUser;
     private final OptionHandlerPassword optionHandlerPassword;
 
-    public OptionValidatorUserAndPasswordCombo(
-            OptionHandlerUser optionHandlerUser,
-            OptionHandlerPassword optionHandlerPassword) {
+    public OptionValidatorUserAndPasswordCombo(final OptionHandlerUser optionHandlerUser,
+        final OptionHandlerPassword optionHandlerPassword) {
         this.optionHandlerPassword = optionHandlerPassword;
         this.optionHandlerUser = optionHandlerUser;
     }
 
     @Override
-    public Maybe<String> validate(DeploymentType deploymentType) {
-        String user = optionHandlerUser.getUserName();
-        String password = optionHandlerPassword.getPassword();
-        boolean ok = (password == null && user == null) || (password != null && user != null);
+    public Maybe<String> validate(final DeploymentType deploymentType) {
+        final String user = optionHandlerUser.getUserName();
+        final String password = optionHandlerPassword.getPassword();
+        final boolean ok = (password == null && user == null) || (password != null && user != null);
         return Maybe.notSetIf(ok, "A user name must be specified with a password");
     }
 }

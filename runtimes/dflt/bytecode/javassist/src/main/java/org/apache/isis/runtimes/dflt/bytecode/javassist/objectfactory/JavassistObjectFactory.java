@@ -17,25 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.javassist.objectfactory;
 
-import org.apache.isis.runtimes.dflt.bytecode.javassist.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAware;
+import org.apache.isis.runtimes.dflt.bytecode.javassist.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectFactoryAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class JavassistObjectFactory extends ObjectFactoryAbstract {
 
     private ObjectResolveAndObjectChangedEnhancer classEnhancer;
     private DomainObjectContainerResolve resolver;
     private DomainObjectContainerObjectChanged changer;
-
 
     public JavassistObjectFactory() {
     }
@@ -46,26 +42,28 @@ public class JavassistObjectFactory extends ObjectFactoryAbstract {
         changer = new DomainObjectContainerObjectChanged();
         resolver = new DomainObjectContainerResolve();
 
-        ObjectResolver objectResolver = new ObjectResolver() {
-            public void resolve(Object domainObject, String propertyName) {
+        final ObjectResolver objectResolver = new ObjectResolver() {
+            @Override
+            public void resolve(final Object domainObject, final String propertyName) {
                 // TODO: could do better than this by maintaining a map of resolved
                 // properties on the ObjectAdapter adapter.
                 resolver.resolve(domainObject);
             }
         };
-        ObjectChanger objectChanger = new ObjectChanger() {
-            public void objectChanged(Object domainObject) {
+        final ObjectChanger objectChanger = new ObjectChanger() {
+            @Override
+            public void objectChanged(final Object domainObject) {
                 changer.objectChanged(domainObject);
             }
         };
-        
-        classEnhancer = new ObjectResolveAndObjectChangedEnhancer(objectResolver, objectChanger, getSpecificationLoader());
+
+        classEnhancer =
+            new ObjectResolveAndObjectChangedEnhancer(objectResolver, objectChanger, getSpecificationLoader());
     }
-    
-    public <T> T doInstantiate(Class<T> cls) throws ObjectInstantiationException {
+
+    @Override
+    public <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {
         return classEnhancer.newInstance(cls);
     }
 
-    
-    
 }

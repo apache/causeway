@@ -17,13 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
-
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpy;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Mockery;
@@ -32,31 +37,16 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpy;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransaction;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
 
 @RunWith(JMock.class)
 public class TransactionTest {
 
-    private Mockery mockery = new JUnit4Mockery();
-
+    private final Mockery mockery = new JUnit4Mockery();
 
     private ObjectAdapter object1;
     private ObjectAdapter object2;
     private ObjectStoreSpy os;
     private ObjectStoreTransaction t;
-
 
     private IsisTransactionManager mockTransactionManager;
     private MessageBroker mockMessageBroker;
@@ -65,8 +55,11 @@ public class TransactionTest {
     private CreateObjectCommand createCreateCommand(final ObjectAdapter object, final String name) {
         return new CreateObjectCommand() {
 
-            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {}
+            @Override
+            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+            }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
@@ -81,8 +74,11 @@ public class TransactionTest {
     private DestroyObjectCommand createDestroyCommand(final ObjectAdapter object, final String name) {
         return new DestroyObjectCommand() {
 
-            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {}
+            @Override
+            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+            }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
@@ -96,8 +92,11 @@ public class TransactionTest {
 
     private SaveObjectCommand createSaveCommand(final ObjectAdapter object, final String name) {
         return new SaveObjectCommand() {
-            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {}
+            @Override
+            public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+            }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
@@ -111,10 +110,12 @@ public class TransactionTest {
 
     private SaveObjectCommand createCommandThatAborts(final ObjectAdapter object, final String name) {
         return new SaveObjectCommand() {
+            @Override
             public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
                 throw new ObjectPersistenceException();
             }
 
+            @Override
             public ObjectAdapter onObject() {
                 return object;
             }
@@ -133,14 +134,12 @@ public class TransactionTest {
         final TestProxySystem system = new TestProxySystem();
         system.init();
 
-
         mockTransactionManager = mockery.mock(IsisTransactionManager.class);
         mockMessageBroker = mockery.mock(MessageBroker.class);
         mockUpdateNotifier = mockery.mock(UpdateNotifier.class);
 
         os = new ObjectStoreSpy();
-        t = new ObjectStoreTransaction(
-                mockTransactionManager, mockMessageBroker, mockUpdateNotifier, os);
+        t = new ObjectStoreTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, os);
 
         object1 = system.createTransientTestObject();
         object2 = system.createTransientTestObject();
@@ -170,7 +169,8 @@ public class TransactionTest {
         try {
             t.commit();
             fail();
-        } catch (final ObjectPersistenceException expected) {}
+        } catch (final ObjectPersistenceException expected) {
+        }
         // previously the xactn invoked "endTransaction" on the OS, but this is
         // now done by the xactn mgr.
         // os.assertAction(0, "endTransaction");
@@ -271,33 +271,32 @@ public class TransactionTest {
         assertEquals(0, os.getActions().size());
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyAbortedTransaction() throws Exception {
         t.abort();
 
         t.abort();
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyAbortedTransaction() throws Exception {
         t.abort();
 
         t.commit();
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyCommitedTransaction() throws Exception {
         t.commit();
 
         t.abort();
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyCommitedTransaction() throws Exception {
         t.commit();
 
         t.commit();
     }
-
 
 }

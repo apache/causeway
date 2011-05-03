@@ -17,8 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
+import static org.hamcrest.CoreMatchers.is;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -26,133 +29,129 @@ import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringi
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
-import static org.hamcrest.CoreMatchers.is;
-
-
 /**
  * Generates OIDs based on monotonically.
  * 
  * <p>
- * Specifies the {@link OidStringifierDirect} as the {@link #getOidStringifier() OID stringifier} 
- * ({@link SerialOid} is conformant)).
+ * Specifies the {@link OidStringifierDirect} as the {@link #getOidStringifier() OID stringifier} ({@link SerialOid} is
+ * conformant)).
  */
 public class SimpleOidGenerator extends OidGeneratorAbstract {
 
-	public static class Memento {
-		private long persistentSerialNumber;
-		private long transientSerialNumber;
-	    Memento(long persistentSerialNumber, long transientSerialNumber) {
-			this.persistentSerialNumber = persistentSerialNumber;
-			this.transientSerialNumber = transientSerialNumber;
-		}
-		public long getTransientSerialNumber() {
-			return transientSerialNumber;
-		}
-		public long getPersistentSerialNumber() {
-			return persistentSerialNumber;
-		}
-	}
-	
+    public static class Memento {
+        private final long persistentSerialNumber;
+        private final long transientSerialNumber;
+
+        Memento(final long persistentSerialNumber, final long transientSerialNumber) {
+            this.persistentSerialNumber = persistentSerialNumber;
+            this.transientSerialNumber = transientSerialNumber;
+        }
+
+        public long getTransientSerialNumber() {
+            return transientSerialNumber;
+        }
+
+        public long getPersistentSerialNumber() {
+            return persistentSerialNumber;
+        }
+    }
+
     private long persistentSerialNumber;
     private long transientSerialNumber;
-    private long aggregatedId; 
+    private long aggregatedId;
 
-    
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // constructor
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     public SimpleOidGenerator() {
         this(1);
     }
 
     /**
-     * Persistent {@link Oid}s count up from the provided seed parameter, while
-     * {@link Oid#isTransient()} transient {@link Oid}s count down.  
+     * Persistent {@link Oid}s count up from the provided seed parameter, while {@link Oid#isTransient()} transient
+     * {@link Oid}s count down.
      */
     public SimpleOidGenerator(final long seed) {
         this(seed, Long.MIN_VALUE + seed);
     }
 
-    public SimpleOidGenerator(Memento memento) {
+    public SimpleOidGenerator(final Memento memento) {
         this(memento.getPersistentSerialNumber(), memento.getTransientSerialNumber());
     }
 
-    private SimpleOidGenerator(long persistentSerialNumber, long transientSerialNumber) {
-    	super(new OidStringifierDirect(SerialOid.class));
+    private SimpleOidGenerator(final long persistentSerialNumber, final long transientSerialNumber) {
+        super(new OidStringifierDirect(SerialOid.class));
         ensureThatArg(persistentSerialNumber, is(greaterThan(0L)));
-		this.persistentSerialNumber = persistentSerialNumber;
-		this.transientSerialNumber = transientSerialNumber;
-	}
+        this.persistentSerialNumber = persistentSerialNumber;
+        this.transientSerialNumber = transientSerialNumber;
+    }
 
-	////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // name
-    ////////////////////////////////////////////////////////////////
-
+    // //////////////////////////////////////////////////////////////
 
     public String name() {
         return "Simple Serial OID Generator";
     }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // main API
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
-
+    @Override
     public synchronized SerialOid createTransientOid(final Object object) {
         return SerialOid.createTransient(transientSerialNumber--); // counts down
     }
 
+    @Override
     public synchronized void convertTransientToPersistentOid(final Oid oid) {
-    	if (!(oid instanceof SerialOid)) {
-    		throw new IllegalArgumentException("Oid is not a SerialOid");
-    	}
+        if (!(oid instanceof SerialOid)) {
+            throw new IllegalArgumentException("Oid is not a SerialOid");
+        }
         final SerialOid serialOid = (SerialOid) oid;
         serialOid.setId(persistentSerialNumber++); // counts up
-        serialOid.makePersistent(); 
+        serialOid.makePersistent();
     }
 
-    public String createAggregateId(Object pojo) {
+    @Override
+    public String createAggregateId(final Object pojo) {
         return Long.toHexString(aggregatedId++);
     }
 
-
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Memento (not API)
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     public Memento getMemento() {
-    	return new Memento(this.persistentSerialNumber, this.transientSerialNumber);
+        return new Memento(this.persistentSerialNumber, this.transientSerialNumber);
     }
 
     /**
      * Reset to a {@link Memento} previously obtained via {@link #getMemento()}.
      * 
      * <p>
-     * Used in particular by the <tt>InMemoryObjectStore</tt> to reset (a new {@link OidGenerator}
-     * is created each time).
+     * Used in particular by the <tt>InMemoryObjectStore</tt> to reset (a new {@link OidGenerator} is created each
+     * time).
      */
-	public void resetTo(Memento memento) {
-		this.persistentSerialNumber = memento.getPersistentSerialNumber();
-		this.transientSerialNumber = memento.getTransientSerialNumber();
-	}
+    public void resetTo(final Memento memento) {
+        this.persistentSerialNumber = memento.getPersistentSerialNumber();
+        this.transientSerialNumber = memento.getTransientSerialNumber();
+    }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // debug
-    ////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("Persistent", persistentSerialNumber);
         debug.appendln("Transient", transientSerialNumber);
     }
 
+    @Override
     public String debugTitle() {
         return name();
     }
-
-
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -28,32 +27,34 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
-
 public final class AdapterUtils {
-    private AdapterUtils() {}
+    private AdapterUtils() {
+    }
 
-    public static ObjectAdapter createAdapter(final Class<?> type, final Object object, AdapterManager adapterManager, SpecificationLoader specificationLoader) {
-	    final ObjectSpecification specification = specificationLoader.loadSpecification(type);
-	    if (specification.isNotCollection()) {
-	        return adapterManager.adapterFor(object);
-	    } else {
-	        throw new UnknownTypeException("not an object, is this a collection?");
-	    }
-	}
+    public static ObjectAdapter createAdapter(final Class<?> type, final Object object,
+        final AdapterManager adapterManager, final SpecificationLoader specificationLoader) {
+        final ObjectSpecification specification = specificationLoader.loadSpecification(type);
+        if (specification.isNotCollection()) {
+            return adapterManager.adapterFor(object);
+        } else {
+            throw new UnknownTypeException("not an object, is this a collection?");
+        }
+    }
 
-	public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, AdapterManager adapterManager) {
-	    final ObjectAdapter collection = adapterManager.adapterFor(option);
-	    final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-	    final Object[] optionArray = new Object[facet.size(collection)];
-	    int j = 0;
-	    for(ObjectAdapter adapter: facet.iterable(collection)) {
-			optionArray[j++] = adapter.getObject();
-	    }
-	    return optionArray;
-	}
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec,
+        final AdapterManager adapterManager) {
+        final ObjectAdapter collection = adapterManager.adapterFor(option);
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final Object[] optionArray = new Object[facet.size(collection)];
+        int j = 0;
+        for (final ObjectAdapter adapter : facet.iterable(collection)) {
+            optionArray[j++] = adapter.getObject();
+        }
+        return optionArray;
+    }
 
-	public static Object domainObject(final ObjectAdapter inObject) {
-	    return inObject == null ? null : inObject.getObject();
-	}
+    public static Object domainObject(final ObjectAdapter inObject) {
+        return inObject == null ? null : inObject.getObject();
+    }
 
 }

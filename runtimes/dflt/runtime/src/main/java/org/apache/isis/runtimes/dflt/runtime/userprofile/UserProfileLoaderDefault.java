@@ -113,12 +113,12 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     // //////////////////////////////////////////////////////
 
     @Override
-    public void saveAsDefault(UserProfile userProfile) {
+    public void saveAsDefault(final UserProfile userProfile) {
         store.save("_default", userProfile);
     }
 
     @Override
-    public void saveForUser(String userName, UserProfile userProfile) {
+    public void saveForUser(final String userName, final UserProfile userProfile) {
         store.save(userName, userProfile);
     }
 
@@ -127,13 +127,13 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     // //////////////////////////////////////////////////////
 
     @Override
-    public void saveSession(List<ObjectAdapter> objects) {
+    public void saveSession(final List<ObjectAdapter> objects) {
         loadOrCreateProfile();
         userProfile.saveObjects(objects);
         save(userProfile);
     }
 
-    private void save(UserProfile userProfile) {
+    private void save(final UserProfile userProfile) {
         saveForUser(userName(), userProfile);
     }
 
@@ -142,9 +142,9 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     // //////////////////////////////////////////////////////
 
     @Override
-    public UserProfile getProfile(AuthenticationSession session) {
-        String userName = session.getUserName();
-        UserProfile profile = store.getUserProfile(userName);
+    public UserProfile getProfile(final AuthenticationSession session) {
+        final String userName = session.getUserName();
+        final UserProfile profile = store.getUserProfile(userName);
         userProfile = profile != null ? profile : createUserProfile(userName);
         return userProfile;
     }
@@ -162,14 +162,14 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
 
     private void loadOrCreateProfile() {
         if (userProfile == null) {
-            String userName = userName();
-            UserProfile profile = store.getUserProfile(userName);
+            final String userName = userName();
+            final UserProfile profile = store.getUserProfile(userName);
             userProfile = profile != null ? profile : createUserProfile(userName);
         }
     }
 
-    private UserProfile createUserProfile(String userName) {
-        UserProfile template = store.getUserProfile("_default");
+    private UserProfile createUserProfile(final String userName) {
+        final UserProfile template = store.getUserProfile("_default");
         if (template == null) {
             return createDefaultProfile(userName);
         } else {
@@ -177,24 +177,24 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
         }
     }
 
-    private UserProfile createDefaultProfile(String userName) {
-        UserProfile profile = new UserProfile();
+    private UserProfile createDefaultProfile(final String userName) {
+        final UserProfile profile = new UserProfile();
         profile.newPerspective(DEFAULT_PERSPECTIVE_NAME
             + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
 
-        List<Object> services = getServices();
+        final List<Object> services = getServices();
         if (services.size() == 0 && mode == Mode.STRICT) {
             throw new IsisException("No known services");
         }
-        for (Object service : services) {
+        for (final Object service : services) {
             profile.getPerspective().addToServices(service);
         }
         LOG.info("creating exploration UserProfile for " + userName);
         return profile;
     }
 
-    private UserProfile createProfileFromTemplate(String userName, UserProfile template) {
-        UserProfile userProfile = new UserProfile();
+    private UserProfile createProfileFromTemplate(final String userName, final UserProfile template) {
+        final UserProfile userProfile = new UserProfile();
         userProfile.copy(template);
         LOG.info("creating UserProfile, from template, for " + userName);
         return userProfile;
@@ -205,7 +205,7 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     // //////////////////////////////////////////////////////
 
     @Override
-    public void debugData(DebugBuilder debug) {
+    public void debugData(final DebugBuilder debug) {
         debug.appendln("Store", store.toString());
         debug.appendln("Mode", mode);
 
@@ -228,7 +228,7 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     }
 
     @Override
-    public void setServices(List<Object> serviceList) {
+    public void setServices(final List<Object> serviceList) {
         this.serviceList = serviceList;
     }
 

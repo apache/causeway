@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.topdown;
 
 import java.util.Enumeration;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,12 +35,10 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
+import org.apache.log4j.Logger;
 
 public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
     private static final Logger LOG = Logger.getLogger(TopDownPersistAlgorithm.class);
-
-
 
     @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
@@ -76,7 +71,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
                     final ObjectAdapter collection = field.get(object);
                     if (collection == null) {
                         throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in "
-                                + object.getSpecification().getFullIdentifier());
+                            + object.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {

@@ -17,20 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.context;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -52,13 +42,20 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDe
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyPersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyReflector;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySession;
-
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class IsisContextTest {
 
-    private Mockery mockery = new JUnit4Mockery();
-    
+    private final Mockery mockery = new JUnit4Mockery();
+
     private IsisConfiguration configuration;
     private PersistenceSession persistenceSession;
     private ObjectReflector reflector;
@@ -70,8 +67,7 @@ public class IsisContextTest {
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
 
-	private List<Object> servicesList;
-
+    private List<Object> servicesList;
 
     @Before
     public void setUp() throws Exception {
@@ -84,46 +80,42 @@ public class IsisContextTest {
         mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
         mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
         mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-        
+
         configuration = new IsisConfigurationDefault();
         reflector = new TestProxyReflector();
         persistenceSession = new TestProxyPersistenceSession(mockPersistenceSessionFactory);
 
-        mockery.checking(new Expectations() {{
-            one(mockPersistenceSessionFactory).createPersistenceSession();
-            will(returnValue(persistenceSession));
-        
-            ignoring(mockPersistenceSessionFactory);
-            
-            one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
-            will(returnValue(new UserProfile()));
-            
-            ignoring(mockUserProfileLoader);
-            
-            ignoring(mockAuthenticationManager);
+        mockery.checking(new Expectations() {
+            {
+                one(mockPersistenceSessionFactory).createPersistenceSession();
+                will(returnValue(persistenceSession));
 
-            ignoring(mockAuthorizationManager);
+                ignoring(mockPersistenceSessionFactory);
 
-            ignoring(mockTemplateImageLoader);
-        }});
+                one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
+                will(returnValue(new UserProfile()));
 
-    	reflector.setRuntimeContext(new RuntimeContextFromSession());
+                ignoring(mockUserProfileLoader);
 
-    	IsisContext.setConfiguration(configuration);
-    	
-        IsisSessionFactory sessionFactory = 
-            new IsisSessionFactoryDefault(
-                    DeploymentType.EXPLORATION, 
-                    configuration, 
-                    mockTemplateImageLoader, 
-                    reflector, 
-                    mockAuthenticationManager, 
-                    mockAuthorizationManager, 
-                    mockUserProfileLoader, 
-                    mockPersistenceSessionFactory, servicesList);
+                ignoring(mockAuthenticationManager);
+
+                ignoring(mockAuthorizationManager);
+
+                ignoring(mockTemplateImageLoader);
+            }
+        });
+
+        reflector.setRuntimeContext(new RuntimeContextFromSession());
+
+        IsisContext.setConfiguration(configuration);
+
+        final IsisSessionFactory sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
+                reflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
+                mockPersistenceSessionFactory, servicesList);
         IsisContextStatic.createRelaxedInstance(sessionFactory);
         sessionFactory.init();
-        
+
         session = new TestProxySession();
         IsisContext.openSession(session);
     }

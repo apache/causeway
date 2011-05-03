@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 
 import java.io.IOException;
@@ -29,7 +28,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 
 public class SocketServerMonitor extends AbstractServerMonitor {
     private static final int DEFAULT_PORT = 8009;
@@ -45,7 +43,7 @@ public class SocketServerMonitor extends AbstractServerMonitor {
 
     @Override
     protected boolean handleRequest(final PrintWriter writer, final String request) throws IOException {
-        String query = URLDecoder.decode(request, "UTF-8");
+        final String query = URLDecoder.decode(request, "UTF-8");
 
         if (query.equalsIgnoreCase("bye")) {
             writer.println("Disconnecting...");
@@ -63,7 +61,7 @@ public class SocketServerMonitor extends AbstractServerMonitor {
         return true;
     }
 
-    @SuppressWarnings(value="DM_EXIT")
+    @SuppressWarnings(value = "DM_EXIT")
     private void exitSystem() {
         System.exit(0);
     }
@@ -73,4 +71,3 @@ public class SocketServerMonitor extends AbstractServerMonitor {
         this.system = system;
     }
 }
-

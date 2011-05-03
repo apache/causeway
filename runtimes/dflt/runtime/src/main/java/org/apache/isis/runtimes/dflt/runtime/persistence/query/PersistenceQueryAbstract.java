@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import java.io.IOException;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -31,46 +29,42 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
-
 public abstract class PersistenceQueryAbstract implements PersistenceQuery, Encodable {
-	
+
     private final ObjectSpecification specification;
 
-    public PersistenceQueryAbstract(
-    		final ObjectSpecification specification) {
-    	this.specification = specification;
-    	initialized();
+    public PersistenceQueryAbstract(final ObjectSpecification specification) {
+        this.specification = specification;
+        initialized();
     }
 
-    protected PersistenceQueryAbstract(DataInputExtended input) throws IOException {
-    	String specName = input.readUTF();
+    protected PersistenceQueryAbstract(final DataInputExtended input) throws IOException {
+        final String specName = input.readUTF();
         specification = getSpecificationLoader().loadSpecification(specName);
         initialized();
     }
 
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	output.writeUTF(specification.getFullIdentifier());
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeUTF(specification.getFullIdentifier());
     }
-    
-    
+
     private void initialized() {
-    	// nothing to do
+        // nothing to do
     }
-    
-    /////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-
+    @Override
     public ObjectSpecification getSpecification() {
         return specification;
     }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // equals, hashCode
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public boolean equals(final Object obj) {
@@ -103,14 +97,12 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
         return result;
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	protected static SpecificationLoader getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
-
+    protected static SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 }
-

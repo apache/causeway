@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.USER_PROFILE_STORE_LONG_OPT;
@@ -27,7 +26,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -38,34 +36,41 @@ import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstall
 
 public class OptionHandlerUserProfileStore extends OptionHandlerAbstract {
 
-	private InstallerRepository installerRepository;
-	private String userProfileStoreName;
-	public OptionHandlerUserProfileStore(final InstallerRepository installerRepository) {
-		this.installerRepository = installerRepository;
-	}
+    private final InstallerRepository installerRepository;
+    private String userProfileStoreName;
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-		Object[] persistenceMechanisms = installerRepository.getInstallers(UserProfileStoreInstaller.class);
-        Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(USER_PROFILE_STORE_LONG_OPT).withDescription(
-                "user profile store to use: " + availableInstallers(persistenceMechanisms)
-                        + "; or class name").create(USER_PROFILE_STORE_OPT);
+    public OptionHandlerUserProfileStore(final InstallerRepository installerRepository) {
+        this.installerRepository = installerRepository;
+    }
+
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Object[] persistenceMechanisms = installerRepository.getInstallers(UserProfileStoreInstaller.class);
+        final Option option =
+            OptionBuilder
+                .withArgName("name|class name")
+                .hasArg()
+                .withLongOpt(USER_PROFILE_STORE_LONG_OPT)
+                .withDescription(
+                    "user profile store to use: " + availableInstallers(persistenceMechanisms) + "; or class name")
+                .create(USER_PROFILE_STORE_OPT);
         options.addOption(option);
-	}
+    }
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		userProfileStoreName = commandLine.getOptionValue(Constants.USER_PROFILE_STORE_OPT);		
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		isisConfigurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY, userProfileStoreName);
-	}
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        userProfileStoreName = commandLine.getOptionValue(Constants.USER_PROFILE_STORE_OPT);
+        return true;
+    }
 
-	public String getUserProfileStoreName() {
-		return userProfileStoreName;
-	}
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY, userProfileStoreName);
+    }
+
+    public String getUserProfileStoreName() {
+        return userProfileStoreName;
+    }
 
 }
-

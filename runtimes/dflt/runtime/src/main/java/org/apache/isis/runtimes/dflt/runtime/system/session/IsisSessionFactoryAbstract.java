@@ -17,13 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.session;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.util.List;
 
@@ -42,17 +41,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-
 /**
- * Creates an implementation of {@link IsisSessionFactory#openSession(AuthenticationSession)} to create
- * an {@link IsisSession}, but delegates to subclasses to actually obtain the components that make up
- * that {@link IsisSession}.
+ * Creates an implementation of {@link IsisSessionFactory#openSession(AuthenticationSession)} to create an
+ * {@link IsisSession}, but delegates to subclasses to actually obtain the components that make up that
+ * {@link IsisSession}.
  * 
  * <p>
- * The idea is that one subclass can use the {@link InstallerLookup} design to lookup installers for
- * components (and hence create the components themselves), whereas another subclass might simply use Spring
- * (or another DI container) to inject in the components according to some Spring-configured application
- * context.
+ * The idea is that one subclass can use the {@link InstallerLookup} design to lookup installers for components (and
+ * hence create the components themselves), whereas another subclass might simply use Spring (or another DI container)
+ * to inject in the components according to some Spring-configured application context.
  */
 public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
 
@@ -64,18 +61,13 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final UserProfileLoader userProfileLoader;
-	private final List<Object> serviceList;
+    private final List<Object> serviceList;
 
-    public IsisSessionFactoryAbstract(
-            final DeploymentType deploymentType,
-            final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final TemplateImageLoader templateImageLoader,
-            final AuthenticationManager authenticationManager,
-            final AuthorizationManager authorizationManager, 
-            final UserProfileLoader userProfileLoader, 
-            final PersistenceSessionFactory persistenceSessionFactory, 
-            final List<Object> serviceList) {
+    public IsisSessionFactoryAbstract(final DeploymentType deploymentType, final IsisConfiguration configuration,
+        final SpecificationLoader specificationLoader, final TemplateImageLoader templateImageLoader,
+        final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
+        final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory,
+        final List<Object> serviceList) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(configuration, is(not(nullValue())));
@@ -105,11 +97,12 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     /**
      * Wires components as necessary, and then {@link ApplicationScopedComponent#init() init}ializes all.
      */
+    @Override
     public void init() {
         templateImageLoader.init();
-        
+
         specificationLoader.setServiceClasses(JavaClassUtils.toClasses(serviceList));
-        
+
         specificationLoader.init();
 
         // must come after init of spec loader.
@@ -122,6 +115,7 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         persistenceSessionFactory.init();
     }
 
+    @Override
     public void shutdown() {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
@@ -130,55 +124,65 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         userProfileLoader.shutdown();
     }
 
+    @Override
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
-        PersistenceSession persistenceSession = persistenceSessionFactory.createPersistenceSession();
+        final PersistenceSession persistenceSession = persistenceSessionFactory.createPersistenceSession();
         ensureThatArg(persistenceSession, is(not(nullValue())));
-        
-        UserProfile userProfile = userProfileLoader.getProfile(authenticationSession);
+
+        final UserProfile userProfile = userProfileLoader.getProfile(authenticationSession);
         ensureThatArg(userProfile, is(not(nullValue())));
-        
+
         // inject into persistenceSession any/all application-scoped components that it requires
         getSpecificationLoader().injectInto(persistenceSession);
 
-        IsisSessionDefault isisSessionDefault = new IsisSessionDefault(this, authenticationSession, persistenceSession, userProfile);
-        
+        final IsisSessionDefault isisSessionDefault =
+            new IsisSessionDefault(this, authenticationSession, persistenceSession, userProfile);
+
         return isisSessionDefault;
     }
 
+    @Override
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
 
+    @Override
     public DeploymentType getDeploymentType() {
         return deploymentType;
     }
 
+    @Override
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
 
+    @Override
     public TemplateImageLoader getTemplateImageLoader() {
         return templateImageLoader;
     }
 
+    @Override
     public AuthenticationManager getAuthenticationManager() {
         return authenticationManager;
     }
 
+    @Override
     public AuthorizationManager getAuthorizationManager() {
         return authorizationManager;
     }
 
+    @Override
     public PersistenceSessionFactory getPersistenceSessionFactory() {
         return persistenceSessionFactory;
     }
 
+    @Override
     public UserProfileLoader getUserProfileLoader() {
         return userProfileLoader;
     }
-    
+
+    @Override
     public List<Object> getServices() {
-    	return serviceList;
+        return serviceList;
     }
 }
-

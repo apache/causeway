@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
@@ -25,9 +24,7 @@ import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer;
 
 public interface EmbeddedWebServerInstaller extends Installer {
 
-	static String TYPE = "embedded-web-server";
+    static String TYPE = "embedded-web-server";
 
     EmbeddedWebServer createEmbeddedWebServer();
 }
-
-

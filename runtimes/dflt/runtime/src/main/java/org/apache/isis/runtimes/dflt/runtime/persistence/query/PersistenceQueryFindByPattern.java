@@ -44,7 +44,7 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
     @Override
     public boolean matches(final ObjectAdapter object) {
         final ObjectSpecification requiredSpec = pattern.getSpecification();
-        ObjectSpecification objectSpec = object.getSpecification();
+        final ObjectSpecification objectSpec = object.getSpecification();
         return objectSpec.equals(requiredSpec) && matchesPattern(pattern, object);
     }
 

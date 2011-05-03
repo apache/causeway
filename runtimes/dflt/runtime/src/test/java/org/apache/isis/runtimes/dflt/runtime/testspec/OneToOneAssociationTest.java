@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testspec;
 
 import org.apache.isis.applib.Identifier;
@@ -39,24 +38,24 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-
 public abstract class OneToOneAssociationTest extends FacetHolderNoop implements OneToOneAssociation {
 
     private final RuntimeContext runtimeContext;
 
     public OneToOneAssociationTest() {
-    	runtimeContext = new RuntimeContextFromSession();
+        runtimeContext = new RuntimeContextFromSession();
     }
 
-	@Override
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+
     @Override
     public boolean isOneToOneAssociation() {
         return true;
     }
-    
+
     @Override
     public void clearAssociation(final ObjectAdapter inObject) {
         throw new UnexpectedCallException();
@@ -111,7 +110,7 @@ public abstract class OneToOneAssociationTest extends FacetHolderNoop implements
     public boolean isAlwaysHidden() {
         return false;
     }
-    
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
@@ -123,7 +122,8 @@ public abstract class OneToOneAssociationTest extends FacetHolderNoop implements
     }
 
     @Override
-    public void toDefault(final ObjectAdapter target) {}
+    public void toDefault(final ObjectAdapter target) {
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -131,41 +131,33 @@ public abstract class OneToOneAssociationTest extends FacetHolderNoop implements
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ValidityContext<?> createValidateInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter owningObjectAdapter,
-            final ObjectAdapter newValue) {
+    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter owningObjectAdapter,
+        final ObjectAdapter newValue) {
         return null;
     }
 
     @Override
-    public PropertyAccessContext createAccessInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod interactionMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
-        OneToOneAssociation specification = this;
+    public Instance getInstance(final ObjectAdapter adapter) {
+        final OneToOneAssociation specification = this;
         return adapter.getInstance(specification);
     }
 
@@ -179,10 +171,9 @@ public abstract class OneToOneAssociationTest extends FacetHolderNoop implements
         return true;
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (from context)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     protected static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
@@ -192,11 +183,8 @@ public abstract class OneToOneAssociationTest extends FacetHolderNoop implements
         return getPersistenceSession().getAdapterManager();
     }
 
-    
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
-
+    public RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -41,17 +40,17 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticatorsTest {
 
-	private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
-	private IsisConfiguration mockConfiguration;
-	private AuthenticationManagerStandard authenticationManager;
-	private Authenticator mockAuthenticator;
-    
+    private IsisConfiguration mockConfiguration;
+    private AuthenticationManagerStandard authenticationManager;
+    private Authenticator mockAuthenticator;
+
     @Before
     public void setUp() throws Exception {
         mockConfiguration = mockery.mock(IsisConfiguration.class);
         mockAuthenticator = mockery.mock(Authenticator.class);
-    	authenticationManager = new AuthenticationManagerStandard(mockConfiguration);
+        authenticationManager = new AuthenticationManagerStandard(mockConfiguration);
     }
 
     @Test
@@ -59,7 +58,7 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
         assertThat(authenticationManager.getAuthenticators().size(), is(0));
     }
 
-    @Test(expected=NoAuthenticatorException.class)
+    @Test(expected = NoAuthenticatorException.class)
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
@@ -71,12 +70,10 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
         assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
-        List<Authenticator> authenticators = authenticationManager.getAuthenticators();
+        final List<Authenticator> authenticators = authenticationManager.getAuthenticators();
         authenticators.add(mockAuthenticator);
     }
 
 }
-
-

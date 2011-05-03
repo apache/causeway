@@ -17,19 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import junit.framework.TestSuite;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -49,7 +39,14 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestSpecification;
-
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ObjectActionImplTest extends ProxyJunit3TestCase {
@@ -57,9 +54,11 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
         junit.textui.TestRunner.run(new TestSuite(ObjectActionImplTest.class));
     }
 
-    private final Mockery mockery = new JUnit4Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+    private final Mockery mockery = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
     private ObjectActionImpl action;
     private FacetedMethod mockFacetedMethod;
@@ -69,7 +68,6 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
     private AdapterMap mockAdapterManager;
     private ServicesProvider mockServicesProvider;
     private QuerySubmitter mockQuerySubmitter;
-
 
     @Override
     @Before
@@ -90,7 +88,9 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
             }
         });
 
-        action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter), mockServicesProvider);
+        action =
+            new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(mockAuthenticationSessionProvider,
+                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter), mockServicesProvider);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
         final TestProxyAdapter result = new TestProxyAdapter();
         final ActionInvocationFacet facet = new ActionInvocationFacetAbstract(mockFacetedMethod) {
             @Override
-            public ObjectAdapter invoke(ObjectAdapter target, ObjectAdapter[] parameters) {
+            public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
                 return result;
             }
 
@@ -130,7 +130,8 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
 
     @Test
     public void testNameDefaultsToActionsMethodName() {
-        final NamedFacet facet = new NamedFacetAbstract("Reduceheadcount", mockFacetedMethod) {};
+        final NamedFacet facet = new NamedFacetAbstract("Reduceheadcount", mockFacetedMethod) {
+        };
         mockery.checking(new Expectations() {
             {
                 one(mockFacetedMethod).getFacet(NamedFacet.class);

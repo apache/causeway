@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -27,7 +26,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
  */
 public interface IsisSystemFactory extends ApplicationScopedComponent {
 
-	IsisSystem createSystem(
-			final DeploymentType deploymentType);
+    IsisSystem createSystem(final DeploymentType deploymentType);
 
 }

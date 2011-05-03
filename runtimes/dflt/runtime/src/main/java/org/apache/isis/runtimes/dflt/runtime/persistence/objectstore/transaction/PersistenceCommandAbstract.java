@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -25,25 +24,25 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public abstract class PersistenceCommandAbstract implements PersistenceCommand {
-	
-	private final ObjectAdapter adapter;
 
-	public PersistenceCommandAbstract(ObjectAdapter adapter) {
-		super();
-		this.adapter = adapter;
-	}
+    private final ObjectAdapter adapter;
 
-	public ObjectAdapter onObject() {
-		return adapter;
-	}
+    public PersistenceCommandAbstract(final ObjectAdapter adapter) {
+        super();
+        this.adapter = adapter;
+    }
 
-	///////////////////////////////////////////////////////////////////////
-	// Dependencies (from context)
-	///////////////////////////////////////////////////////////////////////
-	
-	protected static AuthenticationSession getAuthenticationSession() {
-		return IsisContext.getAuthenticationSession();
-	}
+    @Override
+    public ObjectAdapter onObject() {
+        return adapter;
+    }
 
+    // /////////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // /////////////////////////////////////////////////////////////////////
+
+    protected static AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -31,36 +30,25 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
 
+public interface PersistenceSession extends PersistenceSessionContainer, PersistenceSessionForceReloader,
+    PersistenceSessionAdaptedServiceManager, PersistenceSessionTransactionManagement, PersistenceSessionHydrator,
+    PersistenceSessionTestSupport, SpecificationLoaderAware, IsisTransactionManagerAware, SessionScopedComponent,
+    Injectable, DebuggableWithTitle {
 
-public interface PersistenceSession extends
-        PersistenceSessionContainer,
-        PersistenceSessionForceReloader, 
-        PersistenceSessionAdaptedServiceManager, 
-        PersistenceSessionTransactionManagement, 
-        PersistenceSessionHydrator, 
-        PersistenceSessionTestSupport, 
-        SpecificationLoaderAware,
-        IsisTransactionManagerAware,
-        SessionScopedComponent,
-        Injectable,
-        DebuggableWithTitle {
-
-    
-
-
-	/**
+    /**
      * The {@link PersistenceSessionFactory} that created this {@link PersistenceSession}.
      */
     public PersistenceSessionFactory getPersistenceSessionFactory();
-    
+
     // ///////////////////////////////////////////////////////////////////////////
     // open, close
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public void open();
-    
-    public void close();
 
+    @Override
+    public void close();
 
     /**
      * Determine if the object store has been initialized with its set of start up objects.
@@ -71,11 +59,6 @@ public interface PersistenceSession extends
      */
     boolean isFixturesInstalled();
 
-    
-
-
-    
-    
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////////////////////////
@@ -91,35 +74,32 @@ public interface PersistenceSession extends
      * @return
      */
     ObjectAdapterFactory getAdapterFactory();
-    
+
     /**
      * The configured {@link ObjectFactory}.
      */
-	public ObjectFactory getObjectFactory();
+    public ObjectFactory getObjectFactory();
 
     /**
      * The configured {@link ServicesInjector}.
      */
     ServicesInjector getServicesInjector();
 
-
     /**
      * The configured {@link AdapterManager}.
      */
     AdapterManager getAdapterManager();
-    
-
 
     /**
      * Inject the {@link IsisTransactionManager}.
      * 
      * <p>
-     * This must be injected using setter-based injection rather than through the constructor
-     * because there is a bidirectional relationship between the {@link PersistenceSessionHydrator}
-     * and the {@link IsisTransactionManager}.
+     * This must be injected using setter-based injection rather than through the constructor because there is a
+     * bidirectional relationship between the {@link PersistenceSessionHydrator} and the {@link IsisTransactionManager}.
      * 
      * @see #getTransactionManager()
      */
+    @Override
     void setTransactionManager(final IsisTransactionManager transactionManager);
 
     /**
@@ -129,15 +109,14 @@ public interface PersistenceSession extends
      */
     IsisTransactionManager getTransactionManager();
 
-    
     /**
      * Inject the {@link SpecificationLoader}.
      * 
      * <p>
-     * The need to inject the reflector was introduced to support the HibernateObjectStore, which installs
-     * its own <tt>HibernateClassStrategy</tt> to cope with the proxy classes that Hibernate wraps around
-     * lists, sets and maps.
+     * The need to inject the reflector was introduced to support the HibernateObjectStore, which installs its own
+     * <tt>HibernateClassStrategy</tt> to cope with the proxy classes that Hibernate wraps around lists, sets and maps.
      */
+    @Override
     void setSpecificationLoader(SpecificationLoader specificationLoader);
 
 }

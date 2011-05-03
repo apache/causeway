@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public interface PersistAlgorithm {
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet adders);

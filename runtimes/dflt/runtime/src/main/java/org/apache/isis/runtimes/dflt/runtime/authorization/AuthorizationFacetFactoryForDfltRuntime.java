@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authorization;
-
 
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-
 public class AuthorizationFacetFactoryForDfltRuntime extends AuthorizationFacetFactory {
 
-	public AuthorizationFacetFactoryForDfltRuntime() {
+    public AuthorizationFacetFactoryForDfltRuntime() {
         super(IsisContext.getAuthorizationManager());
-	}
-    
+    }
+
 }

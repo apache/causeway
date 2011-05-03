@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -25,9 +24,9 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterF
 
 public class PojoAdapterFactory extends AdapterFactoryAbstract {
 
-    public PojoAdapter createAdapter(Object pojo, Oid oid) {
+    @Override
+    public PojoAdapter createAdapter(final Object pojo, final Oid oid) {
         return new PojoAdapter(pojo, oid);
     }
 
-    
 }

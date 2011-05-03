@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.topdown;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.topdown.TopDownPersistAlgorithm;
-
 
 public class TopDownPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 
@@ -33,4 +30,3 @@ public class TopDownPersistAlgorithmContractTest extends PersistAlgorithmContrac
     }
 
 }
-

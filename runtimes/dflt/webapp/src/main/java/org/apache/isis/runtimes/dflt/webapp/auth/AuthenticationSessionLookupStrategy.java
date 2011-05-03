@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.webapp.auth;
 
 import javax.servlet.ServletRequest;
@@ -27,12 +26,11 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
 
 /**
- * Decouples the {@link IsisSessionFilter} from the mechanism of obtaining
- * the {@link AuthenticationSession}.
+ * Decouples the {@link IsisSessionFilter} from the mechanism of obtaining the {@link AuthenticationSession}.
  */
 public interface AuthenticationSessionLookupStrategy {
 
-	AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse);
-	
-	void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession);
+    AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse);
+
+    void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession);
 }

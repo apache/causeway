@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import java.util.List;
@@ -36,8 +35,8 @@ public interface PersistenceSessionFactory extends ApplicationScopedComponent, S
     DeploymentType getDeploymentType();
 
     /**
-     * Creates a {@link PersistenceSession} with the implementing object as the
-     * {@link PersistenceSession}'s {@link PersistenceSession#getPersistenceSessionFactory() owning factory}.  
+     * Creates a {@link PersistenceSession} with the implementing object as the {@link PersistenceSession}'s
+     * {@link PersistenceSession#getPersistenceSessionFactory() owning factory}.
      */
     PersistenceSession createPersistenceSession();
 
@@ -49,14 +48,12 @@ public interface PersistenceSessionFactory extends ApplicationScopedComponent, S
      */
     SpecificationLoader getSpecificationLoader();
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Services
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     void setServices(List<Object> servicesList);
+
     List<Object> getServices();
 
 }
-
-

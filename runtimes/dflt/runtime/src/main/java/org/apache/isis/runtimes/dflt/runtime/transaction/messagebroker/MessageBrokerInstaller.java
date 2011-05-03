@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 
-
 public interface MessageBrokerInstaller extends Installer {
 
-	static String TYPE = "message-broker";
+    static String TYPE = "message-broker";
 
     MessageBroker createMessageBroker();
 }
-

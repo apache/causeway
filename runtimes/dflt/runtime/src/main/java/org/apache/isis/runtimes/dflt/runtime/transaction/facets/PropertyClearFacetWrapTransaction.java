@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,11 +28,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 
-
-public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstract implements DecoratingFacet<PropertyClearFacet> {
+public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstract implements
+    DecoratingFacet<PropertyClearFacet> {
 
     private final PropertyClearFacet underlyingFacet;
 
+    @Override
     public PropertyClearFacet getDecoratedFacet() {
         return underlyingFacet;
     }
@@ -43,30 +43,31 @@ public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstrac
         this.underlyingFacet = underlyingFacet;
     }
 
+    @Override
     public void clearProperty(final ObjectAdapter adapter) {
         if (adapter.isTransient()) {
-        	// NOT !adapter.isPersistent();
-        	// (value adapters are neither persistent or transient) 
+            // NOT !adapter.isPersistent();
+            // (value adapters are neither persistent or transient)
             underlyingFacet.clearProperty(adapter);
         } else {
-        	getTransactionManager().executeWithinTransaction(
-    			new TransactionalClosureAbstract(){
-    				public void execute() {
-    					underlyingFacet.clearProperty(adapter);
-    				}});
+            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+                @Override
+                public void execute() {
+                    underlyingFacet.clearProperty(adapter);
+                }
+            });
         }
     }
-
 
     @Override
     public String toString() {
         return super.toString() + " --> " + underlyingFacet.toString();
     }
 
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////
+
     private static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
@@ -75,6 +76,4 @@ public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstrac
         return IsisContext.getPersistenceSession();
     }
 
-
 }
-

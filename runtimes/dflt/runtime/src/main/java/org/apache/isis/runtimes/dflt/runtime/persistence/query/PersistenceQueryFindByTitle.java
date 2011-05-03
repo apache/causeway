@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 
 /**
  * Corresponds to {@link QueryFindByTitle}.
@@ -41,6 +39,7 @@ public class PersistenceQueryFindByTitle extends PersistenceQueryBuiltInAbstract
         return title;
     }
 
+    @Override
     public boolean matches(final ObjectAdapter object) {
         final String titleString = object.titleString();
         return matches(titleString);

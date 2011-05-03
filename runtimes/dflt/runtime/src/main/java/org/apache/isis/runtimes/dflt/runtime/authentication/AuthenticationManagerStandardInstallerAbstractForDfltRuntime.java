@@ -17,21 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication;
 
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
 
+public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime extends
+    AuthenticationManagerStandardInstallerAbstract {
 
-public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime extends AuthenticationManagerStandardInstallerAbstract {
-
-    public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(String name) {
+    public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(final String name) {
         super(name);
     }
 
-	protected AuthenticationManagerStandard createAuthenticationManagerStandard() {
-		return new AuthenticationManagerStandardForDfltRuntime(getConfiguration());
-	}
+    @Override
+    protected AuthenticationManagerStandard createAuthenticationManagerStandard() {
+        return new AuthenticationManagerStandardForDfltRuntime(getConfiguration());
+    }
 
 }

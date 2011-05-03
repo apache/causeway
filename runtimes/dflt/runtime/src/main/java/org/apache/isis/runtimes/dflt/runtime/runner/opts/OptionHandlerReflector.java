@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.REFLECTOR_LONG_OPT;
@@ -27,7 +26,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -38,31 +36,38 @@ import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 public class OptionHandlerReflector extends OptionHandlerAbstract {
 
-	private InstallerRepository installerRepository;
-	private String reflector;
-	public OptionHandlerReflector(final InstallerRepository installerRepository) {
-		this.installerRepository = installerRepository;
-	}
+    private final InstallerRepository installerRepository;
+    private String reflector;
 
-	@SuppressWarnings("static-access")
-	public void addOption(Options options) {
-        Object[] reflectors = installerRepository.getInstallers(ObjectReflectorInstaller.class);
-        Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(REFLECTOR_LONG_OPT).withDescription(
-                "reflector to use (ignored if type is prototype or client): " + availableInstallers(reflectors)
+    public OptionHandlerReflector(final InstallerRepository installerRepository) {
+        this.installerRepository = installerRepository;
+    }
+
+    @Override
+    @SuppressWarnings("static-access")
+    public void addOption(final Options options) {
+        final Object[] reflectors = installerRepository.getInstallers(ObjectReflectorInstaller.class);
+        final Option option =
+            OptionBuilder
+                .withArgName("name|class name")
+                .hasArg()
+                .withLongOpt(REFLECTOR_LONG_OPT)
+                .withDescription(
+                    "reflector to use (ignored if type is prototype or client): " + availableInstallers(reflectors)
                         + "; or class name").create(REFLECTOR_OPT);
         options.addOption(option);
-		
-	}
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
-		reflector = commandLine.getOptionValue(Constants.REFLECTOR_OPT);
-		return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		isisConfigurationBuilder.add(SystemConstants.REFLECTOR_KEY, reflector);
-	}
+    }
 
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
+        reflector = commandLine.getOptionValue(Constants.REFLECTOR_OPT);
+        return true;
+    }
+
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.REFLECTOR_KEY, reflector);
+    }
 
 }

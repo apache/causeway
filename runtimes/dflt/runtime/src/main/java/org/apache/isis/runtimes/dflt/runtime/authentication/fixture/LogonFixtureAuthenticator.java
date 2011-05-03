@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.fixture;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -27,14 +26,15 @@ import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.Authenticat
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class LogonFixtureAuthenticator extends AuthenticatorAbstractForDfltRuntime {
-	
+
     public LogonFixtureAuthenticator(final IsisConfiguration configuration) {
-    	super(configuration);
+        super(configuration);
     }
 
     /**
      * Can authenticate if a {@link AuthenticationRequestLogonFixture}.
      */
+    @Override
     public final boolean canAuthenticate(final AuthenticationRequest request) {
         return request instanceof AuthenticationRequestLogonFixture;
     }
@@ -43,10 +43,10 @@ public class LogonFixtureAuthenticator extends AuthenticatorAbstractForDfltRunti
      * Valid providing running in {@link DeploymentType#isExploring() exploration} or
      * {@link DeploymentType#isPrototyping() prototyping} mode.
      */
+    @Override
     public final boolean isValid(final AuthenticationRequest request) {
-    	DeploymentType deploymentType = getDeploymentType();
-		return deploymentType.isExploring() || deploymentType.isPrototyping();
+        final DeploymentType deploymentType = getDeploymentType();
+        return deploymentType.isExploring() || deploymentType.isPrototyping();
     }
 
 }
-

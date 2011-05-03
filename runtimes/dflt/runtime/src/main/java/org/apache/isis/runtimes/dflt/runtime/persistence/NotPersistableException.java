@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class NotPersistableException extends IsisException {
     private static final long serialVersionUID = 1L;

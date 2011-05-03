@@ -17,29 +17,33 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction;
 
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosure;
 
 /**
- * Convenience adapter providing no-op implementations of {@link #onSuccess()} and 
- * {@link #onFailure()}.
+ * Convenience adapter providing no-op implementations of {@link #onSuccess()} and {@link #onFailure()}.
  */
 public abstract class TransactionalClosureAbstract implements TransactionalClosure {
 
-	/**
-	 * No-op implementation; does nothing.
-	 */
-	public void preExecute() {}
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void preExecute() {
+    }
 
-	/**
-	 * No-op implementation; does nothing.
-	 */
-	public void onSuccess() {}
-	
-	/**
-	 * No-op implementation; does nothing.
-	 */
-	public void onFailure() {}
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void onSuccess() {
+    }
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void onFailure() {
+    }
 }

@@ -17,11 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard.fixture;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
+import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.runtimes.dflt.runtime.authentication.fixture.LogonFixtureAuthenticator;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -29,99 +35,98 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.MultiUserExplorationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.fixture.LogonFixtureAuthenticator;
-import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
 
 @RunWith(JMock.class)
 public class LogonFixtureAuthenticatorTest {
-	
-	private Mockery mockery = new JUnit4Mockery();
 
-	private IsisConfiguration mockConfiguration;
+    private final Mockery mockery = new JUnit4Mockery();
+
+    private IsisConfiguration mockConfiguration;
     private LogonFixtureAuthenticator authenticator;
 
-	private AuthenticationRequestLogonFixture logonFixtureRequest;
+    private AuthenticationRequestLogonFixture logonFixtureRequest;
 
-	private SomeOtherAuthenticationRequest someOtherRequest;
+    private SomeOtherAuthenticationRequest someOtherRequest;
 
     private static class SomeOtherAuthenticationRequest extends AuthenticationRequestAbstract {
-		public SomeOtherAuthenticationRequest() {
-			super("other");
-		}
-	}
+        public SomeOtherAuthenticationRequest() {
+            super("other");
+        }
+    }
 
     @Before
     public void setUp() {
-    	mockConfiguration = mockery.mock(IsisConfiguration.class);
-    	 
-    	logonFixtureRequest = new AuthenticationRequestLogonFixture(new LogonFixture("joebloggs"));
-    	someOtherRequest = new SomeOtherAuthenticationRequest();
-    	authenticator = new LogonFixtureAuthenticator(mockConfiguration);
+        mockConfiguration = mockery.mock(IsisConfiguration.class);
+
+        logonFixtureRequest = new AuthenticationRequestLogonFixture(new LogonFixture("joebloggs"));
+        someOtherRequest = new SomeOtherAuthenticationRequest();
+        authenticator = new LogonFixtureAuthenticator(mockConfiguration);
     }
 
     @Test
     public void canAuthenticateExplorationRequest() throws Exception {
-		assertThat(authenticator.canAuthenticate(logonFixtureRequest), is(true));
+        assertThat(authenticator.canAuthenticate(logonFixtureRequest), is(true));
     }
 
     @Test
     public void canAuthenticateSomeOtherTypeOfRequest() throws Exception {
-		assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
+        assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
     }
 
     @Test
     public void isValidLogonFixtureRequestWhenRunningInExplorationMode() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(DeploymentType.EXPLORATION.name()));
-    	}});
-    	assertThat(authenticator.isValid(logonFixtureRequest), is(true));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(DeploymentType.EXPLORATION.name()));
+            }
+        });
+        assertThat(authenticator.isValid(logonFixtureRequest), is(true));
     }
 
     @Test
     public void isValidLogonFixtureRequestWhenRunningInPrototypeMode() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(DeploymentType.PROTOTYPE.name()));
-    	}});
-    	assertThat(authenticator.isValid(logonFixtureRequest), is(true));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(DeploymentType.PROTOTYPE.name()));
+            }
+        });
+        assertThat(authenticator.isValid(logonFixtureRequest), is(true));
     }
 
     @Test
-    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationOrPrototypeMode() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(DeploymentType.SERVER.name()));
-    	}});
-    	assertThat(authenticator.isValid(logonFixtureRequest), is(false));
+    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationOrPrototypeMode()
+        throws Exception {
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(DeploymentType.SERVER.name()));
+            }
+        });
+        assertThat(authenticator.isValid(logonFixtureRequest), is(false));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void expectsThereToBeADeploymentTypeInIsisConfiguration() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(null));
-    	}});
-    	authenticator.isValid(logonFixtureRequest);
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(null));
+            }
+        });
+        authenticator.isValid(logonFixtureRequest);
     }
 
     @Test
     public void isValidSomeOtherTypeOfRequest() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.deploymentType");
-    		will(returnValue(DeploymentType.EXPLORATION.name()));
-    	}});
-    	assertThat(authenticator.canAuthenticate(new SomeOtherAuthenticationRequest()), is(false));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.deploymentType");
+                will(returnValue(DeploymentType.EXPLORATION.name()));
+            }
+        });
+        assertThat(authenticator.canAuthenticate(new SomeOtherAuthenticationRequest()), is(false));
     }
 
 }
-

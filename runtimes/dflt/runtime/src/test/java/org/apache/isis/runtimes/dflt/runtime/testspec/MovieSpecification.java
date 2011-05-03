@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testspec;
 
 import java.util.Arrays;
@@ -36,12 +35,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.core.testsupport.testdomain.Movie;
 import org.apache.isis.core.testsupport.testdomain.Person;
-
-
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 
 class MovieDirectorField extends OneToOneAssociationTest {
 
@@ -100,11 +97,13 @@ class MovieDirectorField extends OneToOneAssociationTest {
     }
 
     @Override
-    public void set(ObjectAdapter owner, ObjectAdapter newValue) {
+    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
         setAssociation(owner, newValue);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
      */
     @Override
@@ -115,11 +114,12 @@ class MovieDirectorField extends OneToOneAssociationTest {
 }
 
 class MovieNameField extends ValueFieldTest {
-    
+
     @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+
     @Override
     public void clearAssociation(final ObjectAdapter inObject) {
         getMovie(inObject).setName("");
@@ -173,7 +173,7 @@ class MovieNameField extends ValueFieldTest {
     }
 
     @Override
-    public void set(ObjectAdapter owner, ObjectAdapter newValue) {
+    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
         setAssociation(owner, newValue);
     }
 
@@ -184,19 +184,15 @@ class MovieNameField extends ValueFieldTest {
 
 }
 
-
 public class MovieSpecification extends TestProxySpecification {
 
     public MovieSpecification() {
         super(Movie.class);
-        fields = Arrays.asList( (ObjectAssociation)new MovieNameField(), new MovieDirectorField() );
+        fields = Arrays.asList((ObjectAssociation) new MovieNameField(), new MovieDirectorField());
     }
 
     @Override
-    public ObjectAction getClassAction(
-            final ActionType type,
-            final String name,
-            final ObjectSpecification[] parameters) {
+    public ObjectAction getClassAction(final ActionType type, final String name, final ObjectSpecification[] parameters) {
         return null;
     }
 
@@ -211,10 +207,8 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public ObjectAction getObjectAction(
-            final ActionType type,
-            final String name,
-            final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name,
+        final List<ObjectSpecification> parameters) {
         return null;
     }
 
@@ -239,7 +233,7 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter, Localization localization) {
+    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
         return ((Movie) adapter.getObject()).title();
     }
 
@@ -253,19 +247,14 @@ public class MovieSpecification extends TestProxySpecification {
         return new Movie();
     }
 
-    public InteractionContext createVisibleInteractionContext(
-            final AuthenticationSession session,
-            final ObjectAdapter target,
-            final InteractionInvocationMethod invocationMethod) {
+    public InteractionContext createVisibleInteractionContext(final AuthenticationSession session,
+        final ObjectAdapter target, final InteractionInvocationMethod invocationMethod) {
         return null;
     }
 
-    public InteractionContext createUsableInteractionContext(
-            final AuthenticationSession session,
-            final ObjectAdapter target,
-            final InteractionInvocationMethod invocationMethod) {
+    public InteractionContext createUsableInteractionContext(final AuthenticationSession session,
+        final ObjectAdapter target, final InteractionInvocationMethod invocationMethod) {
         return null;
     }
 
-    
 }

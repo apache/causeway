@@ -17,28 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.jmock.integration.junit4.JMock;
-import org.junit.runner.RunWith;
-
-import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.jmock.integration.junit4.JMock;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class SimpleSessionEncodabilityNoRolesTest extends SimpleSessionEncodabilityTestAbstract {
 
-	@Override
-	protected Encodable createEncodable() {
-		return new SimpleSession("joe", new String[]{});
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new SimpleSession("joe", new String[] {});
+    }
 
 }
-
-

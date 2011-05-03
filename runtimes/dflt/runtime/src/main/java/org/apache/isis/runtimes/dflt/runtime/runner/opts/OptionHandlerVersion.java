@@ -17,43 +17,41 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.VERSION_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.runner.Constants;
-import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 
 public class OptionHandlerVersion extends OptionHandlerAbstract {
 
-	public OptionHandlerVersion() {
-		super();
-	}
+    public OptionHandlerVersion() {
+        super();
+    }
 
-	public void addOption(Options options) {
-		options.addOption(VERSION_OPT, false, "print version information");
-	}
+    @Override
+    public void addOption(final Options options) {
+        options.addOption(VERSION_OPT, false, "print version information");
+    }
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
         if (commandLine.hasOption(Constants.VERSION_OPT)) {
             bootPrinter.printVersion();
             return false;
         }
         return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		// nothing to do
-		
-	}
+    }
 
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        // nothing to do
+
+    }
 
 }

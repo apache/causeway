@@ -17,52 +17,45 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication.exploration;
 
 import java.io.IOException;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 
-
 public final class ExplorationSession extends AuthenticationSessionAbstract implements Encodable {
-	
-	private static final long serialVersionUID = 1L;
-	
+
+    private static final long serialVersionUID = 1L;
+
     private static final String DEFAULT_USER_NAME = "exploration";
 
     /**
      * Defaults validation code to <tt>""</tt>.
      */
     public ExplorationSession() {
-    	this("");
+        this("");
     }
 
-    public ExplorationSession(String code) {
+    public ExplorationSession(final String code) {
         super(DEFAULT_USER_NAME, code);
         initialized();
     }
 
-	public ExplorationSession(DataInputExtended input) throws IOException {
-		super(input);
-		initialized();
-	}
+    public ExplorationSession(final DataInputExtended input) throws IOException {
+        super(input);
+        initialized();
+    }
 
-	@Override
-	public void encode(DataOutputExtended output)
-			throws IOException {
-		super.encode(output);
-	}
-	
-	private void initialized() {
-		// nothing to do
-	}
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+    }
 
-
-
+    private void initialized() {
+        // nothing to do
+    }
 
 }

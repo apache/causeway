@@ -17,14 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installerregistry;
 
-
-
-
-public interface InstallerLookupAware  {
+public interface InstallerLookupAware {
 
     void setInstallerLookup(final InstallerLookup installerLookup);
 }
-

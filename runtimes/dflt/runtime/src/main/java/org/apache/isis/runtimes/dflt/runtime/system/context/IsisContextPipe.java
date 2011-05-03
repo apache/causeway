@@ -81,7 +81,7 @@ public class IsisContextPipe extends IsisContextMultiUser {
     @Override
     public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
         applySessionClosePolicy();
-        IsisSession newSession = getSessionFactoryInstance().openSession(authenticationSession);
+        final IsisSession newSession = getSessionFactoryInstance().openSession(authenticationSession);
         if (isCurrentThreadServer()) {
             serverSession = newSession;
         } else {

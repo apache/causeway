@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.CglibEnhanced;
 
-
 public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
 
-    
     public CglibClassSubstitutor() {
         ignore(net.sf.cglib.proxy.Factory.class);
         ignore(net.sf.cglib.proxy.MethodProxy.class);
@@ -35,16 +32,15 @@ public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
     }
 
     /**
-     * If {@link CglibEnhanced} then return superclass, else
-     * as per {@link ClassSubstitutorAbstract#getClass(Class) superclass'} implementation.
+     * If {@link CglibEnhanced} then return superclass, else as per {@link ClassSubstitutorAbstract#getClass(Class)
+     * superclass'} implementation.
      */
     @Override
-    public Class<?> getClass(Class<?> cls) {
-    	if (JavaClassUtils.directlyImplements(cls, CglibEnhanced.class)) {
-    		return getClass(cls.getSuperclass());
-    	}
-    	return super.getClass(cls);
+    public Class<?> getClass(final Class<?> cls) {
+        if (JavaClassUtils.directlyImplements(cls, CglibEnhanced.class)) {
+            return getClass(cls.getSuperclass());
+        }
+        return super.getClass(cls);
     }
-
 
 }

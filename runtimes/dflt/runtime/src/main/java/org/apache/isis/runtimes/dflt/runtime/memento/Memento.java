@@ -63,7 +63,7 @@ public class Memento implements Serializable {
     private static final Logger LOG = Logger.getLogger(Memento.class);
 
     private final List<Oid> transientObjects = Lists.newArrayList();
-    
+
     private Data state;
 
     public Memento(final ObjectAdapter object) {
@@ -85,10 +85,10 @@ public class Memento implements Serializable {
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(object);
         final Data[] collData = new Data[facet.size(object)];
         int i = 0;
-        for (ObjectAdapter ref : facet.iterable(object)) {
+        for (final ObjectAdapter ref : facet.iterable(object)) {
             collData[i++] = createReferenceData(ref);
         }
-        String elementTypeSpecName = object.getSpecification().getFullIdentifier();
+        final String elementTypeSpecName = object.getSpecification().getFullIdentifier();
         return new CollectionData(object.getOid(), object.getResolveState(), elementTypeSpecName, collData);
     }
 
@@ -96,7 +96,8 @@ public class Memento implements Serializable {
         transientObjects.add(adapter.getOid());
         final ObjectSpecification cls = adapter.getSpecification();
         final List<ObjectAssociation> fields = cls.getAssociations();
-        final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullIdentifier());
+        final ObjectData data =
+            new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullIdentifier());
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).isNotPersisted()) {
                 if (fields.get(i).isOneToManyAssociation()) {
@@ -136,12 +137,12 @@ public class Memento implements Serializable {
             return null;
         }
 
-        Oid refOid = ref.getOid();
+        final Oid refOid = ref.getOid();
         if (refOid == null) {
             return createStandaloneData(ref);
         }
 
-        if ((ref.getSpecification().isAggregated() || refOid.isTransient()) && !transientObjects.contains(refOid)) {    
+        if ((ref.getSpecification().isAggregated() || refOid.isTransient()) && !transientObjects.contains(refOid)) {
             transientObjects.add(refOid);
             return createObjectData(ref);
         }
@@ -152,7 +153,7 @@ public class Memento implements Serializable {
 
     }
 
-    private Data createStandaloneData(ObjectAdapter adapter) {
+    private Data createStandaloneData(final ObjectAdapter adapter) {
         return new StandaloneData(adapter);
     }
 
@@ -189,13 +190,14 @@ public class Memento implements Serializable {
         return object;
     }
 
-    private void populateCollection(ObjectAdapter collection, CollectionData state, ResolveState targetState) {
-        ObjectAdapter[] initData = new ObjectAdapter[state.elements.length];
+    private void populateCollection(final ObjectAdapter collection, final CollectionData state,
+        final ResolveState targetState) {
+        final ObjectAdapter[] initData = new ObjectAdapter[state.elements.length];
         int i = 0;
-        for (Data elementData : state.elements) {
+        for (final Data elementData : state.elements) {
             initData[i++] = recreateReference(elementData);
         }
-        CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
+        final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         facet.init(collection, initData);
     }
 
@@ -203,7 +205,7 @@ public class Memento implements Serializable {
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
 
         if (data instanceof StandaloneData) {
-            StandaloneData standaloneData = (StandaloneData) data;
+            final StandaloneData standaloneData = (StandaloneData) data;
             return standaloneData.getAdapter();
         } else {
             final Oid oid = data.getOid();
@@ -214,7 +216,7 @@ public class Memento implements Serializable {
             ref = getHydrator().recreateAdapter(oid, spec);
             if (data instanceof ObjectData) {
                 if (oid.isTransient() || spec.isAggregated()) {
-                    ResolveState resolveState = spec.isAggregated() ? ResolveState.GHOST : ResolveState.TRANSIENT ;
+                    final ResolveState resolveState = spec.isAggregated() ? ResolveState.GHOST : ResolveState.TRANSIENT;
                     if (ref.getResolveState().isValidToChangeTo(resolveState)) {
                         ref.changeState(resolveState);
                     }
@@ -277,12 +279,13 @@ public class Memento implements Serializable {
     private void updateFields(final ObjectAdapter object, final Data state) {
         final ObjectData od = (ObjectData) state;
         final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
-        for (ObjectAssociation field : fields) {
+        for (final ObjectAssociation field : fields) {
             if (field.isNotPersisted()) {
                 if (field.isOneToManyAssociation()) {
                     continue;
                 }
-                if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
+                if (field.containsFacet(PropertyOrCollectionAccessorFacet.class)
+                    && !field.containsFacet(PropertySetterFacet.class)) {
                     LOG.debug("ignoring not-settable field " + field.getName());
                     continue;
                 }
@@ -312,12 +315,12 @@ public class Memento implements Serializable {
         final ObjectAdapter collection = field.get(object);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final List<ObjectAdapter> original = Lists.newArrayList();
-        for (ObjectAdapter adapter : facet.iterable(collection)) {
+        for (final ObjectAdapter adapter : facet.iterable(collection)) {
             original.add(adapter);
         }
 
-        Data[] elements = collectionData.elements;
-        for (Data data : elements) {
+        final Data[] elements = collectionData.elements;
+        for (final Data data : elements) {
             final ObjectAdapter element = recreateReference(data);
             if (!facet.contains(collection, element)) {
                 if (LOG.isDebugEnabled()) {
@@ -329,7 +332,7 @@ public class Memento implements Serializable {
             }
         }
 
-        for (ObjectAdapter element : original) {
+        for (final ObjectAdapter element : original) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("  association " + field + " changed, removed " + element.getOid());
             }

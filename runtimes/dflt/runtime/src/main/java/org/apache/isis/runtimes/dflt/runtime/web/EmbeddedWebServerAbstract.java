@@ -17,25 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.web;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
-
+import org.apache.log4j.Logger;
 
 public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = Logger.getLogger(EmbeddedWebServerAbstract.class);
 
-    private List<WebAppSpecification> specifications = new ArrayList<WebAppSpecification>();
+    private final List<WebAppSpecification> specifications = new ArrayList<WebAppSpecification>();
 
     // ///////////////////////////////////////////////////////
     // WebApp Specifications
@@ -44,7 +41,8 @@ public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {
     /**
      * Must be called prior to {@link #init() initialization}.
      */
-    public void addWebAppSpecification(WebAppSpecification specification) {
+    @Override
+    public void addWebAppSpecification(final WebAppSpecification specification) {
         specifications.add(specification);
     }
 
@@ -56,12 +54,14 @@ public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {
     // init, shutdown
     // ///////////////////////////////////////////////////////
 
+    @Override
     public void init() {
-    // does nothing
+        // does nothing
     }
 
+    @Override
     public void shutdown() {
-    // does nothing
+        // does nothing
     }
 
     // ///////////////////////////////////////////////////////
@@ -73,4 +73,3 @@ public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {
     }
 
 }
-

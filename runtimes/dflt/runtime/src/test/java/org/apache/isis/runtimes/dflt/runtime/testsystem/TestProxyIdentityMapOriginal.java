@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.Hashtable;
@@ -38,13 +37,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-
 public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
-    
-    private final Hashtable<Oid,ObjectAdapter> identities = new Hashtable<Oid,ObjectAdapter>();
-    private final Hashtable<Object,ObjectAdapter> objectAdapters = new Hashtable<Object,ObjectAdapter>();
-    private final Hashtable<Object,ObjectAdapter> collectionAdapters = new Hashtable<Object,ObjectAdapter>();
-    private final Hashtable<Oid,ObjectAdapter> recreatedPersistent = new Hashtable<Oid,ObjectAdapter>();
+
+    private final Hashtable<Oid, ObjectAdapter> identities = new Hashtable<Oid, ObjectAdapter>();
+    private final Hashtable<Object, ObjectAdapter> objectAdapters = new Hashtable<Object, ObjectAdapter>();
+    private final Hashtable<Object, ObjectAdapter> collectionAdapters = new Hashtable<Object, ObjectAdapter>();
+    private final Hashtable<Oid, ObjectAdapter> recreatedPersistent = new Hashtable<Oid, ObjectAdapter>();
     private final Vector recreatedTransient = new Vector();
     private final Hashtable valueAdapters = new Hashtable();
 
@@ -68,27 +66,34 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         recreatedTransient.addElement(adapter);
     }
 
+    @Override
     public ObjectAdapter getAdapterFor(final Object object) {
-        return (ObjectAdapter) objectAdapters.get(object);
+        return objectAdapters.get(object);
     }
 
+    @Override
     public ObjectAdapter getAdapterFor(final Oid oid) {
-        final ObjectAdapter no = (ObjectAdapter) identities.get(oid);
+        final ObjectAdapter no = identities.get(oid);
         return no;
     }
 
+    @Override
     public Iterator<ObjectAdapter> iterator() {
         throw new IsisException();
     }
 
-    public void open() {}
+    @Override
+    public void open() {
+    }
 
-    public void initDomainObject(final Object domainObject) {}
+    public void initDomainObject(final Object domainObject) {
+    }
 
     public boolean isIdentityKnown(final Oid oid) {
         return identities.containsKey(oid);
     }
 
+    @Override
     public void remapAsPersistent(final ObjectAdapter adapter) {
         final Oid oid = adapter.getOid();
         getOidGenerator().convertTransientToPersistentOid(oid);
@@ -96,10 +101,11 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         adapter.changeState(ResolveState.RESOLVED);
     }
 
-    public void remapUpdated(Oid oid) {
+    @Override
+    public void remapUpdated(final Oid oid) {
         identities.remove(oid);
-        Oid previousOid = oid.getPrevious();
-        final ObjectAdapter object = (ObjectAdapter) identities.get(previousOid);
+        final Oid previousOid = oid.getPrevious();
+        final ObjectAdapter object = identities.get(previousOid);
         if (object == null) {
             return;
         }
@@ -109,6 +115,7 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         identities.put(oidFromObject, object);
     }
 
+    @Override
     public void reset() {
         // collectionAdapters.clear();
         identities.clear();
@@ -118,7 +125,9 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         valueAdapters.clear();
     }
 
-    public void close() {}
+    @Override
+    public void close() {
+    }
 
     public void unloaded(final ObjectAdapter object) {
         throw new IsisException();
@@ -127,74 +136,83 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
     public ObjectAdapter addAdapter(final ObjectAdapter adapter) {
         identities.put(adapter.getOid(), adapter);
         objectAdapters.put(adapter.getObject(), adapter);
-        
+
         return adapter;
     }
 
-    public ObjectAdapter createAdapter(Object pojo, Oid oid) {
+    public ObjectAdapter createAdapter(final Object pojo, final Oid oid) {
         throw new NotYetImplementedException();
     }
 
-    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+    @Override
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
+        final IdentifiedHolder identifiedHolder) {
         throw new NotYetImplementedException();
     }
 
-    public ObjectAdapter adapterFor(Object pojo) {
+    @Override
+    public ObjectAdapter adapterFor(final Object pojo) {
         throw new NotYetImplementedException();
     }
 
-    public ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent) {
+    @Override
+    public ObjectAdapter adapterForAggregated(final Object domainObject, final ObjectAdapter parent) {
         throw new NotYetImplementedException();
     }
 
-    public void removeAdapter(ObjectAdapter objectToDispose) {
+    @Override
+    public void removeAdapter(final ObjectAdapter objectToDispose) {
         throw new NotYetImplementedException();
     }
 
-    public void setAdapterFactory(ObjectAdapterFactory adapterFactory) {
+    public void setAdapterFactory(final ObjectAdapterFactory adapterFactory) {
         throw new NotYetImplementedException();
     }
 
-    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         throw new NotYetImplementedException();
     }
 
-    public void setOidGenerator(OidGenerator oidGenerator) {
+    public void setOidGenerator(final OidGenerator oidGenerator) {
         throw new NotYetImplementedException();
     }
 
-    public ObjectAdapter addExistingAdapter(ObjectAdapter adapter) {
+    @Override
+    public ObjectAdapter addExistingAdapter(final ObjectAdapter adapter) {
         return addAdapter(adapter);
     }
 
-    public ObjectAdapter testCreateAdapterFor(Object pojo, Oid oid) {
+    public ObjectAdapter testCreateAdapterFor(final Object pojo, final Oid oid) {
         return recreateRootAdapter(oid, pojo);
     }
 
-    public ObjectAdapter recreateRootAdapter(Oid oid, Object pojo) {
+    @Override
+    public ObjectAdapter recreateRootAdapter(final Oid oid, final Object pojo) {
         throw new NotYetImplementedException();
     }
 
-    public ObjectAdapter testCreateTransient(Object pojo, Oid oid) {
+    @Override
+    public ObjectAdapter testCreateTransient(final Object pojo, final Oid oid) {
         throw new NotYetImplementedException();
     }
 
-    
-    public void injectInto(Object candidate) {
+    @Override
+    public void injectInto(final Object candidate) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public String debugTitle() {
         return "Test Proxy Identity Map";
     }
 
-    public void debugData(final DebugBuilder debug) {}
+    @Override
+    public void debugData(final DebugBuilder debug) {
+    }
 
-
-    
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     private PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
@@ -204,15 +222,12 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
         return getPersistenceSession().getOidGenerator();
     }
 
-	public void removeAdapter(Oid oid) {
-		ObjectAdapter adapter = getAdapterFor(oid);
-		if (adapter != null) {
-			removeAdapter(adapter);
-		}
-	}
-
-
-
-    
+    @Override
+    public void removeAdapter(final Oid oid) {
+        final ObjectAdapter adapter = getAdapterFor(oid);
+        if (adapter != null) {
+            removeAdapter(adapter);
+        }
+    }
 
 }

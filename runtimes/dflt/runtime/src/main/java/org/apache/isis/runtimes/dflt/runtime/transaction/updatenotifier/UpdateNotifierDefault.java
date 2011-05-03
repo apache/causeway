@@ -17,47 +17,45 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-
+import org.apache.log4j.Logger;
 
 public class UpdateNotifierDefault extends UpdateNotifierAbstract implements DebuggableWithTitle {
-	
+
     private static final Logger LOG = Logger.getLogger(UpdateNotifierDefault.class);
     private final List<ObjectAdapter> changes = new ArrayList<ObjectAdapter>();
     private final List<ObjectAdapter> disposals = new ArrayList<ObjectAdapter>();
 
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Constructor
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     public UpdateNotifierDefault() {
         // does nothing
     }
-    
-    ////////////////////////////////////////////////////
-    // Changed Objects
-    ////////////////////////////////////////////////////
 
+    // //////////////////////////////////////////////////
+    // Changed Objects
+    // //////////////////////////////////////////////////
+
+    @Override
     public synchronized void addChangedObject(final ObjectAdapter adapter) {
-        ResolveState resolveState = adapter.getResolveState();
-        if (!resolveState.isResolved() && ! adapter.isTransient()) {
+        final ResolveState resolveState = adapter.getResolveState();
+        if (!resolveState.isResolved() && !adapter.isTransient()) {
             return;
         }
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("mark as changed " + adapter);
         }
@@ -66,68 +64,72 @@ public class UpdateNotifierDefault extends UpdateNotifierAbstract implements Deb
         }
     }
 
-	public List<ObjectAdapter> getChangedObjects() {
+    @Override
+    public List<ObjectAdapter> getChangedObjects() {
         if (changes.size() > 0) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("dirty (changed) objects " + changes);
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("dirty (changed) objects " + changes);
+            }
         }
-		List<ObjectAdapter> changedObjects = new ArrayList<ObjectAdapter>();
-		changedObjects.addAll(changes);
-		
-		changes.clear();
-		
-		return Collections.unmodifiableList(changedObjects);
-	}
-    
-    ////////////////////////////////////////////////////
-    // Disposed Objects
-    ////////////////////////////////////////////////////
+        final List<ObjectAdapter> changedObjects = new ArrayList<ObjectAdapter>();
+        changedObjects.addAll(changes);
 
+        changes.clear();
+
+        return Collections.unmodifiableList(changedObjects);
+    }
+
+    // //////////////////////////////////////////////////
+    // Disposed Objects
+    // //////////////////////////////////////////////////
+
+    @Override
     public void addDisposedObject(final ObjectAdapter adapter) {
-    	if (LOG.isDebugEnabled()) {
-    		LOG.debug("mark as disposed " + adapter);
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("mark as disposed " + adapter);
+        }
         if (!disposals.contains(adapter)) {
             disposals.add(adapter);
         }
     }
 
-	public List<ObjectAdapter> getDisposedObjects() {
+    @Override
+    public List<ObjectAdapter> getDisposedObjects() {
         if (disposals.size() > 0) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("dirty (disposed) objects " + disposals);
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("dirty (disposed) objects " + disposals);
+            }
         }
-		List<ObjectAdapter> disposedObjects = new ArrayList<ObjectAdapter>();
-		disposedObjects.addAll(disposals);
-		
-		disposals.clear();
-		
-		return Collections.unmodifiableList(disposedObjects);
-	}
-    
-    
-    ////////////////////////////////////////////////////
-    // Empty, Clear
-    ////////////////////////////////////////////////////
+        final List<ObjectAdapter> disposedObjects = new ArrayList<ObjectAdapter>();
+        disposedObjects.addAll(disposals);
 
+        disposals.clear();
+
+        return Collections.unmodifiableList(disposedObjects);
+    }
+
+    // //////////////////////////////////////////////////
+    // Empty, Clear
+    // //////////////////////////////////////////////////
+
+    @Override
     public void ensureEmpty() {
         if (changes.size() > 0) {
             throw new IsisException("Update notifier still has updates");
         }
     }
 
+    @Override
     public void clear() {
         changes.clear();
         disposals.clear();
     }
-    
-    
-    ////////////////////////////////////////////////////
-    // Debugging
-    ////////////////////////////////////////////////////
 
+    // //////////////////////////////////////////////////
+    // Debugging
+    // //////////////////////////////////////////////////
+
+    @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("Changes");
         debugList(debug, changes);
@@ -136,6 +138,7 @@ public class UpdateNotifierDefault extends UpdateNotifierAbstract implements Deb
         debugList(debug, disposals);
     }
 
+    @Override
     public String debugTitle() {
         return "Simple Update Notifier";
     }
@@ -145,22 +148,20 @@ public class UpdateNotifierDefault extends UpdateNotifierAbstract implements Deb
         if (list.size() == 0) {
             debug.appendln("none");
         } else {
-            for(ObjectAdapter adapter: list) {
+            for (final ObjectAdapter adapter : list) {
                 debug.appendln(adapter.toString());
             }
         }
         debug.unindent();
     }
 
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // toString
-    ////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////
+
     @Override
     public String toString() {
         return new ToString(this).append("changes", changes).toString();
     }
 
 }
-

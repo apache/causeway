@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory;
 
 public interface ObjectChanger {
 
-	void objectChanged(Object domainObject);
+    void objectChanged(Object domainObject);
 
 }

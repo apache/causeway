@@ -57,9 +57,9 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     protected void shutdownAllThreads() {
         synchronized (sessionsByThread) {
             int i = 0;
-            for (Thread thread : sessionsByThread.keySet()) {
+            for (final Thread thread : sessionsByThread.keySet()) {
                 LOG.info("Shutting down thread: " + i++);
-                IsisSession data = sessionsByThread.get(thread);
+                final IsisSession data = sessionsByThread.get(thread);
                 data.closeAll();
             }
         }
@@ -78,7 +78,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     public String[] allSessionIds() {
         final String[] ids = new String[sessionsByThread.size()];
         int i = 0;
-        for (Thread thread : sessionsByThread.keySet()) {
+        for (final Thread thread : sessionsByThread.keySet()) {
             final IsisSession data = sessionsByThread.get(thread);
             ids[i++] = data.getId();
         }
@@ -99,7 +99,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         super.debugData(debug);
         debug.appendln();
         debug.appendTitle("Threads based Contexts");
-        for (Thread thread : sessionsByThread.keySet()) {
+        for (final Thread thread : sessionsByThread.keySet()) {
             final IsisSession data = sessionsByThread.get(thread);
             debug.appendln(thread.toString(), data);
         }
@@ -107,7 +107,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
 
     @Override
     protected IsisSession getSessionInstance(final String executionContextId) {
-        for (Thread thread : sessionsByThread.keySet()) {
+        for (final Thread thread : sessionsByThread.keySet()) {
             final IsisSession data = sessionsByThread.get(thread);
             if (data.getId().equals(executionContextId)) {
                 return data;
@@ -127,11 +127,11 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
      * Implementation note: an alternative design would have just been to bind onto a thread local.
      */
     @Override
-    public IsisSession openSessionInstance(AuthenticationSession authenticationSession) {
-        Thread thread = Thread.currentThread();
+    public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
+        final Thread thread = Thread.currentThread();
         synchronized (sessionsByThread) {
             applySessionClosePolicy();
-            IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
+            final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
             LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
                 + authenticationSession.getUserName());
             saveSession(thread, session);
@@ -140,15 +140,15 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         }
     }
 
-    protected IsisSession createAndOpenSession(final Thread thread, AuthenticationSession authenticationSession) {
-        IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
+    protected IsisSession createAndOpenSession(final Thread thread, final AuthenticationSession authenticationSession) {
+        final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
         session.open();
         LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
             + authenticationSession.getUserName());
         return session;
     }
 
-    private IsisSession saveSession(final Thread thread, IsisSession session) {
+    private IsisSession saveSession(final Thread thread, final IsisSession session) {
         synchronized (sessionsByThread) {
             sessionsByThread.put(thread, session);
         }
@@ -168,7 +168,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     @Override
     public IsisSession getSessionInstance() {
         final Thread thread = Thread.currentThread();
-        IsisSession session = sessionsByThread.get(thread);
+        final IsisSession session = sessionsByThread.get(thread);
         /*
          * REVIEW this has been moved to IsisContext.getSession() if (session == null) { throw new
          * IllegalStateException("No Session opened for this thread"); }

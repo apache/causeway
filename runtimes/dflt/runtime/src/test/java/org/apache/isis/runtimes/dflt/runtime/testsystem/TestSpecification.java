@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.testsystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Localization;
@@ -50,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 
+import com.google.common.collect.Lists;
 
 /**
  * @deprecated replaced by {@link TestProxySpecification}
@@ -62,8 +60,8 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public List<ObjectAssociation> fields = Lists.newArrayList();
     private final int id = next++;
     private final String name;
-    private List<ObjectSpecification> subclasses = Collections.emptyList();
-    private String title;
+    private final List<ObjectSpecification> subclasses = Collections.emptyList();
+    private final String title;
 
     public TestSpecification() {
         this((String) null);
@@ -73,7 +71,6 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public FeatureType getFeatureType() {
         return FeatureType.OBJECT;
     }
-    
 
     public TestSpecification(final String name) {
         this.name = name == null ? "DummyObjectSpecification#" + id : name;
@@ -84,14 +81,14 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public Class<?> getCorrespondingClass() {
         try {
             return Class.forName(name);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-
     @Override
-    public void clearDirty(final ObjectAdapter object) {}
+    public void clearDirty(final ObjectAdapter object) {
+    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -132,7 +129,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties() {
         @SuppressWarnings("rawtypes")
-        List list = getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List list = getAssociations(ObjectAssociationFilters.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
     }
 
@@ -140,7 +137,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     @SuppressWarnings("unchecked")
     public List<OneToManyAssociation> getCollections() {
         @SuppressWarnings("rawtypes")
-        List list = getAssociations(ObjectAssociationFilters.COLLECTIONS);
+        final List list = getAssociations(ObjectAssociationFilters.COLLECTIONS);
         return new ArrayList<OneToManyAssociation>(list);
     }
 
@@ -169,10 +166,8 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public ObjectAction getObjectAction(
-            final ActionType type,
-            final String name,
-            final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name,
+        final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;
         }
@@ -212,13 +207,14 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public String getDescription() {
         return getSingularName();
     }
-    
+
+    @Override
     public String getHelp() {
         return null;
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter, Localization localization) {
+    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
         return title;
     }
 
@@ -268,11 +264,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public void markDirty(final ObjectAdapter object) {}
+    public void markDirty(final ObjectAdapter object) {
+    }
 
     public Object newInstance() {
         throw new IsisException("Not able to create instance of " + getFullIdentifier()
-                + "; newInstance() method should be overridden");
+            + "; newInstance() method should be overridden");
     }
 
     @Override
@@ -320,12 +317,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public Object createObject(CreationMode creationMode) {
+    public Object createObject(final CreationMode creationMode) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode) {
+    public Object createAggregatedObject(final ObjectAdapter parent, final CreationMode creationMode) {
         throw new NotYetImplementedException();
     }
 
@@ -338,7 +335,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public boolean isCollection() {
         return false;
     }
-    
+
     @Override
     public boolean isNotCollection() {
         return !isCollection();
@@ -349,20 +346,15 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return false;
     }
 
-
     @Override
-    public ObjectValidityContext createValidityInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(
-            final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
-            final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session,
+        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -371,16 +363,14 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
-
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public Instance getInstance(ObjectAdapter adapter) {
+    public Instance getInstance(final ObjectAdapter adapter) {
         return adapter;
     }
-
 
     // /////////////////////////////////////////////////////////////
     // introspection
@@ -403,7 +393,9 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return false;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer#getObjectActionsAll()
      */
     @Override
@@ -411,7 +403,5 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         // TODO Auto-generated method stub
         return null;
     }
-
-
 
 }

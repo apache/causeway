@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
 import java.util.List;
@@ -40,7 +39,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
  * Useful for quickly writing decorating implementations.
  */
 public abstract class IsisStoreDelegating implements ObjectStore {
-    
+
     private final ObjectStore underlying;
     private final String name;
 
@@ -49,127 +48,143 @@ public abstract class IsisStoreDelegating implements ObjectStore {
         this.name = name;
     }
 
-    
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // name
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
+    @Override
     public String name() {
         return name + "(" + underlying.name() + ")";
     }
 
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // init, shutdown, reset, isInitialized
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
+    @Override
     public void open() {
         underlying.open();
     }
 
+    @Override
     public void close() {
         underlying.close();
     }
-    
+
+    @Override
     public void reset() {
         underlying.reset();
     }
 
+    @Override
     public boolean isFixturesInstalled() {
         return underlying.isFixturesInstalled();
     }
 
-
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // createXxxCommands
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
-    public CreateObjectCommand createCreateObjectCommand(ObjectAdapter object) {
+    @Override
+    public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         return underlying.createCreateObjectCommand(object);
     }
 
-    public DestroyObjectCommand createDestroyObjectCommand(ObjectAdapter object) {
+    @Override
+    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
         return underlying.createDestroyObjectCommand(object);
     }
 
-    public SaveObjectCommand createSaveObjectCommand(ObjectAdapter object) {
+    @Override
+    public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
         return underlying.createSaveObjectCommand(object);
     }
 
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // execute
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
+    @Override
     public void execute(final List<PersistenceCommand> commands) {
         underlying.execute(commands);
     }
 
-    
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // TransactionManagement
-    //////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////
+
+    @Override
     public void startTransaction() {
         underlying.startTransaction();
     }
-    
+
+    @Override
     public void endTransaction() {
         underlying.endTransaction();
     }
 
+    @Override
     public void abortTransaction() {
         underlying.abortTransaction();
     }
-    
-    //////////////////////////////////////////////////
-    // getObject, resolveImmediately, resolveField
-    //////////////////////////////////////////////////
 
-    public ObjectAdapter getObject(Oid oid, ObjectSpecification hint) {
+    // ////////////////////////////////////////////////
+    // getObject, resolveImmediately, resolveField
+    // ////////////////////////////////////////////////
+
+    @Override
+    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
         return underlying.getObject(oid, hint);
     }
 
-    public void resolveField(ObjectAdapter object, ObjectAssociation field) {
+    @Override
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
         underlying.resolveField(object, field);
     }
 
-    public void resolveImmediately(ObjectAdapter object) {
+    @Override
+    public void resolveImmediately(final ObjectAdapter object) {
         underlying.resolveImmediately(object);
     }
 
-    
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // getInstances, hasInstances
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
-    public ObjectAdapter[] getInstances(PersistenceQuery persistenceQuery) {
+    @Override
+    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
         return underlying.getInstances(persistenceQuery);
     }
 
-    public boolean hasInstances(ObjectSpecification specification) {
+    @Override
+    public boolean hasInstances(final ObjectSpecification specification) {
         return underlying.hasInstances(specification);
     }
 
-        
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // services
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
-    public Oid getOidForService(String name) {
+    @Override
+    public Oid getOidForService(final String name) {
         return underlying.getOidForService(name);
     }
 
-    public void registerService(String name, Oid oid) {
+    @Override
+    public void registerService(final String name, final Oid oid) {
         underlying.registerService(name, oid);
     }
 
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
     // debug
-    //////////////////////////////////////////////////
+    // ////////////////////////////////////////////////
 
-    public void debugData(DebugBuilder debug) {
+    @Override
+    public void debugData(final DebugBuilder debug) {
         underlying.debugData(debug);
     }
 
+    @Override
     public String debugTitle() {
         return underlying.debugTitle();
     }

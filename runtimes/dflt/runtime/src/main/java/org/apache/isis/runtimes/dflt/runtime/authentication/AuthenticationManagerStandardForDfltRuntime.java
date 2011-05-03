@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.authentication;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -27,12 +26,9 @@ import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.Explorat
 import org.apache.isis.runtimes.dflt.runtime.authentication.fixture.LogonFixtureAuthenticator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-
 public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationManagerStandard {
 
-
-
-    public AuthenticationManagerStandardForDfltRuntime(IsisConfiguration configuration) {
+    public AuthenticationManagerStandardForDfltRuntime(final IsisConfiguration configuration) {
         super(configuration);
     }
 
@@ -40,6 +36,7 @@ public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationM
     // init
     // //////////////////////////////////////////////////////////
 
+    @Override
     protected void addDefaultAuthenticators() {
         // we add to start to ensure that these special case authenticators
         // are always consulted first
@@ -47,16 +44,14 @@ public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationM
         addAuthenticatorToStart(new LogonFixtureAuthenticator(getConfiguration()));
     }
 
-
     // //////////////////////////////////////////////////////////
     // Session Management (including authenticate)
     // //////////////////////////////////////////////////////////
 
-
+    @Override
     public void closeSession(final AuthenticationSession session) {
-    	super.closeSession(session);
+        super.closeSession(session);
         IsisContext.closeSession();
     }
 
 }
-

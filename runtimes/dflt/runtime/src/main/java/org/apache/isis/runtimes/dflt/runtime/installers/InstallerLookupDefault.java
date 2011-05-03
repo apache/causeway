@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.installers;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -30,10 +29,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -68,34 +63,34 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
+import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 
 /**
- * This class retrieves named {@link Installer}s from those loaded at creation, updating the
- * {@link IsisConfiguration} as it goes.
+ * This class retrieves named {@link Installer}s from those loaded at creation, updating the {@link IsisConfiguration}
+ * as it goes.
  * 
  * <p>
- * A list of possible classes are read in from the resource file <tt>installer-registry.properties</tt>. Each
- * installer has a unique name (with respect to its type) that will be compared when one of this classes
- * methods are called. These are instantiated when requested.
+ * A list of possible classes are read in from the resource file <tt>installer-registry.properties</tt>. Each installer
+ * has a unique name (with respect to its type) that will be compared when one of this classes methods are called. These
+ * are instantiated when requested.
  * 
  * <p>
- * Note that it <i>is</i> possible to use an {@link Installer} implementation even if it has not been
- * registered in <tt>installer-registry.properties</tt> : just specify the {@link Installer}'s fully qualified
- * class name.
+ * Note that it <i>is</i> possible to use an {@link Installer} implementation even if it has not been registered in
+ * <tt>installer-registry.properties</tt> : just specify the {@link Installer}'s fully qualified class name.
  */
 public class InstallerLookupDefault implements InstallerLookup {
 
     private static final Logger LOG = Logger.getLogger(InstallerLookupDefault.class);
 
     private final List<Installer> installerList = new ArrayList<Installer>();
-    
+
     @SuppressWarnings("unused")
     private final Class<?> cls;
 
     /**
-     * A mutable representation of the {@link IsisConfiguration configuration}, injected prior to
-     * {@link #init()}.
+     * A mutable representation of the {@link IsisConfiguration configuration}, injected prior to {@link #init()}.
      * 
      * <p>
      * 
@@ -107,7 +102,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Constructor
     // ////////////////////////////////////////////////////////
 
-    public InstallerLookupDefault(Class<?> cls) {
+    public InstallerLookupDefault(final Class<?> cls) {
         this.cls = cls;
         loadInstallers();
     }
@@ -140,8 +135,8 @@ public class InstallerLookupDefault implements InstallerLookup {
             close(reader);
         }
 
-        List<ComponentDetails> installerVersionList = new ArrayList<ComponentDetails>();
-        for (Installer installer : installerList) {
+        final List<ComponentDetails> installerVersionList = new ArrayList<ComponentDetails>();
+        for (final Installer installer : installerList) {
             installerVersionList.add(new InstallerVersion(installer));
         }
         AboutIsis.setComponentDetails(installerVersionList);
@@ -180,7 +175,7 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     @Override
     public void shutdown() {
-    // nothing to do.
+        // nothing to do.
     }
 
     // ////////////////////////////////////////////////////////
@@ -188,55 +183,65 @@ public class InstallerLookupDefault implements InstallerLookup {
     // ////////////////////////////////////////////////////////
 
     @Override
-    public AuthenticationManagerInstaller authenticationManagerInstaller(String requested, final DeploymentType deploymentType) {
-        return getInstaller(AuthenticationManagerInstaller.class, requested, SystemConstants.AUTHENTICATION_INSTALLER_KEY, 
-               deploymentType.isExploring() ? SystemConstants.AUTHENTICATION_EXPLORATION_DEFAULT : SystemConstants.AUTHENTICATION_DEFAULT );
+    public AuthenticationManagerInstaller authenticationManagerInstaller(final String requested,
+        final DeploymentType deploymentType) {
+        return getInstaller(AuthenticationManagerInstaller.class, requested,
+            SystemConstants.AUTHENTICATION_INSTALLER_KEY, deploymentType.isExploring()
+                ? SystemConstants.AUTHENTICATION_EXPLORATION_DEFAULT : SystemConstants.AUTHENTICATION_DEFAULT);
     }
 
     @Override
-    public AuthorizationManagerInstaller authorizationManagerInstaller(String requested, final DeploymentType deploymentType) {
-        return getInstaller(AuthorizationManagerInstaller.class, requested, SystemConstants.AUTHORIZATION_INSTALLER_KEY,
-                !deploymentType.isProduction() ? SystemConstants.AUTHORIZATION_NON_PRODUCTION_DEFAULT : SystemConstants.AUTHORIZATION_DEFAULT);
+    public AuthorizationManagerInstaller authorizationManagerInstaller(final String requested,
+        final DeploymentType deploymentType) {
+        return getInstaller(AuthorizationManagerInstaller.class, requested,
+            SystemConstants.AUTHORIZATION_INSTALLER_KEY, !deploymentType.isProduction()
+                ? SystemConstants.AUTHORIZATION_NON_PRODUCTION_DEFAULT : SystemConstants.AUTHORIZATION_DEFAULT);
     }
 
     @Override
-    public FixturesInstaller fixturesInstaller(String requested) {
+    public FixturesInstaller fixturesInstaller(final String requested) {
         return getInstaller(FixturesInstaller.class, requested, SystemConstants.FIXTURES_INSTALLER_KEY,
-                SystemConstants.FIXTURES_INSTALLER_DEFAULT);
+            SystemConstants.FIXTURES_INSTALLER_DEFAULT);
     }
 
     @Override
-    public TemplateImageLoaderInstaller templateImageLoaderInstaller(String requested) {
+    public TemplateImageLoaderInstaller templateImageLoaderInstaller(final String requested) {
         return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY,
-                SystemConstants.IMAGE_LOADER_DEFAULT);
+            SystemConstants.IMAGE_LOADER_DEFAULT);
     }
 
     @Override
-    public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
-        String persistorDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT
+    public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested,
+        final DeploymentType deploymentType) {
+        final String persistorDefault =
+            deploymentType.isExploring() || deploymentType.isPrototyping()
+                ? SystemConstants.OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT
                 : SystemConstants.OBJECT_PERSISTOR_PRODUCTION_DEFAULT;
         return getInstaller(PersistenceMechanismInstaller.class, requested, SystemConstants.OBJECT_PERSISTOR_KEY,
-                persistorDefault);
+            persistorDefault);
     }
 
     @Override
-    public UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(String requested, DeploymentType deploymentType) {
-        String profileStoreDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT
+    public UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested,
+        final DeploymentType deploymentType) {
+        final String profileStoreDefault =
+            deploymentType.isExploring() || deploymentType.isPrototyping()
+                ? SystemConstants.USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT
                 : SystemConstants.USER_PROFILE_STORE_PRODUCTION_DEFAULT;
         return getInstaller(UserProfileStoreInstaller.class, requested, SystemConstants.USER_PROFILE_STORE_KEY,
-                profileStoreDefault);
+            profileStoreDefault);
     }
 
     @Override
     public ObjectReflectorInstaller reflectorInstaller(final String requested) {
         return getInstaller(ObjectReflectorInstaller.class, requested, SystemConstants.REFLECTOR_KEY,
-                SystemConstants.REFLECTOR_DEFAULT);
+            SystemConstants.REFLECTOR_DEFAULT);
     }
 
     @Override
     public EmbeddedWebServerInstaller embeddedWebServerInstaller(final String requested) {
         return getInstaller(EmbeddedWebServerInstaller.class, requested, SystemConstants.WEBSERVER_KEY,
-                SystemConstants.WEBSERVER_DEFAULT);
+            SystemConstants.WEBSERVER_DEFAULT);
     }
 
     /**
@@ -245,23 +250,22 @@ public class InstallerLookupDefault implements InstallerLookup {
      * <p>
      * This lookup is called in three different contexts:
      * <ul>
-     * <li>the <tt>IsisSystemFactoryUsingInstallers</tt> uses this to lookup the
-     * {@link PersistenceMechanismInstaller} (may be a <tt>ProxyPersistor</tt>)</li>
-     * <li>the <tt>IsisSystemFactoryUsingInstallers</tt> also uses this to lookup the
-     * {@link FacetDecoratorInstaller}; adds in remoting facets.</li>
-     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the
-     * {@link AuthenticationManagerInstaller}.</li>
+     * <li>the <tt>IsisSystemFactoryUsingInstallers</tt> uses this to lookup the {@link PersistenceMechanismInstaller}
+     * (may be a <tt>ProxyPersistor</tt>)</li>
+     * <li>the <tt>IsisSystemFactoryUsingInstallers</tt> also uses this to lookup the {@link FacetDecoratorInstaller};
+     * adds in remoting facets.</li>
+     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the {@link AuthenticationManagerInstaller}.</li>
      * </ul>
      * 
      * <p>
-     * In addition to the usual {@link #mergeConfigurationFor(Installer) merging} of any {@link Installer}
-     * -specific configuration files, this lookup also merges in any
-     * {@link ClientConnectionInstaller#getRemoteProperties() remote properties} available.
+     * In addition to the usual {@link #mergeConfigurationFor(Installer) merging} of any {@link Installer} -specific
+     * configuration files, this lookup also merges in any {@link ClientConnectionInstaller#getRemoteProperties() remote
+     * properties} available.
      */
     @Override
     public ClientConnectionInstaller clientConnectionInstaller(final String requested) {
         return getInstaller(ClientConnectionInstaller.class, requested, SystemConstants.CLIENT_CONNECTION_KEY,
-                SystemConstants.CLIENT_CONNECTION_DEFAULT);
+            SystemConstants.CLIENT_CONNECTION_DEFAULT);
     }
 
     @Override
@@ -289,8 +293,8 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     @Override
     public ServicesInstaller servicesInstaller(final String requestedImplementationName) {
-        return getInstaller(ServicesInstaller.class, requestedImplementationName, SystemConstants.SERVICES_INSTALLER_KEY,
-                SystemConstants.SERVICES_INSTALLER_DEFAULT);
+        return getInstaller(ServicesInstaller.class, requestedImplementationName,
+            SystemConstants.SERVICES_INSTALLER_KEY, SystemConstants.SERVICES_INSTALLER_DEFAULT);
     }
 
     // ////////////////////////////////////////////////////////
@@ -315,14 +319,15 @@ public class InstallerLookupDefault implements InstallerLookup {
     @SuppressWarnings("unchecked")
     public Installer getInstaller(final String implClassName) {
         try {
-            Installer installer = CastUtils.cast(InstanceUtil.createInstance(implClassName));
+            final Installer installer = CastUtils.cast(InstanceUtil.createInstance(implClassName));
             if (installer != null) {
                 mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);
             }
             return installer;
         } catch (final InstanceCreationException e) {
-            throw new InstanceCreationException("Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
+            throw new InstanceCreationException("Specification error in "
+                + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
         } catch (final UnavailableClassException e) {
             return null;
         }
@@ -332,14 +337,15 @@ public class InstallerLookupDefault implements InstallerLookup {
     @SuppressWarnings("unchecked")
     public <T extends Installer> T getInstaller(final Class<T> installerCls) {
         try {
-            T installer = (T) (InstanceUtil.createInstance(installerCls));
+            final T installer = (T) (InstanceUtil.createInstance(installerCls));
             if (installer != null) {
                 mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);
             }
             return installer;
         } catch (final InstanceCreationException e) {
-            throw new InstanceCreationException("Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
+            throw new InstanceCreationException("Specification error in "
+                + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
         } catch (final UnavailableClassException e) {
             return null;
         }
@@ -349,17 +355,18 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Helpers
     // ////////////////////////////////////////////////////////
 
-    private <T extends Installer> T getInstaller(Class<T> requiredType, String reqImpl, String key, String defaultImpl) {
+    private <T extends Installer> T getInstaller(final Class<T> requiredType, String reqImpl, final String key,
+        final String defaultImpl) {
         if (reqImpl == null) {
             reqImpl = getConfiguration().getString(key, defaultImpl);
         }
         if (reqImpl == null) {
             return null;
         }
-        T installer = getInstaller(requiredType, reqImpl);
+        final T installer = getInstaller(requiredType, reqImpl);
         if (installer == null) {
             throw new InstanceCreationException("Failed to load installer; named/class:'" + reqImpl + "' (of type "
-                    + requiredType.getName() + ")");
+                + requiredType.getName() + ")");
         }
         return installer;
     }
@@ -391,14 +398,14 @@ public class InstallerLookupDefault implements InstallerLookup {
         return isisConfigurationBuilder.getConfiguration();
     }
 
-    public void mergeConfigurationFor(Installer installer) {
-        for (String installerConfigResource : installer.getConfigurationResources()) {
+    public void mergeConfigurationFor(final Installer installer) {
+        for (final String installerConfigResource : installer.getConfigurationResources()) {
             isisConfigurationBuilder.addConfigurationResource(installerConfigResource, NotFoundPolicy.CONTINUE);
         }
     }
 
     @Override
-    public <T> T injectDependenciesInto(T candidate) {
+    public <T> T injectDependenciesInto(final T candidate) {
         injectInto(candidate);
         return candidate;
     }
@@ -408,13 +415,13 @@ public class InstallerLookupDefault implements InstallerLookup {
     // ////////////////////////////////////////////////////////////////////
 
     @Override
-    public void injectInto(Object candidate) {
+    public void injectInto(final Object candidate) {
         if (SystemDependencyInjectorAware.class.isAssignableFrom(candidate.getClass())) {
-            SystemDependencyInjectorAware cast = SystemDependencyInjectorAware.class.cast(candidate);
+            final SystemDependencyInjectorAware cast = SystemDependencyInjectorAware.class.cast(candidate);
             cast.setSystemDependencyInjector(this);
         }
         if (InstallerLookupAware.class.isAssignableFrom(candidate.getClass())) {
-            InstallerLookupAware cast = InstallerLookupAware.class.cast(candidate);
+            final InstallerLookupAware cast = InstallerLookupAware.class.cast(candidate);
             cast.setInstallerLookup(this);
         }
         isisConfigurationBuilder.injectInto(candidate);
@@ -436,4 +443,3 @@ public class InstallerLookupDefault implements InstallerLookup {
     }
 
 }
-

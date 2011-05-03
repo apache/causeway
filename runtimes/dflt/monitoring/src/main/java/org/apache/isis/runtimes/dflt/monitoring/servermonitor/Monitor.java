@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-
+import org.apache.log4j.Logger;
 
 public class Monitor {
     private static final Logger LOG = Logger.getLogger(Monitor.class);
@@ -43,16 +41,15 @@ public class Monitor {
         addEvent(category, message, null);
     }
 
-    public static void addEvent(final String category, final String message, DebuggableWithTitle[] debug) {
+    public static void addEvent(final String category, final String message, final DebuggableWithTitle[] debug) {
         final MonitorEvent event = new MonitorEvent(category, message, debug);
         LOG.info(event);
         dispatchEvent(event);
     }
 
     private static void dispatchEvent(final MonitorEvent event) {
-        for(MonitorListener listener: listeners) {
+        for (final MonitorListener listener : listeners) {
             listener.postEvent(event);
         }
     }
 }
-

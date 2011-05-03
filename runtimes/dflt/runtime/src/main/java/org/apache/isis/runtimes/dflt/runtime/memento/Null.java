@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import java.io.Serializable;
@@ -26,29 +25,28 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 
-
 public class Null implements Encodable, Serializable {
     private static final long serialVersionUID = 1L;
 
     public Null() {
-    	initialized();
+        initialized();
     }
 
     public Null(final DataInputExtended input) {
-    	initialized();
+        initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) {
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {

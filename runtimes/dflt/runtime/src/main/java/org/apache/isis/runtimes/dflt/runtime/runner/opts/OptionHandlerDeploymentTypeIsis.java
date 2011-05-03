@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
-
 public class OptionHandlerDeploymentTypeIsis extends OptionHandlerDeploymentType {
-  
+
     public static final String TYPE_EXPLORATION = DeploymentType.EXPLORATION.friendlyName();
     public static final String TYPE_PROTOTYPE = DeploymentType.PROTOTYPE.friendlyName();
     public static final String TYPE_SINGLE_USER = DeploymentType.SINGLE_USER.friendlyName();
@@ -35,9 +32,8 @@ public class OptionHandlerDeploymentTypeIsis extends OptionHandlerDeploymentType
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
 
     public OptionHandlerDeploymentTypeIsis() {
-        super(DeploymentType.PROTOTYPE, TYPE_EXPLORATION + "; " + TYPE_PROTOTYPE + " (default); " + TYPE_SINGLE_USER + "; " + TYPE_CLIENT + "; "
-                + TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + "; " + TYPE_SERVER);
+        super(DeploymentType.PROTOTYPE, TYPE_EXPLORATION + "; " + TYPE_PROTOTYPE + " (default); " + TYPE_SINGLE_USER
+            + "; " + TYPE_CLIENT + "; " + TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + "; " + TYPE_SERVER);
     }
-
 
 }

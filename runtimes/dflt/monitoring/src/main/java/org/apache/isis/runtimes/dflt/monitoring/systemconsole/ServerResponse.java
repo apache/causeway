@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.systemconsole;
 
 import java.io.Serializable;
 
-
 public abstract class ServerResponse implements Serializable {
     final static long serialVersionUID = 1L;
 }
-

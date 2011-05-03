@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.bytecode.javassist.objectfactory.internal;
 
 import org.apache.isis.runtimes.dflt.bytecode.javassist.classsubstitutor.JavassistClassSubstitutor;
 
 /**
- * Marker interface that we make entities implement so easy to spot in the
- * {@link JavassistClassSubstitutor}.
+ * Marker interface that we make entities implement so easy to spot in the {@link JavassistClassSubstitutor}.
  */
 public interface JavassistEnhanced {
 

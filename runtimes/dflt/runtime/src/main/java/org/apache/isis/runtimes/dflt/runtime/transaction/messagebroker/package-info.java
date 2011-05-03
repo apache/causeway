@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Message Broker API.
  * 

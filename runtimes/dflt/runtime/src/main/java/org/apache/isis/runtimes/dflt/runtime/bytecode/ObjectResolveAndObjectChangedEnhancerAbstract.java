@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.bytecode;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.lang.reflect.Method;
 
@@ -35,79 +34,75 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectRes
 
 public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
 
-	protected final ObjectResolver objectResolver;
-	protected final ObjectChanger objectChanger;
-	protected final SpecificationLoader specificationLoader;
+    protected final ObjectResolver objectResolver;
+    protected final ObjectChanger objectChanger;
+    protected final SpecificationLoader specificationLoader;
 
-	public ObjectResolveAndObjectChangedEnhancerAbstract(
-			final ObjectResolver objectResolver,
-			final ObjectChanger objectChanger,
-			final SpecificationLoader specificationLoader) {
-		ensureThatArg(objectResolver, is(notNullValue()));
-		ensureThatArg(objectChanger, is(notNullValue()));
-		ensureThatArg(specificationLoader, is(notNullValue()));
+    public ObjectResolveAndObjectChangedEnhancerAbstract(final ObjectResolver objectResolver,
+        final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+        ensureThatArg(objectResolver, is(notNullValue()));
+        ensureThatArg(objectChanger, is(notNullValue()));
+        ensureThatArg(specificationLoader, is(notNullValue()));
 
-		this.objectResolver = objectResolver;
-		this.objectChanger = objectChanger;
-		this.specificationLoader = specificationLoader;
-	}
+        this.objectResolver = objectResolver;
+        this.objectChanger = objectChanger;
+        this.specificationLoader = specificationLoader;
+    }
 
-	/**
-	 * Subclasses should call from their constructor, and setup their
-	 * implementation-specific callback mechanism.
-	 */
-	protected abstract void createCallback();
+    /**
+     * Subclasses should call from their constructor, and setup their implementation-specific callback mechanism.
+     */
+    protected abstract void createCallback();
 
-	protected ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
-		return getJavaSpecification(method.getDeclaringClass());
-	}
+    protected ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
+        return getJavaSpecification(method.getDeclaringClass());
+    }
 
-	protected ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
-		final ObjectSpecification nos = getSpecification(cls);
-		if (!(nos instanceof ObjectSpecificationDefault)) {
-			throw new UnsupportedOperationException(
-					"Only Java is supported (specification is '"
-							+ nos.getClass().getCanonicalName() + "')");
-		}
-		return (ObjectSpecificationDefault) nos;
-	}
+    protected ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
+        final ObjectSpecification nos = getSpecification(cls);
+        if (!(nos instanceof ObjectSpecificationDefault)) {
+            throw new UnsupportedOperationException("Only Java is supported (specification is '"
+                + nos.getClass().getCanonicalName() + "')");
+        }
+        return (ObjectSpecificationDefault) nos;
+    }
 
-	protected boolean impliesResolve(ImperativeFacet[] imperativeFacets) {
-		for(ImperativeFacet imperativeFacet: imperativeFacets) {
-			if (imperativeFacet.impliesResolve()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    protected boolean impliesResolve(final ImperativeFacet[] imperativeFacets) {
+        for (final ImperativeFacet imperativeFacet : imperativeFacets) {
+            if (imperativeFacet.impliesResolve()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	protected boolean impliesObjectChanged(ImperativeFacet[] imperativeFacets) {
-		for(ImperativeFacet imperativeFacet: imperativeFacets) {
-			if (imperativeFacet.impliesObjectChanged()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    protected boolean impliesObjectChanged(final ImperativeFacet[] imperativeFacets) {
+        for (final ImperativeFacet imperativeFacet : imperativeFacets) {
+            if (imperativeFacet.impliesObjectChanged()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private ObjectSpecification getSpecification(final Class<?> type) {
-		return specificationLoader.loadSpecification(type);
-	}
-	
-	///////////////////////////////////////////////////////////////
-	// Dependencies (from constructor)
-	///////////////////////////////////////////////////////////////
-	
-	public final ObjectResolver getObjectResolver() {
-		return objectResolver;
-	}
+    private ObjectSpecification getSpecification(final Class<?> type) {
+        return specificationLoader.loadSpecification(type);
+    }
 
-	public final ObjectChanger getObjectChanger() {
-		return objectChanger;
-	}
+    // /////////////////////////////////////////////////////////////
+    // Dependencies (from constructor)
+    // /////////////////////////////////////////////////////////////
 
-	public final SpecificationLoader getSpecificationLoader() {
-		return specificationLoader;
-	}
+    public final ObjectResolver getObjectResolver() {
+        return objectResolver;
+    }
+
+    public final ObjectChanger getObjectChanger() {
+        return objectChanger;
+    }
+
+    public final SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
+    }
 
 }

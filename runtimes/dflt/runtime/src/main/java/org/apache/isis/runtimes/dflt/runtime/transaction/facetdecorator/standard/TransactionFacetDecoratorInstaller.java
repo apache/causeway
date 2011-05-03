@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standard;
 
 import java.util.List;
@@ -28,20 +27,19 @@ import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 
 import com.google.common.collect.Lists;
 
-
 public class TransactionFacetDecoratorInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
     public TransactionFacetDecoratorInstaller() {
-    	super(FacetDecoratorInstaller.TYPE, "transaction");
+        super(FacetDecoratorInstaller.TYPE, "transaction");
     }
 
+    @Override
     public List<FacetDecorator> createDecorators() {
-        return Lists.<FacetDecorator>newArrayList(
-        		new StandardTransactionFacetDecorator(getConfiguration()));
+        return Lists.<FacetDecorator> newArrayList(new StandardTransactionFacetDecorator(getConfiguration()));
     }
-    
+
     @Override
     public List<Class<?>> getTypes() {
-    	return listOf(List.class); // ie List<FacetDecorator>
+        return listOf(List.class); // ie List<FacetDecorator>
     }
 }

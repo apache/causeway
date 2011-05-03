@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple;
 
 import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public class SerialOidEncodabilityWhenTransientTest extends SerialOidEncodabilityAbstractTest {
 
-	protected Encodable createEncodable() {
-		return SerialOid.createTransient(123L);
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return SerialOid.createTransient(123L);
+    }
 
 }

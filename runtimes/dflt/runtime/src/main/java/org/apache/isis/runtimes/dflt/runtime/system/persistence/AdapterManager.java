@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.core.commons.components.Injectable;
@@ -26,26 +25,23 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 /**
- * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid identities} for each and every
- * POJO that is being used by the framework.
+ * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid identities} for each and every POJO that
+ * is being used by the framework.
  * 
  * <p>
- * It provides a consistent set of adapters in memory, providing an {@link ObjectAdapter adapter} for the POJOs
- * that are in use ensuring that the same object is not loaded twice into memory.
+ * It provides a consistent set of adapters in memory, providing an {@link ObjectAdapter adapter} for the POJOs that are
+ * in use ensuring that the same object is not loaded twice into memory.
  * 
  * <p>
- * Each POJO is given an {@link ObjectAdapter adapter} so that the framework can work with the POJOs even though
- * it does not understand their types. Each POJO maps to an {@link ObjectAdapter adapter} and these are reused.
+ * Each POJO is given an {@link ObjectAdapter adapter} so that the framework can work with the POJOs even though it does
+ * not understand their types. Each POJO maps to an {@link ObjectAdapter adapter} and these are reused.
  */
 public interface AdapterManager extends ObjectAdapterLookup, Injectable, AdapterMap {
 
-    
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // removal
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     /**
      * Removes the specified {@link ObjectAdapter adapter} from the identity maps.
@@ -58,7 +54,6 @@ public interface AdapterManager extends ObjectAdapterLookup, Injectable, Adapter
      * <p>
      * Should be same as {@link #getAdapterFor(Oid)} followed by {@link #removeAdapter(ObjectAdapter)}.
      */
-	void removeAdapter(Oid oid);
+    void removeAdapter(Oid oid);
 
 }
-

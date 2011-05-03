@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.monitoring.systemconsole;
 
 import java.io.DataOutputStream;
@@ -27,19 +26,24 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-
 public class FileConsole implements ServerConsole {
     final static Logger LOG = Logger.getLogger(FileConsole.class);
     private DataOutputStream dos;
 
-    public void close() {}
+    @Override
+    public void close() {
+    }
 
-    public void init(final Server server) {}
+    @Override
+    public void init(final Server server) {
+    }
 
+    @Override
     public void log() {
         log("");
     }
 
+    @Override
     public void log(final String message) {
         try {
             LOG.info(message);
@@ -51,4 +55,3 @@ public class FileConsole implements ServerConsole {
         }
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.HELP_LONG_OPT;
@@ -25,7 +24,6 @@ import static org.apache.isis.runtimes.dflt.runtime.runner.Constants.HELP_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -33,28 +31,29 @@ import org.apache.isis.runtimes.dflt.runtime.runner.Constants;
 
 public class OptionHandlerHelp extends OptionHandlerAbstract {
 
-	public OptionHandlerHelp() {
-		super();
-	}
+    public OptionHandlerHelp() {
+        super();
+    }
 
-	public void addOption(Options options) {
-		options.addOption(HELP_OPT, HELP_LONG_OPT, false, "show this help");
-		
-	}
+    @Override
+    public void addOption(final Options options) {
+        options.addOption(HELP_OPT, HELP_LONG_OPT, false, "show this help");
 
-	public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options) {
+    }
+
+    @Override
+    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
         if (commandLine.hasOption(Constants.HELP_OPT)) {
-        	bootPrinter.printHelp(options);
+            bootPrinter.printHelp(options);
             return false;
         }
         return true;
-	}
-	
-	public void primeConfigurationBuilder(
-			IsisConfigurationBuilder isisConfigurationBuilder) {
-		// nothing to do
-		
-	}
+    }
 
+    @Override
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        // nothing to do
+
+    }
 
 }

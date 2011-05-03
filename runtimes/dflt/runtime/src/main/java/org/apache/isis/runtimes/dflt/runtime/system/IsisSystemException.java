@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.runtime.system;
 
 public class IsisSystemException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisSystemException() {}
+    public IsisSystemException() {
+    }
 
-    public IsisSystemException(String message) {
+    public IsisSystemException(final String message) {
         super(message);
     }
 
-    public IsisSystemException(Throwable cause) {
+    public IsisSystemException(final Throwable cause) {
         super(cause);
     }
 
-    public IsisSystemException(String message, Throwable cause) {
+    public IsisSystemException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
 }
-
-
