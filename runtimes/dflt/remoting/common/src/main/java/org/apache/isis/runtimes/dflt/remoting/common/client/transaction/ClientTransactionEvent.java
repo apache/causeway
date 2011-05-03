@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.transaction;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public class ClientTransactionEvent {
     private final ObjectAdapter object;
@@ -64,4 +62,3 @@ public class ClientTransactionEvent {
         return type;
     }
 }
-

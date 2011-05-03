@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport;
 
 import org.apache.isis.core.commons.components.Installer;
 
 /**
- * TODO: not yet in use, but holds the {@link #TYPE} constant. 
+ * TODO: not yet in use, but holds the {@link #TYPE} constant.
  */
 public interface TransportInstaller extends Installer {
 
-	public static String TYPE = "transport";
+    public static String TYPE = "transport";
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.persistence;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
@@ -26,12 +25,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class ProxyPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
-    public ProxyPersistenceSessionFactory(
-            final DeploymentType deploymentType, 
-            final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public ProxyPersistenceSessionFactory(final DeploymentType deploymentType,
+        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 
 }
-
-

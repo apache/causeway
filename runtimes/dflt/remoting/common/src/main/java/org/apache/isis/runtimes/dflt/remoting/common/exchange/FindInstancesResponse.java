@@ -17,48 +17,47 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 
 public class FindInstancesResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final ObjectData[] instances;
-	
-	public FindInstancesResponse(ObjectData[] instances) {
-		this.instances = instances;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public FindInstancesResponse(DataInputExtended input) throws IOException {
-		this.instances = input.readEncodables(ObjectData.class);
-		instantiated();
-	}
+    private final ObjectData[] instances;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeEncodables(instances);
-	}
+    public FindInstancesResponse(final ObjectData[] instances) {
+        this.instances = instances;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public FindInstancesResponse(final DataInputExtended input) throws IOException {
+        this.instances = input.readEncodables(ObjectData.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodables(instances);
+    }
 
-	public ObjectData[] getInstances() {
-		return instances;
-	}
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public ObjectData[] getInstances() {
+        return instances;
+    }
+
 }

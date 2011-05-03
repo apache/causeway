@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class OpenSessionRequest extends RequestAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final String username;
     private final String password;
@@ -49,40 +48,39 @@ public class OpenSessionRequest extends RequestAbstract {
     }
 
     @Override
-	public void encode(final DataOutputExtended output) throws IOException {
-    	super.encode(output);
-    	output.writeUTF(username);
-    	output.writeUTF(password);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+        output.writeUTF(username);
+        output.writeUTF(password);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-	
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
-	
-    /////////////////////////////////////////////////////////
+    public String getPassword() {
+        return password;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-
-	/**
-	 * {@link #setResponse(Object) Sets a response} of an {@link AuthenticationSession}.
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of an {@link AuthenticationSession}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        OpenSessionResponse response = serverFacade.openSession(this);
-		setResponse(response);
+        final OpenSessionResponse response = serverFacade.openSession(this);
+        setResponse(response);
     }
 
     /**
@@ -93,10 +91,9 @@ public class OpenSessionRequest extends RequestAbstract {
         return (OpenSessionResponse) super.getResponse();
     }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // toString
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {
@@ -105,6 +102,4 @@ public class OpenSessionRequest extends RequestAbstract {
         return str.toString();
     }
 
-
 }
-

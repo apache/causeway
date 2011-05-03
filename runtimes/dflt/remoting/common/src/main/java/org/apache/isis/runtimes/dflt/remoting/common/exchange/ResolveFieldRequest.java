@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class ResolveFieldRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
@@ -49,38 +48,39 @@ public class ResolveFieldRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
         output.writeUTF(fieldIdentifier);
         output.writeEncodable(target);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	public String getFieldIdentifier() {
-		return fieldIdentifier;
-	}
-	public IdentityData getTarget() {
-		return target;
-	}
-	
-    /////////////////////////////////////////////////////////
+    public String getFieldIdentifier() {
+        return fieldIdentifier;
+    }
+
+    public IdentityData getTarget() {
+        return target;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} of a {@link ResolveFieldResponse}.
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of a {@link ResolveFieldResponse}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        ResolveFieldResponse response = serverFacade.resolveField(this);
-		setResponse(response);
+        final ResolveFieldResponse response = serverFacade.resolveField(this);
+        setResponse(response);
     }
 
     /**
@@ -91,10 +91,9 @@ public class ResolveFieldRequest extends RequestAbstract {
         return (ResolveFieldResponse) super.getResponse();
     }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // toString
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {

@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.protocol;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 
-
 public final class ProtocolConstants {
 
-	public static final String ROOT = 
-		ConfigurationConstants.ROOT + ProtocolInstaller.TYPE + ".";
+    public static final String ROOT = ConfigurationConstants.ROOT + ProtocolInstaller.TYPE + ".";
     public static final String ENCODER_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "persistence-query.encoders";
     public static final String ENCODER_CLASS_NAME_LIST_DEPRECATED = ConfigurationConstants.ROOT + "criteria.encoders";
-	
-	private ProtocolConstants() {}
+
+    private ProtocolConstants() {
+    }
 
 }

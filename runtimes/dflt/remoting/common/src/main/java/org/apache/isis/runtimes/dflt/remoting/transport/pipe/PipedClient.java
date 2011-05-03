@@ -17,27 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.pipe;
 
 import org.apache.isis.runtimes.dflt.remoting.common.client.ClientConnection;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResponseEnvelope;
 
-
 public class PipedClient implements ClientConnection {
 
     private PipedConnection communication;
 
-    public void init() {}
+    @Override
+    public void init() {
+    }
 
-    public void shutdown() {}
-
+    @Override
+    public void shutdown() {
+    }
 
     public synchronized void setConnection(final PipedConnection communication) {
         this.communication = communication;
     }
 
+    @Override
     public synchronized ResponseEnvelope executeRemotely(final Request request) {
         communication.setRequest(request);
         return communication.getResponse();

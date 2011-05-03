@@ -17,53 +17,47 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindUsingApplibQuerySerializableData;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindUsingApplibQuerySerializableData;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindUsingApplibQuerySerializableEncoder extends PersistenceQueryEncoderAbstract {
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindByTitle.class;
     }
-    
-    public PersistenceQueryData encode(
-    		final PersistenceQuery persistenceQuery) {
-        PersistenceQueryFindUsingApplibQuerySerializable query = 
-        	downcast(persistenceQuery);
-		return new PersistenceQueryFindUsingApplibQuerySerializableData(
-        		query.getSpecification(), 
-        		query.getApplibQuery(), 
-        		query.getCardinality());
+
+    @Override
+    public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
+        final PersistenceQueryFindUsingApplibQuerySerializable query = downcast(persistenceQuery);
+        return new PersistenceQueryFindUsingApplibQuerySerializableData(query.getSpecification(),
+            query.getApplibQuery(), query.getCardinality());
     }
 
     @Override
-    protected PersistenceQuery doDecode(
-            final ObjectSpecification specification,
-            final PersistenceQueryData persistenceQueryData) {
-        PersistenceQueryFindUsingApplibQuerySerializableData data = downcast(persistenceQueryData);
-		final Query query = (Query) data.getApplibQuerySerializable();
-		final QueryCardinality cardinality = (QueryCardinality) data.getCardinality();
+    protected PersistenceQuery doDecode(final ObjectSpecification specification,
+        final PersistenceQueryData persistenceQueryData) {
+        final PersistenceQueryFindUsingApplibQuerySerializableData data = downcast(persistenceQueryData);
+        final Query query = (Query) data.getApplibQuerySerializable();
+        final QueryCardinality cardinality = data.getCardinality();
         return new PersistenceQueryFindUsingApplibQuerySerializable(specification, query, cardinality);
     }
 
-	private PersistenceQueryFindUsingApplibQuerySerializable downcast(
-			final PersistenceQuery persistenceQuery) {
-		return (PersistenceQueryFindUsingApplibQuerySerializable) persistenceQuery;
-	}
+    private PersistenceQueryFindUsingApplibQuerySerializable downcast(final PersistenceQuery persistenceQuery) {
+        return (PersistenceQueryFindUsingApplibQuerySerializable) persistenceQuery;
+    }
 
-	private PersistenceQueryFindUsingApplibQuerySerializableData downcast(
-			final PersistenceQueryData persistenceQueryData) {
-		return (PersistenceQueryFindUsingApplibQuerySerializableData) persistenceQueryData;
-	}
+    private PersistenceQueryFindUsingApplibQuerySerializableData downcast(
+        final PersistenceQueryData persistenceQueryData) {
+        return (PersistenceQueryFindUsingApplibQuerySerializableData) persistenceQueryData;
+    }
 
 }
-

@@ -17,20 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class GetObjectRequest extends RequestAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final Oid oid;
     private final String specificationName;
@@ -50,53 +49,52 @@ public class GetObjectRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
         output.writeEncodable(oid);
         output.writeUTF(specificationName);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
-
-    /////////////////////////////////////////////////////////
-    // request data
-    /////////////////////////////////////////////////////////
-
-	public Oid getOid() {
-		return oid;
-	}
-
-	public String getSpecificationName() {
-		return specificationName;
-	}
-	
-    /////////////////////////////////////////////////////////
-    // execute, response
-    /////////////////////////////////////////////////////////
-
-	/**
-	 * {@link #setResponse(Object) Sets a response} of a {@link GetObjectResponse}.
-	 */
-    public void execute(final ServerFacade serverFacade) {
-        GetObjectResponse response = serverFacade.getObject(this);
-		setResponse(response);
+    private void initialized() {
+        // nothing to do
     }
 
-	/**
-	 * Downcasts.
-	 */
-	@Override
+    // ///////////////////////////////////////////////////////
+    // request data
+    // ///////////////////////////////////////////////////////
+
+    public Oid getOid() {
+        return oid;
+    }
+
+    public String getSpecificationName() {
+        return specificationName;
+    }
+
+    // ///////////////////////////////////////////////////////
+    // execute, response
+    // ///////////////////////////////////////////////////////
+
+    /**
+     * {@link #setResponse(Object) Sets a response} of a {@link GetObjectResponse}.
+     */
+    @Override
+    public void execute(final ServerFacade serverFacade) {
+        final GetObjectResponse response = serverFacade.getObject(this);
+        setResponse(response);
+    }
+
+    /**
+     * Downcasts.
+     */
+    @Override
     public GetObjectResponse getResponse() {
         return (GetObjectResponse) super.getResponse();
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // toString
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {
@@ -106,4 +104,3 @@ public class GetObjectRequest extends RequestAbstract {
         return str.toString();
     }
 }
-

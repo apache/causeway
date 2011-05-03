@@ -17,46 +17,40 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindByTitleData;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindByTitleEncoder extends PersistenceQueryEncoderAbstract {
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindByTitle.class;
     }
 
-    public PersistenceQueryData encode(
-    		final PersistenceQuery persistenceQuery) {
-        PersistenceQueryFindByTitle queryByTitle = downcast(persistenceQuery);
-		return new PersistenceQueryFindByTitleData(
-        		persistenceQuery.getSpecification(), 
-        		queryByTitle.getTitle());
+    @Override
+    public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
+        final PersistenceQueryFindByTitle queryByTitle = downcast(persistenceQuery);
+        return new PersistenceQueryFindByTitleData(persistenceQuery.getSpecification(), queryByTitle.getTitle());
     }
 
     @Override
-    protected PersistenceQuery doDecode(
-            final ObjectSpecification specification,
-            final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification,
+        final PersistenceQueryData persistenceQueryData) {
         final String title = (downcast(persistenceQueryData)).getTitle();
         return new PersistenceQueryFindByTitle(specification, title);
     }
 
-	private PersistenceQueryFindByTitle downcast(
-			final PersistenceQuery persistenceQuery) {
-		return (PersistenceQueryFindByTitle) persistenceQuery;
-	}
+    private PersistenceQueryFindByTitle downcast(final PersistenceQuery persistenceQuery) {
+        return (PersistenceQueryFindByTitle) persistenceQuery;
+    }
 
-	private PersistenceQueryFindByTitleData downcast(
-			final PersistenceQueryData persistenceQueryData) {
-		return (PersistenceQueryFindByTitleData) persistenceQueryData;
-	}
+    private PersistenceQueryFindByTitleData downcast(final PersistenceQueryData persistenceQueryData) {
+        return (PersistenceQueryFindByTitleData) persistenceQueryData;
+    }
 
 }
-

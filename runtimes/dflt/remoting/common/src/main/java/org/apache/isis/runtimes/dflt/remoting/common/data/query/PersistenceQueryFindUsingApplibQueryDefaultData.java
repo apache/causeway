@@ -17,52 +17,48 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
 import java.util.Map;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 /**
  * Serializable representation of {@link PersistenceQueryFindUsingApplibQueryDefault}.
  */
 public class PersistenceQueryFindUsingApplibQueryDefaultData extends PersistenceQueryDataAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final Map<String, ObjectData> argumentDatasByParameterName;
-	private final QueryCardinality cardinality;
-	private final String queryName;
-	
-    public PersistenceQueryFindUsingApplibQueryDefaultData(
-    		final ObjectSpecification noSpec, 
-    		final String queryName,
-    		final Map<String, ObjectData> argumentDatasByParameterName, 
-    		final QueryCardinality cardinality) {
+    private final QueryCardinality cardinality;
+    private final String queryName;
+
+    public PersistenceQueryFindUsingApplibQueryDefaultData(final ObjectSpecification noSpec, final String queryName,
+        final Map<String, ObjectData> argumentDatasByParameterName, final QueryCardinality cardinality) {
         super(noSpec);
         this.queryName = queryName;
         this.argumentDatasByParameterName = argumentDatasByParameterName;
         this.cardinality = cardinality;
     }
 
-	public String getQueryName() {
-		return queryName;
-	}
-    
-	public Map<String, ObjectData> getArgumentDatasByParameterName() {
-		return argumentDatasByParameterName;
-	}
-	
-	public QueryCardinality getCardinality() {
-		return cardinality;
-	}
+    public String getQueryName() {
+        return queryName;
+    }
 
-	public Class<?> getPersistenceQueryClass() {
-		return PersistenceQueryFindUsingApplibQueryDefault.class;
-	}
-	
+    public Map<String, ObjectData> getArgumentDatasByParameterName() {
+        return argumentDatasByParameterName;
+    }
+
+    public QueryCardinality getCardinality() {
+        return cardinality;
+    }
+
+    @Override
+    public Class<?> getPersistenceQueryClass() {
+        return PersistenceQueryFindUsingApplibQueryDefault.class;
+    }
+
 }
-

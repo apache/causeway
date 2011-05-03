@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 
 public class PersistenceQueryFindByTitleData extends PersistenceQueryDataAbstract {
-	
+
     private static final long serialVersionUID = 1L;
-    
+
     private final String title;
 
-    public PersistenceQueryFindByTitleData(
-    		final ObjectSpecification noSpec, 
-    		final String title) {
+    public PersistenceQueryFindByTitleData(final ObjectSpecification noSpec, final String title) {
         super(noSpec);
         this.title = title;
     }
@@ -40,8 +37,8 @@ public class PersistenceQueryFindByTitleData extends PersistenceQueryDataAbstrac
         return title;
     }
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindByTitle.class;
     }
 }
-

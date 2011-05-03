@@ -17,37 +17,32 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.protocol.encoding;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.testsupport.testdomain.Movie;
+import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyEncodeableObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyNullValue;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.NullData;
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.ObjectEncoderDecoderDefault;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.runtimes.dflt.runtime.testspec.MovieSpecification;
 import org.apache.isis.runtimes.dflt.runtime.testspec.PersonSpecification;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-import org.apache.isis.core.testsupport.testdomain.Movie;
-import org.apache.isis.core.testsupport.testdomain.Person;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-
-
-
 
 public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
 
@@ -63,49 +58,61 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         system.getSpecification(String.class).setupIsEncodeable();
         system.getSpecification(String.class).addFacet(new EncodableFacet() {
 
+            @Override
             public String toEncodedString(final ObjectAdapter object) {
                 return object.getObject().toString();
             }
 
+            @Override
             public ObjectAdapter fromEncodedString(final String encodedData) {
                 return getAdapterManager().adapterFor(encodedData);
             }
 
+            @Override
             public Class<? extends Facet> facetType() {
                 return EncodableFacet.class;
             }
 
+            @Override
             public FacetHolder getFacetHolder() {
                 return null;
             }
 
-            public void setFacetHolder(final FacetHolder facetHolder) {}
+            @Override
+            public void setFacetHolder(final FacetHolder facetHolder) {
+            }
 
+            @Override
             public boolean alwaysReplace() {
                 return false;
             }
 
+            @Override
             public boolean isDerived() {
-            	return false;
+                return false;
             }
 
+            @Override
             public boolean isNoop() {
                 return false;
             }
-            
-        	public Facet getUnderlyingFacet() {
-        		return null;
-        	}
-        	public void setUnderlyingFacet(Facet underlyingFacet) {
-        		throw new UnsupportedOperationException();
-        	}
+
+            @Override
+            public Facet getUnderlyingFacet() {
+                return null;
+            }
+
+            @Override
+            public void setUnderlyingFacet(final Facet underlyingFacet) {
+                throw new UnsupportedOperationException();
+            }
 
         });
 
         /*
-         * TestProxySpecification specification = new MovieSpecification(); specification.setupFields(new
-         * ObjectField[] { new TestProxyField("name", system.getSpecification(String.class)), new
-         * TestProxyField("person", system.getSpecification(Person.class)) });
+         * TestProxySpecification specification = new MovieSpecification(); specification.setupFields(new ObjectField[]
+         * { new TestProxyField("name", system.getSpecification(String.class)), new TestProxyField("person",
+         * system.getSpecification(Person.class)) });
          */
     }
 
@@ -116,8 +123,8 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
 
     @Test
     public void testRestoreCreatesNewAdapter() {
-        final DummyObjectData data = new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), true,
-                new TestProxyVersion(3));
+        final DummyObjectData data =
+            new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), true, new TestProxyVersion(3));
         final DummyEncodeableObjectData name = new DummyEncodeableObjectData("ET", "java.lang.String");
         final DummyNullValue reference = new DummyNullValue(Person.class.getName());
         // note - the order of the fields is by name, not the order that are defined in the specification
@@ -131,13 +138,13 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         assertEquals("ET", movie.getName());
         assertEquals(new TestProxyOid(5, true), object.getOid());
         assertEquals(new TestProxyVersion(3), object.getVersion());
-        
+
     }
 
     @Test
     public void testRestoreCreatesNewAdapterInUnresolvedState() {
-        final DummyObjectData data = new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), false,
-                new TestProxyVersion(3));
+        final DummyObjectData data =
+            new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), false, new TestProxyVersion(3));
 
         final ObjectAdapter object = encoder.decode(data);
 
@@ -153,7 +160,8 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         final ObjectAdapter adapter = system.createPersistentTestObject(movie);
         adapter.changeState(ResolveState.RESOLVED);
 
-        final DummyObjectData data = new DummyObjectData(adapter.getOid(), Movie.class.getName(), true, new TestProxyVersion(3));
+        final DummyObjectData data =
+            new DummyObjectData(adapter.getOid(), Movie.class.getName(), true, new TestProxyVersion(3));
         final DummyEncodeableObjectData name = new DummyEncodeableObjectData("ET", "java.lang.String");
         final DummyNullValue reference = new DummyNullValue(Person.class.getName());
         data.setFieldContent(new Data[] { reference, name });
@@ -173,7 +181,8 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         final ObjectAdapter adapter = system.createPersistentTestObject(movie);
         adapter.changeState(ResolveState.RESOLVED);
 
-        final DummyObjectData data = new DummyObjectData(adapter.getOid(), Movie.class.getName(), false, new TestProxyVersion(3));
+        final DummyObjectData data =
+            new DummyObjectData(adapter.getOid(), Movie.class.getName(), false, new TestProxyVersion(3));
 
         final ObjectAdapter object = encoder.decode(data);
 
@@ -198,4 +207,3 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
 
     }
 }
-

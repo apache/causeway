@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,44 +25,41 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestVisibility;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class AuthorizationRequestVisibilityEncodabilityTest extends EncodabilityContractTest {
 
-	protected IdentityData mockTargetData;
+    protected IdentityData mockTargetData;
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		mockTargetData = context.mock(IdentityData.class);
-	}
-	
-	protected Encodable createEncodable() {
-		return new AuthorizationRequestVisibility(mockAuthSession, mockTargetData, "foobar");
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        mockTargetData = context.mock(IdentityData.class);
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		AuthorizationRequestVisibility decoded = (AuthorizationRequestVisibility) decodedEncodable;
-		AuthorizationRequestVisibility original = (AuthorizationRequestVisibility) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new AuthorizationRequestVisibility(mockAuthSession, mockTargetData, "foobar");
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
+
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final AuthorizationRequestVisibility decoded = (AuthorizationRequestVisibility) decodedEncodable;
+        final AuthorizationRequestVisibility original = (AuthorizationRequestVisibility) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

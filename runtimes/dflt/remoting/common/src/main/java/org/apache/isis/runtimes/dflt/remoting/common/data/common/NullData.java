@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-
 
 public interface NullData extends Data {
 

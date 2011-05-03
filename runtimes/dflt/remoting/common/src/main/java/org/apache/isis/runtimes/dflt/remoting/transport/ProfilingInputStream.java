@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport;
 
 import java.io.IOException;
@@ -25,13 +24,12 @@ import java.io.InputStream;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * Collection of timing and quantity data for the stream. Note that as the reads block the clock does not
- * start until the first read has completed.
+ * Collection of timing and quantity data for the stream. Note that as the reads block the clock does not start until
+ * the first read has completed.
  */
 public class ProfilingInputStream extends InputStream {
-	
+
     private static final Logger LOG = Logger.getLogger(ProfilingOutputStream.class);
 
     private final InputStream wrapped;
@@ -90,15 +88,15 @@ public class ProfilingInputStream extends InputStream {
         start = end = 0;
     }
 
-    private void start() {}
-    
+    private void start() {
+    }
+
     @Override
     public void close() throws IOException {
-    	super.close();
+        super.close();
         if (LOG.isDebugEnabled()) {
             LOG.debug(getSize() + " bytes received in " + getTime() + " seconds");
         }
         resetTimer();
     }
 }
-

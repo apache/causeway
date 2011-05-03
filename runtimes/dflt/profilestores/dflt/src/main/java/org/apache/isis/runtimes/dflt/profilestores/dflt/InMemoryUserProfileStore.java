@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.profilestores.dflt;
 
 import java.util.HashMap;
@@ -25,36 +24,38 @@ import java.util.Map;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 public class InMemoryUserProfileStore implements UserProfileStore, DebuggableWithTitle {
-	
+
     private static final Map<String, UserProfile> profiles = new HashMap<String, UserProfile>();
-    
+
+    @Override
     public boolean isFixturesInstalled() {
-    	return false;
+        return false;
     }
-    
-    public UserProfile getUserProfile(String name) {
+
+    @Override
+    public UserProfile getUserProfile(final String name) {
         return profiles.get(name);
     }
 
-    public void save(String name, UserProfile userProfile) {
+    @Override
+    public void save(final String name, final UserProfile userProfile) {
         profiles.put(name, userProfile);
     }
 
-    public void debugData(DebugBuilder debug) {
-        for (String name : profiles.keySet()) {
+    @Override
+    public void debugData(final DebugBuilder debug) {
+        for (final String name : profiles.keySet()) {
             debug.appendln(name, profiles.get(name));
         }
     }
 
+    @Override
     public String debugTitle() {
         return "InMemoryUserProfileStore";
     }
 
 }
-
-

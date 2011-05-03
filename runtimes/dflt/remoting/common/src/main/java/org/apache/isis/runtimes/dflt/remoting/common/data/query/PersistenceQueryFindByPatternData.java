@@ -17,23 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 
 /**
  * Serializable representation of {@link PersistenceQueryFindByPattern}.
  */
 public class PersistenceQueryFindByPatternData extends PersistenceQueryDataAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final ObjectData patternData;
 
-    public PersistenceQueryFindByPatternData(
-    		final ObjectSpecification noSpec, final ObjectData patternData) {
+    public PersistenceQueryFindByPatternData(final ObjectSpecification noSpec, final ObjectData patternData) {
         super(noSpec);
         this.patternData = patternData;
     }
@@ -42,8 +40,8 @@ public class PersistenceQueryFindByPatternData extends PersistenceQueryDataAbstr
         return patternData;
     }
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindByPattern.class;
     }
 }
-

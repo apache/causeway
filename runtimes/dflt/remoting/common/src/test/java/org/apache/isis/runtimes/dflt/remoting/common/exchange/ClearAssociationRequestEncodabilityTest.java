@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,49 +25,45 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.ClearAssociationRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class ClearAssociationRequestEncodabilityTest extends EncodabilityContractTest {
 
-	private IdentityData mockTargetData;
-	private IdentityData mockAssociateData;
-	
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		mockTargetData = context.mock(IdentityData.class, "identity");
-		mockAssociateData = context.mock(IdentityData.class, "associate");
-	}
-	
-	protected Encodable createEncodable() {
-		return new ClearAssociationRequest(
-				mockAuthSession, "firstName", mockTargetData, mockAssociateData);
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    private IdentityData mockTargetData;
+    private IdentityData mockAssociateData;
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		ClearAssociationRequest decoded = (ClearAssociationRequest) decodedEncodable;
-		ClearAssociationRequest original = (ClearAssociationRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        mockTargetData = context.mock(IdentityData.class, "identity");
+        mockAssociateData = context.mock(IdentityData.class, "associate");
+    }
+
+    @Override
+    protected Encodable createEncodable() {
+        return new ClearAssociationRequest(mockAuthSession, "firstName", mockTargetData, mockAssociateData);
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
+
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final ClearAssociationRequest decoded = (ClearAssociationRequest) decodedEncodable;
+        final ClearAssociationRequest original = (ClearAssociationRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.facade;
 
-
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestUsability;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestVisibility;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationResponse;
@@ -54,60 +53,57 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationRequ
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-
 
 /**
  * previously called <tt>Distribution</tt>.
  */
 public interface ServerFacade extends ApplicationScopedComponent {
 
-	///////////////////////////////////////////////////////////////////////
-	// Authentication
-	///////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////
+    // Authentication
+    // /////////////////////////////////////////////////////////////////////
 
     OpenSessionResponse openSession(OpenSessionRequest request);
+
     CloseSessionResponse closeSession(CloseSessionRequest request);
 
-    
-	///////////////////////////////////////////////////////////////////////
-	// Authorization
-	///////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////
+    // Authorization
+    // /////////////////////////////////////////////////////////////////////
 
-    AuthorizationResponse authorizeUsability(
-    		AuthorizationRequestUsability request);
-    AuthorizationResponse authorizeVisibility(
-    		AuthorizationRequestVisibility request);
+    AuthorizationResponse authorizeUsability(AuthorizationRequestUsability request);
 
-	///////////////////////////////////////////////////////////////////////
-	// Misc
-	///////////////////////////////////////////////////////////////////////
+    AuthorizationResponse authorizeVisibility(AuthorizationRequestVisibility request);
+
+    // /////////////////////////////////////////////////////////////////////
+    // Misc
+    // /////////////////////////////////////////////////////////////////////
 
     GetPropertiesResponse getProperties(GetPropertiesRequest request);
-    
-	///////////////////////////////////////////////////////////////////////
-	// Associations (Properties and Collections)
-	///////////////////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////////////////
+    // Associations (Properties and Collections)
+    // /////////////////////////////////////////////////////////////////////
 
     SetAssociationResponse setAssociation(SetAssociationRequest request);
+
     ClearAssociationResponse clearAssociation(ClearAssociationRequest request);
 
     SetValueResponse setValue(SetValueRequest request);
+
     ClearValueResponse clearValue(ClearValueRequest request);
-    
-	///////////////////////////////////////////////////////////////////////
-	// Actions
-	///////////////////////////////////////////////////////////////////////
 
-    ExecuteClientActionResponse executeClientAction(
-    		ExecuteClientActionRequest request);
+    // /////////////////////////////////////////////////////////////////////
+    // Actions
+    // /////////////////////////////////////////////////////////////////////
 
-    ExecuteServerActionResponse executeServerAction(
-            ExecuteServerActionRequest request);
-    
-	///////////////////////////////////////////////////////////////////////
-	// getObject, resolve
-	///////////////////////////////////////////////////////////////////////
+    ExecuteClientActionResponse executeClientAction(ExecuteClientActionRequest request);
+
+    ExecuteServerActionResponse executeServerAction(ExecuteServerActionRequest request);
+
+    // /////////////////////////////////////////////////////////////////////
+    // getObject, resolve
+    // /////////////////////////////////////////////////////////////////////
 
     OidForServiceResponse oidForService(OidForServiceRequest request);
 
@@ -116,11 +112,10 @@ public interface ServerFacade extends ApplicationScopedComponent {
     ResolveObjectResponse resolveImmediately(ResolveObjectRequest request);
 
     ResolveFieldResponse resolveField(ResolveFieldRequest request);
-    
-    
-	///////////////////////////////////////////////////////////////////////
-	// findInstances, hasInstances
-	///////////////////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////////////////
+    // findInstances, hasInstances
+    // /////////////////////////////////////////////////////////////////////
 
     FindInstancesResponse findInstances(FindInstancesRequest request);
 

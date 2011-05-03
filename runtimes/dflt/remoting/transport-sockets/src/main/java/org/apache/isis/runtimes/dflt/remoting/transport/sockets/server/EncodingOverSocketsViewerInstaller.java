@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.server;
 
 import java.util.List;
@@ -27,36 +26,33 @@ import org.apache.isis.runtimes.dflt.runtime.Isis;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
 /**
- * Implementation of a {@link IsisViewer} providing the ability to run
- * from server as a {@link Isis command line} application.
+ * Implementation of a {@link IsisViewer} providing the ability to run from server as a {@link Isis command line}
+ * application.
  * 
  * <p>
- * To run, use the <tt>--viewer encoding-sockets</tt> flag. The client-side
- * should run using <tt>--connector encoding-sockets</tt> flag.
+ * To run, use the <tt>--viewer encoding-sockets</tt> flag. The client-side should run using
+ * <tt>--connector encoding-sockets</tt> flag.
  */
-public class EncodingOverSocketsViewerInstaller extends
-		SocketsViewerInstallerAbstract {
+public class EncodingOverSocketsViewerInstaller extends SocketsViewerInstallerAbstract {
 
-	public EncodingOverSocketsViewerInstaller() {
-		super("encoding-sockets");
-	}
+    public EncodingOverSocketsViewerInstaller() {
+        super("encoding-sockets");
+    }
 
-	@Override
-	protected void addConfigurationResources(List<String> configurationResources) {
-		super.addConfigurationResources(configurationResources);
-		// TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
-		// and Transport using the installers.
-		configurationResources.add("protocol.properties");
-		configurationResources.add("protocol_encoding.properties");
-		configurationResources.add("transport.properties");
-		configurationResources.add("transport_sockets.properties");
-	}
+    @Override
+    protected void addConfigurationResources(final List<String> configurationResources) {
+        super.addConfigurationResources(configurationResources);
+        // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
+        // and Transport using the installers.
+        configurationResources.add("protocol.properties");
+        configurationResources.add("protocol_encoding.properties");
+        configurationResources.add("transport.properties");
+        configurationResources.add("transport_sockets.properties");
+    }
 
-	@Override
-	protected SocketsViewerAbstract createSocketsViewer(
-			final ObjectEncoderDecoder objectEncoderDecoder) {
-		return new EncodingOverSocketsViewer(objectEncoderDecoder);
-	}
+    @Override
+    protected SocketsViewerAbstract createSocketsViewer(final ObjectEncoderDecoder objectEncoderDecoder) {
+        return new EncodingOverSocketsViewer(objectEncoderDecoder);
+    }
 
 }
-

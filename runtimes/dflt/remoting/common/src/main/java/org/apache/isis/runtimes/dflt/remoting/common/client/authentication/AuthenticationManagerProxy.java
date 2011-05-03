@@ -17,40 +17,33 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.authentication;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.CloseSessionRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardForDfltRuntime;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
-
 
 public class AuthenticationManagerProxy extends AuthenticationManagerStandardForDfltRuntime {
 
-    private ServerFacade serverFacade;
+    private final ServerFacade serverFacade;
 
-    public AuthenticationManagerProxy(
-    		final IsisConfiguration configuration,
-    		final ServerFacade serverFacade,
-    		final ObjectEncoderDecoder encoderDecoder) {
-    	super(configuration);
-    	this.serverFacade = serverFacade;
+    public AuthenticationManagerProxy(final IsisConfiguration configuration, final ServerFacade serverFacade,
+        final ObjectEncoderDecoder encoderDecoder) {
+        super(configuration);
+        this.serverFacade = serverFacade;
 
-        ProxyAuthenticator authenticator =
-        	new ProxyAuthenticator(getConfiguration(), serverFacade, encoderDecoder);
-		addAuthenticator(authenticator);
+        final ProxyAuthenticator authenticator =
+            new ProxyAuthenticator(getConfiguration(), serverFacade, encoderDecoder);
+        addAuthenticator(authenticator);
     }
-
 
     @Override
     public void closeSession(final AuthenticationSession authSession) {
-		serverFacade.closeSession(new CloseSessionRequest(authSession));
+        serverFacade.closeSession(new CloseSessionRequest(authSession));
         super.closeSession(authSession);
     }
 
 }
-

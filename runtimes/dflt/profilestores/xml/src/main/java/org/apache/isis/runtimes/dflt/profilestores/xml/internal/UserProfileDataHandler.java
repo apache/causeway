@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.profilestores.xml.internal;
 
 import java.util.List;
@@ -32,11 +31,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 public class UserProfileDataHandler extends DefaultHandler {
     private final StringBuffer data = new StringBuffer();
     private final UserProfile userProfile = new UserProfile();
-    private Stack<Options> options = new Stack<Options>();
+    private final Stack<Options> options = new Stack<Options>();
     private String optionName;
     private boolean isProfile;
     private boolean isOptions;
@@ -48,7 +46,7 @@ public class UserProfileDataHandler extends DefaultHandler {
     public UserProfile getUserProfile() {
         return userProfile;
     }
-    
+
     @Override
     public void characters(final char[] ch, final int start, final int end) throws SAXException {
         data.append(new String(ch, start, end));
@@ -63,7 +61,7 @@ public class UserProfileDataHandler extends DefaultHandler {
             isPerspectives = false;
         } else if (tagName.equals("perspective")) {
             // TODO add perspective to profile
-            
+
             perspective = null;
         } else if (tagName.equals("services")) {
             isServices = false;
@@ -80,7 +78,7 @@ public class UserProfileDataHandler extends DefaultHandler {
 
     @Override
     public void startElement(final String ns, final String name, final String tagName, final Attributes attributes)
-            throws SAXException {
+        throws SAXException {
 
         if (isProfile) {
             if (isOptions) {
@@ -88,8 +86,8 @@ public class UserProfileDataHandler extends DefaultHandler {
                     optionName = attributes.getValue("id");
                     data.setLength(0);
                 } else if (tagName.equals("options")) {
-                    String optionsName = attributes.getValue("id");
-                    Options newOptions = new Options();
+                    final String optionsName = attributes.getValue("id");
+                    final Options newOptions = new Options();
                     options.peek().addOptions(optionsName, newOptions);
                     options.push(newOptions);
                 } else {
@@ -98,10 +96,10 @@ public class UserProfileDataHandler extends DefaultHandler {
             } else if (isPerspectives) {
                 if (perspective != null) {
                     if (isServices) {
-                        if (tagName.equals("service")){
-                            String serviceId = attributes.getValue("id");
-                            List<Object> serviceObjects = IsisContext.getServices();
-                            for (Object service : serviceObjects) {
+                        if (tagName.equals("service")) {
+                            final String serviceId = attributes.getValue("id");
+                            final List<Object> serviceObjects = IsisContext.getServices();
+                            for (final Object service : serviceObjects) {
                                 if (ServiceUtil.id(service).equals(serviceId)) {
                                     perspective.addToServices(service);
                                     break;
@@ -111,7 +109,7 @@ public class UserProfileDataHandler extends DefaultHandler {
                             throw new SAXException("Invalid element in services: " + tagName);
                         }
                     } else if (isObjects) {
-                         // TODO reload objects
+                        // TODO reload objects
                     } else if (tagName.equals("services")) {
                         isServices = true;
                     } else if (tagName.equals("objects")) {
@@ -145,4 +143,3 @@ public class UserProfileDataHandler extends DefaultHandler {
     }
 
 }
-

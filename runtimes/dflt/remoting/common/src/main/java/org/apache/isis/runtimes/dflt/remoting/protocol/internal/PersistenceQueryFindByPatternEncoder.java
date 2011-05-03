@@ -17,25 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindByPatternData;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindByPatternEncoder extends PersistenceQueryEncoderAbstract {
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindByPattern.class;
     }
-    
-    public PersistenceQueryData encode(
-    		final PersistenceQuery persistenceQuery) {
+
+    @Override
+    public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
         final PersistenceQueryFindByPattern patternPersistenceQuery = downcast(persistenceQuery);
         final ObjectAdapter pattern = patternPersistenceQuery.getPattern();
         final ObjectData objectData = encodeObject(pattern);
@@ -43,24 +43,19 @@ public class PersistenceQueryFindByPatternEncoder extends PersistenceQueryEncode
     }
 
     @Override
-    protected PersistenceQuery doDecode(
-            final ObjectSpecification specification,
-            final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification,
+        final PersistenceQueryData persistenceQueryData) {
         final ObjectData patternData = downcast(persistenceQueryData).getPatternData();
         final ObjectAdapter patternObject = decodeObject(patternData);
         return new PersistenceQueryFindByPattern(specification, patternObject);
     }
 
-	private PersistenceQueryFindByPattern downcast(
-			final PersistenceQuery persistenceQuery) {
-		return (PersistenceQueryFindByPattern) persistenceQuery;
-	}
+    private PersistenceQueryFindByPattern downcast(final PersistenceQuery persistenceQuery) {
+        return (PersistenceQueryFindByPattern) persistenceQuery;
+    }
 
-	private PersistenceQueryFindByPatternData downcast(
-			final PersistenceQueryData persistenceQueryData) {
-		return (PersistenceQueryFindByPatternData)persistenceQueryData;
-	}
-
+    private PersistenceQueryFindByPatternData downcast(final PersistenceQueryData persistenceQueryData) {
+        return (PersistenceQueryFindByPatternData) persistenceQueryData;
+    }
 
 }
-

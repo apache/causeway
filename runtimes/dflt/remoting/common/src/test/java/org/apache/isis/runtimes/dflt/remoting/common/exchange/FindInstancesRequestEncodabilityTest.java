@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,49 +25,43 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestUsability;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.FindInstancesRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class FindInstancesRequestEncodabilityTest extends EncodabilityContractTest {
 
-	private PersistenceQueryData mockPersistenceQueryData;
+    private PersistenceQueryData mockPersistenceQueryData;
 
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        mockPersistenceQueryData = context.mock(PersistenceQueryData.class);
+    }
 
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		mockPersistenceQueryData = context.mock(PersistenceQueryData.class);
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new FindInstancesRequest(mockAuthSession, mockPersistenceQueryData);
+    }
 
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
 
-	protected Encodable createEncodable() {
-		return new FindInstancesRequest(mockAuthSession, mockPersistenceQueryData);
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final AuthorizationRequestUsability decoded = (AuthorizationRequestUsability) decodedEncodable;
+        final AuthorizationRequestUsability original = (AuthorizationRequestUsability) originalEncodable;
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		AuthorizationRequestUsability decoded = (AuthorizationRequestUsability) decodedEncodable;
-		AuthorizationRequestUsability original = (AuthorizationRequestUsability) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

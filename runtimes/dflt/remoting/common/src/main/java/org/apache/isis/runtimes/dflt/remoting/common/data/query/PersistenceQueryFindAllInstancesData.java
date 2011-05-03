@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -33,8 +32,8 @@ public class PersistenceQueryFindAllInstancesData extends PersistenceQueryDataAb
         super(objectSpecification);
     }
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindAllInstances.class;
     }
 }
-

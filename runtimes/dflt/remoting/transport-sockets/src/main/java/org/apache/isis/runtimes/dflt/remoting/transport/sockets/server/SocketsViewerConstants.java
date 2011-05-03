@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.server;
 
-import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.SocketTransportConstants;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.SocketTransportConstants;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
-
 
 public final class SocketsViewerConstants {
 
-	private static final String ROOT = 
-		ConfigurationConstants.ROOT + IsisViewerInstaller.TYPE + ".";
-	
-	/**
-	 * Used by all the XxxOverSockets viewers.  
-	 * 
-	 * <p>
-	 * Equivalent to {@link SocketTransportConstants#PORT_KEY}.
-	 */
-	public static final String SERVER_PORT = ROOT + "sockets.port";
-	
-	private SocketsViewerConstants() {}
+    private static final String ROOT = ConfigurationConstants.ROOT + IsisViewerInstaller.TYPE + ".";
+
+    /**
+     * Used by all the XxxOverSockets viewers.
+     * 
+     * <p>
+     * Equivalent to {@link SocketTransportConstants#PORT_KEY}.
+     */
+    public static final String SERVER_PORT = ROOT + "sockets.port";
+
+    private SocketsViewerConstants() {
+    }
 
 }

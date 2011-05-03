@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
 import java.io.Serializable;
@@ -31,30 +30,29 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
  * Serializable representation of {@link PersistenceQueryFindUsingApplibQuerySerializable}.
  */
 public class PersistenceQueryFindUsingApplibQuerySerializableData extends PersistenceQueryDataAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final Serializable querySerializable;
-	private final QueryCardinality cardinality;
-	
-    public PersistenceQueryFindUsingApplibQuerySerializableData(
-    		final ObjectSpecification noSpec, 
-    		final Query applibQuery, QueryCardinality cardinality) {
+    private final QueryCardinality cardinality;
+
+    public PersistenceQueryFindUsingApplibQuerySerializableData(final ObjectSpecification noSpec,
+        final Query applibQuery, final QueryCardinality cardinality) {
         super(noSpec);
         querySerializable = applibQuery;
         this.cardinality = cardinality;
     }
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindUsingApplibQuerySerializable.class;
     }
 
     public Serializable getApplibQuerySerializable() {
-		return querySerializable;
-	}
+        return querySerializable;
+    }
 
-	public QueryCardinality getCardinality() {
-		return cardinality;
-	}
+    public QueryCardinality getCardinality() {
+        return cardinality;
+    }
 
 }
-

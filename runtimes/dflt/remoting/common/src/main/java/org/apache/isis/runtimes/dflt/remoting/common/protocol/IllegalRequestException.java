@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.protocol;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 /**
  * Thrown when a request is received from a client who is not authorised to make it.

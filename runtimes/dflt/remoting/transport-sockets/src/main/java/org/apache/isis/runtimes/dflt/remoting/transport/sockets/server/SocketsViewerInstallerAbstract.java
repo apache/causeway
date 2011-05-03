@@ -26,13 +26,13 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
 public abstract class SocketsViewerInstallerAbstract extends IsisViewerInstallerAbstract {
 
-    public SocketsViewerInstallerAbstract(String name) {
+    public SocketsViewerInstallerAbstract(final String name) {
         super(name);
     }
 
     @Override
     public IsisViewer doCreateViewer() {
-        ObjectEncoderDecoderDefault encoder = ObjectEncoderDecoderDefault.create(getConfiguration());
+        final ObjectEncoderDecoderDefault encoder = ObjectEncoderDecoderDefault.create(getConfiguration());
         return createSocketsViewer(encoder);
     }
 

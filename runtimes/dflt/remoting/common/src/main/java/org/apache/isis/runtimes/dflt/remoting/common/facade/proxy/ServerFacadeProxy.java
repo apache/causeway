@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.facade.proxy;
-
 
 import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
 import org.apache.isis.runtimes.dflt.remoting.common.client.ClientConnection;
@@ -65,182 +63,187 @@ import org.apache.log4j.Logger;
  * previously called <tt>ClientConnection</tt>.
  */
 public class ServerFacadeProxy implements ServerFacade {
-    
+
     private static final Logger LOG = Logger.getLogger(ServerFacadeProxy.class);
-    
+
     private final ClientConnection connection;
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // constructor
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
     public ServerFacadeProxy(final ClientConnection connection) {
-    	this.connection = connection;
+        this.connection = connection;
     }
 
-    
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // init, shutdown
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
         connection.init();
     }
 
-
+    @Override
     public void shutdown() {
         connection.shutdown();
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // session
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public CloseSessionResponse closeSession(CloseSessionRequest request) {
+    @Override
+    public CloseSessionResponse closeSession(final CloseSessionRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // authenticate, authorize
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public OpenSessionResponse openSession(OpenSessionRequest request) {
+    @Override
+    public OpenSessionResponse openSession(final OpenSessionRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public AuthorizationResponse authorizeUsability(
-    		final AuthorizationRequestUsability request) {
+    @Override
+    public AuthorizationResponse authorizeUsability(final AuthorizationRequestUsability request) {
         execute(request);
         return request.getResponse();
     }
 
-    public AuthorizationResponse authorizeVisibility(
-    		AuthorizationRequestVisibility request) {
+    @Override
+    public AuthorizationResponse authorizeVisibility(final AuthorizationRequestVisibility request) {
         execute(request);
         return request.getResponse();
     }
 
-    
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // setAssociation, setValue, clearAssociation, clearValue
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public SetAssociationResponse setAssociation(
-            final SetAssociationRequest request) {
+    @Override
+    public SetAssociationResponse setAssociation(final SetAssociationRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public SetValueResponse setValue(
-            SetValueRequest request) {
+    @Override
+    public SetValueResponse setValue(final SetValueRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public ClearAssociationResponse clearAssociation(
-            ClearAssociationRequest request) {
+    @Override
+    public ClearAssociationResponse clearAssociation(final ClearAssociationRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public ClearValueResponse clearValue(
-    		ClearValueRequest request) {
+    @Override
+    public ClearValueResponse clearValue(final ClearValueRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // executeServerAction, executeClientAction
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public ExecuteServerActionResponse executeServerAction(
-            ExecuteServerActionRequest request) {
+    @Override
+    public ExecuteServerActionResponse executeServerAction(final ExecuteServerActionRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public ExecuteClientActionResponse executeClientAction(
-    		ExecuteClientActionRequest request) {
+    @Override
+    public ExecuteClientActionResponse executeClientAction(final ExecuteClientActionRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // getObject, resolveXxx
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public GetObjectResponse getObject(GetObjectRequest request) {
+    @Override
+    public GetObjectResponse getObject(final GetObjectRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public ResolveObjectResponse resolveImmediately(
-    		ResolveObjectRequest request) {
+    @Override
+    public ResolveObjectResponse resolveImmediately(final ResolveObjectRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public ResolveFieldResponse resolveField(ResolveFieldRequest request) {
+    @Override
+    public ResolveFieldResponse resolveField(final ResolveFieldRequest request) {
         execute(request);
         return request.getResponse();
     }
-    
-    ///////////////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////////////
     // findInstances, hasInstances
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public FindInstancesResponse findInstances(FindInstancesRequest request) {
+    @Override
+    public FindInstancesResponse findInstances(final FindInstancesRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    public HasInstancesResponse hasInstances(HasInstancesRequest request) {
+    @Override
+    public HasInstancesResponse hasInstances(final HasInstancesRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // services
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public OidForServiceResponse oidForService(
-    		OidForServiceRequest request) {
+    @Override
+    public OidForServiceResponse oidForService(final OidForServiceRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // getProperties
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
-    public GetPropertiesResponse getProperties(GetPropertiesRequest request) {
+    @Override
+    public GetPropertiesResponse getProperties(final GetPropertiesRequest request) {
         execute(request);
         return request.getResponse();
     }
 
-
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // Helpers: execute
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
     private void execute(final Request request) {
         synchronized (connection) {
             final ResponseEnvelope response = connection.executeRemotely(request);
             if (request.getId() != response.getId()) {
-                throw new IsisRemoteException("Response out of sequence with respect to the request: " + request.getId()
-                        + " & " + response.getId() + " respectively");
+                throw new IsisRemoteException("Response out of sequence with respect to the request: "
+                    + request.getId() + " & " + response.getId() + " respectively");
             }
             if (LOG.isDebugEnabled()) {
-            	LOG.debug("response " + response);
+                LOG.debug("response " + response);
             }
             request.setResponse(response.getObject());
         }
     }
 
-    ///////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ///////////////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////////////
+
 }

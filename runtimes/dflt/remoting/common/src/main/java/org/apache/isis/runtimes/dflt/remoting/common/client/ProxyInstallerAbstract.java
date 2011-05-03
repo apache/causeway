@@ -27,6 +27,12 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.runtimes.dflt.remoting.common.client.authentication.AuthenticationManagerProxy;
 import org.apache.isis.runtimes.dflt.remoting.common.client.authorization.AuthorizationManagerProxy;
 import org.apache.isis.runtimes.dflt.remoting.common.client.facetdecorator.ProxyFacetDecorator;
@@ -39,12 +45,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.marshalling.ClientMarshalle
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
@@ -67,7 +67,7 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
     private ObjectEncoderDecoder encoderDecoder;
     private ServerFacade serverFacade;
 
-    public ProxyInstallerAbstract(String name) {
+    public ProxyInstallerAbstract(final String name) {
         super(ClientConnectionInstaller.TYPE, name);
     }
 
@@ -113,9 +113,9 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
      * {@link #createMarshaller(Transport)} hooks.
      */
     protected ServerFacade createServerFacade() {
-        Transport transport = createTransport();
-        ClientMarshaller marshaller = createMarshaller(transport);
-        ClientConnection connection = new ClientConnectionDefault(marshaller);
+        final Transport transport = createTransport();
+        final ClientMarshaller marshaller = createMarshaller(transport);
+        final ClientConnection connection = new ClientConnectionDefault(marshaller);
         return new ServerFacadeProxy(connection);
     }
 
@@ -165,7 +165,7 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
             new PersistenceSessionProxy(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector,
                 oidGenerator, adapterManager, getServerFacade(), getEncoderDecoder());
 
-        IsisTransactionManager transactionManager =
+        final IsisTransactionManager transactionManager =
             createTransactionManager(getConfiguration(), persistenceSession.getAdapterManager(), persistenceSession);
 
         ensureThatArg(persistenceSession, is(not(nullValue())));

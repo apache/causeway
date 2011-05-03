@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data;
 
 import java.util.Arrays;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 
 public class DummyObjectData extends DummyReferenceData implements ObjectData {
 
@@ -45,14 +42,17 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         this(null, "", false, null);
     }
 
+    @Override
     public Data[] getFieldContent() {
         return fieldContent;
     }
 
+    @Override
     public boolean hasCompleteData() {
         return hasCompleteData;
     }
 
+    @Override
     public void setFieldContent(final Data[] fieldContent) {
         this.fieldContent = fieldContent;
     }
@@ -70,25 +70,29 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         str.append("resolved", hasCompleteData);
         str.append("fields", fieldContent == null ? 0 : fieldContent.length);
         /*
-         * if(fieldContent == null) { str.append("fields", "none"); } else { for (int i = 0; i <
-         * fieldContent.length; i++) { str.append("field" + i + ": " + fieldContent[i].); }
+         * if(fieldContent == null) { str.append("fields", "none"); } else { for (int i = 0; i < fieldContent.length;
+         * i++) { str.append("field" + i + ": " + fieldContent[i].); }
          */
     }
 
-
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        DummyObjectData other = (DummyObjectData) obj;
-        if (!Arrays.equals(fieldContent, other.fieldContent))
+        }
+        final DummyObjectData other = (DummyObjectData) obj;
+        if (!Arrays.equals(fieldContent, other.fieldContent)) {
             return false;
-        if (hasCompleteData != other.hasCompleteData)
+        }
+        if (hasCompleteData != other.hasCompleteData) {
             return false;
+        }
         return true;
     }
 
@@ -100,6 +104,5 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         result = prime * result + (hasCompleteData ? 1231 : 1237);
         return result;
     }
-
 
 }

@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class GetPropertiesRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
@@ -41,35 +40,33 @@ public class GetPropertiesRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
     }
-    
-	private void initialized() {
-		// nothing to do
-	}
 
-    /////////////////////////////////////////////////////////
+    private void initialized() {
+        // nothing to do
+    }
+
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} of a {@link GetPropertiesResponse}.
-	 */
-	public void execute(final ServerFacade serverFacade) {
-		GetPropertiesResponse response = serverFacade.getProperties(this);
-		setResponse(response);
-	}
-	
+    /**
+     * {@link #setResponse(Object) Sets a response} of a {@link GetPropertiesResponse}.
+     */
+    @Override
+    public void execute(final ServerFacade serverFacade) {
+        final GetPropertiesResponse response = serverFacade.getProperties(this);
+        setResponse(response);
+    }
 
-	/**
-	 * Downcasts.
-	 */
-	@Override
+    /**
+     * Downcasts.
+     */
+    @Override
     public GetPropertiesResponse getResponse() {
         return (GetPropertiesResponse) super.getResponse();
     }
 
 }
-

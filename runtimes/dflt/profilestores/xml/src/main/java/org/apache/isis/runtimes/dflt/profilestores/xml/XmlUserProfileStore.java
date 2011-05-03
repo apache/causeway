@@ -36,13 +36,13 @@ public class XmlUserProfileStore implements UserProfileStore {
     private final XmlFile xmlFile;
 
     @Inject
-    public XmlUserProfileStore(IsisConfiguration configuration) {
-        String directory = configuration.getString(XML_DIR, "xml/profiles");
+    public XmlUserProfileStore(final IsisConfiguration configuration) {
+        final String directory = configuration.getString(XML_DIR, "xml/profiles");
         xmlFile = new XmlFile(XmlFileUtil.lookupCharset(configuration), directory);
     }
 
     @Override
-    public UserProfile getUserProfile(String userName) {
+    public UserProfile getUserProfile(final String userName) {
         final UserProfileDataHandler handler = new UserProfileDataHandler();
         if (xmlFile.parse(handler, userName)) {
             return handler.getUserProfile();

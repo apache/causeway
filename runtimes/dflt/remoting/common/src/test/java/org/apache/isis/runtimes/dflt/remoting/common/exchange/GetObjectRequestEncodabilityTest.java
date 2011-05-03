@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,7 +25,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.GetObjectRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -36,36 +34,34 @@ import org.junit.Test;
 
 public class GetObjectRequestEncodabilityTest extends EncodabilityContractTest {
 
-	private Oid mockOid;
+    private Oid mockOid;
 
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		mockOid = context.mock(Oid.class);
-	}
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        mockOid = context.mock(Oid.class);
+    }
 
-	protected Encodable createEncodable() {
-		return new GetObjectRequest(mockAuthSession, mockOid, "com.mycompany.Customer");
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new GetObjectRequest(mockAuthSession, mockOid, "com.mycompany.Customer");
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		GetObjectRequest decoded = (GetObjectRequest) decodedEncodable;
-		GetObjectRequest original = (GetObjectRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
+
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final GetObjectRequest decoded = (GetObjectRequest) decodedEncodable;
+        final GetObjectRequest original = (GetObjectRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

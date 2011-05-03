@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.server;
 
 import java.io.IOException;
@@ -48,7 +47,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract;
 import org.apache.log4j.Logger;
 
-
 public abstract class SocketsViewerAbstract extends IsisViewerAbstract implements DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(SocketsViewerAbstract.class);
@@ -59,7 +57,7 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     private WorkerPool workerPool;
 
     private Boolean shutdown = Boolean.FALSE;
-    private Object shutdownGuard = new Object();
+    private final Object shutdownGuard = new Object();
 
     public SocketsViewerAbstract(final ObjectEncoderDecoder encoderDecoder) {
         this.encoderDecoder = encoderDecoder;
@@ -72,10 +70,12 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     /**
      * TODO: generalize so can listen on multi-homed hosts using new Socket(port, 2, address);
      */
+    @Override
     public void init() {
         super.init();
 
-        final int port = getConfiguration().getInteger(SocketsViewerConstants.SERVER_PORT, SocketTransportConstants.PORT_DEFAULT);
+        final int port =
+            getConfiguration().getInteger(SocketsViewerConstants.SERVER_PORT, SocketTransportConstants.PORT_DEFAULT);
 
         workerPool = new WorkerPool(5);
 
@@ -95,7 +95,7 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
 
     private ServerSocket newServerSocket(final int port) {
         try {
-            ServerSocket socket = new ServerSocket(port);
+            final ServerSocket socket = new ServerSocket(port);
             LOG.info("nof listener started on " + socket);
             socket.setSoTimeout(1000);
             return socket;
@@ -160,13 +160,13 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     // shutdown
     // ////////////////////////////////////////////////////////////////
 
+    @Override
     public void shutdown() {
         LOG.info("stopping listener");
         synchronized (shutdownGuard) {
             shutdown = Boolean.TRUE;
         }
     }
-
 
     private void shutdownListener() {
         shutdown(socket);
@@ -209,21 +209,21 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     /**
      * Hook method.
      */
-    protected abstract ServerConnection createServerConnection(
-            final InputStream input,
-            final OutputStream output,
-            final ServerFacade serverFacade);
+    protected abstract ServerConnection createServerConnection(final InputStream input, final OutputStream output,
+        final ServerFacade serverFacade);
 
     // ////////////////////////////////////////////////////////////////
     // debugging
     // ////////////////////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("Listener on", socket.toString());
         debug.appendln("Workers", workerPool);
         workerPool.debug(debug);
     }
 
+    @Override
     public String debugTitle() {
         return "Server Listener";
     }
@@ -239,7 +239,8 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     @SuppressWarnings("unused")
     private void startMonitors(final IsisSystem system) {
         if (system.getDeploymentType().shouldMonitor()) {
-            Runnable serverMonitorRunnable = new Runnable() {
+            final Runnable serverMonitorRunnable = new Runnable() {
+                @Override
                 public void run() {
                     final SocketServerMonitor serverMonitor = new SocketServerMonitor();
                     serverMonitor.setTarget(system);
@@ -249,7 +250,8 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
 
             Threads.startThread(serverMonitorRunnable, "Monitor-1");
 
-            Runnable httpServerMonitorRunnable = new Runnable() {
+            final Runnable httpServerMonitorRunnable = new Runnable() {
+                @Override
                 public void run() {
                     final HttpServerMonitor httpServerMonitor = new HttpServerMonitor();
                     httpServerMonitor.setTarget(system);
@@ -261,4 +263,3 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     }
 
 }
-

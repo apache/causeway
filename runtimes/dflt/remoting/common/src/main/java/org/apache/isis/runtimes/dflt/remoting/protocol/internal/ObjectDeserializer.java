@@ -17,20 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
 import java.util.Enumeration;
 
-import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.NullData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -45,6 +35,15 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.NullData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -55,18 +54,18 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class ObjectDeserializer {
-    
-    private static final Logger LOG = Logger.getLogger(ObjectDeserializer.class);
-    
-	private final FieldOrderCache fieldOrderCache;
-    
-    public ObjectDeserializer(FieldOrderCache fieldOrderCache) {
-    	this.fieldOrderCache = fieldOrderCache;
-	}
 
-    /////////////////////////////////////////////////////////
+    private static final Logger LOG = Logger.getLogger(ObjectDeserializer.class);
+
+    private final FieldOrderCache fieldOrderCache;
+
+    public ObjectDeserializer(final FieldOrderCache fieldOrderCache) {
+        this.fieldOrderCache = fieldOrderCache;
+    }
+
+    // ///////////////////////////////////////////////////////
     // restore
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     public ObjectAdapter deserialize(final Data data) {
         if (data instanceof CollectionData) {
@@ -84,35 +83,34 @@ public class ObjectDeserializer {
         }
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Helper: restoreCollection
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private ObjectAdapter deserializeCollection(final CollectionData data, final KnownObjectsRequest knownObjects) {
         final String collectionType = data.getType();
-        final ObjectSpecification collectionSpecification = getSpecificationLoader().loadSpecification(
-                collectionType);
+        final ObjectSpecification collectionSpecification = getSpecificationLoader().loadSpecification(collectionType);
 
         /*
-         * if we are to deal with internal collections then we need to be able to get the collection from it's
-         * parent via its field
+         * if we are to deal with internal collections then we need to be able to get the collection from it's parent
+         * via its field
          */
-        ObjectAdapter collection = getPersistenceSession().createInstance(collectionSpecification);
+        final ObjectAdapter collection = getPersistenceSession().createInstance(collectionSpecification);
         if (data.getElements() == null) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("restoring empty collection");
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("restoring empty collection");
+            }
             return collection;
         } else {
             final ReferenceData[] elements = data.getElements();
             if (LOG.isDebugEnabled()) {
-            	LOG.debug("restoring collection " + elements.length + " elements");
+                LOG.debug("restoring collection " + elements.length + " elements");
             }
             final ObjectAdapter[] initData = new ObjectAdapter[elements.length];
             for (int i = 0; i < elements.length; i++) {
                 final ObjectAdapter element = deserializeObject(elements[i], knownObjects);
                 if (LOG.isDebugEnabled()) {
-                	LOG.debug("restoring collection element :" + element);
+                    LOG.debug("restoring collection element :" + element);
                 }
                 initData[i] = element;
             }
@@ -122,32 +120,33 @@ public class ObjectDeserializer {
         }
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Helper: deserializeObject
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private ObjectAdapter deserializeObject(final Data data, final KnownObjectsRequest knownObjects) {
         if (data instanceof NullData) {
             return null;
         } else if (data instanceof ObjectData) {
-            ObjectData objectData = (ObjectData) data;
-			return deserializeObjectFromObjectData(objectData, knownObjects);
+            final ObjectData objectData = (ObjectData) data;
+            return deserializeObjectFromObjectData(objectData, knownObjects);
         } else if (data instanceof IdentityData) {
-            IdentityData identityData = (IdentityData) data;
-			return deserializeObjectFromIdentityData(identityData, knownObjects);
+            final IdentityData identityData = (IdentityData) data;
+            return deserializeObjectFromIdentityData(identityData, knownObjects);
         } else if (data instanceof EncodableObjectData) {
-            EncodableObjectData encodableObjectData = (EncodableObjectData) data;
-			return deserializeObjectFromEncodableObjectData(encodableObjectData);
+            final EncodableObjectData encodableObjectData = (EncodableObjectData) data;
+            return deserializeObjectFromEncodableObjectData(encodableObjectData);
         } else {
             throw new UnknownTypeException(data);
         }
     }
 
-    private ObjectAdapter deserializeObjectFromIdentityData(final IdentityData data, final KnownObjectsRequest knownObjects) {
+    private ObjectAdapter deserializeObjectFromIdentityData(final IdentityData data,
+        final KnownObjectsRequest knownObjects) {
         final Oid oid = data.getOid();
         /*
-         * either create a new transient object, get an existing object and update it if data is for resolved
-         * object, or create new object and set it
+         * either create a new transient object, get an existing object and update it if data is for resolved object, or
+         * create new object and set it
          */
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter == null) {
@@ -164,8 +163,8 @@ public class ObjectDeserializer {
 
         final Oid oid = data.getOid();
         /*
-         * either create a new transient object, get an existing object and update it if data is for resolved
-         * object, or create new object and set it
+         * either create a new transient object, get an existing object and update it if data is for resolved object, or
+         * create new object and set it
          */
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter != null) {
@@ -179,11 +178,10 @@ public class ObjectDeserializer {
         return adapter;
     }
 
-
     private ObjectAdapter deserializeTransient(final ObjectData adapterData, final KnownObjectsRequest knownObjects) {
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(adapterData.getType());
 
-        ObjectAdapter adapter = getHydrator().recreateAdapter(adapterData.getOid(), specification);
+        final ObjectAdapter adapter = getHydrator().recreateAdapter(adapterData.getOid(), specification);
         if (LOG.isDebugEnabled()) {
             LOG.debug("restore transient object " + adapter);
         }
@@ -192,45 +190,40 @@ public class ObjectDeserializer {
         return adapter;
     }
 
-
-    private ObjectAdapter deserializePersistentObject(final ObjectData data, final Oid oid, final KnownObjectsRequest knownObjects) {
+    private ObjectAdapter deserializePersistentObject(final ObjectData data, final Oid oid,
+        final KnownObjectsRequest knownObjects) {
         // unknown object; create an instance
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(data.getType());
 
-        ObjectAdapter adapter = getHydrator().recreateAdapter(oid, specification);
+        final ObjectAdapter adapter = getHydrator().recreateAdapter(oid, specification);
         if (data.getFieldContent() != null) {
             adapter.setOptimisticLock(data.getVersion());
             ResolveState state;
             state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
             if (LOG.isDebugEnabled()) {
-            	LOG.debug("restoring existing object (" + state.name() + ") " + adapter);
+                LOG.debug("restoring existing object (" + state.name() + ") " + adapter);
             }
             setupFields(adapter, data, state, knownObjects);
         }
         return adapter;
     }
 
-
     private ObjectAdapter deserializeObjectFromEncodableObjectData(final EncodableObjectData encodeableObjectData) {
         if (encodeableObjectData.getEncodedObjectData() == null) {
             return null;
-        } 
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(
-		        encodeableObjectData.getType());
-		final EncodableFacet encoder = spec.getFacet(EncodableFacet.class);
-		ObjectAdapter adapter = encoder.fromEncodedString(encodeableObjectData.getEncodedObjectData());
-		return adapter;
+        }
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(encodeableObjectData.getType());
+        final EncodableFacet encoder = spec.getFacet(EncodableFacet.class);
+        final ObjectAdapter adapter = encoder.fromEncodedString(encodeableObjectData.getEncodedObjectData());
+        return adapter;
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Helpers: updateLoadedObject
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-    private void updateLoadedObject(
-    		final ObjectAdapter adapter, 
-    		final ObjectData adapterData, 
-    		final KnownObjectsRequest knownObjects) {
+    private void updateLoadedObject(final ObjectAdapter adapter, final ObjectData adapterData,
+        final KnownObjectsRequest knownObjects) {
         // object known and we have all the latest data; update/resolve the object
         if (adapterData.getFieldContent() != null) {
             adapter.setOptimisticLock(adapterData.getVersion());
@@ -247,83 +240,71 @@ public class ObjectDeserializer {
         }
     }
 
-
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Helpers: setupFields
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-    private void setUpCollectionField(
-            final ObjectAdapter adapter,
-            final ObjectData parentData,
-            final ObjectAssociation field,
-            final CollectionData collectionContentData,
-            final KnownObjectsRequest knownObjects) {
+    private void setUpCollectionField(final ObjectAdapter adapter, final ObjectData parentData,
+        final ObjectAssociation field, final CollectionData collectionContentData,
+        final KnownObjectsRequest knownObjects) {
         if (collectionContentData.hasAllElements()) {
-            setUpCollectionFieldForEntireContents(adapter, field,
-					collectionContentData, knownObjects);
+            setUpCollectionFieldForEntireContents(adapter, field, collectionContentData, knownObjects);
         } else {
             setUpCollectionFieldForNoContents(parentData, adapter, field);
         }
     }
 
-	private void setUpCollectionFieldForNoContents(
-			final ObjectData parentData, final ObjectAdapter adapter,
-			final ObjectAssociation field) {
-		final ObjectAdapter collection = field.get(adapter);
-		if (collection.getResolveState() == ResolveState.GHOST) {
-			return;
-		}
-		
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("No data for collection: " + field.getId());
-		}
-		
-		Version adapterVersion = adapter.getVersion();
-		Version parentVersion = parentData.getVersion();
-		if (adapterVersion.different(parentVersion)) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("clearing collection as versions differ: " + adapter.getVersion() + " " + parentData.getVersion());
-			}
-		    final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-		    facet.init(collection, new ObjectAdapter[0]);
-		    collection.changeState(ResolveState.GHOST);
-		}
-	}
+    private void setUpCollectionFieldForNoContents(final ObjectData parentData, final ObjectAdapter adapter,
+        final ObjectAssociation field) {
+        final ObjectAdapter collection = field.get(adapter);
+        if (collection.getResolveState() == ResolveState.GHOST) {
+            return;
+        }
 
-	private void setUpCollectionFieldForEntireContents(
-			final ObjectAdapter adapter, 
-			final ObjectAssociation field,
-			final CollectionData collectionContentData,
-			final KnownObjectsRequest knownObjects) {
-		final int size = collectionContentData.getElements().length;
-		final ObjectAdapter[] elements = new ObjectAdapter[size];
-		for (int j = 0; j < elements.length; j++) {
-		    elements[j] = deserializeObject(collectionContentData.getElements()[j], knownObjects);
-		    if (LOG.isDebugEnabled()) {
-		    	LOG.debug("adding element to " + field.getId() + ": " + elements[j]);
-		    }
-		}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("No data for collection: " + field.getId());
+        }
 
-		final ObjectAdapter col = field.get(adapter);
-		final ResolveState initialState = col.getResolveState();
-		final ResolveState state = nextState(initialState, collectionContentData.hasAllElements());
-		if (state != null) {
-		    PersistorUtil.start(col, state);
-		    final ObjectAdapter collection = ((OneToManyAssociation) field).get(adapter);
-		    final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-		    facet.init(collection, elements);
-		    PersistorUtil.end(col);
-		} else {
-		    LOG.warn("not initialising collection " + col + " due to current state " + initialState);
-		}
-	}
+        final Version adapterVersion = adapter.getVersion();
+        final Version parentVersion = parentData.getVersion();
+        if (adapterVersion.different(parentVersion)) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("clearing collection as versions differ: " + adapter.getVersion() + " "
+                    + parentData.getVersion());
+            }
+            final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+            facet.init(collection, new ObjectAdapter[0]);
+            collection.changeState(ResolveState.GHOST);
+        }
+    }
 
-    private void setupFields(
-            final ObjectAdapter adapter,
-            final ObjectData adapterData,
-            final ResolveState state,
-            final KnownObjectsRequest knownObjects) {
+    private void setUpCollectionFieldForEntireContents(final ObjectAdapter adapter, final ObjectAssociation field,
+        final CollectionData collectionContentData, final KnownObjectsRequest knownObjects) {
+        final int size = collectionContentData.getElements().length;
+        final ObjectAdapter[] elements = new ObjectAdapter[size];
+        for (int j = 0; j < elements.length; j++) {
+            elements[j] = deserializeObject(collectionContentData.getElements()[j], knownObjects);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("adding element to " + field.getId() + ": " + elements[j]);
+            }
+        }
+
+        final ObjectAdapter col = field.get(adapter);
+        final ResolveState initialState = col.getResolveState();
+        final ResolveState state = nextState(initialState, collectionContentData.hasAllElements());
+        if (state != null) {
+            PersistorUtil.start(col, state);
+            final ObjectAdapter collection = ((OneToManyAssociation) field).get(adapter);
+            final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+            facet.init(collection, elements);
+            PersistorUtil.end(col);
+        } else {
+            LOG.warn("not initialising collection " + col + " due to current state " + initialState);
+        }
+    }
+
+    private void setupFields(final ObjectAdapter adapter, final ObjectData adapterData, final ResolveState state,
+        final KnownObjectsRequest knownObjects) {
         if (adapter.getResolveState().isDeserializable(state)) {
             PersistorUtil.start(adapter, state);
             setUpFields(adapter, adapterData, knownObjects);
@@ -331,16 +312,14 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setUpFields(
-    		final ObjectAdapter adapter,
-    		final ObjectData adapterData, 
-    		final KnownObjectsRequest knownObjects) {
+    private void setUpFields(final ObjectAdapter adapter, final ObjectData adapterData,
+        final KnownObjectsRequest knownObjects) {
         final Data[] fieldContent = adapterData.getFieldContent();
         if (fieldContent != null && fieldContent.length > 0) {
             final ObjectAssociation[] fields = fieldOrderCache.getFields(adapter.getSpecification());
             if (fields.length != fieldContent.length) {
                 throw new IsisRemoteException("Data received for different number of fields; expected " + fields.length
-                        + ", but was " + fieldContent.length);
+                    + ", but was " + fieldContent.length);
             }
             for (int i = 0; i < fields.length; i++) {
                 final ObjectAssociation field = fields[i];
@@ -361,21 +340,17 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setUpReferenceField(
-            final ObjectAdapter adapter,
-            final OneToOneAssociation field,
-            final Data data,
-            final KnownObjectsRequest knownObjects) {
+    private void setUpReferenceField(final ObjectAdapter adapter, final OneToOneAssociation field, final Data data,
+        final KnownObjectsRequest knownObjects) {
         ObjectAdapter associate;
         associate = deserializeObject(data, knownObjects);
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("setting association for field " + field.getId() + ": " + associate);
+            LOG.debug("setting association for field " + field.getId() + ": " + associate);
         }
         field.initAssociation(adapter, associate);
     }
 
-    private void setUpEncodedField(
-    		final ObjectAdapter adapter, final OneToOneAssociation field, final Data data) {
+    private void setUpEncodedField(final ObjectAdapter adapter, final OneToOneAssociation field, final Data data) {
         String value;
         if (data instanceof NullData) {
             field.initAssociation(adapter, null);
@@ -384,30 +359,27 @@ public class ObjectDeserializer {
             final EncodableFacet encoder = field.getSpecification().getFacet(EncodableFacet.class);
             final ObjectAdapter valueAdapter = encoder.fromEncodedString(value);
             if (LOG.isDebugEnabled()) {
-            	LOG.debug("setting value for field " + field.getId() + ": " + valueAdapter);
+                LOG.debug("setting value for field " + field.getId() + ": " + valueAdapter);
             }
             field.initAssociation(adapter, valueAdapter);
         }
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // madePersistent
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     /**
      * Equivalent to {@link PersistenceSessionObjectStore#remapAsPersistent(ObjectAdapter)}.
      */
-    public void madePersistent(
-    		final ObjectAdapter adapter, final ObjectData adapterData) {
+    public void madePersistent(final ObjectAdapter adapter, final ObjectData adapterData) {
         if (adapterData == null) {
             return;
         }
 
-        if (adapter.isTransient() && 
-        	adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
+        if (adapter.isTransient() && adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
 
-        	getAdapterManager().getAdapterFor(adapterData.getOid()); // causes OID to be updated
+            getAdapterManager().getAdapterFor(adapterData.getOid()); // causes OID to be updated
             adapter.setOptimisticLock(adapterData.getVersion());
             adapter.changeState(ResolveState.RESOLVED);
         }
@@ -446,10 +418,9 @@ public class ObjectDeserializer {
         }
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Helpers: nextState
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private ResolveState nextState(final ResolveState initialState, final boolean complete) {
         ResolveState state = null;
@@ -463,10 +434,9 @@ public class ObjectDeserializer {
         return state;
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Dependencies (from singletons)
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();

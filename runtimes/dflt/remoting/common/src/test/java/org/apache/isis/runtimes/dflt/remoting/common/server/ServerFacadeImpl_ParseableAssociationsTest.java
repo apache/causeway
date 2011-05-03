@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.server;
 
 import static org.junit.Assert.assertEquals;
@@ -25,14 +24,15 @@ import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyEncodeableObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyReferenceData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
@@ -43,26 +43,23 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.impl.ServerFacadeImpl;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestCase {
 
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private ServerFacadeImpl server;
     private AuthenticationSession session;
@@ -75,10 +72,10 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
 
     /**
      * Testing the {@link ServerFacadeImpl} implementation of {@link ServerFacade}.
-     *
+     * 
      * <p>
-     * This uses the encoder to unmarshall objects
-     * and then calls the persistor and reflector; all of which should be mocked.
+     * This uses the encoder to unmarshall objects and then calls the persistor and reflector; all of which should be
+     * mocked.
      */
     @Before
     public void setUp() throws Exception {
@@ -94,7 +91,7 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
 
         final TestProxySpecification spec = (TestProxySpecification) object.getSpecification();
         nameField = new TestProxyAssociation("name", system.getSpecification(String.class));
-        spec.setupFields( Arrays.asList( (ObjectAssociation)nameField ));
+        spec.setupFields(Arrays.asList((ObjectAssociation) nameField));
 
         movieData = new DummyReferenceData(object.getOid(), "none", new TestProxyVersion(1));
 
@@ -107,16 +104,16 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
 
     /**
      * TODO: other tests for clear: - clear collection element - fails if unauthorised - fails if unavailable
-     *
+     * 
      * <p>
      * could place all these clear test in one class; test other methods in other classes
      */
     @Test
     public void testClearAssociation() {
         IsisContext.getTransactionManager().startTransaction();
-        ClearValueRequest request = new ClearValueRequest(session, "name", movieData);
-		ClearValueResponse response = server.clearValue(request );
-		final ObjectData[] updatesData = response.getUpdates();
+        final ClearValueRequest request = new ClearValueRequest(session, "name", movieData);
+        final ClearValueResponse response = server.clearValue(request);
+        final ObjectData[] updatesData = response.getUpdates();
         IsisContext.getTransactionManager().endTransaction();
 
         nameField.assertFieldEmpty(object);
@@ -148,7 +145,8 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
             }
 
             @Override
-            public void setFacetHolder(final FacetHolder facetHolder) {}
+            public void setFacetHolder(final FacetHolder facetHolder) {
+            }
 
             @Override
             public boolean alwaysReplace() {
@@ -157,28 +155,31 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
 
             @Override
             public boolean isDerived() {
-            	return false;
+                return false;
             }
 
             @Override
             public boolean isNoop() {
                 return false;
             }
-        	@Override
+
+            @Override
             public Facet getUnderlyingFacet() {
-        		return null;
-        	}
-        	@Override
-            public void setUnderlyingFacet(Facet underlyingFacet) {
-        		throw new UnsupportedOperationException();
-        	}
+                return null;
+            }
+
+            @Override
+            public void setUnderlyingFacet(final Facet underlyingFacet) {
+                throw new UnsupportedOperationException();
+            }
 
         });
 
         IsisContext.getTransactionManager().startTransaction();
-        SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
-		SetValueResponse response = server.setValue(request);
-		final ObjectData[] updates = response.getUpdates();
+        final SetValueRequest request =
+            new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
+        final SetValueResponse response = server.setValue(request);
+        final ObjectData[] updates = response.getUpdates();
         IsisContext.getTransactionManager().endTransaction();
 
         nameField.assertField(object, "name of movie");
@@ -189,18 +190,21 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     public void testSetAssociationFailsWithNonCurrentTarget() {
         try {
             object.setOptimisticLock(new TestProxyVersion(2));
-            SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
-			server.setValue(request);
+            final SetValueRequest request =
+                new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
+            server.setValue(request);
             fail();
-        } catch (final ConcurrencyException expected) {}
+        } catch (final ConcurrencyException expected) {
+        }
     }
 
     @Test
     public void testSetAssociationFailsWhenInvisible() {
         nameField.setUpIsVisible(false);
         try {
-            SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
-			server.setValue(request);
+            final SetValueRequest request =
+                new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
+            server.setValue(request);
             fail();
         } catch (final IsisException expected) {
             assertEquals("can't modify field as not visible or editable", expected.getMessage());
@@ -211,13 +215,13 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     public void testSetAssociationFailsWhenUnavailable() {
         nameField.setUpIsUnusableFor(object);
         try {
-            SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("test data"));
-			server.setValue(request);
+            final SetValueRequest request =
+                new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("test data"));
+            server.setValue(request);
             fail();
         } catch (final IsisException expected) {
             assertEquals("can't modify field as not visible or editable", expected.getMessage());
         }
     }
-
 
 }

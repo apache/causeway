@@ -19,9 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.remoting.common.marshalling;
 
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ProtocolConstants;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ProtocolInstaller;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 
 public final class MarshallingConstants {
 

@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.marshalling;
 
 import java.io.IOException;
 
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 
-
 public interface ClientMarshaller extends Marshaller {
-    
+
     public void connect() throws IOException;
+
     public Object request(final Request request) throws IOException;
+
     public void disconnect();
-    
 
 }

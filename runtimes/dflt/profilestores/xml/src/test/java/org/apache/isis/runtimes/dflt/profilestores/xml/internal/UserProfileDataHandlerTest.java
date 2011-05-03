@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.profilestores.xml.internal;
 
 import static org.junit.Assert.assertEquals;
@@ -36,7 +35,6 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.runtimes.dflt.profilestores.xml.internal.UserProfileDataHandler;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
@@ -52,7 +50,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 public class UserProfileDataHandlerTest {
 
     private TestServiceObject1 service;
@@ -61,43 +58,36 @@ public class UserProfileDataHandlerTest {
     @Before
     public void setup() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        Mockery mockery = new JUnit4Mockery();
-        ArrayList<Object> servicesList = new ArrayList<Object>();
+        final Mockery mockery = new JUnit4Mockery();
+        final ArrayList<Object> servicesList = new ArrayList<Object>();
         service = new TestServiceObject1();
         servicesList.add(service);
-        IsisSessionFactory executionContextFactory = 
-            new IsisSessionFactoryDefault(
-                    DeploymentType.EXPLORATION, 
-                    new IsisConfigurationDefault(), 
-                    mockery.mock(TemplateImageLoader.class), 
-                    mockery.mock(SpecificationLoader.class), 
-                    mockery.mock(AuthenticationManager.class), 
-                    mockery.mock(AuthorizationManager.class),
-                    mockery.mock(UserProfileLoader.class), 
-                    mockery.mock(PersistenceSessionFactory.class), servicesList);
-          
+        final IsisSessionFactory executionContextFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
+                mockery.mock(TemplateImageLoader.class), mockery.mock(SpecificationLoader.class),
+                mockery.mock(AuthenticationManager.class), mockery.mock(AuthorizationManager.class),
+                mockery.mock(UserProfileLoader.class), mockery.mock(PersistenceSessionFactory.class), servicesList);
+
         IsisContextStatic.createRelaxedInstance(executionContextFactory);
- 
-        
-        
-        XMLReader parser = XMLReaderFactory.createXMLReader();
-        UserProfileDataHandler handler = new UserProfileDataHandler();
+
+        final XMLReader parser = XMLReaderFactory.createXMLReader();
+        final UserProfileDataHandler handler = new UserProfileDataHandler();
         parser.setContentHandler(handler);
         parser.parse(new InputSource(new InputStreamReader(new FileInputStream("test.xml"))));
 
         profile = handler.getUserProfile();
     }
-    
+
     @Test
     public void stringOption() throws Exception {
         assertEquals("on", profile.getOptions().getString("power"));
     }
-    
+
     @Test
     public void unknownOptionReturnsNull() throws Exception {
         assertEquals(null, profile.getOptions().getString("device"));
     }
-    
+
     @Test
     public void integerOption() throws Exception {
         assertEquals(50, profile.getOptions().getInteger("height", 10));
@@ -110,14 +100,14 @@ public class UserProfileDataHandlerTest {
 
     @Test
     public void unknownOptionsCreated() throws Exception {
-        Options options = profile.getOptions().getOptions("");
+        final Options options = profile.getOptions().getOptions("");
         assertNotNull(options);
         assertEquals(false, options.names().hasNext());
     }
 
     @Test
     public void containedOptions() throws Exception {
-        Options options = profile.getOptions().getOptions("opts");
+        final Options options = profile.getOptions().getOptions("opts");
         assertNotNull(options);
         assertEquals("value1", options.getString("option1"));
         assertEquals("value2", options.getString("option2"));
@@ -130,15 +120,15 @@ public class UserProfileDataHandlerTest {
         assertEquals("value4", options.getString("option4"));
         assertEquals("value5", options.getString("option5"));
     }
-    
+
     @Test
     public void profileNames() throws Exception {
-        List<String> list = profile.list();
+        final List<String> list = profile.list();
         assertEquals(2, list.size());
         assertEquals("Library", list.get(0));
         assertEquals("Admin", list.get(1));
     }
-    
+
     @Test
     public void perspective() throws Exception {
         assertEquals("Admin", profile.getPerspective().getName());
@@ -146,5 +136,3 @@ public class UserProfileDataHandlerTest {
         assertEquals(service, profile.getPerspective().getServices().get(0));
     }
 }
-
-

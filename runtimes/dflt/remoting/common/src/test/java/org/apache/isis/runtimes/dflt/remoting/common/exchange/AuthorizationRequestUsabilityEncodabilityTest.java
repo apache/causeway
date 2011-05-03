@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,10 +25,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestUsability;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,35 +35,34 @@ import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class AuthorizationRequestUsabilityEncodabilityTest extends EncodabilityContractTest {
-	
-	protected IdentityData mockTargetData;
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		mockTargetData = context.mock(IdentityData.class);
-	}
+    protected IdentityData mockTargetData;
 
-	protected Encodable createEncodable() {
-		return new AuthorizationRequestUsability(mockAuthSession, mockTargetData, "foobar");
-	}
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        mockTargetData = context.mock(IdentityData.class);
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		AuthorizationRequestUsability decoded = (AuthorizationRequestUsability) decodedEncodable;
-		AuthorizationRequestUsability original = (AuthorizationRequestUsability) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new AuthorizationRequestUsability(mockAuthSession, mockTargetData, "foobar");
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
+
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final AuthorizationRequestUsability decoded = (AuthorizationRequestUsability) decodedEncodable;
+        final AuthorizationRequestUsability original = (AuthorizationRequestUsability) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

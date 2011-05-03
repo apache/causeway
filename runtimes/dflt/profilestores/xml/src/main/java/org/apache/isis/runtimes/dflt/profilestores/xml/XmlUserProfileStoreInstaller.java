@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.profilestores.xml;
 
 import java.util.List;
@@ -27,24 +26,20 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-
 public class XmlUserProfileStoreInstaller extends InstallerAbstract implements UserProfileStoreInstaller {
 
     public XmlUserProfileStoreInstaller() {
-		super(UserProfileStoreInstaller.TYPE, "xml");
-	}
+        super(UserProfileStoreInstaller.TYPE, "xml");
+    }
 
-	public UserProfileStore createUserProfileStore(IsisConfiguration configuration) {
-		return new XmlUserProfileStore(configuration);
-	}
+    @Override
+    public UserProfileStore createUserProfileStore(final IsisConfiguration configuration) {
+        return new XmlUserProfileStore(configuration);
+    }
 
-
+    @Override
     public List<Class<?>> getTypes() {
-    	return listOf(UserProfileStore.class);
+        return listOf(UserProfileStore.class);
     }
 
 }
-
-

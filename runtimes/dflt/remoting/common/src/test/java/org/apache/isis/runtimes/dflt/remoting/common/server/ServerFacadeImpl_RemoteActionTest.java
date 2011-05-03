@@ -17,14 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.server;
-
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyIdentityData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyReferenceData;
@@ -34,12 +38,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteServerActio
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteServerActionResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.impl.ServerFacadeImpl;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySession;
@@ -57,12 +55,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
-
 @RunWith(JMock.class)
 public class ServerFacadeImpl_RemoteActionTest {
 
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private AuthenticationManager mockAuthenticationManager;
     private ObjectEncoderDecoder mockEncoder;
@@ -76,8 +72,8 @@ public class ServerFacadeImpl_RemoteActionTest {
     private ObjectAction mockAction;
 
     /*
-     * Testing the Distribution implementation ServerDistribution. This uses the encoder to unmarshall objects
-     * and then calls the persistor and reflector; all of which should be mocked.
+     * Testing the Distribution implementation ServerDistribution. This uses the encoder to unmarshall objects and then
+     * calls the persistor and reflector; all of which should be mocked.
      */
     @Before
     public void setUp() throws Exception {
@@ -91,7 +87,6 @@ public class ServerFacadeImpl_RemoteActionTest {
         server.setEncoder(mockEncoder);
 
         server.init();
-        
 
         system = new TestProxySystem();
         system.init();
@@ -102,15 +97,15 @@ public class ServerFacadeImpl_RemoteActionTest {
         targetData = new DummyIdentityData(oid, TestProxyAdapter.class.getName(), new TestProxyVersion(1));
         parameterData = new ReferenceData[] {};
         final TestProxySpecification proxySpecification = (TestProxySpecification) adapter.getSpecification();
-        
+
         mockAction = mockery.mock(ObjectAction.class);
         proxySpecification.setupAction(mockAction);
-        
+
         mockery.checking(new Expectations() {
             {
                 one(mockAction).getId();
                 will(returnValue("action"));
-                
+
                 one(mockAction).execute(with(equalTo(adapter)), with(equalTo(new ObjectAdapter[0])));
                 will(returnValue(adapter));
             }
@@ -127,28 +122,19 @@ public class ServerFacadeImpl_RemoteActionTest {
         final ExecuteServerActionResponse results = null;
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeServerActionResult(
-                        with(equalTo(adapter)), 
-                        with(equalTo(new ObjectData[0])),
-                        with(equalTo(new ReferenceData[0])), 
-                        with(nullValue(ObjectData.class)), 
-                        with(equalTo(new ObjectData[0])), 
-                        with(equalTo(new String[0])),
-                        with(equalTo(new String[0])));
+                one(mockEncoder).encodeServerActionResult(with(equalTo(adapter)), with(equalTo(new ObjectData[0])),
+                    with(equalTo(new ReferenceData[0])), with(nullValue(ObjectData.class)),
+                    with(equalTo(new ObjectData[0])), with(equalTo(new String[0])), with(equalTo(new String[0])));
                 will(returnValue(results));
-                
+
             }
         });
 
         IsisContext.getTransactionManager().startTransaction();
-        ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ActionType.USER, 
-                "action()", 
-                targetData, 
+        final ExecuteServerActionRequest request =
+            new ExecuteServerActionRequest(new TestProxySession(), ActionType.USER, "action()", targetData,
                 parameterData);
-		final ExecuteServerActionResponse result = 
-            server.executeServerAction(
-                    request);
+        final ExecuteServerActionResponse result = server.executeServerAction(request);
         IsisContext.getTransactionManager().endTransaction();
 
         assertEquals(results, result);
@@ -157,21 +143,18 @@ public class ServerFacadeImpl_RemoteActionTest {
     @Test
     public void testExecuteWhereObjectDeleted() {
         final ExecuteServerActionResponse results = null;
-        
+
         mockery.checking(new Expectations() {
             {
-                final ReferenceData deletedObjectIdentityData = new DummyReferenceData(adapter.getOid(), "", adapter.getVersion());
+                final ReferenceData deletedObjectIdentityData =
+                    new DummyReferenceData(adapter.getOid(), "", adapter.getVersion());
                 one(mockEncoder).encodeIdentityData(adapter);
                 will(returnValue(deletedObjectIdentityData));
-                
-                one(mockEncoder).encodeServerActionResult(
-                        with(equalTo(adapter)), 
-                        with(equalTo(new ObjectData[0])),
-                        with(equalTo(new ReferenceData[] { deletedObjectIdentityData })), 
-                        with(nullValue(ObjectData.class)), 
-                        with(equalTo(new ObjectData[0])),
-                        with(equalTo(new String[0])), 
-                        with(equalTo(new String[0])));
+
+                one(mockEncoder).encodeServerActionResult(with(equalTo(adapter)), with(equalTo(new ObjectData[0])),
+                    with(equalTo(new ReferenceData[] { deletedObjectIdentityData })),
+                    with(nullValue(ObjectData.class)), with(equalTo(new ObjectData[0])), with(equalTo(new String[0])),
+                    with(equalTo(new String[0])));
                 will(returnValue(null));
             }
         });
@@ -179,13 +162,10 @@ public class ServerFacadeImpl_RemoteActionTest {
         IsisContext.getTransactionManager().startTransaction();
 
         IsisContext.getUpdateNotifier().addDisposedObject(adapter);
-        ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ActionType.USER, 
-                "action()", 
-                targetData, 
+        final ExecuteServerActionRequest request =
+            new ExecuteServerActionRequest(new TestProxySession(), ActionType.USER, "action()", targetData,
                 parameterData);
-		final ExecuteServerActionResponse result = server.executeServerAction(
-                request );
+        final ExecuteServerActionResponse result = server.executeServerAction(request);
 
         IsisContext.getTransactionManager().endTransaction();
 
@@ -194,22 +174,18 @@ public class ServerFacadeImpl_RemoteActionTest {
 
     @Test
     public void testExecuteWhereObjectChanged() {
-        
+
         final ExecuteServerActionResponse results = null;
         mockery.checking(new Expectations() {
             {
                 final ObjectData changedObjectData = new DummyObjectData();
                 one(mockEncoder).encodeForUpdate(adapter);
                 will(returnValue(changedObjectData));
-                
-                one(mockEncoder).encodeServerActionResult(
-                        with(equalTo(adapter)), 
-                        with(equalTo(new ObjectData[] { changedObjectData })),
-                        with(equalTo(new ReferenceData[0] )), 
-                        with(nullValue(ObjectData.class)), 
-                        with(equalTo(new ObjectData[0])),
-                        with(equalTo(new String[0])), 
-                        with(equalTo(new String[0])));
+
+                one(mockEncoder).encodeServerActionResult(with(equalTo(adapter)),
+                    with(equalTo(new ObjectData[] { changedObjectData })), with(equalTo(new ReferenceData[0])),
+                    with(nullValue(ObjectData.class)), with(equalTo(new ObjectData[0])), with(equalTo(new String[0])),
+                    with(equalTo(new String[0])));
                 will(returnValue(null));
             }
         });
@@ -217,14 +193,11 @@ public class ServerFacadeImpl_RemoteActionTest {
         IsisContext.getTransactionManager().startTransaction();
 
         IsisContext.getUpdateNotifier().addChangedObject(adapter);
-        
-        ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ActionType.USER, 
-                "action()", 
-                targetData, 
+
+        final ExecuteServerActionRequest request =
+            new ExecuteServerActionRequest(new TestProxySession(), ActionType.USER, "action()", targetData,
                 parameterData);
-		final ExecuteServerActionResponse result = server.executeServerAction(
-                request);
+        final ExecuteServerActionResponse result = server.executeServerAction(request);
 
         IsisContext.getTransactionManager().endTransaction();
 
@@ -236,34 +209,26 @@ public class ServerFacadeImpl_RemoteActionTest {
         final ExecuteServerActionResponse results = null;
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeServerActionResult(
-                        with(equalTo(adapter)), 
-                        with(equalTo(new ObjectData[0])),
-                        with(equalTo(new ReferenceData[0] )), 
-                        with(nullValue(ObjectData.class)), 
-                        with(equalTo(new ObjectData[0])),
-                        with(equalTo(new String[] { "message 1", "message 2" })), 
-                        with(equalTo(new String[] { "warning 1", "warning 2" })));
+                one(mockEncoder).encodeServerActionResult(with(equalTo(adapter)), with(equalTo(new ObjectData[0])),
+                    with(equalTo(new ReferenceData[0])), with(nullValue(ObjectData.class)),
+                    with(equalTo(new ObjectData[0])), with(equalTo(new String[] { "message 1", "message 2" })),
+                    with(equalTo(new String[] { "warning 1", "warning 2" })));
                 will(returnValue(null));
             }
         });
 
         IsisContext.getTransactionManager().startTransaction();
-        
+
         IsisContext.getMessageBroker().addMessage("message 1");
         IsisContext.getMessageBroker().addMessage("message 2");
 
         IsisContext.getMessageBroker().addWarning("warning 1");
         IsisContext.getMessageBroker().addWarning("warning 2");
 
-
-        ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ActionType.USER, 
-                "action()", 
-                targetData, 
+        final ExecuteServerActionRequest request =
+            new ExecuteServerActionRequest(new TestProxySession(), ActionType.USER, "action()", targetData,
                 parameterData);
-		final ExecuteServerActionResponse result = server.executeServerAction(
-                request);
+        final ExecuteServerActionResponse result = server.executeServerAction(request);
 
         IsisContext.getTransactionManager().endTransaction();
 

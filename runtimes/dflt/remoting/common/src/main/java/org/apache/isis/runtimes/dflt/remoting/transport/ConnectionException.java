@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 /**
  * Indicates that a connection could not be established between the client and the server.

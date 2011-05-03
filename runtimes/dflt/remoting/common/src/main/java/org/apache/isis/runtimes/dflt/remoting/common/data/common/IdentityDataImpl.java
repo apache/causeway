@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public class IdentityDataImpl implements IdentityData, Encodable {
-	
+
     private static final long serialVersionUID = 1L;
     private final Oid oid;
     private final String type;
@@ -50,29 +49,32 @@ public class IdentityDataImpl implements IdentityData, Encodable {
         initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(type);
         output.writeEncodable(oid);
         output.writeEncodable(version);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-    
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }

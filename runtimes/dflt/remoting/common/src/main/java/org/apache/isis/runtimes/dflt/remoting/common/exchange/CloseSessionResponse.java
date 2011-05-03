@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -29,27 +28,26 @@ import org.apache.isis.core.commons.encoding.Encodable;
 
 public class CloseSessionResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	public CloseSessionResponse() {
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public CloseSessionResponse(DataInputExtended input) throws IOException {
-		instantiated();
-	}
+    public CloseSessionResponse() {
+        instantiated();
+    }
 
-	public void encode(DataOutputExtended output) throws IOException {
-	}
+    public CloseSessionResponse(final DataInputExtended input) throws IOException {
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
-	
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
 }

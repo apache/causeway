@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -26,11 +25,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 
-
 public abstract class RequestAbstract implements Request {
-	
-	
-	private static int nextId = 0;
+
+    private static int nextId = 0;
     protected transient Object response;
     private final int id;
     protected final AuthenticationSession session;
@@ -47,32 +44,36 @@ public abstract class RequestAbstract implements Request {
         initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeInt(id);
         output.writeEncodable(session);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-
+    @Override
     public final void setResponse(final Object response) {
         this.response = response;
     }
 
+    @Override
     public Object getResponse() {
         return response;
     }
 
+    @Override
     public AuthenticationSession getSession() {
         return session;
     }
 
+    @Override
     public int getId() {
         return id;
     }

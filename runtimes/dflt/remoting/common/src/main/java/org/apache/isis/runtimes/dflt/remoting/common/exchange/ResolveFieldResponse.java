@@ -17,49 +17,48 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 
 public class ResolveFieldResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final Data data;
-	
-	public ResolveFieldResponse(Data data) {
-		this.data = data;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public ResolveFieldResponse(DataInputExtended input) throws IOException {
-		this.data = input.readEncodable(ObjectData.class);
-		instantiated();
-	}
+    private final Data data;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeEncodable(data);
-	}
+    public ResolveFieldResponse(final Data data) {
+        this.data = data;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public ResolveFieldResponse(final DataInputExtended input) throws IOException {
+        this.data = input.readEncodable(ObjectData.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodable(data);
+    }
 
-	public Data getData() {
-		return data;
-	}
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public Data getData() {
+        return data;
+    }
+
 }

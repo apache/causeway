@@ -17,48 +17,47 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 
 public class OidForServiceResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final IdentityData identityData;
-	
-	public OidForServiceResponse(IdentityData identityData) {
-		this.identityData = identityData;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public OidForServiceResponse(DataInputExtended input) throws IOException {
-		this.identityData = input.readEncodable(IdentityData.class);
-		instantiated();
-	}
+    private final IdentityData identityData;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeEncodable(identityData);
-	}
+    public OidForServiceResponse(final IdentityData identityData) {
+        this.identityData = identityData;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public OidForServiceResponse(final DataInputExtended input) throws IOException {
+        this.identityData = input.readEncodable(IdentityData.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodable(identityData);
+    }
 
-	public IdentityData getOidData() {
-		return identityData;
-	}
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public IdentityData getOidData() {
+        return identityData;
+    }
+
 }

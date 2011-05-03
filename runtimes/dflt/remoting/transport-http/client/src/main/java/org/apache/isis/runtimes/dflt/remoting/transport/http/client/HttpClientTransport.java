@@ -28,9 +28,9 @@ import java.io.OutputStream;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.isis.runtimes.dflt.remoting.transport.TransportAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.io.LazyInputStream;
+import org.apache.isis.runtimes.dflt.remoting.transport.TransportAbstract;
 
 public class HttpClientTransport extends TransportAbstract {
 
@@ -40,7 +40,7 @@ public class HttpClientTransport extends TransportAbstract {
     private ByteArrayOutputStream outputStream;
     private InputStream inputStream;
 
-    public HttpClientTransport(IsisConfiguration configuration) {
+    public HttpClientTransport(final IsisConfiguration configuration) {
         super(configuration);
     }
 
@@ -48,11 +48,13 @@ public class HttpClientTransport extends TransportAbstract {
     // init, shutdown
     // ///////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
         httpClient = new HttpClient();
         url = getConfiguration().getString(HttpRemotingConstants.URL_KEY, HttpRemotingConstants.URL_DEFAULT);
     }
 
+    @Override
     public void shutdown() {
         httpClient = null;
     }
@@ -61,10 +63,12 @@ public class HttpClientTransport extends TransportAbstract {
     // connect, disconnect
     // ///////////////////////////////////////////////////////////
 
+    @Override
     public void connect() throws IOException {
         outputStream = new ByteArrayOutputStream();
     }
 
+    @Override
     public void disconnect() {
         inputStream = null;
         outputStream = null;
@@ -78,6 +82,7 @@ public class HttpClientTransport extends TransportAbstract {
      * Returns an {@link OutputStream} that writes into the request body of an HTTP POST, and will send on
      * {@link OutputStream#flush() flush}.
      */
+    @Override
     public OutputStream getOutputStream() {
         return outputStream;
     }
@@ -88,15 +93,16 @@ public class HttpClientTransport extends TransportAbstract {
      * <p>
      * Subsequent calls return the same input stream, at whatever position they have been processed.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         if (inputStream == null) {
             inputStream = new LazyInputStream(new LazyInputStream.InputStreamProvider() {
                 @Override
                 public InputStream getInputStream() throws IOException {
-                    PostMethod postMethod = new PostMethod(url);
+                    final PostMethod postMethod = new PostMethod(url);
 
                     // copy over
-                    InputStreamRequestEntity requestEntity =
+                    final InputStreamRequestEntity requestEntity =
                         new InputStreamRequestEntity(new ByteArrayInputStream(outputStream.toByteArray()));
                     postMethod.setRequestEntity(requestEntity);
 

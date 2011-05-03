@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport;
 
 import java.io.IOException;
@@ -28,12 +27,12 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 public interface Transport extends ApplicationScopedComponent {
 
-	void connect() throws IOException;
+    void connect() throws IOException;
 
-	void disconnect();
+    void disconnect();
 
-	InputStream getInputStream() throws IOException;
-	
-	OutputStream getOutputStream() throws IOException;
+    InputStream getInputStream() throws IOException;
+
+    OutputStream getOutputStream() throws IOException;
 
 }

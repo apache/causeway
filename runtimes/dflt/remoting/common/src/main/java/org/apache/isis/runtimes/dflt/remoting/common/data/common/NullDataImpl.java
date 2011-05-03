@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 
 public class NullDataImpl implements NullData, Encodable, Serializable {
-	
+
     private static final long serialVersionUID = 1L;
     private final String type;
 
@@ -43,19 +42,20 @@ public class NullDataImpl implements NullData, Encodable, Serializable {
         initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(type);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
 
+    @Override
     public String getType() {
         return type;
     }

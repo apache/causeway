@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -30,35 +29,35 @@ import org.apache.isis.core.commons.encoding.Encodable;
 
 public class GetPropertiesResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final Properties properties;
-	
-	public GetPropertiesResponse(Properties properties) {
-		this.properties = properties;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public GetPropertiesResponse(DataInputExtended input) throws IOException {
-		this.properties = input.readSerializable(Properties.class);
-		instantiated();
-	}
+    private final Properties properties;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeSerializable(properties);
-	}
+    public GetPropertiesResponse(final Properties properties) {
+        this.properties = properties;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public GetPropertiesResponse(final DataInputExtended input) throws IOException {
+        this.properties = input.readSerializable(Properties.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeSerializable(properties);
+    }
 
-	public Properties getProperties() {
-		return properties;
-	}
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public Properties getProperties() {
+        return properties;
+    }
+
 }

@@ -24,10 +24,6 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
-import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallerAbstract;
-import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallingConstants;
-import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
@@ -37,6 +33,10 @@ import org.apache.isis.core.commons.encoding.DebugDataInputExtended;
 import org.apache.isis.core.commons.encoding.DebugDataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
+import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallerAbstract;
+import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallingConstants;
+import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.log4j.Logger;
 
 public class EncodingMarshaller extends MarshallerAbstract {
@@ -50,13 +50,13 @@ public class EncodingMarshaller extends MarshallerAbstract {
     private static enum As {
         ENCODABLE(0) {
             @Override
-            public void writeObject(DataOutputExtended output, Object object) throws IOException {
+            public void writeObject(final DataOutputExtended output, final Object object) throws IOException {
                 writeTo(output);
                 output.writeEncodable(object);
             }
 
             @Override
-            public <T> T readObject(DataInputExtended input, Class<T> cls) throws IOException {
+            public <T> T readObject(final DataInputExtended input, final Class<T> cls) throws IOException {
                 // not quite symmetrical with write; the byte has already been read from stream
                 // to determine which As instance to delegate to
                 return input.readEncodable(cls);
@@ -64,13 +64,13 @@ public class EncodingMarshaller extends MarshallerAbstract {
         },
         SERIALIZABLE(1) {
             @Override
-            public void writeObject(DataOutputExtended output, Object object) throws IOException {
+            public void writeObject(final DataOutputExtended output, final Object object) throws IOException {
                 writeTo(output);
                 output.writeSerializable(object);
             }
 
             @Override
-            public <T> T readObject(DataInputExtended input, Class<T> cls) throws IOException {
+            public <T> T readObject(final DataInputExtended input, final Class<T> cls) throws IOException {
                 // not quite symmetrical with write; the byte has already been read from stream
                 // to determine which As instance to delegate to
                 return input.readSerializable(cls);
@@ -78,25 +78,25 @@ public class EncodingMarshaller extends MarshallerAbstract {
         };
         static Map<Integer, As> cache = new HashMap<Integer, As>();
         static {
-            for (As as : values()) {
+            for (final As as : values()) {
                 cache.put(as.idx, as);
             }
         }
         private final int idx;
 
-        private As(int idx) {
+        private As(final int idx) {
             this.idx = idx;
         }
 
-        static As get(int idx) {
+        static As get(final int idx) {
             return cache.get(idx);
         }
 
-        public static As readFrom(DataInputExtended input) throws IOException {
+        public static As readFrom(final DataInputExtended input) throws IOException {
             return get(input.readByte());
         }
 
-        public void writeTo(DataOutputExtended output) throws IOException {
+        public void writeTo(final DataOutputExtended output) throws IOException {
             output.writeByte(idx);
         }
 
@@ -155,8 +155,8 @@ public class EncodingMarshaller extends MarshallerAbstract {
         output.flush();
     }
 
-    private <T> T readFromInput(Class<T> cls) throws IOException {
-        As as = As.readFrom(input);
+    private <T> T readFromInput(final Class<T> cls) throws IOException {
+        final As as = As.readFrom(input);
         return as.readObject(input, cls);
     }
 

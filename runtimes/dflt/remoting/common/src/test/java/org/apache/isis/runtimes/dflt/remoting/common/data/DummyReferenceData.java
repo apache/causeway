@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 
 public class DummyReferenceData implements IdentityData {
     private static final long serialVersionUID = 1L;
@@ -43,14 +41,17 @@ public class DummyReferenceData implements IdentityData {
         this(null, null, null);
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
@@ -80,31 +81,39 @@ public class DummyReferenceData implements IdentityData {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        DummyReferenceData other = (DummyReferenceData) obj;
+        }
+        final DummyReferenceData other = (DummyReferenceData) obj;
         if (oid == null) {
-            if (other.oid != null)
+            if (other.oid != null) {
                 return false;
-        } else if (!oid.equals(other.oid))
+            }
+        } else if (!oid.equals(other.oid)) {
             return false;
+        }
         if (type == null) {
-            if (other.type != null)
+            if (other.type != null) {
                 return false;
-        } else if (!type.equals(other.type))
+            }
+        } else if (!type.equals(other.type)) {
             return false;
+        }
         if (version == null) {
-            if (other.version != null)
+            if (other.version != null) {
                 return false;
-        } else if (!version.equals(other.version))
+            }
+        } else if (!version.equals(other.version)) {
             return false;
+        }
         return true;
     }
-
 
 }

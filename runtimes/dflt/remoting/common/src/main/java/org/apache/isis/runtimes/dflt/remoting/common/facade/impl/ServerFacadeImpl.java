@@ -24,10 +24,32 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
 import org.apache.isis.runtimes.dflt.remoting.common.client.transaction.ClientTransactionEvent;
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
@@ -73,32 +95,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
@@ -106,6 +102,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 /**
  * previously called <tt>ServerDistribution</tt>.
@@ -138,7 +137,7 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public OpenSessionResponse openSession(OpenSessionRequest request2) {
+    public OpenSessionResponse openSession(final OpenSessionRequest request2) {
         final AuthenticationRequestPassword request =
             new AuthenticationRequestPassword(request2.getUsername(), request2.getPassword());
         final AuthenticationSession session = authenticationManager.authenticate(request);
@@ -146,7 +145,7 @@ public class ServerFacadeImpl implements ServerFacade {
     }
 
     @Override
-    public CloseSessionResponse closeSession(CloseSessionRequest request) {
+    public CloseSessionResponse closeSession(final CloseSessionRequest request) {
         authenticationManager.closeSession(request.getSession());
         return new CloseSessionResponse();
     }
@@ -156,16 +155,18 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public AuthorizationResponse authorizeVisibility(AuthorizationRequestVisibility request) {
-        ObjectAdapter targetAdapter = encoderDecoder.decode(request.getTarget());
-        boolean allowed = getMember(request.getIdentifier()).isVisible(request.getSession(), targetAdapter).isAllowed();
+    public AuthorizationResponse authorizeVisibility(final AuthorizationRequestVisibility request) {
+        final ObjectAdapter targetAdapter = encoderDecoder.decode(request.getTarget());
+        final boolean allowed =
+            getMember(request.getIdentifier()).isVisible(request.getSession(), targetAdapter).isAllowed();
         return encoderDecoder.encodeAuthorizeResponse(allowed);
     }
 
     @Override
-    public AuthorizationResponse authorizeUsability(AuthorizationRequestUsability request) {
-        ObjectAdapter targetAdapter = encoderDecoder.decode(request.getTarget());
-        boolean allowed = getMember(request.getIdentifier()).isUsable(request.getSession(), targetAdapter).isAllowed();
+    public AuthorizationResponse authorizeUsability(final AuthorizationRequestUsability request) {
+        final ObjectAdapter targetAdapter = encoderDecoder.decode(request.getTarget());
+        final boolean allowed =
+            getMember(request.getIdentifier()).isUsable(request.getSession(), targetAdapter).isAllowed();
         return encoderDecoder.encodeAuthorizeResponse(allowed);
     }
 
@@ -180,9 +181,8 @@ public class ServerFacadeImpl implements ServerFacade {
     }
 
     private ObjectMember getActionElseThrowException(final Identifier id, final ObjectSpecification specification) {
-        ObjectMember member =
-            specification.getObjectAction(ActionType.USER, id.getMemberName(),
-                loadParameterSpecifications(id));
+        final ObjectMember member =
+            specification.getObjectAction(ActionType.USER, id.getMemberName(), loadParameterSpecifications(id));
         if (member == null) {
             throw new IsisException("No user action found for id " + id);
         }
@@ -190,7 +190,7 @@ public class ServerFacadeImpl implements ServerFacade {
     }
 
     private ObjectMember getAssociationElseThrowException(final Identifier id, final ObjectSpecification specification) {
-        ObjectMember member = specification.getAssociation(id.getMemberName());
+        final ObjectMember member = specification.getAssociation(id.getMemberName());
         if (member == null) {
             throw new IsisException("No property or collection found for id " + id);
         }
@@ -200,7 +200,7 @@ public class ServerFacadeImpl implements ServerFacade {
     private static List<ObjectSpecification> loadParameterSpecifications(final Identifier id) {
         final List<String> parameters = id.getMemberParameterNames();
         final List<ObjectSpecification> specifications = Lists.newArrayList();
-        for (String parameter : parameters) {
+        for (final String parameter : parameters) {
             specifications.add(getSpecificationLoader().loadSpecification(parameter));
         }
         return specifications;
@@ -211,7 +211,7 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public GetPropertiesResponse getProperties(GetPropertiesRequest request) {
+    public GetPropertiesResponse getProperties(final GetPropertiesRequest request) {
         final Properties properties = new Properties();
         properties.put("test-client", "true");
 
@@ -219,8 +219,8 @@ public class ServerFacadeImpl implements ServerFacade {
         final IsisConfiguration configuration = IsisContext.getConfiguration();
         final IsisConfiguration serviceProperties =
             configuration.getProperties(ConfigurationConstants.ROOT + "services");
-        
-        for(String propertyName: serviceProperties) {
+
+        for (final String propertyName : serviceProperties) {
             properties.put(propertyName, serviceProperties.getString(propertyName));
         }
 
@@ -244,10 +244,10 @@ public class ServerFacadeImpl implements ServerFacade {
     @Override
     public SetAssociationResponse setAssociation(final SetAssociationRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData targetData = request.getTarget();
-        IdentityData associateData = request.getAssociate();
+        final AuthenticationSession session = request.getSession();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData targetData = request.getTarget();
+        final IdentityData associateData = request.getAssociate();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request setAssociation " + fieldIdentifier + " on " + targetData + " with " + associateData
@@ -273,12 +273,12 @@ public class ServerFacadeImpl implements ServerFacade {
      * Applies only for {@link OneToOneAssociation}s.
      */
     @Override
-    public SetValueResponse setValue(SetValueRequest request) {
+    public SetValueResponse setValue(final SetValueRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData targetIdentityData = request.getTarget();
-        EncodableObjectData encodeableObjectData = request.getValue();
+        final AuthenticationSession session = request.getSession();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData targetIdentityData = request.getTarget();
+        final EncodableObjectData encodeableObjectData = request.getValue();
 
         Assert.assertNotNull(encodeableObjectData);
         if (LOG.isDebugEnabled()) {
@@ -307,10 +307,10 @@ public class ServerFacadeImpl implements ServerFacade {
     @Override
     public ClearAssociationResponse clearAssociation(final ClearAssociationRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData targetData = request.getTarget();
-        IdentityData associateData = request.getAssociate();
+        final AuthenticationSession session = request.getSession();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData targetData = request.getTarget();
+        final IdentityData associateData = request.getAssociate();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request clearAssociation " + fieldIdentifier + " on " + targetData + " of " + associateData
@@ -342,9 +342,9 @@ public class ServerFacadeImpl implements ServerFacade {
     @Override
     public ClearValueResponse clearValue(final ClearValueRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData targetIdentityData = request.getTarget();
+        final AuthenticationSession session = request.getSession();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData targetIdentityData = request.getTarget();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request clearValue " + fieldIdentifier + " on " + targetIdentityData + " for " + session);
@@ -373,11 +373,11 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public ExecuteClientActionResponse executeClientAction(ExecuteClientActionRequest request) {
+    public ExecuteClientActionResponse executeClientAction(final ExecuteClientActionRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        ReferenceData[] data = request.getData();
-        int[] types = request.getTypes();
+        final AuthenticationSession session = request.getSession();
+        final ReferenceData[] data = request.getData();
+        final int[] types = request.getTypes();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("execute client action for " + session);
@@ -462,13 +462,13 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public ExecuteServerActionResponse executeServerAction(ExecuteServerActionRequest request) {
+    public ExecuteServerActionResponse executeServerAction(final ExecuteServerActionRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        ActionType actionType = request.getActionType();
-        String actionIdentifier = request.getActionIdentifier();
-        ReferenceData targetData = request.getTarget();
-        Data[] parameterData = request.getParameters();
+        final AuthenticationSession session = request.getSession();
+        final ActionType actionType = request.getActionType();
+        final String actionIdentifier = request.getActionIdentifier();
+        final ReferenceData targetData = request.getTarget();
+        final Data[] parameterData = request.getParameters();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request executeAction " + actionIdentifier + " on " + targetData + " for " + session);
@@ -476,7 +476,7 @@ public class ServerFacadeImpl implements ServerFacade {
 
         final KnownObjectsRequest knownObjects = new KnownObjectsRequest();
 
-        ObjectAdapter targetAdapter = decodeTargetAdapter(session, targetData, knownObjects);
+        final ObjectAdapter targetAdapter = decodeTargetAdapter(session, targetData, knownObjects);
 
         final ObjectAction action = targetAdapter.getSpecification().getObjectAction(actionType, actionIdentifier);
         final ObjectAdapter[] parameters = decodeParameters(session, parameterData, knownObjects);
@@ -512,7 +512,7 @@ public class ServerFacadeImpl implements ServerFacade {
             persistedParameterData, messages.toArray(new String[0]), warnings.toArray(new String[0]));
     }
 
-    private ObjectAdapter decodeTargetAdapter(AuthenticationSession session, ReferenceData targetData,
+    private ObjectAdapter decodeTargetAdapter(final AuthenticationSession session, final ReferenceData targetData,
         final KnownObjectsRequest knownObjects) {
         ObjectAdapter targetAdapter;
         if (targetData == null) {
@@ -581,7 +581,7 @@ public class ServerFacadeImpl implements ServerFacade {
 
     private ReferenceData[] getDisposed() {
         final List<ReferenceData> list = new ArrayList<ReferenceData>();
-        for (ObjectAdapter element : getUpdateNotifier().getDisposedObjects()) {
+        for (final ObjectAdapter element : getUpdateNotifier().getDisposedObjects()) {
             list.add(encoderDecoder.encodeIdentityData(element));
         }
         return list.toArray(new ReferenceData[list.size()]);
@@ -592,10 +592,10 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public GetObjectResponse getObject(GetObjectRequest request) {
+    public GetObjectResponse getObject(final GetObjectRequest request) {
 
-        Oid oid = request.getOid();
-        String specificationName = request.getSpecificationName();
+        final Oid oid = request.getOid();
+        final String specificationName = request.getSpecificationName();
 
         final ObjectSpecification specification = getSpecification(specificationName);
         final ObjectAdapter adapter = getPersistenceSession().loadObject(oid, specification);
@@ -604,11 +604,11 @@ public class ServerFacadeImpl implements ServerFacade {
     }
 
     @Override
-    public ResolveFieldResponse resolveField(ResolveFieldRequest request) {
+    public ResolveFieldResponse resolveField(final ResolveFieldRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        IdentityData targetData = request.getTarget();
-        String fieldIdentifier = request.getFieldIdentifier();
+        final AuthenticationSession session = request.getSession();
+        final IdentityData targetData = request.getTarget();
+        final String fieldIdentifier = request.getFieldIdentifier();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request resolveField " + targetData + "/" + fieldIdentifier + " for " + session);
@@ -619,15 +619,15 @@ public class ServerFacadeImpl implements ServerFacade {
         final ObjectAdapter targetAdapter = getPersistenceSession().recreateAdapter(targetData.getOid(), spec);
 
         getPersistenceSession().resolveField(targetAdapter, field);
-        Data data = encoderDecoder.encodeForResolveField(targetAdapter, fieldIdentifier);
+        final Data data = encoderDecoder.encodeForResolveField(targetAdapter, fieldIdentifier);
         return new ResolveFieldResponse(data);
     }
 
     @Override
-    public ResolveObjectResponse resolveImmediately(ResolveObjectRequest request) {
+    public ResolveObjectResponse resolveImmediately(final ResolveObjectRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        IdentityData targetData = request.getTarget();
+        final AuthenticationSession session = request.getSession();
+        final IdentityData targetData = request.getTarget();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request resolveImmediately " + targetData + " for " + session);
@@ -651,26 +651,26 @@ public class ServerFacadeImpl implements ServerFacade {
     @Override
     public FindInstancesResponse findInstances(final FindInstancesRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        PersistenceQueryData criteriaData = request.getCriteria();
+        final AuthenticationSession session = request.getSession();
+        final PersistenceQueryData criteriaData = request.getCriteria();
 
         final PersistenceQuery criteria = encoderDecoder.decodePersistenceQuery(criteriaData);
         LOG.debug("request findInstances " + criteria + " for " + session);
         final ObjectAdapter instances = getPersistenceSession().findInstances(criteria);
-        ObjectData[] instancesData = convertToCollectionAdapter(instances);
+        final ObjectData[] instancesData = convertToCollectionAdapter(instances);
         return new FindInstancesResponse(instancesData);
     }
 
     @Override
-    public HasInstancesResponse hasInstances(HasInstancesRequest request) {
+    public HasInstancesResponse hasInstances(final HasInstancesRequest request) {
 
-        AuthenticationSession session = request.getSession();
-        String specificationName = request.getSpecificationName();
+        final AuthenticationSession session = request.getSession();
+        final String specificationName = request.getSpecificationName();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("request hasInstances of " + specificationName + " for " + session);
         }
-        boolean hasInstances = getPersistenceSession().hasInstances(getSpecification(specificationName));
+        final boolean hasInstances = getPersistenceSession().hasInstances(getSpecification(specificationName));
         return new HasInstancesResponse(hasInstances);
     }
 
@@ -691,9 +691,9 @@ public class ServerFacadeImpl implements ServerFacade {
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public OidForServiceResponse oidForService(OidForServiceRequest request) {
+    public OidForServiceResponse oidForService(final OidForServiceRequest request) {
 
-        String serviceId = request.getServiceId();
+        final String serviceId = request.getServiceId();
 
         final ObjectAdapter serviceAdapter = getPersistenceSession().getService(serviceId);
         if (serviceAdapter == null) {
@@ -737,7 +737,7 @@ public class ServerFacadeImpl implements ServerFacade {
 
     private ObjectData[] getUpdates() {
         final List<ObjectData> list = new ArrayList<ObjectData>();
-        for (ObjectAdapter element : getUpdateNotifier().getChangedObjects()) {
+        for (final ObjectAdapter element : getUpdateNotifier().getChangedObjects()) {
             list.add(encoderDecoder.encodeForUpdate(element));
         }
         return list.toArray(new ObjectData[list.size()]);

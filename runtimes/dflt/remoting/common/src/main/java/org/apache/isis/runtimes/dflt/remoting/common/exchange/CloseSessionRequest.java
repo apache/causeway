@@ -17,54 +17,51 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class CloseSessionRequest extends RequestAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public CloseSessionRequest(final AuthenticationSession session) {
-    	super(session);
-    	initialized();
+        super(session);
+        initialized();
     }
-    
+
     public CloseSessionRequest(final DataInputExtended input) throws IOException {
         super(input);
         initialized();
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} to {@link CloseSessionResponse}.
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} to {@link CloseSessionResponse}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        CloseSessionResponse response = serverFacade.closeSession(this);
+        final CloseSessionResponse response = serverFacade.closeSession(this);
         setResponse(response);
     }
 
-    
     /**
      * Downcasts.
      */
     @Override
     public CloseSessionResponse getResponse() {
-    	return (CloseSessionResponse) super.getResponse();
+        return (CloseSessionResponse) super.getResponse();
     }
-    
-    
-}
 
+}

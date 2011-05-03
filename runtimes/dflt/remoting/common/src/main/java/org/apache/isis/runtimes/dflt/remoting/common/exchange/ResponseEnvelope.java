@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -29,9 +28,9 @@ import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 
 public class ResponseEnvelope implements Encodable, Serializable {
-	
+
     private static final long serialVersionUID = 1L;
-    
+
     private final int id;
     private final Object object;
 
@@ -46,35 +45,36 @@ public class ResponseEnvelope implements Encodable, Serializable {
     }
 
     public ResponseEnvelope(final DataInputExtended input) throws IOException {
-    	this.id = input.readInt();
-    	this.object = input.readEncodable(Object.class);
-    	initialized();
+        this.id = input.readInt();
+        this.object = input.readEncodable(Object.class);
+        initialized();
     }
-    
+
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeInt(id);
         output.writeEncodable(object);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     public int getId() {
         return id;
     }
 
     public Object getObject() {
-    	return object;
+        return object;
     }
-    
-    /////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////
     // toString
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {

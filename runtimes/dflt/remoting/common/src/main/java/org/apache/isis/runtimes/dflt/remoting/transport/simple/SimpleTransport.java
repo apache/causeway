@@ -17,69 +17,72 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.simple;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.isis.runtimes.dflt.remoting.transport.TransportAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.runtimes.dflt.remoting.transport.TransportAbstract;
 
 /**
- * Simple implementation that simply wraps an already existing
- * {@link InputStream} and {@link OutputStream}.
+ * Simple implementation that simply wraps an already existing {@link InputStream} and {@link OutputStream}.
  * 
  * <p>
  * Originally written to assist with refactoring.
  */
 public class SimpleTransport extends TransportAbstract {
-	
-	private final InputStream inputStream;
-	private final OutputStream outputStream;
-	
-	public SimpleTransport(IsisConfiguration configuration,
-			InputStream inputStream, OutputStream outputStream) {
-		super(configuration);
-		this.inputStream = inputStream;
-		this.outputStream = outputStream;
-	}
 
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
 
-	//////////////////////////////////////////////////////
-	// init, shutdown
-	//////////////////////////////////////////////////////
-	
-	public void init() {
-		// does nothing
-	}
+    public SimpleTransport(final IsisConfiguration configuration, final InputStream inputStream,
+        final OutputStream outputStream) {
+        super(configuration);
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
+    }
 
-	public void shutdown() {
-		// does nothing
-	}
+    // ////////////////////////////////////////////////////
+    // init, shutdown
+    // ////////////////////////////////////////////////////
 
-	//////////////////////////////////////////////////////
-	// connect, disconnect
-	//////////////////////////////////////////////////////
+    @Override
+    public void init() {
+        // does nothing
+    }
 
-	public void connect() {
-		// does nothing
-	}
+    @Override
+    public void shutdown() {
+        // does nothing
+    }
 
-	public void disconnect() {
-		// does nothing
-	}
+    // ////////////////////////////////////////////////////
+    // connect, disconnect
+    // ////////////////////////////////////////////////////
 
-	//////////////////////////////////////////////////////
-	// input & output streams
-	//////////////////////////////////////////////////////
+    @Override
+    public void connect() {
+        // does nothing
+    }
 
-	public InputStream getInputStream() {
-		return inputStream;
-	}
+    @Override
+    public void disconnect() {
+        // does nothing
+    }
 
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
+    // ////////////////////////////////////////////////////
+    // input & output streams
+    // ////////////////////////////////////////////////////
+
+    @Override
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    @Override
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
 
 }

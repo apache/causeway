@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import java.io.Serializable;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 
 public interface ReferenceData extends Data, Serializable {
     Oid getOid();

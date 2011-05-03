@@ -17,27 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.util.Map;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 
 import com.google.inject.internal.Maps;
 
-
 /**
- * A lookup of the objects that are part of a request or response. As only one instance of data per object
- * should be passed from node to node this object provides a way of ensuring this.
+ * A lookup of the objects that are part of a request or response. As only one instance of data per object should be
+ * passed from node to node this object provides a way of ensuring this.
  */
 public class KnownObjectsRequest {
 
     private final Map<ObjectAdapter, ObjectData> dataToObjectMap = Maps.newHashMap();
     private final Map<ObjectData, ObjectAdapter> objectToDataMap = Maps.newHashMap();
 
-    public KnownObjectsRequest() {}
+    public KnownObjectsRequest() {
+    }
 
     public boolean containsKey(final ObjectAdapter object) {
         return dataToObjectMap.containsKey(object);
@@ -48,11 +47,11 @@ public class KnownObjectsRequest {
     }
 
     public ObjectData get(final ObjectAdapter object) {
-        return (ObjectData) dataToObjectMap.get(object);
+        return dataToObjectMap.get(object);
     }
 
     public ObjectAdapter get(final ObjectData data) {
-        return (ObjectAdapter) objectToDataMap.get(data);
+        return objectToDataMap.get(data);
     }
 
     public void put(final ObjectAdapter object, final ObjectData data) {
@@ -61,24 +60,31 @@ public class KnownObjectsRequest {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        KnownObjectsRequest other = (KnownObjectsRequest) obj;
+        }
+        final KnownObjectsRequest other = (KnownObjectsRequest) obj;
         if (dataToObjectMap == null) {
-            if (other.dataToObjectMap != null)
+            if (other.dataToObjectMap != null) {
                 return false;
-        } else if (!dataToObjectMap.equals(other.dataToObjectMap))
+            }
+        } else if (!dataToObjectMap.equals(other.dataToObjectMap)) {
             return false;
+        }
         if (objectToDataMap == null) {
-            if (other.objectToDataMap != null)
+            if (other.objectToDataMap != null) {
                 return false;
-        } else if (!objectToDataMap.equals(other.objectToDataMap))
+            }
+        } else if (!objectToDataMap.equals(other.objectToDataMap)) {
             return false;
+        }
         return true;
     }
 
@@ -91,22 +97,19 @@ public class KnownObjectsRequest {
         return result;
     }
 
-
-//    @Override
-//    public boolean equals(final Object obj) {
-//        if (obj == this) {
-//            return true;
-//        }
-//
-//        if (obj instanceof KnownObjectsRequest) {
-//            final KnownObjectsRequest other = (KnownObjectsRequest) obj;
-//
-//            return other.dataToObjectMap.equals(dataToObjectMap) && other.objectToDataMap.equals(objectToDataMap);
-//        }
-//
-//        return false;
-//    }
-
+    // @Override
+    // public boolean equals(final Object obj) {
+    // if (obj == this) {
+    // return true;
+    // }
+    //
+    // if (obj instanceof KnownObjectsRequest) {
+    // final KnownObjectsRequest other = (KnownObjectsRequest) obj;
+    //
+    // return other.dataToObjectMap.equals(dataToObjectMap) && other.objectToDataMap.equals(objectToDataMap);
+    // }
+    //
+    // return false;
+    // }
 
 }
-

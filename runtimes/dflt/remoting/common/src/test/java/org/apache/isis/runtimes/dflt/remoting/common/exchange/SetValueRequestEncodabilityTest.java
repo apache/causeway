@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,51 +25,46 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class SetValueRequestEncodabilityTest extends EncodabilityContractTest {
 
+    private IdentityData mockTargetData;
+    private EncodableObjectData mockEncodeableData;
 
-	private IdentityData mockTargetData;
-	private EncodableObjectData mockEncodeableData;
-	
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		mockTargetData = context.mock(IdentityData.class);
-		mockEncodeableData = context.mock(EncodableObjectData.class);
-	}
-	
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        mockTargetData = context.mock(IdentityData.class);
+        mockEncodeableData = context.mock(EncodableObjectData.class);
+    }
 
-	protected Encodable createEncodable() {
-		return new SetValueRequest(mockAuthSession, "firstName", mockTargetData, mockEncodeableData);
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new SetValueRequest(mockAuthSession, "firstName", mockTargetData, mockEncodeableData);
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		SetValueRequest decoded = (SetValueRequest) decodedEncodable;
-		SetValueRequest original = (SetValueRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
+
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final SetValueRequest decoded = (SetValueRequest) decodedEncodable;
+        final SetValueRequest original = (SetValueRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

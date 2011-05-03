@@ -17,24 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class ClearValueRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
     private final String fieldIdentifier;
     private final IdentityData target;
 
-    public ClearValueRequest(final AuthenticationSession session, final String fieldIdentifier, final IdentityData target) {
+    public ClearValueRequest(final AuthenticationSession session, final String fieldIdentifier,
+        final IdentityData target) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;
@@ -49,39 +49,39 @@ public class ClearValueRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended outputStream)
-    		throws IOException {
-    	super.encode(outputStream);
+    public void encode(final DataOutputExtended outputStream) throws IOException {
+        super.encode(outputStream);
         outputStream.writeUTF(fieldIdentifier);
         outputStream.writeEncodable(target);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	public String getFieldIdentifier() {
-		return fieldIdentifier;
-	}
-	
-	public IdentityData getTarget() {
-		return target;
-	}
-	
-    /////////////////////////////////////////////////////////
+    public String getFieldIdentifier() {
+        return fieldIdentifier;
+    }
+
+    public IdentityData getTarget() {
+        return target;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} of {@link ObjectData}[] (array).
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of {@link ObjectData}[] (array).
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        ClearValueResponse response = serverFacade.clearValue(this);
-		setResponse(response);
+        final ClearValueResponse response = serverFacade.clearValue(this);
+        setResponse(response);
     }
 
     /**

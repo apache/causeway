@@ -17,26 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.server;
 
 import java.io.IOException;
 
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.ServerMarshaller;
-import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class ServerConnectionDefault implements ServerConnection {
 
     private final ServerFacade server;
-    private ServerMarshaller serverMarshaller;
+    private final ServerMarshaller serverMarshaller;
 
     public ServerConnectionDefault(final ServerFacade server, final ServerMarshaller serverMarshaller) {
         this.server = server;
-        this.serverMarshaller = serverMarshaller; 
+        this.serverMarshaller = serverMarshaller;
     }
 
+    @Override
     public ServerFacade getServerFacade() {
         return server;
     }
@@ -45,17 +45,19 @@ public class ServerConnectionDefault implements ServerConnection {
         return serverMarshaller;
     }
 
+    @Override
     public Request readRequest() throws IOException {
         return serverMarshaller.readRequest();
     }
 
-    public void sendResponse(Object response) throws IOException {
+    @Override
+    public void sendResponse(final Object response) throws IOException {
         serverMarshaller.sendResponse(response);
     }
 
-    public void sendError(IsisException exception) throws IOException {
+    @Override
+    public void sendError(final IsisException exception) throws IOException {
         serverMarshaller.sendError(exception);
     }
-
 
 }

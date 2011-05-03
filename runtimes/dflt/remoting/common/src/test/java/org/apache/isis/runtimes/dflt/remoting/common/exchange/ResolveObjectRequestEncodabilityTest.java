@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,47 +25,43 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResolveObjectRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class ResolveObjectRequestEncodabilityTest extends EncodabilityContractTest {
 
+    private IdentityData mockTargetData;
 
-	private IdentityData mockTargetData;
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        mockTargetData = context.mock(IdentityData.class);
+    }
 
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		mockTargetData = context.mock(IdentityData.class);
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new ResolveObjectRequest(mockAuthSession, mockTargetData);
+    }
 
-	protected Encodable createEncodable() {
-		return new ResolveObjectRequest(mockAuthSession, mockTargetData);
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		ResolveObjectRequest decoded = (ResolveObjectRequest) decodedEncodable;
-		ResolveObjectRequest original = (ResolveObjectRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final ResolveObjectRequest decoded = (ResolveObjectRequest) decodedEncodable;
+        final ResolveObjectRequest original = (ResolveObjectRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

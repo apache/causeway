@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class SetValueRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
@@ -35,11 +34,8 @@ public class SetValueRequest extends RequestAbstract {
     private final EncodableObjectData value;
     private final IdentityData target;
 
-    public SetValueRequest(
-            final AuthenticationSession session,
-            final String fieldIdentifier,
-            final IdentityData target,
-            final EncodableObjectData value) {
+    public SetValueRequest(final AuthenticationSession session, final String fieldIdentifier,
+        final IdentityData target, final EncodableObjectData value) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;
@@ -52,49 +48,49 @@ public class SetValueRequest extends RequestAbstract {
         fieldIdentifier = input.readUTF();
         target = input.readEncodable(IdentityData.class);
         value = input.readEncodable(EncodableObjectData.class);
-        initialized();        
+        initialized();
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
-    	
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+
         output.writeUTF(fieldIdentifier);
         output.writeEncodable(target);
         output.writeEncodable(value);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	public String getFieldIdentifier() {
-		return fieldIdentifier;
-	}
-	
-	public IdentityData getTarget() {
-		return target;
-	}
-	
-	public EncodableObjectData getValue() {
-		return value;
-	}
-	
-    /////////////////////////////////////////////////////////
+    public String getFieldIdentifier() {
+        return fieldIdentifier;
+    }
+
+    public IdentityData getTarget() {
+        return target;
+    }
+
+    public EncodableObjectData getValue() {
+        return value;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} of {@link SetValueResponse}
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of {@link SetValueResponse}
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        SetValueResponse response = serverFacade.setValue(this);
-		setResponse(response);
+        final SetValueResponse response = serverFacade.setValue(this);
+        setResponse(response);
     }
 
     /**
@@ -104,5 +100,5 @@ public class SetValueRequest extends RequestAbstract {
     public SetValueResponse getResponse() {
         return (SetValueResponse) super.getResponse();
     }
-    
+
 }

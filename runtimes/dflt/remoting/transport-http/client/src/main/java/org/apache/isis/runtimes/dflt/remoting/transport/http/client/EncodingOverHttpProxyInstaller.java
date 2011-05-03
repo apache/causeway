@@ -32,7 +32,7 @@ public class EncodingOverHttpProxyInstaller extends ProxyInstallerAbstract {
     }
 
     @Override
-    protected void addConfigurationResources(List<String> configurationResources) {
+    protected void addConfigurationResources(final List<String> configurationResources) {
         super.addConfigurationResources(configurationResources);
         // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
         // and Transport using the installers.
@@ -43,7 +43,7 @@ public class EncodingOverHttpProxyInstaller extends ProxyInstallerAbstract {
     }
 
     @Override
-    protected EncodingMarshaller createMarshaller(Transport transport) {
+    protected EncodingMarshaller createMarshaller(final Transport transport) {
         return new EncodingMarshaller(getConfiguration(), transport);
     }
 

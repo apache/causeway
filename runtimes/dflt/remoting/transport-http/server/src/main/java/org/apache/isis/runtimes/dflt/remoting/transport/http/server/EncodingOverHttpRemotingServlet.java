@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.impl.ServerFacadeImpl;
 import org.apache.isis.runtimes.dflt.remoting.marshalling.encode.EncodingMarshaller;
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.ObjectEncoderDecoderDefault;
@@ -35,7 +36,6 @@ import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnectionDefault;
 import org.apache.isis.runtimes.dflt.remoting.transport.ServerConnectionHandler;
 import org.apache.isis.runtimes.dflt.remoting.transport.simple.SimpleTransport;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper;
 
@@ -62,16 +62,16 @@ public class EncodingOverHttpRemotingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-        IOException {
-        ServletInputStream inputStream = request.getInputStream();
-        ServletOutputStream outputStream = response.getOutputStream();
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
+        final ServletInputStream inputStream = request.getInputStream();
+        final ServletOutputStream outputStream = response.getOutputStream();
 
-        ServerConnection serverConnection = createConnection(inputStream, outputStream);
+        final ServerConnection serverConnection = createConnection(inputStream, outputStream);
 
         try {
             new ServerConnectionHandler(serverConnection).handleRequest();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // REVIEW: is this enough, or should we try to return a more
             // user-friendly exception or status?
             throw ex;
@@ -80,13 +80,13 @@ public class EncodingOverHttpRemotingServlet extends HttpServlet {
         }
     }
 
-    private ServerConnection createConnection(ServletInputStream inputStream, ServletOutputStream outputStream)
-        throws IOException {
+    private ServerConnection createConnection(final ServletInputStream inputStream,
+        final ServletOutputStream outputStream) throws IOException {
 
         // TODO: should use installers to create these,
         // provides the opportunity to read in installer-specific config files.
-        SimpleTransport transport = new SimpleTransport(configuration, inputStream, outputStream);
-        EncodingMarshaller marshaller = new EncodingMarshaller(configuration, transport);
+        final SimpleTransport transport = new SimpleTransport(configuration, inputStream, outputStream);
+        final EncodingMarshaller marshaller = new EncodingMarshaller(configuration, transport);
 
         // this is a no-op with the SimpleTransport, but include for consistency
         marshaller.connect();

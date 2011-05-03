@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 
 public class ObjectDataImpl implements ObjectData, Encodable {
-	
+
     private static final long serialVersionUID = 1L;
     private final Oid oid;
     private final boolean isResolved;
@@ -39,8 +38,7 @@ public class ObjectDataImpl implements ObjectData, Encodable {
     private final Version version;
     private Data fieldContent[];
 
-    public ObjectDataImpl(
-    		final Oid oid, final String type, final boolean resolved, final Version version) {
+    public ObjectDataImpl(final Oid oid, final String type, final boolean resolved, final Version version) {
         this.type = type;
         this.oid = oid;
         this.version = version;
@@ -58,6 +56,7 @@ public class ObjectDataImpl implements ObjectData, Encodable {
         initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(type);
         output.writeEncodable(oid);
@@ -66,35 +65,40 @@ public class ObjectDataImpl implements ObjectData, Encodable {
         output.writeEncodables(fieldContent);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
 
+    @Override
     public Data[] getFieldContent() {
         return fieldContent;
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
 
+    @Override
     public boolean hasCompleteData() {
         return isResolved;
     }
 
+    @Override
     public void setFieldContent(final Data[] fieldContent) {
         this.fieldContent = fieldContent;
     }

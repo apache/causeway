@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 
 public class EncodableObjectDataImpl implements EncodableObjectData, Encodable, Serializable {
-	
+
     private static final long serialVersionUID = 1L;
     private final String type;
     private final String objectAsString;
@@ -46,24 +45,26 @@ public class EncodableObjectDataImpl implements EncodableObjectData, Encodable, 
         initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(type);
         output.writeUTF(objectAsString);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
 
+    @Override
     public String getEncodedObjectData() {
         return objectAsString;
     }
 
+    @Override
     public String getType() {
         return type.equals("s") ? String.class.getName() : type;
     }

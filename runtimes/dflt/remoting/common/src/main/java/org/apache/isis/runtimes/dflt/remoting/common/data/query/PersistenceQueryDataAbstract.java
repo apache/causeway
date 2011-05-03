@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.query;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -26,12 +25,12 @@ public abstract class PersistenceQueryDataAbstract implements PersistenceQueryDa
     private static final long serialVersionUID = 1L;
     private final String specification;
 
-    public PersistenceQueryDataAbstract(ObjectSpecification noSpec) {
+    public PersistenceQueryDataAbstract(final ObjectSpecification noSpec) {
         specification = noSpec.getFullIdentifier();
     }
 
+    @Override
     public String getType() {
         return specification;
     }
 }
-

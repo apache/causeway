@@ -17,42 +17,41 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class AuthorizationRequestUsability extends AuthorizationRequestAbstract {
     private static final long serialVersionUID = 1L;
-    
-    public AuthorizationRequestUsability(
-    		final AuthenticationSession session, IdentityData targetData, final String dataStr) {
+
+    public AuthorizationRequestUsability(final AuthenticationSession session, final IdentityData targetData,
+        final String dataStr) {
         super(session, targetData, dataStr);
         initialized();
     }
-    
+
     public AuthorizationRequestUsability(final DataInputExtended input) throws IOException {
-    	super(input);
-    	initialized();
+        super(input);
+        initialized();
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        AuthorizationResponse response = serverFacade.authorizeUsability(this);
-		setResponse(response);
+        final AuthorizationResponse response = serverFacade.authorizeUsability(this);
+        setResponse(response);
     }
-    
-    
+
 }

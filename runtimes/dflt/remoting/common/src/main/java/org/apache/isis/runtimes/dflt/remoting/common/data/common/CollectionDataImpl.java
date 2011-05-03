@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
 import java.io.IOException;
@@ -40,13 +39,8 @@ public class CollectionDataImpl implements CollectionData, Encodable, Serializab
     private final boolean hasAllElements;
     private final String elementType;
 
-    public CollectionDataImpl(
-            final Oid oid,
-            final String collectionType,
-            final String elementType,
-            final ReferenceData[] elements,
-            final boolean hasAllElements,
-            final Version version) {
+    public CollectionDataImpl(final Oid oid, final String collectionType, final String elementType,
+        final ReferenceData[] elements, final boolean hasAllElements, final Version version) {
         this.collectionType = collectionType;
         this.elementType = elementType;
         this.oid = oid;
@@ -66,6 +60,7 @@ public class CollectionDataImpl implements CollectionData, Encodable, Serializab
         initialized();
     }
 
+    @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(collectionType);
         output.writeUTF(elementType);
@@ -76,33 +71,39 @@ public class CollectionDataImpl implements CollectionData, Encodable, Serializab
     }
 
     private void initialized() {
-    	// nothing to do
+        // nothing to do
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
+    @Override
     public ReferenceData[] getElements() {
         return elements;
     }
 
+    @Override
     public String getElementype() {
         return elementType;
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public String getType() {
         return collectionType;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
 
+    @Override
     public boolean hasAllElements() {
         return hasAllElements;
     }

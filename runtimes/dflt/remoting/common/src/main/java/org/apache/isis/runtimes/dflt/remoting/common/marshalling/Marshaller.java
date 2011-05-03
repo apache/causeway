@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.marshalling;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
-
-public interface Marshaller extends ApplicationScopedComponent{
-    
+public interface Marshaller extends ApplicationScopedComponent {
 
 }

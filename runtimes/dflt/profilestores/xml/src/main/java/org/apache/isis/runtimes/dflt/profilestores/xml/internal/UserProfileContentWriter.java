@@ -26,7 +26,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,32 +39,33 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class UserProfileContentWriter implements ContentWriter {
     private final UserProfile userProfile;
 
-    public UserProfileContentWriter(UserProfile userProfile) {
+    public UserProfileContentWriter(final UserProfile userProfile) {
         this.userProfile = userProfile;
     }
 
-    public void write(Writer writer) throws IOException {
+    @Override
+    public void write(final Writer writer) throws IOException {
         final StringBuffer xml = new StringBuffer();
         xml.append("<profile>\n");
 
-        Options options = userProfile.getOptions();
+        final Options options = userProfile.getOptions();
         writeOptions(xml, options, null, 0);
 
         xml.append("  <perspectives>\n");
-        for (String perspectiveName : userProfile.list()) {
-            PerspectiveEntry perspective = userProfile.getPerspective(perspectiveName);
+        for (final String perspectiveName : userProfile.list()) {
+            final PerspectiveEntry perspective = userProfile.getPerspective(perspectiveName);
 
             xml.append("    <perspective" + attribute("name", perspectiveName) + ">\n");
             xml.append("      <services>\n");
-            for (Object service : perspective.getServices()) {
+            for (final Object service : perspective.getServices()) {
                 xml.append("        <service " + attribute("id", ServiceUtil.id(service)) + "/>\n");
             }
             xml.append("      </services>\n");
             xml.append("      <objects>\n");
-            for (Object object : perspective.getObjects()) {
-                ObjectAdapter adapter = getPersistenceSession().getAdapterManager().adapterFor(object);
-                OutputStream out = new ByteArrayOutputStream();
-                DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(out);
+            for (final Object object : perspective.getObjects()) {
+                final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().adapterFor(object);
+                final OutputStream out = new ByteArrayOutputStream();
+                final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(out);
                 adapter.getOid().encode(outputImpl);
                 // FIX need to sort out encoding
                 // xml.append("      <object>" + out.toString() + "</object>\n");
@@ -81,10 +81,10 @@ public class UserProfileContentWriter implements ContentWriter {
         writer.write(xml.toString());
     }
 
-    private void writeOptions(final StringBuffer xml, Options options, String name1, int level) {
-        String spaces = StringUtils.repeat("  ", level);
+    private void writeOptions(final StringBuffer xml, final Options options, final String name1, final int level) {
+        final String spaces = StringUtils.repeat("  ", level);
 
-        Iterator<String> names = options.names();
+        final Iterator<String> names = options.names();
         if (level == 0 || names.hasNext()) {
             xml.append(spaces + "  <options");
             if (name1 != null) {
@@ -92,7 +92,7 @@ public class UserProfileContentWriter implements ContentWriter {
             }
             xml.append(">\n");
             while (names.hasNext()) {
-                String name = names.next();
+                final String name = names.next();
                 if (options.isOptions(name)) {
                     writeOptions(xml, options.getOptions(name), name, level + 1);
                 } else {

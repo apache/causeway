@@ -17,45 +17,44 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class AuthorizationRequestVisibility extends AuthorizationRequestAbstract {
     private static final long serialVersionUID = 1L;
 
-    public AuthorizationRequestVisibility(final AuthenticationSession session, IdentityData targetData, final String data) {
+    public AuthorizationRequestVisibility(final AuthenticationSession session, final IdentityData targetData,
+        final String data) {
         super(session, targetData, data);
         initialized();
     }
-    
-    public AuthorizationRequestVisibility(DataInputExtended input) throws IOException {
-    	super(input);
-    	initialized();
+
+    public AuthorizationRequestVisibility(final DataInputExtended input) throws IOException {
+        super(input);
+        initialized();
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // execute, resonse
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-
-	/**
-	 * {@link #setResponse(Object) Sets a response} of an {@link AuthorizationResponse}.
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of an {@link AuthorizationResponse}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        AuthorizationResponse response = serverFacade.authorizeVisibility(this);
-		setResponse(response);
+        final AuthorizationResponse response = serverFacade.authorizeVisibility(this);
+        setResponse(response);
     }
-
 
 }

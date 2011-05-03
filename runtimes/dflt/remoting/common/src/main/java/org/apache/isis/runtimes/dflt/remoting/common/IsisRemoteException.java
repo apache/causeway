@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 /**
  * Denotes an exception that occurred on the server.

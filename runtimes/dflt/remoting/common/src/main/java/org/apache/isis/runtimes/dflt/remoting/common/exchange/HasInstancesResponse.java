@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -29,35 +28,35 @@ import org.apache.isis.core.commons.encoding.Encodable;
 
 public class HasInstancesResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private boolean hasInstances;
-	
-	public HasInstancesResponse(boolean hasInstances) {
-		this.hasInstances = hasInstances;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public HasInstancesResponse(DataInputExtended input) throws IOException {
-		this.hasInstances = input.readBoolean();
-		instantiated();
-	}
+    private final boolean hasInstances;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeBoolean(hasInstances);
-	}
+    public HasInstancesResponse(final boolean hasInstances) {
+        this.hasInstances = hasInstances;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public HasInstancesResponse(final DataInputExtended input) throws IOException {
+        this.hasInstances = input.readBoolean();
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
-	
-	public Boolean hasInstances() {
-		return hasInstances;
-	}
-	
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeBoolean(hasInstances);
+    }
+
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public Boolean hasInstances() {
+        return hasInstances;
+    }
+
 }

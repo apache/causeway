@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -60,7 +59,7 @@ public class ServerConnectionHandler {
 
     private long responseTime;
 
-    public ServerConnectionHandler(ServerConnection connection) {
+    public ServerConnectionHandler(final ServerConnection connection) {
         this.connection = connection;
     }
 
@@ -119,8 +118,9 @@ public class ServerConnectionHandler {
     }
 
     private void monitorRequest(final AuthenticationSession authenticationSession, final Request request) {
-        String userName = authenticationSession != null ? authenticationSession.getUserName() : "**AUTHENTICATING**";
-        String message = "{" + userName + "|" + this + "}  " + request.toString();
+        final String userName =
+            authenticationSession != null ? authenticationSession.getUserName() : "**AUTHENTICATING**";
+        final String message = "{" + userName + "|" + this + "}  " + request.toString();
         ACCESS_LOG.info(message);
         Monitor.addEvent("REQUEST", message, debugSessionInfo);
     }
@@ -130,7 +130,7 @@ public class ServerConnectionHandler {
     }
 
     private void sendResponse(final Request request) throws IOException {
-        ResponseEnvelope response = new ResponseEnvelope(request);
+        final ResponseEnvelope response = new ResponseEnvelope(request);
 
         if (LOG.isDebugEnabled()) {
             debugResponse = response.toString();
@@ -141,7 +141,7 @@ public class ServerConnectionHandler {
 
     private void sendExceptionResponse(final Exception e) throws IOException {
         LOG.error("error during remote request", e);
-        StringWriter sw = new StringWriter();
+        final StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
 
         if (LOG.isDebugEnabled()) {
@@ -155,7 +155,7 @@ public class ServerConnectionHandler {
         responseTime = System.currentTimeMillis() - start;
     }
 
-    private void closeSessionIfNotAuthenticateRequest(AuthenticationSession authenticationSession) {
+    private void closeSessionIfNotAuthenticateRequest(final AuthenticationSession authenticationSession) {
         if (authenticationSession == null) {
             return;
         }
@@ -183,12 +183,12 @@ public class ServerConnectionHandler {
     private void debugSessionInfo(final DebugBuilder debug) {
         try {
             if (debugSessionInfo != null) {
-                for (DebuggableWithTitle info : debugSessionInfo) {
+                for (final DebuggableWithTitle info : debugSessionInfo) {
                     debug.appendTitle(info.debugTitle());
                     info.debugData(debug);
                 }
             }
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug.appendException(e);
         }
     }

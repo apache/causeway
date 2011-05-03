@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,37 +25,33 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteClientActionRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class ExecuteClientActionRequestEncodabilityTest extends EncodabilityContractTest {
 
+    @Override
+    protected Encodable createEncodable() {
+        return new ExecuteClientActionRequest(mockAuthSession, new ReferenceData[0], new int[0]);
+    }
 
-	protected Encodable createEncodable() {
-		return new ExecuteClientActionRequest(mockAuthSession, new ReferenceData[0], new int[0]);
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		ExecuteClientActionRequest decoded = (ExecuteClientActionRequest) decodedEncodable;
-		ExecuteClientActionRequest original = (ExecuteClientActionRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final ExecuteClientActionRequest decoded = (ExecuteClientActionRequest) decodedEncodable;
+        final ExecuteClientActionRequest original = (ExecuteClientActionRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

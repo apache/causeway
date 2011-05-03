@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -30,35 +29,35 @@ import org.apache.isis.core.commons.encoding.Encodable;
 
 public class OpenSessionResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final AuthenticationSession session;
-	
-	public OpenSessionResponse(final AuthenticationSession session) {
-		this.session = session;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public OpenSessionResponse(DataInputExtended input) throws IOException {
-		this.session = input.readEncodable(AuthenticationSession.class);
-		instantiated();
-	}
+    private final AuthenticationSession session;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeEncodable(session);
-	}
+    public OpenSessionResponse(final AuthenticationSession session) {
+        this.session = session;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public OpenSessionResponse(final DataInputExtended input) throws IOException {
+        this.session = input.readEncodable(AuthenticationSession.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
-	
-	public AuthenticationSession getSession() {
-		return session;
-	}
-	
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodable(session);
+    }
+
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public AuthenticationSession getSession() {
+        return session;
+    }
+
 }

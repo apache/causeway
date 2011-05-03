@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
-import org.apache.isis.runtimes.dflt.remoting.common.client.facets.ActionInvocationFacetWrapProxy;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
+import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -46,7 +44,7 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class ProxyAction_ExecuteLocallyTest {
 
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private ActionInvocationFacetWrapProxy proxy;
     private ObjectAction mockObjectAction;
@@ -54,7 +52,7 @@ public class ProxyAction_ExecuteLocallyTest {
     private ServerFacade mockDistribution;
     private ObjectAdapter target;
     private ObjectAdapter param1;
-    
+
     private TestProxySystem system;
     private Identifier identifier;
     private ActionInvocationFacet mockActionInvocationFacet;
@@ -74,7 +72,7 @@ public class ProxyAction_ExecuteLocallyTest {
         mockDistribution = mockery.mock(ServerFacade.class);
         mockActionInvocationFacet = mockery.mock(ActionInvocationFacet.class);
         mockFacetHolder = mockery.mock(FacetHolder.class);
-        
+
         identifier = Identifier.classIdentifier("");
 
         target = system.createTransientTestObject();
@@ -82,7 +80,7 @@ public class ProxyAction_ExecuteLocallyTest {
             {
                 one(mockActionInvocationFacet).getFacetHolder();
                 will(returnValue(mockFacetHolder));
-                
+
                 allowing(mockObjectAction).getIdentifier();
                 will(returnValue((identifier)));
 
@@ -90,21 +88,23 @@ public class ProxyAction_ExecuteLocallyTest {
                 will(returnValue(null));
             }
         });
-        
-        proxy = new ActionInvocationFacetWrapProxy(mockActionInvocationFacet, mockDistribution, mockEncoder, mockObjectAction);
+
+        proxy =
+            new ActionInvocationFacetWrapProxy(mockActionInvocationFacet, mockDistribution, mockEncoder,
+                mockObjectAction);
 
     }
 
     // to prevent a warning
     @Test
-    public void testDummy() {}
+    public void testDummy() {
+    }
 
     @Ignore("was commented out, don't know details")
     @Test
     public void testOnTransientExecutionIsPassedToDelegate() throws Exception {
         // actionPeer.getTarget();
         // expectLastCall().andStubReturn(null);
-
 
         proxy.invoke(target, new ObjectAdapter[] { param1, param1 });
 
@@ -119,4 +119,3 @@ public class ProxyAction_ExecuteLocallyTest {
         proxy.invoke(target, new ObjectAdapter[] { param1, param1 });
     }
 }
-

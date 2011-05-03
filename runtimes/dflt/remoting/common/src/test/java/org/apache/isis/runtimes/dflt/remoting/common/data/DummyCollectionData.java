@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data;
 
 import java.util.Arrays;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 
 public class DummyCollectionData extends DummyReferenceData implements CollectionData {
 
@@ -35,25 +33,24 @@ public class DummyCollectionData extends DummyReferenceData implements Collectio
     private final ReferenceData[] elements;
     private final String elementType;
 
-    public DummyCollectionData(
-            final Oid oid,
-            final String collectionType,
-            final String elementType,
-            final ReferenceData[] elements,
-            final Version version) {
+    public DummyCollectionData(final Oid oid, final String collectionType, final String elementType,
+        final ReferenceData[] elements, final Version version) {
         super(oid, collectionType, version);
         this.elementType = elementType;
         this.elements = elements;
     }
 
+    @Override
     public ReferenceData[] getElements() {
         return elements;
     }
 
+    @Override
     public String getElementype() {
         return elementType;
     }
 
+    @Override
     public boolean hasAllElements() {
         return false;
     }
@@ -68,23 +65,28 @@ public class DummyCollectionData extends DummyReferenceData implements Collectio
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        DummyCollectionData other = (DummyCollectionData) obj;
+        }
+        final DummyCollectionData other = (DummyCollectionData) obj;
         if (elementType == null) {
-            if (other.elementType != null)
+            if (other.elementType != null) {
                 return false;
-        } else if (!elementType.equals(other.elementType))
+            }
+        } else if (!elementType.equals(other.elementType)) {
             return false;
-        if (!Arrays.equals(elements, other.elements))
+        }
+        if (!Arrays.equals(elements, other.elements)) {
             return false;
+        }
         return true;
     }
-
 
 }

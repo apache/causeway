@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client;
 
 import java.io.IOException;
@@ -30,26 +29,22 @@ import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.log4j.Logger;
 
-
-
 /**
- * Default implementation of {@link ClientConnection} that delegates to
- * {@link ClientMarshaller} supplied in {@link ClientConnectionDefault constructor}.
+ * Default implementation of {@link ClientConnection} that delegates to {@link ClientMarshaller} supplied in
+ * {@link ClientConnectionDefault constructor}.
  */
-public class ClientConnectionDefault  implements ClientConnection {
+public class ClientConnectionDefault implements ClientConnection {
 
     @SuppressWarnings("unused")
-	private static final Logger LOG = Logger.getLogger(ClientConnectionDefault.class);
+    private static final Logger LOG = Logger.getLogger(ClientConnectionDefault.class);
 
     private final ClientMarshaller marshaller;
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // Constructor
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
-    public ClientConnectionDefault(
-    		final ClientMarshaller marshaller) {
+    public ClientConnectionDefault(final ClientMarshaller marshaller) {
         this.marshaller = marshaller;
     }
 
@@ -57,66 +52,63 @@ public class ClientConnectionDefault  implements ClientConnection {
         return marshaller;
     }
 
-    
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // init, shutdown
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
-    	marshaller.init();
+        marshaller.init();
     }
 
+    @Override
     public void shutdown() {
-    	marshaller.shutdown();
+        marshaller.shutdown();
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // reconnect, connect, disconnect
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
     private void connect() {
         try {
-			marshaller.connect();
+            marshaller.connect();
         } catch (final IOException e) {
             throw new ConnectionException("Connection failure", e);
-		}
+        }
     }
 
     private void disconnect() {
-    	marshaller.disconnect();
+        marshaller.disconnect();
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // executeRemotely
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public ResponseEnvelope executeRemotely(final Request request) {
-    	connect();
+        connect();
         try {
             return executeRemotelyElseException(request);
         } catch (final IOException e) {
             throw new ConnectionException("Failed request", e);
         } finally {
-        	disconnect();
+            disconnect();
         }
     }
 
-	private ResponseEnvelope executeRemotelyElseException(final Request request)
-			throws IOException {
+    private ResponseEnvelope executeRemotelyElseException(final Request request) throws IOException {
 
-		Object response = marshaller.request(request);
-		
-		if (response instanceof ConcurrencyException) {
-			throw (ConcurrencyException) response;
-		} else if (response instanceof Exception) {
-			throw new IsisRemoteException(
-					"Exception occurred on server", (Throwable) response);
-		} else {
-			return (ResponseEnvelope) response;
-		}
-	}
+        final Object response = marshaller.request(request);
 
+        if (response instanceof ConcurrencyException) {
+            throw (ConcurrencyException) response;
+        } else if (response instanceof Exception) {
+            throw new IsisRemoteException("Exception occurred on server", (Throwable) response);
+        } else {
+            return (ResponseEnvelope) response;
+        }
+    }
 
 }

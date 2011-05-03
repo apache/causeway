@@ -26,6 +26,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.core.metamodel.spec.ObjectList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.testsupport.testdomain.Movie;
+import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.runtimes.dflt.remoting.common.client.persistence.ClientSideTransactionManager;
 import org.apache.isis.runtimes.dflt.remoting.common.client.persistence.PersistenceSessionProxy;
@@ -48,16 +60,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsReques
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResolveObjectRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.core.metamodel.spec.ObjectList;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
@@ -73,8 +75,6 @@ import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-import org.apache.isis.core.testsupport.testdomain.Movie;
-import org.apache.isis.core.testsupport.testdomain.Person;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -117,13 +117,13 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
         objectFactory = new ObjectFactoryBasic();
         oidGenerator = new TestProxyOidGenerator();
 
-        RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
-        DomainObjectContainerDefault container = new DomainObjectContainerDefault();
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
 
-        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
+        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
 
         persistenceSessionProxy =
@@ -178,7 +178,7 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
         dummyObjectAdapter.setupSpecification(new MovieSpecification());
 
         final PersistenceQueryData c = new TestCriteria();
-        ObjectSpecification noSpec = getSpecificationLoader().loadSpecification(Movie.class);
+        final ObjectSpecification noSpec = getSpecificationLoader().loadSpecification(Movie.class);
         final PersistenceQueryFindAllInstances criteria = new PersistenceQueryFindAllInstances(noSpec);
 
         final FindInstancesRequest request = new FindInstancesRequest(session, c);
@@ -288,7 +288,7 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
         // system.addSpecificationToLoader(new MovieSpecification());
 
         final PersistenceQueryData c = new TestCriteria();
-        ObjectSpecification noSpec = getSpecificationLoader().loadSpecification(Movie.class);
+        final ObjectSpecification noSpec = getSpecificationLoader().loadSpecification(Movie.class);
         final PersistenceQueryFindAllInstances criteria = new PersistenceQueryFindAllInstances(noSpec);
         final FindInstancesRequest request = new FindInstancesRequest(session, c);
 

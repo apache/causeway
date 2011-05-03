@@ -17,22 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 
 /**
- * The data transfer object that contains the data for an encodeable object (ie one that has an
- * {@link EncodableFacet}) in a form that can be passed over the network between a client and a server.
+ * The data transfer object that contains the data for an encodeable object (ie one that has an {@link EncodableFacet})
+ * in a form that can be passed over the network between a client and a server.
  */
 public interface EncodableObjectData extends Data {
 
     /**
-     * Ultimately derived from
-     * {@link EncodableFacet#toEncodedString(org.apache.isis.noa.adapter.ObjectAdapter)}.
+     * Ultimately derived from {@link EncodableFacet#toEncodedString(org.apache.isis.noa.adapter.ObjectAdapter)}.
      */
     String getEncodedObjectData();
 }

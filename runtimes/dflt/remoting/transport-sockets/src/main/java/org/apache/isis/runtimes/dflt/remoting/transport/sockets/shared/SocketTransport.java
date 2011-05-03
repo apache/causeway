@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared;
 
 import static org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.SocketTransportConstants.PORT_DEFAULT;
@@ -30,12 +29,11 @@ import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.remoting.transport.ProfilingInputStream;
 import org.apache.isis.runtimes.dflt.remoting.transport.ProfilingOutputStream;
 import org.apache.isis.runtimes.dflt.remoting.transport.TransportAbstract;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-
 import org.apache.log4j.Logger;
 
 public class SocketTransport extends TransportAbstract {
@@ -46,78 +44,85 @@ public class SocketTransport extends TransportAbstract {
     private int port;
     private String host;
     private boolean profiling;
-    
+
     private OutputStream outputStream;
     private InputStream inputStream;
 
-    public SocketTransport(IsisConfiguration configuration) {
-    	super(configuration);
+    public SocketTransport(final IsisConfiguration configuration) {
+        super(configuration);
     }
 
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // init, shutdown
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
         port = getConfiguration().getInteger(SocketTransportConstants.PORT_KEY, PORT_DEFAULT);
         host = getConfiguration().getString(SocketTransportConstants.HOST_KEY, SocketTransportConstants.HOST_DEFAULT);
-        profiling = getConfiguration().getBoolean(SocketTransportConstants.PROFILING_KEY, SocketTransportConstants.PROFILING_DEFAULT);
+        profiling =
+            getConfiguration().getBoolean(SocketTransportConstants.PROFILING_KEY,
+                SocketTransportConstants.PROFILING_DEFAULT);
         LOG.info("connections will be made to " + host + " " + port);
     }
 
-	public void shutdown() {
-		// does nothing
-	}
+    @Override
+    public void shutdown() {
+        // does nothing
+    }
 
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // Configuration
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
     protected boolean isProfiling() {
         return profiling;
     }
 
-    
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // connect, disconnect
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
-	public void connect() {
+    @Override
+    public void connect() {
         if (socket != null) {
-        	return;
-		}
-        
-        try {
-		    socket = new Socket(host, port);
-		    inputStream = socket.getInputStream();
-		    outputStream = socket.getOutputStream();
-		    if (isProfiling()) {
-		        inputStream = new ProfilingInputStream(inputStream);
-		        outputStream = new ProfilingOutputStream(outputStream);
-		    }
-		    if (LOG.isDebugEnabled()) {
-		    	LOG.debug("connection established " + socket);
-		    }
-		} catch (final MalformedURLException e) {
-		    throw new ConnectionException("Connection failure", e);
-		} catch (final UnknownHostException e) {
-		    throw new ConnectionException("Connection failure", e);
-		} catch (final ConnectException e) {
-		    throw new ConnectionException("Failed to connect to " + host + "/" + port, e);
-		} catch (final IOException e) {
-		    throw new ConnectionException("Connection failure", e);
-		}
-	}
-	
-	public InputStream getInputStream() {
-		return inputStream;
-	}
-	
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
+            return;
+        }
 
-	public void disconnect() {
+        try {
+            socket = new Socket(host, port);
+            inputStream = socket.getInputStream();
+            outputStream = socket.getOutputStream();
+            if (isProfiling()) {
+                inputStream = new ProfilingInputStream(inputStream);
+                outputStream = new ProfilingOutputStream(outputStream);
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("connection established " + socket);
+            }
+        } catch (final MalformedURLException e) {
+            throw new ConnectionException("Connection failure", e);
+        } catch (final UnknownHostException e) {
+            throw new ConnectionException("Connection failure", e);
+        } catch (final ConnectException e) {
+            throw new ConnectionException("Failed to connect to " + host + "/" + port, e);
+        } catch (final IOException e) {
+            throw new ConnectionException("Connection failure", e);
+        }
+    }
+
+    @Override
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    @Override
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    @Override
+    public void disconnect() {
         if (socket != null) {
             try {
                 socket.close();
@@ -126,7 +131,6 @@ public class SocketTransport extends TransportAbstract {
                 LOG.error("failed to close connection", e);
             }
         }
-	}
-
+    }
 
 }

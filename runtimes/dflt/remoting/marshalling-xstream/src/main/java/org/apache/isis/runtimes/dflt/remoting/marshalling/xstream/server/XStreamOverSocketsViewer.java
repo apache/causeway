@@ -34,18 +34,18 @@ import org.apache.isis.runtimes.dflt.remoting.transport.sockets.server.SocketsVi
 
 public class XStreamOverSocketsViewer extends SocketsViewerAbstract {
 
-    public XStreamOverSocketsViewer(ObjectEncoderDecoder objectEncoderDecoder) {
+    public XStreamOverSocketsViewer(final ObjectEncoderDecoder objectEncoderDecoder) {
         super(objectEncoderDecoder);
     }
 
     @Override
     protected ServerConnection createServerConnection(final InputStream input, final OutputStream output,
         final ServerFacade distribution) {
-        SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
-        XStreamMarshaller serverMarshaller = new XStreamMarshaller(getConfiguration(), transport);
+        final SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
+        final XStreamMarshaller serverMarshaller = new XStreamMarshaller(getConfiguration(), transport);
         try {
             serverMarshaller.connect();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ConnectionException(e);
         }
         return new ServerConnectionDefault(distribution, serverMarshaller);

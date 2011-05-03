@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,7 +25,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.HasInstancesRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.junit.Ignore;
@@ -34,28 +32,25 @@ import org.junit.Test;
 
 public class HasInstancesRequestEncodabilityTest extends EncodabilityContractTest {
 
+    @Override
+    protected Encodable createEncodable() {
+        return new HasInstancesRequest(mockAuthSession, "com.mycompany.Customer");
+    }
 
-	protected Encodable createEncodable() {
-		return new HasInstancesRequest(mockAuthSession, "com.mycompany.Customer");
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		HasInstancesRequest decoded = (HasInstancesRequest) decodedEncodable;
-		HasInstancesRequest original = (HasInstancesRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final HasInstancesRequest decoded = (HasInstancesRequest) decodedEncodable;
+        final HasInstancesRequest original = (HasInstancesRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

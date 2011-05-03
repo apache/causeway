@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.profilestores.dflt;
 
 import java.util.List;
@@ -27,21 +26,19 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
-public class InMemoryUserProfileStoreInstaller extends InstallerAbstract implements
-		UserProfileStoreInstaller {
+public class InMemoryUserProfileStoreInstaller extends InstallerAbstract implements UserProfileStoreInstaller {
 
-	public InMemoryUserProfileStoreInstaller() {
-		super(UserProfileStoreInstaller.TYPE, "in-memory");
-	}
-	
-	public UserProfileStore createUserProfileStore(
-			IsisConfiguration objectConfiguration) {
-		return new InMemoryUserProfileStore();
-	}
+    public InMemoryUserProfileStoreInstaller() {
+        super(UserProfileStoreInstaller.TYPE, "in-memory");
+    }
 
+    @Override
+    public UserProfileStore createUserProfileStore(final IsisConfiguration objectConfiguration) {
+        return new InMemoryUserProfileStore();
+    }
 
-	@Override
-	public List<Class<?>> getTypes() {
-		return listOf(UserProfileStore.class);
-	}
+    @Override
+    public List<Class<?>> getTypes() {
+        return listOf(UserProfileStore.class);
+    }
 }

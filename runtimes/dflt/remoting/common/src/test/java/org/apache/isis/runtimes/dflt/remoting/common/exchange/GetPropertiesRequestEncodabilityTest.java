@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,7 +25,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.GetPropertiesRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.junit.Ignore;
@@ -34,27 +32,25 @@ import org.junit.Test;
 
 public class GetPropertiesRequestEncodabilityTest extends EncodabilityContractTest {
 
-	protected Encodable createEncodable() {
-		return new GetPropertiesRequest();
-	}
-	
-	
-	@Override
-	@Ignore
-	@Test
-	public void shouldRoundTrip() throws IOException {
-		super.shouldRoundTrip();
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new GetPropertiesRequest();
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		GetPropertiesRequest decoded = (GetPropertiesRequest) decodedEncodable;
-		GetPropertiesRequest original = (GetPropertiesRequest) originalEncodable;
-		
-		// TODO: to complete, may need to setup mock expectations
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-	}
+    @Override
+    @Ignore
+    @Test
+    public void shouldRoundTrip() throws IOException {
+        super.shouldRoundTrip();
+    }
+
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final GetPropertiesRequest decoded = (GetPropertiesRequest) decodedEncodable;
+        final GetPropertiesRequest original = (GetPropertiesRequest) originalEncodable;
+
+        // TODO: to complete, may need to setup mock expectations
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+    }
 
 }

@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 
-
 public final class TransportConstants {
 
-	private static final String ROOT = 
-		ConfigurationConstants.ROOT + TransportInstaller.TYPE + ".";
+    private static final String ROOT = ConfigurationConstants.ROOT + TransportInstaller.TYPE + ".";
 
-	
-	private TransportConstants() {}
+    private TransportConstants() {
+    }
 
 }

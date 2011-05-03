@@ -21,9 +21,8 @@ package org.apache.isis.runtimes.dflt.remoting.common.marshalling;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-
+import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.log4j.Logger;
 
 public abstract class MarshallerAbstract implements ClientMarshaller, ServerMarshaller {

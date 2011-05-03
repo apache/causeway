@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.persistence;
 
 import java.util.ArrayList;
@@ -25,6 +24,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
@@ -43,19 +55,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResolveObjectReque
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResolveObjectResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
@@ -71,7 +70,6 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbs
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.log4j.Logger;
 
-
 public class PersistenceSessionProxy extends PersistenceSessionAbstract {
 
     final static Logger LOG = Logger.getLogger(PersistenceSessionProxy.class);
@@ -83,35 +81,27 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
      * Keyed on an adapter wrapping a <tt>java.util.List</tt> (or equiv), ie with a {@link CollectionFacet}.
      */
     private final Map<ObjectSpecification, ObjectAdapter> cache = new HashMap<ObjectSpecification, ObjectAdapter>();
-    private HashMap<String, Oid> serviceOidByNameCache = new HashMap<String, Oid>();
+    private final HashMap<String, Oid> serviceOidByNameCache = new HashMap<String, Oid>();
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Constructor
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
-    public PersistenceSessionProxy(
-            final PersistenceSessionFactory persistenceSessionFactory,
-            final ObjectAdapterFactory adapterFactory,
-            final ObjectFactory objectFactory,
-            final ServicesInjector containerInjector,
-            final OidGenerator oidGenerator,
-            final AdapterManagerExtended adapterManager,
-            final ServerFacade serverFacade,
-            final ObjectEncoderDecoder encoder) {
+    public PersistenceSessionProxy(final PersistenceSessionFactory persistenceSessionFactory,
+        final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory,
+        final ServicesInjector containerInjector, final OidGenerator oidGenerator,
+        final AdapterManagerExtended adapterManager, final ServerFacade serverFacade, final ObjectEncoderDecoder encoder) {
         super(persistenceSessionFactory, adapterFactory, objectFactory, containerInjector, oidGenerator, adapterManager);
         this.serverFacade = serverFacade;
         this.encoderDecoder = encoder;
     }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // init, shutdown, reset, isInitialized
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     /**
-     * TODO: mismatch between {@link SessionScopedComponent} (open) and
-     * {@link ApplicationScopedComponent} (init).
+     * TODO: mismatch between {@link SessionScopedComponent} (open) and {@link ApplicationScopedComponent} (init).
      */
     @Override
     public void doOpen() {
@@ -119,28 +109,27 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     }
 
     /**
-     * TODO: mismatch between {@link SessionScopedComponent} (open) and
-     * {@link ApplicationScopedComponent} (init).
+     * TODO: mismatch between {@link SessionScopedComponent} (open) and {@link ApplicationScopedComponent} (init).
      */
+    @Override
     public void doClose() {
         serverFacade.shutdown();
     }
 
-
     /**
      * No need to install fixtures, rely on server-side to do the right thing.
      */
+    @Override
     public boolean isFixturesInstalled() {
         return true;
     }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // loadObject, reload
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
-    public synchronized ObjectAdapter loadObject(
-    		final Oid oid, final ObjectSpecification hintSpec) {
+    @Override
+    public synchronized ObjectAdapter loadObject(final Oid oid, final ObjectSpecification hintSpec) {
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
@@ -148,71 +137,73 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         return loadObjectFromPersistenceLayer(oid, hintSpec);
     }
 
+    private ObjectAdapter loadObjectFromPersistenceLayer(final Oid oid, final ObjectSpecification specHint) {
+        return getTransactionManager().executeWithinTransaction(
+            new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+                @Override
+                public ObjectAdapter execute() {
+                    // NB: I think that the auth session must be null because we may not yet have logged in if
+                    // retrieving the services.
+                    final GetObjectRequest request = new GetObjectRequest(null, oid, specHint.getFullIdentifier());
+                    final GetObjectResponse response = serverFacade.getObject(request);
+                    final ObjectData data = response.getObjectData();
+                    return encoderDecoder.decode(data);
+                }
+            });
+    }
 
-	private ObjectAdapter loadObjectFromPersistenceLayer(final Oid oid,
-			final ObjectSpecification specHint) {
-		return getTransactionManager().executeWithinTransaction(
-        		new TransactionalClosureWithReturnAbstract<ObjectAdapter>(){
-			public ObjectAdapter execute() {
-				// NB: I think that the auth session must be null because we may not yet have logged in if retrieving the services.
-				GetObjectRequest request = new GetObjectRequest(null, oid, specHint.getFullIdentifier());
-				GetObjectResponse response = serverFacade.getObject(request);
-				final ObjectData data = response.getObjectData();
-				return encoderDecoder.decode(data);
-			}});
-	}
-
+    @Override
     public void reload(final ObjectAdapter object) {
         final IdentityData identityData = encoderDecoder.encodeIdentityData(object);
         reloadFromPersistenceLayer(identityData);
     }
 
-
-	private void reloadFromPersistenceLayer(final IdentityData identityData) {
-		getTransactionManager().executeWithinTransaction(
-    		new TransactionalClosureAbstract() {
-				public void execute() {
-					ResolveObjectRequest request = new ResolveObjectRequest(getAuthenticationSession(), identityData);
-					ResolveObjectResponse response = serverFacade.resolveImmediately(request);
-					final ObjectData update = response.getObjectData();
-					encoderDecoder.decode(update);
-				}});
-	}
-
-
-    //////////////////////////////////////////////////////////////////
-    // resolveImmediately, resolveField
-    //////////////////////////////////////////////////////////////////
-
-    public synchronized void resolveImmediately(final ObjectAdapter adapter) {
-    	final ResolveState resolveState = adapter.getResolveState();
-    	if (!resolveState.canChangeTo(ResolveState.RESOLVING)) {
-    		return;
-    	}
-    	final Oid oid = adapter.getOid();
-    	if (LOG.isDebugEnabled()) {
-    		LOG.debug("resolve object (remotely from server)" + oid);
-    	}
-
-    	resolveImmediatelyFromPersistenceLayer(adapter);
+    private void reloadFromPersistenceLayer(final IdentityData identityData) {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                final ResolveObjectRequest request = new ResolveObjectRequest(getAuthenticationSession(), identityData);
+                final ResolveObjectResponse response = serverFacade.resolveImmediately(request);
+                final ObjectData update = response.getObjectData();
+                encoderDecoder.decode(update);
+            }
+        });
     }
 
-	private void resolveImmediatelyFromPersistenceLayer(final ObjectAdapter adapter) {
-		final IdentityData adapterData = encoderDecoder.encodeIdentityData(adapter);
-		getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract(){
-			public void execute() {
-				ResolveObjectRequest request = new ResolveObjectRequest(
-						getAuthenticationSession(), adapterData);
-				// unlike the server-side implementation we don't invoke the callbacks
-				// for loading and loaded (they will already have been called in the server)
-				ResolveObjectResponse response = serverFacade.resolveImmediately(
-						request);
-				final ObjectData data = response.getObjectData();
-				encoderDecoder.decode(data);
-			}
-			});
-	}
+    // ////////////////////////////////////////////////////////////////
+    // resolveImmediately, resolveField
+    // ////////////////////////////////////////////////////////////////
 
+    @Override
+    public synchronized void resolveImmediately(final ObjectAdapter adapter) {
+        final ResolveState resolveState = adapter.getResolveState();
+        if (!resolveState.canChangeTo(ResolveState.RESOLVING)) {
+            return;
+        }
+        final Oid oid = adapter.getOid();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("resolve object (remotely from server)" + oid);
+        }
+
+        resolveImmediatelyFromPersistenceLayer(adapter);
+    }
+
+    private void resolveImmediatelyFromPersistenceLayer(final ObjectAdapter adapter) {
+        final IdentityData adapterData = encoderDecoder.encodeIdentityData(adapter);
+        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                final ResolveObjectRequest request = new ResolveObjectRequest(getAuthenticationSession(), adapterData);
+                // unlike the server-side implementation we don't invoke the callbacks
+                // for loading and loaded (they will already have been called in the server)
+                final ResolveObjectResponse response = serverFacade.resolveImmediately(request);
+                final ObjectData data = response.getObjectData();
+                encoderDecoder.decode(data);
+            }
+        });
+    }
+
+    @Override
     public void resolveField(final ObjectAdapter adapter, final ObjectAssociation field) {
         if (field.getSpecification().isCollectionOrIsAggregated()) {
             return;
@@ -225,99 +216,101 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
             return;
         }
         if (LOG.isInfoEnabled()) {
-        	LOG.info("resolveField on server: " + adapter + "/" + field.getId());
+            LOG.info("resolveField on server: " + adapter + "/" + field.getId());
         }
         resolveFieldFromPersistenceLayer(adapter, field);
     }
 
+    private void resolveFieldFromPersistenceLayer(final ObjectAdapter adapter, final ObjectAssociation field) {
+        final IdentityData adapterData = encoderDecoder.encodeIdentityData(adapter);
+        final String fieldId = field.getId();
+        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                final ResolveFieldRequest request =
+                    new ResolveFieldRequest(getAuthenticationSession(), adapterData, fieldId);
+                final ResolveFieldResponse response = serverFacade.resolveField(request);
+                final Data data = response.getData();
+                encoderDecoder.decode(data);
+            }
+        });
+    }
 
-	private void resolveFieldFromPersistenceLayer(final ObjectAdapter adapter,
-			final ObjectAssociation field) {
-		final IdentityData adapterData = encoderDecoder.encodeIdentityData(adapter);
-		final String fieldId = field.getId();
-		getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
-			public void execute() {
-				ResolveFieldRequest request = new ResolveFieldRequest(getAuthenticationSession(), adapterData, fieldId);
-				ResolveFieldResponse response = serverFacade.resolveField(
-						request);
-				final Data data = response.getData();
-				encoderDecoder.decode(data);
-			}});
-	}
-
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // makePersistent
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     /**
-     * REVIEW: we should perhaps have a little more symmetry here, and
-     * have the {@link ServerFacade} callback to the {@link PersistenceSession}
-     * (the <tt>PersistenceSessionPersist</tt> API) to handle remapping
-     * of adapters.
+     * REVIEW: we should perhaps have a little more symmetry here, and have the {@link ServerFacade} callback to the
+     * {@link PersistenceSession} (the <tt>PersistenceSessionPersist</tt> API) to handle remapping of adapters.
      */
+    @Override
     public synchronized void makePersistent(final ObjectAdapter object) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("makePersistent " + object);
         }
         // TODO: the PSOS has more checks; should we do the same?
-		makePersistentInPersistenceLayer(object);
+        makePersistentInPersistenceLayer(object);
     }
 
-	protected void makePersistentInPersistenceLayer(final ObjectAdapter object) {
-		getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract(){
-			public void execute() {
+    protected void makePersistentInPersistenceLayer(final ObjectAdapter object) {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
 
-		        // the two implementations (proxy vs object store) vary here.
-		        // the object store does not make this call directly, it
-		        // instead delegates to the PersistAlgorithm that makes a
-		        // callback to the PersistenceSessionPersist API,
-		        // which in turn calls remaps the adapters.
-		        //
-		        // the proxy persistor on the other hand does nothing here.
-		        // instead we remap the adapter in distribution code,
-		        // processing the handling of the returned results.
-		        //
-		        // (see REVIEW comment above)
+                // the two implementations (proxy vs object store) vary here.
+                // the object store does not make this call directly, it
+                // instead delegates to the PersistAlgorithm that makes a
+                // callback to the PersistenceSessionPersist API,
+                // which in turn calls remaps the adapters.
+                //
+                // the proxy persistor on the other hand does nothing here.
+                // instead we remap the adapter in distribution code,
+                // processing the handling of the returned results.
+                //
+                // (see REVIEW comment above)
 
-				getTransactionManager().addMakePersistent(object);
-			}});
-	}
+                getTransactionManager().addMakePersistent(object);
+            }
+        });
+    }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // objectChanged
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
+    @Override
     public void objectChanged(final ObjectAdapter adapter) {
         if (adapter.isTransient()) {
             addObjectChangedToPresentationLayer(adapter);
             return;
         }
         if (adapter.getResolveState().respondToChangesInPersistentObjects()) {
-			if (isImmutable(adapter)) {
-				return;
-			}
-        	addObjectChangedToPersistenceLayer(adapter);
-		}
+            if (isImmutable(adapter)) {
+                return;
+            }
+            addObjectChangedToPersistenceLayer(adapter);
+        }
     }
 
     private void addObjectChangedToPresentationLayer(final ObjectAdapter adapter) {
-		getUpdateNotifier().addChangedObject(adapter);
-	}
+        getUpdateNotifier().addChangedObject(adapter);
+    }
 
-	private void addObjectChangedToPersistenceLayer(final ObjectAdapter adapter) {
-		getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract(){
-			public void execute() {
-				getTransactionManager().addObjectChanged(adapter);
-			}});
-	}
+    private void addObjectChangedToPersistenceLayer(final ObjectAdapter adapter) {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                getTransactionManager().addObjectChanged(adapter);
+            }
+        });
+    }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // destroy
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
+    @Override
     public synchronized void destroyObject(final ObjectAdapter object) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroyObject " + object);
@@ -328,90 +321,89 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         // Isis.getObjectLoader().unloaded(object);
     }
 
+    protected void destroyObjectInPersistenceLayer(final ObjectAdapter object) {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                getTransactionManager().addDestroyObject(object);
+            }
+        });
+    }
 
-	protected void destroyObjectInPersistenceLayer(final ObjectAdapter object) {
-		getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract(){
-			public void execute() {
-				getTransactionManager().addDestroyObject(object);
-			}
-		});
-	}
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // getInstances
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     @Override
     protected ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
         final ObjectSpecification noSpec = persistenceQuery.getSpecification();
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("getInstances of " + noSpec + " with " + persistenceQuery);
+            LOG.debug("getInstances of " + noSpec + " with " + persistenceQuery);
         }
 
         if (canSatisfyFromCache(persistenceQuery)) {
-        	return getInstancesFromCache(persistenceQuery);
+            return getInstancesFromCache(persistenceQuery);
         }
 
         return findInstancesFromPersistenceLayer(persistenceQuery);
     }
 
-	private boolean canSatisfyFromCache(final PersistenceQuery persistenceQuery) {
-		final ObjectSpecification noSpec = persistenceQuery.getSpecification();
-		return cache.containsKey(noSpec) &&
-		       persistenceQuery instanceof PersistenceQueryBuiltIn;
-	}
+    private boolean canSatisfyFromCache(final PersistenceQuery persistenceQuery) {
+        final ObjectSpecification noSpec = persistenceQuery.getSpecification();
+        return cache.containsKey(noSpec) && persistenceQuery instanceof PersistenceQueryBuiltIn;
+    }
 
-	/**
-	 * TODO: this code is not currently in use because there is no way to
-	 * set up the cache.  We may want to change what the cache is keyed on.
-	 */
-	private ObjectAdapter[] getInstancesFromCache(
-			PersistenceQuery persistenceQuery) {
-		final ObjectSpecification noSpec = persistenceQuery.getSpecification();
-        PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
-		final ObjectAdapter collection = cache.get(noSpec);
+    /**
+     * TODO: this code is not currently in use because there is no way to set up the cache. We may want to change what
+     * the cache is keyed on.
+     */
+    private ObjectAdapter[] getInstancesFromCache(final PersistenceQuery persistenceQuery) {
+        final ObjectSpecification noSpec = persistenceQuery.getSpecification();
+        final PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
+        final ObjectAdapter collection = cache.get(noSpec);
         if (!collection.getSpecification().isCollection()) {
-        	return new ObjectAdapter[0];
+            return new ObjectAdapter[0];
         }
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-		final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
-		for (ObjectAdapter instance : facet.iterable(collection)) {
-		    if (builtIn.matches(instance)) {
-		        instances.add(instance);
-		    }
-		}
-		return (ObjectAdapter[]) instances.toArray(new ObjectAdapter[instances.size()]);
-	}
+        final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
+        for (final ObjectAdapter instance : facet.iterable(collection)) {
+            if (builtIn.matches(instance)) {
+                instances.add(instance);
+            }
+        }
+        return instances.toArray(new ObjectAdapter[instances.size()]);
+    }
 
-
-	private ObjectAdapter[] findInstancesFromPersistenceLayer(
-			final PersistenceQuery persistenceQuery) {
-		final PersistenceQueryData criteriaData = encoderDecoder.encodePersistenceQuery(persistenceQuery);
+    private ObjectAdapter[] findInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
+        final PersistenceQueryData criteriaData = encoderDecoder.encodePersistenceQuery(persistenceQuery);
         return getTransactionManager().executeWithinTransaction(
-    		new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>(){
-				public ObjectAdapter[] execute() {
-					FindInstancesRequest request = new FindInstancesRequest(getAuthenticationSession(), criteriaData);
-					FindInstancesResponse response = serverFacade.findInstances(request);
-					final ObjectData[] instancesAsObjectData = response.getInstances();
-					final ObjectAdapter[] instances = new ObjectAdapter[instancesAsObjectData.length];
-					for (int i = 0; i < instancesAsObjectData.length; i++) {
-						instances[i] = encoderDecoder.decode(instancesAsObjectData[i]);
-					}
-					return instances;
-				}
-				@Override
-				public void onSuccess() {
-					clearAllDirty();
-				}
-				});
-	}
+            new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>() {
+                @Override
+                public ObjectAdapter[] execute() {
+                    final FindInstancesRequest request =
+                        new FindInstancesRequest(getAuthenticationSession(), criteriaData);
+                    final FindInstancesResponse response = serverFacade.findInstances(request);
+                    final ObjectData[] instancesAsObjectData = response.getInstances();
+                    final ObjectAdapter[] instances = new ObjectAdapter[instancesAsObjectData.length];
+                    for (int i = 0; i < instancesAsObjectData.length; i++) {
+                        instances[i] = encoderDecoder.decode(instancesAsObjectData[i]);
+                    }
+                    return instances;
+                }
 
+                @Override
+                public void onSuccess() {
+                    clearAllDirty();
+                }
+            });
+    }
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // hasInstances
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean hasInstances(final ObjectSpecification specification) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("hasInstances of " + specification);
@@ -422,39 +414,34 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         return hasInstancesFromPersistenceLayer(specification);
     }
 
+    private boolean hasInstancesFromCache(final ObjectSpecification specification) {
+        final ObjectAdapter collection = cache.get(specification);
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        if (facet == null) {
+            return false;
+        }
+        return facet.size(collection) > 0;
+    }
 
-	private boolean hasInstancesFromCache(
-			final ObjectSpecification specification) {
-		final ObjectAdapter collection = (ObjectAdapter) cache.get(specification);
-		final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-		if (facet == null) {
-			return false;
-		}
-		return facet.size(collection) > 0;
-	}
+    private boolean hasInstancesFromPersistenceLayer(final ObjectSpecification specification) {
+        final String specFullName = specification.getFullIdentifier();
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<Boolean>() {
+            @Override
+            public Boolean execute() {
+                final HasInstancesRequest request = new HasInstancesRequest(getAuthenticationSession(), specFullName);
+                final HasInstancesResponse response = serverFacade.hasInstances(request);
+                return response.hasInstances();
+            }
+        });
+    }
 
-
-	private boolean hasInstancesFromPersistenceLayer(
-			final ObjectSpecification specification) {
-		final String specFullName = specification.getFullIdentifier();
-		return getTransactionManager().executeWithinTransaction(
-    		new TransactionalClosureWithReturnAbstract<Boolean>(){
-				public Boolean execute() {
-					HasInstancesRequest request = new HasInstancesRequest(getAuthenticationSession(), specFullName);
-					HasInstancesResponse response = serverFacade.hasInstances(request);
-					return response.hasInstances();
-				}});
-	}
-
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Services
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
-	/**
-	 * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have
-	 * a cache but it does not?
-	 */
+    /**
+     * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have a cache but it does not?
+     */
     @Override
     public Oid getOidForService(final String name) {
         Oid oid = serviceOidByNameCache.get(name);
@@ -465,38 +452,36 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         return oid;
     }
 
-	private Oid getOidForServiceFromPersistenceLayer(final String serviceId) {
-		OidForServiceRequest request = new OidForServiceRequest(getAuthenticationSession(), serviceId);
-		OidForServiceResponse response = serverFacade.oidForService(request);
-		final IdentityData data = response.getOidData();
-		return data.getOid();
-	}
+    private Oid getOidForServiceFromPersistenceLayer(final String serviceId) {
+        final OidForServiceRequest request = new OidForServiceRequest(getAuthenticationSession(), serviceId);
+        final OidForServiceResponse response = serverFacade.oidForService(request);
+        final IdentityData data = response.getOidData();
+        return data.getOid();
+    }
 
-	/**
-	 * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have
-	 * a cache but it does not?
-	 */
+    /**
+     * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have a cache but it does not?
+     */
     @Override
     public void registerService(final String name, final Oid oid) {
         serviceOidByNameCache.put(name, oid);
     }
 
-
-	// ///////////////////////////////////////////////////////////////////////////
-	// TransactionManager
-	// ///////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////
+    // TransactionManager
+    // ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Just downcasts.
      */
+    @Override
     public ClientSideTransactionManager getTransactionManager() {
         return (ClientSideTransactionManager) super.getTransactionManager();
     }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Debugging
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     @Override
     public void debugData(final DebugBuilder debug) {
@@ -504,14 +489,14 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         debug.appendln("Server Facade", serverFacade);
     }
 
+    @Override
     public String debugTitle() {
         return "Proxy Persistence Sessino";
     }
 
-
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     private static AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
@@ -520,7 +505,5 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     private static UpdateNotifier getUpdateNotifier() {
         return IsisContext.getUpdateNotifier();
     }
-
-
 
 }

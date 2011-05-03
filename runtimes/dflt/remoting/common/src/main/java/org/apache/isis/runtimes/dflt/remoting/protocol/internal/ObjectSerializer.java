@@ -21,13 +21,6 @@ package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
 import java.util.Enumeration;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-import org.apache.isis.runtimes.dflt.remoting.common.data.DataFactory;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -39,6 +32,13 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
+import org.apache.isis.runtimes.dflt.remoting.common.data.DataFactory;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 
 /**
@@ -74,18 +74,19 @@ public final class ObjectSerializer {
         Assert.assertNotNull(adapter);
 
         final ResolveState resolveState = adapter.getResolveState();
-        boolean isTransient = adapter.isTransient();
+        final boolean isTransient = adapter.isTransient();
 
         if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() || graphDepth <= 0)) {
             Assert.assertNotNull("OID needed for reference", adapter, adapter.getOid());
-            return this.dataFactory.createIdentityData(adapter.getSpecification().getFullIdentifier(), adapter.getOid(),
-                adapter.getVersion());
+            return this.dataFactory.createIdentityData(adapter.getSpecification().getFullIdentifier(),
+                adapter.getOid(), adapter.getVersion());
         }
         if (isTransient && knownObjects.containsKey(adapter)) {
             return knownObjects.get(adapter);
         }
 
-        boolean withCompleteData = resolveState == ResolveState.TRANSIENT || resolveState == ResolveState.RESOLVED;
+        final boolean withCompleteData =
+            resolveState == ResolveState.TRANSIENT || resolveState == ResolveState.RESOLVED;
 
         final String type = adapter.getSpecification().getFullIdentifier();
         final Oid oid = adapter.getOid();

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
 import org.apache.isis.core.commons.lang.ToString;
-
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.EncodableObjectData;
 
 public final class DummyEncodeableObjectData implements EncodableObjectData {
     private static final long serialVersionUID = 1L;
@@ -40,14 +38,15 @@ public final class DummyEncodeableObjectData implements EncodableObjectData {
         this.type = type;
     }
 
+    @Override
     public String getEncodedObjectData() {
         return value;
     }
 
+    @Override
     public String getType() {
         return type;
     }
-
 
     @Override
     public int hashCode() {
@@ -59,24 +58,31 @@ public final class DummyEncodeableObjectData implements EncodableObjectData {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        DummyEncodeableObjectData other = (DummyEncodeableObjectData) obj;
+        }
+        final DummyEncodeableObjectData other = (DummyEncodeableObjectData) obj;
         if (type == null) {
-            if (other.type != null)
+            if (other.type != null) {
                 return false;
-        } else if (!type.equals(other.type))
+            }
+        } else if (!type.equals(other.type)) {
             return false;
+        }
         if (value == null) {
-            if (other.value != null)
+            if (other.value != null) {
                 return false;
-        } else if (!value.equals(other.value))
+            }
+        } else if (!value.equals(other.value)) {
             return false;
+        }
         return true;
     }
 

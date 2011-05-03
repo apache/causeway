@@ -17,83 +17,69 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindUsingApplibQueryDefaultData;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindUsingApplibQueryDefaultEncoder extends PersistenceQueryEncoderAbstract {
 
+    @Override
     public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindByTitle.class;
     }
 
-    public PersistenceQueryData encode(
-    		final PersistenceQuery persistenceQuery) {
-        PersistenceQueryFindUsingApplibQueryDefault findByQuery = downcast(persistenceQuery);
-		return new PersistenceQueryFindUsingApplibQueryDefaultData(
-        		findByQuery.getSpecification(),
-        		findByQuery.getQueryName(),
-        		encode(findByQuery.getArgumentsAdaptersByParameterName()),
-        		findByQuery.getCardinality());
+    @Override
+    public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
+        final PersistenceQueryFindUsingApplibQueryDefault findByQuery = downcast(persistenceQuery);
+        return new PersistenceQueryFindUsingApplibQueryDefaultData(findByQuery.getSpecification(),
+            findByQuery.getQueryName(), encode(findByQuery.getArgumentsAdaptersByParameterName()),
+            findByQuery.getCardinality());
     }
 
     @Override
-    protected PersistenceQuery doDecode(
-            final ObjectSpecification specification,
-            final PersistenceQueryData persistenceQueryData) {
-        PersistenceQueryFindUsingApplibQueryDefaultData findByQueryData = downcast(persistenceQueryData);
-		return new PersistenceQueryFindUsingApplibQueryDefault(
-        		specification,
-        		findByQueryData.getQueryName(),
-        		decode(findByQueryData.getArgumentDatasByParameterName()),
-        		((QueryCardinality) findByQueryData.getCardinality()));
+    protected PersistenceQuery doDecode(final ObjectSpecification specification,
+        final PersistenceQueryData persistenceQueryData) {
+        final PersistenceQueryFindUsingApplibQueryDefaultData findByQueryData = downcast(persistenceQueryData);
+        return new PersistenceQueryFindUsingApplibQueryDefault(specification, findByQueryData.getQueryName(),
+            decode(findByQueryData.getArgumentDatasByParameterName()), (findByQueryData.getCardinality()));
     }
 
+    private Map<String, ObjectData> encode(final Map<String, ObjectAdapter> argumentsAdaptersByParameterName) {
+        final Map<String, ObjectData> argumentDatasByParameterName = new HashMap<String, ObjectData>();
+        for (final Map.Entry<String, ObjectAdapter> entry : argumentsAdaptersByParameterName.entrySet()) {
+            final String parameterName = entry.getKey();
+            final ObjectAdapter adapter = entry.getValue();
+            argumentDatasByParameterName.put(parameterName, encodeObject(adapter));
+        }
+        return argumentDatasByParameterName;
+    }
 
-    private Map<String, ObjectData> encode(
-			Map<String, ObjectAdapter> argumentsAdaptersByParameterName) {
-    	Map<String, ObjectData> argumentDatasByParameterName = new HashMap<String, ObjectData>();
-		for(Map.Entry<String,ObjectAdapter> entry: argumentsAdaptersByParameterName.entrySet()) {
-		    String parameterName = entry.getKey();
-			ObjectAdapter adapter = entry.getValue();
-			argumentDatasByParameterName.put(parameterName, encodeObject(adapter));
-		}
-		return argumentDatasByParameterName;
-	}
+    private Map<String, ObjectAdapter> decode(final Map<String, ObjectData> argumentDatasByParameterName) {
+        final Map<String, ObjectAdapter> argumentAdaptersByParameterName = new HashMap<String, ObjectAdapter>();
+        for (final Map.Entry<String, ObjectData> entry : argumentDatasByParameterName.entrySet()) {
+            final String parameterName = entry.getKey();
+            final ObjectData data = entry.getValue();
+            argumentAdaptersByParameterName.put(parameterName, decodeObject(data));
+        }
+        return argumentAdaptersByParameterName;
+    }
 
-	private Map<String, ObjectAdapter> decode(
-			Map<String, ObjectData> argumentDatasByParameterName) {
-    	Map<String, ObjectAdapter> argumentAdaptersByParameterName = new HashMap<String, ObjectAdapter>();
-		for(Map.Entry<String, ObjectData> entry: argumentDatasByParameterName.entrySet()) {
-		    String parameterName = entry.getKey();
-			ObjectData data = entry.getValue();
-			argumentAdaptersByParameterName.put(parameterName, decodeObject(data));
-		}
-		return argumentAdaptersByParameterName;
-	}
+    private PersistenceQueryFindUsingApplibQueryDefault downcast(final PersistenceQuery persistenceQuery) {
+        return (PersistenceQueryFindUsingApplibQueryDefault) persistenceQuery;
+    }
 
-
-	private PersistenceQueryFindUsingApplibQueryDefault downcast(
-			final PersistenceQuery persistenceQuery) {
-		return (PersistenceQueryFindUsingApplibQueryDefault) persistenceQuery;
-	}
-
-	private PersistenceQueryFindUsingApplibQueryDefaultData downcast(
-			final PersistenceQueryData persistenceQueryData) {
-		return (PersistenceQueryFindUsingApplibQueryDefaultData) persistenceQueryData;
-	}
+    private PersistenceQueryFindUsingApplibQueryDefaultData downcast(final PersistenceQueryData persistenceQueryData) {
+        return (PersistenceQueryFindUsingApplibQueryDefaultData) persistenceQueryData;
+    }
 
 }
-

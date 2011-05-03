@@ -25,13 +25,13 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.SocketException;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallerAbstract;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.IllegalRequestException;
 import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.log4j.Logger;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
@@ -69,7 +69,7 @@ public class SerializingMarshaller extends MarshallerAbstract {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("sending request" + request);
             }
-            Serializable serializableRequest = asSerializable(request);
+            final Serializable serializableRequest = asSerializable(request);
             try {
                 output.writeObject(serializableRequest);
             } catch (final SocketException e) {

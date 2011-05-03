@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client;
 
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.ClientMarshaller;
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 /**
- * Mediates between a running system (which has {@link Request}s that need servicing) and 
- * the {@link ClientMarshaller} that pushes the requests onto the network and pulls them
- * back. 
+ * Mediates between a running system (which has {@link Request}s that need servicing) and the {@link ClientMarshaller}
+ * that pushes the requests onto the network and pulls them back.
  * 
  * @see ServerConnection
  */
@@ -38,4 +36,3 @@ public interface ClientConnection extends ApplicationScopedComponent {
     ResponseEnvelope executeRemotely(Request request);
 
 }
-

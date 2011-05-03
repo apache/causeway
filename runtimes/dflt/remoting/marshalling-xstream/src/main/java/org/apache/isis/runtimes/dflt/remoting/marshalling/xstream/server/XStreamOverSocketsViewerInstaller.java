@@ -42,7 +42,7 @@ public class XStreamOverSocketsViewerInstaller extends SocketsViewerInstallerAbs
     }
 
     @Override
-    protected void addConfigurationResources(List<String> configurationResources) {
+    protected void addConfigurationResources(final List<String> configurationResources) {
         super.addConfigurationResources(configurationResources);
         // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
         // and Transport using the installers.
@@ -53,7 +53,7 @@ public class XStreamOverSocketsViewerInstaller extends SocketsViewerInstallerAbs
     }
 
     @Override
-    protected SocketsViewerAbstract createSocketsViewer(ObjectEncoderDecoder objectEncoderDecoder) {
+    protected SocketsViewerAbstract createSocketsViewer(final ObjectEncoderDecoder objectEncoderDecoder) {
         return new XStreamOverSocketsViewer(objectEncoderDecoder);
     }
 }

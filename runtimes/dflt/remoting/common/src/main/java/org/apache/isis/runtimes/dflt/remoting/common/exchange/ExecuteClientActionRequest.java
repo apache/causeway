@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class ExecuteClientActionRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
@@ -49,38 +48,39 @@ public class ExecuteClientActionRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
-    	output.writeEncodables(data);
-    	output.writeInts(types);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
+        output.writeEncodables(data);
+        output.writeInts(types);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
-	
-	public ReferenceData[] getData() {
-		return data;
-	}
-	public int[] getTypes() {
-		return types;
-	}
-	
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+
+    public ReferenceData[] getData() {
+        return data;
+    }
+
+    public int[] getTypes() {
+        return types;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
-	
-	/**
-	 * {@link #setResponse(Object) Sets a response} of a {@link ExecuteClientActionResponse}.
-	 */
+    // ///////////////////////////////////////////////////////
+
+    /**
+     * {@link #setResponse(Object) Sets a response} of a {@link ExecuteClientActionResponse}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        ExecuteClientActionResponse response = serverFacade.executeClientAction(this);
-		setResponse(response);
+        final ExecuteClientActionResponse response = serverFacade.executeClientAction(this);
+        setResponse(response);
     }
 
     /**
@@ -91,10 +91,9 @@ public class ExecuteClientActionRequest extends RequestAbstract {
         return (ExecuteClientActionResponse) super.getResponse();
     }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // toString
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {

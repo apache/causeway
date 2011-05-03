@@ -17,39 +17,36 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationRequest;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationResponse;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationRequest;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationResponse;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
+import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
-
 /**
- * A reflection peer for changing one-to-many fields remotely, instead of on the local machine. Any requests
- * to add or remove elements from the field will be passed over the network to the server for completion. Only
- * requests on persistent objects are passed to the server; on a transient object the request will always be
- * dealt with locally.
+ * A reflection peer for changing one-to-many fields remotely, instead of on the local machine. Any requests to add or
+ * remove elements from the field will be passed over the network to the server for completion. Only requests on
+ * persistent objects are passed to the server; on a transient object the request will always be dealt with locally.
  * 
  * <p>
- * If any of the objects involved have been changed on the server by another process then a
- * ConcurrencyException will be passed back to the client and re-thrown.
+ * If any of the objects involved have been changed on the server by another process then a ConcurrencyException will be
+ * passed back to the client and re-thrown.
  * </p>
  */
 public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbstract implements
-        DecoratingFacet<CollectionAddToFacet> {
+    DecoratingFacet<CollectionAddToFacet> {
 
     private final static Logger LOG = Logger.getLogger(CollectionAddToFacetWrapProxy.class);
     private final ServerFacade serverFacade;
@@ -57,11 +54,8 @@ public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbs
     private final CollectionAddToFacet underlyingFacet;
     private final String name;
 
-    public CollectionAddToFacetWrapProxy(
-            final CollectionAddToFacet underlyingFacet,
-            final ServerFacade connection,
-            final ObjectEncoderDecoder encoderDecoder,
-            final String name) {
+    public CollectionAddToFacetWrapProxy(final CollectionAddToFacet underlyingFacet, final ServerFacade connection,
+        final ObjectEncoderDecoder encoderDecoder, final String name) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
         this.serverFacade = connection;
@@ -69,20 +63,22 @@ public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbs
         this.name = name;
     }
 
+    @Override
     public CollectionAddToFacet getDecoratedFacet() {
         return underlyingFacet;
     }
 
+    @Override
     public void add(final ObjectAdapter inObject, final ObjectAdapter referencedAdapter) {
         if (inObject.isPersistent()) {
             try {
                 final IdentityData targetReference = encoderDecoder.encodeIdentityData(inObject);
                 final IdentityData associateReference = encoderDecoder.encodeIdentityData(referencedAdapter);
-                SetAssociationRequest request = new SetAssociationRequest(getAuthenticationSession(), name, targetReference, associateReference);
-				SetAssociationResponse response = 
-                	serverFacade.setAssociation(request);
-                ObjectData[] updates = response.getUpdates();
-				encoderDecoder.decode(updates);
+                final SetAssociationRequest request =
+                    new SetAssociationRequest(getAuthenticationSession(), name, targetReference, associateReference);
+                final SetAssociationResponse response = serverFacade.setAssociation(request);
+                final ObjectData[] updates = response.getUpdates();
+                encoderDecoder.decode(updates);
             } catch (final ConcurrencyException e) {
                 throw ProxyUtil.concurrencyException(e);
             } catch (final IsisException e) {
@@ -94,9 +90,8 @@ public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbs
         }
     }
 
-	protected static AuthenticationSession getAuthenticationSession() {
-		return IsisContext.getAuthenticationSession();
-	}
-
+    protected static AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
 }

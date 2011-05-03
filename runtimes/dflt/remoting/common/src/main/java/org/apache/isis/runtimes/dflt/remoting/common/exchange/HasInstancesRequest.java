@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public class HasInstancesRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
@@ -45,34 +44,34 @@ public class HasInstancesRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
         output.writeUTF(specificationName);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	public String getSpecificationName() {
-		return specificationName;
-	}
-	
-    /////////////////////////////////////////////////////////
+    public String getSpecificationName() {
+        return specificationName;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} of a {@link HasInstancesResponse}.
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of a {@link HasInstancesResponse}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
         final HasInstancesResponse response = serverFacade.hasInstances(this);
-		setResponse(response);
+        setResponse(response);
     }
 
     /**

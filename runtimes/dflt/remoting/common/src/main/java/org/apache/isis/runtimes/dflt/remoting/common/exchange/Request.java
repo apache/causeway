@@ -17,20 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.util.UUID;
 
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 public interface Request extends Encodable {
 
     void execute(ServerFacade serverFacade);
 
     Object getResponse();
+
     void setResponse(Object response);
 
     /**

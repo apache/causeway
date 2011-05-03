@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.PersistenceQueryEncoder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
@@ -36,68 +35,60 @@ public abstract class PersistenceQueryEncoderAbstract implements PersistenceQuer
 
     private ObjectEncoderDecoder objectEncoder;
 
-    public PersistenceQuery decode(
-    		final PersistenceQueryData persistenceQueryData) {
-        String typeName = persistenceQueryData.getType();
-		return doDecode(loadSpecification(typeName), persistenceQueryData);
+    @Override
+    public PersistenceQuery decode(final PersistenceQueryData persistenceQueryData) {
+        final String typeName = persistenceQueryData.getType();
+        return doDecode(loadSpecification(typeName), persistenceQueryData);
     }
 
-    protected abstract PersistenceQuery doDecode(
-	            ObjectSpecification specification,
-	            PersistenceQueryData persistenceQueryData);
+    protected abstract PersistenceQuery doDecode(ObjectSpecification specification,
+        PersistenceQueryData persistenceQueryData);
 
-    private ObjectSpecification loadSpecification(String typeName) {
-    	return getSpecificationLoader().loadSpecification(
-    			typeName);
+    private ObjectSpecification loadSpecification(final String typeName) {
+        return getSpecificationLoader().loadSpecification(typeName);
     }
-
-    
 
     /**
-     * Convenience method for any implementations that need to map over
-     * {@link ObjectAdapter}s.
+     * Convenience method for any implementations that need to map over {@link ObjectAdapter}s.
      * 
      * @see #decodeObject(ObjectData)
      */
-	protected ObjectData encodeObject(final ObjectAdapter adapter) {
-		// REVIEW: this implementation is a bit of a hack...
-		Data[] datas = getObjectEncoder().encodeActionParameters(
-				new ObjectSpecification[] { adapter.getSpecification() }, 
-				new ObjectAdapter[] { adapter }, 
-				new KnownObjectsRequest());
-		return (ObjectData) datas[0];
-	}
+    protected ObjectData encodeObject(final ObjectAdapter adapter) {
+        // REVIEW: this implementation is a bit of a hack...
+        final Data[] datas =
+            getObjectEncoder().encodeActionParameters(new ObjectSpecification[] { adapter.getSpecification() },
+                new ObjectAdapter[] { adapter }, new KnownObjectsRequest());
+        return (ObjectData) datas[0];
+    }
 
-	/**
-     * Convenience method for any implementations that need to map over
-     * {@link ObjectAdapter}s.
+    /**
+     * Convenience method for any implementations that need to map over {@link ObjectAdapter}s.
      * 
      * @see #encodeObject(ObjectAdapter)
-	 */
-	protected ObjectAdapter decodeObject(final ObjectData objectData) {
-		return getObjectEncoder().decode(objectData);
-	}
+     */
+    protected ObjectAdapter decodeObject(final ObjectData objectData) {
+        return getObjectEncoder().decode(objectData);
+    }
 
-
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Dependencies (injected)
-    /////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
 
     protected ObjectEncoderDecoder getObjectEncoder() {
-		return objectEncoder;
-	}
-	public void setObjectEncoder(ObjectEncoderDecoder objectEncoder) {
-		this.objectEncoder = objectEncoder;
-	}
-    
-    /////////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////////
-	
-	private static SpecificationLoader getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
+        return objectEncoder;
+    }
 
+    @Override
+    public void setObjectEncoder(final ObjectEncoderDecoder objectEncoder) {
+        this.objectEncoder = objectEncoder;
+    }
+
+    // ///////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // ///////////////////////////////////////////////////////////////////
+
+    private static SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 }
-

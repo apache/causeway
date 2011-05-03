@@ -34,7 +34,7 @@ public class XStreamOverSocketsProxyDecoratorInstaller extends ProxyInstallerAbs
     }
 
     @Override
-    protected void addConfigurationResources(List<String> configurationResources) {
+    protected void addConfigurationResources(final List<String> configurationResources) {
         super.addConfigurationResources(configurationResources);
         // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
         // and Transport using the installers.
@@ -50,7 +50,7 @@ public class XStreamOverSocketsProxyDecoratorInstaller extends ProxyInstallerAbs
     }
 
     @Override
-    protected ClientMarshaller createMarshaller(Transport transport) {
+    protected ClientMarshaller createMarshaller(final Transport transport) {
         return new XStreamMarshaller(getConfiguration(), transport);
     }
 

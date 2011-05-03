@@ -24,6 +24,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.logging.Logger;
 import org.apache.isis.runtimes.dflt.remoting.common.client.transaction.ClientTransactionEvent;
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
@@ -67,13 +74,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationResp
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.logging.Logger;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 import com.google.inject.internal.Lists;
@@ -122,19 +122,19 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public OpenSessionResponse openSession(OpenSessionRequest request) {
+    public OpenSessionResponse openSession(final OpenSessionRequest request) {
         log("authenticate");
         return decorated.openSession(request);
     }
 
     @Override
-    public AuthorizationResponse authorizeUsability(AuthorizationRequestUsability request) {
+    public AuthorizationResponse authorizeUsability(final AuthorizationRequestUsability request) {
         log("authoriseUsability");
         return decorated.authorizeUsability(request);
     }
 
     @Override
-    public AuthorizationResponse authorizeVisibility(AuthorizationRequestVisibility request) {
+    public AuthorizationResponse authorizeVisibility(final AuthorizationRequestVisibility request) {
         log("authoriseVisibility");
         return decorated.authorizeVisibility(request);
     }
@@ -144,10 +144,10 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public CloseSessionResponse closeSession(CloseSessionRequest request) {
-        AuthenticationSession session = request.getSession();
+    public CloseSessionResponse closeSession(final CloseSessionRequest request) {
+        final AuthenticationSession session = request.getSession();
         log("close session " + session);
-        CloseSessionResponse response = decorated.closeSession(request);
+        final CloseSessionResponse response = decorated.closeSession(request);
         return response;
     }
 
@@ -156,15 +156,15 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public SetAssociationResponse setAssociation(SetAssociationRequest request) {
+    public SetAssociationResponse setAssociation(final SetAssociationRequest request) {
 
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData targetData = request.getTarget();
-        IdentityData associateData = request.getAssociate();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData targetData = request.getTarget();
+        final IdentityData associateData = request.getAssociate();
 
         log("set association " + fieldIdentifier + indentedNewLine() + "target: " + dump(targetData)
             + indentedNewLine() + "associate: " + dump(associateData));
-        SetAssociationResponse response = decorated.setAssociation(request);
+        final SetAssociationResponse response = decorated.setAssociation(request);
         final ObjectData[] changes = response.getUpdates();
         log("  <-- changes: " + dump(changes));
         return response;
@@ -173,13 +173,13 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     @Override
     public SetValueResponse setValue(final SetValueRequest request) {
 
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData target = request.getTarget();
-        EncodableObjectData value = request.getValue();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData target = request.getTarget();
+        final EncodableObjectData value = request.getValue();
 
         log("set value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
             + "value: " + value);
-        SetValueResponse response = decorated.setValue(request);
+        final SetValueResponse response = decorated.setValue(request);
         final ObjectData[] updates = response.getUpdates();
         log("  <-- changes: " + dump(updates));
         return response;
@@ -187,13 +187,13 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
 
     @Override
     public ClearAssociationResponse clearAssociation(final ClearAssociationRequest request) {
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData target = request.getTarget();
-        IdentityData associate = request.getAssociate();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData target = request.getTarget();
+        final IdentityData associate = request.getAssociate();
 
         log("clear association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
             + "associate: " + dump(associate));
-        ClearAssociationResponse response = decorated.clearAssociation(request);
+        final ClearAssociationResponse response = decorated.clearAssociation(request);
         final ObjectData[] updates = response.getUpdates();
         log("  <-- changes: " + dump(updates));
         return response;
@@ -202,11 +202,11 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     @Override
     public ClearValueResponse clearValue(final ClearValueRequest request) {
 
-        String fieldIdentifier = request.getFieldIdentifier();
-        IdentityData target = request.getTarget();
+        final String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData target = request.getTarget();
 
         log("clear value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target));
-        ClearValueResponse response = decorated.clearValue(request);
+        final ClearValueResponse response = decorated.clearValue(request);
         final ObjectData[] updates = response.getUpdates();
         log("  <-- changes: " + dump(updates));
         return response;
@@ -219,10 +219,10 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     @Override
     public ExecuteServerActionResponse executeServerAction(final ExecuteServerActionRequest request) {
 
-        ActionType actionType = request.getActionType();
-        String actionIdentifier = request.getActionIdentifier();
-        ReferenceData target = request.getTarget();
-        Data[] parameters = request.getParameters();
+        final ActionType actionType = request.getActionType();
+        final String actionIdentifier = request.getActionIdentifier();
+        final ReferenceData target = request.getTarget();
+        final Data[] parameters = request.getParameters();
 
         log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target)
             + indentedNewLine() + "parameters: " + dump(parameters));
@@ -242,10 +242,10 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     }
 
     @Override
-    public ExecuteClientActionResponse executeClientAction(ExecuteClientActionRequest request) {
+    public ExecuteClientActionResponse executeClientAction(final ExecuteClientActionRequest request) {
 
-        ReferenceData[] data = request.getData();
-        int[] types = request.getTypes();
+        final ReferenceData[] data = request.getData();
+        final int[] types = request.getTypes();
 
         List<Data> complete = Lists.newArrayList();
         StringBuilder str = new StringBuilder();
@@ -303,37 +303,37 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public GetObjectResponse getObject(GetObjectRequest request) {
+    public GetObjectResponse getObject(final GetObjectRequest request) {
 
-        Oid oid = request.getOid();
+        final Oid oid = request.getOid();
 
         log("get object " + oid);
-        GetObjectResponse response = decorated.getObject(request);
+        final GetObjectResponse response = decorated.getObject(request);
         final ObjectData data = response.getObjectData();
         log(" <-- data: " + data);
         return response;
     }
 
     @Override
-    public ResolveFieldResponse resolveField(ResolveFieldRequest request) {
+    public ResolveFieldResponse resolveField(final ResolveFieldRequest request) {
 
-        IdentityData target = request.getTarget();
-        String fieldIdentifier = request.getFieldIdentifier();
+        final IdentityData target = request.getTarget();
+        final String fieldIdentifier = request.getFieldIdentifier();
 
         log("resolve field " + fieldIdentifier + " - " + dump(target));
-        ResolveFieldResponse response = decorated.resolveField(request);
+        final ResolveFieldResponse response = decorated.resolveField(request);
         final Data result = response.getData();
         log(" <-- data: " + dump(result));
         return response;
     }
 
     @Override
-    public ResolveObjectResponse resolveImmediately(ResolveObjectRequest request) {
+    public ResolveObjectResponse resolveImmediately(final ResolveObjectRequest request) {
 
-        IdentityData target = request.getTarget();
+        final IdentityData target = request.getTarget();
 
         log("resolve immediately" + dump(target));
-        ResolveObjectResponse response = decorated.resolveImmediately(request);
+        final ResolveObjectResponse response = decorated.resolveImmediately(request);
         final ObjectData objectData = response.getObjectData();
         log("  <-- data: " + dump(objectData));
         return response;
@@ -344,24 +344,24 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public FindInstancesResponse findInstances(FindInstancesRequest request) {
+    public FindInstancesResponse findInstances(final FindInstancesRequest request) {
 
-        PersistenceQueryData criteria = request.getCriteria();
+        final PersistenceQueryData criteria = request.getCriteria();
 
         log("find instances " + criteria);
-        FindInstancesResponse response = decorated.findInstances(request);
+        final FindInstancesResponse response = decorated.findInstances(request);
         final ObjectData[] instances = response.getInstances();
         log(" <-- instances: " + dump(instances));
         return response;
     }
 
     @Override
-    public HasInstancesResponse hasInstances(HasInstancesRequest request) {
+    public HasInstancesResponse hasInstances(final HasInstancesRequest request) {
 
-        String specificationName = request.getSpecificationName();
+        final String specificationName = request.getSpecificationName();
 
         log("has instances " + specificationName);
-        HasInstancesResponse response = decorated.hasInstances(request);
+        final HasInstancesResponse response = decorated.hasInstances(request);
         final boolean hasInstances = response.hasInstances();
         log(" <-- instances: " + (hasInstances ? "yes" : "no"));
         return response;
@@ -372,9 +372,9 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public GetPropertiesResponse getProperties(GetPropertiesRequest request) {
+    public GetPropertiesResponse getProperties(final GetPropertiesRequest request) {
         log("get properties");
-        GetPropertiesResponse response = decorated.getProperties(request);
+        final GetPropertiesResponse response = decorated.getProperties(request);
         final Properties properties = response.getProperties();
         log(" <-- data: " + properties);
         return response;
@@ -385,13 +385,13 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     // ////////////////////////////////////////////////////////////////
 
     @Override
-    public OidForServiceResponse oidForService(OidForServiceRequest request) {
+    public OidForServiceResponse oidForService(final OidForServiceRequest request) {
 
-        String serviceId = request.getServiceId();
+        final String serviceId = request.getServiceId();
 
         log("oid for resource " + serviceId);
 
-        OidForServiceResponse response = decorated.oidForService(request);
+        final OidForServiceResponse response = decorated.oidForService(request);
         final IdentityData oidData = response.getOidData();
         log(" <-- data: " + dump(oidData));
         return response;

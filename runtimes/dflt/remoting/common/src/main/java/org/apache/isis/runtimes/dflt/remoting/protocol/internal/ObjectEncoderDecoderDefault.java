@@ -23,6 +23,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
 import org.apache.isis.runtimes.dflt.remoting.common.client.facets.ActionInvocationFacetWrapProxy;
 import org.apache.isis.runtimes.dflt.remoting.common.client.facets.PropertySetterFacetWrapProxy;
@@ -56,18 +68,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.facade.impl.ServerFacadeImp
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.PersistenceQueryEncoder;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ProtocolConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
@@ -106,19 +106,18 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
      */
     public static ObjectEncoderDecoderDefault create(final IsisConfiguration configuration) {
 
-        ObjectEncoderDecoderDefault encoderDecoder = new ObjectEncoderDecoderDefault();
+        final ObjectEncoderDecoderDefault encoderDecoder = new ObjectEncoderDecoderDefault();
         addPersistenceEncoders(configuration, encoderDecoder, ProtocolConstants.ENCODER_CLASS_NAME_LIST);
-        addPersistenceEncoders(configuration, encoderDecoder,
-            ProtocolConstants.ENCODER_CLASS_NAME_LIST_DEPRECATED);
+        addPersistenceEncoders(configuration, encoderDecoder, ProtocolConstants.ENCODER_CLASS_NAME_LIST_DEPRECATED);
         return encoderDecoder;
     }
 
     private static void addPersistenceEncoders(final IsisConfiguration configuration,
-        final ObjectEncoderDecoderDefault encoder, String encoderClassNameList) {
-        String[] encoders = configuration.getList(encoderClassNameList);
-        for (int i = 0; i < encoders.length; i++) {
+        final ObjectEncoderDecoderDefault encoder, final String encoderClassNameList) {
+        final String[] encoders = configuration.getList(encoderClassNameList);
+        for (final String encoder2 : encoders) {
             final PersistenceQueryEncoder encoding =
-                InstanceUtil.createInstance(encoders[i], PersistenceQueryEncoder.class);
+                InstanceUtil.createInstance(encoder2, PersistenceQueryEncoder.class);
             encoder.addPersistenceQueryEncoder(encoding);
         }
     }
@@ -270,11 +269,11 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
 
     @Override
     public void decode(final ObjectData[] dataArray) {
-        for (int i = 0; i < dataArray.length; i++) {
+        for (final ObjectData element : dataArray) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("update " + dataArray[i].getOid());
+                LOG.debug("update " + element.getOid());
             }
-            this.decode(dataArray[i]);
+            this.decode(element);
         }
     }
 
@@ -318,7 +317,7 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public AuthorizationResponse encodeAuthorizeResponse(boolean authorized) {
+    public AuthorizationResponse encodeAuthorizeResponse(final boolean authorized) {
         return new AuthorizationResponse(authorized);
     }
 
@@ -357,12 +356,12 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
      * Called server-side only:
      * <ul>
      * <li>by {@link ServerFacadeImpl#getObject(GetObjectRequest)}
-     * <li>by {@link ServerFacadeImpl#clearAssociation(ClearAssociationRequest) <li><li> by
-     * {@link ServerFacadeImpl#clearValue(ClearValueRequest) <li><li> by
-     * {@link ServerFacadeImpl#executeClientAction(ExecuteClientActionRequest) <li><li> by
-     * {@link ServerFacadeImpl#executeServerAction(ExecuteServerActionRequest) <li><li> by
-     * {@link ServerFacadeImpl#setAssociation(SetAssociationRequest) <li><li> by
-     * {@link ServerFacadeImpl#setValue(SetValueRequest) </ul>
+     * <li>by {@link ServerFacadeImpl#clearAssociation(ClearAssociationRequest) <li><li> by<li> {
+     * @link ServerFacadeImpl#clearValue(ClearValueRequest) <li><li> by<li> {
+     * @link ServerFacadeImpl#executeClientAction(ExecuteClientActionRequest) <li><li> by<li> {
+     * @link ServerFacadeImpl#executeServerAction(ExecuteServerActionRequest) <li><li> by<li> {
+     * @link ServerFacadeImpl#setAssociation(SetAssociationRequest) <li><li> by<li> {
+     * @link ServerFacadeImpl#setValue(SetValueRequest) </ul>
      */
     @Override
     public ObjectData encodeForUpdate(final ObjectAdapter object) {
@@ -540,11 +539,11 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
         }
     }
 
-    private ObjectData encode(final ObjectAdapter adapter, int depth) {
+    private ObjectData encode(final ObjectAdapter adapter, final int depth) {
         return (ObjectData) encode(adapter, depth, new KnownObjectsRequest());
     }
 
-    private ReferenceData encode(final ObjectAdapter adapter, int depth, final KnownObjectsRequest knownObjects) {
+    private ReferenceData encode(final ObjectAdapter adapter, final int depth, final KnownObjectsRequest knownObjects) {
         return serializer.serializeAdapter(adapter, depth, knownObjects);
     }
 

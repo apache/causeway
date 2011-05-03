@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.facade;
 
-
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestUsability;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestVisibility;
@@ -55,91 +54,106 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationRequ
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-
 
 /**
  * previously called <tt>DummyDistribution</tt>.
  */
 public class DummyServerFacade implements ServerFacade {
-    public ObjectData[] allInstances(final AuthenticationSession session, final String fullName, final boolean includeSubclasses) {
+    public ObjectData[] allInstances(final AuthenticationSession session, final String fullName,
+        final boolean includeSubclasses) {
         return null;
     }
 
-    public OpenSessionResponse openSession(OpenSessionRequest request) {
+    @Override
+    public OpenSessionResponse openSession(final OpenSessionRequest request) {
         return null;
     }
 
-    public AuthorizationResponse authorizeUsability(AuthorizationRequestUsability request) {
+    @Override
+    public AuthorizationResponse authorizeUsability(final AuthorizationRequestUsability request) {
         return new AuthorizationResponse(false);
     }
 
-    public AuthorizationResponse authorizeVisibility(AuthorizationRequestVisibility request) {
+    @Override
+    public AuthorizationResponse authorizeVisibility(final AuthorizationRequestVisibility request) {
         return new AuthorizationResponse(false);
     }
 
-    public ClearAssociationResponse clearAssociation(
-            ClearAssociationRequest request) {
+    @Override
+    public ClearAssociationResponse clearAssociation(final ClearAssociationRequest request) {
         return null;
     }
 
-    public ClearValueResponse clearValue(ClearValueRequest request) {
+    @Override
+    public ClearValueResponse clearValue(final ClearValueRequest request) {
         return null;
     }
 
-    public CloseSessionResponse closeSession(CloseSessionRequest request) {
-    	return null;
-    }
-
-    public ExecuteServerActionResponse executeServerAction(
-            ExecuteServerActionRequest request) {
+    @Override
+    public CloseSessionResponse closeSession(final CloseSessionRequest request) {
         return null;
     }
 
-    public ExecuteClientActionResponse executeClientAction(ExecuteClientActionRequest request) {
+    @Override
+    public ExecuteServerActionResponse executeServerAction(final ExecuteServerActionRequest request) {
         return null;
     }
 
-    public FindInstancesResponse findInstances(FindInstancesRequest request) {
+    @Override
+    public ExecuteClientActionResponse executeClientAction(final ExecuteClientActionRequest request) {
         return null;
     }
 
-    public HasInstancesResponse hasInstances(HasInstancesRequest request) {
+    @Override
+    public FindInstancesResponse findInstances(final FindInstancesRequest request) {
         return null;
     }
 
-    public GetObjectResponse getObject(GetObjectRequest request) {
+    @Override
+    public HasInstancesResponse hasInstances(final HasInstancesRequest request) {
         return null;
     }
 
-    public GetPropertiesResponse getProperties(GetPropertiesRequest request) {
+    @Override
+    public GetObjectResponse getObject(final GetObjectRequest request) {
         return null;
     }
 
-    public OidForServiceResponse oidForService(OidForServiceRequest request) {
+    @Override
+    public GetPropertiesResponse getProperties(final GetPropertiesRequest request) {
         return null;
     }
 
-    public ResolveFieldResponse resolveField(ResolveFieldRequest request) {
+    @Override
+    public OidForServiceResponse oidForService(final OidForServiceRequest request) {
         return null;
     }
 
-    public ResolveObjectResponse resolveImmediately(ResolveObjectRequest request) {
+    @Override
+    public ResolveFieldResponse resolveField(final ResolveFieldRequest request) {
         return null;
     }
 
-    public SetAssociationResponse setAssociation(
-            SetAssociationRequest request) {
+    @Override
+    public ResolveObjectResponse resolveImmediately(final ResolveObjectRequest request) {
         return null;
     }
 
-    public SetValueResponse setValue(
-            SetValueRequest request) {
+    @Override
+    public SetAssociationResponse setAssociation(final SetAssociationRequest request) {
         return null;
     }
 
-    public void init() {}
+    @Override
+    public SetValueResponse setValue(final SetValueRequest request) {
+        return null;
+    }
 
-    public void shutdown() {}
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public void shutdown() {
+    }
 }

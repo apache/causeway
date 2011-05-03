@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 
-public interface IdentityData extends ReferenceData {}
+public interface IdentityData extends ReferenceData {
+}

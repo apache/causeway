@@ -17,38 +17,34 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryFindAllInstancesData;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class PersistenceQueryFindAllInstancesEncoder extends PersistenceQueryEncoderAbstract {
 
-	public Class<?> getPersistenceQueryClass() {
+    @Override
+    public Class<?> getPersistenceQueryClass() {
         return PersistenceQueryFindAllInstances.class;
     }
 
-    public PersistenceQueryData encode(
-    		final PersistenceQuery persistenceQuery) {
+    @Override
+    public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
         return new PersistenceQueryFindAllInstancesData(persistenceQuery.getSpecification());
     }
 
     @Override
-    protected PersistenceQuery doDecode(
-            final ObjectSpecification specification,
-            final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification,
+        final PersistenceQueryData persistenceQueryData) {
         return new PersistenceQueryFindAllInstances(specification);
     }
 
-	private PersistenceQueryFindAllInstances downcast(
-			final PersistenceQuery persistenceQuery) {
-		return (PersistenceQueryFindAllInstances) persistenceQuery;
-	}
-
+    private PersistenceQueryFindAllInstances downcast(final PersistenceQuery persistenceQuery) {
+        return (PersistenceQueryFindAllInstances) persistenceQuery;
+    }
 
 }
-

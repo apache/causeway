@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
@@ -29,35 +28,35 @@ import org.apache.isis.core.commons.encoding.Encodable;
 
 public class AuthorizationResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private boolean authorized;
-	
-	public AuthorizationResponse(boolean authorized) {
-		this.authorized = authorized;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public AuthorizationResponse(DataInputExtended input) throws IOException {
-		this.authorized = input.readBoolean();
-		instantiated();
-	}
+    private final boolean authorized;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeBoolean(authorized);
-	}
+    public AuthorizationResponse(final boolean authorized) {
+        this.authorized = authorized;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public AuthorizationResponse(final DataInputExtended input) throws IOException {
+        this.authorized = input.readBoolean();
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
-	
-	public Boolean isAuthorized() {
-		return authorized;
-	}
-	
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeBoolean(authorized);
+    }
+
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public Boolean isAuthorized() {
+        return authorized;
+    }
+
 }

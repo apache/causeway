@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.data;
 
 import java.io.Serializable;
-
 
 public interface Data extends Serializable {
     String getType();

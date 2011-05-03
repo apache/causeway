@@ -17,28 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared;
 
 import java.io.IOException;
 import java.net.SocketException;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
 import org.apache.isis.runtimes.dflt.remoting.transport.ServerConnectionHandler;
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.log4j.Logger;
 
 public class Worker implements Runnable {
     private static final Logger LOG = Logger.getLogger(Worker.class);
     private static int nextId = 1;
-    
+
     private final WorkerPool poolToReturnTo;
     private final int id = nextId++;
 
     private boolean running = true;
-    
+
     private ServerConnection connection;
-	private ServerConnectionHandler serverDelegate;
+    private ServerConnectionHandler serverDelegate;
 
     public Worker(final WorkerPool pool) {
         this.poolToReturnTo = pool;
@@ -52,15 +51,16 @@ public class Worker implements Runnable {
         return connection == null;
     }
 
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // run, setIncomingConnection, wait
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
+    @Override
     public synchronized void run() {
         while (running) {
-        	waitForIncomingConnection();
+            waitForIncomingConnection();
             if (connection == null) {
-            	break;
+                break;
             }
 
             handleRequest();
@@ -80,60 +80,55 @@ public class Worker implements Runnable {
     /**
      * @see #setIncomingConnection(ServerConnection)
      */
-	private void waitForIncomingConnection() {
-		while (connection == null) {
-		    try {
-		        wait();
-		    } catch (final InterruptedException e) {
-		        if (!running) {
-		            LOG.info("Request to stop : " + toString());
-		            break;
-		        }
-		    }
-		}
-	}
+    private void waitForIncomingConnection() {
+        while (connection == null) {
+            try {
+                wait();
+            } catch (final InterruptedException e) {
+                if (!running) {
+                    LOG.info("Request to stop : " + toString());
+                    break;
+                }
+            }
+        }
+    }
 
-
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // handleRequest
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
-	private void handleRequest() {
-		try {
-			serverDelegate.handleRequest();
-		} catch (final SocketException e) {
-		    LOG.info("shutting down receiver (" + e + ")");
-		} catch (final IOException e) {
-		    LOG.info("connection exception; closing connection", e);
-		} finally {
-		    end();
-		}
-	}
+    private void handleRequest() {
+        try {
+            serverDelegate.handleRequest();
+        } catch (final SocketException e) {
+            LOG.info("shutting down receiver (" + e + ")");
+        } catch (final IOException e) {
+            LOG.info("connection exception; closing connection", e);
+        } finally {
+            end();
+        }
+    }
 
     private void end() {
-    	serverDelegate = null;
+        serverDelegate = null;
         connection = null;
         poolToReturnTo.returnWorker(this);
     }
 
-    
-    
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Debug
-    ///////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////
+
     public void debug(final DebugBuilder debug) {
-    	serverDelegate.debug(debug);
+        serverDelegate.debug(debug);
     }
 
-    
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // toString
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     @Override
     public String toString() {
         return "Worker#" + id;
     }
 }
-

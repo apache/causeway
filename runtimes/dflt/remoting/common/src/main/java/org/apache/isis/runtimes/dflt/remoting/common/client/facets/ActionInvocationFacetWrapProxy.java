@@ -17,22 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.NullData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteServerActionRequest;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteServerActionResponse;
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -47,6 +35,15 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.NullData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteServerActionRequest;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.ExecuteServerActionResponse;
+import org.apache.isis.runtimes.dflt.remoting.common.exchange.KnownObjectsRequest;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
+import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -55,23 +52,22 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageList;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.WarningList;
-
+import org.apache.log4j.Logger;
 
 /**
- * A reflection peer for executing actions remotely, instead of on the local machine. Any calls to
- * <code>execute</code> are passed over the network to the server for invocation. There are two cases where
- * the request is not passed to the server, ie it is executed locally: 1) where the method is static, ie is on
- * the class rather than an instance; 2) if the instance is not persistent; 3) if the method is marked as
- * 'local'. If a method is marked as being 'remote' then static methods and methods on transient objects will
- * be passed to the server.
- *
+ * A reflection peer for executing actions remotely, instead of on the local machine. Any calls to <code>execute</code>
+ * are passed over the network to the server for invocation. There are two cases where the request is not passed to the
+ * server, ie it is executed locally: 1) where the method is static, ie is on the class rather than an instance; 2) if
+ * the instance is not persistent; 3) if the method is marked as 'local'. If a method is marked as being 'remote' then
+ * static methods and methods on transient objects will be passed to the server.
+ * 
  * <p>
- * If any of the objects involved have been changed on the server by another process then a
- * ConcurrencyException will be passed back to the client and re-thrown.
+ * If any of the objects involved have been changed on the server by another process then a ConcurrencyException will be
+ * passed back to the client and re-thrown.
  * </p>
  */
 public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetAbstract implements
-        DecoratingFacet<ActionInvocationFacet> {
+    DecoratingFacet<ActionInvocationFacet> {
 
     private final static Logger LOG = Logger.getLogger(ActionInvocationFacetWrapProxy.class);
     private final ServerFacade serverFacade;
@@ -79,11 +75,8 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
     private final ActionInvocationFacet underlyingFacet;
     private final ObjectAction objectAction;
 
-    public ActionInvocationFacetWrapProxy(
-            final ActionInvocationFacet underlyingFacet,
-            final ServerFacade connection,
-            final ObjectEncoderDecoder encoder,
-            final ObjectAction objectAction) {
+    public ActionInvocationFacetWrapProxy(final ActionInvocationFacet underlyingFacet, final ServerFacade connection,
+        final ObjectEncoderDecoder encoder, final ObjectAction objectAction) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
         this.serverFacade = connection;
@@ -100,8 +93,7 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
     public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         if (isToBeExecutedRemotely(target)) {
             /*
-             * NOTE - only remotely executing actions on objects not collection - due to collections not
-             * having OIDs yet
+             * NOTE - only remotely executing actions on objects not collection - due to collections not having OIDs yet
              */
             return executeRemotely(target, parameters);
         } else {
@@ -125,62 +117,59 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
     }
 
     private ObjectAdapter executeRemotely(final ObjectAdapter targetAdapter, final ObjectAdapter[] parameterAdapters) {
-    	if (LOG.isDebugEnabled()) {
-    		LOG.debug(debug("execute remotely", getIdentifier(), targetAdapter, parameterAdapters));
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(debug("execute remotely", getIdentifier(), targetAdapter, parameterAdapters));
+        }
 
         final KnownObjectsRequest knownObjects = new KnownObjectsRequest();
         final Data[] parameterObjectData = parameterValues(parameterAdapters, knownObjects);
-        final ReferenceData targetReference = targetAdapter == null ? null : encoder.encodeActionTarget(targetAdapter, knownObjects);
+        final ReferenceData targetReference =
+            targetAdapter == null ? null : encoder.encodeActionTarget(targetAdapter, knownObjects);
         ExecuteServerActionResponse response;
         try {
-            ExecuteServerActionRequest request =
-            	new ExecuteServerActionRequest(
-            			getAuthenticationSession(),
-            			ActionType.USER,
-            			objectAction.getIdentifier().toNameParmsIdentityString(),
-            			targetReference,
-            			parameterObjectData);
-			response = serverFacade.executeServerAction(request);
+            final ExecuteServerActionRequest request =
+                new ExecuteServerActionRequest(getAuthenticationSession(), ActionType.USER, objectAction
+                    .getIdentifier().toNameParmsIdentityString(), targetReference, parameterObjectData);
+            response = serverFacade.executeServerAction(request);
 
-	        // must deal with transient-now-persistent objects first
-	        if (targetAdapter.isTransient()) {
-	            encoder.madePersistent(targetAdapter, response.getPersistedTarget());
-	        }
+            // must deal with transient-now-persistent objects first
+            if (targetAdapter.isTransient()) {
+                encoder.madePersistent(targetAdapter, response.getPersistedTarget());
+            }
 
-	        final List<ObjectActionParameter> parameters2 = objectAction.getParameters();
-	        for (int i = 0; i < parameterAdapters.length; i++) {
-	            if (parameters2.get(i).getSpecification().isNotCollection()) {
-	                encoder.madePersistent(parameterAdapters[i], response.getPersistedParameters()[i]);
-	            }
-	        }
+            final List<ObjectActionParameter> parameters2 = objectAction.getParameters();
+            for (int i = 0; i < parameterAdapters.length; i++) {
+                if (parameters2.get(i).getSpecification().isNotCollection()) {
+                    encoder.madePersistent(parameterAdapters[i], response.getPersistedParameters()[i]);
+                }
+            }
 
-	        final Data returned = response.getReturn();
-	        ObjectAdapter returnedObject = returned instanceof NullData ? null : encoder.decode(returned);
+            final Data returned = response.getReturn();
+            final ObjectAdapter returnedObject = returned instanceof NullData ? null : encoder.decode(returned);
 
-	        final ObjectData[] updates = response.getUpdates();
-	        for (int i = 0; i < updates.length; i++) {
-	            if (LOG.isDebugEnabled()) {
-	                LOG.debug("update " + updates[i].getOid());
-	            }
-	            encoder.decode(updates[i]);
-	        }
+            final ObjectData[] updates = response.getUpdates();
+            for (final ObjectData update : updates) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("update " + update.getOid());
+                }
+                encoder.decode(update);
+            }
 
-	        final ReferenceData[] disposed = response.getDisposed();
-	        for (int i = 0; i < disposed.length; i++) {
-	            final Oid oid = disposed[i].getOid();
-	            if (LOG.isDebugEnabled()) {
-	                LOG.debug("disposed " + oid);
-	            }
-	            final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
-	            getUpdateNotifier().addDisposedObject(adapter);
-	        }
+            final ReferenceData[] disposed = response.getDisposed();
+            for (final ReferenceData element : disposed) {
+                final Oid oid = element.getOid();
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("disposed " + oid);
+                }
+                final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+                getUpdateNotifier().addDisposedObject(adapter);
+            }
 
-	        copyMessages(response);
+            copyMessages(response);
 
-	        copyWarnings(response);
+            copyWarnings(response);
 
-	        return returnedObject;
+            return returnedObject;
 
         } catch (final ConcurrencyException e) {
             final Oid source = e.getSource();
@@ -190,7 +179,7 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
             final ObjectAdapter failedObject = getAdapterManager().getAdapterFor(source);
             getPersistenceSession().reload(failedObject);
             if (LOG.isInfoEnabled()) {
-            	LOG.info("concurrency conflict: " + e.getMessage());
+                LOG.info("concurrency conflict: " + e.getMessage());
             }
             throw new ConcurrencyException("Object automatically reloaded: " + failedObject.titleString(), e);
         } catch (final IsisException e) {
@@ -200,18 +189,17 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
 
     }
 
-    private void copyWarnings(WarningList response) {
-        for (String warning : response.getWarnings()) {
+    private void copyWarnings(final WarningList response) {
+        for (final String warning : response.getWarnings()) {
             getMessageBroker().addWarning(warning);
         }
     }
 
-    private void copyMessages(MessageList response) {
-        for (String message: response.getMessages()) {
+    private void copyMessages(final MessageList response) {
+        for (final String message : response.getMessages()) {
             getMessageBroker().addMessage(message);
         }
     }
-
 
     private boolean isToBeExecutedRemotely(final ObjectAdapter targetAdapter) {
         final ExecutedFacet facet = objectAction.getFacet(ExecutedFacet.class);
@@ -241,11 +229,8 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
         return encoder.encodeActionParameters(parameterTypes, parameters, knownObjects);
     }
 
-    private static String debug(
-            final String message,
-            final Identifier identifier,
-            final ObjectAdapter target,
-            final ObjectAdapter[] parameters) {
+    private static String debug(final String message, final Identifier identifier, final ObjectAdapter target,
+        final ObjectAdapter[] parameters) {
         if (!LOG.isDebugEnabled()) {
             return "";
         }
@@ -264,9 +249,9 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
         return str.toString();
     }
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
@@ -280,14 +265,12 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
         return IsisContext.getAuthenticationSession();
     }
 
-	protected MessageBroker getMessageBroker() {
-		return IsisContext.getMessageBroker();
-	}
+    protected MessageBroker getMessageBroker() {
+        return IsisContext.getMessageBroker();
+    }
 
-	protected UpdateNotifier getUpdateNotifier() {
-		return IsisContext.getUpdateNotifier();
-	}
-
-
+    protected UpdateNotifier getUpdateNotifier() {
+        return IsisContext.getUpdateNotifier();
+    }
 
 }

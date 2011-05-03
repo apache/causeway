@@ -17,33 +17,32 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 /**
- * REVIEW: should we split? the OTMA will need to specify the associate to remove, but the OTOA should not need to provide the associate to clear.
- * @param request TODO
+ * REVIEW: should we split? the OTMA will need to specify the associate to remove, but the OTOA should not need to
+ * provide the associate to clear.
+ * 
+ * @param request
+ *            TODO
  */
 public class ClearAssociationRequest extends RequestAbstract {
-	
+
     private static final long serialVersionUID = 1L;
     private final String fieldIdentifier;
     private final IdentityData target;
     private final IdentityData associate;
 
-    public ClearAssociationRequest(
-            final AuthenticationSession session,
-            final String fieldIdentifier,
-            final IdentityData target,
-            final IdentityData associate) {
+    public ClearAssociationRequest(final AuthenticationSession session, final String fieldIdentifier,
+        final IdentityData target, final IdentityData associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;
@@ -60,44 +59,44 @@ public class ClearAssociationRequest extends RequestAbstract {
     }
 
     @Override
-    public void encode(DataOutputExtended output)
-    		throws IOException {
-    	super.encode(output);
+    public void encode(final DataOutputExtended output) throws IOException {
+        super.encode(output);
         output.writeUTF(fieldIdentifier);
         output.writeEncodable(target);
         output.writeEncodable(associate);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // request data
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	public String getFieldIdentifier() {
-		return fieldIdentifier;
-	}
-	
-	public IdentityData getTarget() {
-		return target;
-	}
-	
-	public IdentityData getAssociate() {
-		return associate;
-	}
-	
-    /////////////////////////////////////////////////////////
+    public String getFieldIdentifier() {
+        return fieldIdentifier;
+    }
+
+    public IdentityData getTarget() {
+        return target;
+    }
+
+    public IdentityData getAssociate() {
+        return associate;
+    }
+
+    // ///////////////////////////////////////////////////////
     // execute, response
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * {@link #setResponse(Object) Sets a response} of a {@link ClearAssociationResponse}.
-	 */
+    /**
+     * {@link #setResponse(Object) Sets a response} of a {@link ClearAssociationResponse}.
+     */
+    @Override
     public void execute(final ServerFacade serverFacade) {
-        ClearAssociationResponse response = serverFacade.clearAssociation(this);
-		setResponse(response);
+        final ClearAssociationResponse response = serverFacade.clearAssociation(this);
+        setResponse(response);
     }
 
     /**
@@ -107,5 +106,5 @@ public class ClearAssociationRequest extends RequestAbstract {
     public ClearAssociationResponse getResponse() {
         return (ClearAssociationResponse) super.getResponse();
     }
-    
+
 }

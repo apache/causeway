@@ -17,48 +17,47 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 
 public class SetValueResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final ObjectData[] updates;
-	
-	public SetValueResponse(ObjectData[] updates) {
-		this.updates = updates;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public SetValueResponse(DataInputExtended input) throws IOException {
-		this.updates = input.readEncodables(ObjectData.class);
-		instantiated();
-	}
+    private final ObjectData[] updates;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeEncodables(updates);
-	}
+    public SetValueResponse(final ObjectData[] updates) {
+        this.updates = updates;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public SetValueResponse(final DataInputExtended input) throws IOException {
+        this.updates = input.readEncodables(ObjectData.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodables(updates);
+    }
 
-	public ObjectData[] getUpdates() {
-		return updates;
-	}
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public ObjectData[] getUpdates() {
+        return updates;
+    }
+
 }

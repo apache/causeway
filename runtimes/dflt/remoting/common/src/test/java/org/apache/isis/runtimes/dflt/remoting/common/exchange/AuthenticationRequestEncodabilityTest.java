@@ -17,32 +17,29 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.runtimes.dflt.remoting.common.exchange.OpenSessionRequest;
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
 import org.apache.isis.core.commons.encoding.Encodable;
 
 public class AuthenticationRequestEncodabilityTest extends EncodabilityContractTest {
 
-	protected Encodable createEncodable() {
-		return new OpenSessionRequest("sven", "pass");
-	}
+    @Override
+    protected Encodable createEncodable() {
+        return new OpenSessionRequest("sven", "pass");
+    }
 
-	@Override
-	protected void assertRoundtripped(
-			Object decodedEncodable,
-			Object originalEncodable) {
-		OpenSessionRequest decoded = (OpenSessionRequest) decodedEncodable;
-		OpenSessionRequest original = (OpenSessionRequest) originalEncodable;
-		
-		assertThat(decoded.getId(), is(equalTo(original.getId())));
-		assertThat(decoded.getResponse(), is(equalTo(original.getResponse())));
-		
-	}
+    @Override
+    protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
+        final OpenSessionRequest decoded = (OpenSessionRequest) decodedEncodable;
+        final OpenSessionRequest original = (OpenSessionRequest) originalEncodable;
+
+        assertThat(decoded.getId(), is(equalTo(original.getId())));
+        assertThat(decoded.getResponse(), is(equalTo(original.getResponse())));
+
+    }
 }

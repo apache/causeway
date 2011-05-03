@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.server;
 
 import java.io.IOException;
@@ -31,26 +30,22 @@ import org.apache.isis.runtimes.dflt.remoting.server.ServerConnectionDefault;
 import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.remoting.transport.simple.SimpleTransport;
 
-
 public class EncodingOverSocketsViewer extends SocketsViewerAbstract {
-	
-	public EncodingOverSocketsViewer(ObjectEncoderDecoder objectEncoderDecoder) {
-		super(objectEncoderDecoder);
-	}
-	
+
+    public EncodingOverSocketsViewer(final ObjectEncoderDecoder objectEncoderDecoder) {
+        super(objectEncoderDecoder);
+    }
+
     @Override
-    protected ServerConnectionDefault createServerConnection(
-            final InputStream input,
-            final OutputStream output,
-            final ServerFacade serverFacade) {
-    	SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
-        EncodingMarshaller marshaller = new EncodingMarshaller(getConfiguration(), transport);
+    protected ServerConnectionDefault createServerConnection(final InputStream input, final OutputStream output,
+        final ServerFacade serverFacade) {
+        final SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
+        final EncodingMarshaller marshaller = new EncodingMarshaller(getConfiguration(), transport);
         try {
             marshaller.connect();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ConnectionException(e);
         }
         return new ServerConnectionDefault(serverFacade, marshaller);
     }
 }
-

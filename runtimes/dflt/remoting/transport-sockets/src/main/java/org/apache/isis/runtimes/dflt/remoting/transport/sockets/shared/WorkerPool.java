@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,13 +28,12 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.log4j.Logger;
 
-
 // REVIEW should this class be replaced with something from concurrent.util ? 
 public class WorkerPool {
     private static final Logger LOG = Logger.getLogger(WorkerPool.class);
-    
+
     private final ThreadGroup group;
-    
+
     public Vector available = new Vector();
     public Vector all = new Vector();
 
@@ -87,7 +85,8 @@ public class WorkerPool {
         while (available.size() == 0) {
             try {
                 wait();
-            } catch (final InterruptedException e) {}
+            } catch (final InterruptedException e) {
+            }
         }
         final Worker worker = (Worker) available.elementAt(0);
         available.removeElementAt(0);
@@ -125,4 +124,3 @@ public class WorkerPool {
         return "WorkerGroup[groupName=" + group.getName() + "]";
     }
 }
-

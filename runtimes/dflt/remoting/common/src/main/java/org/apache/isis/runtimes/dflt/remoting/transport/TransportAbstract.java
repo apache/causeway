@@ -17,25 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.transport;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public abstract class TransportAbstract implements Transport {
 
-	private final IsisConfiguration configuration;
-    
-    public TransportAbstract(IsisConfiguration configuration) {
-    	this.configuration = configuration;
+    private final IsisConfiguration configuration;
+
+    public TransportAbstract(final IsisConfiguration configuration) {
+        this.configuration = configuration;
     }
-    
-	
-	//////////////////////////////////////////////////////////////////////
-	// Dependencies (injected in constructor)
-	//////////////////////////////////////////////////////////////////////
-	
-	public IsisConfiguration getConfiguration() {
-		return configuration;
-	}
+
+    // ////////////////////////////////////////////////////////////////////
+    // Dependencies (injected in constructor)
+    // ////////////////////////////////////////////////////////////////////
+
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 }

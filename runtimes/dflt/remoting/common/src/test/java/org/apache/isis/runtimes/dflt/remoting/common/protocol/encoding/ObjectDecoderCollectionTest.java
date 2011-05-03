@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.protocol.encoding;
 
 import java.util.Collection;
@@ -25,6 +24,11 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyCollectionData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.CollectionData;
@@ -32,17 +36,11 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.FieldOrderCache;
 import org.apache.isis.runtimes.dflt.remoting.protocol.internal.ObjectDeserializer;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.ObjectToAdapterTransformer;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-
 
 public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
 
@@ -51,28 +49,32 @@ public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        FieldOrderCache fieldOrderCache = null;  // TODO: should provide a mock here?
-		deserializer = new ObjectDeserializer(fieldOrderCache);
+        final FieldOrderCache fieldOrderCache = null; // TODO: should provide a mock here?
+        deserializer = new ObjectDeserializer(fieldOrderCache);
 
         final TestProxySpecification specification = system.getSpecification(Vector.class);
         specification.addFacet(new CollectionFacetAbstract(specification) {
 
+            @Override
             public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
-                for (int i = 0; i < initData.length; i++) {
-                    collectionOfUnderlying(collection).add(initData[i].getObject());
+                for (final ObjectAdapter element : initData) {
+                    collectionOfUnderlying(collection).add(element.getObject());
                 }
             }
 
+            @Override
             @SuppressWarnings("unchecked")
-            public Collection<ObjectAdapter> collection(ObjectAdapter collectionAdapter) {
-                Collection<Object> collection = collectionOfUnderlying(collectionAdapter);
+            public Collection<ObjectAdapter> collection(final ObjectAdapter collectionAdapter) {
+                final Collection<Object> collection = collectionOfUnderlying(collectionAdapter);
                 return CollectionUtils.collect(collection, new ObjectToAdapterTransformer());
             }
 
+            @Override
             public ObjectAdapter firstElement(final ObjectAdapter collection) {
                 throw new NotYetImplementedException();
             }
 
+            @Override
             public int size(final ObjectAdapter collection) {
                 return collectionOfUnderlying(collection).size();
             }
@@ -88,8 +90,9 @@ public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
     public void testRecreateEmptyCollection() {
         final TestProxyOid collectionOid = new TestProxyOid(123);
         final ReferenceData[] elementData = null;
-        final CollectionData data = new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(),
-                elementData, new TestProxyVersion());
+        final CollectionData data =
+            new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(), elementData,
+                new TestProxyVersion());
 
         final ObjectAdapter adapter = deserializer.deserialize(data);
 
@@ -108,8 +111,9 @@ public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
         elements[1] = new DummyObjectData(element1Oid, TestPojo.class.getName(), false, new TestProxyVersion(7));
 
         final TestProxyOid collectionOid = new TestProxyOid(123);
-        final CollectionData data = new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(),
-                elements, new TestProxyVersion());
+        final CollectionData data =
+            new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(), elements,
+                new TestProxyVersion());
 
         final ObjectAdapter adapter = deserializer.deserialize(data);
 

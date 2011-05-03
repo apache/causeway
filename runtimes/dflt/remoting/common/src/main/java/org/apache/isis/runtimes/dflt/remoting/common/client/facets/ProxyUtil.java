@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,23 +27,23 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.log4j.Logger;
 
-
 public class ProxyUtil {
     private final static Logger LOG = Logger.getLogger(ProxyUtil.class);
 
-    private ProxyUtil() {}
+    private ProxyUtil() {
+    }
 
     public static ConcurrencyException concurrencyException(final ConcurrencyException e) {
-    	if (LOG.isInfoEnabled()) {
-    		LOG.info("concurrency conflict: " + e.getMessage());
-    	}
+        if (LOG.isInfoEnabled()) {
+            LOG.info("concurrency conflict: " + e.getMessage());
+        }
         final Oid source = e.getSource();
         if (source == null) {
             return e;
         }
         final ObjectAdapter failedObject = getAdapterManager().getAdapterFor(source);
-		getPersistenceSession().reload(failedObject);
-		return new ConcurrencyException("Object automatically reloaded: " + failedObject.titleString(), e);
+        getPersistenceSession().reload(failedObject);
+        return new ConcurrencyException("Object automatically reloaded: " + failedObject.titleString(), e);
     }
 
     private static PersistenceSession getPersistenceSession() {
@@ -56,4 +55,3 @@ public class ProxyUtil {
     }
 
 }
-

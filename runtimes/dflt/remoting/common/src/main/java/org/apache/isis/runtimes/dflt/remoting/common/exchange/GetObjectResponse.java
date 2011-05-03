@@ -17,48 +17,47 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 
 public class GetObjectResponse implements Encodable, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final ObjectData objectData;
-	
-	public GetObjectResponse(ObjectData objectData) {
-		this.objectData = objectData;
-		instantiated();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public GetObjectResponse(DataInputExtended input) throws IOException {
-		this.objectData = input.readEncodable(ObjectData.class);
-		instantiated();
-	}
+    private final ObjectData objectData;
 
-	public void encode(DataOutputExtended output) throws IOException {
-		output.writeEncodable(objectData);
-	}
+    public GetObjectResponse(final ObjectData objectData) {
+        this.objectData = objectData;
+        instantiated();
+    }
 
-	private void instantiated() {
-		// nothing to do
-	}
+    public GetObjectResponse(final DataInputExtended input) throws IOException {
+        this.objectData = input.readEncodable(ObjectData.class);
+        instantiated();
+    }
 
-	
-	///////////////////////////////////////////
-	//
-	///////////////////////////////////////////
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeEncodable(objectData);
+    }
 
-	public ObjectData getObjectData() {
-		return objectData;
-	}
-	
+    private void instantiated() {
+        // nothing to do
+    }
+
+    // /////////////////////////////////////////
+    //
+    // /////////////////////////////////////////
+
+    public ObjectData getObjectData() {
+        return objectData;
+    }
+
 }

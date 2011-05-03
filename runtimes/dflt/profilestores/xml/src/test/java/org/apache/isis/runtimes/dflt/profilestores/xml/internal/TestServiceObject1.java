@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.profilestores.xml.internal;
 
 public class TestServiceObject1 {
@@ -27,5 +26,3 @@ public class TestServiceObject1 {
         return ID;
     }
 }
-
-
