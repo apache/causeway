@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,10 +28,10 @@ import org.apache.isis.viewer.dnd.view.base.TextView;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.field.TextParseableField;
 
-
 public class OpenValueDropDownBorder extends OpenDropDownBorder {
     private static final SelectionListSpecification spec = new SelectionListSpecification() {
-        protected View createElementView(Content content) {
+        @Override
+        protected View createElementView(final Content content) {
             return new TextView(content, this);
         }
     };
@@ -41,8 +40,9 @@ public class OpenValueDropDownBorder extends OpenDropDownBorder {
         super(wrappedView);
     }
 
+    @Override
     protected View createDropDownView() {
-        Axes viewAxes = getViewAxes();
+        final Axes viewAxes = getViewAxes();
         viewAxes.add(new SelectionListAxis(this), SelectionListAxis.class);
         return spec.createView(getContent(), viewAxes, -1);
     }
@@ -61,9 +61,10 @@ public class OpenValueDropDownBorder extends OpenDropDownBorder {
 
     }
 
-    protected void setSelection(OptionContent selectedContent) {
+    @Override
+    protected void setSelection(final OptionContent selectedContent) {
         final ObjectAdapter option = selectedContent.getAdapter();
-        TextParseableContent content = (TextParseableContent) getContent();
+        final TextParseableContent content = (TextParseableContent) getContent();
         content.parseTextEntry(option.titleString());
         content.entryComplete();
     }

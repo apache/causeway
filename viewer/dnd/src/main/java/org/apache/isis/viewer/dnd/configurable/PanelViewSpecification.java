@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -31,41 +30,47 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.border.IconBorder;
 
 public class PanelViewSpecification implements ViewSpecification {
-    
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isObject() && requirement.isOpen()&& requirement.isExpandable() && requirement.isDesign();
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isObject() && requirement.isOpen() && requirement.isExpandable() && requirement.isDesign();
     }
 
+    @Override
     public String getName() {
         return "Panel (experimental)";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
 
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
-    public View createView(Content content, Axes axes, int sequence) {
-        PanelView wrappedView = new PanelView(content, this);
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
+        final PanelView wrappedView = new PanelView(content, this);
         wrappedView.setInitialViewSpecification(new InternalFormSpecification());
-        View newView = new IconBorder(wrappedView, Toolkit.getText(ColorsAndFonts.TEXT_TITLE));
+        final View newView = new IconBorder(wrappedView, Toolkit.getText(ColorsAndFonts.TEXT_TITLE));
         return newView;
     }
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import java.util.List;
@@ -35,40 +34,40 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.border.SelectObjectBorder;
 
-
 /**
- * Specification for a tree node that will display a closed object as a root node or within an object. This
- * will indicate that the created view can be opened if: one of it fields is a collection; it is set up to
- * show objects within objects and one of the fields is an object but it is not a lookup.
+ * Specification for a tree node that will display a closed object as a root node or within an object. This will
+ * indicate that the created view can be opened if: one of it fields is a collection; it is set up to show objects
+ * within objects and one of the fields is an object but it is not a lookup.
  * 
- * @see org.apache.isis.viewer.dnd.tree.OpenObjectNodeSpecification for displaying an open collection as
- *      part of an object.
+ * @see org.apache.isis.viewer.dnd.tree.OpenObjectNodeSpecification for displaying an open collection as part of an
+ *      object.
  */
 class ClosedObjectNodeSpecification extends NodeSpecification {
     private final boolean showObjectContents;
-    private SubviewDecorator decorator = new SelectObjectBorder.Factory();
+    private final SubviewDecorator decorator = new SelectObjectBorder.Factory();
 
     public ClosedObjectNodeSpecification(final boolean showObjectContents) {
         this.showObjectContents = showObjectContents;
     }
 
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isObject() && requirement.hasReference();
     }
 
     @Override
     public int canOpen(final Content content) {
         final ObjectAdapter object = ((ObjectContent) content).getObject();
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
+        final List<ObjectAssociation> fields =
+            object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).isOneToManyAssociation()) {
                 return CAN_OPEN;
             }
 
-            if (  showObjectContents && fields.get(i).isOneToOneAssociation() &&
-                !(BoundedFacetUtils.isBoundedSet(object.getSpecification()))) {
+            if (showObjectContents && fields.get(i).isOneToOneAssociation()
+                && !(BoundedFacetUtils.isBoundedSet(object.getSpecification()))) {
                 return CAN_OPEN;
             }
         }
@@ -76,7 +75,7 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
     }
 
     @Override
-    protected View createNodeView(final Content content, Axes axes) {
+    protected View createNodeView(final Content content, final Axes axes) {
         View treeLeafNode = new LeafNodeView(content, this);
         treeLeafNode = decorator.decorate(axes, treeLeafNode);
         return treeLeafNode;

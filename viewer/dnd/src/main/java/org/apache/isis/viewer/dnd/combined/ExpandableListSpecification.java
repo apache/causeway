@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.combined;
 
 import org.apache.isis.viewer.dnd.form.ExpandableViewBorder;
@@ -25,27 +24,27 @@ import org.apache.isis.viewer.dnd.icon.IconElementFactory;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.composite.AbstractCollectionViewSpecification;
 
-
 public class ExpandableListSpecification extends AbstractCollectionViewSpecification {
 
     public ExpandableListSpecification() {
         builder.addSubviewDecorator(new ExpandableViewBorder.Factory());
     }
-    
+
+    @Override
     protected ViewFactory createElementFactory() {
         return new IconElementFactory();
     }
 
+    @Override
     public String getName() {
         return "Expanding List (experimental)";
     }
-    
+
     // TODO this should be available if an item can be given more space
-/*
-    @Override
-    public boolean canDisplay(final Content content, ViewRequirement requirement) {
-        return content.isCollection() && requirement.is(ViewRequirement.CLOSED) && requirement.is(ViewRequirement.SUBVIEW) && requirement.is(ViewRequirement.SUBVIEW);
-    }
-    */
-  
+    /*
+     * @Override public boolean canDisplay(final Content content, ViewRequirement requirement) { return
+     * content.isCollection() && requirement.is(ViewRequirement.CLOSED) && requirement.is(ViewRequirement.SUBVIEW) &&
+     * requirement.is(ViewRequirement.SUBVIEW); }
+     */
+
 }

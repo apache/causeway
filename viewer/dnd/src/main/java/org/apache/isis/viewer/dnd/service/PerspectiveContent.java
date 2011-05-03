@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.service;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,38 +29,44 @@ import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.content.AbstractContent;
 
-
 public class PerspectiveContent extends AbstractContent {
     private final PerspectiveEntry perspective;
 
-    public PerspectiveContent(PerspectiveEntry perspective) {
+    public PerspectiveContent(final PerspectiveEntry perspective) {
         this.perspective = perspective;
     }
 
+    @Override
     public void debugDetails(final DebugBuilder debug) {
         debug.appendln("perspective", perspective);
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return null;
     }
 
+    @Override
     public String getDescription() {
         return null;
     }
 
+    @Override
     public String getHelp() {
         return "";
     }
 
+    @Override
     public String getId() {
         return "";
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
@@ -71,14 +76,17 @@ public class PerspectiveContent extends AbstractContent {
         return false;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return false;
     }
 
+    @Override
     public String title() {
         return perspective.getTitle();
     }
@@ -93,23 +101,28 @@ public class PerspectiveContent extends AbstractContent {
         return perspective.getTitle();
     }
 
-    public Consent canDrop(Content sourceContent) {
+    @Override
+    public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
-    public ObjectAdapter drop(Content sourceContent) {
+    @Override
+    public ObjectAdapter drop(final Content sourceContent) {
         return null;
     }
 
+    @Override
     public String getIconName() {
         return "icon";
     }
 
-    public Image getIconPicture(int iconHeight) {
+    @Override
+    public Image getIconPicture(final int iconHeight) {
         return null;
     }
 
-    public void parseTextEntry(String entryText) {}
+    public void parseTextEntry(final String entryText) {
+    }
 
     public PerspectiveEntry getPerspective() {
         return perspective;

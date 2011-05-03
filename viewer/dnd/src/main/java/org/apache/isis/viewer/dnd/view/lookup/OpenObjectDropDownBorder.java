@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,21 +28,22 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.action.ParameterContent;
 import org.apache.isis.viewer.dnd.view.field.OneToOneField;
 
-
 public class OpenObjectDropDownBorder extends OpenDropDownBorder {
-    private final SelectionListSpecification listSpecification; 
+    private final SelectionListSpecification listSpecification;
 
     public OpenObjectDropDownBorder(final View wrappedView, final ViewSpecification spec) {
         super(wrappedView);
         listSpecification = new SelectionListSpecification() {
-            protected View createElementView(Content content) {
+            @Override
+            protected View createElementView(final Content content) {
                 return spec.createView(content, null, 0);
             }
         };
     }
 
+    @Override
     protected View createDropDownView() {
-        Axes viewAxes = getViewAxes();
+        final Axes viewAxes = getViewAxes();
         viewAxes.add(new SelectionListAxis(this), SelectionListAxis.class);
         return listSpecification.createView(getContent(), viewAxes, -1);
     }
@@ -62,7 +62,8 @@ public class OpenObjectDropDownBorder extends OpenDropDownBorder {
 
     }
 
-    protected void setSelection(OptionContent selectedContent) {
+    @Override
+    protected void setSelection(final OptionContent selectedContent) {
         final ObjectAdapter option = selectedContent.getAdapter();
         ((ObjectContent) getContent()).setObject(option);
     }

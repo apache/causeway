@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.core.runtime.userprofile.Options;
@@ -29,30 +28,32 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class GridLayoutControlBorder extends AbstractBorder {
 
     public static final class Factory implements CompositeViewDecorator {
-        public View decorate(View view, Axes axes) {
+        @Override
+        public View decorate(final View view, final Axes axes) {
             return new GridLayoutControlBorder(view);
         }
     }
 
-    protected GridLayoutControlBorder(View view) {
+    protected GridLayoutControlBorder(final View view) {
         super(view);
     }
 
-    public void viewMenuOptions(UserActionSet menuOptions) {
+    @Override
+    public void viewMenuOptions(final UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
         final GridLayout layout = getViewAxes().getAxis(GridLayout.class);
 
         final boolean columnOrientation = layout.getOrientation() == GridLayout.COLUMNS;
 
-        UserActionSet submenu = menuOptions.addNewActionSet("Grid");
+        final UserActionSet submenu = menuOptions.addNewActionSet("Grid");
 
         submenu.add(new UserActionAbstract("Add " + (columnOrientation ? "Column" : "Row")) {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 layout.setSize(layout.getSize() + 1);
                 invalidateLayout();
             }
@@ -60,7 +61,8 @@ public class GridLayoutControlBorder extends AbstractBorder {
 
         if (layout.getSize() > 1) {
             submenu.add(new UserActionAbstract("Remove " + (columnOrientation ? "Column" : "Row")) {
-                public void execute(Workspace workspace, View view, Location at) {
+                @Override
+                public void execute(final Workspace workspace, final View view, final Location at) {
                     layout.setSize(layout.getSize() - 1);
                     invalidateLayout();
                 }
@@ -68,27 +70,30 @@ public class GridLayoutControlBorder extends AbstractBorder {
         }
 
         submenu.add(new UserActionAbstract(columnOrientation ? "In Rows" : "In Columns") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 layout.setOrientation(columnOrientation ? GridLayout.ROWS : GridLayout.COLUMNS);
                 invalidateLayout();
             }
         });
     }
 
-    public void saveOptions(Options viewOptions) {
+    @Override
+    public void saveOptions(final Options viewOptions) {
         super.saveOptions(viewOptions);
 
         final GridLayout layout = getViewAxes().getAxis(GridLayout.class);
         viewOptions.addOption("orientation", layout.getOrientation() == GridLayout.COLUMNS ? "columns" : "rows");
         viewOptions.addOption("size", layout.getSize() + "");
     }
-    
-    public void loadOptions(Options viewOptions) {
+
+    @Override
+    public void loadOptions(final Options viewOptions) {
         super.loadOptions(viewOptions);
-        
+
         final GridLayout layout = getViewAxes().getAxis(GridLayout.class);
-        layout.setOrientation(viewOptions.getString("orientation", "columns").equals("columns") ? GridLayout.COLUMNS : GridLayout.ROWS);
+        layout.setOrientation(viewOptions.getString("orientation", "columns").equals("columns") ? GridLayout.COLUMNS
+            : GridLayout.ROWS);
         layout.setSize(viewOptions.getInteger("size", 1));
     }
 }
-

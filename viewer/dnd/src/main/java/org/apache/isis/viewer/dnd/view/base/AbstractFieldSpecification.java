@@ -17,34 +17,38 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
-
 public abstract class AbstractFieldSpecification implements ViewSpecification {
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isTextParseable() && requirement.isEditable();
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return true;
     }
 
+    @Override
     public boolean isSubView() {
         return true;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
 
 public abstract class AbstractObjectOption extends UserActionAbstract {
     protected final ObjectAction action;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.collection.AbstractCollectionContent;
-
 
 public class CollectionActionContent extends AbstractCollectionContent implements ActionContent {
     private final ActionHelper invocation;
@@ -44,20 +42,23 @@ public class CollectionActionContent extends AbstractCollectionContent implement
         debug.appendln("action", getActionName());
         debug.appendln("target", getAdapter());
         String parameterSet = "";
-        for (int i = 0; i < parameters.length; i++) {
-            parameterSet += parameters[i];
+        for (final ParameterContent parameter : parameters) {
+            parameterSet += parameter;
         }
         debug.appendln("parameters", parameterSet);
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
+    @Override
     public Consent disabled() {
         return invocation.disabled();
     }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         throw new NotYetImplementedException();
     }
@@ -67,10 +68,12 @@ public class CollectionActionContent extends AbstractCollectionContent implement
         throw new NotYetImplementedException();
     }
 
+    @Override
     public ObjectAdapter execute() {
         return invocation.invoke();
     }
 
+    @Override
     public String getActionName() {
         return invocation.getName();
     }
@@ -85,42 +88,52 @@ public class CollectionActionContent extends AbstractCollectionContent implement
         return invocation.getDescription();
     }
 
+    @Override
     public String getHelp() {
         return invocation.getHelp();
     }
 
+    @Override
     public String getIconName() {
         return getAdapter().getIconName();
     }
 
+    @Override
     public String getId() {
         return invocation.getName();
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return invocation.getTarget();
     }
 
+    @Override
     public int getNoParameters() {
         return parameters.length;
     }
 
+    @Override
     public ParameterContent getParameterContent(final int index) {
         return parameters[index];
     }
 
+    @Override
     public ObjectAdapter getParameterObject(final int index) {
         return invocation.getParameter(index);
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return getAdapter().getSpecification();
     }
 
+    @Override
     public boolean isTransient() {
         return true;
     }
 
+    @Override
     public String title() {
         return getAdapter().titleString();
     }

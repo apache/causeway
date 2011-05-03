@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -32,6 +29,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
+import com.google.common.collect.Lists;
+
 public class TableAxisImpl implements TableAxis {
     private final List<ObjectAssociation> columns;
     private final String[] columnName;
@@ -39,11 +38,11 @@ public class TableAxisImpl implements TableAxis {
     private View table;
     private final int[] widths;
 
-    public TableAxisImpl(CollectionContent content) {
+    public TableAxisImpl(final CollectionContent content) {
         // TODO create axis first, then after view built set up the axis details?
         final ObjectSpecification elementSpecification = (content).getElementSpecification();
-        final List<ObjectAssociation> accessibleFields = elementSpecification
-                .getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final List<ObjectAssociation> accessibleFields =
+            elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
 
         this.columns = tableFields(accessibleFields, content);
         widths = new int[columns.size()];
@@ -57,18 +56,18 @@ public class TableAxisImpl implements TableAxis {
     }
 
     /*
-     * public TableAxis(final ObjectAssociation[] columns) { this.columns = columns; widths = new
-     * int[columns.length]; columnName = new String[columns.length]; for (int i = 0; i < widths.length; i++) {
-     * columnName[i] = columns[i].getName(); } }
+     * public TableAxis(final ObjectAssociation[] columns) { this.columns = columns; widths = new int[columns.length];
+     * columnName = new String[columns.length]; for (int i = 0; i < widths.length; i++) { columnName[i] =
+     * columns[i].getName(); } }
      */
-    private List<ObjectAssociation> tableFields(final List<ObjectAssociation> viewFields, final CollectionContent content) {
+    private List<ObjectAssociation> tableFields(final List<ObjectAssociation> viewFields,
+        final CollectionContent content) {
         for (int i = 0; i < viewFields.size(); i++) {
-            //final ObjectAssociation objectAssociation = viewFields[i];
+            // final ObjectAssociation objectAssociation = viewFields[i];
             // TODO reinstate check to skip unsuitable types
             /*
              * if (viewFields[i].getSpecification().isOfType(
-             * IsisContext.getSpecificationLoader().loadSpecification(ImageValue.class))) { continue;
-             * }
+             * IsisContext.getSpecificationLoader().loadSpecification(ImageValue.class))) { continue; }
              */
 
             // if (!objectAssociation.isVisible(IsisContext.getAuthenticationSession(),
@@ -95,8 +94,8 @@ public class TableAxisImpl implements TableAxis {
     }
 
     /**
-     * Returns the number of the column found at the specificied position, ignoring the columns two borders.
-     * Returns 0 for the first column, 1 for second column, etc.
+     * Returns the number of the column found at the specificied position, ignoring the columns two borders. Returns 0
+     * for the first column, 1 for second column, etc.
      * 
      * If over the column border then returns -1.
      */
@@ -117,8 +116,8 @@ public class TableAxisImpl implements TableAxis {
     }
 
     /**
-     * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second
-     * column, etc.
+     * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second column,
+     * etc.
      * 
      * If no column border is identified then returns -1.
      */
@@ -175,8 +174,8 @@ public class TableAxisImpl implements TableAxis {
     @Override
     public void invalidateLayout() {
         final View[] rows = table.getSubviews();
-        for (int i = 0; i < rows.length; i++) {
-            rows[i].invalidateLayout();
+        for (final View row : rows) {
+            row.invalidateLayout();
         }
         table.invalidateLayout();
     }
@@ -205,12 +204,10 @@ public class TableAxisImpl implements TableAxis {
 
     @Override
     public String toString() {
-        ToString str = new ToString(this);
+        final ToString str = new ToString(this);
         str.append("columns", columnName.length);
         str.append("header offset", rowHeaderOffet);
         str.append("table", table);
         return str.toString();
     }
 }
-
-

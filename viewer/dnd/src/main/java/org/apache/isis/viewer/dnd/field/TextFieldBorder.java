@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -25,7 +24,6 @@ import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
-
 
 /**
  * Border decorator to draw a white background and 3D style border around a text field.

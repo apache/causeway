@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import java.util.List;
@@ -37,8 +36,9 @@ public class OptionFactory {
     public static void addCreateOptions(final ObjectSpecification specification, final UserActionSet options) {
         // TODO do the same as addObjectMenuOptions and collect together all the
         // actions for all the types
-        List<ObjectAction> actions = specification.getServiceActionsReturning(ActionType.USER, ActionType.EXPLORATION,
-                ActionType.PROTOTYPE, ActionType.DEBUG);
+        final List<ObjectAction> actions =
+            specification.getServiceActionsReturning(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
+                ActionType.DEBUG);
         menuOptions(actions, null, options);
     }
 
@@ -47,15 +47,16 @@ public class OptionFactory {
             return;
         }
 
-        ObjectSpecification noSpec = adapter.getSpecification();
-        menuOptions(noSpec.getObjectActions(ActionType.USER, ActionType.EXPLORATION,
-        		ActionType.PROTOTYPE, ActionType.DEBUG), adapter, options);
+        final ObjectSpecification noSpec = adapter.getSpecification();
+        menuOptions(
+            noSpec.getObjectActions(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG),
+            adapter, options);
 
         // TODO: this looks like a bit of a hack; can we improve it by looking at the facets?
         if (adapter.getObject() instanceof ObjectList) {
             return;
         }
-        Oid oid = adapter.getOid();
+        final Oid oid = adapter.getOid();
         if (oid != null && oid.isTransient()) {
             return;
         }
@@ -66,7 +67,8 @@ public class OptionFactory {
         options.add(new DisposeObjectOption());
     }
 
-    private static void menuOptions(final List<ObjectAction> actions, final ObjectAdapter target, final UserActionSet menuOptionSet) {
+    private static void menuOptions(final List<ObjectAction> actions, final ObjectAdapter target,
+        final UserActionSet menuOptionSet) {
         for (int i = 0; i < actions.size(); i++) {
             UserAction option = null;
             if (actions.get(i).getActions().size() > 0) {
@@ -78,7 +80,7 @@ public class OptionFactory {
                 if (noOfParameters == 0) {
                     option = ImmediateObjectOption.createOption(actions.get(i), target);
                 } else if (actions.get(i).isContributed() && noOfParameters == 1 && target != null
-                        && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())) {
+                    && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())) {
                     option = ImmediateObjectOption.createServiceOption(actions.get(i), target);
                 } else {
                     option = DialoggedObjectOption.createOption(actions.get(i), target);
@@ -90,4 +92,3 @@ public class OptionFactory {
         }
     }
 }
-

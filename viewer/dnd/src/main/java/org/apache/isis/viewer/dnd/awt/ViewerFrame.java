@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.FileDialog;
@@ -35,13 +34,13 @@ import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 
-
 public class ViewerFrame extends Frame implements RenderingArea {
     private static final String DEFAULT_TITLE = "Apache Isis";
     private static final long serialVersionUID = 1L;
     private XViewer viewer;
 
-    public ViewerFrame() {}
+    public ViewerFrame() {
+    }
 
     {
         setBackground(((AwtColor) Toolkit.getColor(ColorsAndFonts.COLOR_APPLICATION)).getAwtColor());
@@ -60,8 +59,7 @@ public class ViewerFrame extends Frame implements RenderingArea {
             e1.printStackTrace();
         } catch (final NoSuchMethodException ignore) {
             /*
-             * Ignore no such method exception as this method is only available, but needed, in version 1.4
-             * and later.
+             * Ignore no such method exception as this method is only available, but needed, in version 1.4 and later.
              */
         } catch (final IllegalArgumentException e) {
             e.printStackTrace();
@@ -72,11 +70,12 @@ public class ViewerFrame extends Frame implements RenderingArea {
         }
     }
 
-    public boolean imageUpdate( Image img, int flags, int x, int y, int w, int h ) {
-            repaint();
-            return true;
+    @Override
+    public boolean imageUpdate(final Image img, final int flags, final int x, final int y, final int w, final int h) {
+        repaint();
+        return true;
     }
-    
+
     /**
      * Calls <code>update()</code> to do double-buffered drawing of all views.
      * 
@@ -119,8 +118,9 @@ public class ViewerFrame extends Frame implements RenderingArea {
             public void componentResized(final ComponentEvent e) {
                 ViewerFrame.this.viewer.sizeChange();
             }
-            
-            public void componentMoved(ComponentEvent e) {
+
+            @Override
+            public void componentMoved(final ComponentEvent e) {
                 ViewerFrame.this.viewer.locationChange(getLocation().x, getLocation().y);
             }
         });
@@ -133,6 +133,7 @@ public class ViewerFrame extends Frame implements RenderingArea {
         super.setTitle(str);
     }
 
+    @Override
     public String selectFilePath(final String title, final String directory) {
         final FileDialog dlg = new FileDialog(this, title);
         dlg.setVisible(true);

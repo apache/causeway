@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import java.util.Enumeration;
@@ -30,19 +29,21 @@ import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 
-
 public interface CollectionContent extends Content {
 
     Enumeration allElements();
 
+    @Override
     void debugDetails(final DebugBuilder debug);
 
     ObjectAdapter[] elements();
 
     ObjectAdapter getCollection();
 
+    @Override
     void contentMenuOptions(final UserActionSet options);
 
+    @Override
     void viewMenuOptions(final UserActionSet options);
 
     void parseTextEntry(final String entryText);
@@ -55,16 +56,18 @@ public interface CollectionContent extends Content {
 
     ObjectAssociation getFieldSortOrder();
 
+    @Override
     Image getIconPicture(final int iconHeight);
 
     boolean getOrderByElement();
 
     boolean getReverseSortOrder();
 
+    @Override
     boolean isOptionEnabled();
 
+    @Override
     ObjectAdapter[] getOptions();
 
     ObjectSpecification getElementSpecification();
 }
-

@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 
-
 public class BlankView extends AbstractView {
-    private Size size;
+    private final Size size;
 
     public BlankView() {
         this(new NullContent());
@@ -36,14 +34,15 @@ public class BlankView extends AbstractView {
         super(content);
         size = new Size(100, 50);
     }
-    
+
     public BlankView(final Content content, final Size size) {
         super(content);
         this.size = size;
     }
-    
-    public Size getRequiredSize(Size availableSpace) {
-        Size requiredSize = new Size(size);
+
+    @Override
+    public Size getRequiredSize(final Size availableSpace) {
+        final Size requiredSize = new Size(size);
         requiredSize.limitSize(availableSpace);
         return requiredSize;
     }

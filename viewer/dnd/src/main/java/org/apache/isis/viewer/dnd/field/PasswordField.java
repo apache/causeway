@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -34,7 +33,6 @@ import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
-
 
 public class PasswordField extends TextField {
     protected static final Text style = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
@@ -58,6 +56,7 @@ public class PasswordField extends TextField {
         options.setColor(Toolkit.getColor(ColorsAndFonts.COLOR_MENU_VALUE));
     }
 
+    @Override
     protected boolean provideClearCopyPaste() {
         return false;
     }
@@ -65,6 +64,7 @@ public class PasswordField extends TextField {
     /**
      * Only allow deletion of last character, ie don;t allow editing of the internals of the password.
      */
+    @Override
     public void delete() {
         textContent.deleteLeft(cursor);
         cursor.left();
@@ -75,34 +75,46 @@ public class PasswordField extends TextField {
     /**
      * disable left key.
      */
-    protected void left(boolean alt, boolean shift) {}
+    @Override
+    protected void left(final boolean alt, final boolean shift) {
+    }
 
     /**
      * disable right key.
      */
-    protected void right(boolean alt, boolean shift) {}
+    @Override
+    protected void right(final boolean alt, final boolean shift) {
+    }
 
     /**
      * disable home key.
      */
-    protected void home(boolean alt, boolean shift) {}
+    @Override
+    protected void home(final boolean alt, final boolean shift) {
+    }
 
     /**
      * disable end key.
      */
-    protected void end(boolean alt, boolean shift) {}
+    @Override
+    protected void end(final boolean alt, final boolean shift) {
+    }
 
     /**
      * disable page down key.
      */
-    protected void pageDown(boolean shift, boolean ctrl) {}
+    @Override
+    protected void pageDown(final boolean shift, final boolean ctrl) {
+    }
 
     /**
      * disable page up key.
      */
-    protected void pageUp(boolean shift, boolean ctrl) {}
+    @Override
+    protected void pageUp(final boolean shift, final boolean ctrl) {
+    }
 
-    private String echoPassword(String password) {
+    private String echoPassword(final String password) {
         final int length = password.length();
         String echoedPassword = "";
         for (int i = 0; i < length; i++) {
@@ -112,7 +124,7 @@ public class PasswordField extends TextField {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final int width = HPADDING + maxTextWidth + HPADDING;
         int height = style.getTextHeight() + VPADDING;
         height = Math.max(height, Toolkit.defaultFieldHeight());
@@ -127,9 +139,13 @@ public class PasswordField extends TextField {
         maxTextWidth = style.charWidth('o') * noCharacters;
     }
 
-    protected void align() {}
+    @Override
+    protected void align() {
+    }
 
-    protected void drawHighlight(Canvas canvas, int maxWidth) {}
+    @Override
+    protected void drawHighlight(final Canvas canvas, final int maxWidth) {
+    }
 
     @Override
     protected void drawLines(final Canvas canvas, final Color color, final int width) {
@@ -143,7 +159,7 @@ public class PasswordField extends TextField {
         final String[] lines = textContent.getDisplayLines();
         if (lines.length > 1) {
             throw new IsisException("Password field should contain a string that contains no line breaks; contains "
-                    + lines.length);
+                + lines.length);
         }
 
         final String chars = lines[0];
@@ -155,12 +171,12 @@ public class PasswordField extends TextField {
         }
 
         final int baseline = getBaseline();
-        String echoPassword = echoPassword(chars);
+        final String echoPassword = echoPassword(chars);
 
         // draw cursor
         if (hasFocus() && canChangeValue().isAllowed()) {
             final int pos = style.stringWidth(echoPassword) - HPADDING;
-            Color color = Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_CURSOR);
+            final Color color = Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_CURSOR);
             canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(), color);
         }
 

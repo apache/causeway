@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAreaType;
 
-
 public class AbstractBorder extends AbstractViewDecorator {
     protected int bottom;
     protected int left;
@@ -49,10 +47,10 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     protected Bounds contentArea() {
-        return new Bounds(getLeft(), getTop(), getSize().getWidth() - getLeft() - getRight(), getSize().getHeight() - getTop()
-                - getBottom());
+        return new Bounds(getLeft(), getTop(), getSize().getWidth() - getLeft() - getRight(), getSize().getHeight()
+            - getTop() - getBottom());
     }
-    
+
     @Override
     public View dragFrom(final Location location) {
         location.subtract(getLeft(), getTop());
@@ -81,7 +79,7 @@ public class AbstractBorder extends AbstractViewDecorator {
         }
     }
 
-    protected void clearBackground(Canvas canvas, Color color) {
+    protected void clearBackground(final Canvas canvas, final Color color) {
         final Bounds bounds = getView().getBounds();
         canvas.drawSolidRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
     }
@@ -89,11 +87,12 @@ public class AbstractBorder extends AbstractViewDecorator {
     @Override
     public void draw(final Canvas canvas) {
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
+            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(),
+                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
         }
-        int width = getSize().getWidth() - getRight();
-        int height = getSize().getHeight() - getBottom();
-        Canvas subcanvas = canvas.createSubcanvas(getLeft(), getTop(), width, height);
+        final int width = getSize().getWidth() - getRight();
+        final int height = getSize().getHeight() - getBottom();
+        final Canvas subcanvas = canvas.createSubcanvas(getLeft(), getTop(), width, height);
         wrappedView.draw(subcanvas);
     }
 
@@ -142,7 +141,7 @@ public class AbstractBorder extends AbstractViewDecorator {
         size.extend(getLeft() + getRight(), getTop() + getBottom());
         return size;
     }
-    
+
     protected int getRight() {
         return right;
     }
@@ -162,14 +161,15 @@ public class AbstractBorder extends AbstractViewDecorator {
     @Override
     protected void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
-        debug.appendln("border", getTop() + "/" + getBottom() + " " + getLeft() + "/" + getRight() + " (top/bottom left/right)");
+        debug.appendln("border", getTop() + "/" + getBottom() + " " + getLeft() + "/" + getRight()
+            + " (top/bottom left/right)");
         debug.appendln("contents", contentArea());
     }
 
     protected boolean overBorder(final Location location) {
         return !contentArea().contains(location);
     }
-    
+
     protected boolean overContent(final Location location) {
         return contentArea().contains(location);
     }
@@ -203,7 +203,7 @@ public class AbstractBorder extends AbstractViewDecorator {
 
     @Override
     public void mouseMoved(final Location at) {
-        boolean on = overBorder(at);
+        final boolean on = overBorder(at);
         if (onBorder != on) {
             markDamaged();
             onBorder = on;

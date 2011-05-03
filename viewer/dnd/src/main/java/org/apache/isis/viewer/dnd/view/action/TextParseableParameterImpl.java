@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.content.AbstractTextParsableContent;
 
-
 public class TextParseableParameterImpl extends AbstractTextParsableContent implements TextParseableParameter {
     private ObjectAdapter object;
     private final ObjectAdapter[] options;
@@ -44,12 +42,8 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
     private final ActionHelper invocation;
     private final int index;
 
-    public TextParseableParameterImpl(
-            final ParseableEntryActionParameter objectActionParameters,
-            final ObjectAdapter adapter,
-            final ObjectAdapter[] options,
-            final int i,
-            final ActionHelper invocation) {
+    public TextParseableParameterImpl(final ParseableEntryActionParameter objectActionParameters,
+        final ObjectAdapter adapter, final ObjectAdapter[] options, final int i, final ActionHelper invocation) {
         this.parameter = objectActionParameters;
         this.options = options;
         index = i;
@@ -57,6 +51,7 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         object = adapter;
     }
 
+    @Override
     public void debugDetails(final DebugBuilder debug) {
         debug.appendln("name", parameter.getName());
         debug.appendln("required", isRequired());
@@ -64,8 +59,10 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
     }
 
     @Override
-    public void entryComplete() {}
+    public void entryComplete() {
+    }
 
+    @Override
     public String getIconName() {
         return "";
     }
@@ -75,14 +72,17 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         return ImageFactory.getInstance().loadIcon("value", 12, null);
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return object;
     }
 
+    @Override
     public int getNoLines() {
         return parameter.getNoLines();
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return options;
     }
@@ -92,14 +92,17 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         return object == null;
     }
 
+    @Override
     public boolean isRequired() {
         return !parameter.isOptional();
     }
 
+    @Override
     public Consent canClear() {
         return Allow.DEFAULT;
     }
 
+    @Override
     public boolean canWrap() {
         return parameter.canWrap();
     }
@@ -119,10 +122,12 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         return true;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return options != null && options.length > 0;
     }
 
+    @Override
     public String title() {
         return AdapterUtils.titleString(object);
     }
@@ -134,29 +139,34 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         return toString.toString();
     }
 
+    @Override
     public String getParameterName() {
         return parameter.getName();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return parameter.getSpecification();
     }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         return null;
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
+    @Override
     public String titleString(final ObjectAdapter value) {
         return titleString(value, parameter, parameter.getSpecification());
     }
 
     /**
-     * @throws InvalidEntryException -
-     *             turns the parameter red if invalid.
+     * @throws InvalidEntryException
+     *             - turns the parameter red if invalid.
      */
     @Override
     public void parseTextEntry(final String entryText) {
@@ -174,12 +184,13 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         final ObjectSpecification parameterSpecification = parameter.getSpecification();
         final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
         try {
-        	return p.parseTextEntry(object, entryText);
-        } catch(IllegalArgumentException ex) {
-        	throw new InvalidEntryException(ex.getMessage(), ex);
+            return p.parseTextEntry(object, entryText);
+        } catch (final IllegalArgumentException ex) {
+            throw new InvalidEntryException(ex.getMessage(), ex);
         }
     }
 
+    @Override
     public String getDescription() {
         final String title = object == null ? "" : ": " + object.titleString();
         final String specification = getSpecification().getShortIdentifier();
@@ -187,10 +198,12 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         return getParameterName() + type + title + " " + parameter.getDescription();
     }
 
+    @Override
     public String getHelp() {
         return null;
     }
 
+    @Override
     public String getId() {
         return null;
     }
@@ -200,10 +213,12 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         return Allow.DEFAULT;
     }
 
+    @Override
     public int getMaximumLength() {
         return parameter.getMaximumLength();
     }
 
+    @Override
     public int getTypicalLineLength() {
         return parameter.getTypicalLineLength();
     }

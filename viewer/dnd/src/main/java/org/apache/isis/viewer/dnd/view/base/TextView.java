@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,7 +28,6 @@ import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
-
 
 public class TextView extends AbstractView {
     private final Text style = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);

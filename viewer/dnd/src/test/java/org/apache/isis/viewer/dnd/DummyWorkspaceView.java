@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,14 +24,14 @@ import org.apache.isis.viewer.dnd.view.Placement;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
-
 public class DummyWorkspaceView extends DummyView implements Workspace {
 
     public DummyWorkspaceView() {
         setupAllowSubviewsToBeAdded(true);
     }
 
-    public View addIconFor(final ObjectAdapter adapter, Placement placement) {
+    @Override
+    public View addIconFor(final ObjectAdapter adapter, final Placement placement) {
         return createAndAddView();
     }
 
@@ -42,7 +41,8 @@ public class DummyWorkspaceView extends DummyView implements Workspace {
         return view;
     }
 
-    public View addWindowFor(final ObjectAdapter object, Placement placement) {
+    @Override
+    public View addWindowFor(final ObjectAdapter object, final Placement placement) {
         return createAndAddView();
     }
 
@@ -50,21 +50,31 @@ public class DummyWorkspaceView extends DummyView implements Workspace {
         return createAndAddView();
     }
 
-    public void lower(final View view) {}
+    @Override
+    public void lower(final View view) {
+    }
 
-    public void raise(final View view) {}
+    @Override
+    public void raise(final View view) {
+    }
 
-    public void removeViewsFor(final ObjectAdapter object) {}
+    public void removeViewsFor(final ObjectAdapter object) {
+    }
 
     @Override
     public Workspace getWorkspace() {
         return this;
     }
 
-    public void removeObject(final ObjectAdapter object) {}
+    public void removeObject(final ObjectAdapter object) {
+    }
 
-    public void addDialog(View dialog, Placement placement) {}
+    @Override
+    public void addDialog(final View dialog, final Placement placement) {
+    }
 
-    public void addWindow(View window, Placement placement) {}
+    @Override
+    public void addWindow(final View window, final Placement placement) {
+    }
 
 }

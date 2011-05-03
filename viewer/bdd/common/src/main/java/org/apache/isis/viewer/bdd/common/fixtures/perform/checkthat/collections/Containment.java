@@ -28,49 +28,42 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.AssertsConta
 
 public class Containment extends ThatAbstract {
 
-	private final AssertsContainment assertion;
+    private final AssertsContainment assertion;
 
-	public Containment(final AssertsContainment assertion) {
-		super(assertion.getKey());
-		this.assertion = assertion;
-	}
+    public Containment(final AssertsContainment assertion) {
+        super(assertion.getKey());
+        this.assertion = assertion;
+    }
 
-	@Override
-	protected void doThat(final PerformContext performContext,
-			final Iterable<ObjectAdapter> collection)
-			throws ScenarioBoundValueException {
+    @Override
+    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection)
+        throws ScenarioBoundValueException {
 
-		final ObjectMember nakedObjectMember = performContext
-				.getObjectMember();
-		final CellBinding thatBinding = performContext.getPeer()
-				.getThatItBinding();
-		final CellBinding arg0Binding = performContext.getPeer()
-				.getArg0Binding();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
+        final CellBinding thatBinding = performContext.getPeer().getThatItBinding();
+        final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
 
-		if (!arg0Binding.isFound()) {
-			throw ScenarioBoundValueException.current(thatBinding,
-					"(requires argument)");
-		}
+        if (!arg0Binding.isFound()) {
+            throw ScenarioBoundValueException.current(thatBinding, "(requires argument)");
+        }
 
-		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
+        final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 
-		final ObjectAdapter containedAdapter = performContext.getPeer()
-				.getAdapter(null, nakedObjectMember.getSpecification(),
-						arg0Binding, arg0Cell);
+        final ObjectAdapter containedAdapter =
+            performContext.getPeer().getAdapter(null, nakedObjectMember.getSpecification(), arg0Binding, arg0Cell);
 
-		boolean contains = false;
-		for (final ObjectAdapter eachAdapter : collection) {
-			if (containedAdapter == eachAdapter) {
-				contains = true;
-				break;
-			}
-		}
+        boolean contains = false;
+        for (final ObjectAdapter eachAdapter : collection) {
+            if (containedAdapter == eachAdapter) {
+                contains = true;
+                break;
+            }
+        }
 
-		if (!assertion.isSatisfiedBy(contains)) {
-			throw ScenarioBoundValueException.current(arg0Binding, assertion
-					.getErrorMsgIfNotSatisfied());
-		}
+        if (!assertion.isSatisfiedBy(contains)) {
+            throw ScenarioBoundValueException.current(arg0Binding, assertion.getErrorMsgIfNotSatisfied());
+        }
 
-	}
+    }
 
 }

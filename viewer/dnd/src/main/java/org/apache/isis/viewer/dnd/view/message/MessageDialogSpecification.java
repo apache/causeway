@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.message;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -44,41 +43,48 @@ import org.apache.isis.viewer.dnd.view.border.ScrollBorder;
 import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
 import org.apache.isis.viewer.dnd.view.window.SubviewFocusManager;
 
-
 public class MessageDialogSpecification implements ViewSpecification {
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.getContent() instanceof MessageContent;
     }
 
+    @Override
     public String getName() {
         return "Message Dialog";
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final ButtonAction actions[] = new ButtonAction[] { new CloseViewAction() };
-        MessageView messageView = new MessageView((MessageContent) content, this);
+        final MessageView messageView = new MessageView((MessageContent) content, this);
         final View dialogView = new ButtonBorder(actions, new ScrollBorder(messageView));
         dialogView.setFocusManager(new SubviewFocusManager(dialogView));
         return dialogView;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return true;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
@@ -88,6 +94,7 @@ public class MessageDialogSpecification implements ViewSpecification {
             super("Close");
         }
 
+        @Override
         public void execute(final Workspace workspace, final View view, final Location at) {
             view.dispose();
         }
@@ -113,15 +120,15 @@ class MessageView extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Size size = new Size();
 
         final String message = ((MessageContent) getContent()).getMessage();
         final String heading = ((MessageContent) getContent()).title();
 
         size.ensureHeight(errorIcon.getHeight());
-        Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
-        Text titleText = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
+        final Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
+        final Text titleText = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
         size.extendWidth(text.stringWidth(message, MAX_TEXT_WIDTH));
         int textHeight = titleText.getLineHeight();
         textHeight += text.stringHeight(message, MAX_TEXT_WIDTH);
@@ -149,9 +156,9 @@ class MessageView extends AbstractView {
 
         final int x = LEFT + errorIcon.getWidth() + PADDING;
         int y = TOP + 3 + Toolkit.getText(ColorsAndFonts.TEXT_NORMAL).getAscent();
-        Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+        final Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         if (!heading.equals("")) {
-            Text title = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
+            final Text title = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
             canvas.drawText(heading, x, y, black, title);
             y += title.getLineHeight();
         }

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.message;
 
 import org.apache.isis.viewer.dnd.view.Content;
-
 
 public interface MessageContent extends Content {
     String getMessage();

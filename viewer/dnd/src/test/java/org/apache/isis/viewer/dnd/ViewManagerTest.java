@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import junit.framework.TestCase;
 import junit.textui.TestRunner;
-
 
 public class ViewManagerTest extends TestCase {
     // private final static Component COMPONENT = new Component() {
@@ -32,11 +30,12 @@ public class ViewManagerTest extends TestCase {
         TestRunner.run(ViewManagerTest.class);
     }
 
-    public void testNone() {}
+    public void testNone() {
+    }
 
     /*
-     * public void testMouseClick() { MockWorkspace workspace = new MockWorkspace(null); MockView view = new
-     * MockView(); workspace.setupIdentifyView(view);
+     * public void testMouseClick() { MockWorkspace workspace = new MockWorkspace(null); MockView view = new MockView();
+     * workspace.setupIdentifyView(view);
      * 
      * ViewManager manager = new ViewManager(workspace, null);
      * 
@@ -47,8 +46,8 @@ public class ViewManagerTest extends TestCase {
      * 
      * view.verify(); }
      * 
-     * public void testPopupMouseClick() { MockWorkspace workspace = new MockWorkspace(null); MockView view =
-     * new MockView(); workspace.setupIdentifyView(view);
+     * public void testPopupMouseClick() { MockWorkspace workspace = new MockWorkspace(null); MockView view = new
+     * MockView(); workspace.setupIdentifyView(view);
      * 
      * MockPopupMenu popup = new MockPopupMenu(); ViewManager manager = new ViewManager(workspace, popup);
      * 
@@ -65,7 +64,7 @@ public class ViewManagerTest extends TestCase {
      * 
      * popup.setExpectedFirstClickCalls(1); }
      * 
-     * private MouseEvent createMouseEvent(final int x, final int y, final int count, final int button) {
-     * return new MouseEvent(COMPONENT, 0, 0, button, x, y, count, false); }
+     * private MouseEvent createMouseEvent(final int x, final int y, final int count, final int button) { return new
+     * MouseEvent(COMPONENT, 0, 0, button, x, y, count, false); }
      */
 }

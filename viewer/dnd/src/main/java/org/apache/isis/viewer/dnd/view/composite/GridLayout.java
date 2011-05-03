@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -25,7 +24,6 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAxis;
 import org.apache.isis.viewer.dnd.view.base.Layout;
-
 
 /**
  */
@@ -35,6 +33,7 @@ public class GridLayout implements Layout, ViewAxis {
     private int orientation = COLUMNS;
     private int size = 1;
 
+    @Override
     public Size getRequiredSize(final View view) {
         final View views[] = view.getSubviews();
 
@@ -42,8 +41,7 @@ public class GridLayout implements Layout, ViewAxis {
         final int total[] = new int[size];
 
         int column = 0;
-        for (int i = 0; i < views.length; i++) {
-            final View v = views[i];
+        for (final View v : views) {
             final Size s = v.getRequiredSize(new Size(Integer.MAX_VALUE, Integer.MAX_VALUE));
             if (orientation == COLUMNS) {
                 total[column] += s.getHeight();
@@ -72,6 +70,7 @@ public class GridLayout implements Layout, ViewAxis {
         return new Size(width, height);
     }
 
+    @Override
     public void layout(final View view, final Size maximumSize) {
         int x = 0;
         int y = 0;
@@ -79,8 +78,7 @@ public class GridLayout implements Layout, ViewAxis {
         final int max[] = new int[size];
 
         int column = 0;
-        for (int i = 0; i < views.length; i++) {
-            final View v = views[i];
+        for (final View v : views) {
             final Size s = v.getRequiredSize(new Size(maximumSize));
             if (orientation == COLUMNS) {
                 max[column] = Math.max(max[column], s.getWidth());
@@ -94,8 +92,7 @@ public class GridLayout implements Layout, ViewAxis {
         }
 
         column = 0;
-        for (int i = 0; i < views.length; i++) {
-            final View v = views[i];
+        for (final View v : views) {
             final Size s = v.getRequiredSize(new Size(maximumSize));
             v.setLocation(new Location(x, y));
             if (orientation == COLUMNS) {
@@ -117,7 +114,7 @@ public class GridLayout implements Layout, ViewAxis {
                     x += s.getWidth();
                 }
             }
-            
+
         }
     }
 
@@ -125,7 +122,7 @@ public class GridLayout implements Layout, ViewAxis {
         return orientation;
     }
 
-    public void setOrientation(int orientation) {
+    public void setOrientation(final int orientation) {
         this.orientation = orientation;
     }
 
@@ -133,10 +130,8 @@ public class GridLayout implements Layout, ViewAxis {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(final int size) {
         this.size = size;
     }
-    
-    
 
 }

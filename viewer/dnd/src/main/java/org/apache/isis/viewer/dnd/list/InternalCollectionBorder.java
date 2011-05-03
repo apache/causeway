@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.list;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -42,10 +41,10 @@ import org.apache.isis.viewer.dnd.view.base.IconGraphic;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.viewer.dnd.view.field.OneToManyField;
 
-
 public class InternalCollectionBorder extends AbstractBorder {
     public static class Factory implements CompositeViewDecorator {
-        public View decorate(View child, Axes axes) {
+        @Override
+        public View decorate(final View child, final Axes axes) {
             return new InternalCollectionBorder(child);
         }
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.icon;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -27,34 +26,35 @@ import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.BlankView;
 
-
 public class IconElementFactory implements ViewFactory {
-    private ViewSpecification objectSpec;
-    private ViewSpecification collectionSpec;
-    private boolean createViewsForEmptyContent;
-    
+    private final ViewSpecification objectSpec;
+    private final ViewSpecification collectionSpec;
+    private final boolean createViewsForEmptyContent;
+
     public IconElementFactory() {
         this(null, null, false);
     }
-    
-    public IconElementFactory(ViewSpecification objectSpec, ViewSpecification collectionSpec, boolean createViewsForEmptyContent) {
+
+    public IconElementFactory(final ViewSpecification objectSpec, final ViewSpecification collectionSpec,
+        final boolean createViewsForEmptyContent) {
         this.objectSpec = this.objectSpec == null ? new SubviewIconSpecification() : objectSpec;
         this.collectionSpec = this.collectionSpec == null ? new SubviewIconSpecification() : collectionSpec;
         this.createViewsForEmptyContent = createViewsForEmptyContent;
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         if (content.isObject()) {
             if (content.getAdapter() == null) {
                 return createViewsForEmptyContent ? new BlankView(content) : null;
             } else {
-               return objectSpec.createView(content, axes, -1);
+                return objectSpec.createView(content, axes, -1);
             }
-         } else if (content.isCollection()) {
-             return collectionSpec.createView(content, axes, -1);
-         } else {
-             // TODO decide what to do with  values: use factory, use another SubviewSpec, or ignore always
-             return null;
-         }
+        } else if (content.isCollection()) {
+            return collectionSpec.createView(content, axes, -1);
+        } else {
+            // TODO decide what to do with values: use factory, use another SubviewSpec, or ignore always
+            return null;
+        }
     }
 }

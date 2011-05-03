@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -30,19 +29,20 @@ import org.apache.isis.viewer.dnd.view.border.IconBorder;
 import org.apache.isis.viewer.dnd.view.border.LineBorder;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 
-
 public class SummaryFormSpecification extends AbstractFormSpecification {
 
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference() && requirement.isOpen()
-                && requirement.isSubview() && requirement.isFixed();
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference()
+            && requirement.isOpen() && requirement.isSubview() && requirement.isFixed();
     }
 
     @Override
     protected void init() {
         addViewDecorator(new IconBorder.Factory());
         addViewDecorator(new CompositeViewDecorator() {
-            public View decorate(View view, Axes axes) {
+            @Override
+            public View decorate(final View view, final Axes axes) {
                 return new EmptyBorder(3, new BackgroundBorder(new LineBorder(1, 8, new EmptyBorder(3, view))));
             }
         });
@@ -53,6 +53,7 @@ public class SummaryFormSpecification extends AbstractFormSpecification {
         return new SummaryFields();
     }
 
+    @Override
     public String getName() {
         return "Summary";
     }

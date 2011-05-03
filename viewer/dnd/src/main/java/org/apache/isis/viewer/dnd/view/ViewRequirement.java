@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.commons.ensure.Assert;
@@ -25,18 +24,17 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public class ViewRequirement {
     public static final int NONE = 0;
     public static final int CLOSED = 0x01;
-//    public static final int SUMMARY = 0x02;
+    // public static final int SUMMARY = 0x02;
     public static final int OPEN = 0x04;
-    
+
     public static final int EDITABLE = 0x10;
-    
+
     public static final int FIXED = 0x100;
     public static final int EXPANDABLE = 0x200;
-    
+
     public static final int ROOT = 0x1000;
     public static final int SUBVIEW = 0x2000;
 
@@ -44,8 +42,8 @@ public class ViewRequirement {
 
     private final Content content;
     private final int status;
-    
-    public ViewRequirement(Content content, int status) {
+
+    public ViewRequirement(final Content content, int status) {
         Assert.assertNotNull(content);
         this.content = content;
         this.status = status;
@@ -56,7 +54,7 @@ public class ViewRequirement {
         return content;
     }
 
-    public boolean is(int status) {
+    public boolean is(final int status) {
         return (this.status & status) == status;
     }
 
@@ -67,19 +65,19 @@ public class ViewRequirement {
     public boolean isOpen() {
         return is(OPEN);
     }
-    
+
     public boolean isFixed() {
         return is(FIXED);
     }
-    
+
     public boolean isExpandable() {
         return is(EXPANDABLE);
     }
-    
+
     public boolean isSubview() {
         return is(SUBVIEW);
     }
-    
+
     public boolean isEditable() {
         return is(EDITABLE);
     }
@@ -101,7 +99,7 @@ public class ViewRequirement {
         return content.isTextParseable();
     }
 
-    public boolean isFor(Class<?> cls) {
+    public boolean isFor(final Class<?> cls) {
         return cls.isAssignableFrom(content.getClass());
     }
 
@@ -109,8 +107,8 @@ public class ViewRequirement {
         return content.getAdapter() != null;
     }
 
-    public boolean isForValueType(Class<? extends Facet> cls) {
-        ObjectSpecification specification = content.getSpecification();
+    public boolean isForValueType(final Class<? extends Facet> cls) {
+        final ObjectSpecification specification = content.getSpecification();
         return specification != null && specification.containsFacet(cls);
     }
 
@@ -123,5 +121,3 @@ public class ViewRequirement {
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -25,12 +24,10 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
-
 /**
- * A column layout places component views side by side. Each component is given the space it request. A
- * components width will be give a consistent width if that component's view specification's
- * <code>isAligned</code> method returns <code>true</code>, or the layout's <code>fixedWidth</code> flag is
- * set (via the two parameter constructor).
+ * A column layout places component views side by side. Each component is given the space it request. A components width
+ * will be give a consistent width if that component's view specification's <code>isAligned</code> method returns
+ * <code>true</code>, or the layout's <code>fixedWidth</code> flag is set (via the two parameter constructor).
  */
 public class ColumnLayout implements Layout {
     private final boolean fixedWidth;
@@ -43,40 +40,39 @@ public class ColumnLayout implements Layout {
         this.fixedWidth = fixedWidth;
     }
 
+    @Override
     public Size getRequiredSize(final View view) {
         int height = 0;
         int width = 0;
         int maxWidth = 0;
         final View views[] = view.getSubviews();
 
-        for (int i = 0; i < views.length; i++) {
-            final View v = views[i];
+        for (final View v : views) {
             final Size s = v.getRequiredSize(new Size(Integer.MAX_VALUE, Integer.MAX_VALUE));
             width += s.getWidth();
             maxWidth = Math.max(maxWidth, s.getWidth());
             height = Math.max(height, s.getHeight());
         }
 
-        if(fixedWidth) {
+        if (fixedWidth) {
             width = maxWidth / 2 * views.length;
         }
         return new Size(width, height);
     }
 
+    @Override
     public void layout(final View view, final Size maximumSize) {
         int x = 0;
         final int y = 0;
         final View subviews[] = view.getSubviews();
 
         int maxWidth = 0;
-        for (int i = 0; i < subviews.length; i++) {
-            final View v = subviews[i];
+        for (final View v : subviews) {
             final Size s = v.getRequiredSize(new Size(maximumSize));
             maxWidth = Math.max(maxWidth, s.getWidth());
         }
 
-        for (int i = 0; i < subviews.length; i++) {
-            final View v = subviews[i];
+        for (final View v : subviews) {
             final Size s = v.getRequiredSize(new Size(maximumSize));
             v.setLocation(new Location(x, y));
             if (fixedWidth || v.getSpecification().isAligned()) {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -43,7 +42,6 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.action.BackgroundWork;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 
-
 public abstract class AbstractField extends AbstractView {
     protected static final int TEXT_WIDTH = 20;
     private boolean identified;
@@ -60,28 +58,33 @@ public abstract class AbstractField extends AbstractView {
     protected boolean provideClearCopyPaste() {
         return false;
     }
-    
+
     protected Consent canClear() {
         return Allow.DEFAULT;
     }
 
-    protected void clear() {}
+    protected void clear() {
+    }
 
-    protected void copyToClipboard() {}
+    protected void copyToClipboard() {
+    }
 
-    protected void pasteFromClipboard() {}
+    protected void pasteFromClipboard() {
+    }
 
     /**
      * Indicates the drag started within this view's bounds is continuing. By default does nothing.
      */
     @Override
-    public void drag(final InternalDrag drag) {}
+    public void drag(final InternalDrag drag) {
+    }
 
     /**
      * Default implementation - does nothing
      */
     @Override
-    public void dragCancel(final InternalDrag drag) {}
+    public void dragCancel(final InternalDrag drag) {
+    }
 
     /**
      * Indicates the start of a drag within this view's bounds. By default does nothing.
@@ -92,11 +95,12 @@ public abstract class AbstractField extends AbstractView {
     }
 
     /**
-     * Indicates the drag started within this view's bounds has been finished (although the location may now
-     * be outside of its bounds). By default does nothing.
+     * Indicates the drag started within this view's bounds has been finished (although the location may now be outside
+     * of its bounds). By default does nothing.
      */
     @Override
-    public void dragTo(final InternalDrag drag) {}
+    public void dragTo(final InternalDrag drag) {
+    }
 
     @Override
     public void draw(final Canvas canvas) {
@@ -109,12 +113,12 @@ public abstract class AbstractField extends AbstractView {
         }
 
         if (getState().isInvalid()) {
-            Image image = ImageFactory.getInstance().loadIcon("invalid-entry", 12, null);
+            final Image image = ImageFactory.getInstance().loadIcon("invalid-entry", 12, null);
             if (image != null) {
                 canvas.drawImage(image, getSize().getWidth() - 16, 2);
             }
-            
-            //canvas.clearBackground(this, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID));
+
+            // canvas.clearBackground(this, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID));
         }
 
         super.draw(canvas);
@@ -163,7 +167,7 @@ public abstract class AbstractField extends AbstractView {
     public boolean isEmpty() {
         return false;
     }
-    
+
     public boolean indicatesForView(final Location mouseLocation) {
         return false;
     }
@@ -172,21 +176,23 @@ public abstract class AbstractField extends AbstractView {
      * Called when the user presses any key on the keyboard while this view has the focus.
      */
     @Override
-    public void keyPressed(final KeyboardAction key) {}
+    public void keyPressed(final KeyboardAction key) {
+    }
 
     /**
      * Called when the user releases any key on the keyboard while this view has the focus.
      */
     @Override
-    public void keyReleased(KeyboardAction action) {}
+    public void keyReleased(final KeyboardAction action) {
+    }
 
     /**
-     * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow etc). Such
-     * a key press will result in a prior call to <code>keyPressed</code> and a subsequent call to
-     * <code>keyReleased</code>.
+     * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow etc). Such a key
+     * press will result in a prior call to <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>.
      */
     @Override
-    public void keyTyped(KeyboardAction action) {}
+    public void keyTyped(final KeyboardAction action) {
+    }
 
     @Override
     public void contentMenuOptions(final UserActionSet options) {
@@ -202,6 +208,7 @@ public abstract class AbstractField extends AbstractView {
 
     protected final void initiateSave(final boolean moveToNextField) {
         BackgroundWork.runTaskInBackground(this, new BackgroundTask() {
+            @Override
             public void execute() {
                 save();
                 getParent().updateView();
@@ -211,10 +218,12 @@ public abstract class AbstractField extends AbstractView {
                 }
             }
 
+            @Override
             public String getName() {
                 return "Save field";
             }
 
+            @Override
             public String getDescription() {
                 return "Saving " + getContent().windowTitle();
             }

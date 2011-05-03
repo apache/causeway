@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
-
 
 public class EmptyBorder extends AbstractBorder {
 

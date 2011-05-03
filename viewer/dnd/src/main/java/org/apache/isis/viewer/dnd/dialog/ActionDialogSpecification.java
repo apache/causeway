@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.dialog;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -50,20 +48,23 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
 import org.apache.isis.viewer.dnd.view.control.CancelAction;
-
+import org.apache.log4j.Logger;
 
 public class ActionDialogSpecification extends CompositeViewSpecification {
     private static final Logger LOG = Logger.getLogger(ActionDialogSpecification.class);
 
     private static class DialogFormSubviews implements ViewFactory {
 
-        public View createView(final Content content, Axes axes, int fieldNumber) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int fieldNumber) {
             if (content instanceof TextParseableParameter) {
                 final GlobalViewFactory factory = Toolkit.getViewFactory();
-                return factory.createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
+                return factory
+                    .createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
             } else if (content instanceof ObjectParameter) {
                 final GlobalViewFactory factory = Toolkit.getViewFactory();
-                return factory.createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
+                return factory
+                    .createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
             }
 
             return null;
@@ -84,8 +85,7 @@ public class ActionDialogSpecification extends CompositeViewSpecification {
             final View[] subviews = view.getSubviews();
             final StringBuffer missingFields = new StringBuffer();
             final StringBuffer invalidFields = new StringBuffer();
-            for (int i = 0; i < subviews.length; i++) {
-                final View field = subviews[i];
+            for (final View field : subviews) {
                 final ParameterContent content = ((ParameterContent) field.getContent());
                 final boolean isEmpty = content.getAdapter() == null;
                 if (content.isRequired() && isEmpty) {
@@ -116,11 +116,13 @@ public class ActionDialogSpecification extends CompositeViewSpecification {
             return actionContent.disabled();
         }
 
+        @Override
         public void execute(final Workspace workspace, final View view, final Location at) {
             final BackgroundTask task = new BackgroundTask() {
+                @Override
                 public void execute() {
-                    ActionContent actionContent = ((ActionContent) view.getContent());
-                    ObjectAdapter result = actionContent.execute();
+                    final ActionContent actionContent = ((ActionContent) view.getContent());
+                    final ObjectAdapter result = actionContent.execute();
                     LOG.debug("action invoked with result " + result);
                     if (result != null) {
                         view.objectActionResult(result, new Placement(view.getAbsoluteLocation()));
@@ -129,10 +131,12 @@ public class ActionDialogSpecification extends CompositeViewSpecification {
                     view.getFeedbackManager().showMessagesAndWarnings();
                 }
 
+                @Override
                 public String getName() {
                     return ((ActionContent) view.getContent()).getActionName();
                 }
 
+                @Override
                 public String getDescription() {
                     return "Running action " + getName() + " on  " + view.getContent().getAdapter();
                 }
@@ -163,31 +167,37 @@ public class ActionDialogSpecification extends CompositeViewSpecification {
         }
 
         @Override
-        protected void move(final Location at) {}
+        protected void move(final Location at) {
+        }
     }
 
     public ActionDialogSpecification() {
         builder = new ActionFieldBuilder(new DialogFormSubviews());
         addSubviewDecorator(new ParametersLabelDecorator());
         addViewDecorator(new CompositeViewDecorator() {
-            public View decorate(View view, Axes axes) {
+            @Override
+            public View decorate(final View view, final Axes axes) {
                 // TODO reintroduce the 'Apply' notion, but under control from the method declaration
                 final ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction() };
-                final ButtonBorder buttonBorder = new ButtonBorder(actions, new IconBorder(view, Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL)));
+                final ButtonBorder buttonBorder =
+                    new ButtonBorder(actions, new IconBorder(view, Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL)));
                 buttonBorder.setFocusManager(new ActionDialogFocusManager(buttonBorder));
                 return buttonBorder;
             }
         });
     }
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.getContent() instanceof ActionContent;
     }
 
+    @Override
     public String getName() {
         return "Action Dialog";
     }

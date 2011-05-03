@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 public interface InteractionSpyWindow {
@@ -28,4 +27,3 @@ public interface InteractionSpyWindow {
 
     void open();
 }
-

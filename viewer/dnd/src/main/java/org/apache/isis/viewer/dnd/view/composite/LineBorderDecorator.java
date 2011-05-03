@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -27,14 +26,14 @@ import org.apache.isis.viewer.dnd.view.ViewAxis;
 import org.apache.isis.viewer.dnd.view.border.LineBorder;
 
 public class LineBorderDecorator implements SubviewDecorator {
-    
-    public View decorate(Axes axes, View view) {
+
+    @Override
+    public View decorate(final Axes axes, final View view) {
         return new LineBorder(view);
     }
 
-    public ViewAxis createAxis(org.apache.isis.viewer.dnd.view.Content content) {
+    @Override
+    public ViewAxis createAxis(final org.apache.isis.viewer.dnd.view.Content content) {
         return null;
     }
 }
-
-

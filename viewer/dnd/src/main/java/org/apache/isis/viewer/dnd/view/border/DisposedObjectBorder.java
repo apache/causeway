@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,7 +29,6 @@ import org.apache.isis.viewer.dnd.view.DragStart;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
-
 
 public class DisposedObjectBorder extends AbstractBorder {
 
@@ -71,8 +69,8 @@ public class DisposedObjectBorder extends AbstractBorder {
         }
         for (int i = 0; i < 15; i++) {
             canvas.drawLine(left, top + i, left + i, top, color);
-            canvas.drawLine(w - left - right - 1, s.getHeight() - top - i - 1, w - left - right - i - 1, s.getHeight() - top - 1,
-                    color);
+            canvas.drawLine(w - left - right - 1, s.getHeight() - top - i - 1, w - left - right - i - 1, s.getHeight()
+                - top - 1, color);
         }
     }
 

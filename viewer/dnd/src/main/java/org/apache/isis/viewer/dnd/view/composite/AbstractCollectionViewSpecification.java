@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -25,7 +24,6 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.base.Layout;
-
 
 public abstract class AbstractCollectionViewSpecification extends CompositeViewSpecification {
 
@@ -35,17 +33,21 @@ public abstract class AbstractCollectionViewSpecification extends CompositeViewS
     }
 
     protected abstract ViewFactory createElementFactory();
-    
-    protected void init() {}
 
-    public Layout createLayout(Content content, Axes axes) {
+    protected void init() {
+    }
+
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
-    
-    public boolean canDisplay(ViewRequirement requirement) {
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isCollection() && requirement.isOpen();
     }
 
+    @Override
     public String getName() {
         return "List";
     }

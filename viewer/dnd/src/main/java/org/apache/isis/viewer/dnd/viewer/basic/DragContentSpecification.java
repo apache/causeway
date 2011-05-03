@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -28,11 +27,10 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.border.LineBorder;
 
-
 public class DragContentSpecification extends IconSpecification {
 
     @Override
-    public View createView(final Content content, Axes axes, int sequence) {
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final View icon = super.createView(content, axes, sequence);
         return new LineBorder(1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1), icon);
     }

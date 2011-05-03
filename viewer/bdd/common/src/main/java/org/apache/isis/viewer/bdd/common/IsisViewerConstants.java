@@ -20,23 +20,21 @@ package org.apache.isis.viewer.bdd.common;
 
 public final class IsisViewerConstants {
 
-    private IsisViewerConstants() {}
+    private IsisViewerConstants() {
+    }
 
     public static final String ON_OBJECT_HEAD = "on object";
     public static final String ON_OBJECT_HEAD_ALT1 = "object";
     public static final String ON_OBJECT_HEAD_ALT2 = "on";
-    public static final String[] ON_OBJECT_HEAD_SET = {
-            ON_OBJECT_HEAD, ON_OBJECT_HEAD_ALT1,
-            ON_OBJECT_HEAD_ALT2 };
+    public static final String[] ON_OBJECT_HEAD_SET = { ON_OBJECT_HEAD, ON_OBJECT_HEAD_ALT1, ON_OBJECT_HEAD_ALT2 };
     public static final String ON_OBJECT_NAME = ON_OBJECT_HEAD;
 
     public static final String ALIAS_RESULT_HEAD = "alias result as";
     public static final String ALIAS_RESULT_HEAD_ALT1 = "result=";
     public static final String ALIAS_RESULT_HEAD_ALT2 = "alias=";
     public static final String ALIAS_RESULT_HEAD_ALT3 = "alias as";
-    public static final String[] ALIAS_RESULT_HEAD_SET = {
-            ALIAS_RESULT_HEAD, ALIAS_RESULT_HEAD_ALT1,
-            ALIAS_RESULT_HEAD_ALT2, ALIAS_RESULT_HEAD_ALT3 };
+    public static final String[] ALIAS_RESULT_HEAD_SET = { ALIAS_RESULT_HEAD, ALIAS_RESULT_HEAD_ALT1,
+        ALIAS_RESULT_HEAD_ALT2, ALIAS_RESULT_HEAD_ALT3 };
     public static final String ALIAS_RESULT_NAME = ALIAS_RESULT_HEAD;
 
     public static final String TITLE_NAME = "Title";
@@ -52,25 +50,22 @@ public final class IsisViewerConstants {
     public static final String PERFORM_HEAD_ALT1 = "do";
     public static final String PERFORM_HEAD_ALT2 = "interaction";
     public static final String PERFORM_HEAD_ALT3 = "interaction type";
-    public static final String[] PERFORM_HEAD_SET = { PERFORM_HEAD,
-            PERFORM_HEAD_ALT1, PERFORM_HEAD_ALT2,
-            PERFORM_HEAD_ALT3 };
+    public static final String[] PERFORM_HEAD_SET = { PERFORM_HEAD, PERFORM_HEAD_ALT1, PERFORM_HEAD_ALT2,
+        PERFORM_HEAD_ALT3 };
     public static final String PERFORM_NAME = PERFORM_HEAD;
 
     public static final String ON_MEMBER_HEAD = "on member";
     public static final String ON_MEMBER_HEAD_ALT1 = "using member";
     public static final String ON_MEMBER_HEAD_ALT2 = "using";
     public static final String ON_MEMBER_HEAD_ALT3 = "member";
-    public static final String[] ON_MEMBER_HEAD_SET = {
-            ON_MEMBER_HEAD, ON_MEMBER_HEAD_ALT1,
-            ON_MEMBER_HEAD_ALT2, ON_MEMBER_HEAD_ALT3 };
+    public static final String[] ON_MEMBER_HEAD_SET = { ON_MEMBER_HEAD, ON_MEMBER_HEAD_ALT1, ON_MEMBER_HEAD_ALT2,
+        ON_MEMBER_HEAD_ALT3 };
     public static final String ON_MEMBER_NAME = ON_MEMBER_HEAD;
 
     public static final String THAT_IT_HEAD = "that it";
     public static final String THAT_IT_HEAD_ALT1 = "that";
     public static final String THAT_IT_HEAD_ALT2 = "verb";
-    public static final String[] THAT_IT_HEAD_SET = { THAT_IT_HEAD,
-            THAT_IT_HEAD_ALT1, THAT_IT_HEAD_ALT2 };
+    public static final String[] THAT_IT_HEAD_SET = { THAT_IT_HEAD, THAT_IT_HEAD_ALT1, THAT_IT_HEAD_ALT2 };
     public static final String THAT_IT_NAME = THAT_IT_HEAD;
 
     public static final String WITH_ARGUMENTS_HEAD = "with arguments";
@@ -83,16 +78,9 @@ public final class IsisViewerConstants {
     public static final String WITH_ARGUMENTS_HEAD_ALT7 = "for parameters";
     public static final String WITH_ARGUMENTS_HEAD_ALT8 = "value";
     public static final String WITH_ARGUMENTS_HEAD_ALT9 = "reference";
-    public static final String[] WITH_ARGUMENTS_HEAD_SET = {
-            WITH_ARGUMENTS_HEAD, WITH_ARGUMENTS_HEAD_ALT1,
-            WITH_ARGUMENTS_HEAD_ALT2,
-            WITH_ARGUMENTS_HEAD_ALT3,
-            WITH_ARGUMENTS_HEAD_ALT4,
-            WITH_ARGUMENTS_HEAD_ALT5,
-            WITH_ARGUMENTS_HEAD_ALT6,
-            WITH_ARGUMENTS_HEAD_ALT7,
-            WITH_ARGUMENTS_HEAD_ALT8,
-            WITH_ARGUMENTS_HEAD_ALT9 };
+    public static final String[] WITH_ARGUMENTS_HEAD_SET = { WITH_ARGUMENTS_HEAD, WITH_ARGUMENTS_HEAD_ALT1,
+        WITH_ARGUMENTS_HEAD_ALT2, WITH_ARGUMENTS_HEAD_ALT3, WITH_ARGUMENTS_HEAD_ALT4, WITH_ARGUMENTS_HEAD_ALT5,
+        WITH_ARGUMENTS_HEAD_ALT6, WITH_ARGUMENTS_HEAD_ALT7, WITH_ARGUMENTS_HEAD_ALT8, WITH_ARGUMENTS_HEAD_ALT9 };
     public static final String WITH_ARGUMENTS_NAME = WITH_ARGUMENTS_HEAD;
 
 }

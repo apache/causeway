@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,7 +39,6 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.AbstractFieldSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 
-
 /*
  * TODO this class does not set the underlying business object  via its boolean adapter.  Need
  * to create an content type for flags.
@@ -50,14 +48,16 @@ public class CheckboxField extends AbstractField {
 
     public static class Specification extends AbstractFieldSpecification {
         @Override
-        public boolean canDisplay(ViewRequirement requirement) {
+        public boolean canDisplay(final ViewRequirement requirement) {
             return requirement.isTextParseable() && requirement.isForValueType(BooleanValueFacet.class);
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             return new CheckboxField(content, this);
         }
 
+        @Override
         public String getName() {
             return "Checkbox";
         }
@@ -82,7 +82,7 @@ public class CheckboxField extends AbstractField {
         color = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
         canvas.drawRectangle(left, top, size, size, color);
         if (isSet()) {
-            Image image = ImageFactory.getInstance().loadImage("check-mark");
+            final Image image = ImageFactory.getInstance().loadImage("check-mark");
             canvas.drawImage(image, 3, 3, size, size);
         }
     }
@@ -92,16 +92,18 @@ public class CheckboxField extends AbstractField {
         toggle();
     }
 
-    public void secondClick(Click click) {
-    // ignore
-    }
-
-    public void thirdClick(Click click) {
-    // ignore
+    @Override
+    public void secondClick(final Click click) {
+        // ignore
     }
 
     @Override
-    public void keyTyped(KeyboardAction action) {
+    public void thirdClick(final Click click) {
+        // ignore
+    }
+
+    @Override
+    public void keyTyped(final KeyboardAction action) {
         if (action.getKeyCode() == ' ') {
             toggle();
         } else {
@@ -127,7 +129,7 @@ public class CheckboxField extends AbstractField {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(HPADDING + size + HPADDING, VPADDING + size + VPADDING);
     }
 

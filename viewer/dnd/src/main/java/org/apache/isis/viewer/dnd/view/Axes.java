@@ -17,29 +17,28 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.util.ViewerException;
+import org.apache.log4j.Logger;
 
 public class Axes {
     private static final Logger LOG = Logger.getLogger(Axes.class);
     private final Map<Class, ViewAxis> axes = new HashMap<Class, ViewAxis>();
-    
-    public void add(ViewAxis axis) {
+
+    public void add(final ViewAxis axis) {
         if (axis != null) {
-            Class<? extends ViewAxis> cls = axis.getClass();
+            final Class<? extends ViewAxis> cls = axis.getClass();
             add(axis, cls);
         }
     }
 
-    public void add(ViewAxis axis, Class<? extends ViewAxis> cls) {
-        ViewAxis previous = axes.put(cls, axis);
+    public void add(final ViewAxis axis, final Class<? extends ViewAxis> cls) {
+        final ViewAxis previous = axes.put(cls, axis);
         if (previous != null) {
             LOG.debug(axis + " replacing " + previous);
         } else {
@@ -47,30 +46,29 @@ public class Axes {
         }
     }
 
-    public <T extends ViewAxis> T getAxis(Class<T> axisClass) {
-        ViewAxis viewAxis = axes.get(axisClass);
+    public <T extends ViewAxis> T getAxis(final Class<T> axisClass) {
+        final ViewAxis viewAxis = axes.get(axisClass);
         if (viewAxis == null) {
             throw new ViewerException("No axis of type " + axisClass + " in " + this);
         }
         return (T) viewAxis;
     }
 
-    public boolean contains(Class<? extends ViewAxis> axisClass) {
+    public boolean contains(final Class<? extends ViewAxis> axisClass) {
         return axes.containsKey(axisClass);
     }
 
-    public void add(Axes axes) {
+    public void add(final Axes axes) {
         this.axes.putAll(axes.axes);
     }
-    
+
+    @Override
     public String toString() {
         // TODO provide flag to list as elements, rather than fields
-        ToString s = new ToString(this);
-        for (ViewAxis axis : axes.values()) {
+        final ToString s = new ToString(this);
+        for (final ViewAxis axis : axes.values()) {
             s.append(axis.toString());
         }
         return s.toString();
     }
 }
-
-

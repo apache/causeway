@@ -17,16 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.isis.viewer.dnd.view.text.TextBlock;
-import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
-
 
 public class TextBlockTest extends TestCase {
 
@@ -41,7 +37,8 @@ public class TextBlockTest extends TestCase {
         LogManager.getRootLogger().setLevel(Level.OFF);
 
         final TextBlockTarget user = new TextBlockTargetExample();
-        block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York", true);
+        block =
+            new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York", true);
         // "Now is the winter "
         // "of our discontent "
         // "made summer by "
@@ -62,7 +59,8 @@ public class TextBlockTest extends TestCase {
         try {
             block.insert(0, 4, "\n");
             fail();
-        } catch (final IllegalArgumentException expected) {}
+        } catch (final IllegalArgumentException expected) {
+        }
     }
 
     public void testCountLine() {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 public interface KeyboardAction {
@@ -29,7 +28,7 @@ public interface KeyboardAction {
     public final static int PREVIOUS_WINDOW = 5;
 
     int getKeyCode();
-    
+
     char getKeyChar();
 
     int getModifiers();
@@ -38,4 +37,3 @@ public interface KeyboardAction {
 
     boolean isConsumed();
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
 import org.apache.isis.viewer.dnd.viewer.drawing.DummyText;
-
 
 public class TitleTextTest extends ProxyJunit3TestCase {
     private TitleText titleText;
@@ -61,38 +59,24 @@ public class TitleTextTest extends ProxyJunit3TestCase {
     }
 
     // TODO these tests won't work on server that doesn't have graphics - eg a Linux box without X
-/*
-    public void XXtestDrawCanvas() {
-        title = "abcde";
-        titleText.draw(canvas, 10, 20);
-    }
-
-    public void testDrawCanvasDefaultColor() {
-        titleText.draw(canvas, 10, 20);
-        assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), canvas.color);
-    }
-
-    public void testDrawCanvasCanDrop() {
-        view.getState().setCanDrop();
-
-        titleText.draw(canvas, 10, 20);
-        assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_VALID), canvas.color);
-    }
-
-    public void testDrawCanvasCantDrop() {
-        view.getState().setCantDrop();
-
-        titleText.draw(canvas, 10, 20);
-        assertEquals(ColorsAndFonts.COLOR_INVALID, canvas.color);
-    }
-
-    public void testDrawCanvasIdentifier() {
-        view.getState().setContentIdentified();
-
-        titleText.draw(canvas, 10, 20);
-        assertEquals(Toolkit.getColor("primary1"), canvas.color);
-    }
-*/
+    /*
+     * public void XXtestDrawCanvas() { title = "abcde"; titleText.draw(canvas, 10, 20); }
+     * 
+     * public void testDrawCanvasDefaultColor() { titleText.draw(canvas, 10, 20);
+     * assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), canvas.color); }
+     * 
+     * public void testDrawCanvasCanDrop() { view.getState().setCanDrop();
+     * 
+     * titleText.draw(canvas, 10, 20); assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_VALID), canvas.color); }
+     * 
+     * public void testDrawCanvasCantDrop() { view.getState().setCantDrop();
+     * 
+     * titleText.draw(canvas, 10, 20); assertEquals(ColorsAndFonts.COLOR_INVALID, canvas.color); }
+     * 
+     * public void testDrawCanvasIdentifier() { view.getState().setContentIdentified();
+     * 
+     * titleText.draw(canvas, 10, 20); assertEquals(Toolkit.getColor("primary1"), canvas.color); }
+     */
     public void testDrawingLocation() {
         titleText.draw(canvas, 10, 20);
         assertEquals(10, canvas.x);

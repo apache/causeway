@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
-
 
 /**
  * A simple specification that always returns false when asked if it can display any content.
@@ -39,14 +37,16 @@ public class EmptyNodeSpecification extends NodeSpecification {
     }
 
     @Override
-    protected View createNodeView(final Content content, Axes axes) {
+    protected View createNodeView(final Content content, final Axes axes) {
         return null;
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return false;
     }
 
+    @Override
     public String getName() {
         return "Empty tree node";
     }

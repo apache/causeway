@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.viewer.dnd.view.Content;
-
 
 public interface ParameterContent extends Content {
 

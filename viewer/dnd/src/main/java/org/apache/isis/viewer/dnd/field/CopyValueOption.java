@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class CopyValueOption extends AbstractValueOption {
 
@@ -42,7 +40,7 @@ public class CopyValueOption extends AbstractValueOption {
         }
         // TODO: move logic into Facets
         return Allow.DEFAULT;
-        //return new Allow(String.format("Copy value '%s' to clipboard", field.getSelectedText()));
+        // return new Allow(String.format("Copy value '%s' to clipboard", field.getSelectedText()));
     }
 
     @Override

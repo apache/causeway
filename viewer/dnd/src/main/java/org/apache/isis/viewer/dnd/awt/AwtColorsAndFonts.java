@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.util.Hashtable;
@@ -27,13 +26,13 @@ import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public class AwtColorsAndFonts implements ColorsAndFonts {
     private final Hashtable colors = new Hashtable();
     private int defaultBaseline;
     private int defaultFieldHeight;
     private final Hashtable fonts = new Hashtable();
 
+    @Override
     public int defaultBaseline() {
         if (defaultBaseline == 0) {
             final int iconSize = getText(TEXT_NORMAL).getAscent();
@@ -42,6 +41,7 @@ public class AwtColorsAndFonts implements ColorsAndFonts {
         return defaultBaseline;
     }
 
+    @Override
     public int defaultFieldHeight() {
         if (defaultFieldHeight == 0) {
             defaultFieldHeight = getText(TEXT_NORMAL).getTextHeight();
@@ -49,6 +49,7 @@ public class AwtColorsAndFonts implements ColorsAndFonts {
         return defaultFieldHeight;
     }
 
+    @Override
     public Color getColor(final String name) {
         Color color = (Color) colors.get(name);
         if (color == null && name.startsWith(COLOR_WINDOW + ".")) {
@@ -59,14 +60,17 @@ public class AwtColorsAndFonts implements ColorsAndFonts {
 
     }
 
+    @Override
     public Color getColor(final int rgbColor) {
         return new AwtColor(rgbColor);
     }
 
+    @Override
     public Text getText(final String name) {
         return (Text) fonts.get(name);
     }
 
+    @Override
     public void init() {
         // core color scheme
         setColor(COLOR_BLACK, "#000000");
@@ -95,7 +99,7 @@ public class AwtColorsAndFonts implements ColorsAndFonts {
         setColor(COLOR_LABEL_MANDATORY, getColor(COLOR_BLACK));
         setColor(COLOR_LABEL, getColor(COLOR_SECONDARY1));
         setColor(COLOR_LABEL_DISABLED, getColor(COLOR_SECONDARY2));
-        
+
         // state colors
         setColor(COLOR_IDENTIFIED, getColor(COLOR_PRIMARY1)); // "#0099ff");
         setColor(COLOR_VALID, "#32CD32");
@@ -118,13 +122,13 @@ public class AwtColorsAndFonts implements ColorsAndFonts {
         setColor(COLOR_DEBUG_BOUNDS_VIEW, AwtColor.DEBUG_VIEW_BOUNDS);
 
         // fonts
-        String defaultFontFamily = AwtText.defaultFontFamily();
-        int defaultFontSizeSmall = AwtText.defaultFontSizeSmall();
-        int defaultFontSizeMedium = AwtText.defaultFontSizeMedium();
-        int defaultFontSizeLarge = AwtText.defaultFontSizeLarge();
+        final String defaultFontFamily = AwtText.defaultFontFamily();
+        final int defaultFontSizeSmall = AwtText.defaultFontSizeSmall();
+        final int defaultFontSizeMedium = AwtText.defaultFontSizeMedium();
+        final int defaultFontSizeLarge = AwtText.defaultFontSizeLarge();
 
         setText(TEXT_TITLE, defaultFontFamily + "-bold-" + defaultFontSizeLarge);
-        
+
         setText(TEXT_TITLE_SMALL, defaultFontFamily + "-bold-" + defaultFontSizeMedium);
         setText(TEXT_NORMAL, defaultFontFamily + "-plain-" + defaultFontSizeMedium);
         setText(TEXT_CONTROL, defaultFontFamily + "-bold-" + defaultFontSizeMedium);
@@ -162,4 +166,3 @@ public class AwtColorsAndFonts implements ColorsAndFonts {
         }
     }
 }
-

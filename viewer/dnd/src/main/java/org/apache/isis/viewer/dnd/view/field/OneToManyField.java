@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.field;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 
-
 public interface OneToManyField extends FieldContent, CollectionContent {
     OneToManyAssociation getOneToManyAssociation();
 }
-

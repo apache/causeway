@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -28,24 +27,23 @@ import org.apache.isis.viewer.dnd.view.InternalDrag;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Viewer;
 
-
-public class SimpleInternalDrag  extends DragImpl implements InternalDrag {
+public class SimpleInternalDrag extends DragImpl implements InternalDrag {
     private final Location location;
     // TODO replace Location with Offset
     private final Location offset;
     private final View view;
 
     /**
-     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it.
-     * The view returned by the pickup method becomes this event overlay view, which is moved continuously so
-     * that it tracks the pointer,
+     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it. The view
+     * returned by the pickup method becomes this event overlay view, which is moved continuously so that it tracks the
+     * pointer,
      * 
      * @param view
      *            the view over which the pointer was when this event started
      * @param location
      *            the location within the viewer (the Frame/Applet/Window etc)
      * 
-     * TODO combine the two constructors
+     *            TODO combine the two constructors
      */
     public SimpleInternalDrag(final View view, final Location location) {
         this.view = view;
@@ -55,7 +53,8 @@ public class SimpleInternalDrag  extends DragImpl implements InternalDrag {
 
         final Padding targetPadding = view.getPadding();
         final Padding containerPadding = view.getView().getPadding();
-        offset.add(containerPadding.getLeft() - targetPadding.getLeft(), containerPadding.getTop() - targetPadding.getTop());
+        offset.add(containerPadding.getLeft() - targetPadding.getLeft(),
+            containerPadding.getTop() - targetPadding.getTop());
 
         this.location.subtract(offset);
     }
@@ -69,7 +68,8 @@ public class SimpleInternalDrag  extends DragImpl implements InternalDrag {
 
         final Padding targetPadding = view.getPadding();
         final Padding containerPadding = view.getView().getPadding();
-        offset.add(containerPadding.getLeft() - targetPadding.getLeft(), containerPadding.getTop() - targetPadding.getTop());
+        offset.add(containerPadding.getLeft() - targetPadding.getLeft(),
+            containerPadding.getTop() - targetPadding.getTop());
 
         this.location.subtract(offset);
     }
@@ -95,6 +95,7 @@ public class SimpleInternalDrag  extends DragImpl implements InternalDrag {
     /**
      * Gets the location of the pointer relative to the view.
      */
+    @Override
     public Location getLocation() {
         return new Location(location);
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.ArrayList;
@@ -37,25 +36,25 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.window.SubviewFocusManager;
 
-
 public abstract class CompositeViewSpecification implements ViewSpecification {
     protected ViewBuilder builder;
     private final List<CompositeViewDecorator> viewDecorators = new ArrayList<CompositeViewDecorator>();
 
-    public final View createView(final Content content, final Axes axes, int sequence) {
+    @Override
+    public final View createView(final Content content, final Axes axes, final int sequence) {
         resolveObject(content);
-        
+
         createAxes(content, axes);
         builder.createAxes(axes, content);
-        Layout layout = createLayout(content, axes);
+        final Layout layout = createLayout(content, axes);
         if (layout instanceof ViewAxis) {
             axes.add((ViewAxis) layout);
         }
 
         final CompositeViewUsingBuilder view = new CompositeViewUsingBuilder(content, this, axes, layout, builder);
         view.setCanDragView(builder.canDragView());
-        View decoratedView = decorateView(view, view.getViewAxes());
-        Options options = Properties.getViewConfigurationOptions(this);
+        final View decoratedView = decorateView(view, view.getViewAxes());
+        final Options options = Properties.getViewConfigurationOptions(this);
         decoratedView.loadOptions(options);
         return decoratedView;
     }
@@ -68,44 +67,50 @@ public abstract class CompositeViewSpecification implements ViewSpecification {
             }
         }
     }
-    
+
     private View decorateView(final View view, final Axes axes) {
         view.setFocusManager(new SubviewFocusManager(view));
         View decorated = view;
-        for (CompositeViewDecorator decorator : viewDecorators) {
+        for (final CompositeViewDecorator decorator : viewDecorators) {
             decorated = decorator.decorate(decorated, axes);
         }
         return decorated;
     }
 
-    public void addViewDecorator(CompositeViewDecorator decorator) {
+    public void addViewDecorator(final CompositeViewDecorator decorator) {
         viewDecorators.add(decorator);
     }
 
-    public void addSubviewDecorator(SubviewDecorator decorator) {
+    public void addSubviewDecorator(final SubviewDecorator decorator) {
         builder.addSubviewDecorator(decorator);
     }
-    
+
     protected abstract Layout createLayout(Content content, Axes axes);
 
-    protected void createAxes(Content content, Axes axes) {}
+    protected void createAxes(final Content content, final Axes axes) {
+    }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return true;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }

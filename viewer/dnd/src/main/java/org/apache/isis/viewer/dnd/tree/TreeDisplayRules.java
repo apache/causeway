@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -31,11 +30,11 @@ import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
-
 public class TreeDisplayRules {
     private static boolean showCollectionsOnly = false;
 
-    private TreeDisplayRules() {}
+    private TreeDisplayRules() {
+    }
 
     public static void menuOptions(final UserActionSet options) {
         // TODO fix and remove following line
@@ -44,26 +43,32 @@ public class TreeDisplayRules {
         }
 
         final UserAction option = new UserAction() {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 showCollectionsOnly = !showCollectionsOnly;
             }
 
+            @Override
             public String getName(final View view) {
                 return showCollectionsOnly ? "Show collections only" : "Show all references";
             }
 
+            @Override
             public Consent disabled(final View view) {
                 return Allow.DEFAULT;
             }
 
+            @Override
             public String getDescription(final View view) {
                 return "This option makes the system only show collections within the trees, and not single elements";
             }
 
+            @Override
             public ActionType getType() {
                 return ActionType.USER;
             }
 
+            @Override
             public String getHelp(final View view) {
                 return "";
             }
@@ -76,7 +81,7 @@ public class TreeDisplayRules {
     }
 
     public static boolean canDisplay(final ObjectAdapter object) {
-        boolean lookupView = object != null && BoundedFacetUtils.isBoundedSet(object.getSpecification());
+        final boolean lookupView = object != null && BoundedFacetUtils.isBoundedSet(object.getSpecification());
         final boolean showNonCollections = !TreeDisplayRules.isCollectionsOnly();
         final boolean objectView = object instanceof ObjectAdapter && showNonCollections;
         final boolean collectionView = object.getSpecification().isCollection();

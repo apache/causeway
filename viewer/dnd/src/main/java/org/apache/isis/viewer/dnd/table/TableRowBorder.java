@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -47,16 +46,17 @@ import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
 
-
 // REVIEW can we use ObjectBorder to provide the basic functionality
 public class TableRowBorder extends AbstractBorder {
     public static class Factory implements SubviewDecorator {
-        public ViewAxis createAxis(Content content) {
-            TableAxis axis = new TableAxisImpl((CollectionContent) content);
+        @Override
+        public ViewAxis createAxis(final Content content) {
+            final TableAxis axis = new TableAxisImpl((CollectionContent) content);
             return axis;
         }
 
-        public View decorate(Axes axes, View view) {
+        @Override
+        public View decorate(final Axes axes, final View view) {
             return new TableRowBorder(axes, view);
         }
     }
@@ -66,13 +66,13 @@ public class TableRowBorder extends AbstractBorder {
     private final int baseline;
     private final IconGraphic icon;
     private final TitleText title;
-    
-    private TableAxis axis;
+
+    private final TableAxis axis;
 
     public TableRowBorder(final Axes axes, final View wrappedRow) {
         super(wrappedRow);
 
-        Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
+        final Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
         icon = new IconGraphic(this, text);
         title = new ObjectTitleText(this, text);
         baseline = icon.getBaseline();
@@ -108,7 +108,7 @@ public class TableRowBorder extends AbstractBorder {
     public void draw(final Canvas canvas) {
         final int baseline = getBaseline();
 
-         final int width = axis.getHeaderOffset();
+        final int width = axis.getHeaderOffset();
         final Size s = getSize();
         final Canvas subcanvas = canvas.createSubcanvas(0, 0, width, s.getHeight());
         int offset = HPADDING;
@@ -119,7 +119,7 @@ public class TableRowBorder extends AbstractBorder {
         final int columns = axis.getColumnCount();
         int x = -1;
         x += axis.getHeaderOffset();
-        Color secondary1 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color secondary1 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
         canvas.drawLine(x - 1, 0, x - 1, s.getHeight() - 1, secondary1);
         canvas.drawLine(x, 0, x, s.getHeight() - 1, secondary1);
         for (int i = 0; i < columns; i++) {
@@ -127,16 +127,16 @@ public class TableRowBorder extends AbstractBorder {
             canvas.drawLine(x, 0, x, s.getHeight() - 1, secondary1);
         }
         canvas.drawLine(0, 0, 0, s.getHeight() - 1, secondary1);
-        
+
         final int y = s.getHeight() - 1;
-        Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
-            canvas.drawLine(0, y, s.getWidth(), y, secondary2);
+        final Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
+        canvas.drawLine(0, y, s.getWidth(), y, secondary2);
 
         if (getState().isObjectIdentified()) {
             final int xExtent = width - 1;
             canvas.drawLine(xExtent - BORDER, top, xExtent - BORDER, top + s.getHeight() - 1, secondary2);
-            canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top - 1, Toolkit
-                    .getColor(ColorsAndFonts.COLOR_SECONDARY3));
+            canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top - 1,
+                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         }
 
         // components

@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.menu;
 
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -56,7 +54,7 @@ import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.AbstractContent;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.window.SubviewFocusManager;
-
+import org.apache.log4j.Logger;
 
 public class PopupMenu extends AbstractView {
 
@@ -73,7 +71,8 @@ public class PopupMenu extends AbstractView {
             return item;
         }
 
-        public static Item createOption(final UserAction action, final Object object, final View view, final Location location) {
+        public static Item createOption(final UserAction action, final Object object, final View view,
+            final Location location) {
             final Item item = new Item();
             if (action == null) {
                 item.isBlank = true;
@@ -98,7 +97,8 @@ public class PopupMenu extends AbstractView {
         String reasonDisabled;
         View view;
 
-        private Item() {}
+        private Item() {
+        }
 
         public String getHelp() {
             return action.getHelp(view);
@@ -112,110 +112,135 @@ public class PopupMenu extends AbstractView {
 
     private class PopupContent extends AbstractContent {
 
-        public PopupContent() {}
+        public PopupContent() {
+        }
 
+        @Override
         public Consent canDrop(final Content sourceContent) {
             return Veto.DEFAULT;
         }
 
-        public void debugDetails(final DebugBuilder debug) {}
+        @Override
+        public void debugDetails(final DebugBuilder debug) {
+        }
 
+        @Override
         public ObjectAdapter drop(final Content sourceContent) {
             return null;
         }
 
+        @Override
         public String getDescription() {
             final int optionNo = getOption();
             return items[optionNo].description;
         }
 
+        @Override
         public String getHelp() {
             final int optionNo = getOption();
             return items[optionNo].getHelp();
         }
 
+        @Override
         public String getIconName() {
             return null;
         }
 
+        @Override
         public Image getIconPicture(final int iconHeight) {
             return null;
         }
 
+        @Override
         public String getId() {
             return null;
         }
 
+        @Override
         public ObjectAdapter getAdapter() {
             return null;
         }
 
+        @Override
         public boolean isOptionEnabled() {
             return false;
         }
 
+        @Override
         public ObjectSpecification getSpecification() {
             return null;
         }
 
+        @Override
         public boolean isTransient() {
             return false;
         }
 
-        public void parseTextEntry(final String entryText) {}
+        public void parseTextEntry(final String entryText) {
+        }
 
+        @Override
         public String title() {
             final int optionNo = getOption();
             return items[optionNo].name;
         }
 
+        @Override
         public ObjectAdapter[] getOptions() {
             return null;
         }
     }
 
     private static class PopupSpecification implements ViewSpecification {
-        public boolean canDisplay(ViewRequirement requirement) {
+        @Override
+        public boolean canDisplay(final ViewRequirement requirement) {
             return false;
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             return null;
         }
 
+        @Override
         public String getName() {
             return "Popup Menu";
         }
 
+        @Override
         public boolean isAligned() {
             return false;
         }
 
+        @Override
         public boolean isOpen() {
             return true;
         }
 
+        @Override
         public boolean isReplaceable() {
             return false;
         }
-        
+
+        @Override
         public boolean isResizeable() {
             return false;
         }
 
+        @Override
         public boolean isSubView() {
             return false;
         }
     }
 
-     private static final Logger LOG = Logger.getLogger(PopupMenu.class);
+    private static final Logger LOG = Logger.getLogger(PopupMenu.class);
     private Color backgroundColor;
     private View forView;
     private Item[] items = new Item[0];
     private int optionIdentified;
     private final FocusManager simpleFocusManager;
 
-    public PopupMenu(PopupMenuContainer parent) {
+    public PopupMenu(final PopupMenuContainer parent) {
         super(new NullContent(), new PopupSpecification());
         // REVIEW should this content be used as param 1 above?
         setContent(new PopupContent());
@@ -223,12 +248,8 @@ public class PopupMenu extends AbstractView {
         simpleFocusManager = new SubviewFocusManager(this);
     }
 
-    private void addItems(
-            final View target,
-            final UserAction[] options,
-            final int len,
-            final Vector list,
-            final ActionType type) {
+    private void addItems(final View target, final UserAction[] options, final int len, final Vector list,
+        final ActionType type) {
         final int initialSize = list.size();
         for (int i = 0; i < len; i++) {
             if (options[i].getType() == type) {
@@ -265,7 +286,7 @@ public class PopupMenu extends AbstractView {
      */
     @Override
     public void draw(final Canvas canvas) {
-        Size coreSize = getSize();
+        final Size coreSize = getSize();
         final int width = coreSize.getWidth();
         final int height = coreSize.getHeight();
         canvas.drawSolidRectangle(0, 0, width, height, backgroundColor);
@@ -308,7 +329,7 @@ public class PopupMenu extends AbstractView {
             baseLine += itemHeight;
         }
 
-//        canvas.drawRectangleAround(this, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
+        // canvas.drawRectangleAround(this, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
     }
 
     @Override
@@ -320,10 +341,12 @@ public class PopupMenu extends AbstractView {
     }
 
     @Override
-    public void focusLost() {}
+    public void focusLost() {
+    }
 
     @Override
-    public void focusReceived() {}
+    public void focusReceived() {
+    }
 
     @Override
     public FocusManager getFocusManager() {
@@ -331,11 +354,11 @@ public class PopupMenu extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Size size = new Size();
 
-        for (int i = 0; i < items.length; i++) {
-            final int itemWidth = items[i].isBlank ? 0 : style().stringWidth(items[i].name);
+        for (final Item item : items) {
+            final int itemWidth = item.isBlank ? 0 : style().stringWidth(item.name);
             size.ensureWidth(itemWidth);
             size.extendHeight(style().getLineHeight() + VPADDING);
         }
@@ -348,7 +371,7 @@ public class PopupMenu extends AbstractView {
     public int getOption() {
         return optionIdentified;
     }
-    
+
     public int getOptionPostion() {
         final int itemHeight = style().getLineHeight() + VPADDING;
         return itemHeight * getOption();
@@ -386,7 +409,7 @@ public class PopupMenu extends AbstractView {
             return;
 
         } else if (item.action instanceof UserActionSet) {
-            UserAction[] menuOptions = ((UserActionSet) item.action).getUserActions();
+            final UserAction[] menuOptions = ((UserActionSet) item.action).getUserActions();
             ((PopupMenuContainer) getParent()).openSubmenu(menuOptions);
         } else {
             final Workspace workspace = getWorkspace();
@@ -395,11 +418,11 @@ public class PopupMenu extends AbstractView {
             location.subtract(workspace.getView().getAbsoluteLocation());
             final Padding padding = workspace.getView().getPadding();
             location.move(-padding.getLeft(), -padding.getTop());
-            
+
             final int itemHeight = style().getLineHeight() + VPADDING;
-            int baseLine = itemHeight * option;
+            final int baseLine = itemHeight * option;
             location.add(0, baseLine);
-            
+
             getParent().dispose();
             LOG.debug("execute " + item.name + " on " + forView + " in " + workspace);
             item.action.execute(workspace, forView, location);
@@ -413,7 +436,7 @@ public class PopupMenu extends AbstractView {
         if (keyCode == KeyEvent.VK_ESCAPE) {
             if (getParent() == null) {
                 dispose();
-            } 
+            }
 
             key.consume();
 
@@ -459,35 +482,28 @@ public class PopupMenu extends AbstractView {
                 break;
             }
         }
-    
+
     }
 
     @Override
-    public void keyReleased(KeyboardAction action) {}
-
-    @Override
-    public void keyTyped(KeyboardAction action) {}
-/*
-    @Override
-    public void layout(final Size maximumSize) {
-        coreSize = new Bounds(getCoreRequiredSize());
-
-        final int option = getOption();
-        final int itemHeight = style().getLineHeight() + VPADDING;
-        int menuWidth = coreSize.getWidth();
-   //     Location menuLocation = new Location(menuWidth - 4, itemHeight * option);
-        Location menuLocation = new Location(0, itemHeight * option);
-        
-        if (submenu != null) {
-            submenu.layout(maximumSize);
-            submenu.setLocation(menuLocation);
-            
-            //coreSize.setX(submenu.getSize().getWidth() - 4);
-            //getLocation()
-        }
-        setSize(getMaximumSize());
+    public void keyReleased(final KeyboardAction action) {
     }
-*/
+
+    @Override
+    public void keyTyped(final KeyboardAction action) {
+    }
+
+    /*
+     * @Override public void layout(final Size maximumSize) { coreSize = new Bounds(getCoreRequiredSize());
+     * 
+     * final int option = getOption(); final int itemHeight = style().getLineHeight() + VPADDING; int menuWidth =
+     * coreSize.getWidth(); // Location menuLocation = new Location(menuWidth - 4, itemHeight * option); Location
+     * menuLocation = new Location(0, itemHeight * option);
+     * 
+     * if (submenu != null) { submenu.layout(maximumSize); submenu.setLocation(menuLocation);
+     * 
+     * //coreSize.setX(submenu.getSize().getWidth() - 4); //getLocation() } setSize(getMaximumSize()); }
+     */
     public View makeView(final ObjectAdapter object, final ObjectAssociation field) throws CloneNotSupportedException {
         throw new RuntimeException();
     }
@@ -508,7 +524,7 @@ public class PopupMenu extends AbstractView {
         option = Math.max(option, 0);
         option = Math.min(option, items.length - 1);
         if (option >= 0 && optionIdentified != option) {
-            //LOG.debug("mouse over option " + option + " " + this);
+            // LOG.debug("mouse over option " + option + " " + this);
             setOption(option);
             markDamaged();
         }
@@ -541,7 +557,7 @@ public class PopupMenu extends AbstractView {
         }
     }
 
-    private boolean isEmpty(String str) {
+    private boolean isEmpty(final String str) {
         return str == null || str.length() == 0;
     }
 
@@ -574,7 +590,7 @@ public class PopupMenu extends AbstractView {
     @Override
     public String toString() {
         return "PopupMenu [location=" + getLocation() + ",item=" + optionIdentified + ",itemCount="
-                + (items == null ? 0 : items.length) + "]";
+            + (items == null ? 0 : items.length) + "]";
     }
 
     protected boolean transparentBackground() {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import java.util.ArrayList;
@@ -43,45 +42,46 @@ public class NewObjectView extends CompositeView {
     LabelAxis labelAxis = new LabelAxis();
     List<NewObjectField> fields = new ArrayList<NewObjectField>();
 
-    public NewObjectView(Content content, ViewSpecification specification) {
+    public NewObjectView(final Content content, final ViewSpecification specification) {
         super(content, specification);
     }
 
-    void addField(NewObjectField field) {
+    void addField(final NewObjectField field) {
         fields.add(field);
         addFieldView(field);
         invalidateContent();
     }
-    
+
     @Override
     protected void buildView() {
         if (getSubviews().length == 0) {
-            ObjectAdapter object = getContent().getAdapter();
-            List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
-           
-            
-            ObjectAssociation field = associations.get(0);
-            
+            final ObjectAdapter object = getContent().getAdapter();
+            final List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
+
+            final ObjectAssociation field = associations.get(0);
+
             addFieldView(object, field);
-            addFieldView(object, associations.get(2)); 
+            addFieldView(object, associations.get(2));
         }
     }
 
-    private void addFieldView(ObjectAdapter object, ObjectAssociation field) {
-        FieldContent fieldContent = (FieldContent) Toolkit.getContentFactory().createFieldContent(field, object);
-        ViewRequirement requirement= new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
+    private void addFieldView(final ObjectAdapter object, final ObjectAssociation field) {
+        final FieldContent fieldContent = (FieldContent) Toolkit.getContentFactory().createFieldContent(field, object);
+        final ViewRequirement requirement =
+            new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
         View fieldView = Toolkit.getViewFactory().createView(requirement);
-        
+
         fieldView = LabelBorder.createFieldLabelBorder(labelAxis, fieldView);
-        
+
         addView(fieldView);
     }
 
-
-    private void addFieldView(NewObjectField field) {
-        ObjectAdapter object = getContent().getAdapter();
-        FieldContent fieldContent = (FieldContent) Toolkit.getContentFactory().createFieldContent(field.getField(), object);
-        ViewRequirement requirement= new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
+    private void addFieldView(final NewObjectField field) {
+        final ObjectAdapter object = getContent().getAdapter();
+        final FieldContent fieldContent =
+            (FieldContent) Toolkit.getContentFactory().createFieldContent(field.getField(), object);
+        final ViewRequirement requirement =
+            new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
         View fieldView = Toolkit.getViewFactory().createView(requirement);
         if (field.includeLabel()) {
             fieldView = LabelBorder.createFieldLabelBorder(labelAxis, fieldView);
@@ -90,29 +90,27 @@ public class NewObjectView extends CompositeView {
     }
 
     @Override
-    protected void doLayout(Size maximumSize) {
+    protected void doLayout(final Size maximumSize) {
         layout.layout(this, maximumSize);
     }
 
     @Override
-    protected Size requiredSize(Size availableSpace) {
+    protected Size requiredSize(final Size availableSpace) {
         return layout.getRequiredSize(this);
     }
 
     @Override
-    public void loadOptions(Options viewOptions) {
-        Options options = viewOptions.getOptions("fields");
-      //  options.options()
-       
+    public void loadOptions(final Options viewOptions) {
+        final Options options = viewOptions.getOptions("fields");
+        // options.options()
+
     }
-    
+
     @Override
-    public void saveOptions(Options viewOptions) {
-       for (NewObjectField field : fields) {
-           field.saveOptions(viewOptions.getOptions("fields"));
-       }
-        
+    public void saveOptions(final Options viewOptions) {
+        for (final NewObjectField field : fields) {
+            field.saveOptions(viewOptions.getOptions("fields"));
+        }
+
     }
 }
-
-

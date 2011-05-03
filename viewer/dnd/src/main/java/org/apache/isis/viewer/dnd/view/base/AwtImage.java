@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.Size;
-
 
 public class AwtImage implements Image {
     java.awt.Image iconImage;
@@ -35,14 +33,17 @@ public class AwtImage implements Image {
         this.iconImage = iconImage;
     }
 
+    @Override
     public int getHeight() {
         return iconImage.getHeight(null);
     }
 
+    @Override
     public int getWidth() {
         return iconImage.getWidth(null);
     }
 
+    @Override
     public Size getSize() {
         return new Size(getWidth(), getHeight());
     }

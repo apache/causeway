@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -27,7 +26,6 @@ import org.apache.isis.viewer.dnd.view.ObjectContent;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
-
 
 class EmptyFieldTitleText extends TitleText {
     private final Content content;

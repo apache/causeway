@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.help;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Location;
-
+import org.apache.log4j.Logger;
 
 public class ExternalHelpViewerProgram implements HelpViewer {
     private static final Logger LOG = Logger.getLogger(ExternalHelpViewerProgram.class);
@@ -35,6 +33,7 @@ public class ExternalHelpViewerProgram implements HelpViewer {
         this.program = program;
     }
 
+    @Override
     public void open(final Location location, final String name, final String description, final String help) {
         final String exec = program + " " + help;
         try {

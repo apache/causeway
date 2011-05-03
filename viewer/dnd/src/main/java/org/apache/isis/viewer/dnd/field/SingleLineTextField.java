@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -31,15 +30,12 @@ import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
 import org.apache.isis.viewer.dnd.view.text.TextUtils;
 
-
 public class SingleLineTextField extends TextField {
     private static final int LIMIT = 20;
     private int offset = 0;
 
-    public SingleLineTextField(
-            final TextParseableContent content,
-            final ViewSpecification specification,
-            final boolean showLines) {
+    public SingleLineTextField(final TextParseableContent content, final ViewSpecification specification,
+        final boolean showLines) {
         super(content, specification, showLines, TextContent.NO_WRAPPING);
     }
 
@@ -84,8 +80,8 @@ public class SingleLineTextField extends TextField {
         if (line != null) {
             final int start = style.stringWidth(line.substring(0, from));
             final int end = style.stringWidth(line.substring(0, to));
-            canvas.drawSolidRectangle(start + (HPADDING), top, end - start, style.getLineHeight(), Toolkit
-                    .getColor(ColorsAndFonts.COLOR_TEXT_HIGHLIGHT));
+            canvas.drawSolidRectangle(start + (HPADDING), top, end - start, style.getLineHeight(),
+                Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_HIGHLIGHT));
         }
     }
 
@@ -100,7 +96,7 @@ public class SingleLineTextField extends TextField {
         final String[] lines = textContent.getDisplayLines();
         if (lines.length > 1) {
             throw new IsisException(
-                    "Single line text field should contain a string that contains no line breaks; contains " + lines.length);
+                "Single line text field should contain a string that contains no line breaks; contains " + lines.length);
         }
 
         final String chars = lines[0];
@@ -117,12 +113,12 @@ public class SingleLineTextField extends TextField {
         if (hasFocus() && canChangeValue().isAllowed()) {
             final int at = Math.min(cursor.getCharacter(), chars.length());
             final int pos = style.stringWidth(chars.substring(0, at)) - offset + HPADDING;
-            canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(), Toolkit
-                    .getColor(ColorsAndFonts.COLOR_TEXT_CURSOR));
+            canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(),
+                Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_CURSOR));
         }
 
         // draw text
-        String line = hasFocus() ? chars : TextUtils.limitText(chars, style, width);
+        final String line = hasFocus() ? chars : TextUtils.limitText(chars, style, width);
         canvas.drawText(line, HPADDING - offset, baseline, textColor, style);
     }
 

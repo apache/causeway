@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Offset;
 import org.apache.isis.viewer.dnd.view.Click;
-
 
 /**
  * Describes a mouse click event.
@@ -34,6 +32,7 @@ public class ClickImpl extends PointerEvent implements Click {
 
     /**
      * Creates a new click event object.
+     * 
      * @param mouseLocation
      *            the location of the mouse relative to the viewer
      * @param modifiers
@@ -46,10 +45,12 @@ public class ClickImpl extends PointerEvent implements Click {
         this.locationWithinViewer = new Location(mouseLocation);
     }
 
+    @Override
     public Location getLocation() {
         return location;
     }
 
+    @Override
     public Location getLocationWithinViewer() {
         return locationWithinViewer;
     }
@@ -57,6 +58,7 @@ public class ClickImpl extends PointerEvent implements Click {
     /**
      * Translate the location of this event by the specified offset.
      */
+    @Override
     public void subtract(final int x, final int y) {
         location.subtract(x, y);
     }
@@ -74,8 +76,8 @@ public class ClickImpl extends PointerEvent implements Click {
         subtract(offset.getDeltaX(), offset.getDeltaY());
     }
 
+    @Override
     public void subtract(final Location location) {
         subtract(location.getX(), location.getY());
     }
 }
-

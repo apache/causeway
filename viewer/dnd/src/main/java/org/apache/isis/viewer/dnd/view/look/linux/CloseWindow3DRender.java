@@ -26,13 +26,14 @@ import org.apache.isis.viewer.dnd.view.window.CloseWindowRender;
 
 public class CloseWindow3DRender implements CloseWindowRender {
 
-
-    public void draw(Canvas canvas, int width, int height, boolean isDisabled, boolean isOver, boolean isPressed) {
+    @Override
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
+        final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 
-        canvas.drawRectangle(x-1, y, width+2, height+1, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
-        canvas.drawRectangle(x, y-1, width+2, height+1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
+        canvas.drawRectangle(x - 1, y, width + 2, height + 1, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
+        canvas.drawRectangle(x, y - 1, width + 2, height + 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
         final Color crossColor = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         canvas.drawLine(x + 4, y + 3, x + 10, y + 9, crossColor);
         canvas.drawLine(x + 5, y + 3, x + 11, y + 9, crossColor);

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -33,12 +32,10 @@ import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
-
 /**
- * Displays an error message in place of a normal field when a problem occurs, usually due to a programming
- * error, and the normal field cannot be created. A example of this is where value field is declared in an
- * ObjectAdapter, but the programmer forgot to instantiate the value object, causing null to be returned
- * instead, which is an illegal value.
+ * Displays an error message in place of a normal field when a problem occurs, usually due to a programming error, and
+ * the normal field cannot be created. A example of this is where value field is declared in an ObjectAdapter, but the
+ * programmer forgot to instantiate the value object, causing null to be returned instead, which is an illegal value.
  */
 public class FieldErrorView extends AbstractView {
 
@@ -54,9 +51,12 @@ public class FieldErrorView extends AbstractView {
         super.draw(canvas);
 
         final Size size = getSize();
-        canvas.drawSolidRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
-        canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
-        canvas.drawText(error, 14, 20, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+        canvas.drawSolidRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1,
+            Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
+        canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1,
+            Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
+        canvas.drawText(error, 14, 20, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID),
+            Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class FieldErrorView extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(250, 30);
     }
 
@@ -75,34 +75,42 @@ public class FieldErrorView extends AbstractView {
     }
 
     public static class Specification implements ViewSpecification {
-        public boolean canDisplay(ViewRequirement requirement) {
+        @Override
+        public boolean canDisplay(final ViewRequirement requirement) {
             return true;
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             throw new NotYetImplementedException();
         }
 
+        @Override
         public String getName() {
             return "Field Error";
         }
 
+        @Override
         public boolean isAligned() {
             return false;
         }
 
+        @Override
         public boolean isSubView() {
             return false;
         }
-        
+
+        @Override
         public boolean isResizeable() {
             return false;
         }
 
+        @Override
         public boolean isReplaceable() {
             return false;
         }
 
+        @Override
         public boolean isOpen() {
             return false;
         }

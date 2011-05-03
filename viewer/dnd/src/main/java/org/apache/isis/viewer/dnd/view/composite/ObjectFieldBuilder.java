@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -42,7 +39,7 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.base.FieldErrorView;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
-
+import org.apache.log4j.Logger;
 
 public class ObjectFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ObjectFieldBuilder.class);
@@ -59,7 +56,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     }
 
     @Override
-    public void build(final View view, Axes axes) {
+    public void build(final View view, final Axes axes) {
         Assert.assertEquals("ensure the view is the complete decorated view", view.getView(), view);
 
         final Content content = view.getContent();
@@ -67,9 +64,9 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         LOG.debug("build view " + view + " for " + object);
 
-        ObjectSpecification spec = object.getSpecification();
-        Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(IsisContext
-                .getAuthenticationSession(), object);
+        final ObjectSpecification spec = object.getSpecification();
+        final Filter<ObjectAssociation> filter =
+            ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object);
         final List<ObjectAssociation> flds = spec.getAssociations(filter);
 
         if (view.getSubviews().length == 0) {
@@ -79,7 +76,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private void initialBuild(final View view, Axes axes, final ObjectAdapter object, final List<ObjectAssociation> flds) {
+    private void initialBuild(final View view, final Axes axes, final ObjectAdapter object,
+        final List<ObjectAssociation> flds) {
         LOG.debug("  as new build");
         // addViewAxes(view);
         for (int f = 0; f < flds.size(); f++) {
@@ -88,19 +86,16 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private void addField(
-            final View view,
-            final Axes axes,
-            final ObjectAdapter object,
-            final ObjectAssociation field,
-            int fieldNumber) {
+    private void addField(final View view, final Axes axes, final ObjectAdapter object, final ObjectAssociation field,
+        final int fieldNumber) {
         final View fieldView = createFieldView(view, axes, object, fieldNumber, field);
         if (fieldView != null) {
             view.addView(decorateSubview(axes, fieldView));
         }
     }
 
-    private void updateBuild(final View view, Axes axes, final ObjectAdapter object, final List<ObjectAssociation> flds) {
+    private void updateBuild(final View view, final Axes axes, final ObjectAdapter object,
+        final List<ObjectAssociation> flds) {
         LOG.debug("  as update build");
         /*
          * 1/ To remove fields: look through views and remove any that don't exists in visible fields
@@ -177,12 +172,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private View createFieldView(
-            final View view,
-            final Axes axes,
-            final ObjectAdapter object,
-            final int fieldNumber,
-            final ObjectAssociation field) {
+    private View createFieldView(final View view, final Axes axes, final ObjectAdapter object, final int fieldNumber,
+        final ObjectAssociation field) {
         if (field == null) {
             throw new NullPointerException();
         }

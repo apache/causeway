@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,11 +24,10 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public abstract class AbstractValueOption extends UserActionAbstract {
     protected final AbstractField field;
 
-    AbstractValueOption(AbstractField field, final String name) {
+    AbstractValueOption(final AbstractField field, final String name) {
         super(name);
         this.field = field;
     }
@@ -42,16 +40,15 @@ public abstract class AbstractValueOption extends UserActionAbstract {
 
     protected void updateParent(final View view) {
         // have commented this out because it isn't needed; the transaction manager will do this
-        // for us on endTransaction.  Still, if I'm wrong and it is needed, hopefully this
+        // for us on endTransaction. Still, if I'm wrong and it is needed, hopefully this
         // comment will help...
         // IsisContext.getObjectPersistor().objectChangedAllDirty();
-        
+
         view.markDamaged();
         view.getParent().invalidateContent();
     }
 
-    
     protected boolean isEmpty(final View view) {
         return field.isEmpty();
-   }
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.swing;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -27,7 +26,9 @@ import org.apache.isis.viewer.dnd.view.window.ResizeWindowRender;
 
 public class ResizeWindow3DRender implements ResizeWindowRender {
 
-    public void draw(Canvas canvas, int width, int height, boolean isDisabled, boolean isOver, boolean isPressed) {
+    @Override
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
+        final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 
@@ -38,5 +39,3 @@ public class ResizeWindow3DRender implements ResizeWindowRender {
     }
 
 }
-
-

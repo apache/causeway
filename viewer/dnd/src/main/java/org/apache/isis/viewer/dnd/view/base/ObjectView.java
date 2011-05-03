@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,7 +39,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
 
 public abstract class ObjectView extends AbstractView {
 
@@ -85,8 +83,8 @@ public abstract class ObjectView extends AbstractView {
     }
 
     /**
-     * Called when a dragged object is dropped onto this view. The default behaviour implemented here calls
-     * the action method on the target, passing the source object in as the only parameter.
+     * Called when a dragged object is dropped onto this view. The default behaviour implemented here calls the action
+     * method on the target, passing the source object in as the only parameter.
      */
     @Override
     public void drop(final ContentDrag drag) {
@@ -145,11 +143,11 @@ public abstract class ObjectView extends AbstractView {
 
         });
     }
-      
-    /////////////////////////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////////////////
+
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }

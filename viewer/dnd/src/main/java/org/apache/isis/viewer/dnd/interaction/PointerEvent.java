@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import java.awt.event.InputEvent;
-
 
 /**
  * Details an event involving the pointer, such as a click or drag.

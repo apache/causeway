@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Frame;
 import java.awt.Image;
 import java.net.URL;
-
-
 
 public class AWTUtilities {
 
@@ -38,4 +35,3 @@ public class AWTUtilities {
         }
     }
 }
-

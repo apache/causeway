@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import java.awt.Image;
@@ -29,7 +28,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.progmodel.facets.value.image.ImageValueFacet;
@@ -52,19 +50,21 @@ import org.apache.isis.viewer.dnd.view.base.AwtImage;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 import org.apache.isis.viewer.dnd.view.field.OneToOneField;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
+import org.apache.log4j.Logger;
 
 public class ImageField extends AbstractField {
     public static class Specification extends AbstractFieldSpecification {
         @Override
-        public boolean canDisplay(ViewRequirement requirement) {
+        public boolean canDisplay(final ViewRequirement requirement) {
             return requirement.isForValueType(ImageValueFacet.class);
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             return new ImageField(content, this);
         }
 
+        @Override
         public String getName() {
             return "Image";
         }
@@ -97,7 +97,8 @@ public class ImageField extends AbstractField {
         });
     }
 
-    private void copy() {}
+    private void copy() {
+    }
 
     @Override
     public void draw(final Canvas canvas) {
@@ -173,18 +174,18 @@ public class ImageField extends AbstractField {
         final boolean ctrl = (modifiers & InputEvent.CTRL_MASK) > 0;
 
         switch (keyCode) {
-        case KeyEvent.VK_V:
-            if (ctrl) {
-                key.consume();
-                pasteFromClipboard();
-            }
-            break;
-        case KeyEvent.VK_C:
-            if (ctrl) {
-                key.consume();
-                copy();
-            }
-            break;
+            case KeyEvent.VK_V:
+                if (ctrl) {
+                    key.consume();
+                    pasteFromClipboard();
+                }
+                break;
+            case KeyEvent.VK_C:
+                if (ctrl) {
+                    key.consume();
+                    copy();
+                }
+                break;
         }
     }
 
@@ -196,24 +197,19 @@ public class ImageField extends AbstractField {
             throw new IsisException(e);
         }
 
-      //  final ObjectAdapter value = getContent().getAdapter();
-        ImageValueFacet facet = ((FieldContent) getContent()).getSpecification().getFacet(ImageValueFacet.class);
-        ObjectAdapter object = facet.createValue(image);
+        // final ObjectAdapter value = getContent().getAdapter();
+        final ImageValueFacet facet = ((FieldContent) getContent()).getSpecification().getFacet(ImageValueFacet.class);
+        final ObjectAdapter object = facet.createValue(image);
         ((OneToOneField) getContent()).setObject(object);
-        //((TextParseableField) getContent()).entryComplete();
+        // ((TextParseableField) getContent()).entryComplete();
         invalidateLayout();
     }
-/*
-    private void loadImageFromURL(final String filename) {
-        try {
-            final URL url = new URL("file://" + filename);
-            final Image image = java.awt.Toolkit.getDefaultToolkit().getImage(url);
-            loadImage(image);
-        } catch (final MalformedURLException e) {
-            throw new IsisException("Failed to load image from " + filename);
-        }
-    }
-*/
+
+    /*
+     * private void loadImageFromURL(final String filename) { try { final URL url = new URL("file://" + filename); final
+     * Image image = java.awt.Toolkit.getDefaultToolkit().getImage(url); loadImage(image); } catch (final
+     * MalformedURLException e) { throw new IsisException("Failed to load image from " + filename); } }
+     */
     private void loadImageFromFile(final String filename) {
         final Image image = java.awt.Toolkit.getDefaultToolkit().getImage(filename);
         loadImage(image);
@@ -241,8 +237,7 @@ public class ImageField extends AbstractField {
                  * transferDataFlavors.length; i++) { LOG.debug("data transfer as " +
                  * transferDataFlavors[i].getMimeType()); }
                  * 
-                 * Image image = (Image) content.getTransferData(DataFlavor.imageFlavor); LOG.debug("pasted " +
-                 * image);
+                 * Image image = (Image) content.getTransferData(DataFlavor.imageFlavor); LOG.debug("pasted " + image);
                  */
 
             }
@@ -254,5 +249,6 @@ public class ImageField extends AbstractField {
     }
 
     @Override
-    protected void save() {}
+    protected void save() {
+    }
 }

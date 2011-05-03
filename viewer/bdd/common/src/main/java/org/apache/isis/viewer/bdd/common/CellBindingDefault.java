@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.bdd.common;
 
-
 public class CellBindingDefault extends CellBinding {
 
     public static class Builder {
@@ -57,15 +56,14 @@ public class CellBindingDefault extends CellBinding {
         return new Builder(name, headText);
     }
 
-    private CellBindingDefault(final String name, final boolean autoCreate,
-            final boolean ditto, final boolean optional,
-            final String[] headTexts) {
-    	super(name, autoCreate, ditto, optional, headTexts);
+    private CellBindingDefault(final String name, final boolean autoCreate, final boolean ditto,
+        final boolean optional, final String[] headTexts) {
+        super(name, autoCreate, ditto, optional, headTexts);
     }
 
-	@Override
-	protected void copy(ScenarioCell from, ScenarioCell to) {
-		to.setText(from.getText());
-	}
+    @Override
+    protected void copy(final ScenarioCell from, final ScenarioCell to) {
+        to.setText(from.getText());
+    }
 
 }

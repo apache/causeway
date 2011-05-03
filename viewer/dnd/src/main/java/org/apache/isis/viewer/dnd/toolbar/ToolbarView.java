@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.toolbar;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -29,18 +28,21 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeView;
 
 public class ToolbarView extends CompositeView {
 
-    public ToolbarView(Content content, ViewSpecification specification) {
+    public ToolbarView(final Content content, final ViewSpecification specification) {
         super(content, specification);
     }
 
-    protected void buildView() {}
+    @Override
+    protected void buildView() {
+    }
 
-    protected void doLayout(Size maximumSize) {
+    @Override
+    protected void doLayout(final Size maximumSize) {
         int x = HPADDING;
         int y = 0;
         int lineHeight = 0;
-        for (View button : getSubviews()) {
-            Size buttonSize = button.getRequiredSize(Size.createMax());
+        for (final View button : getSubviews()) {
+            final Size buttonSize = button.getRequiredSize(Size.createMax());
             if (x + buttonSize.getWidth() >= maximumSize.getWidth()) {
                 x = HPADDING;
                 y += lineHeight + VPADDING;
@@ -52,13 +54,14 @@ public class ToolbarView extends CompositeView {
             lineHeight = Math.max(lineHeight, buttonSize.getHeight());
         }
     }
-    
-    public Size requiredSize(Size availableSpace) {
+
+    @Override
+    public Size requiredSize(final Size availableSpace) {
         int lineHeight = 0;
         int lineWidth = HPADDING;
-        Size requiredSize = new Size();
-        for (View button : getSubviews()) {
-            Size buttonSize = button.getRequiredSize(availableSpace);
+        final Size requiredSize = new Size();
+        for (final View button : getSubviews()) {
+            final Size buttonSize = button.getRequiredSize(availableSpace);
             lineWidth += buttonSize.getWidth() + HPADDING;
             if (lineWidth >= availableSpace.getWidth()) {
                 lineWidth = HPADDING;
@@ -73,5 +76,3 @@ public class ToolbarView extends CompositeView {
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.option;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.ObjectContent;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 /**
  * Destroy this object
@@ -80,7 +78,7 @@ public class DisposeObjectOption extends UserActionAbstract {
         // getTransactionManager().startTransaction();
 
         getPersistenceSession().destroyObject(object);
-        
+
         // getTransactionManager().endTransaction();
 
         getUpdateNotifier().addDisposedObject(object);
@@ -88,15 +86,14 @@ public class DisposeObjectOption extends UserActionAbstract {
         view.getFeedbackManager().showMessagesAndWarnings();
     }
 
-
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-        
+
     private static UpdateNotifier getUpdateNotifier() {
         return IsisContext.getUpdateNotifier();
     }

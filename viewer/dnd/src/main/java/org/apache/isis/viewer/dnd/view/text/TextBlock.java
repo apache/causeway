@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import org.apache.log4j.Logger;
-
 
 class TextBlock {
     private static final Logger LOG = Logger.getLogger(TextBlock.class);
@@ -180,8 +178,8 @@ class TextBlock {
     }
 
     /**
-     * breaks a block at the cursor position by truncating this block and creating a new block and adding the
-     * removed text.
+     * breaks a block at the cursor position by truncating this block and creating a new block and adding the removed
+     * text.
      */
     public TextBlock splitAt(final int line, final int character) {
         format();

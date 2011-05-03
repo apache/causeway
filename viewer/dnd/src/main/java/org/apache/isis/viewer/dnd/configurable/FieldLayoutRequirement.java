@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.viewer.dnd.view.View;
@@ -25,19 +24,15 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
 public class FieldLayoutRequirement {
     private View view;
-    
-    
+
     private boolean visible;
     private int columnSpan;
     private int rowSpan;
-    
-    
+
     private ViewSpecification spec;
     private boolean showLabel;
     private boolean mergeWithNext;
-    
+
     private boolean allowGrowing;
     private boolean allowScrolling;
 }
-
-

@@ -40,7 +40,7 @@ public class SaveObject extends PerformAbstractTypeParams {
 
         final Consent valid = onAdapter.getSpecification().isValid(onAdapter);
 
-        CellBinding performBinding = performContext.getPeer().getPerformBinding();
+        final CellBinding performBinding = performContext.getPeer().getPerformBinding();
         if (valid.isVetoed()) {
             throw ScenarioBoundValueException.current(performBinding, valid.getReason());
         }

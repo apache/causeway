@@ -17,25 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
-import org.apache.isis.viewer.dnd.drawing.Text;
-import org.apache.isis.viewer.dnd.icon.Icon;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
-import org.apache.isis.viewer.dnd.view.ViewRequirement;
-import org.apache.isis.viewer.dnd.view.base.IconGraphic;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.border.IconBorder;
 import org.apache.isis.viewer.dnd.view.border.LineBorder;
-import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 
 public class IconGridViewSpecification extends AbstractCollectionViewSpecification {
 
@@ -43,52 +35,47 @@ public class IconGridViewSpecification extends AbstractCollectionViewSpecificati
         addViewDecorator(new IconBorder.Factory());
     }
 
-        protected ViewFactory createElementFactory() {
-            return new ViewFactory() {
-                public View createView(Content content, Axes axes, int sequence) {
-                    View icon = new ImageViewSpecification().createView(content, axes, sequence);
-                    /*
-                    Icon icon = new Icon(content, IconGridViewSpecification.this);
-                    Text textStyle = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
-                    icon.setTitle(new ObjectTitleText(icon, textStyle));
-                    icon.setSelectedGraphic(new IconGraphic(icon, 68));
-                    icon.setUnselectedGraphic(new IconGraphic(icon, 60));
-                    icon.setVertical(true);
-                    
-                    // return icon;
-                    */
-                    LineBorder lineBorderedIcon = new LineBorder(icon);
-                    lineBorderedIcon.setPadding(4);
-                    lineBorderedIcon.setColor(Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
-                    
-            //        return lineBorderedIcon;
-                    
-                    return new ReplaceViewBorder(lineBorderedIcon);
-                }
-            };
-        }
+    @Override
+    protected ViewFactory createElementFactory() {
+        return new ViewFactory() {
+            @Override
+            public View createView(final Content content, final Axes axes, final int sequence) {
+                final View icon = new ImageViewSpecification().createView(content, axes, sequence);
+                /*
+                 * Icon icon = new Icon(content, IconGridViewSpecification.this); Text textStyle =
+                 * Toolkit.getText(ColorsAndFonts.TEXT_NORMAL); icon.setTitle(new ObjectTitleText(icon, textStyle));
+                 * icon.setSelectedGraphic(new IconGraphic(icon, 68)); icon.setUnselectedGraphic(new IconGraphic(icon,
+                 * 60)); icon.setVertical(true);
+                 * 
+                 * // return icon;
+                 */
+                final LineBorder lineBorderedIcon = new LineBorder(icon);
+                lineBorderedIcon.setPadding(4);
+                lineBorderedIcon.setColor(Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
 
-    public Layout createLayout(Content content, Axes axes) {
-        GridLayout gridLayout = new GridLayout();
+                // return lineBorderedIcon;
+
+                return new ReplaceViewBorder(lineBorderedIcon);
+            }
+        };
+    }
+
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
+        final GridLayout gridLayout = new GridLayout();
         gridLayout.setSize(3);
         return gridLayout;
     }
-    
+
+    @Override
     public String getName() {
         return "Icon Grid";
     }
-    
-    
-    
-    
-    
-    
+
     /*
-    private static final ObjectSpecification BOOK_SPECIFICATION = IsisContext.getSpecificationLoader().loadSpecification("org.apache.isis.example.library.dom.Book");
-    public boolean canDisplay(ViewRequirement requirement) {
-        return super.canDisplay(requirement) && requirement.getAdapter().getTypeOfFacet().valueSpec() == BOOK_SPECIFICATION;
-    }
-    */
+     * private static final ObjectSpecification BOOK_SPECIFICATION =
+     * IsisContext.getSpecificationLoader().loadSpecification("org.apache.isis.example.library.dom.Book"); public
+     * boolean canDisplay(ViewRequirement requirement) { return super.canDisplay(requirement) &&
+     * requirement.getAdapter().getTypeOfFacet().valueSpec() == BOOK_SPECIFICATION; }
+     */
 }
-
-

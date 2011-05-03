@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Cursor;
@@ -27,7 +26,6 @@ import java.awt.Insets;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 
 public interface RenderingArea {
 

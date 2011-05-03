@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.drawing.Location;
-
+import org.apache.log4j.Logger;
 
 public class TextContent {
     private static final Logger LOG = Logger.getLogger(TextContent.class);
@@ -39,8 +37,8 @@ public class TextContent {
     private final TextBlockTarget target;
     private int displayFromLine;
     private int availableDisplayLines;
-    private boolean useEmptyLines;
-    private final int wrap;    
+    private final boolean useEmptyLines;
+    private final int wrap;
 
     public TextContent(final TextBlockTarget target, final int noLines, final int wrapStyle) {
         this(target, noLines, wrapStyle, false);
@@ -64,8 +62,8 @@ public class TextContent {
     }
 
     /**
-     * Returns the number of lines that this field will display the content. This can be smaller than the
-     * actual number of lines of content, but will be at least one.
+     * Returns the number of lines that this field will display the content. This can be smaller than the actual number
+     * of lines of content, but will be at least one.
      */
     public int getNoDisplayLines() {
         return availableDisplayLines;
@@ -183,8 +181,7 @@ public class TextContent {
     }
 
     /**
-     * returns the entire text of the content, with a newline between each block (but not after the final
-     * block.
+     * returns the entire text of the content, with a newline between each block (but not after the final block.
      */
     public String getText() {
         final StringBuffer content = new StringBuffer();
@@ -264,8 +261,7 @@ public class TextContent {
             addBlock("");
         } else {
             final String[] tokens = text.split("\\n");
-            for (int i = 0; i < tokens.length; i++) {
-                String token = tokens[i];
+            for (final String token : tokens) {
                 if (useEmptyLines || token.length() > 0) {
                     addBlock(token);
                 }
@@ -350,8 +346,8 @@ public class TextContent {
         }
 
         /*
-         * slightly offsetting mouse helps the user position the cursor between characters near the pointer
-         * rather than always after the pointer
+         * slightly offsetting mouse helps the user position the cursor between characters near the pointer rather than
+         * always after the pointer
          */
         final int x = atLocation.getX() - 3;
 

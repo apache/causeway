@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -44,19 +43,20 @@ import org.apache.isis.viewer.dnd.view.field.OneToOneField;
 import org.apache.isis.viewer.dnd.view.lookup.OpenObjectDropDownBorder;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
 
-
 public class EmptyField extends AbstractView {
 
     public static class Specification implements ViewSpecification {
-        public boolean canDisplay(ViewRequirement requirement) {
+        @Override
+        public boolean canDisplay(final ViewRequirement requirement) {
             return requirement.isObject() && requirement.isOpen() && !requirement.isTextParseable()
-                    && !requirement.hasReference();
+                && !requirement.hasReference();
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             final EmptyField emptyField = new EmptyField(content, this, Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
             if ((content instanceof OneToOneField && ((OneToOneField) content).isEditable().isAllowed())
-                    || content instanceof ObjectParameter) {
+                || content instanceof ObjectParameter) {
                 if (content.isOptionEnabled()) {
                     return new ObjectBorder(new OpenObjectDropDownBorder(emptyField, new IconSpecification()));
                 } else {
@@ -67,26 +67,32 @@ public class EmptyField extends AbstractView {
             }
         }
 
+        @Override
         public String getName() {
             return "empty field";
         }
 
+        @Override
         public boolean isAligned() {
             return false;
         }
 
+        @Override
         public boolean isOpen() {
             return false;
         }
 
+        @Override
         public boolean isReplaceable() {
             return true;
         }
-        
+
+        @Override
         public boolean isResizeable() {
             return false;
         }
 
+        @Override
         public boolean isSubView() {
             return true;
         }
@@ -126,7 +132,7 @@ public class EmptyField extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Size size = icon.getSize();
         size.extendWidth(View.HPADDING);
         size.extendWidth(text.getSize().getWidth());
@@ -149,7 +155,7 @@ public class EmptyField extends AbstractView {
             } else {
                 getState().setCantDrop();
             }
-            String actionText = canDrop.isVetoed() ? canDrop.getReason() : "Set to " + sourceContent.title();
+            final String actionText = canDrop.isVetoed() ? canDrop.getReason() : "Set to " + sourceContent.title();
             getFeedbackManager().setAction(actionText);
         } else {
             getState().setCantDrop();

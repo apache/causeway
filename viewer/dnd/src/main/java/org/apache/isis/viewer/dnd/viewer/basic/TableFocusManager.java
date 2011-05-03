@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 public class TableFocusManager implements FocusManager {
     private int row;
@@ -36,6 +34,7 @@ public class TableFocusManager implements FocusManager {
         focusInitialChildView();
     }
 
+    @Override
     public void focusNextView() {
         View r = table.getSubviews()[row];
         View[] cells = r.getSubviews();
@@ -67,6 +66,7 @@ public class TableFocusManager implements FocusManager {
         }
     }
 
+    @Override
     public void focusPreviousView() {
         View r = table.getSubviews()[row];
         View[] cells = r.getSubviews();
@@ -96,12 +96,19 @@ public class TableFocusManager implements FocusManager {
         }
     }
 
-    public void focusParentView() {}
+    @Override
+    public void focusParentView() {
+    }
 
-    public void focusFirstChildView() {}
+    @Override
+    public void focusFirstChildView() {
+    }
 
-    public void focusLastChildView() {}
+    @Override
+    public void focusLastChildView() {
+    }
 
+    @Override
     public void focusInitialChildView() {
         row = cell = 0;
 
@@ -121,6 +128,7 @@ public class TableFocusManager implements FocusManager {
         }
     }
 
+    @Override
     public View getFocus() {
         final View[] rows = table.getSubviews();
         if (row < 0 || row >= rows.length) {
@@ -134,6 +142,7 @@ public class TableFocusManager implements FocusManager {
         return cells[cell];
     }
 
+    @Override
     public void setFocus(final View view) {
         if (view == table) {
             return;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -29,7 +28,6 @@ import org.apache.isis.viewer.dnd.view.Click;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractViewDecorator;
-
 
 class SelectionItemSelector extends AbstractViewDecorator {
 

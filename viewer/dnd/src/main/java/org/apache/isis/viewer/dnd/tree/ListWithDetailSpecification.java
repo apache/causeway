@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.viewer.dnd.list.SimpleListSpecification;
@@ -30,45 +29,51 @@ import org.apache.isis.viewer.dnd.view.border.SelectObjectBorder;
 import org.apache.isis.viewer.dnd.view.composite.MasterDetailPanel;
 
 public class ListWithDetailSpecification implements ViewSpecification {
-    private SimpleListSpecification leftHandSideSpecification;
+    private final SimpleListSpecification leftHandSideSpecification;
 
     public ListWithDetailSpecification() {
         leftHandSideSpecification = new SimpleListSpecification();
         leftHandSideSpecification.addSubviewDecorator(new SelectObjectBorder.Factory());
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isCollection() && requirement.isOpen();
     }
- 
-    public View createView(Content content, Axes axes, int sequence) {
+
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         return new MasterDetailPanel(content, this, leftHandSideSpecification);
     }
-    
+
+    @Override
     public String getName() {
         return "List and details";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return true;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
 }
-
-

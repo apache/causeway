@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -25,7 +24,6 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Dump;
-
 
 public class DebugObjectSpecification implements DebuggableWithTitle {
     private final ObjectSpecification specification;
@@ -38,6 +36,7 @@ public class DebugObjectSpecification implements DebuggableWithTitle {
         this.specification = object;
     }
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         if (specification == null) {
             debug.appendln("no specfication");
@@ -46,6 +45,7 @@ public class DebugObjectSpecification implements DebuggableWithTitle {
         }
     }
 
+    @Override
     public String debugTitle() {
         return "Object Specification";
     }

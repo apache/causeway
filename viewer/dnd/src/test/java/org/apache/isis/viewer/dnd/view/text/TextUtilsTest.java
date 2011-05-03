@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import junit.framework.TestCase;
 
 import org.apache.isis.viewer.dnd.drawing.Text;
-import org.apache.isis.viewer.dnd.view.text.TextUtils;
 import org.apache.isis.viewer.dnd.viewer.drawing.DummyText;
-
 
 public class TextUtilsTest extends TestCase {
 
@@ -60,7 +57,6 @@ public class TextUtilsTest extends TestCase {
         assertEquals("test string...", TextUtils.limitText(title, style, 199));
     }
 
-
     public void testNoSpace() {
         final String title = "test string, that? is truncated";
         final Text style = new DummyText();
@@ -69,4 +65,3 @@ public class TextUtilsTest extends TestCase {
     }
 
 }
-

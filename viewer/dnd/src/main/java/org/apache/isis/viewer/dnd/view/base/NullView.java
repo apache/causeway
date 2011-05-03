@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.viewer.dnd.view.content.NullContent;
-
 
 public class NullView extends AbstractView {
     public NullView() {

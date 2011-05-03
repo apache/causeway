@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.border.IconBorder;
 import org.apache.isis.viewer.dnd.view.composite.FieldLabelsDecorator;
 
-
 public class ExpandableFormSpecification extends AbstractFormSpecification {
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return super.canDisplay(requirement) && !requirement.is(ViewRequirement.SUBVIEW);
     }
 
@@ -36,13 +35,14 @@ public class ExpandableFormSpecification extends AbstractFormSpecification {
         addSubviewDecorator(new ExpandableViewBorder.Factory());
         addSubviewDecorator(new FieldLabelsDecorator());
         addViewDecorator(new IconBorder.Factory());
-   }
+    }
 
     @Override
     protected int collectionRequirement() {
         return super.collectionRequirement() | ViewRequirement.EXPANDABLE;
     }
 
+    @Override
     public String getName() {
         return "Expanding Form (experimental)";
     }

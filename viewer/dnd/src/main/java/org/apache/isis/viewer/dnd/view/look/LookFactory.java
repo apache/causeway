@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look;
 
 import java.util.ArrayList;
@@ -30,12 +29,11 @@ import org.apache.isis.viewer.dnd.view.look.linux.LinuxLook;
 import org.apache.isis.viewer.dnd.view.look.simple.SimpleLook;
 import org.apache.isis.viewer.dnd.view.look.swing.SwingLook;
 
-
 public class LookFactory {
     private static final Look SIMPLE_LOOK = new SimpleLook();
     private static final LineLook LINE_LOOK = new LineLook();
     private static final Look SWING_LOOK = new SwingLook();
-    private static final Look LINUX_LOOK = new LinuxLook(); 
+    private static final Look LINUX_LOOK = new LinuxLook();
     private static final Look defaultLook = SIMPLE_LOOK;
     private static List<Look> looks = new ArrayList<Look>();
     private static Look installedLook;
@@ -44,11 +42,11 @@ public class LookFactory {
         looks.add(SIMPLE_LOOK);
         looks.add(LINE_LOOK);
         looks.add(SWING_LOOK);
-        looks.add(LINUX_LOOK); 
-        
-        String className = Properties.getString("look");
+        looks.add(LINUX_LOOK);
+
+        final String className = Properties.getString("look");
         if (className != null) {
-            for (Look look : looks) {
+            for (final Look look : looks) {
                 if (look.getClass().getName().equals(className)) {
                     setLook(look);
                     return;
@@ -58,11 +56,11 @@ public class LookFactory {
         setLook(defaultLook);
     }
 
-    public static void setLook(Look look) {
+    public static void setLook(final Look look) {
         defaultLook.install();
         look.install();
         installedLook = look;
-        
+
         Properties.setStringOption("look", installedLook.getClass().getName());
     }
 
@@ -75,4 +73,3 @@ public class LookFactory {
     }
 
 }
-

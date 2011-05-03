@@ -27,28 +27,24 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcomma
 
 public class NotEmpty extends ThatSubcommandAbstract {
 
-	public NotEmpty() {
-		super("is not empty");
-	}
+    public NotEmpty() {
+        super("is not empty");
+    }
 
-	public ObjectAdapter that(final PerformContext performContext)
-			throws ScenarioBoundValueException {
+    @Override
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-		final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-				.getObjectMember();
+        final OneToOneAssociation otoa = (OneToOneAssociation) performContext.getObjectMember();
 
-		// get
-		final ObjectAdapter resultAdapter = otoa.get(performContext
-				.getOnAdapter());
+        // get
+        final ObjectAdapter resultAdapter = otoa.get(performContext.getOnAdapter());
 
-		if (resultAdapter == null) {
-			CellBinding thatItBinding = performContext.getPeer()
-					.getThatItBinding();
-			throw ScenarioBoundValueException.current(thatItBinding, 
-					"(empty)");
-		}
+        if (resultAdapter == null) {
+            final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
+            throw ScenarioBoundValueException.current(thatItBinding, "(empty)");
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

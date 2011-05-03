@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
@@ -40,7 +38,7 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.ObjectView;
-
+import org.apache.log4j.Logger;
 
 public abstract class CompositeView extends ObjectView {
     private static final Logger LOG = Logger.getLogger(CompositeView.class);
@@ -60,8 +58,8 @@ public abstract class CompositeView extends ObjectView {
     @Override
     public void refresh() {
         final View views[] = getSubviews();
-        for (int i = 0; i < views.length; i++) {
-            views[i].refresh();
+        for (final View view : views) {
+            view.refresh();
         }
     }
 
@@ -98,24 +96,24 @@ public abstract class CompositeView extends ObjectView {
 
     protected void disposeContentsOnly() {
         final View views[] = getSubviews();
-        for (int i = 0; i < views.length; i++) {
-            views[i].dispose();
+        for (final View view : views) {
+            view.dispose();
         }
     }
 
     @Override
     public void draw(final Canvas canvas) {
         final View views[] = getSubviews();
-        for (int i = 0; i < views.length; i++) {
-            final View subview = views[i];
+        for (final View subview : views) {
             final Bounds bounds = subview.getBounds();
             if (Toolkit.debug) {
                 LOG.debug("compare: " + bounds + "  " + canvas);
             }
             if (canvas.overlaps(bounds)) {
                 // Canvas subCanvas = canvas.createSubcanvas();
-                final Canvas subCanvas = canvas.createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth() - 0, bounds
-                        .getSize().getHeight());
+                final Canvas subCanvas =
+                    canvas.createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth() - 0, bounds.getSize()
+                        .getHeight());
                 // subCanvas.offset(subview.getBounds().getX(), subview.getBounds().getY());
                 if (Toolkit.debug) {
                     LOG.debug("-- repainting " + subview);
@@ -123,10 +121,9 @@ public abstract class CompositeView extends ObjectView {
                 }
                 subview.draw(subCanvas);
                 if (Toolkit.debug) {
-                    canvas
-                            .drawRectangle(subview.getBounds().getX(), subview.getBounds().getY(),
-                                    subview.getBounds().getWidth() - 1, subview.getBounds().getHeight() - 1,
-                                    Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
+                    canvas.drawRectangle(subview.getBounds().getX(), subview.getBounds().getY(), subview.getBounds()
+                        .getWidth() - 1, subview.getBounds().getHeight() - 1, Toolkit
+                        .getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
                 }
             }
         }
@@ -149,7 +146,7 @@ public abstract class CompositeView extends ObjectView {
     }
 
     @Override
-    public final Size getRequiredSize(Size availableSpace) {
+    public final Size getRequiredSize(final Size availableSpace) {
         ensureBuilt();
         return requiredSize(availableSpace);
     }
@@ -158,9 +155,9 @@ public abstract class CompositeView extends ObjectView {
 
     /**
      * Gets the set of subviews for this container. If the container is marked as not being built yet (ie
-     * {@link #buildInvalid} is <tt>true</tt> ), then a view building process is initiated and the flag is
-     * cleared. During this build process the {@link #buildView()} method is called and then each subview is
-     * asked for its subview so that the build process can recurse down the tree if it needs to.
+     * {@link #buildInvalid} is <tt>true</tt> ), then a view building process is initiated and the flag is cleared.
+     * During this build process the {@link #buildView()} method is called and then each subview is asked for its
+     * subview so that the build process can recurse down the tree if it needs to.
      * 
      * This method is synchronised so that two threads do not try to build the same view at the same time
      */
@@ -179,7 +176,7 @@ public abstract class CompositeView extends ObjectView {
             } else {
                 buildModifiedView();
             }
-            for (View view : subviews()) {
+            for (final View view : subviews()) {
                 view.getSubviews();
             }
             getFeedbackManager().clearBusy(this);
@@ -201,6 +198,7 @@ public abstract class CompositeView extends ObjectView {
      * @deprecated
      */
     // TODO call two different methods instead: buildNewView and buildModifiedView
+    @Deprecated
     protected abstract void buildView();
 
     protected View[] subviews() {
@@ -226,13 +224,13 @@ public abstract class CompositeView extends ObjectView {
         if (layoutInvalid) {
             getFeedbackManager().setBusy(this, null);
             markDamaged();
-            
+
             ensureBuilt();
-            Size maximumSize = getSize();
-//           maximumSize.contract(getPadding());
+            final Size maximumSize = getSize();
+            // maximumSize.contract(getPadding());
             doLayout(maximumSize);
             layoutInvalid = false;
-            for (View view : getSubviews()) {
+            for (final View view : getSubviews()) {
                 view.layout();
             }
             markDamaged();
@@ -244,11 +242,12 @@ public abstract class CompositeView extends ObjectView {
     protected abstract void doLayout(Size maximumSize);
 
     /**
-     * When the specified size is different to the current size the the layout of this component is marked as
-     * invalid, forcing its components to re-laid out in turn.
+     * When the specified size is different to the current size the the layout of this component is marked as invalid,
+     * forcing its components to re-laid out in turn.
      */
-    public void setSize(Size size) {
-        Size previousSize = getSize();
+    @Override
+    public void setSize(final Size size) {
+        final Size previousSize = getSize();
         super.setSize(size);
         if (!size.equals(previousSize)) {
             layoutInvalid = true;

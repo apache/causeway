@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class ClearValueOption extends AbstractValueOption {
 
@@ -46,7 +44,7 @@ public class ClearValueOption extends AbstractValueOption {
         if (consent.isVetoed()) {
             return consent;
         }
-        Consent canClear = field.canClear();
+        final Consent canClear = field.canClear();
         if (canClear.isVetoed()) {
             // TODO: move logic into Facets.
             return new Veto(String.format("Can't clear %s values", value.getSpecification().getShortIdentifier()));

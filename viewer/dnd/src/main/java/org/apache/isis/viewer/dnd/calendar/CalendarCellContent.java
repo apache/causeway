@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.collection.AbstractCollectionContent;
 
-
 public class CalendarCellContent extends AbstractCollectionContent {
     private final String title;
     private final List<Object> collection = new ArrayList<Object>();
@@ -41,49 +39,58 @@ public class CalendarCellContent extends AbstractCollectionContent {
         this.title = title;
     }
 
+    @Override
     public ObjectAdapter getCollection() {
         return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(collection);
     }
 
-    public Consent canDrop(Content sourceContent) {
+    @Override
+    public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
-    public ObjectAdapter drop(Content sourceContent) {
+    @Override
+    public ObjectAdapter drop(final Content sourceContent) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public String getHelp() {
         return "No help available";
     }
 
+    @Override
     public String getIconName() {
         return null;
     }
 
+    @Override
     public String getId() {
         return null;
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return getCollection();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public boolean isTransient() {
         return true;
     }
 
+    @Override
     public String title() {
         return title;
     }
 
-    public void addElement(ObjectAdapter element) {
+    public void addElement(final ObjectAdapter element) {
         collection.add(element.getObject());
     }
 
 }
-

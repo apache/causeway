@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -26,17 +25,16 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
-
 /**
- * Specification for a tree browser frame with a tree displaying only collections and objects containing
- * collections.
+ * Specification for a tree browser frame with a tree displaying only collections and objects containing collections.
  */
 public class TreeSpecification implements ViewSpecification {
     private final OpenCollectionNodeSpecification openCollection;
     private final OpenObjectNodeSpecification openObject;
-    
+
     public TreeSpecification() {
-        final ClosedObjectNodeSpecification closedObject = new ClosedObjectNodeSpecification(false); //, new SelectObjectBorder.Factory());
+        final ClosedObjectNodeSpecification closedObject = new ClosedObjectNodeSpecification(false); // , new
+                                                                                                     // SelectObjectBorder.Factory());
         final NodeSpecification closedCollection = new ClosedCollectionNodeSpecification();
         final EmptyNodeSpecification noNode = new EmptyNodeSpecification();
 
@@ -55,13 +53,17 @@ public class TreeSpecification implements ViewSpecification {
         closedCollection.setReplacementNodeSpecification(openCollection);
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.is(ViewRequirement.OPEN) && (openCollection.canDisplay(requirement) || openObject.canDisplay(requirement)) && requirement.isExpandable();
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.is(ViewRequirement.OPEN)
+            && (openCollection.canDisplay(requirement) || openObject.canDisplay(requirement))
+            && requirement.isExpandable();
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         View rootNode;
-        ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.CLOSED);
+        final ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.CLOSED);
         if (openCollection.canDisplay(requirement)) {
             rootNode = openCollection.createView(content, axes, -1);
         } else {
@@ -70,26 +72,32 @@ public class TreeSpecification implements ViewSpecification {
         return rootNode;
     }
 
+    @Override
     public String getName() {
         return "Tree (not working)";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }

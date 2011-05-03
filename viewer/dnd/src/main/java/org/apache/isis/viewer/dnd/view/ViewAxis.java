@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
-public interface ViewAxis {}
+public interface ViewAxis {
+}

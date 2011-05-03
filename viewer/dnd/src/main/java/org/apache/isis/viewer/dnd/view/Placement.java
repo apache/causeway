@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 
-
 /**
- * Used to determine the placement of a new view on the workspace. It can be: an absolute placement given a
- * Location; a position relative to a given view; or in the center. A relative placement uses the
- * PlacementStrategy to determine an optimum location.
+ * Used to determine the placement of a new view on the workspace. It can be: an absolute placement given a Location; a
+ * position relative to a given view; or in the center. A relative placement uses the PlacementStrategy to determine an
+ * optimum location.
  */
 public class Placement {
     private static final int ABSOLUTE = 1;
@@ -38,19 +36,19 @@ public class Placement {
     private final View relativeTo;
     private final int position;
 
-    public Placement(Location location) {
+    public Placement(final Location location) {
         this.location = location;
         relativeTo = null;
         position = ABSOLUTE;
     }
 
-    public Placement(View relativeTo) {
+    public Placement(final View relativeTo) {
         this.relativeTo = relativeTo.getView();
         location = null;
         position = RELATIVE;
     }
 
-    public Placement(int position) {
+    public Placement(final int position) {
         this.relativeTo = null;
         location = null;
         this.position = position;
@@ -66,19 +64,18 @@ public class Placement {
 
     public void position(final Workspace workspace, final View view) {
         switch (position) {
-        case ABSOLUTE:
-            view.setLocation(location);
-            break;
+            case ABSOLUTE:
+                view.setLocation(location);
+                break;
 
-        case RELATIVE:
-            view.setLocation(placementStrategy.determinePlacement(workspace, relativeTo, view));
-            break;
+            case RELATIVE:
+                view.setLocation(placementStrategy.determinePlacement(workspace, relativeTo, view));
+                break;
 
-        case CENTER:
-            view.setLocation(center(workspace, view));
-            break;
+            case CENTER:
+                view.setLocation(center(workspace, view));
+                break;
         }
     }
 
 }
-

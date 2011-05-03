@@ -31,17 +31,16 @@ import com.google.common.collect.Iterables;
 
 public class AbstractListFixturePeer extends AbstractFixturePeer {
 
-	private final String listAlias;
+    private final String listAlias;
 
-   /**
+    /**
      * @see #collectionAdapters()
      */
     private List<ObjectAdapter> objects;
 
-
-    public AbstractListFixturePeer(final AliasRegistry aliasesRegistry,
-            final String listAlias, final CellBinding... cellBindings) {
-    	super(aliasesRegistry, cellBindings);
+    public AbstractListFixturePeer(final AliasRegistry aliasesRegistry, final String listAlias,
+        final CellBinding... cellBindings) {
+        super(aliasesRegistry, cellBindings);
 
         this.listAlias = listAlias;
     }
@@ -54,25 +53,24 @@ public class AbstractListFixturePeer extends AbstractFixturePeer {
         return getAliasRegistry().getAliased(listAlias);
     }
 
+    public void assertIsList() throws ScenarioValueException {
+        if (!(getListAdapter() != null)) {
+            throw new ScenarioValueException("no such alias");
+        }
+        if (!isList()) {
+            throw new ScenarioValueException("not a list");
+        }
+    }
 
-	public void assertIsList() throws ScenarioValueException {
-		if (!(getListAdapter() != null)) {
-			throw new ScenarioValueException("no such alias");
-		}
-		if (!isList()) {
-			throw new ScenarioValueException("not a list");
-		}
-	}
-
-	public boolean isList() {
-		return getCollectionFacet() != null;
-	}
+    public boolean isList() {
+        return getCollectionFacet() != null;
+    }
 
     /**
      * Lazily populated, and populated only once.
      */
     protected List<ObjectAdapter> collectionAdapters() {
-        if(objects==null){
+        if (objects == null) {
             objects = new ArrayList<ObjectAdapter>();
             Iterables.addAll(objects, collectionContents());
         }
@@ -83,10 +81,8 @@ public class AbstractListFixturePeer extends AbstractFixturePeer {
         return getCollectionFacet().iterable(getListAdapter());
     }
 
-	private CollectionFacet getCollectionFacet() {
-        return getListAdapter() != null ? getListAdapter()
-                .getSpecification().getFacet(CollectionFacet.class) : null;
-	}
-
+    private CollectionFacet getCollectionFacet() {
+        return getListAdapter() != null ? getListAdapter().getSpecification().getFacet(CollectionFacet.class) : null;
+    }
 
 }

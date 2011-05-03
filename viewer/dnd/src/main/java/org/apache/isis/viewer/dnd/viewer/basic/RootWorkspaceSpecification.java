@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public class RootWorkspaceSpecification extends WorkspaceSpecification {
     @Override
-    public View createView(final Content content, Axes axes, int sequence) {
+    public View createView(final Content content, final Axes axes, final int sequence) {
         View workspace;
         workspace = super.createView(content, axes, sequence);
         workspace.setFocusManager(new WorkspaceFocusManager());

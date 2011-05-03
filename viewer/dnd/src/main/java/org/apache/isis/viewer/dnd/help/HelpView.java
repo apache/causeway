@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.help;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
 
-
 public class HelpView extends AbstractView implements TextBlockTarget {
     private static final int HEIGHT = 350;
     private static final int WIDTH = 400;
@@ -41,8 +39,10 @@ public class HelpView extends AbstractView implements TextBlockTarget {
 
     public HelpView(final String name, final String description, final String help) {
         super(new NullContent());
-        final String text = (name == null || name.trim().equals("") ? "" : (name + "\n"))
-                + (description == null || description.trim().equals("") ? "" : (description + "\n")) + (help == null ? "" : help);
+        final String text =
+            (name == null || name.trim().equals("") ? "" : (name + "\n"))
+                + (description == null || description.trim().equals("") ? "" : (description + "\n"))
+                + (help == null ? "" : help);
         content = new TextContent(this, 10, TextContent.WRAPPING);
         content.setText(text);
     }
@@ -56,9 +56,10 @@ public class HelpView extends AbstractView implements TextBlockTarget {
 
         final int arc = 9;
         canvas.drawSolidRectangle(x + 2, y + 2, xEntent - 4, yExtent - 4, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
-        Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+        final Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         canvas.drawRoundedRectangle(x, y++, xEntent, yExtent, arc, arc, black);
-        canvas.drawRoundedRectangle(x + 1, y++, xEntent - 2, yExtent - 2, arc, arc, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+        canvas.drawRoundedRectangle(x + 1, y++, xEntent - 2, yExtent - 2, arc, arc,
+            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
         canvas.drawRoundedRectangle(x + 2, y++, xEntent - 4, yExtent - 4, arc, arc, black);
 
         x += 10;
@@ -67,9 +68,9 @@ public class HelpView extends AbstractView implements TextBlockTarget {
         canvas.drawText("Help", x, y, black, Toolkit.getText(ColorsAndFonts.TEXT_TITLE));
 
         final String[] lines = content.getDisplayLines();
-        for (int i = 0; i < lines.length; i++) {
+        for (final String line : lines) {
             y += Toolkit.getText(ColorsAndFonts.TEXT_NORMAL).getLineHeight();
-            canvas.drawText(lines[i], x, y, MAX_TEXT_WIDTH, black, Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+            canvas.drawText(line, x, y, MAX_TEXT_WIDTH, black, Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
         }
     }
 
@@ -88,10 +89,12 @@ public class HelpView extends AbstractView implements TextBlockTarget {
         getViewManager().clearOverlayView(this);
     }
 
+    @Override
     public int getMaxFieldWidth() {
         return WIDTH - 20;
     }
 
+    @Override
     public Text getText() {
         return Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
     }

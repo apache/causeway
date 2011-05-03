@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-
 
 public class InfoDebugFrame extends DebugFrame {
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import java.util.List;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
-
 
 public class ActionHelper {
 
@@ -66,23 +64,19 @@ public class ActionHelper {
         }
 
         /*
-         * int[] maxLength = action.getParameterMaxLengths(); int[] typicalLength =
-         * action.getParameterTypicalLengths(); int[] noLines = action.getParameterNoLines(); boolean[]
-         * canWrap = action.canParametersWrap();
+         * int[] maxLength = action.getParameterMaxLengths(); int[] typicalLength = action.getParameterTypicalLengths();
+         * int[] noLines = action.getParameterNoLines(); boolean[] canWrap = action.canParametersWrap();
          */
         return new ActionHelper(target, action, parameters, defaultValues, options);
     }
+
     private final ObjectAction action;
     private final ObjectAdapter[] parameters;
     private final ObjectAdapter target;
     private final ObjectAdapter[][] options;
 
-    private ActionHelper(
-            final ObjectAdapter target,
-            final ObjectAction action,
-            final ObjectAdapter[] parameters,
-            final ObjectAdapter[] defaultValues,
-            final ObjectAdapter[][] options) {
+    private ActionHelper(final ObjectAdapter target, final ObjectAction action, final ObjectAdapter[] parameters,
+        final ObjectAdapter[] defaultValues, final ObjectAdapter[][] options) {
         this.target = target;
         this.action = action;
         this.parameters = parameters;
@@ -96,12 +90,13 @@ public class ActionHelper {
             final ObjectAdapter adapter = parameters[i];
             final ObjectSpecification specification = parameters2.get(i).getSpecification();
             if (specification.isParseable()) {
-                final ParseableEntryActionParameter parseableEntryActionParameter = (ParseableEntryActionParameter) parameters2.get(i);
-                parameterContents[i] = new TextParseableParameterImpl(parseableEntryActionParameter, adapter, options[i], i,
-                        this);
+                final ParseableEntryActionParameter parseableEntryActionParameter =
+                    (ParseableEntryActionParameter) parameters2.get(i);
+                parameterContents[i] =
+                    new TextParseableParameterImpl(parseableEntryActionParameter, adapter, options[i], i, this);
             } else {
-                parameterContents[i] = new ObjectParameterImpl((OneToOneActionParameter) parameters2.get(i), adapter, options[i],
-                        i, this);
+                parameterContents[i] =
+                    new ObjectParameterImpl((OneToOneActionParameter) parameters2.get(i), adapter, options[i], i, this);
             }
         }
 
@@ -150,9 +145,9 @@ public class ActionHelper {
         return getTarget().getIconName();
     }
 
-    private static boolean hasValues(ObjectAdapter[] values) {
+    private static boolean hasValues(final ObjectAdapter[] values) {
         if (values != null) {
-            for (ObjectAdapter adapter : values) {
+            for (final ObjectAdapter adapter : values) {
                 if (adapter != null) {
                     return true;
                 }
@@ -161,9 +156,9 @@ public class ActionHelper {
         return false;
     }
 
-    private static boolean hasValues(ObjectAdapter[][] values) {
+    private static boolean hasValues(final ObjectAdapter[][] values) {
         if (values != null) {
-            for (ObjectAdapter[] adapters : values) {
+            for (final ObjectAdapter[] adapters : values) {
                 if (hasValues(adapters)) {
                     return true;
                 }

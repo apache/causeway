@@ -17,18 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import org.apache.isis.viewer.dnd.drawing.Text;
 
 public class TextUtils {
-    
-    private TextUtils() {}
-    
+
+    private TextUtils() {
+    }
+
     public static String limitText(final String xtext, final Text style, final int maxWidth) {
         String text = xtext;
-        int ellipsisWidth = style.stringWidth("...");
+        final int ellipsisWidth = style.stringWidth("...");
         if (maxWidth > 0 && style.stringWidth(text) > maxWidth) {
             int lastCharacterWithinAllowedWidth = 0;
             for (int textWidth = ellipsisWidth; textWidth <= maxWidth;) {
@@ -61,5 +61,3 @@ public class TextUtils {
     }
 
 }
-
-

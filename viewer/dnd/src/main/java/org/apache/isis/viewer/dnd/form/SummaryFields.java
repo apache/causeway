@@ -17,21 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.composite.StandardFields;
 
+public class SummaryFields extends StandardFields {
 
-public class SummaryFields extends StandardFields{
-
+    @Override
     protected int collectionRequirement() {
         return ViewRequirement.NONE;
     }
-    
-    protected boolean include(Content content, int sequence) {
+
+    @Override
+    protected boolean include(final Content content, final int sequence) {
         return sequence < 4 && content.getAdapter() != null;
     }
 }

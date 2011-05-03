@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.viewer.dnd.view.Content;
-
 
 public interface ActionContent extends Content {
     public Consent disabled();
@@ -38,5 +36,6 @@ public interface ActionContent extends Content {
 
     public ObjectAdapter getParameterObject(final int index);
 
+    @Override
     public String getDescription();
 }

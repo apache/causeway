@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import java.util.Enumeration;
@@ -42,7 +41,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.content.AbstractContent;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
 
 public abstract class AbstractCollectionContent extends AbstractContent implements CollectionContent {
     private static final TypeComparator TYPE_COMPARATOR = new TypeComparator();
@@ -90,7 +88,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final ObjectAdapter[] elementsArray = new ObjectAdapter[facet.size(collection)];
         int i = 0;
-        for (ObjectAdapter element : facet.iterable(collection)) {
+        for (final ObjectAdapter element : facet.iterable(collection)) {
             elementsArray[i++] = element;
         }
         return elementsArray;
@@ -120,18 +118,19 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         /*
          * Action[] actions = collection.getSpecification().getObjectActions(Action.USER);
          * 
-         * for (int i = 0; i < actions.length; i++) { final Action action = actions[i]; AbstractUserAction
-         * option; option = new AbstractUserAction(actions[i].getId()) { public void execute(final Workspace
-         * workspace, final View view, final Location at) { ObjectAdapter result = collection.execute(action, new
-         * ObjectAdapter[0]); at.add(20, 20); workspace.addOpenViewFor(result, at); } };
+         * for (int i = 0; i < actions.length; i++) { final Action action = actions[i]; AbstractUserAction option;
+         * option = new AbstractUserAction(actions[i].getId()) { public void execute(final Workspace workspace, final
+         * View view, final Location at) { ObjectAdapter result = collection.execute(action, new ObjectAdapter[0]);
+         * at.add(20, 20); workspace.addOpenViewFor(result, at); } };
          * 
          * if (option != null) { options.add(option); } }
          */
         options.add(new UserActionAbstract("Clear resolved", ActionType.DEBUG) {
             @Override
             public Consent disabled(final View component) {
-                return ConsentAbstract.allowIf(collection == null || collection.getResolveState() != ResolveState.TRANSIENT
-                        || collection.getResolveState() == ResolveState.GHOST);
+                return ConsentAbstract.allowIf(collection == null
+                    || collection.getResolveState() != ResolveState.TRANSIENT
+                    || collection.getResolveState() == ResolveState.GHOST);
             }
 
             @Override

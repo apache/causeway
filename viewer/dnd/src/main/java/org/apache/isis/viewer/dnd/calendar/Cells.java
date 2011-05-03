@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import java.text.DateFormat;
@@ -25,30 +24,30 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
 public abstract class Cells {
     protected final DateFormat monthFormat = new SimpleDateFormat("MMM");
     protected final DateFormat dayFormat = new SimpleDateFormat("EEE");
     protected Calendar date;
 
-    public Cells(Cells replacing) {
+    public Cells(final Cells replacing) {
         if (replacing == null) {
             today();
         } else {
             date = replacing.date;
         }
     }
-    
+
     public void today() {
         date = Calendar.getInstance();
         roundDown();
     }
 
-    public final void setDate(Calendar date) {
+    public final void setDate(final Calendar date) {
         this.date = date;
     }
 
-    public void roundDown() { }
+    public void roundDown() {
+    }
 
     abstract int defaultRows();
 
@@ -58,19 +57,18 @@ public abstract class Cells {
 
     abstract String title(int cell);
 
-    public String header(int cell) {
+    public String header(final int cell) {
         return null;
     }
 
-    public int getPeriodFor(Date date) {
-        Calendar forDate = Calendar.getInstance();
+    public int getPeriodFor(final Date date) {
+        final Calendar forDate = Calendar.getInstance();
         forDate.setTime(date);
-        int baseline = period(this.date);
-        int comparativePeriod = period(forDate);
+        final int baseline = period(this.date);
+        final int comparativePeriod = period(forDate);
         return baseline - comparativePeriod;
     }
 
     protected abstract int period(Calendar forDate);
 
 }
-

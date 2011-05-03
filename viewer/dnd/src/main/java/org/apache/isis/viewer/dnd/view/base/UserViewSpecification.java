@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
-
-import java.util.Date;
 
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.util.Properties;
@@ -33,55 +30,59 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 public class UserViewSpecification implements ViewSpecification {
 
     private final ViewSpecification specification;
-    private String name;
+    private final String name;
 
-    public UserViewSpecification(ViewSpecification specification, String name) {
+    public UserViewSpecification(final ViewSpecification specification, final String name) {
         this.specification = specification;
         this.name = name;
     }
-/*
-    public UserViewSpecification(View view) {
-        specification = view.getSpecification();
-        Options copyOptions = new Options();
-        view.saveOptions(copyOptions);
-        name = specification.getName() + " " + new Date().getSeconds();
-        
- //       view.setSpecification(this);
- //       view.loadOptions(copyOptions);
-    }
-*/
-    public boolean canDisplay(ViewRequirement requirement) {
+
+    /*
+     * public UserViewSpecification(View view) { specification = view.getSpecification(); Options copyOptions = new
+     * Options(); view.saveOptions(copyOptions); name = specification.getName() + " " + new Date().getSeconds();
+     * 
+     * // view.setSpecification(this); // view.loadOptions(copyOptions); }
+     */
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return specification.canDisplay(requirement);
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public boolean isAligned() {
         return specification.isAligned();
     }
 
+    @Override
     public boolean isOpen() {
         return specification.isOpen();
     }
 
+    @Override
     public boolean isReplaceable() {
         return specification.isReplaceable();
     }
 
+    @Override
     public boolean isResizeable() {
         return specification.isResizeable();
     }
 
+    @Override
     public boolean isSubView() {
         return specification.isSubView();
     }
 
-    public View createView(Content content, Axes axes, int sequence) {
-        View createView = specification.createView(content, axes, sequence);
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
+        final View createView = specification.createView(content, axes, sequence);
 
-        Options viewOptions = Properties.getViewConfigurationOptions(this);
+        final Options viewOptions = Properties.getViewConfigurationOptions(this);
         createView.loadOptions(viewOptions);
         return createView;
     }
@@ -91,5 +92,3 @@ public class UserViewSpecification implements ViewSpecification {
     }
 
 }
-
-

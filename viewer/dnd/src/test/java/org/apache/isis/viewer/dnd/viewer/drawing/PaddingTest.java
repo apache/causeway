@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.drawing;
-
-import org.apache.isis.viewer.dnd.drawing.Padding;
 
 import junit.framework.TestCase;
 
+import org.apache.isis.viewer.dnd.drawing.Padding;
 
 public class PaddingTest extends TestCase {
 

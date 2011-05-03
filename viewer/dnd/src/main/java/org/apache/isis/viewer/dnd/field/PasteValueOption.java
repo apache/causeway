@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class PasteValueOption extends AbstractValueOption {
 
@@ -38,7 +36,8 @@ public class PasteValueOption extends AbstractValueOption {
         if (changable.isVetoed()) {
             return changable;
         } else {
-            return changable.setDescription(String.format("Replace field content with '%s' from clipboard", getClipboard(view)));
+            return changable.setDescription(String.format("Replace field content with '%s' from clipboard",
+                getClipboard(view)));
         }
     }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.icon;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -30,7 +29,6 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.IconGraphic;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
-
 
 public class IconSpecification implements ViewSpecification {
     private final boolean isSubView;
@@ -45,11 +43,13 @@ public class IconSpecification implements ViewSpecification {
         this.isReplaceable = isReplaceable;
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isClosed() && requirement.isObject() && requirement.hasReference();
     }
-    
-    public View createView(final Content content, Axes axes, int sequence) {
+
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final Text style = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
         final Icon icon = new Icon(content, this);
         icon.setTitle(new ObjectTitleText(icon, style));
@@ -57,18 +57,22 @@ public class IconSpecification implements ViewSpecification {
         return icon;
     }
 
+    @Override
     public String getName() {
         return "Icon";
     }
 
+    @Override
     public boolean isSubView() {
         return isSubView;
     }
 
+    @Override
     public boolean isReplaceable() {
         return isReplaceable;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
@@ -77,10 +81,12 @@ public class IconSpecification implements ViewSpecification {
         return subview;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }

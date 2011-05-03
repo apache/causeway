@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.content;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.dnd.view.Content;
-
 
 public class RootObject extends AbstractObjectContent {
     private final ObjectAdapter adapter;
@@ -69,7 +67,7 @@ public class RootObject extends AbstractObjectContent {
     @Override
     public String getDescription() {
         return getSpecification().getSingularName() + ": " + getObject().titleString() + " "
-                + getSpecification().getDescription();
+            + getSpecification().getDescription();
     }
 
     @Override

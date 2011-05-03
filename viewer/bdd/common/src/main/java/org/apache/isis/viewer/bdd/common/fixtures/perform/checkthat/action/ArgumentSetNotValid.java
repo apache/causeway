@@ -32,46 +32,40 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcomma
 
 public class ArgumentSetNotValid extends ThatSubcommandAbstract {
 
-	public ArgumentSetNotValid() {
-		super("is not valid for", "is invalid", "invalid");
-	}
+    public ArgumentSetNotValid() {
+        super("is not valid for", "is invalid", "invalid");
+    }
 
-	// TODO: a lot of duplication with InvokeAction; simplify somehow?
-	public ObjectAdapter that(final PerformContext performContext)
-			throws ScenarioBoundValueException {
+    // TODO: a lot of duplication with InvokeAction; simplify somehow?
+    @Override
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-		final ObjectAdapter onAdapter = performContext.getOnAdapter();
-		final ObjectMember nakedObjectMember = performContext
-				.getObjectMember();
-		final CellBinding onMemberBinding = performContext.getPeer()
-				.getOnMemberBinding();
-		final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
+        final ObjectAdapter onAdapter = performContext.getOnAdapter();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
+        final CellBinding onMemberBinding = performContext.getPeer().getOnMemberBinding();
+        final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
 
-		final ObjectAction nakedObjectAction = (ObjectAction) nakedObjectMember;
-		final int parameterCount = nakedObjectAction.getParameterCount();
-		final boolean isContributedOneArgAction = nakedObjectAction
-				.isContributed()
-				&& parameterCount == 1;
+        final ObjectAction nakedObjectAction = (ObjectAction) nakedObjectMember;
+        final int parameterCount = nakedObjectAction.getParameterCount();
+        final boolean isContributedOneArgAction = nakedObjectAction.isContributed() && parameterCount == 1;
 
-		if (isContributedOneArgAction) {
-			return null;
-		}
+        if (isContributedOneArgAction) {
+            return null;
+        }
 
-		// lookup arguments
-		final ObjectAdapter[] proposedArguments = performContext.getPeer()
-				.getAdapters(onAdapter, nakedObjectAction, onMemberBinding, argumentCells);
+        // lookup arguments
+        final ObjectAdapter[] proposedArguments =
+            performContext.getPeer().getAdapters(onAdapter, nakedObjectAction, onMemberBinding, argumentCells);
 
-		// validate arguments
-		final Consent argSetValid = nakedObjectAction
-				.isProposedArgumentSetValid(onAdapter, proposedArguments);
-		if (argSetValid.isAllowed()) {
-			CellBinding thatItBinding = performContext.getPeer()
-					.getThatItBinding();
-			throw ScenarioBoundValueException.current(thatItBinding, "(valid)");
-		}
+        // validate arguments
+        final Consent argSetValid = nakedObjectAction.isProposedArgumentSetValid(onAdapter, proposedArguments);
+        if (argSetValid.isAllowed()) {
+            final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
+            throw ScenarioBoundValueException.current(thatItBinding, "(valid)");
+        }
 
-		// execute
-		return null;
-	}
+        // execute
+        return null;
+    }
 
 }

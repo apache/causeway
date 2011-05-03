@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
-
-
 
 /**
  * A look-up for font and color details.
@@ -41,7 +38,7 @@ public interface ColorsAndFonts {
     public final static String COLOR_WINDOW = "color.background.window";
     public final static String COLOR_MENU_VALUE = "color.background.menu.value";
     public final static String COLOR_MENU_CONTENT = "color.background.menu.content";
-    public final static String COLOR_MENU_VIEW= "color.background.menu.view";
+    public final static String COLOR_MENU_VIEW = "color.background.menu.view";
     public final static String COLOR_MENU_WORKSPACE = "color.background.menu.workspace";
 
     // menu colors
@@ -52,8 +49,8 @@ public interface ColorsAndFonts {
     // label colors
     public final static String COLOR_LABEL = "color.label.normal";
     public final static String COLOR_LABEL_DISABLED = "color.label.disabled";
-    public final static String COLOR_LABEL_MANDATORY = "color.label.mandatory";    
-    
+    public final static String COLOR_LABEL_MANDATORY = "color.label.mandatory";
+
     // state colors
     public final static String COLOR_IDENTIFIED = "color.identified";
     public final static String COLOR_VALID = "color.valid";
@@ -102,4 +99,3 @@ public interface ColorsAndFonts {
     void init();
 
 }
-

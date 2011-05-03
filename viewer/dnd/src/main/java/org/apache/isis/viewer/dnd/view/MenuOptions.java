@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
-
 
 public interface MenuOptions {
 
     public abstract void menuOptions(final UserActionSet options);
 
 }
-

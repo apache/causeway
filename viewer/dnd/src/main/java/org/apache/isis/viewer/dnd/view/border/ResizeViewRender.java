@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -27,5 +26,3 @@ public interface ResizeViewRender {
     void draw(Canvas canvas, int x, int width, int height, boolean hasFocus);
 
 }
-
-

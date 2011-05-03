@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
-
 
 public interface ResizeWindowRender {
 
     void draw(Canvas canvas, int width, int height, boolean isDisabled, boolean isOver, boolean isPressed);
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.service;
 
 import java.util.Arrays;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.content.AbstractContent;
-
 
 public class ServiceObject extends AbstractContent {
     private final ObjectAdapter adapter;
@@ -72,7 +70,7 @@ public class ServiceObject extends AbstractContent {
         final String specName = getSpecification().getSingularName();
         final String objectTitle = getObject().titleString();
         return specName + (specName.equalsIgnoreCase(objectTitle) ? "" : ": " + objectTitle) + " "
-                + getSpecification().getDescription();
+            + getSpecification().getDescription();
     }
 
     @Override
@@ -135,28 +133,30 @@ public class ServiceObject extends AbstractContent {
 
     @Override
     public Consent canDrop(final Content sourceContent) {
-        ObjectAction action = actionFor(sourceContent);
+        final ObjectAction action = actionFor(sourceContent);
         if (action == null) {
             return Veto.DEFAULT;
         } else {
-            ObjectAdapter source = sourceContent.getAdapter();
-            final Consent parameterSetValid = action.isProposedArgumentSetValid(adapter, new ObjectAdapter[] { source });
+            final ObjectAdapter source = sourceContent.getAdapter();
+            final Consent parameterSetValid =
+                action.isProposedArgumentSetValid(adapter, new ObjectAdapter[] { source });
             parameterSetValid.setDescription("Execute '" + action.getName() + "' with " + source.titleString());
             return parameterSetValid;
         }
-      }
+    }
 
     private ObjectAction actionFor(final Content sourceContent) {
         ObjectAction action;
-        action = adapter.getSpecification().getObjectAction(ActionType.USER, null,
-                Arrays.asList( sourceContent.getSpecification() ));
+        action =
+            adapter.getSpecification().getObjectAction(ActionType.USER, null,
+                Arrays.asList(sourceContent.getSpecification()));
         return action;
     }
 
     @Override
     public ObjectAdapter drop(final Content sourceContent) {
-        ObjectAction action = actionFor(sourceContent);
-        ObjectAdapter source = sourceContent.getAdapter();
+        final ObjectAction action = actionFor(sourceContent);
+        final ObjectAdapter source = sourceContent.getAdapter();
         return action.execute(adapter, new ObjectAdapter[] { source });
     }
 
@@ -179,6 +179,7 @@ public class ServiceObject extends AbstractContent {
     }
 
     @Override
-    public void viewMenuOptions(final UserActionSet options) {}
+    public void viewMenuOptions(final UserActionSet options) {
+    }
 
 }

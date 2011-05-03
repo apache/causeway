@@ -17,23 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.view.configurable;
 
 import junit.framework.Assert;
 
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.composite.GridLayout;
-
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class GridLayoutTest {
     private static final int CONTAINER_HEIGHT = 100;
@@ -55,13 +53,14 @@ public class GridLayoutTest {
 
     @After
     public void complete() {
-    // mockery.assertIsSatisfied();
+        // mockery.assertIsSatisfied();
     }
 
     private void createContainer(final View[] views) {
         mockery.checking(new Expectations() {
             {
-                one(container).getSubviews();                 will(returnValue(views));
+                one(container).getSubviews();
+                will(returnValue(views));
             }
         });
     }
@@ -107,7 +106,7 @@ public class GridLayoutTest {
         final View view3 = createLayoutView(0, 10, 20, 10);
         final View view4 = createLayoutView(20, 10, 20, 10);
         final View view5 = createLayoutView(0, 20, 20, 10);
-            createContainer(new View[] { view1, view2, view3, view4, view5 });
+        createContainer(new View[] { view1, view2, view3, view4, view5 });
 
         layout.setOrientation(GridLayout.COLUMNS);
         layout.setSize(2);
@@ -121,7 +120,7 @@ public class GridLayoutTest {
         final View view3 = createLayoutView(40, 0, 20, 10);
         final View view4 = createLayoutView(0, 10, 20, 10);
         final View view5 = createLayoutView(20, 10, 20, 10);
-            createContainer(new View[] { view1, view2, view3, view4, view5 });
+        createContainer(new View[] { view1, view2, view3, view4, view5 });
 
         layout.setOrientation(GridLayout.COLUMNS);
         layout.setSize(3);
@@ -154,11 +153,7 @@ public class GridLayoutTest {
         layout.layout(container, new Size(CONTAINER_WIDTH, CONTAINER_HEIGHT));
     }
 
-    private View createLayoutView(
-            final int x,
-            final int y,
-            final int width,
-            final int height) {
+    private View createLayoutView(final int x, final int y, final int width, final int height) {
         final View view = mockery.mock(View.class, "view" + viewIndex++);
         mockery.checking(new Expectations() {
             {
@@ -184,7 +179,7 @@ public class GridLayoutTest {
         createContainer(new View[] { createView(20, 10), createView(30, 10) });
         Assert.assertEquals(50, layout.getRequiredSize(container).getWidth());
     }
-  
+
     @Test
     public void widthMaxTwoViews() {
         createContainer(new View[] { createView(25, 10), createView(20, 10) });
@@ -197,7 +192,6 @@ public class GridLayoutTest {
         createContainer(new View[] { createView(10, 40), createView(10, 30) });
         Assert.assertEquals(40, layout.getRequiredSize(container).getHeight());
     }
-
 
     @Test
     public void sizeOver2Columns() {
@@ -237,4 +231,3 @@ public class GridLayoutTest {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-
 public class DebugObjectGraph implements DebuggableWithTitle {
     private final ObjectAdapter object;
 
@@ -34,10 +32,12 @@ public class DebugObjectGraph implements DebuggableWithTitle {
         this.object = object;
     }
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         dumpGraph(object, debug);
     }
 
+    @Override
     public String debugTitle() {
         return "Object Graph";
     }

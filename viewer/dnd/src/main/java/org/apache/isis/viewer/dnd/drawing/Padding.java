@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
 
 public class Padding {
@@ -125,7 +124,7 @@ public class Padding {
             final Padding object = (Padding) obj;
 
             return object.top == this.top && object.bottom == this.bottom && object.left == this.left
-                    && object.right == this.right;
+                && object.right == this.right;
         }
 
         return false;

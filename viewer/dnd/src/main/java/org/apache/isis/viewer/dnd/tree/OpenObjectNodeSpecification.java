@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import java.util.List;
@@ -36,34 +35,34 @@ import org.apache.isis.viewer.dnd.view.border.SelectObjectBorder;
 import org.apache.isis.viewer.dnd.view.composite.ObjectFieldBuilder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
-
 /**
  * Specification for a tree node that will display an open object as a root node or within an object.
  * 
- * @see org.apache.isis.viewer.dnd.tree.ClosedObjectNodeSpecification for displaying a closed collection
- *      within an object.
+ * @see org.apache.isis.viewer.dnd.tree.ClosedObjectNodeSpecification for displaying a closed collection within an
+ *      object.
  */
 public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
-    private SubviewDecorator decorator = new SelectObjectBorder.Factory();
+    private final SubviewDecorator decorator = new SelectObjectBorder.Factory();
 
     public OpenObjectNodeSpecification() {
         builder = new ObjectFieldBuilder(this);
     }
-    
+
     @Override
-    public Layout createLayout(Content content, Axes axes) {
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
     /**
-     * This is only used to control root nodes. Therefore a object tree can only be displayed for an object
-     * with fields that are collections.
+     * This is only used to control root nodes. Therefore a object tree can only be displayed for an object with fields
+     * that are collections.
      */
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         if (requirement.isObject() && requirement.hasReference()) {
             final ObjectAdapter object = requirement.getAdapter();
-            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
+            final List<ObjectAssociation> fields =
+                object.getSpecification().getAssociations(
                     ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToManyAssociation()) {
@@ -74,9 +73,9 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
 
         return false;
     }
-    
+
     @Override
-    protected View createNodeView(Content content, Axes axes) {
+    protected View createNodeView(final Content content, final Axes axes) {
         return decorator.decorate(axes, super.createNodeView(content, axes));
     }
 
@@ -89,7 +88,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
     public boolean isOpen() {
         return true;
     }
-    
+
     @Override
     public boolean isSubView() {
         return false;

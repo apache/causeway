@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -29,7 +28,6 @@ import org.apache.isis.viewer.dnd.view.Click;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
-
 
 public class DebugBorder extends AbstractBorder {
     public DebugBorder(final View wrappedView) {
@@ -46,7 +44,7 @@ public class DebugBorder extends AbstractBorder {
     @Override
     public void draw(final Canvas canvas) {
         final String debug = getView() + " " + getState();
-        Text text = Toolkit.getText(ColorsAndFonts.TEXT_DEBUG);
+        final Text text = Toolkit.getText(ColorsAndFonts.TEXT_DEBUG);
         final int baseline = wrappedView.getSize().getHeight() + text.getAscent();
         final Color color = Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE);
         canvas.drawText(debug, 0, baseline, color, text);

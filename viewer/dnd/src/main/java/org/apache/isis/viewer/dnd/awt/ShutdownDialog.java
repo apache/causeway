@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Button;
@@ -36,7 +35,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import org.apache.log4j.Logger;
-
 
 class ShutdownDialog extends Dialog implements ActionListener, KeyListener {
     private static final long serialVersionUID = 1L;
@@ -99,14 +97,17 @@ class ShutdownDialog extends Dialog implements ActionListener, KeyListener {
         return in;
     }
 
+    @Override
     public void actionPerformed(final ActionEvent evt) {
         action(evt.getSource());
     }
 
+    @Override
     public void keyPressed(final KeyEvent e) {
-    // ignore
+        // ignore
     }
 
+    @Override
     public void keyReleased(final KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             action(e.getComponent());
@@ -116,8 +117,9 @@ class ShutdownDialog extends Dialog implements ActionListener, KeyListener {
         }
     }
 
+    @Override
     public void keyTyped(final KeyEvent e) {
-    // ignore
+        // ignore
     }
 
     private synchronized void cancel(final Object widget) {

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
 
+public interface Click {
 
-public interface Click{
-    
     Location getLocationWithinViewer();
 
     Location getLocation();
@@ -32,7 +30,7 @@ public interface Click{
     boolean button2();
 
     boolean button1();
-    
+
     boolean button3();
 
     boolean isAlt();
@@ -44,6 +42,5 @@ public interface Click{
     void subtract(int left, int top);
 
     void subtract(Location location);
-    
-}
 
+}

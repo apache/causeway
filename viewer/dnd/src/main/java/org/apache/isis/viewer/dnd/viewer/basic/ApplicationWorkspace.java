@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Enumeration;
@@ -70,28 +69,30 @@ import org.apache.isis.viewer.dnd.view.window.DialogBorder;
 import org.apache.isis.viewer.dnd.view.window.SubviewFocusManager;
 import org.apache.isis.viewer.dnd.view.window.WindowBorder;
 
-
 public final class ApplicationWorkspace extends CompositeViewUsingBuilder implements Workspace {
     protected Vector<View> serviceViews;
     protected Vector<View> iconViews;
 
-    public ApplicationWorkspace(final Content content, final Axes axes, final CompositeViewSpecification specification, Layout layout, ApplicationWorkspaceBuilder builder) {
+    public ApplicationWorkspace(final Content content, final Axes axes, final CompositeViewSpecification specification,
+        final Layout layout, final ApplicationWorkspaceBuilder builder) {
         super(content, specification, axes, layout, builder);
         serviceViews = new Vector<View>();
         iconViews = new Vector<View>();
         LookFactory.init();
     }
 
-    public void addDialog(final View dialogContent, Placement placement) {
-        DialogBorder dialogView = new DialogBorder(dialogContent, false);
+    @Override
+    public void addDialog(final View dialogContent, final Placement placement) {
+        final DialogBorder dialogView = new DialogBorder(dialogContent, false);
         addView(dialogView);
         placement.position(this, dialogView);
         // dialogView.setFocusManager( new SubviewFocusManager(dialogView));
     }
 
-    public void addWindow(View containedView, Placement placement) {
-        boolean scrollable = !containedView.getSpecification().isResizeable();
-        WindowBorder windowView = new WindowBorder(containedView, scrollable);
+    @Override
+    public void addWindow(final View containedView, final Placement placement) {
+        final boolean scrollable = !containedView.getSpecification().isResizeable();
+        final WindowBorder windowView = new WindowBorder(containedView, scrollable);
         addView(windowView);
         placement.position(this, windowView);
         windowView.setFocusManager(new SubviewFocusManager(windowView));
@@ -107,15 +108,16 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     @Override
     public void replaceView(final View toReplace, final View replacement) {
         if (replacement.getSpecification().isOpen()) {
-            boolean scrollable = !replacement.getSpecification().isResizeable();
-            WindowBorder windowView = new WindowBorder(replacement, scrollable);
+            final boolean scrollable = !replacement.getSpecification().isResizeable();
+            final WindowBorder windowView = new WindowBorder(replacement, scrollable);
             super.replaceView(toReplace, windowView);
         } else {
             super.replaceView(toReplace, replacement);
         }
     }
 
-    public View addWindowFor(final ObjectAdapter object, Placement placement) {
+    @Override
+    public View addWindowFor(final ObjectAdapter object, final Placement placement) {
         final Content content = Toolkit.getContentFactory().createRootContent(object);
         final View view = Toolkit.getViewFactory().createView(new ViewRequirement(content, ViewRequirement.OPEN));
         addWindow(view, placement);
@@ -123,9 +125,11 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         return view;
     }
 
-    public View addIconFor(final ObjectAdapter object, Placement placement) {
+    @Override
+    public View addIconFor(final ObjectAdapter object, final Placement placement) {
         final Content content = Toolkit.getContentFactory().createRootContent(object);
-        View icon = Toolkit.getViewFactory().createView(
+        final View icon =
+            Toolkit.getViewFactory().createView(
                 new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.ROOT));
         add(iconViews, icon);
         placement.position(this, icon);
@@ -134,7 +138,8 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
 
     public void addServiceIconFor(final ObjectAdapter service) {
         final Content content = new ServiceObject(service);
-        final View serviceIcon = Toolkit.getViewFactory().createView(
+        final View serviceIcon =
+            Toolkit.getViewFactory().createView(
                 new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
         add(serviceViews, serviceIcon);
     }
@@ -182,7 +187,9 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
             dropLocation.subtract(drag.getOffset());
 
             if (drag.isShift()) {
-                newView = Toolkit.getViewFactory().createView(new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.SUBVIEW));
+                newView =
+                    Toolkit.getViewFactory().createView(
+                        new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.SUBVIEW));
                 drag.getTargetView().addView(newView);
                 newView.setLocation(dropLocation);
             } else {
@@ -190,8 +197,8 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
                 final View sourceView = drag.getSource();
                 if (!sourceView.getSpecification().isOpen()) {
                     final View[] subviews = getSubviews();
-                    for (int i = 0; i < subviews.length; i++) {
-                        if (subviews[i] == sourceView) {
+                    for (final View subview : subviews) {
+                        if (subview == sourceView) {
                             sourceView.markDamaged();
                             sourceView.setLocation(dropLocation);
                             sourceView.markDamaged();
@@ -199,7 +206,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
                         }
                     }
                 } else {
-                    for (View view : iconViews) {
+                    for (final View view : iconViews) {
                         if (view.getContent().getAdapter() == source) {
                             view.markDamaged();
                             view.setLocation(dropLocation);
@@ -215,7 +222,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
 
     @Override
     public void entered() {
-    // prevents status details about "Persective..."
+        // prevents status details about "Persective..."
     }
 
     private PerspectiveEntry getPerspective() {
@@ -233,8 +240,8 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
                 // TODO remove the open view from the container and place on
                 // workspace; replace the internal view with an icon
             } else if (sourceView.getContent() instanceof FieldContent) {
-                ViewRequirement requirement = new ViewRequirement(sourceView.getContent(), ViewRequirement.OPEN);
-                View view = Toolkit.getViewFactory().createView(requirement);
+                final ViewRequirement requirement = new ViewRequirement(sourceView.getContent(), ViewRequirement.OPEN);
+                final View view = Toolkit.getViewFactory().createView(requirement);
                 addWindow(view, new Placement(newLocation));
                 sourceView.getState().clearViewIdentified();
             } else {
@@ -259,6 +266,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         return this;
     }
 
+    @Override
     public void lower(final View view) {
         if (views.contains(view)) {
             views.removeElement(view);
@@ -267,6 +275,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         }
     }
 
+    @Override
     public void raise(final View view) {
         if (views.contains(view)) {
             views.removeElement(view);
@@ -291,7 +300,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         }
     }
 
-    private void removeService(ObjectAdapter object) {
+    private void removeService(final ObjectAdapter object) {
         getPerspective().removeFromServices(object.getObject());
     }
 
@@ -321,8 +330,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final View views[] = getWindowViews();
-                for (int i = 0; i < views.length; i++) {
-                    final View v = views[i];
+                for (final View v : views) {
                     // if (v.getSpecification().isOpen()) {
                     v.dispose();
                     // }
@@ -357,10 +365,10 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final List<Object> services = IsisContext.getServices();
-                ObjectAdapter[] serviceObjects = new ObjectAdapter[services.size()];
+                final ObjectAdapter[] serviceObjects = new ObjectAdapter[services.size()];
                 int i = 0;
-                for (Object object : services) {
-                    AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+                for (final Object object : services) {
+                    final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
                     serviceObjects[i++] = adapterManager.adapterFor(object);
                 }
                 final ObjectSpecification spec = getSpecificationLoader().loadSpecification(Object.class);
@@ -372,11 +380,11 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         menuForChangingLook(options);
 
         menuForChangingUsers(options);
-        
+
         options.add(new UserActionAbstract("Save User Profile", ActionType.USER) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
-                Feedback feedbackManager = getFeedbackManager();
+                final Feedback feedbackManager = getFeedbackManager();
                 feedbackManager.showBusyState(ApplicationWorkspace.this);
                 getViewManager().saveOpenObjects();
                 feedbackManager.addMessage("Profile saved");
@@ -385,12 +393,12 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         });
     }
 
-    private void menuForChangingLook(UserActionSet options) {
+    private void menuForChangingLook(final UserActionSet options) {
         final UserActionSet set = options.addNewActionSet("Change Look", ActionType.USER);
-        for (Look look : LookFactory.getAvailableLooks()) {
+        for (final Look look : LookFactory.getAvailableLooks()) {
             menuOptionForChangingLook(set, look, look.getName());
         }
-   }
+    }
 
     private void menuOptionForChangingLook(final UserActionSet set, final Look look, final String name) {
         set.add(new UserActionAbstract(name) {
@@ -399,24 +407,23 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
                 LookFactory.setLook(look);
                 ApplicationWorkspace.this.invalidateLayout();
                 ApplicationWorkspace.this.markDamaged();
-           }
+            }
 
             @Override
-            public Consent disabled(View view) {
+            public Consent disabled(final View view) {
                 return LookFactory.getInstalledLook() == look ? new Veto("Current look") : Allow.DEFAULT;
             }
         });
     }
 
-
     private void menuForChangingUsers(final UserActionSet options) {
         // TODO pick out users from the perspectives, but only show when in exploration mode
         if (getAuthenticationSession() instanceof MultiUserExplorationSession) {
-            MultiUserExplorationSession session = (MultiUserExplorationSession) getAuthenticationSession();
+            final MultiUserExplorationSession session = (MultiUserExplorationSession) getAuthenticationSession();
 
-            Set<String> users = session.getUserNames();
+            final Set<String> users = session.getUserNames();
             final UserActionSet set = options.addNewActionSet("Change user", ActionType.EXPLORATION);
-            for (String user : users) {
+            for (final String user : users) {
                 menuOptionForChangingUser(set, user, session.getUserName());
             }
         }
@@ -431,7 +438,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
             }
 
             @Override
-            public Consent disabled(View view) {
+            public Consent disabled(final View view) {
                 return user.equals(currentUser) ? new Veto("Current user") : Allow.DEFAULT;
             }
         });
@@ -439,11 +446,11 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
 
     @Override
     protected View[] subviews() {
-        Object[] viewsCopy = views.toArray();
-        Object[] serviceViewsCopy = serviceViews.toArray();
-        Object[] iconViewsCopy = iconViews.toArray();
+        final Object[] viewsCopy = views.toArray();
+        final Object[] serviceViewsCopy = serviceViews.toArray();
+        final Object[] iconViewsCopy = iconViews.toArray();
 
-        View v[] = new View[viewsCopy.length + serviceViewsCopy.length + iconViewsCopy.length];
+        final View v[] = new View[viewsCopy.length + serviceViewsCopy.length + iconViewsCopy.length];
         int offset = 0;
         Object[] src = serviceViewsCopy;
         System.arraycopy(src, 0, v, offset, src.length);
@@ -485,8 +492,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     }
 
     private void tidyViews(final View[] views) {
-        for (int i = 0; i < views.length; i++) {
-            final View v = views[i];
+        for (final View v : views) {
             v.setLocation(ApplicationWorkspaceBuilder.UNPLACED);
         }
         invalidateLayout();

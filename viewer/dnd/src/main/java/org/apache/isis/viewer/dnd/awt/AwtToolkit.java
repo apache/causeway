@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.viewer.DefaultContentFactory;
 import org.apache.isis.viewer.dnd.viewer.SkylarkViewFactory;
 import org.apache.isis.viewer.dnd.viewer.basic.LogoBackground;
-
 
 public class AwtToolkit extends Toolkit {
     @Override

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.swing;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -25,10 +24,11 @@ import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.window.IconizeWindowRender;
 
-
 public class IconizeWindow3DRender implements IconizeWindowRender {
 
-    public void draw(Canvas canvas, int width, int height, boolean isDisabled, boolean isOver, boolean isPressed) {
+    @Override
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
+        final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 
@@ -38,4 +38,3 @@ public class IconizeWindow3DRender implements IconizeWindowRender {
         canvas.drawLine(x + 3, y + 9, x + 8, y + 9, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
     }
 }
-

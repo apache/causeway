@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 /**
  * Abstract focus manager that uses the set of views to move focus between from the concrete subclass.
@@ -66,11 +64,12 @@ public abstract class AbstractFocusManager implements FocusManager {
         }
     }
 
+    @Override
     public void focusFirstChildView() {
         final View[] views = getChildViews();
-        for (int j = 0; j < views.length; j++) {
-            if (views[j].canFocus()) {
-                setFocus(views[j]);
+        for (final View view : views) {
+            if (view.canFocus()) {
+                setFocus(view);
                 return;
             }
         }
@@ -78,6 +77,7 @@ public abstract class AbstractFocusManager implements FocusManager {
         return;
     }
 
+    @Override
     public void focusInitialChildView() {
         if (initialFocus == null) {
             focusFirstChildView();
@@ -86,6 +86,7 @@ public abstract class AbstractFocusManager implements FocusManager {
         }
     }
 
+    @Override
     public void focusLastChildView() {
         final View[] views = getChildViews();
         for (int j = views.length - 1; j > 0; j--) {
@@ -98,6 +99,7 @@ public abstract class AbstractFocusManager implements FocusManager {
         return;
     }
 
+    @Override
     public void focusNextView() {
         final View[] views = getChildViews();
         for (int i = 0; i < views.length; i++) {
@@ -127,10 +129,12 @@ public abstract class AbstractFocusManager implements FocusManager {
         return view == focus;
     }
 
+    @Override
     public void focusParentView() {
         container.getFocusManager().setFocus(container.getFocusManager().getFocus());
     }
 
+    @Override
     public void focusPreviousView() {
         final View[] views = getChildViews();
         if (views.length > 1) {
@@ -160,10 +164,12 @@ public abstract class AbstractFocusManager implements FocusManager {
 
     protected abstract View[] getChildViews();
 
+    @Override
     public View getFocus() {
         return focus;
     }
 
+    @Override
     public void setFocus(final View view) {
         checkCanFocusOn(view);
 

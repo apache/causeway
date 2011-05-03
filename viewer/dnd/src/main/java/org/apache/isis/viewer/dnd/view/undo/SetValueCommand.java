@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.undo;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,7 +26,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.dnd.view.Command;
-
 
 public class SetValueCommand implements Command {
     private final String description;
@@ -44,28 +42,32 @@ public class SetValueCommand implements Command {
         this.description = "reset the value to " + oldValue;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void undo() {
         final EncodableFacet facet = value.getFacet(EncodableFacet.class);
         final Object obj = facet.fromEncodedString(oldValue);
         final ObjectAdapter adapter = getAdapterManager().adapterFor(obj);
         value.setAssociation(object, adapter);
         // have commented this out because it isn't needed; the transaction manager will do this
-        // for us on endTransaction.  Still, if I'm wrong and it is needed, hopefully this
+        // for us on endTransaction. Still, if I'm wrong and it is needed, hopefully this
         // comment will help...
         // IsisContext.getObjectPersistor().objectChangedAllDirty();
     }
 
-    public void execute() {}
+    @Override
+    public void execute() {
+    }
 
+    @Override
     public String getName() {
         return "entry";
     }
-    
-    
+
     // //////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////////////
@@ -77,6 +79,5 @@ public class SetValueCommand implements Command {
     private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
-
 
 }

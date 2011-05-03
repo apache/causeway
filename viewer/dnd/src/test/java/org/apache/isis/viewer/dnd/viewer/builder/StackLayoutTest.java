@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.builder;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;
 import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
-
+import org.junit.Before;
+import org.junit.Test;
 
 public class StackLayoutTest {
     private StackLayout layout;
@@ -53,14 +51,14 @@ public class StackLayoutTest {
 
     @Test
     public void noContentNoSize() throws Exception {
-        View view = new DummyView();
+        final View view = new DummyView();
         Assert.assertEquals(new Size(), layout.getRequiredSize(view));
     }
 
     @Test
     public void sameSizeAsOnlyComponent() throws Exception {
-        View view = new DummyWorkspaceView();
-        DummyView subview = new DummyView();
+        final View view = new DummyWorkspaceView();
+        final DummyView subview = new DummyView();
         subview.setupRequiredSize(new Size(100, 20));
         view.addView(subview);
 
@@ -69,8 +67,8 @@ public class StackLayoutTest {
 
     @Test
     public void sameWidthAsWidestComponentAndHeightTotalOfAll() throws Exception {
-        View view = new DummyWorkspaceView();
-         view.addView(subview1);
+        final View view = new DummyWorkspaceView();
+        view.addView(subview1);
         view.addView(subview2);
 
         Assert.assertEquals(new Size(120, 40), layout.getRequiredSize(view));
@@ -78,23 +76,22 @@ public class StackLayoutTest {
 
     @Test
     public void layoutToMaxWidth() throws Exception {
-        View view = new DummyWorkspaceView();
+        final View view = new DummyWorkspaceView();
         view.addView(subview1);
         view.addView(subview2);
-        
+
         layout.layout(view, new Size(110, 60));
 
         Assert.assertEquals(new Size(100, 20), subview1.getSize());
         Assert.assertEquals(new Size(110, 20), subview2.getSize());
     }
 
-
     @Test
     public void layoutFixedWidth() throws Exception {
-        View view = new DummyWorkspaceView();
+        final View view = new DummyWorkspaceView();
         view.addView(subview1);
         view.addView(subview2);
-        
+
         layout = new StackLayout(true);
         layout.layout(view, Size.createMax());
 
@@ -103,4 +100,3 @@ public class StackLayoutTest {
     }
 
 }
-

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.composite.StandardFields;
-
 
 public abstract class AbstractFormSpecification extends AbstractObjectViewSpecification {
 
@@ -35,9 +33,9 @@ public abstract class AbstractFormSpecification extends AbstractObjectViewSpecif
             protected int collectionRequirement() {
                 return AbstractFormSpecification.this.collectionRequirement();
             }
-            
+
             @Override
-            protected boolean include(Content content, int sequence) {
+            protected boolean include(final Content content, final int sequence) {
                 return AbstractFormSpecification.this.include(content, sequence);
             }
         };
@@ -46,8 +44,8 @@ public abstract class AbstractFormSpecification extends AbstractObjectViewSpecif
     protected int collectionRequirement() {
         return ViewRequirement.OPEN | ViewRequirement.SUBVIEW;
     }
-    
-    protected boolean include(Content content, int sequence) {
+
+    protected boolean include(final Content content, final int sequence) {
         return true;
     }
 

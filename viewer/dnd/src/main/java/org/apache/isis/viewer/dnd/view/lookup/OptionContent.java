@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,7 +29,6 @@ import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.content.AbstractContent;
 
-
 public class OptionContent extends AbstractContent {
     private final ObjectAdapter adapter;
 
@@ -38,28 +36,36 @@ public class OptionContent extends AbstractContent {
         this.adapter = adapter;
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
-    public void debugDetails(final DebugBuilder debug) {}
+    @Override
+    public void debugDetails(final DebugBuilder debug) {
+    }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         return null;
     }
 
+    @Override
     public String getDescription() {
         return null;
     }
 
+    @Override
     public String getHelp() {
         return null;
     }
 
+    @Override
     public String getIconName() {
         return adapter.getIconName();
     }
 
+    @Override
     public Image getIconPicture(final int iconHeight) {
         if (adapter instanceof ObjectAdapter) {
             final ObjectAdapter adapter = this.adapter;
@@ -77,34 +83,41 @@ public class OptionContent extends AbstractContent {
         }
     }
 
+    @Override
     public String getId() {
         return "OptionContent " + adapter;
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return adapter;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return adapter.getSpecification();
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return false;
     }
 
-    public void parseTextEntry(final String entryText) {}
+    public void parseTextEntry(final String entryText) {
+    }
 
+    @Override
     public String title() {
         return adapter.titleString();
     }
 }
-

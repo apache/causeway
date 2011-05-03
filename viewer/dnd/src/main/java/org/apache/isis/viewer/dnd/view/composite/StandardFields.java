@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -34,7 +33,8 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
  */
 public class StandardFields implements ViewFactory {
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final GlobalViewFactory factory = Toolkit.getViewFactory();
 
         int requirement = 0;
@@ -49,14 +49,14 @@ public class StandardFields implements ViewFactory {
         }
 
         if (requirement != 0 && include(content, sequence)) {
-            ViewRequirement viewRequirement = new ViewRequirement(content, requirement);
+            final ViewRequirement viewRequirement = new ViewRequirement(content, requirement);
             return factory.createView(viewRequirement);
         } else {
             return null;
         }
     }
 
-    protected boolean include(Content content, int sequence) {
+    protected boolean include(final Content content, final int sequence) {
         return true;
     }
 
@@ -72,4 +72,3 @@ public class StandardFields implements ViewFactory {
         return ViewRequirement.CLOSED | ViewRequirement.SUBVIEW;
     }
 }
-

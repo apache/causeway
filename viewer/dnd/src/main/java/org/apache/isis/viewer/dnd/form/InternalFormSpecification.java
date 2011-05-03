@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -26,10 +25,10 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.border.IconBorder;
 import org.apache.isis.viewer.dnd.view.composite.FieldLabelsDecorator;
 
-
 public class InternalFormSpecification extends AbstractFormSpecification {
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return super.canDisplay(requirement) && requirement.is(ViewRequirement.SUBVIEW);
     }
 
@@ -40,6 +39,7 @@ public class InternalFormSpecification extends AbstractFormSpecification {
 
     }
 
+    @Override
     public String getName() {
         return "Internal form";
     }

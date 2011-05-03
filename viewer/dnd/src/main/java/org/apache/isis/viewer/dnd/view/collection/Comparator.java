@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public interface Comparator {
     void init(ObjectAdapter element);

@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.option;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
+import org.apache.log4j.Logger;
 
 public class ReplaceViewOption extends UserActionAbstract {
     private static final Logger LOG = Logger.getLogger(ReplaceViewOption.class);
@@ -39,7 +37,8 @@ public class ReplaceViewOption extends UserActionAbstract {
 
     @Override
     public String getDescription(final View view) {
-        return "Replace this " + view.getSpecification().getName() + " view with a " + specification.getName() + " view";
+        return "Replace this " + view.getSpecification().getName() + " view with a " + specification.getName()
+            + " view";
     }
 
     @Override
@@ -49,8 +48,8 @@ public class ReplaceViewOption extends UserActionAbstract {
         replace(view, replacement);
     }
 
-    protected void replace(View view, View withReplacement) {
-        View existingView = view.getView();
+    protected void replace(final View view, final View withReplacement) {
+        final View existingView = view.getView();
         view.getParent().replaceView(existingView, withReplacement);
     }
 

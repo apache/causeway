@@ -17,13 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.viewer.dnd.view.KeyboardAction;
 
 public class KeyboardActionImpl implements KeyboardAction {
-    
+
     final int keyCode;
     final int modifiers;
     private boolean isConsumed;
@@ -34,26 +33,29 @@ public class KeyboardActionImpl implements KeyboardAction {
         isConsumed = false;
     }
 
+    @Override
     public int getKeyCode() {
         return keyCode;
     }
 
+    @Override
     public char getKeyChar() {
         return (char) keyCode;
     }
-    
+
+    @Override
     public int getModifiers() {
         return modifiers;
     }
 
+    @Override
     public boolean isConsumed() {
         return isConsumed;
     }
 
+    @Override
     public void consume() {
         isConsumed = true;
     }
 
 }
-
-

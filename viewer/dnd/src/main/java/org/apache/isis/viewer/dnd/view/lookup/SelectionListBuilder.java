@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,7 +26,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
 
-
 public class SelectionListBuilder extends AbstractViewBuilder {
     private final ViewFactory subviewSpecification;
 
@@ -36,7 +34,7 @@ public class SelectionListBuilder extends AbstractViewBuilder {
     }
 
     @Override
-    public void build(final View view, Axes axes) {
+    public void build(final View view, final Axes axes) {
         final Content content = view.getContent();
         final ObjectAdapter[] options = content.getOptions();
 
@@ -54,4 +52,3 @@ public class SelectionListBuilder extends AbstractViewBuilder {
     }
 
 }
-

@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * A mutable wrapper around a {@link DateFormat}, allowing the date and time
- * parts of the format to be specified independently specified.
+ * A mutable wrapper around a {@link DateFormat}, allowing the date and time parts of the format to be specified
+ * independently specified.
  */
 public class DateParser {
 
@@ -55,28 +55,28 @@ public class DateParser {
     public DateParser() {
     }
 
-    public Date parse(String dateAndOrTimeStr) {
+    public Date parse(final String dateAndOrTimeStr) {
         try {
             return getDateAndTimeFormat().parse(dateAndOrTimeStr);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             try {
                 return getDateFormat().parse(dateAndOrTimeStr);
-            } catch (ParseException e2) {
+            } catch (final ParseException e2) {
                 try {
                     return getTimeFormat().parse(dateAndOrTimeStr);
-                } catch (ParseException e3) {
+                } catch (final ParseException e3) {
                     return null;
                 }
             }
         }
     }
 
-    public void setDateFormat(String dateMask) {
+    public void setDateFormat(final String dateMask) {
         this.dateMask = dateMask;
         invalidateFormats();
     }
 
-    public void setTimeFormat(String timeMask) {
+    public void setTimeFormat(final String timeMask) {
         this.timeMask = timeMask;
         invalidateFormats();
     }
@@ -87,7 +87,7 @@ public class DateParser {
         this.timeOnlyFormat = null;
     }
 
-    public String format(Date resultDate) {
+    public String format(final Date resultDate) {
         return getDateAndTimeFormat().format(resultDate);
     }
 
@@ -112,8 +112,8 @@ public class DateParser {
         return dateOnlyFormat;
     }
 
-    private DateFormat getUTCDateFormat(String dateTimeMask) {
-        DateFormat dateFormat = new SimpleDateFormat(dateTimeMask);
+    private DateFormat getUTCDateFormat(final String dateTimeMask) {
+        final DateFormat dateFormat = new SimpleDateFormat(dateTimeMask);
         dateFormat.setTimeZone(UTC_TIME_ZONE);
         return dateFormat;
     }

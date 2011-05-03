@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree2;
 
 import org.apache.isis.viewer.dnd.form.ExpandableViewBorder;
@@ -37,73 +36,87 @@ import org.apache.isis.viewer.dnd.view.composite.ObjectFieldBuilder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 import org.apache.isis.viewer.dnd.view.composite.ViewBuilder;
 
-
 public class TreeNodeSpecification extends CompositeViewSpecification {
 
     public TreeNodeSpecification() {
         builder = new ViewBuilder() {
             ViewBuilder objectBuilder = new ObjectFieldBuilder(new ViewFactory() {
-                public View createView(Content content, Axes axes, int sequence) {
+                @Override
+                public View createView(final Content content, final Axes axes, final int sequence) {
                     if (content.isTextParseable() || content.getAdapter() == null) {
                         return null;
                     } else if (content.isObject()) {
-                        return new IconElementFactory().createView(content, axes, 0); // TreeNodeSpecification.this.createView(content, axes);
+                        return new IconElementFactory().createView(content, axes, 0); // TreeNodeSpecification.this.createView(content,
+                                                                                      // axes);
                     } else {
                         return TreeNodeSpecification.this.createView(content, axes, -1);
                     }
                 }
             });
-            
+
             ViewBuilder collectiontBuilder = new CollectionElementBuilder(new IconElementFactory());
 
             {
-                Factory decorator = new ExpandableViewBorder.Factory(null, TreeNodeSpecification.this, null);
+                final Factory decorator = new ExpandableViewBorder.Factory(null, TreeNodeSpecification.this, null);
                 objectBuilder.addSubviewDecorator(decorator);
                 collectiontBuilder.addSubviewDecorator(decorator);
 
             }
 
-            public void addSubviewDecorator(SubviewDecorator decorator) {}
+            @Override
+            public void addSubviewDecorator(final SubviewDecorator decorator) {
+            }
 
-            public void build(View view, Axes axes) {
+            @Override
+            public void build(final View view, final Axes axes) {
                 synchronized (view) {
                     (view.getContent().isCollection() ? collectiontBuilder : objectBuilder).build(view, axes);
                 }
             }
 
-            public void createAxes(Axes axes, Content content) {}
+            @Override
+            public void createAxes(final Axes axes, final Content content) {
+            }
 
+            @Override
             public boolean isOpen() {
                 return false;
             }
 
+            @Override
             public boolean isReplaceable() {
                 return true;
             }
 
+            @Override
             public boolean isSubView() {
                 return true;
             }
 
+            @Override
             public boolean canDragView() {
                 return true;
             }
-            
-            public void viewMenuOptions(UserActionSet options, View view) {}
+
+            @Override
+            public void viewMenuOptions(final UserActionSet options, final View view) {
+            }
         };
     }
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isObject() && requirement.isExpandable();
     }
 
+    @Override
     public String getName() {
         return "Tree Node (not working)";
     }
 
 }
-

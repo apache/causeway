@@ -31,57 +31,54 @@ public class AliasItemsInListPeer extends AbstractListFixturePeer {
     private final CellBinding titleBinding;
     private final CellBinding typeBinding;
     private final CellBinding aliasBinding;
-    
 
-    public AliasItemsInListPeer(final AliasRegistry aliasesRegistry,
-            final String listAlias, 
-            final CellBinding titleBinding,
-            final CellBinding typeBinding, final CellBinding aliasBinding) {
-    	super(aliasesRegistry, listAlias, titleBinding, typeBinding, aliasBinding);
+    public AliasItemsInListPeer(final AliasRegistry aliasesRegistry, final String listAlias,
+        final CellBinding titleBinding, final CellBinding typeBinding, final CellBinding aliasBinding) {
+        super(aliasesRegistry, listAlias, titleBinding, typeBinding, aliasBinding);
 
-    	this.titleBinding = titleBinding;
+        this.titleBinding = titleBinding;
         this.typeBinding = typeBinding;
         this.aliasBinding = aliasBinding;
     }
 
-	public CellBinding getTitleBinding() {
-		return titleBinding;
-	}
-	
-	public CellBinding getTypeBinding() {
-		return typeBinding;
-	}
-	
-	public CellBinding getAliasBinding() {
-		return aliasBinding;
-	}
+    public CellBinding getTitleBinding() {
+        return titleBinding;
+    }
 
-	public ScenarioCell findAndAlias() throws ScenarioBoundValueException {
-    	ObjectAdapter foundAdapter = findAdapter();
+    public CellBinding getTypeBinding() {
+        return typeBinding;
+    }
+
+    public CellBinding getAliasBinding() {
+        return aliasBinding;
+    }
+
+    public ScenarioCell findAndAlias() throws ScenarioBoundValueException {
+        final ObjectAdapter foundAdapter = findAdapter();
         if (foundAdapter == null) {
-        	throw ScenarioBoundValueException.current(titleBinding, "not found");
+            throw ScenarioBoundValueException.current(titleBinding, "not found");
         }
-        
-        ScenarioCell currentCell = aliasBinding.getCurrentCell();
-		String currentCellText = currentCell.getText();
-		getAliasRegistry().aliasAs(currentCellText, foundAdapter);
-		return currentCell;
-	}
 
-	private ObjectAdapter findAdapter() {
+        final ScenarioCell currentCell = aliasBinding.getCurrentCell();
+        final String currentCellText = currentCell.getText();
+        getAliasRegistry().aliasAs(currentCellText, foundAdapter);
+        return currentCell;
+    }
+
+    private ObjectAdapter findAdapter() {
         for (final ObjectAdapter adapter : collectionAdapters()) {
-        	
+
             if (!titleMatches(adapter)) {
                 continue; // keep looking
             }
             if (!typeMatches(adapter)) {
                 continue; // keep looking
             }
-            
+
             return adapter;
         }
-		return null;
-	}
+        return null;
+    }
 
     private boolean titleMatches(final ObjectAdapter adapter) {
         final String adapterTitle = adapter.titleString();
@@ -102,8 +99,7 @@ public class AliasItemsInListPeer extends AbstractListFixturePeer {
         }
 
         final String simpleSpecName = StringUtils.simpleName(specFullName);
-        final String simpleRequiredType = StringUtils
-                .simpleName(requiredTypeName);
+        final String simpleRequiredType = StringUtils.simpleName(requiredTypeName);
         return simpleSpecName.equalsIgnoreCase(simpleRequiredType);
     }
 

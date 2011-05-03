@@ -37,34 +37,30 @@ public class ArgumentSetValid extends ThatSubcommandAbstract {
     }
 
     // TODO: a lot of duplication with InvokeAction; simplify somehow?
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final ObjectMember nakedObjectMember = performContext
-                .getObjectMember();
-        final CellBinding onMemberBinding = performContext
-        .getPeer().getOnMemberBinding();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
+        final CellBinding onMemberBinding = performContext.getPeer().getOnMemberBinding();
         final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
 
         final ObjectAction nakedObjectAction = (ObjectAction) nakedObjectMember;
         final int parameterCount = nakedObjectAction.getParameterCount();
-        final boolean isContributedOneArgAction = nakedObjectAction
-                .isContributed()
-                && parameterCount == 1;
+        final boolean isContributedOneArgAction = nakedObjectAction.isContributed() && parameterCount == 1;
 
         if (isContributedOneArgAction) {
             return null;
         }
 
         // lookup arguments
-        final ObjectAdapter[] proposedArguments = performContext.getPeer().getAdapters(
-        		onAdapter, nakedObjectAction, onMemberBinding, argumentCells);
+        final ObjectAdapter[] proposedArguments =
+            performContext.getPeer().getAdapters(onAdapter, nakedObjectAction, onMemberBinding, argumentCells);
 
         // validate arguments
-        final Consent argSetValid = nakedObjectAction
-                .isProposedArgumentSetValid(onAdapter, proposedArguments);
+        final Consent argSetValid = nakedObjectAction.isProposedArgumentSetValid(onAdapter, proposedArguments);
         if (argSetValid.isVetoed()) {
-        	throw ScenarioBoundValueException.current(onMemberBinding, argSetValid.getReason());
+            throw ScenarioBoundValueException.current(onMemberBinding, argSetValid.getReason());
         }
 
         // execute

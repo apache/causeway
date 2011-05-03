@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.util;
 
 import java.util.StringTokenizer;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
-
 public class Properties {
 
     public static final String PROPERTY_BASE = ConfigurationConstants.ROOT + "viewer.dnd.";
@@ -40,7 +38,7 @@ public class Properties {
     public static Size getSize(final String name, final Size defaultSize) {
         String initialSize = optionFor(name);
         if (initialSize == null) {
-              initialSize = IsisContext.getConfiguration().getString(name);
+            initialSize = IsisContext.getConfiguration().getString(name);
         }
         if (initialSize != null) {
             final StringTokenizer st = new StringTokenizer(initialSize, "x");
@@ -56,9 +54,9 @@ public class Properties {
         }
         return defaultSize;
     }
-    
+
     public static void saveSizeOption(final String name, final Size size) {
-        String value = size.getWidth() + "x" + size.getHeight();
+        final String value = size.getWidth() + "x" + size.getHeight();
         IsisContext.getUserProfile().getOptions().addOption(name, value);
     }
 
@@ -76,7 +74,8 @@ public class Properties {
                 y = Integer.valueOf(st.nextToken().trim()).intValue();
                 return new Location(x, y);
             } else {
-                throw new IsisConfigurationException("Location not specified correctly in " + name + ": " + initialLocation);
+                throw new IsisConfigurationException("Location not specified correctly in " + name + ": "
+                    + initialLocation);
             }
         }
         return defaultLocation;
@@ -85,74 +84,74 @@ public class Properties {
     private static String optionFor(final String name) {
         return IsisContext.inSession() ? IsisContext.getUserProfile().getOptions().getString(name) : null;
     }
-    
+
     public static void saveLocationOption(final String name, final Location location) {
-        String value = location.getX() + "," + location.getY();
+        final String value = location.getX() + "," + location.getY();
         IsisContext.getUserProfile().getOptions().addOption(name, value);
     }
 
-    public static String getString(String name) {
-        String value = optionFor(PROPERTY_BASE +name);
+    public static String getString(final String name) {
+        String value = optionFor(PROPERTY_BASE + name);
         if (value == null) {
             value = IsisContext.getConfiguration().getString(PROPERTY_BASE + name);
         }
         return value;
     }
 
-    public static void setStringOption(String name, String value) {
-        IsisContext.getUserProfile().getOptions().addOption(PROPERTY_BASE +name, value);
+    public static void setStringOption(final String name, final String value) {
+        IsisContext.getUserProfile().getOptions().addOption(PROPERTY_BASE + name, value);
     }
 
-    public static Options getOptions(String name) {
+    public static Options getOptions(final String name) {
         return IsisContext.getUserProfile().getOptions().getOptions(name);
     }
 
     public static String getDefaultIconViewOptions() {
         return getString("view.icon-default");
     }
-    
+
     public static String getDefaultObjectViewOptions() {
         return getString("view.object-default");
     }
-    
+
     public static String getDefaultCollectionViewOptions() {
         return getString("view.collection-default");
     }
-    
-    public static Options getViewConfigurationOptions(ViewSpecification specification) {
-        Options settingsOptions = getOptions("views.configuration");
-        String specificationName = specification.getName();
+
+    public static Options getViewConfigurationOptions(final ViewSpecification specification) {
+        final Options settingsOptions = getOptions("views.configuration");
+        final String specificationName = specification.getName();
         return settingsOptions.getOptions(specificationName);
     }
 
-    public static Options getDefaultViewOptions(ObjectSpecification specification) {
-        Options settingsOptions = getOptions("views.type-default");
+    public static Options getDefaultViewOptions(final ObjectSpecification specification) {
+        final Options settingsOptions = getOptions("views.type-default");
         String name;
         if (specification.isCollection()) {
             name = "collection:" + specification.getFacet(TypeOfFacet.class).valueSpec().getFullIdentifier();
         } else {
             name = specification.getFullIdentifier();
         }
-        Options viewOptions = settingsOptions.getOptions(name);
+        final Options viewOptions = settingsOptions.getOptions(name);
         return viewOptions;
     }
 
-    public static Options getUserViewSpecificationOptions(String specificationName) {
-        Options settingsOptions = getOptions("views.user-defined");
+    public static Options getUserViewSpecificationOptions(final String specificationName) {
+        final Options settingsOptions = getOptions("views.user-defined");
         return settingsOptions.getOptions(specificationName);
     }
 
-    public static Object loadClass(Options viewOptions, String name) {
-        String specificationName = viewOptions.getString(name);
+    public static Object loadClass(final Options viewOptions, final String name) {
+        final String specificationName = viewOptions.getString(name);
         if (specificationName != null) {
             try {
-                Class<?> specificationClass = Class.forName(specificationName);
+                final Class<?> specificationClass = Class.forName(specificationName);
                 return specificationClass.newInstance();
-            } catch (ClassNotFoundException e) {
+            } catch (final ClassNotFoundException e) {
                 throw new ViewerException(e);
-            } catch (InstantiationException e) {
+            } catch (final InstantiationException e) {
                 throw new ViewerException(e);
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 throw new ViewerException(e);
             }
         }
@@ -160,4 +159,3 @@ public class Properties {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import java.awt.event.KeyEvent;
@@ -39,18 +38,19 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class SelectObjectBorder extends AbstractBorder {
     private final SelectableViewAxis axis;
 
     public static class Factory implements SubviewDecorator {
-        public ViewAxis createAxis(Content content) {
+        @Override
+        public ViewAxis createAxis(final Content content) {
             return null;
         }
 
-        public View decorate(Axes axes, View view) {
+        @Override
+        public View decorate(final Axes axes, final View view) {
             if (axes.contains(SelectableViewAxis.class)) {
-                SelectableViewAxis axis = axes.getAxis(SelectableViewAxis.class);
+                final SelectableViewAxis axis = axes.getAxis(SelectableViewAxis.class);
                 return new SelectObjectBorder(view, axis);
             } else {
                 return view;
@@ -58,18 +58,18 @@ public class SelectObjectBorder extends AbstractBorder {
         }
     }
 
-    protected SelectObjectBorder(View view, SelectableViewAxis axis) {
+    protected SelectObjectBorder(final View view, final SelectableViewAxis axis) {
         super(view);
         this.axis = axis;
     }
 
     @Override
     public Axes getViewAxes() {
-        Axes viewAxes = super.getViewAxes();
+        final Axes viewAxes = super.getViewAxes();
         viewAxes.add(axis);
         return viewAxes;
     }
-    
+
     @Override
     protected void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
@@ -77,7 +77,7 @@ public class SelectObjectBorder extends AbstractBorder {
     }
 
     @Override
-    public void keyPressed(KeyboardAction key) {
+    public void keyPressed(final KeyboardAction key) {
         if (key.getKeyCode() == KeyEvent.VK_SPACE) {
             selectNode();
         } else {
@@ -128,4 +128,3 @@ public class SelectObjectBorder extends AbstractBorder {
         super.draw(canvas);
     }
 }
-

@@ -17,23 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.apache.isis.viewer.dnd.DummyView;
-import org.apache.isis.viewer.dnd.TestToolkit;
-import org.apache.isis.viewer.dnd.drawing.Size;
-import org.apache.isis.viewer.dnd.view.composite.CompositeView;
-import org.apache.isis.viewer.dnd.view.content.NullContent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.viewer.dnd.DummyView;
+import org.apache.isis.viewer.dnd.TestToolkit;
+import org.apache.isis.viewer.dnd.drawing.Size;
+import org.apache.isis.viewer.dnd.view.content.NullContent;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CompositeViewTest {
 
@@ -49,21 +46,27 @@ public class CompositeViewTest {
         TestToolkit.createInstance();
 
         view = new CompositeView(new NullContent(), null) {
+            @Override
             protected void buildNewView() {
                 newBuildCount++;
             }
 
+            @Override
             protected void buildModifiedView() {
                 modifiedBuildCount++;
             }
 
-            protected void buildView() {}
+            @Override
+            protected void buildView() {
+            }
 
-            protected void doLayout(Size maximumSize) {
+            @Override
+            protected void doLayout(final Size maximumSize) {
                 layoutCount++;
             }
 
-            public Size requiredSize(Size availableSpace) {
+            @Override
+            public Size requiredSize(final Size availableSpace) {
                 return null;
             }
         };
@@ -186,4 +189,3 @@ public class CompositeViewTest {
         assertEquals(1, modifiedBuildCount);
     }
 }
-

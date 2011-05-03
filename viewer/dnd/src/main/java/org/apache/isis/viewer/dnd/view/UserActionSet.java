@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,9 +31,9 @@ public interface UserActionSet extends UserAction {
     void addObjectMenuOptions(ObjectAdapter object);
 
     void addCreateOptions(ObjectSpecification specification);
-    
+
     UserActionSet addNewActionSet(String name);
-    
+
     UserActionSet addNewActionSet(String name, ActionType type);
 
     UserAction[] getUserActions();
@@ -43,5 +42,3 @@ public interface UserActionSet extends UserAction {
 
     void setColor(Color color);
 }
-
-

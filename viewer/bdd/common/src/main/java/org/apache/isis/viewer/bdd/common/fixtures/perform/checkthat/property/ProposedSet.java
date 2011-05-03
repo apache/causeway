@@ -32,12 +32,10 @@ public class ProposedSet extends ProposedArgumentValidityAbstract {
     }
 
     @Override
-    protected Consent determineConsent(final PerformContext performContext,
-            final ObjectAdapter toValidateAdapter) {
+    protected Consent determineConsent(final PerformContext performContext, final ObjectAdapter toValidateAdapter) {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getObjectMember();
+        final OneToOneAssociation otoa = (OneToOneAssociation) performContext.getObjectMember();
 
         return otoa.isAssociationValid(onAdapter, toValidateAdapter);
     }

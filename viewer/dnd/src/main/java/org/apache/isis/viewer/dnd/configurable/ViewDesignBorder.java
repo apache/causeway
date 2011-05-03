@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import java.util.List;
@@ -30,33 +29,32 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class ViewDesignBorder extends AbstractBorder {
-    private NewObjectView viewUnderControl;
-    
-    protected ViewDesignBorder(View view, NewObjectView view2) {
+    private final NewObjectView viewUnderControl;
+
+    protected ViewDesignBorder(final View view, final NewObjectView view2) {
         super(view);
         viewUnderControl = view2;
     }
-    
+
     private NewObjectView getNewObjectView() {
         return viewUnderControl;
     }
-    
+
     @Override
-    public void viewMenuOptions(UserActionSet menuOptions) {
+    public void viewMenuOptions(final UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-    //    ObjectAdapter object = getContent().getAdapter();
-        List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
-       
-        for (ObjectAssociation objectAssociation : associations) {
+        // ObjectAdapter object = getContent().getAdapter();
+        final List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
+
+        for (final ObjectAssociation objectAssociation : associations) {
             final ObjectAssociation f = objectAssociation;
-            UserActionAbstract action = new UserActionAbstract("Add field " + objectAssociation.getName()) {
+            final UserActionAbstract action = new UserActionAbstract("Add field " + objectAssociation.getName()) {
 
                 @Override
-                public void execute(Workspace workspace, View view, Location at) {
-                    NewObjectField field = new NewObjectField(f);
+                public void execute(final Workspace workspace, final View view, final Location at) {
+                    final NewObjectField field = new NewObjectField(f);
                     getNewObjectView().addField(field);
                 }
             };
@@ -64,4 +62,3 @@ public class ViewDesignBorder extends AbstractBorder {
         }
     }
 }
-

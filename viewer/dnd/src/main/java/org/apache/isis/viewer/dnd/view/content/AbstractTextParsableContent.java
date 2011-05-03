@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.content;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,13 +27,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
 import org.apache.isis.viewer.dnd.drawing.Image;
 
-
 public abstract class AbstractTextParsableContent extends AbstractContent {
 
     public abstract void clear();
 
     public abstract void entryComplete();
 
+    @Override
     public Image getIconPicture(final int iconHeight) {
         return null;
     }
@@ -46,6 +45,7 @@ public abstract class AbstractTextParsableContent extends AbstractContent {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return false;
     }
@@ -67,12 +67,10 @@ public abstract class AbstractTextParsableContent extends AbstractContent {
      * @param propertyOrParamTypeSpecification
      *            the specification of the type of the property or parameter (for fallback).
      */
-    protected String titleString(
-            final ObjectAdapter propertyOrParamValue,
-            final FacetHolder propertyOrParam,
-            final FacetHolder propertyOrParamTypeSpecification) {
-        
-        TitleFacet titleFacet = propertyOrParam.getFacet(TitleFacet.class);
+    protected String titleString(final ObjectAdapter propertyOrParamValue, final FacetHolder propertyOrParam,
+        final FacetHolder propertyOrParamTypeSpecification) {
+
+        final TitleFacet titleFacet = propertyOrParam.getFacet(TitleFacet.class);
         if (titleFacet != null) {
             return titleFacet.title(propertyOrParamValue, null);
         } else {

@@ -33,21 +33,21 @@ public class CheckListForConcordion extends AbstractFixture<CheckListPeer> {
     }
 
     private static CellBindingDefault titleBinding() {
-        return CellBindingDefault
-            .builder(CheckListConstants.TITLE_NAME, CheckListConstants.TITLE_HEAD_SET).ditto().build();
+        return CellBindingDefault.builder(CheckListConstants.TITLE_NAME, CheckListConstants.TITLE_HEAD_SET).ditto()
+            .build();
     }
 
-    public String executeHeader(String title) {
+    public String executeHeader(final String title) {
         return setupHeader(title);
     }
 
-    private String setupHeader(String title) {
+    private String setupHeader(final String title) {
         int colNum = 0;
         getPeer().getTitleBinding().setHeadColumn(colNum++);
         return ""; // ok
     }
 
-    public String executeRow(String title) {
+    public String executeRow(final String title) {
 
         setupHeader(title);
 
@@ -59,14 +59,15 @@ public class CheckListForConcordion extends AbstractFixture<CheckListPeer> {
     }
 
     private String checkExists() {
-        if(!getPeer().findAndAddObject()) {
+        if (!getPeer().findAndAddObject()) {
             return getTitle() + " not found";
         }
         return "ok";
     }
+
     private String getTitle() {
-        ScenarioCell currentCell = getPeer().getTitleBinding().getCurrentCell();
-        return currentCell!=null?currentCell.getText():"(no title provided)";
+        final ScenarioCell currentCell = getPeer().getTitleBinding().getCurrentCell();
+        return currentCell != null ? currentCell.getText() : "(no title provided)";
     }
 
 }

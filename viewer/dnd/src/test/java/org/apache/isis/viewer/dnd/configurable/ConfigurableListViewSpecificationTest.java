@@ -17,95 +17,97 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
+
+import static org.junit.Assert.assertTrue;
 
 import java.util.Enumeration;
 
+import org.apache.isis.viewer.dnd.TestToolkit;
+import org.apache.isis.viewer.dnd.view.Content;
+import org.apache.isis.viewer.dnd.view.ViewRequirement;
+import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.viewer.dnd.TestToolkit;
-import org.apache.isis.viewer.dnd.configurable.GridListSpecification;
-import org.apache.isis.viewer.dnd.view.Content;
-import org.apache.isis.viewer.dnd.view.ViewRequirement;
-import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
-
-import static org.junit.Assert.assertTrue;
-
 
 public class ConfigurableListViewSpecificationTest {
     private GridListSpecification viewSpecification;
     private CollectionContent collectionContent;
     private Mockery context;
-    
+
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
         TestToolkit.createInstance();
-        
+
         viewSpecification = new GridListSpecification();
-        
+
         context = new Mockery();
         collectionContent = context.mock(CollectionContent.class);
-        context.checking(new Expectations() {{
-            one(collectionContent).isCollection();
-            will(returnValue(true));
-        }});
+        context.checking(new Expectations() {
+            {
+                one(collectionContent).isCollection();
+                will(returnValue(true));
+            }
+        });
     }
 
     @Test
     public void requiresOpenCollection() throws Exception {
-        ViewRequirement requirement = new ViewRequirement(collectionContent, ViewRequirement.OPEN);
+        final ViewRequirement requirement = new ViewRequirement(collectionContent, ViewRequirement.OPEN);
         assertTrue(viewSpecification.canDisplay(requirement));
     }
 
     @Test
     public void requiresOpenObject() throws Exception {
-        ViewRequirement requirement = new ViewRequirement(collectionContent, ViewRequirement.OPEN);
+        final ViewRequirement requirement = new ViewRequirement(collectionContent, ViewRequirement.OPEN);
         assertTrue(viewSpecification.canDisplay(requirement));
     }
 
     @Test
     public void requiresClosedCollection() throws Exception {
         final Content objectContent = context.mock(Content.class, "object");
-        context.checking(new Expectations() {{
-            one(objectContent).isCollection();
-            will(returnValue(false));
-        }});
-        ViewRequirement requirement = new ViewRequirement(objectContent, ViewRequirement.CLOSED);
+        context.checking(new Expectations() {
+            {
+                one(objectContent).isCollection();
+                will(returnValue(false));
+            }
+        });
+        final ViewRequirement requirement = new ViewRequirement(objectContent, ViewRequirement.CLOSED);
         assertTrue(!viewSpecification.canDisplay(requirement));
     }
-    
- //   @Test
-    public void testname() throws Exception {
-        context.checking(new Expectations() {{
-            one(collectionContent).allElements();
-            will(returnValue(new Enumeration() {
-                public boolean hasMoreElements() {
-                    return false;
-                }
 
-                public Object nextElement() {
-                    return null;
-                }}));
-        }});
+    // @Test
+    public void testname() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(collectionContent).allElements();
+                will(returnValue(new Enumeration() {
+                    @Override
+                    public boolean hasMoreElements() {
+                        return false;
+                    }
+
+                    @Override
+                    public Object nextElement() {
+                        return null;
+                    }
+                }));
+            }
+        });
 
         /*
-         * TODO Fails trying to load user profile form NO system. 
-        View view = viewSpecification.createView(collectionContent, new Axes(), 0);
-        Axes axes = view.getViewAxes();
-        GridLayout axis = axes.getAxis(GridLayout.class);
-        assertEquals(1, axis.getSize());
-        
-        
-        ConfigurationAxis configurationAxis = axes.getAxis(ConfigurationAxis.class);
-        assertNotNull(configurationAxis);
-        */
+         * TODO Fails trying to load user profile form NO system. View view =
+         * viewSpecification.createView(collectionContent, new Axes(), 0); Axes axes = view.getViewAxes(); GridLayout
+         * axis = axes.getAxis(GridLayout.class); assertEquals(1, axis.getSize());
+         * 
+         * 
+         * ConfigurationAxis configurationAxis = axes.getAxis(ConfigurationAxis.class);
+         * assertNotNull(configurationAxis);
+         */
     }
 }
-
-

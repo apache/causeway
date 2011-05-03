@@ -17,22 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -44,40 +32,44 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
-import org.apache.isis.viewer.dnd.view.text.CursorPosition;
-import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
-import org.apache.isis.viewer.dnd.view.text.TextContent;
-import org.apache.isis.viewer.dnd.view.text.TextSelection;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class MultilineTextFieldContentTest {
 
     private TextContent content;
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
     protected TemplateImageLoader mockTemplateImageLoader;
     protected SpecificationLoader mockSpecificationLoader;
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
     private UserProfileLoader mockUserProfileLoader;
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
-    
-	private List<Object> servicesList;
 
-    
+    private List<Object> servicesList;
+
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         servicesList = Collections.emptyList();
-        
+
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
         mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
         mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
         mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
         mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
         mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-        
+
         mockery.checking(new Expectations() {
             {
                 ignoring(mockTemplateImageLoader);
@@ -89,18 +81,13 @@ public class MultilineTextFieldContentTest {
             }
         });
 
-        IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(
-                DeploymentType.EXPLORATION, 
-                new IsisConfigurationDefault(), 
-                mockTemplateImageLoader, 
-                mockSpecificationLoader, 
-                mockAuthenticationManager, 
-		        mockAuthorizationManager,
-                mockUserProfileLoader, 
-                mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactoryDefault sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
+                mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager,
+                mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         IsisContextStatic.createRelaxedInstance(sessionFactory);
         sessionFactory.init();
-                
+
         final TextBlockTarget target = new TextBlockTargetExample();
 
         content = new TextContent(target, 4, TextContent.WRAPPING);
@@ -113,7 +100,8 @@ public class MultilineTextFieldContentTest {
         selection.resetTo(new CursorPosition(content, 1, 3));
         selection.extendTo(new CursorPosition(content, 1, 7));
         content.delete(selection);
-        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps", content.getText());
+        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps",
+            content.getText());
     }
 
     @Test
@@ -122,7 +110,8 @@ public class MultilineTextFieldContentTest {
         selection.resetTo(new CursorPosition(content, 1, 7));
         selection.extendTo(new CursorPosition(content, 1, 3));
         content.delete(selection);
-        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps", content.getText());
+        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps",
+            content.getText());
     }
 
     @Test
@@ -158,7 +147,8 @@ public class MultilineTextFieldContentTest {
         selection.resetTo(new CursorPosition(content, 5, 0));
         selection.extendTo(new CursorPosition(content, 5, 3));
         content.delete(selection);
-        Assert.assertEquals("Line one\nLine two\nLine three\nLine four that is long enough that wraps", content.getText());
+        Assert.assertEquals("Line one\nLine two\nLine three\nLine four that is long enough that wraps",
+            content.getText());
     }
 
     @Test

@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public class TitleComparator implements Comparator {
     private String title;
 
+    @Override
     public void init(final ObjectAdapter element) {
         title = element.titleString();
     }
 
+    @Override
     public int compare(final ObjectAdapter sortedElement) {
         final String sortedTitle = sortedElement.titleString();
         return sortedTitle.compareTo(title);

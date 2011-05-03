@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.icon;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -32,24 +31,26 @@ import org.apache.isis.viewer.dnd.view.base.IconGraphic;
 import org.apache.isis.viewer.dnd.view.border.ObjectBorder;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 
-
 public class LargeIconSpecification implements ViewSpecification {
     private static final int DEFAULT_SIZE = 64;
-    private int size;
+    private final int size;
 
     public LargeIconSpecification() {
         this(DEFAULT_SIZE);
     }
-    
-    LargeIconSpecification(int size) {
+
+    LargeIconSpecification(final int size) {
         this.size = size;
     }
-    
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isClosed() && requirement.isObject() && requirement.hasReference() && requirement.isSubview();
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isClosed() && requirement.isObject() && requirement.hasReference()
+            && requirement.isSubview();
     }
-    
-    public View createView(final Content content, Axes axes, int sequence) {
+
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final Text style = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
         final Icon icon = new Icon(content, this);
         icon.setTitle(new ObjectTitleText(icon, style));
@@ -58,26 +59,32 @@ public class LargeIconSpecification implements ViewSpecification {
         return new ObjectBorder(icon);
     }
 
+    @Override
     public String getName() {
         return "Image";
     }
 
+    @Override
     public boolean isSubView() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }

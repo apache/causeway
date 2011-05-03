@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
-
 
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 public abstract class AbstractBuilderDecorator implements ViewBuilder {
     protected final ViewBuilder wrappedBuilder;
@@ -33,18 +30,22 @@ public abstract class AbstractBuilderDecorator implements ViewBuilder {
         this.wrappedBuilder = design;
     }
 
-    public void build(final View view, Axes axes) {
+    @Override
+    public void build(final View view, final Axes axes) {
         wrappedBuilder.build(view, axes);
     }
 
+    @Override
     public boolean isOpen() {
         return wrappedBuilder.isOpen();
     }
 
+    @Override
     public boolean isReplaceable() {
         return wrappedBuilder.isReplaceable();
     }
 
+    @Override
     public boolean isSubView() {
         return wrappedBuilder.isSubView();
     }
@@ -54,8 +55,9 @@ public abstract class AbstractBuilderDecorator implements ViewBuilder {
         final String name = getClass().getName();
         return wrappedBuilder + "/" + name.substring(name.lastIndexOf('.') + 1);
     }
-    
-    public void viewMenuOptions(UserActionSet options, View view) {
+
+    @Override
+    public void viewMenuOptions(final UserActionSet options, final View view) {
         wrappedBuilder.viewMenuOptions(options, view);
     }
 }

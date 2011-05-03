@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.drawing;
-
-import org.apache.isis.viewer.dnd.drawing.Shape;
 
 import junit.framework.TestCase;
 
+import org.apache.isis.viewer.dnd.drawing.Shape;
 
 public class ShapeTest extends TestCase {
 

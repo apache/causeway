@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,42 +37,40 @@ import org.apache.isis.viewer.dnd.view.border.ViewResizeBorder;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 
-
 public class MasterDetailPanel extends CompositeView implements Selectable {
     private static final int MINIMUM_WIDTH = 120;
     private final ViewSpecification leftHandSideSpecification;
-    private Axes axes;
+    private final Axes axes;
 
-    public MasterDetailPanel(
-            final Content content,
-            final ViewSpecification specification,
-            final ViewSpecification leftHandSideSpecification) {
+    public MasterDetailPanel(final Content content, final ViewSpecification specification,
+        final ViewSpecification leftHandSideSpecification) {
         super(content, specification);
         this.leftHandSideSpecification = leftHandSideSpecification;
         axes = new Axes();
         axes.add(new SelectableViewAxis(this));
     }
 
+    @Override
     protected void buildView() {
-        Content content = getContent();
+        final Content content = getContent();
         View leftHandView = leftHandSideSpecification.createView(content, axes, -1);
         leftHandView = new ViewResizeBorder(new ScrollBorder(leftHandView));
         leftHandView.setParent(getView());
         addView(leftHandView);
 
-        Size blankViewSize = new Size(MINIMUM_WIDTH, 0);
-        View blankView = new BlankView(new NullContent(), blankViewSize);
+        final Size blankViewSize = new Size(MINIMUM_WIDTH, 0);
+        final View blankView = new BlankView(new NullContent(), blankViewSize);
         blankView.setParent(getView());
         addView(blankView);
 
         selectFirstSuitableObject(content);
     }
 
-    private void selectFirstSuitableObject(Content content) {
+    private void selectFirstSuitableObject(final Content content) {
         if (content instanceof CollectionContent) {
-            ObjectAdapter[] elements = ((CollectionContent) content).elements();
+            final ObjectAdapter[] elements = ((CollectionContent) content).elements();
             if (elements.length > 0) {
-                ObjectAdapter firstElement = elements[0];
+                final ObjectAdapter firstElement = elements[0];
                 final Content firstElementContent = Toolkit.getContentFactory().createRootContent(firstElement);
                 setSelectedNode(firstElementContent);
             }
@@ -81,39 +78,39 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
             /*
              * TODO provide a view that shows first useful object (not redisplaying parent)
              * 
-             * ObjectAssociation[] associations = content.getSpecification().getAssociations(); for (int
-             * i = 0; i < associations.length; i++) { ObjectAssociation assoc = associations[i]; if
-             * (assoc.isOneToManyAssociation()) { ObjectAdapter collection = assoc.get(content.getAdapter());
-             * final Content collectionContent = Toolkit.getContentFactory().createRootContent(collection);
+             * ObjectAssociation[] associations = content.getSpecification().getAssociations(); for (int i = 0; i <
+             * associations.length; i++) { ObjectAssociation assoc = associations[i]; if
+             * (assoc.isOneToManyAssociation()) { ObjectAdapter collection = assoc.get(content.getAdapter()); final
+             * Content collectionContent = Toolkit.getContentFactory().createRootContent(collection);
              * setSelectedNode(collectionContent); break; } else if (assoc.isOneToOneAssociation() &&
              * !((OneToOneAssociation)assoc).getSpecification().isParseable()) { ObjectAdapter object =
              * assoc.get(content.getAdapter()); if (object == null) { continue; } final Content objectContent =
-             * Toolkit.getContentFactory().createRootContent(object); setSelectedNode(objectContent); break; }
-             * }
+             * Toolkit.getContentFactory().createRootContent(object); setSelectedNode(objectContent); break; } }
              */
             setSelectedNode(content);
         }
     }
 
-    protected void doLayout(Size availableSpace) {
+    @Override
+    protected void doLayout(final Size availableSpace) {
         availableSpace.contract(getView().getPadding());
 
-        View[] subviews = getSubviews();
-        View left = subviews[0];
-        View right = subviews[1];
-        Size leftPanelRequiredSize = left.getRequiredSize(new Size(availableSpace));
-        Size rightPanelRequiredSize = right == null ? new Size() : right.getRequiredSize(new Size(availableSpace));
+        final View[] subviews = getSubviews();
+        final View left = subviews[0];
+        final View right = subviews[1];
+        final Size leftPanelRequiredSize = left.getRequiredSize(new Size(availableSpace));
+        final Size rightPanelRequiredSize =
+            right == null ? new Size() : right.getRequiredSize(new Size(availableSpace));
 
         // combine the two sizes
         final Size totalSize = new Size(leftPanelRequiredSize);
         totalSize.extendWidth(rightPanelRequiredSize.getWidth());
         totalSize.ensureHeight(rightPanelRequiredSize.getHeight());
-        
-       
+
         if (totalSize.getWidth() > availableSpace.getWidth()) {
             /*
-             * If the combined width is greater than the available then we need to divide the space between
-             * the two sides and recalculate
+             * If the combined width is greater than the available then we need to divide the space between the two
+             * sides and recalculate
              */
             if (rightPanelRequiredSize.getWidth() <= MINIMUM_WIDTH) {
                 leftPanelRequiredSize.setWidth(availableSpace.getWidth() - rightPanelRequiredSize.getWidth());
@@ -124,21 +121,20 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
                 rightPanelRequiredSize.setWidth(rightPanelRequiredSize.getWidth() * availableWidth / requiredWidth);
             }
             /*
-            final int leftWidth = Math.max(MINIMUM_WIDTH, leftPanelRequiredSize.getWidth());
-            final int rightWidth = rightPanelRequiredSize.getWidth();
-            final int totalWidth = leftWidth + rightWidth;
-
-            final int bestWidth = (int) (1.0 * leftWidth / totalWidth * availableWidth);
-            final Size maximumSizeLeft = new Size(bestWidth, maximumSize.getHeight());
-            leftPanelRequiredSize = left.getRequiredSize(maximumSizeLeft);
-
-            final Size maximumSizeRight = new Size(availableWidth - leftPanelRequiredSize.getWidth(), maximumSize.getHeight());
-            rightPanelRequiredSize = right.getRequiredSize(maximumSizeRight);
-            */
+             * final int leftWidth = Math.max(MINIMUM_WIDTH, leftPanelRequiredSize.getWidth()); final int rightWidth =
+             * rightPanelRequiredSize.getWidth(); final int totalWidth = leftWidth + rightWidth;
+             * 
+             * final int bestWidth = (int) (1.0 * leftWidth / totalWidth * availableWidth); final Size maximumSizeLeft =
+             * new Size(bestWidth, maximumSize.getHeight()); leftPanelRequiredSize =
+             * left.getRequiredSize(maximumSizeLeft);
+             * 
+             * final Size maximumSizeRight = new Size(availableWidth - leftPanelRequiredSize.getWidth(),
+             * maximumSize.getHeight()); rightPanelRequiredSize = right.getRequiredSize(maximumSizeRight);
+             */
         }
 
-        //combinedSize.setHeight(Math.min(combinedSize.getHeight(), maximumSize.getHeight()));
-       // totalSize.limitSize(availableSpace);
+        // combinedSize.setHeight(Math.min(combinedSize.getHeight(), maximumSize.getHeight()));
+        // totalSize.limitSize(availableSpace);
 
         left.setSize(new Size(leftPanelRequiredSize.getWidth(), totalSize.getHeight()));
         left.layout();
@@ -154,17 +150,17 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
 
     @Override
     public Size requiredSize(final Size availableSpace) {
-        View[] subviews = getSubviews();
-        View left = subviews[0];
-        View right = subviews.length > 1 ? subviews[1] : null;
+        final View[] subviews = getSubviews();
+        final View left = subviews[0];
+        final View right = subviews.length > 1 ? subviews[1] : null;
 
         Size leftPanelRequiredSize = left.getRequiredSize(new Size(availableSpace));
         Size rightPanelRequiredSize = right == null ? new Size() : right.getRequiredSize(new Size(availableSpace));
 
         if (leftPanelRequiredSize.getWidth() + rightPanelRequiredSize.getWidth() > availableSpace.getWidth()) {
             /*
-             * If the combined width is greater than the available then we need to divide the space between
-             * the two sides and recalculate
+             * If the combined width is greater than the available then we need to divide the space between the two
+             * sides and recalculate
              */
 
             final int availableWidth = availableSpace.getWidth();
@@ -176,8 +172,9 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
             final Size maximumSizeLeft = new Size(bestWidth, availableSpace.getHeight());
             leftPanelRequiredSize = left.getRequiredSize(maximumSizeLeft);
 
-            final Size maximumSizeRight = new Size(availableWidth - leftPanelRequiredSize.getWidth(), availableSpace.getHeight());
-            rightPanelRequiredSize = right == null ? new Size() :right.getRequiredSize(maximumSizeRight);
+            final Size maximumSizeRight =
+                new Size(availableWidth - leftPanelRequiredSize.getWidth(), availableSpace.getHeight());
+            rightPanelRequiredSize = right == null ? new Size() : right.getRequiredSize(maximumSizeRight);
         }
 
         // combine the two required sizes
@@ -191,31 +188,27 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
         replaceView(getSubviews()[1], view);
     }
 
+    @Override
     public void setSelectedNode(final View view) {
         final Content content = view.getContent();
         setSelectedNode(content);
     }
 
     private void setSelectedNode(final Content content) {
-        ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW | ViewRequirement.FIXED);
+        final ViewRequirement requirement =
+            new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW | ViewRequirement.FIXED);
         /*
-        final ObjectAdapter object = content.getAdapter();
-        final ObjectSpecification specification = object.getSpecification();
-        final CollectionFacet facet = specification.getFacet(CollectionFacet.class);
-        if (facet != null && facet.size(object) > 0) {
-            if (mainViewTableSpec.canDisplay(requirement)) {
-                showInRightPane(mainViewTableSpec.createView(content, axes, -1));
-            } else if (mainViewListSpec.canDisplay(requirement)) {
-                showInRightPane(mainViewListSpec.createView(content, axes, -1));
-            }
-
-        } else if (specification.isObject()) {
-            if (object != null && mainViewFormSpec.canDisplay(requirement)) {
-                showInRightPane(mainViewFormSpec.createView(content, axes, -1));
-            }
-        }
-        */
-        View createView = Toolkit.getViewFactory().createView(requirement);
+         * final ObjectAdapter object = content.getAdapter(); final ObjectSpecification specification =
+         * object.getSpecification(); final CollectionFacet facet = specification.getFacet(CollectionFacet.class); if
+         * (facet != null && facet.size(object) > 0) { if (mainViewTableSpec.canDisplay(requirement)) {
+         * showInRightPane(mainViewTableSpec.createView(content, axes, -1)); } else if
+         * (mainViewListSpec.canDisplay(requirement)) { showInRightPane(mainViewListSpec.createView(content, axes, -1));
+         * }
+         * 
+         * } else if (specification.isObject()) { if (object != null && mainViewFormSpec.canDisplay(requirement)) {
+         * showInRightPane(mainViewFormSpec.createView(content, axes, -1)); } }
+         */
+        final View createView = Toolkit.getViewFactory().createView(requirement);
         showInRightPane(createView);
     }
 
@@ -225,4 +218,3 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
     }
 
 }
-

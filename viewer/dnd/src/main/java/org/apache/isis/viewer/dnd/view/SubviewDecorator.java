@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
-
 
 public interface SubviewDecorator {
     ViewAxis createAxis(Content content);
 
     View decorate(Axes axes, View view);
 }
-

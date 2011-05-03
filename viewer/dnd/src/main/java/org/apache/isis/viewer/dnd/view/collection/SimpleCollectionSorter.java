@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import java.util.Enumeration;
@@ -25,9 +24,9 @@ import java.util.Vector;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public class SimpleCollectionSorter implements CollectionSorter {
 
+    @Override
     public void sort(final ObjectAdapter[] elements, final Comparator order, final boolean reverse) {
         if (order == null) {
             return;

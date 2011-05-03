@@ -17,12 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
-
-
-
 public interface CompositeViewSpecification extends ViewSpecification {
-    
+
 }

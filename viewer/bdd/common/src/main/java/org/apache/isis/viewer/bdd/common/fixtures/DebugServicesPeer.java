@@ -24,16 +24,13 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 
-
-
 public class DebugServicesPeer extends AbstractFixturePeer {
-	
-	public DebugServicesPeer(AliasRegistry aliasesRegistry,
-			CellBinding... cellBindings) {
-		super(aliasesRegistry, cellBindings);
-	}
 
-	public String debugServices() {
+    public DebugServicesPeer(final AliasRegistry aliasesRegistry, final CellBinding... cellBindings) {
+        super(aliasesRegistry, cellBindings);
+    }
+
+    public String debugServices() {
         final DebugString debug = new DebugString();
 
         final List<Object> services = getServices();
@@ -43,6 +40,6 @@ public class DebugServicesPeer extends AbstractFixturePeer {
             debug.append("\n");
         }
         return debug.toString().replaceAll("\n", "<br>");
-	}
+    }
 
 }

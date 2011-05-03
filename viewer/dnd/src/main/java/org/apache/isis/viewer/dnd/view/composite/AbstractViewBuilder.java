@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.ArrayList;
@@ -29,53 +28,61 @@ import org.apache.isis.viewer.dnd.view.SubviewDecorator;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public abstract class AbstractViewBuilder implements ViewBuilder {
     private final List<SubviewDecorator> subviewDecorators = new ArrayList<SubviewDecorator>();
 
+    @Override
     public abstract void build(final View view, Axes axes);
 
-    public void createAxes(Axes axes, Content content) {
-        for (SubviewDecorator decorator : subviewDecorators) {
+    @Override
+    public void createAxes(final Axes axes, final Content content) {
+        for (final SubviewDecorator decorator : subviewDecorators) {
             axes.add(decorator.createAxis(content));
-        }        
+        }
     }
 
-    public void addSubviewDecorator(SubviewDecorator decorator) {
+    @Override
+    public void addSubviewDecorator(final SubviewDecorator decorator) {
         if (decorator != null) {
             subviewDecorators.add(decorator);
         }
     }
 
-    public View decorateSubview(Axes axes, final View child) {
+    public View decorateSubview(final Axes axes, final View child) {
         View view = child;
-        for (SubviewDecorator decorator : subviewDecorators) {
+        for (final SubviewDecorator decorator : subviewDecorators) {
             view = decorator.decorate(axes, view);
         }
         return view;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
+    @Override
     public boolean canDragView() {
         return true;
     }
-    
+
     @Override
     public String toString() {
         final String name = getClass().getName();
         return name.substring(name.lastIndexOf('.') + 1);
     }
-    
-    public void viewMenuOptions(UserActionSet options, View view) {}
+
+    @Override
+    public void viewMenuOptions(final UserActionSet options, final View view) {
+    }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.field.SingleLineTextField;
@@ -28,20 +27,21 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.base.AbstractFieldSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 
-
 /**
  * Creates a single line text field without the baseline being drawn.
  */
 public class UnlinedTextFieldSpecification extends AbstractFieldSpecification {
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isTextParseable()   && ((TextParseableContent)  requirement.getContent()).getNoLines() == 1;
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isTextParseable() && ((TextParseableContent) requirement.getContent()).getNoLines() == 1;
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         return new SingleLineTextField((TextParseableContent) content, this, false);
     }
 
+    @Override
     public String getName() {
         return "Single Line Text Field";
     }

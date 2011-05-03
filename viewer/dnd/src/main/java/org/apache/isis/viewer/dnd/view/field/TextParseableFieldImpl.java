@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.field;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -38,38 +37,44 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.ObjectContent;
 import org.apache.isis.viewer.dnd.view.content.AbstractTextParsableContent;
 
-
 public class TextParseableFieldImpl extends AbstractTextParsableContent implements TextParseableField, ObjectContent {
     private final ObjectField field;
     private final ObjectAdapter parent;
     private ObjectAdapter object;
 
-    public TextParseableFieldImpl(final ObjectAdapter parent, final ObjectAdapter object, final OneToOneAssociation association) {
+    public TextParseableFieldImpl(final ObjectAdapter parent, final ObjectAdapter object,
+        final OneToOneAssociation association) {
         field = new ObjectField(parent, association);
         this.parent = parent;
         this.object = object;
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
+    @Override
     public Consent canClear() {
         return Allow.DEFAULT; // TODO is this flagged anywhere - getValueAssociation().canClear();
     }
 
+    @Override
     public boolean canWrap() {
         return getValueAssociation().containsFacet(MultiLineFacet.class);
     }
 
     @Override
-    public void clear() {}
+    public void clear() {
+    }
 
+    @Override
     public void debugDetails(final DebugBuilder debug) {
         field.debugDetails(debug);
         debug.appendln("object", object);
     }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         return null;
     }
@@ -79,39 +84,49 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         getValueAssociation().setAssociation(getParent(), object);
     }
 
+    @Override
     public String getDescription() {
         final String title = object == null ? "" : ": " + object.titleString();
         final String name = field.getName();
         final ObjectSpecification specification = getSpecification();
-        final String type = name.indexOf(specification.getShortIdentifier()) == -1 ? "" : " (" + specification.getShortIdentifier() + ")";
+        final String type =
+            name.indexOf(specification.getShortIdentifier()) == -1 ? "" : " (" + specification.getShortIdentifier()
+                + ")";
         final String description = getValueAssociation().getDescription();
         return name + type + title + " " + description;
     }
 
+    @Override
     public String getHelp() {
         return field.getHelp();
     }
 
+    @Override
     public String getFieldName() {
         return field.getName();
     }
 
+    @Override
     public ObjectAssociation getField() {
         return field.getObjectAssociation();
     }
 
+    @Override
     public String getIconName() {
         return object == null ? "" : object.getIconName();
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return object;
     }
 
+    @Override
     public String getId() {
         return field.getName();
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return getValueAssociation().getChoices(getParent());
     }
@@ -120,23 +135,28 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         return (OneToOneAssociation) getField();
     }
 
+    @Override
     public int getMaximumLength() {
         return maxLengthFacet().value();
     }
 
+    @Override
     public int getTypicalLineLength() {
         final TypicalLengthFacet facet = field.getObjectAssociation().getFacet(TypicalLengthFacet.class);
         return facet.value();
     }
 
+    @Override
     public int getNoLines() {
         return multilineFacet().numberOfLines();
     }
 
+    @Override
     public ObjectAdapter getParent() {
         return field.getParent();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return getValueAssociation().getSpecification();
     }
@@ -151,14 +171,17 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         return getField().isEmpty(getParent());
     }
 
+    @Override
     public boolean isMandatory() {
         return getValueAssociation().isMandatory();
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return getValueAssociation().hasChoices();
     }
 
+    @Override
     public String titleString(final ObjectAdapter value) {
         return titleString(value, field.getObjectAssociation(), field.getSpecification());
     }
@@ -177,9 +200,9 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         final ObjectSpecification fieldSpecification = field.getSpecification();
         final ParseableFacet p = fieldSpecification.getFacet(ParseableFacet.class);
         try {
-        	return p.parseTextEntry(object, entryText);
-        } catch(IllegalArgumentException ex) {
-        	throw new InvalidEntryException(ex.getMessage(), ex);
+            return p.parseTextEntry(object, entryText);
+        } catch (final IllegalArgumentException ex) {
+            throw new InvalidEntryException(ex.getMessage(), ex);
         }
     }
 
@@ -195,6 +218,7 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         }
     }
 
+    @Override
     public String title() {
         return field.getName();
     }
@@ -217,15 +241,18 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         return getValueAssociation().getFacet(MultiLineFacet.class);
     }
 
-    public Consent canSet(ObjectAdapter dragSource) {
+    @Override
+    public Consent canSet(final ObjectAdapter dragSource) {
         return Veto.DEFAULT;
     }
 
+    @Override
     public ObjectAdapter getObject() {
         return object;
     }
 
-    public void setObject(ObjectAdapter object) {
+    @Override
+    public void setObject(final ObjectAdapter object) {
         this.object = object;
         ((OneToOneAssociation) field.getObjectAssociation()).setAssociation(getParent(), object);
     }

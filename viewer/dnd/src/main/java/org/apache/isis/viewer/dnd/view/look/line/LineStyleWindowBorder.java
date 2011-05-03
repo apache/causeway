@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.line;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -34,59 +33,71 @@ import org.apache.isis.viewer.dnd.view.border.BorderDrawing;
 import org.apache.isis.viewer.dnd.view.text.TextUtils;
 import org.apache.isis.viewer.dnd.view.window.WindowControl;
 
-
 public class LineStyleWindowBorder implements BorderDrawing {
     private final static Text TITLE_STYLE = Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL);
-    private int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE
-            .getTextHeight());
+    private final int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(),
+        TITLE_STYLE.getTextHeight());
 
-    public void debugDetails(DebugBuilder debug) {}
+    @Override
+    public void debugDetails(final DebugBuilder debug) {
+    }
 
-    public void draw(Canvas canvas, Size s, boolean hasFocus, ViewState state, View[] controls, String title) {
-        final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY1);
+    @Override
+    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state,
+        final View[] controls, final String title) {
+        final Color borderColor =
+            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
         canvas.drawRectangle(0, 0, s.getWidth(), s.getHeight(), borderColor);
-        int y = getTop();
+        final int y = getTop();
         canvas.drawLine(0, y, s.getWidth(), y, borderColor);
-        int controlWidth = View.HPADDING + (WindowControl.WIDTH + View.HPADDING) * controls.length;
-        String text = TextUtils.limitText(title, TITLE_STYLE, s.getWidth() - controlWidth - View.VPADDING);
-        canvas.drawText(text, 6, TITLE_STYLE.getLineHeight(), borderColor, Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL));
+        final int controlWidth = View.HPADDING + (WindowControl.WIDTH + View.HPADDING) * controls.length;
+        final String text = TextUtils.limitText(title, TITLE_STYLE, s.getWidth() - controlWidth - View.VPADDING);
+        canvas.drawText(text, 6, TITLE_STYLE.getLineHeight(), borderColor,
+            Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL));
     }
 
     // TODO transiency should be flagged elsewhere and dealt with in the draw method.
-    public void drawTransientMarker(Canvas canvas, Size size) {}
+    @Override
+    public void drawTransientMarker(final Canvas canvas, final Size size) {
+    }
 
+    @Override
     public int getBottom() {
         return 1;
     }
 
+    @Override
     public int getLeft() {
         return 1;
     }
 
-    public void getRequiredSize(Size size, String title, View[] controls) {
-        final int width = getLeft() + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length
+    @Override
+    public void getRequiredSize(final Size size, final String title, final View[] controls) {
+        final int width =
+            getLeft() + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length
                 * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + getRight();
         size.ensureWidth(width);
     }
 
+    @Override
     public int getRight() {
         return 1;
     }
 
+    @Override
     public int getTop() {
         return titlebarHeight + 5;
     }
 
-    public void layoutControls(Size size, View[] controls) {
+    @Override
+    public void layoutControls(final Size size, final View[] controls) {
         int x = size.getWidth() - 1 - (WindowControl.WIDTH + View.HPADDING) * controls.length;
         final int y = 2 + View.VPADDING;
-        for (int i = 0; i < controls.length; i++) {
-            controls[i].setSize(controls[i].getRequiredSize(new Size()));
-            controls[i].setLocation(new Location(x, y));
-            x += controls[i].getSize().getWidth() + View.HPADDING;
+        for (final View control : controls) {
+            control.setSize(control.getRequiredSize(new Size()));
+            control.setLocation(new Location(x, y));
+            x += control.getSize().getWidth() + View.HPADDING;
         }
     }
 
 }
-

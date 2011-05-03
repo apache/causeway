@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Enumeration;
-
 
 public interface CollectionDisplayIterator {
 

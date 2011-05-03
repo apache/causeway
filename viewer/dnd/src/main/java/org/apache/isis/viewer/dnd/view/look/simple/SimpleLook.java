@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.simple;
 
 import org.apache.isis.viewer.dnd.view.Look;
@@ -29,9 +28,9 @@ import org.apache.isis.viewer.dnd.view.window.CloseWindowControl;
 import org.apache.isis.viewer.dnd.view.window.IconizeWindowControl;
 import org.apache.isis.viewer.dnd.view.window.ResizeWindowControl;
 
-
 public class SimpleLook implements Look {
 
+    @Override
     public void install() {
         AbstractWindowBorder.setBorderRenderer(new SimpleStyleWindowBorder());
         CloseWindowControl.setRender(new CloseWindowSimpleRender());
@@ -42,9 +41,9 @@ public class SimpleLook implements Look {
         Button.setButtonRender(new SimpleButtonRender());
     }
 
+    @Override
     public String getName() {
         return "Simple";
     }
 
 }
-

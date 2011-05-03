@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -25,7 +24,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.debug.DebugView;
-
 
 public class OverlayDebugFrame extends DebugFrame {
     private static final long serialVersionUID = 1L;

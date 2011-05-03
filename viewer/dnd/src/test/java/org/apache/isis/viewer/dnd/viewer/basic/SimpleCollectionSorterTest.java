@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import junit.framework.TestCase;
@@ -28,7 +27,6 @@ import org.apache.isis.viewer.dnd.view.collection.CollectionSorter;
 import org.apache.isis.viewer.dnd.view.collection.SimpleCollectionSorter;
 import org.apache.isis.viewer.dnd.view.collection.TitleComparator;
 
-
 public class SimpleCollectionSorterTest extends TestCase {
 
     public static void main(final String[] args) {
@@ -36,7 +34,8 @@ public class SimpleCollectionSorterTest extends TestCase {
     }
 
     public void testSortByTitle() {
-        final ObjectAdapter[] instances = new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
+        final ObjectAdapter[] instances =
+            new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
 
         final SimpleCollectionSorter sorter = new SimpleCollectionSorter();
         sorter.sort(instances, new TitleComparator(), CollectionSorter.NORMAL);
@@ -48,7 +47,8 @@ public class SimpleCollectionSorterTest extends TestCase {
     }
 
     public void testSortByTitleReversed() {
-        final ObjectAdapter[] instances = new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
+        final ObjectAdapter[] instances =
+            new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
 
         final SimpleCollectionSorter sorter = new SimpleCollectionSorter();
         sorter.sort(instances, new TitleComparator(), CollectionSorter.REVERSED);

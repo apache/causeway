@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
@@ -31,19 +29,18 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.text.CursorPosition;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
-
+import org.apache.log4j.Logger;
 
 public class WrappedTextField extends TextField {
     private static final Logger LOG = Logger.getLogger(WrappedTextField.class);
 
-    public WrappedTextField(
-            final TextParseableContent content,
-            final ViewSpecification specification,
-            final boolean showLines) {
+    public WrappedTextField(final TextParseableContent content, final ViewSpecification specification,
+        final boolean showLines) {
         super(content, specification, showLines, TextContent.WRAPPING);
     }
 
-    public void setWrapping(final boolean wrapping) {}
+    public void setWrapping(final boolean wrapping) {
+    }
 
     @Override
     protected void drawLines(final Canvas canvas, final Color color, final int width) {
@@ -82,8 +79,8 @@ public class WrappedTextField extends TextField {
                     end = style.stringWidth(line.substring(0, at));
                 }
 
-                canvas.drawSolidRectangle(start + (HPADDING), top, end - start, getText().getLineHeight(), Toolkit
-                        .getColor(ColorsAndFonts.COLOR_TEXT_HIGHLIGHT));
+                canvas.drawSolidRectangle(start + (HPADDING), top, end - start, getText().getLineHeight(),
+                    Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_HIGHLIGHT));
             }
 
             top += getText().getLineHeight();
@@ -108,8 +105,8 @@ public class WrappedTextField extends TextField {
             if (hasFocus() && canChangeValue().isAllowed() && cursorLine == i) {
                 final int at = Math.min(cursor.getCharacter(), chars.length());
                 final int pos = style.stringWidth(chars.substring(0, at)) + HPADDING;
-                canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(), Toolkit
-                        .getColor(ColorsAndFonts.COLOR_TEXT_CURSOR));
+                canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(),
+                    Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_CURSOR));
             }
 
             // draw text
@@ -117,8 +114,8 @@ public class WrappedTextField extends TextField {
             baseline += getText().getLineHeight();
         }
         /*
-         * if (end < entryLength) { int x = style.stringWidth(new String(buffer, start, end));
-         * g.setColor(Color.red); g.drawString("\u00bb", x, baseline - lineHeight()); }
+         * if (end < entryLength) { int x = style.stringWidth(new String(buffer, start, end)); g.setColor(Color.red);
+         * g.drawString("\u00bb", x, baseline - lineHeight()); }
          */
     }
 
@@ -155,6 +152,7 @@ public class WrappedTextField extends TextField {
     }
 
     @Override
-    protected void align() {}
+    protected void align() {
+    }
 
 }

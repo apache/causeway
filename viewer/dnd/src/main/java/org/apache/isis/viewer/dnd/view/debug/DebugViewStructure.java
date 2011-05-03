@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 public class DebugViewStructure implements DebuggableWithTitle {
     private final View view;
@@ -32,10 +30,12 @@ public class DebugViewStructure implements DebuggableWithTitle {
         this.view = display;
     }
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         view.debug(debug);
     }
 
+    @Override
     public String debugTitle() {
         return "View Structure";
     }

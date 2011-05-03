@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -28,8 +27,9 @@ public class NewObjectField implements OptionsClient {
 
     private final ObjectAssociation field;
 
-    public NewObjectField(ObjectAssociation field) {
-        this.field = field;}
+    public NewObjectField(final ObjectAssociation field) {
+        this.field = field;
+    }
 
     public boolean includeLabel() {
         return true;
@@ -39,12 +39,13 @@ public class NewObjectField implements OptionsClient {
         return field;
     }
 
-    public void loadOptions(Options viewOptions) {}
+    @Override
+    public void loadOptions(final Options viewOptions) {
+    }
 
-    public void saveOptions(Options viewOptions) {
+    @Override
+    public void saveOptions(final Options viewOptions) {
         viewOptions.addOption("field", field.getId());
     }
 
 }
-
-

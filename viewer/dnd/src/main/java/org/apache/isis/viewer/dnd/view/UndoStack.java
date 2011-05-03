@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import java.util.Vector;
 
-
 public class UndoStack {
-    
+
     private final Vector<Command> commands = new Vector<Command>();
 
     public void add(final Command command) {

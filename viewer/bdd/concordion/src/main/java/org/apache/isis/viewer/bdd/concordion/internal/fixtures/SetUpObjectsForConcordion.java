@@ -30,7 +30,8 @@ public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer>
     public SetUpObjectsForConcordion(final AliasRegistry aliasesRegistry, final String className,
         final SetUpObjectsPeer.Mode mode) {
         this(aliasesRegistry, className, mode, CellBindingDefault
-            .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
+            .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate()
+            .build());
     }
 
     private SetUpObjectsForConcordion(final AliasRegistry storyFixture, final String className,
@@ -38,7 +39,7 @@ public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer>
         super(new SetUpObjectsPeer(storyFixture, className, mode, aliasBinding));
     }
 
-    public String executeHeader(String alias, String... propertyNames) {
+    public String executeHeader(final String alias, final String... propertyNames) {
 
         // create bindings (there's only one)
         getPeer().getAliasBinding().setHeadColumn(0);
@@ -47,18 +48,18 @@ public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer>
         int colNum = 0;
         getPeer().definePropertyOrAlias(alias, colNum++);
 
-        for (String propertyName : propertyNames) {
+        for (final String propertyName : propertyNames) {
             getPeer().definePropertyOrAlias(propertyName, colNum++);
         }
 
         return ""; // ok
     }
 
-    public String executeRow(String alias, String... propertyValues) {
+    public String executeRow(final String alias, final String... propertyValues) {
 
         // set property values and the alis
         getPeer().addPropertyValueOrAlias(alias);
-        for (String propertyValue : propertyValues) {
+        for (final String propertyValue : propertyValues) {
             getPeer().addPropertyValueOrAlias(propertyValue);
         }
 
@@ -66,7 +67,7 @@ public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer>
         try {
             getPeer().createObject();
             return "ok";
-        } catch (ScenarioBoundValueException ex) {
+        } catch (final ScenarioBoundValueException ex) {
             return ex.toString();
         }
 

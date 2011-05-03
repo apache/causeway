@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Location;
-
 
 public class InteractionSpy {
     private int actionCount;

@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
-
-
 
 /**
  * Describes a view, and how it is built.
@@ -30,14 +27,13 @@ public interface ViewSpecification extends ViewFactory {
     String getName();
 
     /**
-     * Determines if the view created to this specification can display the specified type. Returns true if it
-     * can.
+     * Determines if the view created to this specification can display the specified type. Returns true if it can.
      */
     boolean canDisplay(ViewRequirement requirement);
 
     /**
-     * Indicates whether views to this specification are open - displaying the attributes of the content
-     * object - or are closed - display only the title of the content object.
+     * Indicates whether views to this specification are open - displaying the attributes of the content object - or are
+     * closed - display only the title of the content object.
      */
     boolean isOpen();
 
@@ -51,14 +47,14 @@ public interface ViewSpecification extends ViewFactory {
     boolean isSubView();
 
     /**
-     * Return true if the generated views are to have their sizes adjusted so they are consistent with
-     * surrounding views.
+     * Return true if the generated views are to have their sizes adjusted so they are consistent with surrounding
+     * views.
      */
     // TODO rename
     boolean isAligned();
-    
+
     /**
-     * Indicates if this view can handled being resized.  If it can't then the viewer can put it in a scroll border. 
+     * Indicates if this view can handled being resized. If it can't then the viewer can put it in a scroll border.
      */
     boolean isResizeable();
 }

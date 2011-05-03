@@ -17,41 +17,43 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import java.util.Calendar;
 
-
 public class SingleDayCells extends Cells {
 
-    public SingleDayCells(Cells replacing) {
+    public SingleDayCells(final Cells replacing) {
         super(replacing);
     }
 
+    @Override
     public int defaultColumns() {
         return 1;
     }
 
+    @Override
     public int defaultRows() {
         return 1;
     }
 
-    public void add(int interval) {
+    @Override
+    public void add(final int interval) {
         date.add(Calendar.DAY_OF_WEEK, interval);
     }
 
-    public String title(int cell) {
-        Calendar d = (Calendar) date.clone();
+    @Override
+    public String title(final int cell) {
+        final Calendar d = (Calendar) date.clone();
         d.add(Calendar.DAY_OF_WEEK, cell);
-        String displayName = dayFormat.format(d.getTime()) + " " + d.get(Calendar.DAY_OF_MONTH) + " "
-                + monthFormat.format(d.getTime());
+        final String displayName =
+            dayFormat.format(d.getTime()) + " " + d.get(Calendar.DAY_OF_MONTH) + " " + monthFormat.format(d.getTime());
         return displayName;
     }
 
-    protected int period(Calendar forDate) {
+    @Override
+    protected int period(final Calendar forDate) {
         return forDate.get(Calendar.YEAR) * 12 - forDate.get(Calendar.DAY_OF_YEAR);
     }
 
 }
-

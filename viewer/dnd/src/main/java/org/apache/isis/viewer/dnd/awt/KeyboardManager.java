@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.interaction.KeyboardActionImpl;
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.KeyboardAction;
 import org.apache.isis.viewer.dnd.view.View;
-
+import org.apache.log4j.Logger;
 
 public class KeyboardManager {
     private static final Logger LOG = Logger.getLogger(KeyboardManager.class);
@@ -95,10 +93,10 @@ public class KeyboardManager {
             return;
         }
         /*
-         * if(keyCode == KeyEvent.VK_ENTER) { //viewer.firstClick(new Click(keyboardFocus,
-         * keyboardFocus.getLocation(), modifiers)); Location location = keyboardFocus.getAbsoluteLocation();
-         * location.add(1, 1); viewer.secondClick(new Click(keyboardFocus, location, modifiers));
-         * //viewer.thirdClick(new Click(keyboardFocus, keyboardFocus.getLocation(), modifiers)); return; }
+         * if(keyCode == KeyEvent.VK_ENTER) { //viewer.firstClick(new Click(keyboardFocus, keyboardFocus.getLocation(),
+         * modifiers)); Location location = keyboardFocus.getAbsoluteLocation(); location.add(1, 1);
+         * viewer.secondClick(new Click(keyboardFocus, location, modifiers)); //viewer.thirdClick(new
+         * Click(keyboardFocus, keyboardFocus.getLocation(), modifiers)); return; }
          */
 
         if (keyCode == KeyEvent.VK_F4 && (modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
@@ -144,21 +142,21 @@ public class KeyboardManager {
         }
 
         switch (action) {
-        case KeyboardAction.NEXT_VIEW:
-            focusManager.focusNextView();
-            // focusNextSubview(keyboardFocus);
-            break;
-        case KeyboardAction.PREVIOUS_VIEW:
-            focusManager.focusPreviousView();
-            // focusPreviousSubview(keyboardFocus);
-            break;
-        case KeyboardAction.NEXT_WINDOW:
-            focusManager.focusParentView();
-            // focusNextRootView(keyboardFocus);
-            break;
-        case KeyboardAction.PREVIOUS_WINDOW:
-            focusManager.focusFirstChildView();
-            break;
+            case KeyboardAction.NEXT_VIEW:
+                focusManager.focusNextView();
+                // focusNextSubview(keyboardFocus);
+                break;
+            case KeyboardAction.PREVIOUS_VIEW:
+                focusManager.focusPreviousView();
+                // focusPreviousSubview(keyboardFocus);
+                break;
+            case KeyboardAction.NEXT_WINDOW:
+                focusManager.focusParentView();
+                // focusNextRootView(keyboardFocus);
+                break;
+            case KeyboardAction.PREVIOUS_WINDOW:
+                focusManager.focusFirstChildView();
+                break;
         }
     }
 

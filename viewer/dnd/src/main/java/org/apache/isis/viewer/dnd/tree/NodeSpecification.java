@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -25,7 +24,6 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.viewer.basic.NullFocusManager;
-
 
 abstract class NodeSpecification implements ViewSpecification {
     public static final int CAN_OPEN = 1;
@@ -37,30 +35,36 @@ abstract class NodeSpecification implements ViewSpecification {
 
     protected abstract View createNodeView(final Content content, Axes axes);
 
-    public final View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public final View createView(final Content content, final Axes axes, final int sequence) {
         final View view = createNodeView(content, axes);
         final TreeNodeBorder newView = new TreeNodeBorder(view, replacementNodeSpecification);
         newView.setFocusManager(new NullFocusManager());
-        
+
         return newView;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return true;
     }

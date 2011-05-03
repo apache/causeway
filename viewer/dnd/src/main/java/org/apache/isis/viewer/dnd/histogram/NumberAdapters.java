@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.histogram;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,7 +27,6 @@ import org.apache.isis.core.progmodel.facets.value.integer.IntegerValueFacet;
 import org.apache.isis.core.progmodel.facets.value.longs.DoubleFloatingPointValueFacet;
 import org.apache.isis.core.progmodel.facets.value.money.MoneyValueFacet;
 
-
 public class NumberAdapters {
     static interface Converter {
         double value(ObjectAdapter value);
@@ -36,39 +34,41 @@ public class NumberAdapters {
 
     static {
         new Converter() {
-            public double value(ObjectAdapter arg0) {
+            @Override
+            public double value(final ObjectAdapter arg0) {
                 return 0;
             }
         };
 
     }
 
-    public static boolean contains(ObjectAssociation t) {
+    public static boolean contains(final ObjectAssociation t) {
         return t.getSpecification().containsFacet(IntegerValueFacet.class)
-                || t.getSpecification().containsFacet(DoubleFloatingPointValueFacet.class)
-                || t.getSpecification().containsFacet(FloatingPointValueFacet.class)
-                || t.getSpecification().containsFacet(MoneyValueFacet.class);
+            || t.getSpecification().containsFacet(DoubleFloatingPointValueFacet.class)
+            || t.getSpecification().containsFacet(FloatingPointValueFacet.class)
+            || t.getSpecification().containsFacet(MoneyValueFacet.class);
     }
 
-    public static double doubleValue(ObjectAssociation field, ObjectAdapter value) {
-        ObjectSpecification specification = value.getSpecification();
+    public static double doubleValue(final ObjectAssociation field, final ObjectAdapter value) {
+        final ObjectSpecification specification = value.getSpecification();
 
-        IntegerValueFacet intValueFacet = specification.getFacet(IntegerValueFacet.class);
+        final IntegerValueFacet intValueFacet = specification.getFacet(IntegerValueFacet.class);
         if (intValueFacet != null) {
             return intValueFacet.integerValue(value).doubleValue();
         }
 
-        DoubleFloatingPointValueFacet doubleValueFacet = specification.getFacet(DoubleFloatingPointValueFacet.class);
+        final DoubleFloatingPointValueFacet doubleValueFacet =
+            specification.getFacet(DoubleFloatingPointValueFacet.class);
         if (doubleValueFacet != null) {
             return doubleValueFacet.doubleValue(value).doubleValue();
         }
 
-        FloatingPointValueFacet floatValueFacet = specification.getFacet(FloatingPointValueFacet.class);
+        final FloatingPointValueFacet floatValueFacet = specification.getFacet(FloatingPointValueFacet.class);
         if (floatValueFacet != null) {
             return floatValueFacet.floatValue(value).doubleValue();
         }
 
-        MoneyValueFacet moneyValueFacet = specification.getFacet(MoneyValueFacet.class);
+        final MoneyValueFacet moneyValueFacet = specification.getFacet(MoneyValueFacet.class);
         if (moneyValueFacet != null) {
             return moneyValueFacet.getAmount(value);
         }
@@ -77,4 +77,3 @@ public class NumberAdapters {
     }
 
 }
-

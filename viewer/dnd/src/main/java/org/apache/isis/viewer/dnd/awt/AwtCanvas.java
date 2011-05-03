@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Font;
@@ -38,19 +37,19 @@ import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.base.AwtImage;
 
-
 public class AwtCanvas implements Canvas {
     private java.awt.Color color;
     private Font font;
     private final Graphics graphics;
     private final RenderingArea renderingArea;
 
-    private AwtCanvas(final Graphics graphics, RenderingArea renderingArea) {
+    private AwtCanvas(final Graphics graphics, final RenderingArea renderingArea) {
         this.graphics = graphics;
         this.renderingArea = renderingArea;
     }
 
-    public AwtCanvas(final Graphics bufferGraphic, final RenderingArea renderingArea, final int x, final int y, final int width, final int height) {
+    public AwtCanvas(final Graphics bufferGraphic, final RenderingArea renderingArea, final int x, final int y,
+        final int width, final int height) {
         graphics = bufferGraphic;
         this.renderingArea = renderingArea;
         graphics.clipRect(x, y, width, height);
@@ -70,14 +69,17 @@ public class AwtCanvas implements Canvas {
         return p;
     }
 
+    @Override
     public Canvas createSubcanvas() {
         return new AwtCanvas(graphics.create(), renderingArea);
     }
 
+    @Override
     public Canvas createSubcanvas(final Bounds bounds) {
         return createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     }
 
+    @Override
     public Canvas createSubcanvas(final int x, final int y, final int width, final int height) {
         final Graphics g = graphics.create();
         // this form of clipping must go here!
@@ -85,17 +87,14 @@ public class AwtCanvas implements Canvas {
         return new AwtCanvas(g, renderingArea, 0, 0, width, height);
     }
 
-    public void draw3DRectangle(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final Color color,
-            final boolean raised) {
+    @Override
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
+        final boolean raised) {
         useColor(color);
         graphics.draw3DRect(x, y, width - 1, height - 1, raised);
     }
 
+    @Override
     public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {
         final int width = bounds.getWidth();
         final int height = bounds.getHeight();
@@ -103,94 +102,107 @@ public class AwtCanvas implements Canvas {
         final int midpoint = bounds.getY() + height / 2;
         drawLine(bounds.getX(), midpoint, width - 2, midpoint, color);
         if (baseline > 0) {
-            drawLine(bounds.getX(), baseline, width - 1, baseline, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
+            drawLine(bounds.getX(), baseline, width - 1, baseline,
+                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
         }
     }
 
+    @Override
     public void drawImage(final Image image, final int x, final int y) {
         graphics.drawImage(((AwtImage) image).getAwtImage(), x, y, (ImageObserver) renderingArea);
     }
 
+    @Override
     public void drawImage(final Image image, final int x, final int y, final int width, final int height) {
-        graphics.drawImage(((AwtImage) image).getAwtImage(), x, y, width - 1, height - 1, (ImageObserver) renderingArea);
+        graphics
+            .drawImage(((AwtImage) image).getAwtImage(), x, y, width - 1, height - 1, (ImageObserver) renderingArea);
     }
 
+    @Override
     public void drawLine(final int x, final int y, final int x2, final int y2, final Color color) {
         useColor(color);
         graphics.drawLine(x, y, x2, y2);
     }
 
+    @Override
     public void drawLine(final Location start, final int xExtent, final int yExtent, final Color color) {
         drawLine(start.getX(), start.getY(), start.getX() + xExtent, start.getY() + yExtent, color);
     }
 
+    @Override
     public void drawOval(final int x, final int y, final int width, final int height, final Color color) {
         useColor(color);
         final Polygon p = createOval(x, y, width - 1, height - 1);
         graphics.drawPolygon(p);
     }
 
+    @Override
     public void drawRectangle(final int x, final int y, final int width, final int height, final Color color) {
         useColor(color);
         graphics.drawRect(x, y, width - 1, height - 1);
     }
 
+    @Override
     public void drawRectangleAround(final Bounds bounds, final Color color) {
         drawRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
     }
 
-    public void drawRoundedRectangle(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final int arcWidth,
-            final int arcHeight,
-            final Color color) {
+    @Override
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
+        final int arcHeight, final Color color) {
         useColor(color);
         graphics.drawRoundRect(x, y, width - 1, height - 1, arcWidth, arcHeight);
     }
 
+    @Override
     public void drawShape(final Shape shape, final Color color) {
         useColor(color);
         graphics.drawPolygon(shape.getX(), shape.getY(), shape.count());
     }
 
+    @Override
     public void drawShape(final Shape shape, final int x, final int y, final Color color) {
         final Shape copy = new Shape(shape);
         copy.translate(x, y);
         drawShape(copy, color);
     }
 
+    @Override
     public void drawSolidOval(final int x, final int y, final int width, final int height, final Color color) {
         useColor(color);
         final Polygon p = createOval(x, y, width, height);
         graphics.fillPolygon(p);
     }
 
+    @Override
     public void drawSolidRectangle(final int x, final int y, final int width, final int height, final Color color) {
         useColor(color);
         graphics.fillRect(x, y, width, height);
     }
 
+    @Override
     public void drawSolidShape(final Shape shape, final Color color) {
         useColor(color);
         graphics.fillPolygon(shape.getX(), shape.getY(), shape.count());
     }
 
+    @Override
     public void drawSolidShape(final Shape shape, final int x, final int y, final Color color) {
         final Shape copy = new Shape(shape);
         copy.translate(x, y);
         drawSolidShape(copy, color);
     }
 
+    @Override
     public void drawText(final String text, final int x, final int y, final Color color, final Text style) {
         useColor(color);
         useFont(style);
         graphics.drawString(text, x, y);
     }
 
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {
+    @Override
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
+        final Text style) {
         useColor(color);
         useFont(style);
 
@@ -220,10 +232,12 @@ public class AwtCanvas implements Canvas {
         }
     }
 
+    @Override
     public void offset(final int x, final int y) {
         graphics.translate(x, y);
     }
 
+    @Override
     public boolean overlaps(final Bounds bounds) {
         final Rectangle clip = graphics.getClipBounds();
         final Bounds activeArea = new Bounds(clip.x, clip.y, clip.width, clip.height);
@@ -233,7 +247,8 @@ public class AwtCanvas implements Canvas {
     @Override
     public String toString() {
         final Rectangle cb = graphics.getClipBounds();
-        return "Canvas [area=" + cb.x + "," + cb.y + " " + cb.width + "x" + cb.height + ",color=" + color + ",font=" + font + "]";
+        return "Canvas [area=" + cb.x + "," + cb.y + " " + cb.width + "x" + cb.height + ",color=" + color + ",font="
+            + font + "]";
     }
 
     private void useColor(final Color color) {

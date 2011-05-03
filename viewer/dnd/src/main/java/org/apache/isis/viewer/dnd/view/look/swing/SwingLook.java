@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.swing;
 
 import org.apache.isis.viewer.dnd.view.Look;
@@ -31,6 +30,7 @@ import org.apache.isis.viewer.dnd.view.window.ResizeWindowControl;
 
 public class SwingLook implements Look {
 
+    @Override
     public void install() {
         Button.setButtonRender(new Button3DStyleRender());
         AbstractWindowBorder.setBorderRenderer(new SwingStyleWindowBorder());
@@ -41,10 +41,9 @@ public class SwingLook implements Look {
         ScrollBorder.setRender(new ScrollBar3DRender());
     }
 
+    @Override
     public String getName() {
         return "Swing";
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.view.ObjectContent;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
-
 public class DebugView implements DebuggableWithTitle {
     private final View view;
 
@@ -40,6 +38,7 @@ public class DebugView implements DebuggableWithTitle {
         this.view = display;
     }
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         debug.append(view.getView());
         debug.blankLine();
@@ -97,6 +96,7 @@ public class DebugView implements DebuggableWithTitle {
         view.draw(new DebugCanvas(debug, new Bounds(view.getBounds())));
     }
 
+    @Override
     public String debugTitle() {
         return "Debug: " + view + view == null ? "" : ("/" + view.getContent());
     }

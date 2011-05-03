@@ -30,11 +30,12 @@ public class Valid extends ThatSubcommandAbstract {
         super("is valid", "valid");
     }
 
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         if (!performContext.validObjectConsent().isAllowed()) {
-        	CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
-        	throw ScenarioBoundValueException.current(thatItBinding, "(not valid)");
+            final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
+            throw ScenarioBoundValueException.current(thatItBinding, "(not valid)");
         }
 
         return null;

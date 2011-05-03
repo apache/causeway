@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -33,38 +32,45 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.ObjectView;
 
-
 public class FallbackView extends ObjectView {
 
     public static class Specification implements ViewSpecification {
-        public boolean canDisplay(ViewRequirement requirement) {
+        @Override
+        public boolean canDisplay(final ViewRequirement requirement) {
             return true;
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             return new FallbackView(content, this);
         }
 
+        @Override
         public String getName() {
             return "Fallback";
         }
 
+        @Override
         public boolean isAligned() {
             return false;
         }
 
+        @Override
         public boolean isOpen() {
             return false;
         }
 
+        @Override
         public boolean isReplaceable() {
             return false;
         }
-        
+
+        @Override
         public boolean isResizeable() {
             return false;
         }
 
+        @Override
         public boolean isSubView() {
             return false;
         }
@@ -85,7 +91,8 @@ public class FallbackView extends ObjectView {
         canvas.drawSolidRectangle(0, 0, 10, height, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
         canvas.drawLine(10, 0, 10, height - 2, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
         canvas.drawRectangle(0, 0, width, height, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
-        canvas.drawText(getContent().title(), 14, getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+        canvas.drawText(getContent().title(), 14, getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_BLACK),
+            Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
     }
 
     @Override
@@ -94,7 +101,7 @@ public class FallbackView extends ObjectView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(150, 20);
     }
 

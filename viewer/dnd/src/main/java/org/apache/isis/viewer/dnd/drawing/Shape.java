@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
 
 public class Shape {
@@ -25,7 +24,8 @@ public class Shape {
     int[] x = new int[6];
     int[] y = new int[6];
 
-    public Shape() {}
+    public Shape() {
+    }
 
     public Shape(final int xOrigin, final int yOrigin) {
         this.x[0] = xOrigin;

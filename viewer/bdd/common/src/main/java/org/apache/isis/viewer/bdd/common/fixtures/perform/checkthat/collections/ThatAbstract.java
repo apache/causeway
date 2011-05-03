@@ -31,24 +31,22 @@ public abstract class ThatAbstract extends ThatSubcommandAbstract {
         super(key);
     }
 
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final OneToManyAssociation otma = (OneToManyAssociation) performContext
-                .getObjectMember();
+        final OneToManyAssociation otma = (OneToManyAssociation) performContext.getObjectMember();
 
-        final ObjectAdapter nakedObjectRepresentingCollection = otma
-                .get(onAdapter);
-        final CollectionFacet collectionFacet = nakedObjectRepresentingCollection
-                .getSpecification().getFacet(CollectionFacet.class);
+        final ObjectAdapter nakedObjectRepresentingCollection = otma.get(onAdapter);
+        final CollectionFacet collectionFacet =
+            nakedObjectRepresentingCollection.getSpecification().getFacet(CollectionFacet.class);
 
-        doThat(performContext, collectionFacet
-                .iterable(nakedObjectRepresentingCollection));
+        doThat(performContext, collectionFacet.iterable(nakedObjectRepresentingCollection));
 
         return nakedObjectRepresentingCollection; // can alias if wish
     }
 
-    protected abstract void doThat(PerformContext performContext,
-            Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException;
+    protected abstract void doThat(PerformContext performContext, Iterable<ObjectAdapter> collection)
+        throws ScenarioBoundValueException;
 
 }

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
-
 
 public class DebugCanvas implements Canvas {
     private final DebugBuilder buffer;
@@ -36,6 +34,7 @@ public class DebugCanvas implements Canvas {
         this.buffer = buffer;
     }
 
+    @Override
     public Canvas createSubcanvas() {
         buffer.blankLine();
         indent();
@@ -43,10 +42,12 @@ public class DebugCanvas implements Canvas {
         return new DebugCanvas(buffer, level + 1);
     }
 
+    @Override
     public Canvas createSubcanvas(final Bounds bounds) {
         return createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     }
 
+    @Override
     public Canvas createSubcanvas(final int x, final int y, final int width, final int height) {
         buffer.blankLine();
         indent();
@@ -54,75 +55,76 @@ public class DebugCanvas implements Canvas {
         return new DebugCanvas(buffer, level + 1);
     }
 
-    public void draw3DRectangle(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final Color color,
-            final boolean raised) {
+    @Override
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
+        final boolean raised) {
         indent();
         buffer.appendln("Rectangle (3D) " + x + "," + y + " " + width + "x" + height);
     }
 
+    @Override
     public void drawImage(final Image image, final int x, final int y) {
         indent();
         buffer.appendln("Icon " + x + "," + y + " " + image.getWidth() + "x" + image.getHeight());
     }
 
+    @Override
     public void drawImage(final Image image, final int x, final int y, final int width, final int height) {
         indent();
         buffer.appendln("Icon " + x + "," + y + " " + width + "x" + height);
     }
 
+    @Override
     public void drawLine(final int x, final int y, final int x2, final int y2, final Color color) {
         indent();
         buffer.appendln("Line from " + x + "," + y + " to " + x2 + "," + y2 + " " + color);
     }
 
+    @Override
     public void drawLine(final Location start, final int xExtent, final int yExtent, final Color color) {
         indent();
         buffer.appendln("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + ","
-                + (start.getY() + yExtent) + " " + color);
+            + (start.getY() + yExtent) + " " + color);
     }
 
+    @Override
     public void drawOval(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         buffer.appendln("Oval " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
+    @Override
     public void drawRectangle(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         buffer.appendln("Rectangle " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
+    @Override
     public void drawRectangleAround(final Bounds bounds, final Color color) {
         indent();
         buffer.appendln("Rectangle 0,0 " + bounds.getWidth() + "x" + bounds.getHeight() + " " + color);
     }
 
-    public void drawRoundedRectangle(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final int arcWidth,
-            final int arcHeight,
-            final Color color) {
+    @Override
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
+        final int arcHeight, final Color color) {
         indent();
         buffer.appendln("Rounded Rectangle " + x + "," + y + " " + (x + width) + "x" + (y + height) + " " + color);
     }
 
+    @Override
     public void drawShape(final Shape shape, final Color color) {
         indent();
         buffer.appendln("Shape " + shape + " " + color);
     }
 
+    @Override
     public void drawShape(final Shape shape, final int x, final int y, final Color color) {
         indent();
         buffer.appendln("Shape " + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
     }
 
+    @Override
     public void drawSolidOval(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         buffer.appendln("Oval (solid) " + x + "," + y + " " + width + "x" + height + " " + color);
@@ -148,7 +150,8 @@ public class DebugCanvas implements Canvas {
         buffer.appendln("Text " + x + "," + y + " \"" + text + "\" " + style + " " + color);
     }
 
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
+        final Text style) {
         indent();
         buffer.appendln("Text " + x + "," + y + " +" + maxWidth + "xh \"" + text + "\" " + style + " " + color);
     }
@@ -174,6 +177,7 @@ public class DebugCanvas implements Canvas {
         return "Canvas";
     }
 
-    public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {}
+    public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {
+    }
 
 }

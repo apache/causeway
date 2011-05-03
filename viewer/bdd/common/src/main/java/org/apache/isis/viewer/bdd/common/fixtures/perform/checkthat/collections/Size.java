@@ -31,15 +31,14 @@ public class Size extends ThatAbstract {
     }
 
     @Override
-    protected void doThat(final PerformContext performContext,
-            final Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException {
+    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection)
+        throws ScenarioBoundValueException {
 
         final CellBinding thatBinding = performContext.getPeer().getThatItBinding();
         final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
 
         if (!arg0Binding.isFound()) {
-			throw ScenarioBoundValueException.current(thatBinding, 
-                    "(requires argument)");
+            throw ScenarioBoundValueException.current(thatBinding, "(requires argument)");
         }
 
         final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
@@ -63,7 +62,7 @@ public class Size extends ThatAbstract {
         }
 
         if (expectedSize != actualSize) {
-        	throw ScenarioBoundValueException.current(arg0Binding, "" + actualSize);
+            throw ScenarioBoundValueException.current(arg0Binding, "" + actualSize);
         }
 
     }

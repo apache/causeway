@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.undo;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.dnd.view.Command;
-
 
 public class AssociateCommand implements Command {
     private final String description;
@@ -32,7 +30,8 @@ public class AssociateCommand implements Command {
     private final ObjectAdapter associatedObject;
     private final String name;
 
-    public AssociateCommand(final ObjectAdapter object, final ObjectAdapter associatedObject, final OneToOneAssociation field) {
+    public AssociateCommand(final ObjectAdapter object, final ObjectAdapter associatedObject,
+        final OneToOneAssociation field) {
         this.description = "Clear association of " + associatedObject.titleString();
         this.name = "associate " + associatedObject.titleString();
         this.object = object;
@@ -40,18 +39,22 @@ public class AssociateCommand implements Command {
         this.field = field;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void undo() {
         field.clearAssociation(object);
     }
 
+    @Override
     public void execute() {
         field.setAssociation(object, associatedObject);
     }

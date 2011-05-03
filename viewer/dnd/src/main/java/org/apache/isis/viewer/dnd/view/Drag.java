@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 /**
  * Details a drag event - from drag start to drop,
  */
-public interface Drag {}
-
+public interface Drag {
+}

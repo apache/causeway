@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.simple;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.view.window.CloseWindowRender;
 
-
 public class CloseWindowSimpleRender extends SimpleRender implements CloseWindowRender {
 
-    public void draw(Canvas canvas, int width, int height, boolean isDisabled, boolean isOver, boolean isPressed) {
+    @Override
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
+        final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 
-        Color color = color(isDisabled, isOver);
+        final Color color = color(isDisabled, isOver);
         canvas.drawLine(x + 4, y + 3, x + 10, y + 9, color);
         canvas.drawLine(x + 5, y + 3, x + 11, y + 9, color);
         canvas.drawLine(x + 10, y + 3, x + 4, y + 9, color);
         canvas.drawLine(x + 11, y + 3, x + 5, y + 9, color);
     }
 }
-

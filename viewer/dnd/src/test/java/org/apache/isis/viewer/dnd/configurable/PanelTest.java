@@ -17,25 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.apache.isis.viewer.dnd.DummyView;
-import org.apache.isis.viewer.dnd.TestToolkit;
-import org.apache.isis.viewer.dnd.configurable.Panel;
-import org.apache.isis.viewer.dnd.configurable.PanelView.Position;
-import org.apache.isis.viewer.dnd.drawing.Location;
-import org.apache.isis.viewer.dnd.drawing.Size;
-
-import static org.junit.Assert.*;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
+import org.apache.isis.viewer.dnd.DummyView;
+import org.apache.isis.viewer.dnd.TestToolkit;
+import org.apache.isis.viewer.dnd.configurable.PanelView.Position;
+import org.apache.isis.viewer.dnd.drawing.Location;
+import org.apache.isis.viewer.dnd.drawing.Size;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PanelTest {
 
@@ -79,24 +74,24 @@ public class PanelTest {
     public void totalSizeIsWidthPlusMaxHeigth() throws Exception {
         assertEquals(new Size(350, 120), panel.getRequiredSize(Size.createMax()));
     }
-    
+
     @Test
     public void addingToSouth() throws Exception {
         panel = new Panel();
         panel.addView(view1, Position.East);
         panel.addView(view2, Position.South);
         panel.addView(view3, Position.South);
-        
+
         assertEquals(new Size(200, 340), panel.getRequiredSize(Size.createMax()));
     }
 
     @Test
     public void addingToEast() throws Exception {
         panel.addView(view3, Position.East);
-        
+
         assertEquals(new Size(500, 120), panel.getRequiredSize(Size.createMax()));
     }
-    
+
     @Test
     public void secondPanelLocatedToRightOfFirst() throws Exception {
         panel.layout(Size.createMax());
@@ -118,7 +113,7 @@ public class PanelTest {
         panel.addView(view3, null);
         assertEquals(new Size(500, 120), panel.getRequiredSize(Size.createMax()));
     }
-    
+
     @Test
     public void addingThirdPanelToBottomIncreasesHeight() throws Exception {
         panel.addView(view3, Position.South);
@@ -127,13 +122,14 @@ public class PanelTest {
 
     @Test
     public void addingFouthPanelToLeftIncreasesWidth() throws Exception {
-        DummyView view4 = new DummyView();
+        final DummyView view4 = new DummyView();
         view4.setupRequiredSize(new Size(50, 100));
-        
+
         panel.addView(view3, Position.South);
         panel.addView(view4, Position.East);
         assertEquals(new Size(400, 240), panel.getRequiredSize(Size.createMax()));
     }
+
     @Test
     public void addingThirdPanelToNorthIncreasesHeight() throws Exception {
         panel.addView(view3, Position.North);
@@ -158,4 +154,3 @@ public class PanelTest {
         assertEquals(new Location(0, 120), view3.getLocation());
     }
 }
-

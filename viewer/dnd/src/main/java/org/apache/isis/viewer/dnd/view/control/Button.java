@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.control;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -25,11 +24,10 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.ButtonAction;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public class Button extends AbstractControlView {
     private static ButtonRender buttonRender;
-    
-    public static void setButtonRender(ButtonRender buttonRender) {
+
+    public static void setButtonRender(final ButtonRender buttonRender) {
         Button.buttonRender = buttonRender;
     }
 
@@ -46,12 +44,13 @@ public class Button extends AbstractControlView {
     public void draw(final Canvas canvas) {
         final View target = getParent();
         final String text = action.getName(target);
-        boolean isDisabled = action.disabled(target).isVetoed();
-        boolean isDefault = ((ButtonAction) action).isDefault();
+        final boolean isDisabled = action.disabled(target).isVetoed();
+        final boolean isDefault = ((ButtonAction) action).isDefault();
         buttonRender.draw(canvas, getSize(), isDisabled, isDefault, hasFocus(), isOver(), isPressed(), text);
     }
 
-    public Size getRequiredSize(Size availableSpace) {
+    @Override
+    public Size getRequiredSize(final Size availableSpace) {
         final String text = action.getName(getView());
         return buttonRender.getMaximumSize(text);
     }

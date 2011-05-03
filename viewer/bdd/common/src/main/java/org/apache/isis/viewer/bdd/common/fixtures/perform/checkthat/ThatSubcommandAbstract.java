@@ -33,6 +33,7 @@ public abstract class ThatSubcommandAbstract implements ThatSubcommand {
         this.subkeys = Collections.unmodifiableList(Arrays.asList(subkeys));
     }
 
+    @Override
     public List<String> getSubkeys() {
         return subkeys;
     }
@@ -44,6 +45,7 @@ public abstract class ThatSubcommandAbstract implements ThatSubcommand {
     /**
      * Injected.
      */
+    @Override
     public void setOwner(final PerformOwner owner) {
         this.owner = owner;
     }

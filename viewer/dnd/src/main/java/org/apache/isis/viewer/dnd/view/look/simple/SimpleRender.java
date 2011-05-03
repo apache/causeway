@@ -17,25 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.simple;
 
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 
-
-
 class SimpleRender {
-    protected Color color(boolean isDisabled, boolean isOver) {
+    protected Color color(final boolean isDisabled, final boolean isOver) {
         Color color;
         if (isDisabled) {
             color = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
         } else {
-            color = isOver ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2) : Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+            color =
+                isOver ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2) : Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         }
         return color;
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import java.util.List;
@@ -37,7 +36,6 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
-
 public abstract class AbstractTableSpecification extends CompositeViewSpecification {
 
     public AbstractTableSpecification() {
@@ -46,41 +44,42 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
 
             // TODO do directly without specification
             @Override
-            public View createView(Content content, Axes axes, int sequence) {
-                //ViewSpecification rowSpecification = new SubviewIconSpecification();
+            public View createView(final Content content, final Axes axes, final int sequence) {
+                // ViewSpecification rowSpecification = new SubviewIconSpecification();
                 return rowSpecification.createView(content, axes, -1);
             }
         });
 
         addSubviewDecorator(new TableRowBorder.Factory());
-        
+
         addViewDecorator(new CompositeViewDecorator() {
             @Override
-            public View decorate(View view, Axes axes) {
+            public View decorate(final View view, final Axes axes) {
                 axes.getAxis(TableAxis.class).setRoot(view);
                 return view;
-            }});
+            }
+        });
     }
 
     @Override
-    public Layout createLayout(Content content, Axes axes) {
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
-    
+
     @Override
-    public void createAxes(Content content, Axes axes) {
+    public void createAxes(final Content content, final Axes axes) {
         axes.add(new TableAxisImpl((CollectionContent) content), TableAxis.class);
     }
 
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         if (!requirement.isCollection() || !requirement.isOpen()) {
             return false;
         } else {
-            CollectionContent collectionContent = (CollectionContent) requirement.getContent();
+            final CollectionContent collectionContent = (CollectionContent) requirement.getContent();
             final ObjectSpecification elementSpecification = collectionContent.getElementSpecification();
-            final List<ObjectAssociation> fields = elementSpecification
-                    .getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            final List<ObjectAssociation> fields =
+                elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToOneAssociation()) {
                     return true;
@@ -89,15 +88,12 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
             return false;
         }
     }
-/*
-    protected View decorateView(View view) {
-        TableAxis tableAxis = (TableAxis) view.getViewAxisForChildren();
-        tableAxis.setRoot(view);
-        return view;
-        // return doCreateView(table, content, axis);
-    }
-    protected abstract View doCreateView(final View table, final Content content, final ViewAxis axis);
- */
+
+    /*
+     * protected View decorateView(View view) { TableAxis tableAxis = (TableAxis) view.getViewAxisForChildren();
+     * tableAxis.setRoot(view); return view; // return doCreateView(table, content, axis); } protected abstract View
+     * doCreateView(final View table, final Content content, final ViewAxis axis);
+     */
 
     @Override
     public String getName() {

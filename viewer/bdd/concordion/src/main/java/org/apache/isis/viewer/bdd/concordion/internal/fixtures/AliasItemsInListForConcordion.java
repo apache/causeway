@@ -30,8 +30,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.AliasItemsInListPeer;
 public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInListPeer> {
 
     public AliasItemsInListForConcordion(final AliasRegistry aliasRegistry, final String listAlias) {
-        this(aliasRegistry, listAlias, 
-            CellBindingDefault.builder(IsisViewerConstants.TITLE_NAME,
+        this(aliasRegistry, listAlias, CellBindingDefault.builder(IsisViewerConstants.TITLE_NAME,
             IsisViewerConstants.TITLE_HEAD).build(), CellBindingDefault
             .builder(IsisViewerConstants.TYPE_NAME, IsisViewerConstants.TYPE_HEAD).optional().build(),
             CellBindingDefault
@@ -44,13 +43,13 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
         super(new AliasItemsInListPeer(aliasRegistry, listAlias, titleBinding, typeBinding, aliasBinding));
     }
 
-    public String execute(String aliasAs, String title, String type) {
-        String header = executeHeader(aliasAs, title, type);
+    public String execute(final String aliasAs, final String title, final String type) {
+        final String header = executeHeader(aliasAs, title, type);
         if (header != null) {
             return header;
         }
 
-        String row = executeRow(aliasAs, title, type);
+        final String row = executeRow(aliasAs, title, type);
         if (row != null) {
             return row;
         }
@@ -58,10 +57,10 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
         return "ok"; // ok
     }
 
-    private String executeHeader(String alias, String title, String type) {
+    private String executeHeader(final String alias, final String title, final String type) {
         try {
             getPeer().assertIsList();
-        } catch (ScenarioValueException e) {
+        } catch (final ScenarioValueException e) {
             return e.getMessage();
         }
 
@@ -76,7 +75,7 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
         return null;
     }
 
-    private String executeRow(String aliasAs, String title, String type) {
+    private String executeRow(final String aliasAs, final String title, final String type) {
         if (!getPeer().isList()) {
             return null; // skip
         }
@@ -85,14 +84,14 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
 
         try {
             getPeer().findAndAlias();
-        } catch (ScenarioBoundValueException e) {
+        } catch (final ScenarioBoundValueException e) {
             return e.getMessage();
         }
 
         return null;
     }
 
-    private void captureCurrent(String aliasAs, String title, String type) {
+    private void captureCurrent(final String aliasAs, final String title, final String type) {
         getPeer().getAliasBinding().captureCurrent(new ScenarioCellDefault(aliasAs));
         getPeer().getTitleBinding().captureCurrent(new ScenarioCellDefault(title));
         if (type != null) {

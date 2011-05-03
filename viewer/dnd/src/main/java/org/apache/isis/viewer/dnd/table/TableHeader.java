@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -40,7 +39,6 @@ import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.border.ResizeDrag;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
-
 
 public class TableHeader extends AbstractView {
     private final TableAxis axis;
@@ -78,7 +76,7 @@ public class TableHeader extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(-1, height);
     }
 
@@ -133,7 +131,7 @@ public class TableHeader extends AbstractView {
             drawOrderIndicator(canvas, axis, x - 10);
         }
 
-        Color secondary1 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color secondary1 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
         canvas.drawLine(0, 0, getSize().getWidth() - 1, 0, secondary1);
         canvas.drawLine(0, height - 1, getSize().getWidth() - 1, height - 1, secondary1);
         canvas.drawLine(x, 0, x, getSize().getHeight() - 1, secondary1);
@@ -144,16 +142,17 @@ public class TableHeader extends AbstractView {
             if (fieldSortOrder == axis.getFieldForColumn(i)) {
                 drawOrderIndicator(canvas, axis, x + axis.getColumnWidth(i) - 10);
             }
-            
+
             canvas.drawLine(0, 0, 0, getSize().getHeight() - 1, secondary1);
             canvas.drawLine(x, 0, x, getSize().getHeight() - 1, secondary1);
             final Canvas headerCanvas = canvas.createSubcanvas(x, 0, axis.getColumnWidth(i) - 1, height);
-            headerCanvas.drawText(axis.getColumnName(i), HPADDING, y, secondary1, Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
+            headerCanvas.drawText(axis.getColumnName(i), HPADDING, y, secondary1,
+                Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
             x += axis.getColumnWidth(i);
         }
-  //     Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
- //   canvas.drawLine(x, 0, x, getSize().getHeight() - 1, secondary2);
-  //      canvas.drawRectangle(0, height, getSize().getWidth() - 1, getSize().getHeight() - height - 1, secondary2);
+        // Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
+        // canvas.drawLine(x, 0, x, getSize().getHeight() - 1, secondary2);
+        // canvas.drawRectangle(0, height, getSize().getWidth() - 1, getSize().getHeight() - height - 1, secondary2);
     }
 
     private void drawOrderIndicator(final Canvas canvas, final TableAxis axis, final int x) {
@@ -203,16 +202,14 @@ public class TableHeader extends AbstractView {
             final int column = axis.getColumnBorderAt(click.getLocation().getX()) - 1;
             if (column == -1) {
                 final View[] subviews = getSubviews();
-                for (int i = 0; i < subviews.length; i++) {
-                    final View row = subviews[i];
+                for (final View row : subviews) {
                     axis.ensureOffset(((TableRowBorder) row).requiredTitleWidth());
                 }
 
             } else {
                 final View[] subviews = getSubviews();
                 int max = 0;
-                for (int i = 0; i < subviews.length; i++) {
-                    final View row = subviews[i];
+                for (final View row : subviews) {
                     final View cell = row.getSubviews()[column];
                     max = Math.max(max, cell.getRequiredSize(new Size()).getWidth());
                 }

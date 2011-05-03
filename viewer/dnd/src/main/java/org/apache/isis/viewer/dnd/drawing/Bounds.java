@@ -17,25 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * Bounds represent a rectangular area on the screen. The top-left corner is represented by the location
- * (available using getLocation(), and getX() and getY()). The extent of the bounds is specified by its height
- * and width (available using getHeight() and getWidth()). The bottom-right point is the offset from the
- * top-left point by width -1 and hieght - 1 pixels.
+ * Bounds represent a rectangular area on the screen. The top-left corner is represented by the location (available
+ * using getLocation(), and getX() and getY()). The extent of the bounds is specified by its height and width (available
+ * using getHeight() and getWidth()). The bottom-right point is the offset from the top-left point by width -1 and
+ * hieght - 1 pixels.
  * 
  * For example a bounds created as follows
  * 
  * new Bounds(5, 10, 10, 20)
  * 
- * Would represent a rectangle at location (5, 10), with a width of 10 pixels and a height of 20. Note, hower
- * that the lower-right corner would be at (14, 29), as there are 10 pixels between pixel 5 and pixel 14, and
- * 20 between 10 and 29.
+ * Would represent a rectangle at location (5, 10), with a width of 10 pixels and a height of 20. Note, hower that the
+ * lower-right corner would be at (14, 29), as there are 10 pixels between pixel 5 and pixel 14, and 20 between 10 and
+ * 29.
  */
 public class Bounds {
     Logger LOG = Logger.getLogger("Bounds");
@@ -184,9 +182,8 @@ public class Bounds {
     }
 
     /**
-     * Determines whether this bounds overlaps the specified bounds. If any area is shared by the two bounds
-     * then this will return true. As the edges of the bounds are of a finite size the bounds overlap if any
-     * of the edges overlap.
+     * Determines whether this bounds overlaps the specified bounds. If any area is shared by the two bounds then this
+     * will return true. As the edges of the bounds are of a finite size the bounds overlap if any of the edges overlap.
      */
     public boolean intersects(final Bounds bounds) {
         final int tx1 = this.x;
@@ -195,14 +192,16 @@ public class Bounds {
         final int ox2 = bounds.x + bounds.width - 1;
 
         // tx1 < ox1 < tx2 || tx1 < ox2 < tx2
-        final boolean xOverlap = (tx1 <= ox1 && ox1 <= tx2) || (tx1 <= ox2 && ox1 <= tx2) || (ox1 <= tx1 && tx1 <= ox2)
+        final boolean xOverlap =
+            (tx1 <= ox1 && ox1 <= tx2) || (tx1 <= ox2 && ox1 <= tx2) || (ox1 <= tx1 && tx1 <= ox2)
                 || (ox1 <= tx2 && tx1 <= ox2);
 
         final int ty1 = this.y;
         final int ty2 = this.y + this.height - 1;
         final int oy1 = bounds.y;
         final int oy2 = bounds.y + bounds.height - 1;
-        final boolean yOverlap = (ty1 <= oy1 && oy1 <= ty2) || (ty1 <= oy2 && oy1 <= ty2) || (oy1 <= ty1 && ty1 <= oy2)
+        final boolean yOverlap =
+            (ty1 <= oy1 && oy1 <= ty2) || (ty1 <= oy2 && oy1 <= ty2) || (oy1 <= ty1 && ty1 <= oy2)
                 || (oy1 <= ty2 && ty1 <= oy2);
         return xOverlap && yOverlap;
 

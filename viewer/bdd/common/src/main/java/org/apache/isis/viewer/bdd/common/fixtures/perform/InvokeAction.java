@@ -30,58 +30,50 @@ import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public class InvokeAction extends PerformAbstractTypeParams {
 
-	private ObjectAdapter result;
+    private ObjectAdapter result;
 
-	public InvokeAction(final Perform.Mode mode) {
-		super("invoke action", Type.ACTION, NumParameters.UNLIMITED, mode);
-	}
+    public InvokeAction(final Perform.Mode mode) {
+        super("invoke action", Type.ACTION, NumParameters.UNLIMITED, mode);
+    }
 
-	@Override
-	public void doHandle(final PerformContext performContext)
-			throws ScenarioBoundValueException {
+    @Override
+    public void doHandle(final PerformContext performContext) throws ScenarioBoundValueException {
 
-	    final ObjectAdapter onAdapter = performContext.getOnAdapter();
-		final ObjectMember objectMember = performContext
-				.getObjectMember();
-		final CellBinding onMemberBinding = performContext.getPeer()
-				.getOnMemberBinding();
-		final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
+        final ObjectAdapter onAdapter = performContext.getOnAdapter();
+        final ObjectMember objectMember = performContext.getObjectMember();
+        final CellBinding onMemberBinding = performContext.getPeer().getOnMemberBinding();
+        final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
 
-		final ObjectAction objectAction = (ObjectAction) objectMember;
-		
+        final ObjectAction objectAction = (ObjectAction) objectMember;
 
-		final int parameterCount = objectAction.getParameterCount();
-		final boolean isContributedOneArgAction = objectAction
-				.isContributed()
-				&& parameterCount == 1;
+        final int parameterCount = objectAction.getParameterCount();
+        final boolean isContributedOneArgAction = objectAction.isContributed() && parameterCount == 1;
 
-		ObjectAdapter[] proposedArguments;
-		if (!isContributedOneArgAction) {
+        ObjectAdapter[] proposedArguments;
+        if (!isContributedOneArgAction) {
 
-			// lookup arguments
-			proposedArguments = performContext.getPeer().getAdapters(onAdapter,
-					objectAction, onMemberBinding, argumentCells);
+            // lookup arguments
+            proposedArguments =
+                performContext.getPeer().getAdapters(onAdapter, objectAction, onMemberBinding, argumentCells);
 
-			// validate arguments
-			final Consent argSetValid = objectAction
-					.isProposedArgumentSetValid(onAdapter, proposedArguments);
-			if (argSetValid.isVetoed()) {
-				throw ScenarioBoundValueException.current(onMemberBinding, argSetValid
-						.getReason());
-			}
-		} else {
-			proposedArguments = new ObjectAdapter[] { onAdapter };
-		}
+            // validate arguments
+            final Consent argSetValid = objectAction.isProposedArgumentSetValid(onAdapter, proposedArguments);
+            if (argSetValid.isVetoed()) {
+                throw ScenarioBoundValueException.current(onMemberBinding, argSetValid.getReason());
+            }
+        } else {
+            proposedArguments = new ObjectAdapter[] { onAdapter };
+        }
 
-		// execute
-		result = objectAction.execute(onAdapter, proposedArguments);
+        // execute
+        result = objectAction.execute(onAdapter, proposedArguments);
 
-		// all OK.
-	}
+        // all OK.
+    }
 
-	@Override
+    @Override
     public ObjectAdapter getResult() {
-		return result;
-	}
+        return result;
+    }
 
 }

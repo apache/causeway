@@ -31,6 +31,7 @@ public abstract class PerformAbstract implements Perform {
         this.mode = mode;
     }
 
+    @Override
     public String getKey() {
         return key;
     }

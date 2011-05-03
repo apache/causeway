@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -34,45 +33,51 @@ import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 
 public class ImageViewSpecification implements ViewSpecification {
 
-    public View createView(Content content, Axes axes, int sequence) {
-        Icon icon = new Icon(content, ImageViewSpecification.this);
-        Text textStyle = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
+        final Icon icon = new Icon(content, ImageViewSpecification.this);
+        final Text textStyle = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
         icon.setTitle(new ObjectTitleText(icon, textStyle));
         icon.setSelectedGraphic(new IconGraphic(icon, 68));
         icon.setUnselectedGraphic(new IconGraphic(icon, 60));
         icon.setVertical(true);
-        
+
         return icon;
     }
- 
-    public boolean canDisplay(ViewRequirement requirement) {
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isObject() && requirement.isClosed();
     }
-    
+
+    @Override
     public String getName() {
         return "Image";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
 
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
-    
+
 }
-
-

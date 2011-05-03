@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.message;
 
 import java.util.StringTokenizer;
@@ -45,36 +44,41 @@ import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
 import org.apache.isis.viewer.dnd.view.control.CancelAction;
 import org.apache.isis.viewer.dnd.view.debug.DebugOutput;
 
-
 public class DetailedMessageViewSpecification implements ViewSpecification {
 
-    public boolean canDisplay(ViewRequirement requirement) {
-        Content content = requirement.getContent();
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        final Content content = requirement.getContent();
         return content instanceof MessageContent && ((MessageContent) content).getDetail() != null;
     }
 
+    @Override
     public String getName() {
         return "Detailed Message";
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final ButtonAction actions[] = new ButtonAction[] { new AbstractButtonAction("Print...") {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 DebugOutput.print("Print exception", extract(view));
             }
         }, new AbstractButtonAction("Save...") {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 DebugOutput.saveToFile("Save exception", "Exception", extract(view));
             }
         }, new AbstractButtonAction("Copy") {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 DebugOutput.saveToClipboard(extract(view));
             }
         }, new CancelAction(),
 
         };
-        
-        DetailedMessageView messageView = new DetailedMessageView(content, this);
+
+        final DetailedMessageView messageView = new DetailedMessageView(content, this);
         return new ButtonBorder(actions, new ScrollBorder(messageView));
     }
 
@@ -94,22 +98,27 @@ public class DetailedMessageViewSpecification implements ViewSpecification {
         return text.toString();
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return true;
     }
@@ -121,7 +130,7 @@ class DetailedMessageView extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Size size = new Size();
         size.extendHeight(Toolkit.getText(ColorsAndFonts.TEXT_TITLE).getTextHeight());
         size.extendHeight(30);
@@ -135,7 +144,7 @@ class DetailedMessageView extends AbstractView {
         final StringTokenizer st = new StringTokenizer(detail, "\n\r");
         while (st.hasMoreTokens()) {
             final String line = st.nextToken();
-            Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
+            final Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
             size.ensureWidth((line.startsWith("\t") ? 20 : 0) + text.stringWidth(line));
             size.extendHeight(text.getTextHeight());
         }
@@ -149,16 +158,16 @@ class DetailedMessageView extends AbstractView {
         super.draw(canvas);
 
         final int left = 10;
-        Text title = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
+        final Text title = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
         int y = 10 + title.getAscent();
         final String message = ((MessageContent) getContent()).getMessage();
         final String heading = ((MessageContent) getContent()).title();
         final String detail = ((MessageContent) getContent()).getDetail();
 
-        Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+        final Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         canvas.drawText(heading, left, y, black, title);
         y += title.getTextHeight();
-        Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
+        final Text text = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
         canvas.drawText(message, left, y, 500, black, text);
 
         y += text.stringHeight(message, 500);

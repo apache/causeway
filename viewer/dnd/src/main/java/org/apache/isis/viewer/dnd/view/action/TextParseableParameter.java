@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
@@ -25,4 +24,3 @@ import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 public interface TextParseableParameter extends ParameterContent, TextParseableContent {
 
 }
-

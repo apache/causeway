@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 public interface Look {
@@ -25,5 +24,3 @@ public interface Look {
 
     String getName();
 }
-
-

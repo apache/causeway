@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import java.util.Enumeration;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.drawing.Location;
-
 
 /*
  * TODO this factory should always create views, not provide specifications; alternatively, this should be
@@ -33,13 +31,13 @@ import org.apache.isis.viewer.dnd.drawing.Location;
  * the Axis is never used.
  */
 public interface GlobalViewFactory extends DebuggableWithTitle {
-    
+
     void addSpecification(ViewSpecification spec);
-    
+
     Enumeration<ViewSpecification> availableViews(ViewRequirement viewRequirement);
-    
+
     Enumeration<ViewSpecification> availableDesigns(ViewRequirement viewRequirement);
-    
+
     View createDragViewOutline(View view);
 
     DragEvent createDragContentOutline(View view, Location location);
@@ -50,4 +48,3 @@ public interface GlobalViewFactory extends DebuggableWithTitle {
 
     View createView(ViewRequirement requirement);
 }
-

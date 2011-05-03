@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Frame;
@@ -26,7 +25,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import org.apache.isis.viewer.dnd.view.InteractionSpyWindow;
-
 
 class SpyWindow implements InteractionSpyWindow {
     private int event;
@@ -73,6 +71,7 @@ class SpyWindow implements InteractionSpyWindow {
         }
     }
 
+    @Override
     public void display(final int event, final String label[][], final String[] trace, final int traceIndex) {
         if (frame != null) {
             this.event = event;
@@ -83,15 +82,16 @@ class SpyWindow implements InteractionSpyWindow {
         }
     }
 
+    @Override
     public void open() {
         frame = new SpyFrame();
         frame.setBounds(10, 10, 800, 500);
         frame.setVisible(true);
     }
 
+    @Override
     public void close() {
         frame.setVisible(false);
         frame.dispose();
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import junit.framework.TestCase;
@@ -25,7 +24,6 @@ import junit.framework.TestCase;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.interaction.SimpleInternalDrag;
 import org.apache.isis.viewer.dnd.view.InternalDrag;
-
 
 public class InternalDragTest extends TestCase {
     public static void main(final String[] args) {
@@ -39,7 +37,7 @@ public class InternalDragTest extends TestCase {
         final InternalDrag id = new SimpleInternalDrag(view, new Location(100, 110));
         assertEquals(new Location(70, 50), id.getLocation());
 
-//        id.drag(null, new Location(110, 130), 0);
-//        assertEquals(new Location(80, 70), id.getLocation());
+        // id.drag(null, new Location(110, 130), 0);
+        // assertEquals(new Location(80, 70), id.getLocation());
     }
 }

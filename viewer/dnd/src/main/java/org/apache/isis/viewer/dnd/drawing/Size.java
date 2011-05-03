@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
 
 public class Size {
     public static final Size createMax() {
         return new Size(10000, 10000);
     }
-    
+
     int height;
     int width;
 
@@ -121,17 +120,16 @@ public class Size {
     }
 
     /**
-     * Limits the height of this Size so that if its height is greater than the specified maximum then the
-     * height is reduced to the maximum. If the height is less than maximum (or equal to it) then nothing is
-     * done.
+     * Limits the height of this Size so that if its height is greater than the specified maximum then the height is
+     * reduced to the maximum. If the height is less than maximum (or equal to it) then nothing is done.
      */
     public void limitHeight(final int maximum) {
         height = Math.min(height, maximum);
     }
 
     /**
-     * Limits the width of this Size so that if its width is greater than the specified maximum then the width
-     * is reduced to the maximum. If the width is less than maximum (or equal to it) then nothing is done.
+     * Limits the width of this Size so that if its width is greater than the specified maximum then the width is
+     * reduced to the maximum. If the width is less than maximum (or equal to it) then nothing is done.
      */
     public void limitWidth(final int maximum) {
         width = Math.min(width, maximum);

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat;
 
-
 public abstract class ThatValidityAbstract extends ThatSubcommandAbstract {
 
     private final AssertsValidity assertion;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -35,20 +34,21 @@ public class SelectedBorder extends AbstractBorder {
         super(view);
         this.axis = axis;
     }
-    
-    public void firstClick(Click click) {
-       axis.selected(getView());
-       super.firstClick(click);
+
+    @Override
+    public void firstClick(final Click click) {
+        axis.selected(getView());
+        super.firstClick(click);
     }
-    
-    public void draw(Canvas canvas) {
-        if (axis.isSelected(getView())){
-            Size size = getSize();
-            canvas.drawSolidRectangle(left, right, size.getWidth() - left - right, size.getHeight() - top - bottom, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
+
+    @Override
+    public void draw(final Canvas canvas) {
+        if (axis.isSelected(getView())) {
+            final Size size = getSize();
+            canvas.drawSolidRectangle(left, right, size.getWidth() - left - right, size.getHeight() - top - bottom,
+                Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
         }
         super.draw(canvas);
     }
 
 }
-
-

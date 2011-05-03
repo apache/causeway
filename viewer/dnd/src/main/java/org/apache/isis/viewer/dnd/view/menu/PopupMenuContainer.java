@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.menu;
 
 import java.awt.event.KeyEvent;
@@ -49,20 +48,18 @@ public class PopupMenuContainer extends AbstractView {
     private PopupMenu menu;
     private PopupMenu submenu;
     private Color backgroundColor;
-    private View target;
+    private final View target;
     private final Vector options = new Vector();
     private final Location at;
     private boolean isLayoutInvalid;
-    
-    public PopupMenuContainer(View target, Location at) {
+
+    public PopupMenuContainer(final View target, final Location at) {
         super(new NullContent());
         this.target = target;
         this.at = at;
         setLocation(at);
         isLayoutInvalid = true;
     }
-
-
 
     @Override
     public void debug(final DebugBuilder debug) {
@@ -83,7 +80,7 @@ public class PopupMenuContainer extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Size size = menu.getRequiredSize(Size.createMax());
         if (submenu != null) {
             final Size subviewSize = submenu.getRequiredSize(Size.createMax());
@@ -92,46 +89,47 @@ public class PopupMenuContainer extends AbstractView {
         }
         return size;
     }
-    
+
     @Override
     public void layout() {
         if (isLayoutInvalid) {
             menu.layout();
-            Size menuSize = menu.getRequiredSize(Size.createMax());
+            final Size menuSize = menu.getRequiredSize(Size.createMax());
             menu.setSize(menuSize);
-            menu.setLocation(new Location(0,0));
-            
-            Location containerLocation = new Location(at);
-            Size bounds = getViewManager().getOverlaySize();
+            menu.setLocation(new Location(0, 0));
+
+            final Location containerLocation = new Location(at);
+            final Size bounds = getViewManager().getOverlaySize();
             if (containerLocation.getX() < 0) {
                 containerLocation.setX(0);
             } else if (containerLocation.getX() + menuSize.getWidth() > bounds.getWidth()) {
-                containerLocation.setX(bounds.getWidth() -  menuSize.getWidth());
+                containerLocation.setX(bounds.getWidth() - menuSize.getWidth());
             }
-            
+
             if (containerLocation.getY() < 0) {
                 containerLocation.setY(0);
             } else if (containerLocation.getY() + menuSize.getHeight() > bounds.getHeight()) {
-                containerLocation.setY(bounds.getHeight() -  menuSize.getHeight());
+                containerLocation.setY(bounds.getHeight() - menuSize.getHeight());
             }
-            
+
             if (submenu != null) {
                 submenu.layout();
-                Size submenuSize = submenu.getRequiredSize(Size.createMax());
+                final Size submenuSize = submenu.getRequiredSize(Size.createMax());
                 submenu.setSize(submenuSize);
 
-                
                 int submenuOffset = submenuOffset();
-                Location menuLocation = new Location();
-                
-                int containerBottom = containerLocation.getY() + submenuOffset + submenuSize.getHeight();
-                if (containerBottom > bounds.getHeight()) {
-                    int overstretch = containerBottom - bounds.getHeight();
-                    submenuOffset  -= overstretch;
-                }
-                Location submenuLocation = new Location(0, submenuOffset);
+                final Location menuLocation = new Location();
 
-                boolean placeToLeft = at.getX() + menuSize.getWidth() + submenuSize.getWidth() < getViewManager().getOverlaySize().getWidth();
+                final int containerBottom = containerLocation.getY() + submenuOffset + submenuSize.getHeight();
+                if (containerBottom > bounds.getHeight()) {
+                    final int overstretch = containerBottom - bounds.getHeight();
+                    submenuOffset -= overstretch;
+                }
+                final Location submenuLocation = new Location(0, submenuOffset);
+
+                final boolean placeToLeft =
+                    at.getX() + menuSize.getWidth() + submenuSize.getWidth() < getViewManager().getOverlaySize()
+                        .getWidth();
                 if (placeToLeft) {
                     submenuLocation.setX(menuSize.getWidth() - MENU_OVERLAP);
                 } else {
@@ -140,45 +138,41 @@ public class PopupMenuContainer extends AbstractView {
                 }
 
                 if (containerLocation.getY() + menuSize.getHeight() > bounds.getHeight()) {
-                    containerLocation.setY(bounds.getHeight() -  menuSize.getHeight());
+                    containerLocation.setY(bounds.getHeight() - menuSize.getHeight());
                 }
-                
-                
-                submenu.setLocation(submenuLocation); //// !
-                menu.setLocation(menuLocation); /// !
 
-            }           
-            
-            
+                submenu.setLocation(submenuLocation); // // !
+                menu.setLocation(menuLocation); // / !
+
+            }
+
             setLocation(containerLocation);
 
         }
     }
 
-
-
     private int submenuOffset() {
         return menu.getOptionPostion();
-    }  
+    }
 
     @Override
     public void mouseMoved(final Location at) {
         if (menu.getBounds().contains(at)) {
             at.subtract(menu.getLocation());
             menu.mouseMoved(at);
-        } else  if (submenu  != null && submenu.getBounds().contains(at)) {
-             at.subtract(submenu.getLocation());
+        } else if (submenu != null && submenu.getBounds().contains(at)) {
+            at.subtract(submenu.getLocation());
             submenu.mouseMoved(at);
         }
     }
 
-
-    public void show(final boolean forView, final boolean includeDebug, final boolean includeExploration, final boolean includePrototype) {
+    public void show(final boolean forView, final boolean includeDebug, final boolean includeExploration,
+        final boolean includePrototype) {
         final boolean withExploration = getViewManager().isRunningAsExploration() && includeExploration;
         final boolean withPrototype = getViewManager().isRunningAsPrototype() && includePrototype;
-        
 
-        final UserActionSet optionSet = new UserActionSetImpl(withExploration, withPrototype, includeDebug, ActionType.USER);
+        final UserActionSet optionSet =
+            new UserActionSetImpl(withExploration, withPrototype, includeDebug, ActionType.USER);
         if (forView) {
             target.viewMenuOptions(optionSet);
         } else {
@@ -192,23 +186,19 @@ public class PopupMenuContainer extends AbstractView {
         }
 
         menu = new PopupMenu(this);
-        
+
         backgroundColor = optionSet.getColor();
         menu.show(target, optionSet.getUserActions(), backgroundColor);
         getViewManager().setOverlayView(this);
- 
+
         if (target != null) {
             final String status = changeStatus(target, forView, withExploration, includeDebug);
             getFeedbackManager().setViewDetail(status);
         }
     }
 
-
-    private String changeStatus(
-            final View over,
-            final boolean forView,
-            final boolean includeExploration,
-            final boolean includeDebug) {
+    private String changeStatus(final View over, final boolean forView, final boolean includeExploration,
+        final boolean includeDebug) {
         final StringBuffer status = new StringBuffer("Menu for ");
         if (forView) {
             status.append("view ");
@@ -239,7 +229,6 @@ public class PopupMenuContainer extends AbstractView {
         return status.toString();
     }
 
-
     public void addMenuOptions(final MenuOptions options) {
         this.options.addElement(options);
     }
@@ -254,15 +243,11 @@ public class PopupMenuContainer extends AbstractView {
         final Size size = getRequiredSize(Size.createMax());
         setSize(size);
         layout();
-        
+
         isLayoutInvalid = false;
 
-        
-        
         markDamaged();
     }
-
-    
 
     @Override
     public void keyPressed(final KeyboardAction key) {
@@ -286,12 +271,14 @@ public class PopupMenuContainer extends AbstractView {
             menu.keyPressed(key);
         }
     }
-    
+
+    @Override
     public void invalidateLayout() {
         isLayoutInvalid = true;
     }
-    
-    public void draw(Canvas canvas) {
+
+    @Override
+    public void draw(final Canvas canvas) {
         super.draw(canvas);
         if (menu != null) {
             final Canvas menuCanvas = canvas.createSubcanvas(menu.getBounds());
@@ -306,10 +293,10 @@ public class PopupMenuContainer extends AbstractView {
             canvas.drawRectangleAround(getBounds(), Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
         }
     }
-    
+
     @Override
     public void firstClick(final Click click) {
-        Location location = click.getLocation();
+        final Location location = click.getLocation();
         if (menu.getBounds().contains(location)) {
             click.subtract(menu.getLocation());
             menu.firstClick(click);
@@ -320,5 +307,3 @@ public class PopupMenuContainer extends AbstractView {
     }
 
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.content;
 
 import java.util.Arrays;
@@ -52,7 +51,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public abstract class AbstractObjectContent extends AbstractContent implements ObjectContent {
 
     public static final class ExplorationInstances extends UserActionAbstract {
@@ -71,8 +69,9 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         public void execute(final Workspace workspace, final View view, final Location at) {
             final ObjectAdapter object = view.getContent().getAdapter();
             final ObjectSpecification spec = object.getSpecification();
-            final ObjectAdapter instances = IsisContext.getPersistenceSession().findInstances(
-                    new QueryFindAllInstances(spec.getFullIdentifier()), QueryCardinality.MULTIPLE);
+            final ObjectAdapter instances =
+                IsisContext.getPersistenceSession().findInstances(new QueryFindAllInstances(spec.getFullIdentifier()),
+                    QueryCardinality.MULTIPLE);
             workspace.objectActionResult(instances, new Placement(view));
         }
     }
@@ -121,7 +120,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         public Consent disabled(final View view) {
             final ObjectAdapter object = view.getContent().getAdapter();
             return ConsentAbstract.allowIf(object == null || object.getResolveState() != ResolveState.TRANSIENT
-                    || object.getResolveState() == ResolveState.GHOST);
+                || object.getResolveState() == ResolveState.GHOST);
         }
 
         @Override
@@ -162,7 +161,8 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             // TODO: use Facet for this test instead.
             return new Veto("Can't set field in persistent object with reference to non-persistent object");
         }
-        final List<ObjectAssociation> fields = targetAdapter.getSpecification().getAssociations(
+        final List<ObjectAssociation> fields =
+            targetAdapter.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), targetAdapter));
         for (final ObjectAssociation fld : fields) {
             if (!fld.isOneToOneAssociation()) {
@@ -174,15 +174,16 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             if (fld.get(targetAdapter) != null) {
                 continue;
             }
-            final Consent associationValid = ((OneToOneAssociation) fld).isAssociationValid(targetAdapter, sourceAdapter);
+            final Consent associationValid =
+                ((OneToOneAssociation) fld).isAssociationValid(targetAdapter, sourceAdapter);
             if (associationValid.isAllowed()) {
                 return associationValid.setDescription("Set field " + fld.getName());
             }
 
         }
         // TODO: use Facet for this test instead
-        return new Veto(String.format("No empty field accepting object of type %s in %s", sourceAdapter.getSpecification()
-                .getSingularName(), title()));
+        return new Veto(String.format("No empty field accepting object of type %s in %s", sourceAdapter
+            .getSpecification().getSingularName(), title()));
     }
 
     @Override
@@ -212,13 +213,15 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             return action.execute(target, new ObjectAdapter[] { source });
         }
 
-        final List<ObjectAssociation> associations = target.getSpecification().getAssociations(
+        final List<ObjectAssociation> associations =
+            target.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), target));
 
         for (int i = 0; i < associations.size(); i++) {
             final ObjectAssociation association = associations.get(i);
-            if (association.isOneToOneAssociation() && source.getSpecification().isOfType(association.getSpecification())) {
-                OneToOneAssociation otoa = (OneToOneAssociation) association;
+            if (association.isOneToOneAssociation()
+                && source.getSpecification().isOfType(association.getSpecification())) {
+                final OneToOneAssociation otoa = (OneToOneAssociation) association;
                 if (association.get(target) == null && otoa.isAssociationValid(target, source).isAllowed()) {
                     otoa.setAssociation(target, source);
                     break;
@@ -230,8 +233,8 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     }
 
     private ObjectAction dropAction(final ObjectAdapter source, final ObjectAdapter target) {
-        ObjectAction action = target.getSpecification().getObjectAction(ActionType.USER, null,
-                Arrays.asList( source.getSpecification() ));
+        final ObjectAction action =
+            target.getSpecification().getObjectAction(ActionType.USER, null, Arrays.asList(source.getSpecification()));
         return action;
     }
 

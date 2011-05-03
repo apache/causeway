@@ -17,24 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.list;
 
 import org.apache.isis.viewer.dnd.icon.IconElementFactory;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.composite.AbstractCollectionViewSpecification;
 
-
 // TODO use the superclass instead
 public class SimpleListSpecification extends AbstractCollectionViewSpecification {
-    
+
+    @Override
     protected ViewFactory createElementFactory() {
         return new IconElementFactory();
     }
 
+    @Override
     public String getName() {
         return "List";
     }
-
 
 }

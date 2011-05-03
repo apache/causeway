@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -30,13 +29,15 @@ import org.apache.isis.viewer.dnd.view.border.DroppableLabelBorder;
 import org.apache.isis.viewer.dnd.view.border.LabelBorder;
 
 public class FieldLabelsDecorator implements SubviewDecorator {
-    
-    public ViewAxis createAxis(Content content) {
+
+    @Override
+    public ViewAxis createAxis(final Content content) {
         return new LabelAxis();
     }
 
-    public View decorate(Axes axes, View view) {
-        LabelAxis axis = (LabelAxis) axes.getAxis(LabelAxis.class);
+    @Override
+    public View decorate(final Axes axes, final View view) {
+        final LabelAxis axis = axes.getAxis(LabelAxis.class);
         if (view.getContent().isObject() && !view.getContent().isTextParseable()) {
             return DroppableLabelBorder.createObjectFieldLabelBorder(axis, view);
         } else {
@@ -44,5 +45,3 @@ public class FieldLabelsDecorator implements SubviewDecorator {
         }
     }
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.service;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,7 +38,6 @@ import org.apache.isis.viewer.dnd.view.action.OptionFactory;
 import org.apache.isis.viewer.dnd.view.base.IconGraphic;
 import org.apache.isis.viewer.dnd.view.option.CloseViewOption;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
-
 
 public class ServiceIcon extends Icon {
     private final static int ICON_SIZE;
@@ -83,7 +81,6 @@ public class ServiceIcon extends Icon {
 
     @Override
     public DragEvent dragStart(final DragStart drag) {
-       return Toolkit.getViewFactory().createDragContentOutline(this, drag.getLocation());
+        return Toolkit.getViewFactory().createDragContentOutline(this, drag.getLocation());
     }
 }
-

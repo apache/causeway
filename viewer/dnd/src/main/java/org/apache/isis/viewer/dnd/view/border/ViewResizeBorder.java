@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -26,15 +25,14 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.util.Properties;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 // TODO enhance so the direction of resizing can be specified (could limit to width on right, height on bottom, or width/height from corner
 public class ViewResizeBorder extends ResizeBorder {
     public static final int BORDER_WIDTH = IsisContext.getConfiguration().getInteger(
-            Properties.PROPERTY_BASE + "tree-resize-border", 7);
-    
+        Properties.PROPERTY_BASE + "tree-resize-border", 7);
+
     private static ResizeViewRender render;
-    
-    public static void setRender(ResizeViewRender render) {
+
+    public static void setRender(final ResizeViewRender render) {
         ViewResizeBorder.render = render;
     }
 
@@ -47,6 +45,6 @@ public class ViewResizeBorder extends ResizeBorder {
         final int x = getSize().getWidth() - BORDER_WIDTH;
         final int height = getSize().getHeight() - 1;
         final boolean hasFocus = getParent().containsFocus();
-       render.draw(canvas, x, BORDER_WIDTH, height, hasFocus);
+        render.draw(canvas, x, BORDER_WIDTH, height, hasFocus);
     }
 }

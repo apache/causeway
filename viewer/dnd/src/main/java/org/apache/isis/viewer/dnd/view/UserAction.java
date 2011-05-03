@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
-
 public interface UserAction {
-	
+
     /**
      * Returns the type of action: user, exploration, debug, or a set.
      */

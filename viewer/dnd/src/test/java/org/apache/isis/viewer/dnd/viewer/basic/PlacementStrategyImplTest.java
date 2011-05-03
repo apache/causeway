@@ -17,12 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyView;
@@ -30,7 +26,9 @@ import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.PlacementStrategyImpl;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PlacementStrategyImplTest {
 
@@ -69,34 +67,35 @@ public class PlacementStrategyImplTest {
 
     @Test
     public void defaultWhenNoRelativeView() throws Exception {
-        Location location = strategy.determinePlacement(workspace, null, newView);
+        final Location location = strategy.determinePlacement(workspace, null, newView);
         Assert.assertEquals(new Location(), location);
     }
 
     @Test
     public void placeToRight() throws Exception {
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING, 70), location);
     }
 
     @Test
     public void adjustWhenOnTopOfExistingField() throws Exception {
-        DummyView anotherView = new DummyView();
+        final DummyView anotherView = new DummyView();
         anotherView.setLocation(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING, ORIGINAL_Y));
         anotherView.setSize(new Size(50, 50));
         workspace.addView(anotherView);
 
         newView.setupRequiredSize(new Size(NEW_VIEW_WIDTH, NEW_VIEW_HEIGHT));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
-        Assert.assertEquals(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING + PADDING * 4, ORIGINAL_Y + PADDING * 4), location);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
+        Assert.assertEquals(
+            new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING + PADDING * 4, ORIGINAL_Y + PADDING * 4), location);
     }
 
     @Test
     public void placeBelow() throws Exception {
         existingView.setLocation(new Location(WORKSPACE_WIDTH - 200, 100));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(WORKSPACE_WIDTH - 200, 100 + +ROOT_VIEW_HEIGHT + PADDING), location);
     }
 
@@ -104,7 +103,7 @@ public class PlacementStrategyImplTest {
     public void placeToLeft() throws Exception {
         existingView.setLocation(new Location(WORKSPACE_WIDTH - 200, 500));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(WORKSPACE_WIDTH - 200 - PADDING - NEW_VIEW_WIDTH, 500), location);
     }
 
@@ -113,7 +112,7 @@ public class PlacementStrategyImplTest {
         existingView.setLocation(new Location(100, 700));
         existingView.setSize(new Size(900, 100));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(100, 700 - NEW_VIEW_HEIGHT - PADDING), location);
     }
 
@@ -122,17 +121,17 @@ public class PlacementStrategyImplTest {
         existingView.setLocation(new Location(100, 100));
         newView.setupRequiredSize(new Size(1100, 900));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
-        Assert.assertEquals("should be placed on top of original, but slightly offset",  new Location(0, 0), location);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
+        Assert.assertEquals("should be placed on top of original, but slightly offset", new Location(0, 0), location);
     }
 
     @Test
     public void viewLargerThanWorkspaceAndExisitingViewInCorner() throws Exception {
         existingView.setLocation(new Location(200, 300));
-        existingView.setLocation(new Location(0,0));
+        existingView.setLocation(new Location(0, 0));
         newView.setupRequiredSize(new Size(1100, 900));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals("should be placed on top of original, but slightly offset", new Location(0, 0), location);
     }
 
@@ -141,62 +140,59 @@ public class PlacementStrategyImplTest {
         existingView.setLocation(new Location(100, 100));
         existingView.setSize(new Size(800, 600));
 
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals("should be placed on top of original, but slightly offset", new Location(100 + PADDING * 6,
-                100 + PADDING * 6), location);
+            100 + PADDING * 6), location);
     }
 
     @Test
     public void wideComponentShiftsToLeft() throws Exception {
         newView.setupRequiredSize(new Size(1200, NEW_VIEW_HEIGHT));
-        
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(0, ORIGINAL_Y + ROOT_VIEW_HEIGHT + PADDING), location);
     }
 
     @Test
     public void tallComponentShiftsUp() throws Exception {
         newView.setupRequiredSize(new Size(NEW_VIEW_WIDTH, 1000));
-        
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING, 0), location);
     }
 
     @Test
     public void wideComponentsDontCompletelyOverlap() throws Exception {
-        DummyView anotherView = new DummyView();
+        final DummyView anotherView = new DummyView();
         anotherView.setLocation(new Location(0, 70 + ROOT_VIEW_HEIGHT + PADDING));
         anotherView.setSize(new Size(WORKSPACE_WIDTH, 100));
         workspace.addView(anotherView);
-        
+
         newView.setupRequiredSize(new Size(WORKSPACE_WIDTH, NEW_VIEW_HEIGHT));
-        
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(0, 70 + ROOT_VIEW_HEIGHT + PADDING + PADDING * 4), location);
     }
 
     @Test
     public void tallComponentsDontCompletelyOverlap() throws Exception {
-        DummyView anotherView = new DummyView();
+        final DummyView anotherView = new DummyView();
         anotherView.setLocation(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING, 0));
         anotherView.setSize(new Size(100, WORKSPACE_HEIGHT));
         workspace.addView(anotherView);
-        
+
         newView.setupRequiredSize(new Size(NEW_VIEW_WIDTH, WORKSPACE_HEIGHT));
-        
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING + PADDING * 4, 0), location);
     }
-    
 
     @Test
     public void noSpaceToMoveNewView() throws Exception {
         newView.setupRequiredSize(new Size(WORKSPACE_WIDTH - ORIGINAL_X, WORKSPACE_HEIGHT - ORIGINAL_Y));
-        
-        Location location = strategy.determinePlacement(workspace, existingView, newView);
+
+        final Location location = strategy.determinePlacement(workspace, existingView, newView);
         Assert.assertEquals(new Location(ORIGINAL_X, ORIGINAL_Y), location);
     }
 
-
 }
-

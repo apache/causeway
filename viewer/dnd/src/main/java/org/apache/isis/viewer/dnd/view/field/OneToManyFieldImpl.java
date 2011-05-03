@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.field;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -35,12 +34,12 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.collection.AbstractCollectionContent;
 
-
 public class OneToManyFieldImpl extends AbstractCollectionContent implements OneToManyField {
     private final ObjectAdapter collection;
     private final ObjectField field;
 
-    public OneToManyFieldImpl(final ObjectAdapter parent, final ObjectAdapter object, final OneToManyAssociation association) {
+    public OneToManyFieldImpl(final ObjectAdapter parent, final ObjectAdapter object,
+        final OneToManyAssociation association) {
         field = new ObjectField(parent, association);
         this.collection = object;
     }
@@ -57,7 +56,8 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
                 return new Veto("Collection not set up; can't add elements to a non-existant collection");
             }
 
-            final Consent usableInState = getOneToManyAssociation().isUsable(IsisContext.getAuthenticationSession(), parentAdapter);
+            final Consent usableInState =
+                getOneToManyAssociation().isUsable(IsisContext.getAuthenticationSession(), parentAdapter);
             if (usableInState.isVetoed()) {
                 return usableInState;
             }
@@ -66,8 +66,8 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
             final ObjectSpecification elementSpecification = getElementSpecification();
             if (!specification.isOfType(elementSpecification)) {
                 // TODO: move logic into Facet
-                return new Veto(String.format("Only objects of type %s are allowed in this collection", elementSpecification
-                        .getSingularName()));
+                return new Veto(String.format("Only objects of type %s are allowed in this collection",
+                    elementSpecification.getSingularName()));
             }
             if (parentAdapter.isPersistent() && sourceAdapter.isTransient()) {
                 // TODO: move logic into Facet
@@ -176,7 +176,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
     public ObjectSpecification getSpecification() {
         return field.getSpecification();
     }
-    
+
     @Override
     public Consent isEditable() {
         return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());

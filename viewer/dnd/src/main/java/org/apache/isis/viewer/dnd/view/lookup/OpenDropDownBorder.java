@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import java.awt.event.KeyEvent;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.action.BackgroundWork;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 
-
 /**
  * Field border that provides a drop-down selector.
  */
@@ -49,7 +47,7 @@ public abstract class OpenDropDownBorder extends AbstractBorder {
     }
 
     protected abstract View createDropDownView();
-    
+
     @Override
     public void draw(final Canvas canvas) {
         final Size size = getSize();
@@ -63,7 +61,9 @@ public abstract class OpenDropDownBorder extends AbstractBorder {
 
             canvas.drawShape(triangle, x, y, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             if (over) {
-                final Color color = over ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2);
+                final Color color =
+                    over ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit
+                        .getColor(ColorsAndFonts.COLOR_PRIMARY2);
                 canvas.drawSolidShape(triangle, x, y, color);
             }
         }
@@ -138,6 +138,7 @@ public abstract class OpenDropDownBorder extends AbstractBorder {
 
     private void open() {
         BackgroundWork.runTaskInBackground(this, new BackgroundTask() {
+            @Override
             public void execute() {
                 final View overlay = createDropDownView();
                 final Location location = getView().getAbsoluteLocation();
@@ -146,16 +147,18 @@ public abstract class OpenDropDownBorder extends AbstractBorder {
                 getViewManager().setOverlayView(overlay);
             }
 
+            @Override
             public String getDescription() {
                 return "";
             }
 
+            @Override
             public String getName() {
                 return "Opening selector";
             }
         });
     }
 
-    // TODO move into abstract subclass for selection list 
+    // TODO move into abstract subclass for selection list
     protected abstract void setSelection(OptionContent selectedContent);
 }

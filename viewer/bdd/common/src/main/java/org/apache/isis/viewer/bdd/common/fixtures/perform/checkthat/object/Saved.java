@@ -27,17 +27,17 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcomma
 public class Saved extends ThatSubcommandAbstract {
 
     public Saved() {
-        super("is saved", "is persistent", "is persisted", "saved",
-                "persistent", "persisted");
+        super("is saved", "is persistent", "is persisted", "saved", "persistent", "persisted");
     }
 
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
+        final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
 
         if (!onAdapter.isPersistent()) {
-        	throw ScenarioBoundValueException.current(thatItBinding, "(not saved)");
+            throw ScenarioBoundValueException.current(thatItBinding, "(not saved)");
         }
 
         return null;

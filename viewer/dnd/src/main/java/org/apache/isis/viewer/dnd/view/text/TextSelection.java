@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
-
 
 public class TextSelection {
     private final CursorPosition cursor;
@@ -33,8 +31,7 @@ public class TextSelection {
     }
 
     /**
-     * Determine if the selection is back to front. Returns true if the cursor position is before the start
-     * position.
+     * Determine if the selection is back to front. Returns true if the cursor position is before the start position.
      */
     private boolean backwardSelection() {
         return cursor.isBefore(start);
@@ -65,8 +62,7 @@ public class TextSelection {
     }
 
     /**
-     * clears the selection so nothing is selected. The start and end points are set to the same values as the
-     * cursor.
+     * clears the selection so nothing is selected. The start and end points are set to the same values as the cursor.
      */
     public void resetTo(final CursorPosition pos) {
         start.asFor(pos);
@@ -96,6 +92,6 @@ public class TextSelection {
     @Override
     public String toString() {
         return "Selection [from=" + start.getLine() + ":" + start.getCharacter() + ",to=" + cursor.getLine() + ":"
-                + cursor.getCharacter() + "]";
+            + cursor.getCharacter() + "]";
     }
 }

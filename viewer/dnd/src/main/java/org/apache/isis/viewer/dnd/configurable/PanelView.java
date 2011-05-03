@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -31,20 +29,18 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewDrag;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
-import org.apache.isis.viewer.dnd.view.border.IconBorder;
-import org.apache.isis.viewer.dnd.view.border.LineBorder;
 import org.apache.isis.viewer.dnd.view.composite.CompositeView;
-
 
 public class PanelView extends CompositeView {
     public static enum Position {
         North, South, East, West
     };
 
-    private Panel panel = new Panel();
+    private final Panel panel = new Panel();
     private ViewSpecification initialViewSpecification;;
-    
-    public void debug(DebugBuilder debug) {
+
+    @Override
+    public void debug(final DebugBuilder debug) {
         super.debug(debug);
         debug.appendln("Panel");
         debug.indent();
@@ -52,43 +48,44 @@ public class PanelView extends CompositeView {
         debug.unindent();
     }
 
-    public void setInitialViewSpecification(ViewSpecification initialViewSpecification) {
+    public void setInitialViewSpecification(final ViewSpecification initialViewSpecification) {
         this.initialViewSpecification = initialViewSpecification;
     }
 
-    public PanelView(Content content, ViewSpecification specification) {
+    public PanelView(final Content content, final ViewSpecification specification) {
         super(content, specification);
     }
 
+    @Override
     protected void buildView() {
-//        addView(getContent(), initialViewSpecification, null);
-        View newView = initialViewSpecification.createView(getContent(), new Axes(), 0);
+        // addView(getContent(), initialViewSpecification, null);
+        final View newView = initialViewSpecification.createView(getContent(), new Axes(), 0);
         panel.addView(newView, null);
         addView(newView);
     }
-    
-    
 
-    protected void doLayout(Size maximumSize) {
+    @Override
+    protected void doLayout(final Size maximumSize) {
         panel.layout(maximumSize);
     }
 
-    public Size requiredSize(Size availableSpace) {
+    @Override
+    public Size requiredSize(final Size availableSpace) {
         return panel.getRequiredSize(availableSpace);
     }
 
     @Override
-    public void drop(ViewDrag drag) {
+    public void drop(final ViewDrag drag) {
         if (drag.getSourceView() == getView() || !contains(drag.getSourceView())) {
             super.drop(drag);
         } else {
-            Location dropAt = drag.getLocation();
+            final Location dropAt = drag.getLocation();
             dropAt.subtract(getLocation());
-            int x = dropAt.getX();
-            int y = dropAt.getY();
-            int borderWdth = 45;
-            int left = getSize().getWidth() - borderWdth;
-            int bottom = getSize().getHeight() - borderWdth;
+            final int x = dropAt.getX();
+            final int y = dropAt.getY();
+            final int borderWdth = 45;
+            final int left = getSize().getWidth() - borderWdth;
+            final int bottom = getSize().getHeight() - borderWdth;
             if (y < borderWdth) {
                 addView(drag.getSourceView().getContent(), Position.North);
             } else if (y > bottom) {
@@ -101,17 +98,17 @@ public class PanelView extends CompositeView {
         }
     }
 
-    public void addView(Content content, Position position) {
-        ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW);
-        ViewSpecification viewSpecification = Toolkit.getViewFactory().availableViews(requirement).nextElement();
+    public void addView(final Content content, final Position position) {
+        final ViewRequirement requirement =
+            new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW);
+        final ViewSpecification viewSpecification = Toolkit.getViewFactory().availableViews(requirement).nextElement();
         addView(content, viewSpecification, position);
     }
 
-    public void addView(Content content, ViewSpecification specification, Position position) {
-        View newView = specification.createView(content, new Axes(), 0);
-        //     newView = new LineBorder(newView);
+    public void addView(final Content content, final ViewSpecification specification, final Position position) {
+        final View newView = specification.createView(content, new Axes(), 0);
+        // newView = new LineBorder(newView);
         panel.addView(newView, position);
         addView(newView);
     }
 }
-

@@ -30,18 +30,16 @@ public class GetActionParameterChoices extends PerformAbstractTypeParams {
     private ObjectAdapter result;
 
     public GetActionParameterChoices(final Perform.Mode mode) {
-        super("get action parameter choices", Type.ACTION, NumParameters.ONE,
-                mode);
+        super("get action parameter choices", Type.ACTION, NumParameters.ONE, mode);
     }
 
     @Override
     public void doHandle(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final ObjectMember nakedObjectMember = performContext
-                .getObjectMember();
-        CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
+        final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
+        final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 
         int requestedParamNum = -1;
         try {
@@ -53,15 +51,15 @@ public class GetActionParameterChoices extends PerformAbstractTypeParams {
         final ObjectAction noa = (ObjectAction) nakedObjectMember;
         final int parameterCount = noa.getParameterCount();
         if (requestedParamNum < 0 || requestedParamNum > parameterCount - 1) {
-            throw ScenarioBoundValueException.current(arg0Binding, 
-                    "(must be between 0 and " + (parameterCount - 1) + ")");
+            throw ScenarioBoundValueException.current(arg0Binding, "(must be between 0 and " + (parameterCount - 1)
+                + ")");
         }
 
         final ObjectAdapter[][] allParameterChoices = noa.getChoices(onAdapter);
-        result = performContext.getPeer()
-                .toAdaptedListOfPojos(allParameterChoices[requestedParamNum]);
+        result = performContext.getPeer().toAdaptedListOfPojos(allParameterChoices[requestedParamNum]);
     }
 
+    @Override
     public ObjectAdapter getResult() {
         return result;
     }

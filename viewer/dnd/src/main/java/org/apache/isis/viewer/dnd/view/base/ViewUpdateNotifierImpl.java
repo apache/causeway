@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,12 +38,13 @@ import org.apache.isis.viewer.dnd.view.ObjectContent;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewUpdateNotifier;
 import org.apache.isis.viewer.dnd.view.collection.RootCollection;
-
+import org.apache.log4j.Logger;
 
 public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
     private static final Logger LOG = Logger.getLogger(ViewUpdateNotifierImpl.class);
-    protected Hashtable<ObjectAdapter,Vector<View>> viewListByAdapter = new Hashtable<ObjectAdapter,Vector<View>>();
+    protected Hashtable<ObjectAdapter, Vector<View>> viewListByAdapter = new Hashtable<ObjectAdapter, Vector<View>>();
 
+    @Override
     public void add(final View view) {
         final Content content = view.getContent();
         if (content != null && content.isObject()) {
@@ -66,12 +65,13 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
                 }
                 viewsToNotify.addElement(view);
                 if (LOG.isDebugEnabled()) {
-                	LOG.debug("added " + view + " to observers for " + adapter);
+                    LOG.debug("added " + view + " to observers for " + adapter);
                 }
             }
         }
     }
 
+    @Override
     public void debugData(final DebugBuilder buf) {
         final Enumeration<ObjectAdapter> f = viewListByAdapter.keys();
 
@@ -91,31 +91,32 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
         }
     }
 
+    @Override
     public String debugTitle() {
         return "Views for object details (observers)";
     }
 
+    @Override
     public void remove(final View view) {
         final Content content = view.getContent();
         if (content == null || !content.isObject()) {
-        	// nothing to do
-        	return;
+            // nothing to do
+            return;
         }
-    	if (LOG.isDebugEnabled()) {
-    		LOG.debug("removing " + content + " for " + view);
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("removing " + content + " for " + view);
+        }
 
-    	final ObjectAdapter object = ((ObjectContent) content).getObject();
+        final ObjectAdapter object = ((ObjectContent) content).getObject();
         if (object != null) {
             if (!viewListByAdapter.containsKey(object)) {
-                throw new IsisException("Tried to remove a non-existant view " + view + " from observers for "
-                        + object);
+                throw new IsisException("Tried to remove a non-existant view " + view + " from observers for " + object);
             }
             Vector<View> viewsToNotify;
             viewsToNotify = viewListByAdapter.get(object);
             final Enumeration<View> e = viewsToNotify.elements();
             while (e.hasMoreElements()) {
-                final View v = (View) e.nextElement();
+                final View v = e.nextElement();
                 if (view == v.getView()) {
                     viewsToNotify.remove(v);
                     LOG.debug("removed " + view + " from observers for " + object);
@@ -126,7 +127,7 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
             if (viewsToNotify.size() == 0) {
                 viewListByAdapter.remove(object);
                 if (LOG.isDebugEnabled()) {
-                	LOG.debug("removed observer list for " + object);
+                    LOG.debug("removed observer list for " + object);
                 }
 
                 // TODO need to do garbage collection instead
@@ -140,39 +141,42 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
         viewListByAdapter.clear();
     }
 
+    @Override
     public void invalidateViewsForChangedObjects() {
-        for(ObjectAdapter object:getUpdateNotifier().getChangedObjects()) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("invalidate views for " + object);
-        	}
+        for (final ObjectAdapter object : getUpdateNotifier().getChangedObjects()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("invalidate views for " + object);
+            }
             final Vector<View> viewsVector = this.viewListByAdapter.get(object);
             if (viewsVector == null) {
                 continue;
             }
             final Enumeration<View> views = viewsVector.elements();
             while (views.hasMoreElements()) {
-                final View view = (View) views.nextElement();
+                final View view = views.nextElement();
                 LOG.debug("   - " + view);
                 view.getView().invalidateContent();
             }
         }
     }
 
+    @Override
     public void removeViewsForDisposedObjects() {
-        for(ObjectAdapter objectToDispose: getUpdateNotifier().getDisposedObjects()) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("dispose views for " + objectToDispose);
-        	}
+        for (final ObjectAdapter objectToDispose : getUpdateNotifier().getDisposedObjects()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("dispose views for " + objectToDispose);
+            }
             final Vector<View> viewsForObject = viewListByAdapter.get(objectToDispose);
             if (viewsForObject == null) {
-            	continue;
+                continue;
             }
             removeViews(viewsForObject);
             final Vector<View> remainingViews = viewListByAdapter.get(objectToDispose);
             if (remainingViews != null && remainingViews.size() > 0) {
                 getMessageBroker().addWarning(
-                        "There are still views (within other views) for the disposed object " + objectToDispose.titleString()
-                                + ".  Only objects that are shown as root views can be properly disposed of");
+                    "There are still views (within other views) for the disposed object "
+                        + objectToDispose.titleString()
+                        + ".  Only objects that are shown as root views can be properly disposed of");
             } else {
                 getAdapterManager().removeAdapter(objectToDispose);
             }
@@ -183,21 +187,21 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
         final View[] viewsArray = new View[views.size()];
         views.copyInto(viewsArray);
         final View[] viewsOnWorkspace = viewsArray[0].getWorkspace().getSubviews();
-        for (int i = 0; i < viewsArray.length; i++) {
-            final View view = viewsArray[i].getView();
-            for (int j = 0; j < viewsOnWorkspace.length; j++) {
-                if (view == viewsOnWorkspace[j]) {
+        for (final View element : viewsArray) {
+            final View view = element.getView();
+            for (final View element2 : viewsOnWorkspace) {
+                if (view == element2) {
                     LOG.debug("   (root removed) " + view);
                     view.getView().dispose();
                     break;
                 }
             }
 
-            for (int j = 0; j < viewsOnWorkspace.length; j++) {
-                if (viewsOnWorkspace[j].getContent() instanceof RootCollection) {
-                    final View[] subviewsOfRootView = viewsOnWorkspace[j].getSubviews();
-                    for (int k = 0; k < subviewsOfRootView.length; k++) {
-                        if (subviewsOfRootView[k] == view) {
+            for (final View element2 : viewsOnWorkspace) {
+                if (element2.getContent() instanceof RootCollection) {
+                    final View[] subviewsOfRootView = element2.getSubviews();
+                    for (final View element3 : subviewsOfRootView) {
+                        if (element3 == view) {
                             LOG.debug("   (element removed) " + view);
                             view.getView().dispose();
                         }
@@ -205,8 +209,8 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
                 }
             }
 
-            for (int j = 0; j < viewsOnWorkspace.length; j++) {
-                if (viewsOnWorkspace[j].contains(view)) {
+            for (final View element2 : viewsOnWorkspace) {
+                if (element2.contains(view)) {
                     LOG.debug("   (invalidated) " + view);
                     final View parent = view.getParent();
                     parent.invalidateContent();
@@ -217,11 +221,10 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
 
     }
 
-    
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (from singleton)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
@@ -234,30 +237,42 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
         return IsisContext.getMessageBroker();
     }
 
-	private static UpdateNotifier getUpdateNotifier() {
-		return IsisContext.inSession() ? IsisContext.getUpdateNotifier() : new NoOpUpdateNotifier();
-	}
+    private static UpdateNotifier getUpdateNotifier() {
+        return IsisContext.inSession() ? IsisContext.getUpdateNotifier() : new NoOpUpdateNotifier();
+    }
 
 }
 
 class NoOpUpdateNotifier implements UpdateNotifier {
 
-    public void addChangedObject(ObjectAdapter object) {}
+    @Override
+    public void addChangedObject(final ObjectAdapter object) {
+    }
 
-    public void addDisposedObject(ObjectAdapter adapter) {}
+    @Override
+    public void addDisposedObject(final ObjectAdapter adapter) {
+    }
 
-    public void clear() {}
+    @Override
+    public void clear() {
+    }
 
-    public void ensureEmpty() {}
+    @Override
+    public void ensureEmpty() {
+    }
 
+    @Override
     public List<ObjectAdapter> getChangedObjects() {
         return new ArrayList<ObjectAdapter>();
     }
 
+    @Override
     public List<ObjectAdapter> getDisposedObjects() {
         return new ArrayList<ObjectAdapter>();
     }
 
-    public void injectInto(Object candidate) {}
+    @Override
+    public void injectInto(final Object candidate) {
+    }
 
 }

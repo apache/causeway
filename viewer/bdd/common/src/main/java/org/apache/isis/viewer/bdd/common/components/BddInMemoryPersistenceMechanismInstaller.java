@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.bdd.common.components;
 
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 
-public class BddInMemoryPersistenceMechanismInstaller extends
-        InMemoryPersistenceMechanismInstaller {
+public class BddInMemoryPersistenceMechanismInstaller extends InMemoryPersistenceMechanismInstaller {
 
-    public BddInMemoryPersistenceMechanismInstaller() {}
+    public BddInMemoryPersistenceMechanismInstaller() {
+    }
 
     // ///////////////////////////////////////////////////////////////
     // Name
@@ -41,10 +41,8 @@ public class BddInMemoryPersistenceMechanismInstaller extends
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public PersistenceSessionFactory createPersistenceSessionFactory(
-            final DeploymentType deploymentType) {
-        return new BddInMemoryPersistenceSessionFactory(deploymentType,
-                this);
+    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
+        return new BddInMemoryPersistenceSessionFactory(deploymentType, this);
     }
 
 }

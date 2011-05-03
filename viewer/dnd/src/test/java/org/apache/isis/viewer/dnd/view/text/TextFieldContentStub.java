@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
-import org.apache.isis.viewer.dnd.view.text.TextContent;
 
 public class TextFieldContentStub extends TextContent {
 
@@ -29,7 +27,8 @@ public class TextFieldContentStub extends TextContent {
     }
 
     @Override
-    public void alignDisplay(final int line) {}
+    public void alignDisplay(final int line) {
+    }
 
     @Override
     public int getNoLinesOfContent() {

@@ -17,34 +17,41 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.content;
 
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 
-
 public abstract class AbstractContent implements Content {
-    public void contentMenuOptions(final UserActionSet options) {}
+    @Override
+    public void contentMenuOptions(final UserActionSet options) {
+    }
 
+    @Override
     public boolean isCollection() {
         return false;
     }
 
+    @Override
     public boolean isObject() {
         return false;
     }
 
+    @Override
     public boolean isPersistable() {
         return false;
     }
 
+    @Override
     public boolean isTextParseable() {
         return false;
     }
 
-    public void viewMenuOptions(final UserActionSet options) {}
+    @Override
+    public void viewMenuOptions(final UserActionSet options) {
+    }
 
+    @Override
     public String windowTitle() {
         return "";
     }

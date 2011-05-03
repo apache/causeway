@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import java.awt.Dimension;
 import java.util.StringTokenizer;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
@@ -98,10 +95,10 @@ import org.apache.isis.viewer.dnd.viewer.basic.DragContentSpecification;
 import org.apache.isis.viewer.dnd.viewer.basic.InnerWorkspaceSpecification;
 import org.apache.isis.viewer.dnd.viewer.basic.RootWorkspaceSpecification;
 import org.apache.isis.viewer.dnd.viewer.basic.WrappedTextFieldSpecification;
-
+import org.apache.log4j.Logger;
 
 public class DndViewer extends IsisViewerAbstract {
-    
+
     private static final Logger LOG = Logger.getLogger(DndViewer.class);
     private static final String SPECIFICATION_BASE = Properties.PROPERTY_BASE + "specification.";
     private ViewUpdateNotifier updateNotifier;
@@ -112,7 +109,6 @@ public class DndViewer extends IsisViewerAbstract {
     private HelpViewer helpViewer;
     private boolean acceptingLogIns = true;
 
-
     // ////////////////////////////////////
     // shutdown
     // ////////////////////////////////////
@@ -121,7 +117,6 @@ public class DndViewer extends IsisViewerAbstract {
     public void shutdown() {
         System.exit(0);
     }
-
 
     private Bounds calculateInitialWindowSize(final Dimension screenSize) {
         int maxWidth = screenSize.width;
@@ -137,12 +132,13 @@ public class DndViewer extends IsisViewerAbstract {
         final int x = 40;
         final int y = 40;
 
-        Size defaultWindowSize = new Size(width, height);
+        final Size defaultWindowSize = new Size(width, height);
         defaultWindowSize.limitWidth(800);
         defaultWindowSize.limitHeight(600);
-        
+
         final Size size = Properties.getSize(Properties.PROPERTY_BASE + "initial.size", defaultWindowSize);
-        final Location location = Properties.getLocation(Properties.PROPERTY_BASE + "initial.location", new Location(x, y));
+        final Location location =
+            Properties.getLocation(Properties.PROPERTY_BASE + "initial.location", new Location(x, y));
         return new Bounds(location, size);
     }
 
@@ -165,15 +161,15 @@ public class DndViewer extends IsisViewerAbstract {
         viewer.close();
         notify();
     }
-    
+
     private void saveDesktop() {
-    	if (!IsisContext.inSession()) {
-    		// can't do anything
-    		return;
-    	} 
-    	viewer.saveOpenObjects();
+        if (!IsisContext.inSession()) {
+            // can't do anything
+            return;
+        }
+        viewer.saveOpenObjects();
     }
-    
+
     protected void quit() {
         LOG.info("user quit");
         saveDesktop();
@@ -183,16 +179,18 @@ public class DndViewer extends IsisViewerAbstract {
 
     @Override
     public synchronized void init() {
-    	super.init();
-    	
+        super.init();
+
         new AwtImageFactory(IsisContext.getTemplateImageLoader());
         new AwtToolkit();
 
         setShutdownListener(new ShutdownListener() {
+            @Override
             public void logOut() {
                 DndViewer.this.logOut();
             }
 
+            @Override
             public void quit() {
                 DndViewer.this.quit();
             }
@@ -212,7 +210,8 @@ public class DndViewer extends IsisViewerAbstract {
                 openViewer();
                 try {
                     wait();
-                } catch (final InterruptedException e) {}
+                } catch (final InterruptedException e) {
+                }
             } else {
                 quit();
             }
@@ -223,21 +222,20 @@ public class DndViewer extends IsisViewerAbstract {
     // login
     // ////////////////////////////////////
 
-    
-	// TODO: nasty
+    // TODO: nasty
     private boolean loggedInUsingLogonFixture = false;
-    
+
     /**
-     * TODO: there is similar code in <tt>AuthenticationSessionLookupStrategyDefault</tt>;
-     * should try to combine somehow... 
+     * TODO: there is similar code in <tt>AuthenticationSessionLookupStrategyDefault</tt>; should try to combine
+     * somehow...
      */
     private boolean login() {
-        AuthenticationRequest request = determineRequestIfPossible();
+        final AuthenticationRequest request = determineRequestIfPossible();
 
         // we may have enough to get a session
         AuthenticationSession session = getAuthenticationManager().authenticate(request);
         clearAuthenticationRequestViaArgs();
-        
+
         if (session == null) {
             session = loginDialogPrompt(request);
         }
@@ -249,8 +247,7 @@ public class DndViewer extends IsisViewerAbstract {
         }
     }
 
-
-    private AuthenticationSession loginDialogPrompt(AuthenticationRequest request) {
+    private AuthenticationSession loginDialogPrompt(final AuthenticationRequest request) {
         AuthenticationSession session;
         final LoginDialog dialog = new LoginDialog(getAuthenticationManager());
         if (request != null) {
@@ -265,24 +262,24 @@ public class DndViewer extends IsisViewerAbstract {
         return session;
     }
 
-	private AuthenticationRequest determineRequestIfPossible() {
-		AuthenticationRequest request;
-		// command line args
+    private AuthenticationRequest determineRequestIfPossible() {
+        AuthenticationRequest request;
+        // command line args
         request = getAuthenticationRequestViaArgs();
-        
+
         // exploration
         if (request == null && getDeploymentType().isExploring()) {
-        	request = new AuthenticationRequestExploration(getLogonFixture());
+            request = new AuthenticationRequestExploration(getLogonFixture());
         }
-        
+
         // logon fixture provided
-		if (request == null && getLogonFixture() != null && !loggedInUsingLogonFixture) {
-			loggedInUsingLogonFixture = true;
-			request = new AuthenticationRequestLogonFixture(getLogonFixture());
-		}
-		return request;
-	}
-	
+        if (request == null && getLogonFixture() != null && !loggedInUsingLogonFixture) {
+            loggedInUsingLogonFixture = true;
+            request = new AuthenticationRequestLogonFixture(getLogonFixture());
+        }
+        return request;
+    }
+
     private void openViewer() {
         frame = new ViewerFrame();
 
@@ -311,7 +308,7 @@ public class DndViewer extends IsisViewerAbstract {
         if (currentSession == null) {
             throw new NullPointerException("No session for " + this);
         }
-        
+
         setupViewFactory();
 
         final UserProfile userProfiler = IsisContext.getUserProfile();
@@ -395,31 +392,29 @@ public class DndViewer extends IsisViewerAbstract {
             viewFactory.addSpecification(new InternalListSpecification());
             viewFactory.addSpecification(new SimpleListSpecification());
             viewFactory.addSpecification(new GridSpecification());
-            // TBA             viewFactory.addSpecification(new ListWithExpandableElementsSpecification());
+            // TBA viewFactory.addSpecification(new ListWithExpandableElementsSpecification());
             // TBA
             viewFactory.addSpecification(new CalendarSpecification());
             viewFactory.addSpecification(new ListWithDetailSpecification());
             viewFactory.addSpecification(new HistogramSpecification());
-              
+
             viewFactory.addSpecification(new TreeWithDetailSpecification());
             viewFactory.addSpecification(new FormSpecification());
             viewFactory.addSpecification(new FormWithTableSpecification());
             viewFactory.addSpecification(new WindowTableSpecification());
-            // TBA 
+            // TBA
             viewFactory.addSpecification(new ExpandableFormSpecification());
             viewFactory.addSpecification(new InternalFormSpecification());
             viewFactory.addSpecification(new TwoPartViewSpecification());
-            // TBA 
+            // TBA
             viewFactory.addSpecification(new FormWithDetailSpecification());
-            
+
             viewFactory.addSpecification(new SummaryFormSpecification());
-            
-            
-            
+
             viewFactory.addSpecification(new TreeSpecification());
-            // TODO allow window form to be used for objects with limited number of collections 
+            // TODO allow window form to be used for objects with limited number of collections
             // viewFactory.addSpecification(new TreeWithDetailSpecification(0, 3));
-            
+
             viewFactory.addDesignSpecification(new GridListSpecification());
             viewFactory.addDesignSpecification(new ConfigurableObjectViewSpecification());
             viewFactory.addDesignSpecification(new PanelViewSpecification());
@@ -429,9 +424,6 @@ public class DndViewer extends IsisViewerAbstract {
         viewFactory.addSpecification(new MessageDialogSpecification());
         viewFactory.addSpecification(new DetailedMessageViewSpecification());
 
-        
-
-        
         viewFactory.addEmptyFieldSpecification(loadSpecification("field.empty", EmptyField.Specification.class));
 
         viewFactory.addSpecification(loadSpecification("icon.object", RootIconSpecification.class));
@@ -443,7 +435,7 @@ public class DndViewer extends IsisViewerAbstract {
         viewFactory.setDragContentSpecification(loadSpecification("drag-content", DragContentSpecification.class));
 
         // TODO remove or move to better position
-        ViewSpecification[] specifications = CollectionTreeNodeSpecification.create();
+        final ViewSpecification[] specifications = CollectionTreeNodeSpecification.create();
         viewFactory.addSpecification(specifications[0]);
         viewFactory.addSpecification(specifications[1]);
         viewFactory.addSpecification(new TreeNodeSpecification());
@@ -453,7 +445,6 @@ public class DndViewer extends IsisViewerAbstract {
         viewFactory.loadUserViewSpecifications();
     }
 
-
     private void installSpecsFromConfiguration(final SkylarkViewFactory viewFactory) {
         final String viewParams = IsisContext.getConfiguration().getString(SPECIFICATION_BASE + "view");
         if (viewParams != null) {
@@ -461,7 +452,7 @@ public class DndViewer extends IsisViewerAbstract {
             while (st.hasMoreTokens()) {
                 final String specName = st.nextToken().trim();
                 if (specName != null && !specName.trim().equals("")) {
-                   viewFactory.addSpecification(specName);
+                    viewFactory.addSpecification(specName);
                 }
             }
         }

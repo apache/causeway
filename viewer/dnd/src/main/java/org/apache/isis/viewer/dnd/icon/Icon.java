@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.icon;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,7 +33,6 @@ import org.apache.isis.viewer.dnd.view.base.IconGraphic;
 import org.apache.isis.viewer.dnd.view.base.ObjectView;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
-
 
 public class Icon extends ObjectView {
     private IconGraphic icon;
@@ -65,11 +63,11 @@ public class Icon extends ObjectView {
             x += View.HPADDING;
             y = icon.getBaseline();
         }
-        int maxWidth = getSize().getWidth() - x;
+        final int maxWidth = getSize().getWidth() - x;
         title.draw(canvas, x, y, maxWidth);
-        
+
         if (getState().isActive()) {
-            Image busyImage = ImageFactory.getInstance().loadIcon("busy", 16, null);
+            final Image busyImage = ImageFactory.getInstance().loadIcon("busy", 16, null);
             canvas.drawImage(busyImage, icon.getSize().getWidth() - 16 - 4, 4);
         }
 
@@ -77,7 +75,7 @@ public class Icon extends ObjectView {
 
     private void ensureHasIcon() {
         if (icon == null) {
-          //  icon = selectedGraphic;
+            // icon = selectedGraphic;
         }
     }
 
@@ -102,9 +100,9 @@ public class Icon extends ObjectView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         if (icon == null) {
-         //   icon = unselectedGraphic;
+            // icon = unselectedGraphic;
         }
 
         final Size size = icon.getSize();
@@ -125,7 +123,7 @@ public class Icon extends ObjectView {
     public void setSelectedGraphic(final IconGraphic selectedGraphic) {
         this.selectedGraphic = selectedGraphic;
         if (unselectedGraphic == null) {
-            unselectedGraphic = selectedGraphic;    
+            unselectedGraphic = selectedGraphic;
             icon = selectedGraphic;
         }
     }
@@ -138,8 +136,8 @@ public class Icon extends ObjectView {
     }
 
     /**
-     * Set up the graphic to be used when displaying the icon and the icon is unselected. If this returns null
-     * the graphic will not be changed when the icon becomes unselected.
+     * Set up the graphic to be used when displaying the icon and the icon is unselected. If this returns null the
+     * graphic will not be changed when the icon becomes unselected.
      */
     public void setUnselectedGraphic(final IconGraphic unselectedGraphic) {
         this.unselectedGraphic = unselectedGraphic;

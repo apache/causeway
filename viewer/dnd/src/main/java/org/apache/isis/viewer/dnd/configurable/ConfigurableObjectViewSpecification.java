@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -38,25 +37,25 @@ public class ConfigurableObjectViewSpecification extends CompositeViewSpecificat
         builder = new ObjectFieldBuilder(new StandardFields());
         addSubviewDecorator(new FieldLabelsDecorator());
         addSubviewDecorator(new ConfigurableFieldBorder.Factory());
-        addViewDecorator(new  GridLayoutControlBorder.Factory());
+        addViewDecorator(new GridLayoutControlBorder.Factory());
         addViewDecorator(new IconBorder.Factory());
     }
-    
-    public boolean canDisplay(ViewRequirement requirement) {
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isObject() && requirement.isOpen() && requirement.isExpandable() && requirement.isDesign();
     }
 
+    @Override
     public String getName() {
         return "Configurable (experimental)";
     }
+
     /*
-    protected View decorateView(View view) {
-        return new IconBorder(view);
-    }
-*/
-    public Layout createLayout(Content content, Axes axes) {
+     * protected View decorateView(View view) { return new IconBorder(view); }
+     */
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new GridLayout();
     }
 }
-
-

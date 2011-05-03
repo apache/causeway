@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.bdd.common;
 
-
 /**
  * Simply holds the text.
  * 
@@ -27,7 +26,7 @@ public class ScenarioCellDefault implements ScenarioCell {
 
     private String source;
 
-    public ScenarioCellDefault(String source) {
+    public ScenarioCellDefault(final String source) {
         this.source = source;
     }
 
@@ -37,7 +36,7 @@ public class ScenarioCellDefault implements ScenarioCell {
     }
 
     @Override
-    public void setText(String str) {
+    public void setText(final String str) {
         this.source = str;
     }
 

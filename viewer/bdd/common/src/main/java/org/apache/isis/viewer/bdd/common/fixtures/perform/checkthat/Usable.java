@@ -25,20 +25,19 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 
 public class Usable extends ThatSubcommandAbstract {
 
-	public Usable() {
-		super("is usable", "is enabled", "is not disabled");
-	}
+    public Usable() {
+        super("is usable", "is enabled", "is not disabled");
+    }
 
-	public ObjectAdapter that(final PerformContext performContext)
-			throws ScenarioBoundValueException {
+    @Override
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-		if (!performContext.usableMemberConsent().isAllowed()) {
-			CellBinding onMemberBinding = performContext.getPeer()
-					.getOnMemberBinding();
-			throw ScenarioBoundValueException.current(onMemberBinding, "(disabled)");
-		}
+        if (!performContext.usableMemberConsent().isAllowed()) {
+            final CellBinding onMemberBinding = performContext.getPeer().getOnMemberBinding();
+            throw ScenarioBoundValueException.current(onMemberBinding, "(disabled)");
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import java.util.Enumeration;
@@ -39,18 +38,18 @@ import org.apache.isis.viewer.dnd.view.base.UserViewSpecification;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class ConfigurableCompositeViewBorder extends AbstractBorder {
 
     public static class Factory implements CompositeViewDecorator {
         private final ElementFactory elementSpecification;
 
-        public Factory(ElementFactory elementSpecification) {
+        public Factory(final ElementFactory elementSpecification) {
             this.elementSpecification = elementSpecification;
         }
 
-        public View decorate(View view, Axes axes) {
-            ConfigurationAxis axis = new ConfigurationAxis();
+        @Override
+        public View decorate(final View view, final Axes axes) {
+            final ConfigurationAxis axis = new ConfigurationAxis();
             // TODO load previously saved settings for the type of elements
             // axis.loadSettings(view.getContent());
             axes.add(axis);
@@ -60,33 +59,37 @@ public class ConfigurableCompositeViewBorder extends AbstractBorder {
 
     private ViewSpecification elementSpecification;
 
-    protected ConfigurableCompositeViewBorder(View view, ElementFactory elementFactory) {
+    protected ConfigurableCompositeViewBorder(final View view, final ElementFactory elementFactory) {
         super(view);
     }
 
-    public void loadOptions(Options viewOptions) {
+    @Override
+    public void loadOptions(final Options viewOptions) {
         super.loadOptions(viewOptions);
-        String elementsClass = viewOptions.getString("elements");
-        if (elementsClass != null ) {
-                ViewSpecification specification;
-                if (elementsClass.startsWith("user:")) {
-                    String name = elementsClass.substring("user:".length());
-                    String wrappedSpecificationClass = Properties.getUserViewSpecificationOptions(name).getString("wrapped-specification");
-                    ViewSpecification wrappedSpectification = (ViewSpecification) InstanceUtil.createInstance(wrappedSpecificationClass);
-                    specification = new UserViewSpecification(wrappedSpectification, name);
-                } else {
-                    specification = (ViewSpecification) InstanceUtil.createInstance(elementsClass);
-                }
-                if (specification != null) {
-                    getViewAxes().getAxis(ConfigurationAxis.class).setElementSpecification(specification);
-                }
+        final String elementsClass = viewOptions.getString("elements");
+        if (elementsClass != null) {
+            ViewSpecification specification;
+            if (elementsClass.startsWith("user:")) {
+                final String name = elementsClass.substring("user:".length());
+                final String wrappedSpecificationClass =
+                    Properties.getUserViewSpecificationOptions(name).getString("wrapped-specification");
+                final ViewSpecification wrappedSpectification =
+                    (ViewSpecification) InstanceUtil.createInstance(wrappedSpecificationClass);
+                specification = new UserViewSpecification(wrappedSpectification, name);
+            } else {
+                specification = (ViewSpecification) InstanceUtil.createInstance(elementsClass);
+            }
+            if (specification != null) {
+                getViewAxes().getAxis(ConfigurationAxis.class).setElementSpecification(specification);
+            }
         }
     }
-    
-    public void saveOptions(Options viewOptions) {
+
+    @Override
+    public void saveOptions(final Options viewOptions) {
         super.saveOptions(viewOptions);
         if (elementSpecification != null) {
-            boolean isUserSpecification = elementSpecification instanceof UserViewSpecification;
+            final boolean isUserSpecification = elementSpecification instanceof UserViewSpecification;
             String name;
             if (isUserSpecification) {
                 name = "user:" + elementSpecification.getName();
@@ -96,42 +99,43 @@ public class ConfigurableCompositeViewBorder extends AbstractBorder {
             viewOptions.addOption("elements", name);
         }
     }
-    
-    
-    public void viewMenuOptions(UserActionSet menuOptions) {
+
+    @Override
+    public void viewMenuOptions(final UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
-        UserActionSet subOptions = menuOptions.addNewActionSet("Elements as");
-        View firstSubview = getSubviews()[0];
-        int status = ViewRequirement.OPEN | ViewRequirement.CLOSED | ViewRequirement.SUBVIEW | ViewRequirement.FIXED;
-        ViewRequirement viewRequirement = new ViewRequirement(firstSubview.getContent(), status);
-        Enumeration<ViewSpecification> possibleViews = Toolkit.getViewFactory().availableViews(viewRequirement);
+        final UserActionSet subOptions = menuOptions.addNewActionSet("Elements as");
+        final View firstSubview = getSubviews()[0];
+        final int status =
+            ViewRequirement.OPEN | ViewRequirement.CLOSED | ViewRequirement.SUBVIEW | ViewRequirement.FIXED;
+        final ViewRequirement viewRequirement = new ViewRequirement(firstSubview.getContent(), status);
+        final Enumeration<ViewSpecification> possibleViews = Toolkit.getViewFactory().availableViews(viewRequirement);
         while (possibleViews.hasMoreElements()) {
             addElementAsOption(subOptions, possibleViews.nextElement());
         }
     }
 
-    private void addElementAsOption(UserActionSet subOptions, final ViewSpecification specification) {
+    private void addElementAsOption(final UserActionSet subOptions, final ViewSpecification specification) {
         if (specification != elementSpecification) {
             subOptions.add(new UserActionAbstract(specification.getName()) {
-                public void execute(Workspace workspace, View view, Location at) {
+                @Override
+                public void execute(final Workspace workspace, final View view, final Location at) {
                     replaceElementViews(specification, view);
                 }
             });
         }
     }
 
-    private void replaceElementViews(final ViewSpecification specification, View view) {
+    private void replaceElementViews(final ViewSpecification specification, final View view) {
         elementSpecification = specification;
         removeAllSubviews(view);
         getViewAxes().getAxis(ConfigurationAxis.class).setElementSpecification(specification);
         invalidateContent();
     }
 
-    private void removeAllSubviews(View view) {
+    private void removeAllSubviews(final View view) {
         final View[] subviews = view.getSubviews();
-        for (int i = 0; i < subviews.length; i++) {
-            view.removeView(subviews[i]);
+        for (final View subview : subviews) {
+            view.removeView(subview);
         }
     }
 }
-

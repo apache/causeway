@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.help;
 
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -35,7 +34,6 @@ import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.window.SubviewFocusManager;
 
-
 public class AboutView extends AbstractView {
     private static final int MAX_WIDTH = 300;
     private final int linePadding = -2;
@@ -43,7 +41,7 @@ public class AboutView extends AbstractView {
     private final int margin = 14;
     private final Image image;
     private final int left;
-    private FocusManager focusManager;
+    private final FocusManager focusManager;
 
     public AboutView() {
         super(new NullContent());
@@ -54,6 +52,7 @@ public class AboutView extends AbstractView {
         focusManager = new SubviewFocusManager(this);
     }
 
+    @Override
     public FocusManager getFocusManager() {
         return focusManager;
     }
@@ -115,7 +114,7 @@ public class AboutView extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Text titleStyle = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
         final Text normalStyle = Toolkit.getText(ColorsAndFonts.TEXT_LABEL);
 
@@ -167,6 +166,6 @@ public class AboutView extends AbstractView {
 
     @Override
     public void firstClick(final Click click) {
-    // dispose();
+        // dispose();
     }
 }

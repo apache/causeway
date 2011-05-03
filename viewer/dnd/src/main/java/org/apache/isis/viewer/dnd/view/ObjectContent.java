@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-
 
 public interface ObjectContent extends Content {
 
@@ -37,4 +35,3 @@ public interface ObjectContent extends Content {
     void setObject(final ObjectAdapter object);
 
 }
-

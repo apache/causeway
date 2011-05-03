@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import java.awt.event.KeyEvent;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.view.KeyboardAction;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.control.Button;
-
 
 public class ButtonBorder extends AbstractBorder {
     private static final int BUTTON_SPACING = 5;
@@ -58,10 +56,10 @@ public class ButtonBorder extends AbstractBorder {
     @Override
     public void draw(final Canvas canvas) {
         // draw buttons
-        for (int i = 0; i < buttons.length; i++) {
-            final Canvas buttonCanvas = canvas.createSubcanvas(buttons[i].getBounds());
-            buttons[i].draw(buttonCanvas);
-            final int buttonWidth = buttons[i].getSize().getWidth();
+        for (final View button : buttons) {
+            final Canvas buttonCanvas = canvas.createSubcanvas(button.getBounds());
+            button.draw(buttonCanvas);
+            final int buttonWidth = button.getSize().getWidth();
             buttonCanvas.offset(BUTTON_SPACING + buttonWidth, 0);
         }
 
@@ -93,8 +91,7 @@ public class ButtonBorder extends AbstractBorder {
 
     @Override
     public View identify(final Location location) {
-        for (int i = 0; i < buttons.length; i++) {
-            final View button = buttons[i];
+        for (final View button : buttons) {
             if (button.getBounds().contains(location)) {
                 return button;
             }
@@ -152,8 +149,7 @@ public class ButtonBorder extends AbstractBorder {
      * Finds the action button under the pointer; returning null if none.
      */
     private View overButton(final Location location) {
-        for (int i = 0; i < buttons.length; i++) {
-            final View button = buttons[i];
+        for (final View button : buttons) {
             if (button.getBounds().contains(location)) {
                 return button;
             }

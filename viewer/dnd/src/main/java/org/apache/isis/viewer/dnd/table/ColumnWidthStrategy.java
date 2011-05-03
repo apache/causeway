@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-
 
 public interface ColumnWidthStrategy {
     int getMinimumWidth(int i, ObjectAssociation specification);

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.grid;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -39,23 +38,26 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 
-
 public class GridSpecification extends CompositeViewSpecification {
 
     public GridSpecification() {
         builder = new CollectionElementBuilder(new AbstractFormSpecification() {
+            @Override
             public String getName() {
                 return "";
             }
 
+            @Override
             protected void init() {
                 super.init();
                 addSubviewDecorator(new SubviewDecorator() {
-                    public ViewAxis createAxis(Content content) {
+                    @Override
+                    public ViewAxis createAxis(final Content content) {
                         return null;
                     }
 
-                    public View decorate(Axes axes, View view) {
+                    @Override
+                    public View decorate(final Axes axes, final View view) {
                         return new EmptyBorder(0, 0, 5, 0, view);
                     }
                 });
@@ -65,15 +67,18 @@ public class GridSpecification extends CompositeViewSpecification {
         addViewDecorator(new ColumnLabelBorder.Factory());
     }
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new ColumnLayout(true);
     }
 
+    @Override
     public String getName() {
         return "Grid (experimental)";
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isCollection() && requirement.isOpen();
     }
 }
@@ -81,28 +86,29 @@ public class GridSpecification extends CompositeViewSpecification {
 class ColumnLabelBorder extends AbstractBorder {
 
     public static class Factory implements CompositeViewDecorator {
-        public View decorate(View view, Axes axes) {
+        @Override
+        public View decorate(final View view, final Axes axes) {
             return new ColumnLabelBorder(view);
         }
     }
 
-    protected ColumnLabelBorder(View view) {
+    protected ColumnLabelBorder(final View view) {
         super(view);
         left = 100;
     }
 
-    public void draw(Canvas canvas) {
-        View subview = getSubviews()[0];
+    @Override
+    public void draw(final Canvas canvas) {
+        final View subview = getSubviews()[0];
 
-        int top = subview.getPadding().getTop();
-        for (View view : subview.getSubviews()) {
-            String fieldName = ((FieldContent) view.getContent()).getFieldName();
-            canvas.drawText(fieldName + ":", 0, view.getLocation().getY() + top + view.getBaseline(), Toolkit
-                    .getColor(ColorsAndFonts.COLOR_PRIMARY1), Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
+        final int top = subview.getPadding().getTop();
+        for (final View view : subview.getSubviews()) {
+            final String fieldName = ((FieldContent) view.getContent()).getFieldName();
+            canvas.drawText(fieldName + ":", 0, view.getLocation().getY() + top + view.getBaseline(),
+                Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
             // canvas.drawRectangle(0, view.getLocation().getY() + top, 80, 10, Toolkit.getColor("primary1"));
         }
 
         super.draw(canvas);
     }
 }
-

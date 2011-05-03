@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.field;
 
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
@@ -26,4 +25,3 @@ import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 public interface TextParseableField extends TextParseableContent, FieldContent {
 
 }
-

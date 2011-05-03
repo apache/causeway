@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.dnd.view.ContentDrag;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Viewer;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class ContentDragImpl extends DragImpl implements ContentDrag {
     private final View dragView;
@@ -39,9 +37,9 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
     private final View source;
 
     /**
-     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it.
-     * The view returned by the pickup method becomes this event overlay view, which is moved continuously so
-     * that it tracks the pointer,
+     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it. The view
+     * returned by the pickup method becomes this event overlay view, which is moved continuously so that it tracks the
+     * pointer,
      * 
      * @param source
      *            the view over which the pointer was when this event started
@@ -117,6 +115,7 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
         return dragView;
     }
 
+    @Override
     public View getSource() {
         return source;
     }
@@ -124,10 +123,12 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
     /**
      * Returns the Content object from the source view.
      */
+    @Override
     public Content getSourceContent() {
         return sourceContent;
     }
 
+    @Override
     public Location getTargetLocation() {
         final Location location = new Location(this.location);
         location.subtract(target.getAbsoluteLocation());
@@ -137,6 +138,7 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
         return location;
     }
 
+    @Override
     public Location getOffset() {
         return offset;
     }
@@ -144,6 +146,7 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
     /**
      * Returns the current target view.
      */
+    @Override
     public View getTargetView() {
         return target;
     }
@@ -153,6 +156,7 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
         return "ContentDrag [" + super.toString() + "]";
     }
 
-    public void subtract(final int left, final int top) {}
+    @Override
+    public void subtract(final int left, final int top) {
+    }
 }
-

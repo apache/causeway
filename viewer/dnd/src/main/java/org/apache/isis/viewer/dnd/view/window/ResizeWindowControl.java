@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -29,35 +28,41 @@ import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
-
 public class ResizeWindowControl extends WindowControl {
     private static ResizeWindowRender render;
-    
-    public static void setRender(ResizeWindowRender render) {
+
+    public static void setRender(final ResizeWindowRender render) {
         ResizeWindowControl.render = render;
     }
-    
+
     public ResizeWindowControl(final View target) {
         super(new UserAction() {
 
+            @Override
             public Consent disabled(final View view) {
                 return Veto.DEFAULT;
             }
 
-            public void execute(final Workspace workspace, final View view, final Location at) {}
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
+            }
 
+            @Override
             public String getDescription(final View view) {
                 return "";
             }
 
+            @Override
             public String getHelp(final View view) {
                 return "";
             }
 
+            @Override
             public ActionType getType() {
                 return ActionType.USER;
             }
 
+            @Override
             public String getName(final View view) {
                 return "Resize";
             }
@@ -67,6 +72,6 @@ public class ResizeWindowControl extends WindowControl {
 
     @Override
     public void draw(final Canvas canvas) {
-       render.draw(canvas, WIDTH, HEIGHT, action.disabled(this).isVetoed(), isOver(), isPressed());
+        render.draw(canvas, WIDTH, HEIGHT, action.disabled(this).isVetoed(), isOver(), isPressed());
     }
 }

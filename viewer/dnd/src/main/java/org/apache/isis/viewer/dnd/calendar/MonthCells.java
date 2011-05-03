@@ -17,43 +17,46 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import java.util.Calendar;
 
-
 public class MonthCells extends Cells {
 
-    public MonthCells(Cells replacing) {
+    public MonthCells(final Cells replacing) {
         super(replacing);
     }
 
+    @Override
     public int defaultColumns() {
         return 4;
     }
 
+    @Override
     public int defaultRows() {
         return 3;
     }
 
+    @Override
     public void roundDown() {
         date.set(Calendar.MONTH, 0);
     }
 
-    public void add(int interval) {
+    @Override
+    public void add(final int interval) {
         date.add(Calendar.MONTH, interval);
     }
 
-    public String title(int cell) {
-        Calendar d = (Calendar) date.clone();
+    @Override
+    public String title(final int cell) {
+        final Calendar d = (Calendar) date.clone();
         d.add(Calendar.MONTH, cell);
-        String displayName = monthFormat.format(d.getTime()) + " " + d.get(Calendar.YEAR);
+        final String displayName = monthFormat.format(d.getTime()) + " " + d.get(Calendar.YEAR);
         return displayName;
     }
 
-    protected int period(Calendar forDate) {
+    @Override
+    protected int period(final Calendar forDate) {
         return forDate.get(Calendar.YEAR) * 12 - forDate.get(Calendar.MONTH);
     }
 }
-

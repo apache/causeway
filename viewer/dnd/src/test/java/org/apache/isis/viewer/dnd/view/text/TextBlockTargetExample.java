@@ -17,65 +17,74 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import org.apache.isis.viewer.dnd.drawing.Text;
-import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
-
 
 final class TextBlockTargetExample implements TextBlockTarget {
+    @Override
     public int getMaxFieldWidth() {
         return 200;
     }
 
+    @Override
     public Text getText() {
         return new Text() {
 
+            @Override
             public int charWidth(final char ch) {
                 return 10;
             }
 
+            @Override
             public int stringHeight(final String text, final int width) {
                 return 0;
             }
 
+            @Override
             public int stringWidth(final String string) {
                 return 40;
             }
 
+            @Override
             public int stringWidth(final String message, final int maxWidth) {
                 return 0;
             }
 
+            @Override
             public int getAscent() {
                 return 10;
             }
 
+            @Override
             public int getLineHeight() {
                 return 15;
             }
 
+            @Override
             public int getMidPoint() {
                 return 7;
             }
 
+            @Override
             public int getDescent() {
                 return 0;
             }
 
+            @Override
             public int getTextHeight() {
                 return 15;
             }
 
+            @Override
             public int getLineSpacing() {
                 return 0;
             }
 
+            @Override
             public String getName() {
                 return null;
             }
         };
     }
 }
-

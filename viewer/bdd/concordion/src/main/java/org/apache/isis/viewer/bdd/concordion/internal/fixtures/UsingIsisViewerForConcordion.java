@@ -37,127 +37,107 @@ import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 
 import com.google.common.collect.Lists;
 
-public class UsingIsisViewerForConcordion extends
-		AbstractFixture<UsingIsisViewerPeer> {
+public class UsingIsisViewerForConcordion extends AbstractFixture<UsingIsisViewerPeer> {
 
+    public UsingIsisViewerForConcordion(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType,
+        final DateParser dateParser, final Perform.Mode mode) {
+        this(aliasesRegistry, deploymentType, dateParser, mode, CellBindingDefault
+            .builder(IsisViewerConstants.ON_OBJECT_NAME, IsisViewerConstants.ON_OBJECT_HEAD_SET).ditto().build(),
+            CellBindingDefault
+                .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).optional()
+                .build(), CellBindingDefault
+                .builder(IsisViewerConstants.PERFORM_NAME, IsisViewerConstants.PERFORM_HEAD_SET).ditto().build(),
+            CellBindingDefault.builder(IsisViewerConstants.ON_MEMBER_NAME, IsisViewerConstants.ON_MEMBER_HEAD_SET)
+                .optional().build(), CellBindingDefault
+                .builder(IsisViewerConstants.THAT_IT_NAME, IsisViewerConstants.THAT_IT_HEAD_SET).ditto().optional()
+                .build(), CellBindingDefault
+                .builder(IsisViewerConstants.WITH_ARGUMENTS_NAME, IsisViewerConstants.WITH_ARGUMENTS_HEAD_SET)
+                .optional().build());
+    }
 
-	public UsingIsisViewerForConcordion(
-			final AliasRegistry aliasesRegistry,
-			final DeploymentType deploymentType,
-			final DateParser dateParser, final Perform.Mode mode) {
-		this(aliasesRegistry, deploymentType, dateParser, mode, 
-				CellBindingDefault.builder(
-				        IsisViewerConstants.ON_OBJECT_NAME, IsisViewerConstants.ON_OBJECT_HEAD_SET)
-						.ditto().build(),
-				CellBindingDefault.builder(
-				        IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET)
-						.optional().build(), 
-				CellBindingDefault.builder(
-				        IsisViewerConstants.PERFORM_NAME, IsisViewerConstants.PERFORM_HEAD_SET)
-						.ditto().build(), 
-				CellBindingDefault.builder(
-				        IsisViewerConstants.ON_MEMBER_NAME, IsisViewerConstants.ON_MEMBER_HEAD_SET)
-						.optional().build(),
-				CellBindingDefault.builder(
-						IsisViewerConstants.THAT_IT_NAME, IsisViewerConstants.THAT_IT_HEAD_SET)
-						.ditto().optional().build(), 
-				CellBindingDefault.builder(
-				        IsisViewerConstants.WITH_ARGUMENTS_NAME, IsisViewerConstants.WITH_ARGUMENTS_HEAD_SET)
-						.optional().build());
-	}
+    private UsingIsisViewerForConcordion(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType,
+        final DateParser dateParser, final Perform.Mode mode, final CellBinding onObjectBinding,
+        final CellBinding aliasResultAsBinding, final CellBinding performBinding, final CellBinding onMemberBinding,
+        final CellBinding thatItBinding, final CellBinding arg0Binding) {
+        super(new UsingIsisViewerPeer(aliasesRegistry, deploymentType, dateParser, mode, onObjectBinding,
+            aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding, arg0Binding));
+    }
 
-	private UsingIsisViewerForConcordion(
-			final AliasRegistry aliasesRegistry,
-			final DeploymentType deploymentType,
-			final DateParser dateParser, 
-			final Perform.Mode mode,
-			final CellBinding onObjectBinding,
-			final CellBinding aliasResultAsBinding,
-			final CellBinding performBinding,
-			final CellBinding onMemberBinding, final CellBinding thatItBinding,
-			final CellBinding arg0Binding) {
-		super(new UsingIsisViewerPeer(aliasesRegistry, deploymentType, dateParser, mode,
-				onObjectBinding, aliasResultAsBinding, performBinding,
-				onMemberBinding, thatItBinding, arg0Binding));
-	}
+    public String executeHeader(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0, final String... remainingArgs) {
 
-	public String executeHeader(String onObject, String aliasResultAs,
-			String perform, String usingMember, String thatIt, String arg0, String... remainingArgs) {
+        return setupHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0);
+    }
 
-		return setupHeader(onObject, aliasResultAs, perform, usingMember,
-				thatIt, arg0);
-	}
+    private String setupHeader(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0) {
+        int colNum = 0;
+        getPeer().getOnObjectBinding().setHeadColumn(colNum++);
+        getPeer().getAliasResultAsBinding().setHeadColumn(colNum++);
+        getPeer().getPerformBinding().setHeadColumn(colNum++);
+        getPeer().getOnMemberBinding().setHeadColumn(colNum++);
+        if (thatIt != null) {
+            getPeer().getThatItBinding().setHeadColumn(colNum++);
+        }
+        if (arg0 != null) {
+            getPeer().getArg0Binding().setHeadColumn(colNum++);
+        }
 
-	private String setupHeader(String onObject, String aliasResultAs,
-			String perform, String usingMember, String thatIt, String arg0) {
-		int colNum = 0;
-		getPeer().getOnObjectBinding().setHeadColumn(colNum++);
-		getPeer().getAliasResultAsBinding().setHeadColumn(colNum++);
-		getPeer().getPerformBinding().setHeadColumn(colNum++);
-		getPeer().getOnMemberBinding().setHeadColumn(colNum++);
-		if (thatIt != null) {
-			getPeer().getThatItBinding().setHeadColumn(colNum++);
-		}
-		if (arg0 != null) {
-			getPeer().getArg0Binding().setHeadColumn(colNum++);
-		}
-		
-		return ""; // ok
-	}
+        return ""; // ok
+    }
 
-	public String executeRow(String onObject, String aliasResultAs,
-			String perform, String usingMember, String thatIt, String arg0, String... remainingArgs) {
+    public String executeRow(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0, final String... remainingArgs) {
 
-		setupHeader(onObject, aliasResultAs, perform, usingMember,
-				thatIt, arg0);
+        setupHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0);
 
-	    final List<String> argumentCells = new ArrayList<String>();
+        final List<String> argumentCells = new ArrayList<String>();
 
-		// capture current
-		getPeer().getOnObjectBinding().captureCurrent(new ScenarioCellDefault(onObject));
-		getPeer().getAliasResultAsBinding().captureCurrent(new ScenarioCellDefault(aliasResultAs));
-		getPeer().getPerformBinding().captureCurrent(new ScenarioCellDefault(perform));
-		getPeer().getOnMemberBinding().captureCurrent(new ScenarioCellDefault(usingMember));
-		if (getPeer().getThatItBinding().isFound()) {
-			getPeer().getThatItBinding().captureCurrent(new ScenarioCellDefault(thatIt));
-		}
-		if (getPeer().getArg0Binding().isFound()) {
-			getPeer().getArg0Binding().captureCurrent(new ScenarioCellDefault(arg0));
-			argumentCells.add(arg0);
-		}
-		for (String arg: remainingArgs) {
-			argumentCells.add(arg);
-		}
-		
-		// execute
-		try {
-			execute(argumentCells);
-		} catch (ScenarioBoundValueException ex) {
-			return ex.getMessage();
-		}
-		
-		return "ok";
-	}
+        // capture current
+        getPeer().getOnObjectBinding().captureCurrent(new ScenarioCellDefault(onObject));
+        getPeer().getAliasResultAsBinding().captureCurrent(new ScenarioCellDefault(aliasResultAs));
+        getPeer().getPerformBinding().captureCurrent(new ScenarioCellDefault(perform));
+        getPeer().getOnMemberBinding().captureCurrent(new ScenarioCellDefault(usingMember));
+        if (getPeer().getThatItBinding().isFound()) {
+            getPeer().getThatItBinding().captureCurrent(new ScenarioCellDefault(thatIt));
+        }
+        if (getPeer().getArg0Binding().isFound()) {
+            getPeer().getArg0Binding().captureCurrent(new ScenarioCellDefault(arg0));
+            argumentCells.add(arg0);
+        }
+        for (final String arg : remainingArgs) {
+            argumentCells.add(arg);
+        }
 
-	private void execute(final List<String> argumentCells) throws ScenarioBoundValueException {
+        // execute
+        try {
+            execute(argumentCells);
+        } catch (final ScenarioBoundValueException ex) {
+            return ex.getMessage();
+        }
 
-		ObjectAdapter onAdapter = getPeer().validateOnObject();
-		String aliasAs = getPeer().validateAliasAs();
-		Perform performCommand = getPeer().validatePerform();
-		
-		ObjectMember objectMember = null;
-		if (performCommand.requiresMember()) {
-			objectMember = getPeer().validateOnMember(onAdapter);
-		}
+        return "ok";
+    }
 
-		getPeer().performCommand(onAdapter, aliasAs, objectMember, performCommand, asValues(argumentCells));
-	}
+    private void execute(final List<String> argumentCells) throws ScenarioBoundValueException {
 
-	private static List<ScenarioCell> asValues(List<String> argumentCells) {
-		List<ScenarioCell> storyValues = Lists.newArrayList();
-		for (String arg : argumentCells) {
-			storyValues.add(new ScenarioCellDefault(arg));
-		}
-		return storyValues;
-	}
+        final ObjectAdapter onAdapter = getPeer().validateOnObject();
+        final String aliasAs = getPeer().validateAliasAs();
+        final Perform performCommand = getPeer().validatePerform();
+
+        ObjectMember objectMember = null;
+        if (performCommand.requiresMember()) {
+            objectMember = getPeer().validateOnMember(onAdapter);
+        }
+
+        getPeer().performCommand(onAdapter, aliasAs, objectMember, performCommand, asValues(argumentCells));
+    }
+
+    private static List<ScenarioCell> asValues(final List<String> argumentCells) {
+        final List<ScenarioCell> storyValues = Lists.newArrayList();
+        for (final String arg : argumentCells) {
+            storyValues.add(new ScenarioCellDefault(arg));
+        }
+        return storyValues;
+    }
 }

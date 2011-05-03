@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.content;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.viewer.dnd.view.Content;
-
 
 public interface TextParseableContent extends Content {
 
@@ -44,11 +42,8 @@ public interface TextParseableContent extends Content {
     Consent isEditable();
 
     boolean isEmpty();
-    
 
     void parseTextEntry(String entryText);
 
-
     String titleString(ObjectAdapter value);
 }
-

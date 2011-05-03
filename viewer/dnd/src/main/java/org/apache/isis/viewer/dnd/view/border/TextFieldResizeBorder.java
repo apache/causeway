@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -30,10 +29,9 @@ import org.apache.isis.viewer.dnd.util.Properties;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public class TextFieldResizeBorder extends ResizeBorder {
     public static final int BORDER_WIDTH = IsisContext.getConfiguration().getInteger(
-            Properties.PROPERTY_BASE + "field-resize-border", 5);
+        Properties.PROPERTY_BASE + "field-resize-border", 5);
 
     public TextFieldResizeBorder(final View view) {
         super(view, RIGHT + DOWN, 1, 1);
@@ -43,13 +41,13 @@ public class TextFieldResizeBorder extends ResizeBorder {
     protected void drawResizeBorder(final Canvas canvas, final Size size) {
         if (resizing) {
             final Shape shape = new Shape(0, 0);
-            int resizeMarkerSize = 10;
+            final int resizeMarkerSize = 10;
             shape.addVector(resizeMarkerSize, 0);
             shape.addVector(0, resizeMarkerSize);
             shape.addVector(-resizeMarkerSize, -resizeMarkerSize);
-            Color color = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
-            int height = size.getHeight();
-            int width = size.getWidth();
+            final Color color = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
+            final int height = size.getHeight();
+            final int width = size.getWidth();
             canvas.drawSolidShape(shape, width - resizeMarkerSize, height, color);
             canvas.drawRectangle(0, 0, width, height, color);
         }

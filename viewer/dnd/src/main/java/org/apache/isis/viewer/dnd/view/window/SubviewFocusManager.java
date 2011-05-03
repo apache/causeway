@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.viewer.dnd.view.View;

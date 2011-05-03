@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.help;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
-
 
 /**
  * A HelpSystem is used to launch the help system and bring up contextual help.

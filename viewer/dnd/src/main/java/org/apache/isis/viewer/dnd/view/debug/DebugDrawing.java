@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.DebugCanvas;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public class DebugDrawing implements DebuggableWithTitle {
     private final View view;
 
@@ -34,10 +32,12 @@ public class DebugDrawing implements DebuggableWithTitle {
         this.view = display;
     }
 
+    @Override
     public void debugData(final DebugBuilder debug) {
         view.draw(new DebugCanvas(debug, new Bounds(view.getBounds())));
     }
 
+    @Override
     public String debugTitle() {
         return "Drawing";
     }

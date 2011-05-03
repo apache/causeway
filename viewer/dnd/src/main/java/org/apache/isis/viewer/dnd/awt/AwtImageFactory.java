@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Toolkit;
@@ -31,7 +30,6 @@ import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.base.AwtImage;
 
-
 public class AwtImageFactory extends ImageFactory {
 
     private static class Filter extends RGBImageFilter {
@@ -43,13 +41,14 @@ public class AwtImageFactory extends ImageFactory {
 
     private final TemplateImageLoader loader;
 
-    public AwtImageFactory(TemplateImageLoader imageLoader) {
+    public AwtImageFactory(final TemplateImageLoader imageLoader) {
         loader = imageLoader;
     }
 
     /**
      * Load an image with the given name.
      */
+    @Override
     public Image loadImage(final String path) {
         final TemplateImage template = templateImage(path);
         if (template == null) {
@@ -58,6 +57,7 @@ public class AwtImageFactory extends ImageFactory {
         return new AwtImage(template.getImage());
     }
 
+    @Override
     protected Image loadImage(final String name, final int height, final Color tint) {
         final TemplateImage template = templateImage(name);
         if (template == null) {
@@ -81,4 +81,3 @@ public class AwtImageFactory extends ImageFactory {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -36,134 +35,148 @@ import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
 import org.apache.isis.viewer.dnd.view.control.Button;
 import org.apache.log4j.Logger;
 
-
 public class CalendarView extends CompositeView {
     private static final Logger LOG = Logger.getLogger(CalendarView.class);
 
-    protected CalendarView(Content content, ViewSpecification specification) {
+    protected CalendarView(final Content content, final ViewSpecification specification) {
         super(content, specification);
     }
 
-    public void doLayout(Size maximumSize) {
+    @Override
+    public void doLayout(final Size maximumSize) {
         LOG.debug("doLayout() " + maximumSize + "  " + getSize());
-        View toolbar = getSubviews()[0];
+        final View toolbar = getSubviews()[0];
         maximumSize.contract(getPadding());
-        Size toolbarSize = toolbar.getRequiredSize(maximumSize);
+        final Size toolbarSize = toolbar.getRequiredSize(maximumSize);
         LOG.debug("   toolbar " + toolbarSize);
         Bounds bounds = new Bounds(toolbarSize);
         toolbar.setBounds(bounds);
 
-        
-        View grid = getSubviews()[1];
-        Size gridSize = getRequiredSize(Size.createMax());
+        final View grid = getSubviews()[1];
+        final Size gridSize = getRequiredSize(Size.createMax());
         gridSize.contract(getPadding());
         gridSize.contractHeight(toolbarSize.getHeight());
         bounds = new Bounds(new Location(0, toolbarSize.getHeight()), gridSize);
         grid.setBounds(bounds);
         LOG.debug("   grid " + toolbarSize);
-         
+
     }
 
     @Override
     public void setFocusManager(final FocusManager focusManager) {
-    // this.focusManager = focusManager;
+        // this.focusManager = focusManager;
     }
 
     @Override
-    public Size requiredSize(Size availableSpace) {
-        Size workspace = getWorkspace().getSize();
+    public Size requiredSize(final Size availableSpace) {
+        final Size workspace = getWorkspace().getSize();
         return new Size((int) (workspace.getWidth() * 0.8), (int) (workspace.getHeight() * 0.8));
     }
 
+    @Override
     protected void buildView() {
         if (subviews().length == 0) {
-            CalendarGrid grid = new CalendarGrid(getContent());
-            ToolbarView toolbar = createToolbar(grid);
+            final CalendarGrid grid = new CalendarGrid(getContent());
+            final ToolbarView toolbar = createToolbar(grid);
             addView(toolbar);
-          addView(grid);
+            addView(grid);
         } else {
             // TODO update grid view
         }
     }
 
     private ToolbarView createToolbar(final CalendarGrid calendar) {
-        ToolbarView toolbarView = new ToolbarView(getContent(), null);
-        
+        final ToolbarView toolbarView = new ToolbarView(getContent(), null);
+
         toolbarView.addView(new Button(new AbstractButtonAction("+Row") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.addRow();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("-Row") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.removeRow();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Across") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.acrossFirst();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Down") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.downFirst();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Next") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.nextPeriod();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Previous") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.previousePeriod();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Day") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.showSingleDay();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Days") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.showDays();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Weeks") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.showWeeks();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Months") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.showMonths();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Years") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.showYears();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Today") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 calendar.today();
             }
         }, this));
 
         toolbarView.addView(new Button(new AbstractButtonAction("Date") {
-            public void execute(Workspace workspace, View view, Location at) {
-                Content content = new NullContent() {};
+            @Override
+            public void execute(final Workspace workspace, View view, final Location at) {
+                final Content content = new NullContent() {
+                };
                 view = DatePickerControl.getPicker(content);
                 calendar.today();
                 getViewManager().setOverlayView(view);
@@ -174,12 +187,10 @@ public class CalendarView extends CompositeView {
     }
 
     /*
-     * public void invalidateLayout() { // super.invalidateLayout(); View parent = getParent(); if (parent !=
-     * null) { // parent.invalidateLayout(); } isInvalid = true; View toolbar = getSubviews()[0];
-     * toolbar.invalidateLayout(); // View grid = getSubviews()[1]; // grid.invalidateLayout(); }
-    protected boolean isLayoutInvalid() {
-        return isInvalid;
-    }
+     * public void invalidateLayout() { // super.invalidateLayout(); View parent = getParent(); if (parent != null) { //
+     * parent.invalidateLayout(); } isInvalid = true; View toolbar = getSubviews()[0]; toolbar.invalidateLayout(); //
+     * View grid = getSubviews()[1]; // grid.invalidateLayout(); } protected boolean isLayoutInvalid() { return
+     * isInvalid; }
      */
 
 }

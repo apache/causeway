@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.control;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
+import org.apache.log4j.Logger;
 
 public class CancelAction extends AbstractButtonAction {
     private static final Logger LOG = Logger.getLogger(CancelAction.class);
@@ -33,9 +31,9 @@ public class CancelAction extends AbstractButtonAction {
         super("Cancel");
     }
 
+    @Override
     public void execute(final Workspace workspace, final View view, final Location at) {
         LOG.debug("cancel pressed");
         view.dispose();
     }
 }
-

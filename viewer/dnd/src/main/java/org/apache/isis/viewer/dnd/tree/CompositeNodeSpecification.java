@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -27,7 +26,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewUsingBuilder;
 import org.apache.isis.viewer.dnd.view.composite.ViewBuilder;
-
 
 public abstract class CompositeNodeSpecification extends NodeSpecification implements CompositeViewSpecification {
     protected ViewBuilder builder;
@@ -42,27 +40,26 @@ public abstract class CompositeNodeSpecification extends NodeSpecification imple
         this.objectLeafNodeSpecification = objectLeafNodeSpecification;
     }
 
-    public void createAxes(Content content, Axes axes) {}
-    
+    public void createAxes(final Content content, final Axes axes) {
+    }
+
     @Override
-    protected View createNodeView(final Content content, Axes axes) {
-        final CompositeViewUsingBuilder view = new CompositeViewUsingBuilder(content, this, axes, createLayout(content, axes), builder);
+    protected View createNodeView(final Content content, final Axes axes) {
+        final CompositeViewUsingBuilder view =
+            new CompositeViewUsingBuilder(content, this, axes, createLayout(content, axes), builder);
         return view;
     }
 
     protected abstract Layout createLayout(Content content, Axes axes);
 
-/*
-    public View createView(final Content content, Axes axes, int fieldNumber) {
-        ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.CLOSED);
-        if (collectionLeafNodeSpecification.canDisplay(content, requirement )) {
-            return collectionLeafNodeSpecification.createView(content, axes, -1);
-        }
-
-        if (objectLeafNodeSpecification.canDisplay(content, requirement)) {
-            return objectLeafNodeSpecification.createView(content, axes, -1);
-        }
-
-        return null;
-    }*/
+    /*
+     * public View createView(final Content content, Axes axes, int fieldNumber) { ViewRequirement requirement = new
+     * ViewRequirement(content, ViewRequirement.CLOSED); if (collectionLeafNodeSpecification.canDisplay(content,
+     * requirement )) { return collectionLeafNodeSpecification.createView(content, axes, -1); }
+     * 
+     * if (objectLeafNodeSpecification.canDisplay(content, requirement)) { return
+     * objectLeafNodeSpecification.createView(content, axes, -1); }
+     * 
+     * return null; }
+     */
 }

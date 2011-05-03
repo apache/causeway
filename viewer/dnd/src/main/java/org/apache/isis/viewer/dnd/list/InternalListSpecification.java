@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.list;
 
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 
-
 public class InternalListSpecification extends SimpleListSpecification {
-    
+
     public InternalListSpecification() {
         addViewDecorator(new InternalCollectionBorder.Factory());
     }
 
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         return super.canDisplay(requirement) && requirement.is(ViewRequirement.SUBVIEW);
     }
 }

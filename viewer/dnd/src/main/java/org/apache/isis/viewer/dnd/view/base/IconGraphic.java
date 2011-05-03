@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -33,12 +32,11 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 /*
  *  TODO why does this pass out the baseline, and then expect it back when doing the drawing?
  */
 public class IconGraphic {
-    private int baseline;
+    private final int baseline;
     protected final Content content;
     protected Image icon;
     protected final int iconHeight;
@@ -65,8 +63,8 @@ public class IconGraphic {
     public void draw(final Canvas canvas, final int x, final int baseline) {
         final int y = baseline - this.baseline + 1;
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(new Location(x, y), getSize()), getBaseline(), Toolkit
-                    .getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
+            canvas.drawDebugOutline(new Bounds(new Location(x, y), getSize()), getBaseline(),
+                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
         }
         final Image icon = icon();
         if (icon == null) {
@@ -89,8 +87,8 @@ public class IconGraphic {
     protected Image icon() {
         final String iconName = content.getIconName();
         /*
-         * If the graphic is based on a name provided by the object then the icon could be changed at any
-         * time, so we won't lazily load it.
+         * If the graphic is based on a name provided by the object then the icon could be changed at any time, so we
+         * won't lazily load it.
          */
         if (icon != null && (iconName == null || iconName.equals(lastIconName))) {
             return icon;

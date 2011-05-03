@@ -25,15 +25,14 @@ import org.apache.isis.viewer.dnd.view.look.LookFactory;
 import org.apache.isis.viewer.dnd.view.look.linux.LinuxDatePicker;
 import org.apache.isis.viewer.dnd.view.look.linux.LinuxLook;
 
-
 public class DatePickerControl {
 
     private static final Look LINUX_LOOK = new LinuxLook();
 
-    public static View getPicker(Content content) {
-        Look look = LookFactory.getInstalledLook();
+    public static View getPicker(final Content content) {
+        final Look look = LookFactory.getInstalledLook();
         if (look.getClass().isInstance(LINUX_LOOK)) {
-        	return new LinuxDatePicker(content);
+            return new LinuxDatePicker(content);
         }
         return new SimpleDatePicker(content);
     }

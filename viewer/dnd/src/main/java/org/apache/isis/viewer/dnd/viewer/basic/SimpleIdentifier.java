@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -29,7 +28,6 @@ import org.apache.isis.viewer.dnd.view.ContentDrag;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractViewDecorator;
-
 
 public class SimpleIdentifier extends AbstractViewDecorator {
 

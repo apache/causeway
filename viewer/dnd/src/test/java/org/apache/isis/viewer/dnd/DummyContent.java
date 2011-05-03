@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,62 +29,77 @@ import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 
-
 public class DummyContent implements Content {
 
     private String iconName;
     private String title;
     private String windowTitle;
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }
 
-    public void debugDetails(final DebugBuilder debug) {}
+    @Override
+    public void debugDetails(final DebugBuilder debug) {
+    }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         return null;
     }
 
+    @Override
     public String getIconName() {
         return iconName;
     }
 
+    @Override
     public Image getIconPicture(final int iconHeight) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public boolean isCollection() {
         return false;
     }
 
+    @Override
     public boolean isObject() {
         return false;
     }
 
+    @Override
     public boolean isPersistable() {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return false;
     }
 
+    @Override
     public boolean isTextParseable() {
         return false;
     }
 
-    public void contentMenuOptions(final UserActionSet options) {}
+    @Override
+    public void contentMenuOptions(final UserActionSet options) {
+    }
 
-    public void parseTextEntry(final String entryText) {}
+    public void parseTextEntry(final String entryText) {
+    }
 
     public void setupIconName(final String iconName) {
         this.iconName = iconName;
@@ -99,32 +113,41 @@ public class DummyContent implements Content {
         this.windowTitle = windowTitle;
     }
 
+    @Override
     public String title() {
         return title;
     }
 
+    @Override
     public String windowTitle() {
         return windowTitle;
     }
 
+    @Override
     public String getDescription() {
         return null;
     }
 
+    @Override
     public String getId() {
         return null;
     }
 
-    public void viewMenuOptions(final UserActionSet options) {}
+    @Override
+    public void viewMenuOptions(final UserActionSet options) {
+    }
 
+    @Override
     public String getHelp() {
         return null;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }

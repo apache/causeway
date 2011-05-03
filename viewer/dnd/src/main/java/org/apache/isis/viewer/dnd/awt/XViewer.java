@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Cursor;
@@ -34,7 +33,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
@@ -73,7 +71,7 @@ import org.apache.isis.viewer.dnd.view.debug.LoggingOptions;
 import org.apache.isis.viewer.dnd.view.menu.PopupMenuContainer;
 import org.apache.isis.viewer.dnd.view.message.MessageContent;
 import org.apache.isis.viewer.dnd.viewer.ApplicationOptions;
-
+import org.apache.log4j.Logger;
 
 public class XViewer implements Viewer {
     private static final Size NO_SIZE = new Size(0, 0);
@@ -123,7 +121,8 @@ public class XViewer implements Viewer {
 
     public XViewer() {
         doubleBuffering = IsisContext.getConfiguration().getBoolean(Properties.PROPERTY_BASE + "double-buffer", true);
-        showExplorationMenuByDefault = IsisContext.getConfiguration().getBoolean(Properties.PROPERTY_BASE + "exploration.show", true);
+        showExplorationMenuByDefault =
+            IsisContext.getConfiguration().getBoolean(Properties.PROPERTY_BASE + "exploration.show", true);
         overlayView = CLEAR_OVERLAY;
         redrawArea = new Bounds();
     }
@@ -134,14 +133,17 @@ public class XViewer implements Viewer {
         }
     }
 
+    @Override
     public void addToNotificationList(final View view) {
         updateNotifier.add(view.getView());
     }
 
+    @Override
     public String selectFilePath(final String title, final String directory) {
         return renderingArea.selectFilePath(title, directory);
     }
 
+    @Override
     public void setKeyboardFocus(final View view) {
         if (view == null) {
             return;
@@ -149,7 +151,7 @@ public class XViewer implements Viewer {
 
         final FocusManager currentFocusManager = keyboardManager.getFocusManager();
         if (currentFocusManager != null && currentFocusManager.getFocus() != null
-                && currentFocusManager.getFocus().getParent() != null) {
+            && currentFocusManager.getFocus().getParent() != null) {
             currentFocusManager.getFocus().getParent().markDamaged();
         }
 
@@ -174,11 +176,13 @@ public class XViewer implements Viewer {
         }
     }
 
+    @Override
     public void clearOverlayView() {
         overlayView.markDamaged();
         overlayView = CLEAR_OVERLAY;
     }
 
+    @Override
     public void clearOverlayView(final View view) {
         if (this.getOverlayView() != view) {
             LOG.warn("no such view to remove: " + view);
@@ -205,6 +209,7 @@ public class XViewer implements Viewer {
         clearOverlayView();
     }
 
+    @Override
     public void disposeUnneededViews() {
         updateNotifier.removeViewsForDisposedObjects();
     }
@@ -260,14 +265,17 @@ public class XViewer implements Viewer {
         return overlayView;
     }
 
+    @Override
     public InteractionSpy getSpy() {
         return spy;
     }
 
+    @Override
     public UndoStack getUndoStack() {
         return undoStack;
     }
 
+    @Override
     public boolean hasFocus(final View view) {
         final FocusManager focusManager = keyboardManager.getFocusManager();
         return focusManager != null && focusManager.getFocus() == view;
@@ -295,7 +303,8 @@ public class XViewer implements Viewer {
         spy = new InteractionSpy(new SpyWindow());
 
         keyboardManager = new KeyboardManager(this);
-        final InteractionHandler interactionHandler = new InteractionHandler(this, feedbackManager, keyboardManager, spy);
+        final InteractionHandler interactionHandler =
+            new InteractionHandler(this, feedbackManager, keyboardManager, spy);
         renderingArea.addMouseMotionListener(interactionHandler);
         renderingArea.addMouseListener(interactionHandler);
         renderingArea.addKeyListener(interactionHandler);
@@ -309,10 +318,12 @@ public class XViewer implements Viewer {
         APPLICATION_OPTIONS = new ApplicationOptions(listener);
     }
 
+    @Override
     public boolean isRunningAsExploration() {
         return runningAsExploration;
     }
 
+    @Override
     public boolean isRunningAsPrototype() {
         return runningAsPrototype;
     }
@@ -321,11 +332,12 @@ public class XViewer implements Viewer {
         return spy.isVisible();
     }
 
+    @Override
     public void markDamaged(final Bounds bounds) {
         if (spy != null) {
             spy.addDamagedArea(bounds);
         }
-        
+
         synchronized (redrawArea) {
             if (redrawArea.equals(NO_REDRAW)) {
                 redrawArea.setBounds(bounds);
@@ -339,7 +351,8 @@ public class XViewer implements Viewer {
         }
     }
 
-    public void menuOptions(final UserActionSet options) {}
+    public void menuOptions(final UserActionSet options) {
+    }
 
     public void mouseDown(final Click click) {
         if (onOverlay(click.getLocation())) {
@@ -385,8 +398,8 @@ public class XViewer implements Viewer {
             spy.redraw(paintArea.toString(), redrawCount);
         }
         if (UI_LOG.isDebugEnabled()) {
-            UI_LOG.debug("------ repaint viewer #" + redrawCount + " " + paintArea.x + "," + paintArea.y + " " + paintArea.width
-                    + "x" + paintArea.height);
+            UI_LOG.debug("------ repaint viewer #" + redrawCount + " " + paintArea.x + "," + paintArea.y + " "
+                + paintArea.width + "x" + paintArea.height);
         }
 
         final Canvas c = createCanvas(graphic, paintArea);
@@ -400,7 +413,7 @@ public class XViewer implements Viewer {
         }
         // paint overlay
 
-        Bounds bounds = overlayView.getBounds();
+        final Bounds bounds = overlayView.getBounds();
         if (paintArea.intersects(new Rectangle(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight()))) {
             overlayView.draw(c.createSubcanvas(bounds));
         }
@@ -429,7 +442,7 @@ public class XViewer implements Viewer {
         final int h = internalDisplaySize.getHeight();
         if (doubleBuffering) {
             if ((doubleBuffer == null) || (bufferGraphics == null) || (doubleBuffer.getWidth(null) < w)
-                    || (doubleBuffer.getHeight(null) < h)) {
+                || (doubleBuffer.getHeight(null) < h)) {
                 doubleBuffer = renderingArea.createImage(w, h);
                 LOG.debug("buffer sized to " + doubleBuffer.getWidth(null) + "x" + doubleBuffer.getHeight(null));
             }
@@ -442,7 +455,8 @@ public class XViewer implements Viewer {
         bufferGraphics.clearRect(0, 0, w, h);
 
         bufferGraphics.setClip(paintArea.x, paintArea.y, paintArea.width, paintArea.height);
-        final Canvas c = new AwtCanvas(bufferGraphics, renderingArea, paintArea.x, paintArea.y, paintArea.width, paintArea.height);
+        final Canvas c =
+            new AwtCanvas(bufferGraphics, renderingArea, paintArea.x, paintArea.y, paintArea.width, paintArea.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
         return c;
     }
@@ -463,8 +477,8 @@ public class XViewer implements Viewer {
         rootView.layout();
         synchronized (redrawArea) {
             if (!redrawArea.equals(NO_REDRAW)) {
-                final Rectangle r2 = new Rectangle(redrawArea.getX(), redrawArea.getY(), redrawArea.getWidth(), redrawArea
-                        .getHeight());
+                final Rectangle r2 =
+                    new Rectangle(redrawArea.getX(), redrawArea.getY(), redrawArea.getWidth(), redrawArea.getHeight());
                 redrawArea.setBounds(NO_REDRAW);
                 return r2;
             }
@@ -512,12 +526,8 @@ public class XViewer implements Viewer {
         }
     }
 
-    public void popupMenu(
-            final View over,
-            final Location at,
-            final boolean forView,
-            final boolean includeExploration,
-            final boolean includeDebug) {
+    public void popupMenu(final View over, final Location at, final boolean forView, final boolean includeExploration,
+        final boolean includeDebug) {
         feedbackManager.setBusy(over, null);
         saveCurrentFieldEntry();
         final PopupMenuContainer menu = new PopupMenuContainer(over, at);
@@ -532,6 +542,7 @@ public class XViewer implements Viewer {
         feedbackManager.clearBusy(over);
     }
 
+    @Override
     public void removeFromNotificationList(final View view) {
         updateNotifier.remove(view);
     }
@@ -539,6 +550,7 @@ public class XViewer implements Viewer {
     /**
      * Force a repaint of the damaged area of the viewer.
      */
+    @Override
     public void scheduleRepaint() {
         updateNotifier.invalidateViewsForChangedObjects();
         synchronized (redrawArea) {
@@ -552,6 +564,7 @@ public class XViewer implements Viewer {
         }
     }
 
+    @Override
     public void saveCurrentFieldEntry() {
         final FocusManager focusManager = getFocusManager();
         if (focusManager != null) {
@@ -573,6 +586,7 @@ public class XViewer implements Viewer {
         }
     }
 
+    @Override
     public void setBackground(final Background background) {
         this.background = background;
     }
@@ -593,6 +607,7 @@ public class XViewer implements Viewer {
         this.listener = listener;
     }
 
+    @Override
     public void setOverlayView(final View view) {
         disposeOverlayView();
         overlayView = view;
@@ -608,15 +623,18 @@ public class XViewer implements Viewer {
         overlayView.markDamaged();
     }
 
+    @Override
     public Size getOverlaySize() {
         return rootView.getSize();
     }
 
-    public void showInOverlay(Content content, Location location) {
+    @Override
+    public void showInOverlay(final Content content, final Location location) {
         View view;
         view = Toolkit.getViewFactory().createView(new ViewRequirement(content, ViewRequirement.OPEN));
-        view = new LineBorder(2, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2), new BackgroundBorder(Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY3), view));
+        view =
+            new LineBorder(2, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2), new BackgroundBorder(
+                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3), view));
         final Size size = view.getRequiredSize(Size.createMax());
         location.subtract(size.getWidth() / 2, size.getHeight() / 2);
         view.setLocation(location);
@@ -655,22 +673,21 @@ public class XViewer implements Viewer {
     public void sizeChange() {
         initSize();
         final View subviews[] = rootView.getSubviews();
-        for (int i = 0; i < subviews.length; i++) {
-            subviews[i].invalidateLayout();
+        for (final View subview : subviews) {
+            subview.invalidateLayout();
         }
 
         final Bounds bounds = new Bounds(internalDisplaySize);
         markDamaged(bounds);
         scheduleRepaint();
-        
+
         Properties.saveSizeOption(Properties.PROPERTY_BASE + "initial.size", bounds.getSize());
     }
 
-    public void locationChange(int x, int y) {
+    public void locationChange(final int x, final int y) {
         Properties.saveLocationOption(Properties.PROPERTY_BASE + "initial.location", new Location(x, y));
     }
-        
-        
+
     public void initSize() {
         internalDisplaySize = createSize(renderingArea.getSize());
         insets = renderingArea.getInsets();
@@ -679,10 +696,11 @@ public class XViewer implements Viewer {
         LOG.debug("  internal " + internalDisplaySize);
 
         final Size rootViewSize = new Size(internalDisplaySize);
-        Text text = Toolkit.getText(ColorsAndFonts.TEXT_STATUS);
+        final Text text = Toolkit.getText(ColorsAndFonts.TEXT_STATUS);
         statusBarHeight = text.getLineHeight() + text.getDescent();
         rootViewSize.contractHeight(statusBarHeight);
-        statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.getHeight(), rootViewSize.getWidth(), statusBarHeight);
+        statusBarArea =
+            new Bounds(insets.left, insets.top + rootViewSize.getHeight(), rootViewSize.getWidth(), statusBarHeight);
         rootView.setSize(rootViewSize);
     }
 
@@ -722,7 +740,7 @@ public class XViewer implements Viewer {
     }
 
     public void makeRootFocus() {
-    // makeFocus(rootView);
+        // makeFocus(rootView);
     }
 
     public void openHelp(final View forView) {
@@ -745,6 +763,7 @@ public class XViewer implements Viewer {
 
     }
 
+    @Override
     public Object getClipboard(final Class<?> cls) {
         if (cls == String.class) {
 
@@ -763,6 +782,7 @@ public class XViewer implements Viewer {
         }
     }
 
+    @Override
     public void setClipboard(final String clip, final Class<?> class1) {
         final Clipboard cb = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
         cb.setContents(new StringSelection(clip), null);
@@ -775,19 +795,21 @@ public class XViewer implements Viewer {
     }
 
     public void showDialog(final MessageContent content) {
-        ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.OPEN);
+        final ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.OPEN);
         final View view = Toolkit.getViewFactory().createView(requirement);
         rootView.getWorkspace().addDialog(view, new Placement(Placement.CENTER));
         scheduleRepaint();
     }
-    
-    public void showDebugFrame(DebuggableWithTitle[] info, Location at) {
+
+    @Override
+    public void showDebugFrame(final DebuggableWithTitle[] info, final Location at) {
         final InfoDebugFrame f = new InfoDebugFrame();
         f.setInfo(info);
         f.show(at.getX(), at.getY());
 
     }
 
+    @Override
     public void clearAction() {
         feedbackManager.clearAction();
         clearOverlayView();
@@ -802,10 +824,11 @@ public class XViewer implements Viewer {
         renderingArea.dispose();
     }
 
+    @Override
     public void saveOpenObjects() {
-        List<ObjectAdapter> objects = new ArrayList<ObjectAdapter>();
-        for (View view : rootView.getSubviews()) {
-            Content content = view.getContent();
+        final List<ObjectAdapter> objects = new ArrayList<ObjectAdapter>();
+        for (final View view : rootView.getSubviews()) {
+            final Content content = view.getContent();
             if (content instanceof ObjectContent) {
                 objects.add(((ObjectContent) content).getAdapter());
             }
@@ -814,4 +837,3 @@ public class XViewer implements Viewer {
     }
 
 }
-

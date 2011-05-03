@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-
 
 public interface ObjectParameter extends ParameterContent {
 
@@ -31,4 +29,3 @@ public interface ObjectParameter extends ParameterContent {
     void setObject(final ObjectAdapter object);
 
 }
-

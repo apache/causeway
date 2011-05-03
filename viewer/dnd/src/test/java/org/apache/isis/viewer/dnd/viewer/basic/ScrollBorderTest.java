@@ -17,22 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -52,13 +40,22 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.border.ScrollBorder;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ScrollBorderTest {
 
-    private Mockery mockery = new JUnit4Mockery();
-    
+    private final Mockery mockery = new JUnit4Mockery();
+
     protected TemplateImageLoader mockTemplateImageLoader;
     protected SpecificationLoader mockSpecificationLoader;
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
@@ -66,16 +63,14 @@ public class ScrollBorderTest {
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
 
-	private List<Object> servicesList;
-
-
+    private List<Object> servicesList;
 
     @Before
     public void setUp() throws Exception {
         LogManager.getRootLogger().setLevel(Level.OFF);
 
         servicesList = Collections.emptyList();
-        
+
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
         mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
         mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
@@ -96,24 +91,18 @@ public class ScrollBorderTest {
 
         TestToolkit.createInstance();
 
-        IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-        IsisSessionFactory sessionFactory = 
-            new IsisSessionFactoryDefault(
-                    DeploymentType.EXPLORATION, 
-                    configuration, 
-                    mockTemplateImageLoader, 
-                    mockSpecificationLoader, 
-                    mockAuthenticationManager, 
-    		        mockAuthorizationManager,
-                    mockUserProfileLoader, 
-                    mockPersistenceSessionFactory, servicesList);
+        final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
+        final IsisSessionFactory sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
+                mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
+                mockPersistenceSessionFactory, servicesList);
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
     }
 
     @Test
     public void testScrollBar() {
-        DummyView innerView = new DummyView();
+        final DummyView innerView = new DummyView();
         innerView.setupRequiredSize(new Size(100, 200));
         final View view = new ScrollBorder(innerView);
 

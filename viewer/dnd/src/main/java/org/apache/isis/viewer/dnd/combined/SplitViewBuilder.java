@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.combined;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -30,42 +29,45 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 class SplitViewBuilder extends AbstractViewBuilder {
 
     private final SplitViewSpecification splitViewSpecification;
 
-    public SplitViewBuilder(SplitViewSpecification splitViewSpecification) {
+    public SplitViewBuilder(final SplitViewSpecification splitViewSpecification) {
         this.splitViewSpecification = splitViewSpecification;
     }
 
-    public void createAxes(Axes axes, Content content) {
+    @Override
+    public void createAxes(final Axes axes, final Content content) {
         super.createAxes(axes, content);
         axes.add(new SplitViewAccess(splitViewSpecification.determineAvailableFields(content)));
     }
 
-    public void build(View view, Axes axes) {
+    @Override
+    public void build(final View view, final Axes axes) {
         if (view.getSubviews().length == 0) {
-            Content content = view.getContent();
+            final Content content = view.getContent();
             final Content fieldContent = splitViewSpecification.determineSecondaryContent(content);
 
-            View form1 = splitViewSpecification.createMainView(axes, content, fieldContent);
+            final View form1 = splitViewSpecification.createMainView(axes, content, fieldContent);
             view.addView(form1);
 
-            View labelledForm = splitViewSpecification.createSecondaryView(axes, fieldContent);
+            final View labelledForm = splitViewSpecification.createSecondaryView(axes, fieldContent);
             view.addView(labelledForm);
         }
     }
 
-    public void viewMenuOptions(UserActionSet options, View view) {
+    @Override
+    public void viewMenuOptions(final UserActionSet options, final View view) {
         super.viewMenuOptions(options, view);
 
-        SplitViewAccess axis = view.getViewAxes().getAxis(SplitViewAccess.class);
-        for (ObjectAssociation field : axis.getFields()) {
+        final SplitViewAccess axis = view.getViewAxes().getAxis(SplitViewAccess.class);
+        for (final ObjectAssociation field : axis.getFields()) {
             options.add(new UserActionAbstract("Select " + field.getName()) {
-                public void execute(Workspace workspace, View view, Location at) {}
+                @Override
+                public void execute(final Workspace workspace, final View view, final Location at) {
+                }
             });
         }
     }
 }
-

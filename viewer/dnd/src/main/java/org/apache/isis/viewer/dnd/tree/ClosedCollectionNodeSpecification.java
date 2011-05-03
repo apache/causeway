@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,15 +28,15 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
-
 /**
  * Specification for a tree node that will display a closed collection as a root node or within an object.
  * 
- * @see org.apache.isis.viewer.dnd.tree.OpenCollectionNodeSpecification for displaying an open collection
- *      within an object.
+ * @see org.apache.isis.viewer.dnd.tree.OpenCollectionNodeSpecification for displaying an open collection within an
+ *      object.
  */
 public class ClosedCollectionNodeSpecification extends NodeSpecification {
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isCollection() && requirement.hasReference();
     }
 
@@ -53,11 +52,12 @@ public class ClosedCollectionNodeSpecification extends NodeSpecification {
     }
 
     @Override
-    protected View createNodeView(final Content content, Axes axes) {
+    protected View createNodeView(final Content content, final Axes axes) {
         final View treeLeafNode = new LeafNodeView(content, this);
         return treeLeafNode;
     }
 
+    @Override
     public String getName() {
         return "Collection tree node - closed";
     }

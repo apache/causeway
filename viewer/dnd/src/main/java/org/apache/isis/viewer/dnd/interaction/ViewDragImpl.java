@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewDrag;
 import org.apache.isis.viewer.dnd.view.Viewer;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class ViewDragImpl extends DragImpl implements ViewDrag {
     private Location location;
@@ -40,9 +38,9 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
     private final Workspace viewsWorkspace;
 
     /**
-     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it.
-     * The view returned by the pickup method becomes this event overlay view, which is moved continuously so
-     * that it tracks the pointer.
+     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it. The view
+     * returned by the pickup method becomes this event overlay view, which is moved continuously so that it tracks the
+     * pointer.
      * 
      * @param view
      *            the view over which the pointer was when this event started
@@ -55,8 +53,9 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
         viewsWorkspace = view.getWorkspace();
     }
 
-    /**getView().getAbsoluteLocation().getX(), -getView().getAbsoluteLocation().getY()
-     * Cancel drag by changing cursor back to pointer.
+    /**
+     * getView().getAbsoluteLocation().getX(), -getView().getAbsoluteLocation().getY() Cancel drag by changing cursor
+     * back to pointer.
      */
     @Override
     public void cancel(final Viewer viewer) {
@@ -79,8 +78,8 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
         this.location = location;
         if (overlayView != null) {
             overlayView.markDamaged();
-            updateDraggingLocation();   
-         //   this.location.subtract(target.getAbsoluteLocation());
+            updateDraggingLocation();
+            // this.location.subtract(target.getAbsoluteLocation());
             viewsWorkspace.getViewManager().getSpy().addTrace(target, "   over", getLocation());
             targetView = target;
             target.drag(this);
@@ -102,14 +101,17 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
         return overlayView;
     }
 
+    @Override
     public Location getLocation() {
         return location;
     }
 
+    @Override
     public View getSourceView() {
         return sourceView;
     }
-    
+
+    @Override
     public Location getViewDropLocation() {
         final Location viewLocation = new Location(location);
         viewLocation.subtract(overlayOffset);
@@ -132,9 +134,9 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
         overlayView.limitBoundsWithin(viewsWorkspace.getSize());
     }
 
+    @Override
     public void subtract(final int x, final int y) {
         location.subtract(x, y);
     }
 
 }
-

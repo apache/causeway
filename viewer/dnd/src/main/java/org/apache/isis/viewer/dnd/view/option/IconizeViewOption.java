@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.option;
 
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class IconizeViewOption extends UserActionAbstract {
     public IconizeViewOption() {
@@ -43,8 +41,8 @@ public class IconizeViewOption extends UserActionAbstract {
         final View minimizedView = Toolkit.getViewFactory().createMinimizedView(view);
         minimizedView.setLocation(view.getLocation());
         final View[] views = workspace.getSubviews();
-        for (int i = 0; i < views.length; i++) {
-            if (views[i] == view) {
+        for (final View view2 : views) {
+            if (view2 == view) {
                 workspace.removeView(view);
                 workspace.addView(minimizedView);
                 workspace.invalidateLayout();
@@ -53,8 +51,8 @@ public class IconizeViewOption extends UserActionAbstract {
         }
 
         /*
-         * // TODO change so that an iconized version of the window is created and displayed, which holds the
-         * original view. View iconView = new RootIconSpecification().createView(view.getContent(), null);
+         * // TODO change so that an iconized version of the window is created and displayed, which holds the original
+         * view. View iconView = new RootIconSpecification().createView(view.getContent(), null);
          * iconView.setLocation(view.getLocation()); workspace.replaceView(view, iconView);
          */
     }

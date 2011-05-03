@@ -17,16 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
-
 
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.SubviewDecorator;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 public interface ViewBuilder {
 

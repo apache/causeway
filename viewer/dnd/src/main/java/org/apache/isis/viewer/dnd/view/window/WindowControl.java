@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.control.AbstractControlView;
-
 
 public abstract class WindowControl extends AbstractControlView {
     public final static int HEIGHT = 13;
@@ -34,7 +32,8 @@ public abstract class WindowControl extends AbstractControlView {
         super(action, target);
     }
 
-    public Size getRequiredSize(Size availableSpace) {
+    @Override
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(WIDTH, HEIGHT);
     }
 

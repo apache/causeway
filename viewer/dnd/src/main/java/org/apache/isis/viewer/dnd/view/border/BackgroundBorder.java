@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -28,7 +27,7 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 
 /**
- * A background border provides a coloured background to a view of a specified colour. 
+ * A background border provides a coloured background to a view of a specified colour.
  */
 public class BackgroundBorder extends AbstractBorder {
     private Color background;

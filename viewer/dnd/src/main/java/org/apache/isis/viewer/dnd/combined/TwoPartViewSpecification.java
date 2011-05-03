@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.combined;
 
 import java.util.List;
@@ -39,40 +38,40 @@ import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.border.LabelBorder;
 import org.apache.isis.viewer.dnd.view.composite.ColumnLayout;
 
-
 public class TwoPartViewSpecification extends SplitViewSpecification {
 
     @Override
-    public Layout createLayout(Content content, Axes axes) {
+    public Layout createLayout(final Content content, final Axes axes) {
         return new ColumnLayout();
     }
 
     @Override
-    View createMainView(Axes axes, Content mainContent, final Content secondaryContent) {
-        View form1 = new FormSpecification() {
+    View createMainView(final Axes axes, final Content mainContent, final Content secondaryContent) {
+        final View form1 = new FormSpecification() {
             @Override
-            protected boolean include(Content content, int sequence) {
+            protected boolean include(final Content content, final int sequence) {
                 return !secondaryContent.getId().equals(content.getId());
             };
         }.createView(mainContent, axes, -1);
         return form1;
     }
-    
+
     @Override
-    View createSecondaryView(Axes axes, final Content fieldContent) {
-        View form = new InternalFormSpecification().createView(fieldContent, axes, -1);
-        View labelledForm = LabelBorder.createFieldLabelBorder(new LabelAxis(), form);
+    View createSecondaryView(final Axes axes, final Content fieldContent) {
+        final View form = new InternalFormSpecification().createView(fieldContent, axes, -1);
+        final View labelledForm = LabelBorder.createFieldLabelBorder(new LabelAxis(), form);
         return labelledForm;
     }
 
     @Override
     @Deprecated
-    Content determineSecondaryContent(Content content) {
-        ObjectSpecification spec = content.getSpecification();
-        ObjectAdapter target = content.getAdapter();
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
-        for (ObjectAssociation field : fields) {
+    Content determineSecondaryContent(final Content content) {
+        final ObjectSpecification spec = content.getSpecification();
+        final ObjectAdapter target = content.getAdapter();
+        final AuthenticationSession session = IsisContext.getAuthenticationSession();
+        final List<ObjectAssociation> fields =
+            spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        for (final ObjectAssociation field : fields) {
             if (validField(field)) {
                 return Toolkit.getContentFactory().createFieldContent(field, target);
             }
@@ -81,15 +80,13 @@ public class TwoPartViewSpecification extends SplitViewSpecification {
     }
 
     @Override
-    boolean validField(ObjectAssociation field) {
+    boolean validField(final ObjectAssociation field) {
         return field.isOneToOneAssociation() && !field.getSpecification().isParseable();
     }
 
-    
     @Override
     public String getName() {
         return "Two part object (experimental)";
     }
 
 }
-

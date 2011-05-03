@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -25,7 +24,6 @@ import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 public class ObjectTitleText extends TitleText {
     private final Content content;

@@ -17,39 +17,35 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyContent;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;
 import org.apache.isis.viewer.dnd.TestToolkit;
-import org.apache.isis.viewer.dnd.configurable.PanelView;
 import org.apache.isis.viewer.dnd.configurable.PanelView.Position;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewDrag;
-import org.apache.isis.viewer.dnd.view.ViewSpecification;
-
-import static org.junit.Assert.assertEquals;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PanelViewDropTest {
 
     private PanelView view;
     private DummyContent content;
     private Position position;
-    private DummyView sourceView = new DummyView();
+    private final DummyView sourceView = new DummyView();
 
     @Before
     public void setup() {
@@ -57,16 +53,17 @@ public class PanelViewDropTest {
         TestToolkit.createInstance();
         IsisContext.setConfiguration(new TestProxyConfiguration());
 
-
         content = new DummyContent();
 
         view = new PanelView(content, new DummyViewSpecification()) {
-            public void addView(Content content, Position position) {
+            @Override
+            public void addView(final Content content, final Position position) {
                 PanelViewDropTest.this.position = position;
             }
-            
+
+            @Override
             public synchronized View[] getSubviews() {
-                return new View[] {sourceView};
+                return new View[] { sourceView };
             }
         };
         view.setSize(new Size(200, 100));
@@ -130,13 +127,13 @@ public class PanelViewDropTest {
     }
 
     private ViewDrag dragTo(final Location location) {
-        Mockery context = new Mockery();
+        final Mockery context = new Mockery();
         final ViewDrag drag = context.mock(ViewDrag.class);
         context.checking(new Expectations() {
             {
                 exactly(3).of(drag).getSourceView();
                 will(returnValue(sourceView));
-                
+
                 atLeast(1).of(drag).getLocation();
                 will(returnValue(location));
             }
@@ -145,4 +142,3 @@ public class PanelViewDropTest {
     }
 
 }
-

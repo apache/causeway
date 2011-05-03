@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.viewer.dnd.view.BackgroundTask;
 import org.apache.isis.viewer.dnd.view.View;
-
+import org.apache.log4j.Logger;
 
 public final class BackgroundWork {
     private static final Logger LOG = Logger.getLogger(BackgroundTask.class);
@@ -33,7 +31,7 @@ public final class BackgroundWork {
         private final View view;
         private final BackgroundTask task;
 
-        public BackgroundThread(View view, BackgroundTask task) {
+        public BackgroundThread(final View view, final BackgroundTask task) {
             super("nof-background");
             this.view = view;
             this.task = task;
@@ -50,9 +48,9 @@ public final class BackgroundWork {
                 LOG.debug("running background thread for task " + task);
                 task.execute();
 
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 if (!(e instanceof IsisApplicationException)) {
-                    String message = "Error while running background task " + task.getName();
+                    final String message = "Error while running background task " + task.getName();
                     LOG.error(message, e);
                 }
                 view.getFeedbackManager().showException(e);
@@ -76,6 +74,7 @@ public final class BackgroundWork {
         t.start();
     }
 
-    private BackgroundWork() {}
+    private BackgroundWork() {
+    }
 
 }

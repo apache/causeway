@@ -40,17 +40,15 @@ public class Contains extends ThatSubcommandAbstract {
     @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-        final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getObjectMember();
+        final OneToOneAssociation otoa = (OneToOneAssociation) performContext.getObjectMember();
 
         // if we have an expected result
-        CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
-		final String expected = arg0Cell.getText();
+        final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
+        final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
+        final String expected = arg0Cell.getText();
 
         // get
-        final ObjectAdapter resultAdapter = otoa.get(performContext
-                .getOnAdapter());
+        final ObjectAdapter resultAdapter = otoa.get(performContext.getOnAdapter());
 
         // see if matches null
         if (resultAdapter == null) {
@@ -75,31 +73,29 @@ public class Contains extends ThatSubcommandAbstract {
             }
 
             // otherwise, see if date and if so compare as such
-            DateValueFacet dateValueFacet = resultAdapter.getSpecification().getFacet(DateValueFacet.class);
-            if(dateValueFacet != null) {
-                Date resultDate = dateValueFacet.dateValue(resultAdapter);
-                
-                DateParser dateParser = performContext.getDateParser();
-                Date expectedDate = dateParser.parse(expected);
+            final DateValueFacet dateValueFacet = resultAdapter.getSpecification().getFacet(DateValueFacet.class);
+            if (dateValueFacet != null) {
+                final Date resultDate = dateValueFacet.dateValue(resultAdapter);
+
+                final DateParser dateParser = performContext.getDateParser();
+                final Date expectedDate = dateParser.parse(expected);
                 if (expectedDate != null) {
-                    if(expectedDate.compareTo(resultDate) == 0) {
+                    if (expectedDate.compareTo(resultDate) == 0) {
                         return resultAdapter; // ok
-                    } 
+                    }
                 }
-                String format = dateParser.format(resultDate);
+                final String format = dateParser.format(resultDate);
                 throw ScenarioBoundValueException.current(arg0Binding, format);
             }
 
-            
             // otherwise, compare title
             if (!StringUtils.nullSafeEquals(resultTitle, expected)) {
-            	throw ScenarioBoundValueException.current(arg0Binding, resultTitle);
+                throw ScenarioBoundValueException.current(arg0Binding, resultTitle);
             }
         } else {
             // try to provide a default
             final String resultAlias = performContext.getPeer().getAliasRegistry().getAlias(resultAdapter);
-            final String resultStr = resultAlias != null ? resultAlias
-                    : resultTitle;
+            final String resultStr = resultAlias != null ? resultAlias : resultTitle;
             performContext.getPeer().provideDefault(arg0Cell, resultStr);
         }
 

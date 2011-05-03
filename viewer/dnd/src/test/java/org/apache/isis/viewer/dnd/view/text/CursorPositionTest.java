@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
-import org.apache.isis.viewer.dnd.view.text.CursorPosition;
-
 import junit.framework.TestCase;
-
 
 public class CursorPositionTest extends TestCase {
 

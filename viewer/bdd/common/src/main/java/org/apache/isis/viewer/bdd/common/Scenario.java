@@ -29,12 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerNoop;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
@@ -47,7 +48,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.viewer.bdd.common.components.BddAuthenticationManagerInstaller;
 import org.apache.isis.viewer.bdd.common.components.BddInMemoryPersistenceMechanismInstaller;
 import org.apache.isis.viewer.bdd.common.parsers.DateParser;
@@ -106,19 +106,20 @@ public class Scenario implements AliasRegistryHolder {
     }
 
     @SuppressWarnings("unchecked")
-    public void bootstrapIsis(String configDirectory, DeploymentType deploymentType) {
+    public void bootstrapIsis(final String configDirectory, final DeploymentType deploymentType) {
         this.configDirectory = configDirectory;
         this.deploymentType =
             ensureThatArg(deploymentType,
                 is(anyOf(equalTo(DeploymentType.EXPLORATION), equalTo(DeploymentType.PROTOTYPE))));
 
-        IsisConfigurationBuilderFileSystem configurationBuilder = new IsisConfigurationBuilderFileSystem(getConfigDirectory());
+        final IsisConfigurationBuilderFileSystem configurationBuilder =
+            new IsisConfigurationBuilderFileSystem(getConfigDirectory());
 
         configurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
         defaultStoryComponentsInto(configurationBuilder);
 
         getAliasRegistry().clear();
-        
+
         try {
             // create system...
             isisSystem = createSystem(deploymentType, configurationBuilder);
@@ -134,16 +135,17 @@ public class Scenario implements AliasRegistryHolder {
         }
     }
 
-    private IsisSystem createSystem(DeploymentType deploymentType, IsisConfigurationBuilder isisConfigurationBuilder) {
+    private IsisSystem createSystem(final DeploymentType deploymentType,
+        final IsisConfigurationBuilder isisConfigurationBuilder) {
         this.installerLookup = new InstallerLookupDefault(this.getClass());
         isisConfigurationBuilder.injectInto(installerLookup);
 
-        Injector injector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup);
-        IsisSystem system = injector.getInstance(IsisSystem.class);
+        final Injector injector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup);
+        final IsisSystem system = injector.getInstance(IsisSystem.class);
         return system;
     }
 
-    private void defaultStoryComponentsInto(IsisConfigurationBuilder isisConfigurationBuilder) {
+    private void defaultStoryComponentsInto(final IsisConfigurationBuilder isisConfigurationBuilder) {
         isisConfigurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY,
             BddAuthenticationManagerInstaller.class.getName());
         isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY,
@@ -154,9 +156,9 @@ public class Scenario implements AliasRegistryHolder {
         isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true);
     }
 
-    private Injector createGuiceInjector(DeploymentType deploymentType, IsisConfigurationBuilder isisConfigurationBuilder,
-        InstallerLookup installerLookup) {
-        IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
+    private Injector createGuiceInjector(final DeploymentType deploymentType,
+        final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
+        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
 
@@ -169,8 +171,8 @@ public class Scenario implements AliasRegistryHolder {
     // /////////////////////////////////////////////////////////////
 
     public boolean dateAndTimeIs(final String dateAndTimeStr) {
-        Date date = dateParser.parse(dateAndTimeStr);
-        if(date != null) {
+        final Date date = dateParser.parse(dateAndTimeStr);
+        if (date != null) {
             new SetClock(this).setClock(date);
             return true;
         } else {
@@ -181,11 +183,11 @@ public class Scenario implements AliasRegistryHolder {
     /**
      * Logon, specifying no roles.
      * <p>
-     * Unlike the {@link LogonFixture} on regular fixtures, the logonAs is not automatically remembered
-     * until the end of the setup. It should therefore be invoked at the end of setup explicitly.
+     * Unlike the {@link LogonFixture} on regular fixtures, the logonAs is not automatically remembered until the end of
+     * the setup. It should therefore be invoked at the end of setup explicitly.
      */
     public void logonAsOrSwitchUserTo(final String userName) {
-        List<String> noRoles = Collections.emptyList();
+        final List<String> noRoles = Collections.emptyList();
         logonAsOrSwitchUserTo(userName, noRoles);
     }
 
@@ -249,21 +251,21 @@ public class Scenario implements AliasRegistryHolder {
     // date parser
     // /////////////////////////////////////////////////////////
 
-    public void usingDateFormat(String dateFormatStr) {
+    public void usingDateFormat(final String dateFormatStr) {
         dateParser.setDateFormat(dateFormatStr);
         setTemporalFormat("date", dateFormatStr);
         setTemporalFormat("datetime", dateParser.getCombinedMask());
         setTemporalFormat("timestamp", dateParser.getCombinedMask());
     }
 
-    public void usingTimeFormat(String timeFormatStr) {
+    public void usingTimeFormat(final String timeFormatStr) {
         dateParser.setTimeFormat(timeFormatStr);
         setTemporalFormat("time", timeFormatStr);
         setTemporalFormat("datetime", dateParser.getCombinedMask());
         setTemporalFormat("timestamp", dateParser.getCombinedMask());
     }
 
-    private void setTemporalFormat(String propertyType, String formatStr) {
+    private void setTemporalFormat(final String propertyType, final String formatStr) {
         ValueSemanticsProviderAbstractTemporal.setFormat(propertyType, formatStr);
     }
 
@@ -307,7 +309,5 @@ public class Scenario implements AliasRegistryHolder {
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
-
-
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import java.util.Vector;
@@ -55,7 +54,6 @@ import org.apache.isis.viewer.dnd.view.Viewer;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
-
 public class DummyView implements View {
     private Size requiredSize = new Size(100, 10);
     private Size size;
@@ -67,323 +65,396 @@ public class DummyView implements View {
     private ViewSpecification specification;
     public int invlidateLayout;
     public int invalidateContent;
-    private ViewState state = new ViewState();
+    private final ViewState state = new ViewState();
     private final Vector subviews = new Vector();
     private boolean allowSubviewsToBeAdded;
-    private Axes axes = new Axes();
+    private final Axes axes = new Axes();
 
     public DummyView() {
         setView(this);
     }
-    
-    public DummyView(int width, int height) {
+
+    public DummyView(final int width, final int height) {
         this();
         setupRequiredSize(new Size(width, height));
     }
 
-    public Size getRequiredSize(Size availableSpace) {
+    @Override
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(requiredSize);
     }
 
+    @Override
     public Consent canChangeValue() {
         return Veto.DEFAULT;
     }
 
+    @Override
     public boolean canFocus() {
         return false;
     }
 
+    @Override
     public boolean contains(final View view) {
         return false;
     }
 
+    @Override
     public boolean containsFocus() {
         return false;
     }
 
+    @Override
     public void contentMenuOptions(final UserActionSet menuOptions) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void debug(final DebugBuilder debug) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void debugStructure(final DebugBuilder b) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void dispose() {
-        Workspace workspace = getWorkspace();
+        final Workspace workspace = getWorkspace();
         if (workspace != null) {
             workspace.removeView(this);
         }
     }
 
+    @Override
     public void drag(final InternalDrag drag) {
         throw new NotYetImplementedException();
     }
 
-    public void drag(ViewDrag drag) {
+    @Override
+    public void drag(final ViewDrag drag) {
         throw new NotYetImplementedException();
     }
-    
+
+    @Override
     public void dragCancel(final InternalDrag drag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public View dragFrom(final Location location) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void drag(final ContentDrag contentDrag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void dragIn(final ContentDrag drag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void dragOut(final ContentDrag drag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public DragEvent dragStart(final DragStart drag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void dragTo(final InternalDrag drag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void draw(final Canvas canvas) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void drop(final ContentDrag drag) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void drop(final ViewDrag drag) {
         throw new NotYetImplementedException();
     }
 
-    public void editComplete(boolean moveFocus, boolean toNextField) {
+    @Override
+    public void editComplete(final boolean moveFocus, final boolean toNextField) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void entered() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void exited() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void firstClick(final Click click) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void focusLost() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void focusReceived() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Location getAbsoluteLocation() {
         return absoluteLocation;
     }
 
+    @Override
     public int getBaseline() {
         return 0;
     }
 
+    @Override
     public Bounds getBounds() {
         return new Bounds(location, size);
     }
 
+    @Override
     public Content getContent() {
         return content;
     }
 
+    @Override
     public FocusManager getFocusManager() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public int getId() {
         return 0;
     }
 
+    @Override
     public Location getLocation() {
         return location;
     }
 
+    @Override
     public Padding getPadding() {
         return new Padding();
     }
 
+    @Override
     public View getParent() {
         return parent;
     }
 
+    @Override
     public Size getSize() {
         return size;
     }
 
+    @Override
     public ViewSpecification getSpecification() {
         return specification;
     }
 
+    @Override
     public ViewState getState() {
-        return state ;
+        return state;
     }
-    
+
+    @Override
     public void addView(final View view) {
-        if(allowSubviewsToBeAdded) {
+        if (allowSubviewsToBeAdded) {
             subviews.add(view);
-        }  else {
+        } else {
             throw new IsisException("Can't add view. Do you need to set the allowSubviewsToBeAdded flag?");
         }
     }
 
+    @Override
     public void removeView(final View view) {
-        if(allowSubviewsToBeAdded) {
+        if (allowSubviewsToBeAdded) {
             subviews.remove(view);
-        }  else {
+        } else {
             throw new IsisException("Can't remove view. Do you need to set the allowSubviewsToBeAdded flag?");
         }
     }
 
+    @Override
     public View[] getSubviews() {
         return (View[]) subviews.toArray(new View[subviews.size()]);
     }
 
+    @Override
     public View getView() {
         return view;
     }
 
+    @Override
     public Viewer getViewManager() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Feedback getFeedbackManager() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Workspace getWorkspace() {
         return getParent() == null ? null : getParent().getWorkspace();
     }
 
+    @Override
     public boolean hasFocus() {
         return false;
     }
 
+    @Override
     public View identify(final Location mouseLocation) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void invalidateContent() {
         invalidateContent++;
     }
 
+    @Override
     public void invalidateLayout() {
         invlidateLayout++;
     }
 
+    @Override
     public void keyPressed(final KeyboardAction key) {
         throw new NotYetImplementedException();
     }
 
-    public void keyReleased(KeyboardAction action) {
+    @Override
+    public void keyReleased(final KeyboardAction action) {
         throw new NotYetImplementedException();
     }
 
-    public void keyTyped(KeyboardAction action) {
+    @Override
+    public void keyTyped(final KeyboardAction action) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void layout() {
     }
 
+    @Override
     public void limitBoundsWithin(final Size size) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void markDamaged() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void markDamaged(final Bounds bounds) {
     }
 
+    @Override
     public void mouseDown(final Click click) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void mouseMoved(final Location location) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void objectActionResult(final ObjectAdapter result, final Placement placement) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public View pickupContent(final Location location) {
         return null;
     }
 
+    @Override
     public View pickupView(final Location location) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void print(final Canvas canvas) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void refresh() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void replaceView(final View toReplace, final View replacement) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void secondClick(final Click click) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void setBounds(final Bounds bounds) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void setFocusManager(final FocusManager focusManager) {
         throw new NotYetImplementedException();
     }
 
-    public void setLayout(Layout layout) {
+    public void setLayout(final Layout layout) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void setLocation(final Location location) {
         this.location = location;
     }
 
+    @Override
     public void setParent(final View view) {
         parent = view.getView();
     }
 
+    @Override
     public void setSize(final Size size) {
         this.size = size;
     }
 
+    @Override
     public void setView(final View view) {
         this.view = view;
     }
 
+    @Override
     public View subviewFor(final Location location) {
-        for (View view : getSubviews()) {
+        for (final View view : getSubviews()) {
             if (view.getBounds().contains(location)) {
                 return view;
             }
@@ -391,22 +462,27 @@ public class DummyView implements View {
         return null;
     }
 
+    @Override
     public void thirdClick(final Click click) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void update(final ObjectAdapter object) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void updateView() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public ViewAreaType viewAreaType(final Location mouseLocation) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void viewMenuOptions(final UserActionSet menuOptions) {
         throw new NotYetImplementedException();
     }
@@ -427,29 +503,35 @@ public class DummyView implements View {
         this.requiredSize = size;
     }
 
-    public void setupSpecification(ViewSpecification specification) {
+    public void setupSpecification(final ViewSpecification specification) {
         this.specification = specification;
     }
-    
-    public void setupSubviews(View[] views) {
-        for (View view : views) {
+
+    public void setupSubviews(final View[] views) {
+        for (final View view : views) {
             subviews.add(view);
         }
     }
 
-    public void mouseUp(Click click) {
+    @Override
+    public void mouseUp(final Click click) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Axes getViewAxes() {
         return axes;
     }
 
-    public void setupAllowSubviewsToBeAdded(boolean allowSubviewsToBeAdded) {
+    public void setupAllowSubviewsToBeAdded(final boolean allowSubviewsToBeAdded) {
         this.allowSubviewsToBeAdded = allowSubviewsToBeAdded;
     }
 
-    public void loadOptions(Options viewOptions) {}
-    
-    public void saveOptions(Options viewOptions) {}
+    @Override
+    public void loadOptions(final Options viewOptions) {
+    }
+
+    @Override
+    public void saveOptions(final Options viewOptions) {
+    }
 }

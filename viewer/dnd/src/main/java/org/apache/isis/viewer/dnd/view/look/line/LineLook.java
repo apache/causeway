@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.line;
 
 import org.apache.isis.viewer.dnd.view.Look;
@@ -26,15 +25,15 @@ import org.apache.isis.viewer.dnd.view.window.AbstractWindowBorder;
 
 public class LineLook implements Look {
 
+    @Override
     public void install() {
         AbstractWindowBorder.setBorderRenderer(new LineStyleWindowBorder());
         Button.setButtonRender(new ButtonLineStyleRender());
     }
 
+    @Override
     public String getName() {
         return "Line";
     }
 
 }
-
-

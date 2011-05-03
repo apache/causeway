@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -31,28 +30,28 @@ import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 
 public class ReplaceViewBorder extends AbstractBorder {
 
-    protected ReplaceViewBorder(View view) {
+    protected ReplaceViewBorder(final View view) {
         super(view);
     }
-    
-    public void draw(Canvas canvas) {
+
+    @Override
+    public void draw(final Canvas canvas) {
         super.draw(canvas);
-        
-        Bounds b = getButtonBounds();
+
+        final Bounds b = getButtonBounds();
         canvas.drawRoundedRectangle(b.getX(), b.getY(), b.getWidth(), b.getHeight(), 6, 6, Toolkit.getColor(0xfff));
     }
 
-    public void firstClick(Click click) {
+    @Override
+    public void firstClick(final Click click) {
         if (getButtonBounds().contains(click.getLocation())) {
-            View view = new FormSpecification().createView(getContent(), new Axes(), 0);
+            final View view = new FormSpecification().createView(getContent(), new Axes(), 0);
             getWorkspace().replaceView(getParent(), view);
         }
     }
 
     private Bounds getButtonBounds() {
-        int x = getSize().getWidth() - 28;
+        final int x = getSize().getWidth() - 28;
         return new Bounds(x, 8, 20, 16);
     }
 }
-
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import junit.framework.TestCase;
@@ -25,7 +24,6 @@ import junit.framework.TestCase;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.interaction.ContentDragImpl;
 import org.apache.isis.viewer.dnd.view.ContentDrag;
-
 
 public class ContentDragTest extends TestCase {
 
@@ -45,8 +43,7 @@ public class ContentDragTest extends TestCase {
         final DummyView targetView = new DummyView();
         targetView.setupAbsoluteLocation(new Location(100, 100));
 
-//        drag.drag(targetView, new Location(120, 120), 0);
-//        assertEquals(new Location(20, 20), drag.getTargetLocation());
+        // drag.drag(targetView, new Location(120, 120), 0);
+        // assertEquals(new Location(20, 20), drag.getTargetLocation());
     }
 }
-

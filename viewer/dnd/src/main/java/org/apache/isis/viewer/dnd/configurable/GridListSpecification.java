@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -34,17 +33,18 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.composite.GridLayout;
 import org.apache.isis.viewer.dnd.view.composite.GridLayoutControlBorder;
 
-
 public class GridListSpecification extends CompositeViewSpecification implements ViewFactory {
 
     protected static class ElementFactory implements ViewFactory {
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             final GlobalViewFactory factory = Toolkit.getViewFactory();
 
-            ViewSpecification elementSpecification = axes.getAxis(ConfigurationAxis.class).getElementSpecification();
+            final ViewSpecification elementSpecification =
+                axes.getAxis(ConfigurationAxis.class).getElementSpecification();
             if (elementSpecification == null) {
-                int defaultRequirement = ViewRequirement.CLOSED | ViewRequirement.SUBVIEW;
-                ViewRequirement viewRequirement = new ViewRequirement(content, defaultRequirement);
+                final int defaultRequirement = ViewRequirement.CLOSED | ViewRequirement.SUBVIEW;
+                final ViewRequirement viewRequirement = new ViewRequirement(content, defaultRequirement);
                 return factory.createView(viewRequirement);
             } else {
                 return elementSpecification.createView(content, axes, sequence);
@@ -65,16 +65,18 @@ public class GridListSpecification extends CompositeViewSpecification implements
         addViewDecorator(new GridLayoutControlBorder.Factory());
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isCollection() && requirement.isOpen() && !requirement.isSubview() && requirement.isDesign();
     }
 
+    @Override
     public String getName() {
         return "Grid List";
     }
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new GridLayout();
     }
 }
-

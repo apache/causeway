@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Text;
-
 
 public abstract class Toolkit {
     public static boolean debug = false;
@@ -95,4 +93,3 @@ public abstract class Toolkit {
     protected abstract void init();
 
 }
-

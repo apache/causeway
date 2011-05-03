@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -28,5 +27,3 @@ public interface CompositeViewDecorator {
     View decorate(View view, Axes axes);
 
 }
-
-

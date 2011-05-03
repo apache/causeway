@@ -34,15 +34,14 @@ public class GetPropertyChoices extends PerformAbstractTypeParams {
     public void doHandle(final PerformContext performContext) {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final ObjectMember nakedObjectMember = performContext
-                .getObjectMember();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
 
         final OneToOneAssociation otoa = (OneToOneAssociation) nakedObjectMember;
 
-        result = performContext.getPeer().toAdaptedListOfPojos(otoa
-                .getChoices(onAdapter));
+        result = performContext.getPeer().toAdaptedListOfPojos(otoa.getChoices(onAdapter));
     }
 
+    @Override
     public ObjectAdapter getResult() {
         return result;
     }

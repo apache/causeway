@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.histogram;
 
 import java.util.List;
@@ -29,36 +28,37 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.ViewAxis;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
-
 class HistogramAxis implements ViewAxis {
-    private ObjectAssociation fields[];
-    private double maxValues[];
-    private int noBars;
+    private final ObjectAssociation fields[];
+    private final double maxValues[];
+    private final int noBars;
 
-    public HistogramAxis(Content content) {
-        List<? extends ObjectAssociation> associationList = HistogramSpecification
-                .availableFields((CollectionContent) content);
+    public HistogramAxis(final Content content) {
+        final List<? extends ObjectAssociation> associationList =
+            HistogramSpecification.availableFields((CollectionContent) content);
         noBars = associationList.size();
         fields = new ObjectAssociation[noBars];
         maxValues = new double[noBars];
         int i = 0;
-        for (ObjectAssociation association : associationList) {
+        for (final ObjectAssociation association : associationList) {
             fields[i++] = association;
         }
     }
 
-    public double getLengthFor(Content content, int fieldNo) {
-        return NumberAdapters.doubleValue(fields[fieldNo],  fields[fieldNo].get(content.getAdapter())) / maxValues[fieldNo];
+    public double getLengthFor(final Content content, final int fieldNo) {
+        return NumberAdapters.doubleValue(fields[fieldNo], fields[fieldNo].get(content.getAdapter()))
+            / maxValues[fieldNo];
     }
 
-    public void determineMaximum(Content content) {
+    public void determineMaximum(final Content content) {
         int i = 0;
-        for (ObjectAssociation field : fields) {
+        for (final ObjectAssociation field : fields) {
             maxValues[i] = 0;
-            CollectionFacet collectionFacet = content.getAdapter().getSpecification().getFacet(CollectionFacet.class);
-            for (ObjectAdapter element : collectionFacet.iterable(content.getAdapter())) {
-                ObjectAdapter value = field.get(element);
-                double doubleValue = NumberAdapters.doubleValue(field, value);
+            final CollectionFacet collectionFacet =
+                content.getAdapter().getSpecification().getFacet(CollectionFacet.class);
+            for (final ObjectAdapter element : collectionFacet.iterable(content.getAdapter())) {
+                final ObjectAdapter value = field.get(element);
+                final double doubleValue = NumberAdapters.doubleValue(field, value);
                 maxValues[i] = Math.max(maxValues[i], doubleValue);
             }
             i++;
@@ -69,4 +69,3 @@ class HistogramAxis implements ViewAxis {
         return noBars;
     }
 }
-

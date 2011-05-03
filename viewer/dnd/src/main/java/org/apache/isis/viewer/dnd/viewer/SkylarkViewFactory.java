@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -50,7 +48,7 @@ import org.apache.isis.viewer.dnd.view.border.DisposedObjectBorder;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.viewer.basic.FallbackView;
 import org.apache.isis.viewer.dnd.viewer.basic.MinimizedView;
-
+import org.apache.log4j.Logger;
 
 /**
  * This class holds all the different view types that all the different objects can be viewed as.
@@ -67,21 +65,22 @@ public class SkylarkViewFactory implements GlobalViewFactory {
     private final Vector subviews = new Vector();
     private ViewSpecification dragContentSpecification;
 
-    private List<ViewSpecification> viewSpecifications = new ArrayList<ViewSpecification>();
-    private List<ViewSpecification> designSpecifications = new ArrayList<ViewSpecification>();
+    private final List<ViewSpecification> viewSpecifications = new ArrayList<ViewSpecification>();
+    private final List<ViewSpecification> designSpecifications = new ArrayList<ViewSpecification>();
 
+    @Override
     public void addSpecification(final ViewSpecification specification) {
         viewSpecifications.add(specification);
     }
-    
-    public void addSpecification(String specClassName) {
-            ViewSpecification spec;
-            spec = (ViewSpecification) InstanceUtil.createInstance(specClassName);
-            LOG.info("adding view specification: " + spec);
-            addSpecification(spec);
+
+    public void addSpecification(final String specClassName) {
+        ViewSpecification spec;
+        spec = (ViewSpecification) InstanceUtil.createInstance(specClassName);
+        LOG.info("adding view specification: " + spec);
+        addSpecification(spec);
     }
 
-    public void addDesignSpecification(ViewSpecification specification) {
+    public void addDesignSpecification(final ViewSpecification specification) {
         designSpecifications.add(specification);
     }
 
@@ -89,6 +88,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         emptyFieldSpecification = spec;
     }
 
+    @Override
     public View createDialog(final Content content) {
         return createView(dialogSpec, content);
     }
@@ -103,16 +103,13 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         }
         // TODO this should be passed in so that factory created views can be related to the views that ask
         // for them
-        Axes axes = new Axes();
+        final Axes axes = new Axes();
         View createView = spec.createView(content, axes, -1);
 
         /*
-        ObjectSpecification contentSpecification = content.getSpecification();
-        if (contentSpecification != null) {
-            Options viewOptions = Properties.getViewConfigurationOptions(spec);
-            createView.loadOptions(viewOptions);
-        }   
-        */
+         * ObjectSpecification contentSpecification = content.getSpecification(); if (contentSpecification != null) {
+         * Options viewOptions = Properties.getViewConfigurationOptions(spec); createView.loadOptions(viewOptions); }
+         */
         if (content.isObject()) {
             final ObjectAdapter adapter = content.getAdapter();
             if (adapter != null && adapter.getResolveState().isDestroyed()) {
@@ -123,6 +120,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         return createView;
     }
 
+    @Override
     public void debugData(final DebugBuilder sb) {
         sb.append("RootsViews\n");
         Enumeration fields = rootViews.elements();
@@ -145,7 +143,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         sb.append("\n\n");
 
         sb.append("Specifications\n");
-        for (ViewSpecification spec : viewSpecifications) {
+        for (final ViewSpecification spec : viewSpecifications) {
             sb.append("  ");
             sb.append(spec);
             sb.append("\n");
@@ -153,6 +151,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         sb.append("\n\n");
     }
 
+    @Override
     public String debugTitle() {
         return "View factory entries";
     }
@@ -169,33 +168,37 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         this.dragContentSpecification = dragContentSpecification;
     }
 
+    @Override
     public View createDragViewOutline(final View view) {
         return new DragViewOutline(view);
     }
 
-    public DragEvent createDragContentOutline(View view, Location location) {
-        View dragOverlay = dragContentSpecification.createView(view.getContent(), new Axes(), -1);
+    @Override
+    public DragEvent createDragContentOutline(final View view, final Location location) {
+        final View dragOverlay = dragContentSpecification.createView(view.getContent(), new Axes(), -1);
         return new ContentDragImpl(view, location, dragOverlay);
     }
 
+    @Override
     public View createMinimizedView(final View view) {
         return new MinimizedView(view);
     }
 
-    public View createView(ViewRequirement requirement) {
+    @Override
+    public View createView(final ViewRequirement requirement) {
         final ViewSpecification objectFieldSpecification = getSpecificationForRequirement(requirement);
         return createView(objectFieldSpecification, requirement.getContent());
     }
 
     public ViewSpecification getSpecificationForRequirement(final ViewRequirement requirement) {
-        Content content = requirement.getContent();
-        ObjectSpecification specification = content.getSpecification();
-        boolean isValue = specification != null && specification.containsFacet(ValueFacet.class);
+        final Content content = requirement.getContent();
+        final ObjectSpecification specification = content.getSpecification();
+        final boolean isValue = specification != null && specification.containsFacet(ValueFacet.class);
         if (content.isObject() && !isValue && content.getAdapter() == null) {
             return getEmptyFieldSpecification();
         } else {
             if (specification != null) {
-                Options viewOptions = Properties.getDefaultViewOptions(specification);
+                final Options viewOptions = Properties.getDefaultViewOptions(specification);
                 String spec = viewOptions.getString("spec");
                 if (spec == null) {
                     if (content instanceof ObjectContent && requirement.isObject() && requirement.isClosed()) {
@@ -207,13 +210,13 @@ public class SkylarkViewFactory implements GlobalViewFactory {
                     }
                 }
                 if (spec != null) {
-                    ViewSpecification lookSpec = lookupSpecByName(spec);
+                    final ViewSpecification lookSpec = lookupSpecByName(spec);
                     if (lookSpec != null && lookSpec.canDisplay(requirement)) {
                         return lookSpec;
                     }
                 }
             }
-            for (ViewSpecification viewSpecification : viewSpecifications) {
+            for (final ViewSpecification viewSpecification : viewSpecifications) {
                 if (viewSpecification.canDisplay(requirement)) {
                     return viewSpecification;
                 }
@@ -225,18 +228,18 @@ public class SkylarkViewFactory implements GlobalViewFactory {
     }
 
     public void loadUserViewSpecifications() {
-        Options options = Properties.getOptions("views.user-defined");
-        Iterator<String> names = options.names();
+        final Options options = Properties.getOptions("views.user-defined");
+        final Iterator<String> names = options.names();
         while (names.hasNext()) {
-            String name = names.next();
-            Options viewOptions = options.getOptions(name);
-            String specName = viewOptions.getString("design");
+            final String name = names.next();
+            final Options viewOptions = options.getOptions(name);
+            final String specName = viewOptions.getString("design");
             addSpecification(specName);
         }
     }
-    
-    private ViewSpecification lookupSpecByName(String name) {
-        for (ViewSpecification viewSpecification : viewSpecifications) {
+
+    private ViewSpecification lookupSpecByName(final String name) {
+        for (final ViewSpecification viewSpecification : viewSpecifications) {
             if (viewSpecification.getName().equals(name)) {
                 return viewSpecification;
             }
@@ -244,9 +247,9 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         LOG.warn("No specification found for " + name);
         return null;
     }
-    
-    private ViewSpecification lookupSpecByClassName(String className) {
-        for (ViewSpecification viewSpecification : viewSpecifications) {
+
+    private ViewSpecification lookupSpecByClassName(final String className) {
+        for (final ViewSpecification viewSpecification : viewSpecifications) {
             if (viewSpecification.getClass().getName().equals(className)) {
                 return viewSpecification;
             }
@@ -255,17 +258,20 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         return null;
     }
 
+    @Override
     public Enumeration<ViewSpecification> availableViews(final ViewRequirement requirement) {
         return viewsFor(requirement, viewSpecifications);
     }
 
+    @Override
     public Enumeration<ViewSpecification> availableDesigns(final ViewRequirement requirement) {
         return viewsFor(requirement, designSpecifications);
     }
-    
-    private Enumeration<ViewSpecification> viewsFor(final ViewRequirement requirement, List<ViewSpecification> viewSpecifications) {
+
+    private Enumeration<ViewSpecification> viewsFor(final ViewRequirement requirement,
+        final List<ViewSpecification> viewSpecifications) {
         final Vector<ViewSpecification> v = new Vector<ViewSpecification>();
-        for (ViewSpecification specification : viewSpecifications) {
+        for (final ViewSpecification specification : viewSpecifications) {
             if (specification.canDisplay(requirement)) {
                 v.addElement(specification);
             }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.field;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -32,16 +31,13 @@ import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
 
-
 public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOneField {
     private static final UserAction CLEAR_ASSOCIATION = new ClearOneToOneAssociationOption();
     private final ObjectField field;
     private final ObjectAdapter adapter;
 
-    public OneToOneFieldImpl(
-    		final ObjectAdapter parentAdapter, 
-    		final ObjectAdapter adapter, 
-    		final OneToOneAssociation association) {
+    public OneToOneFieldImpl(final ObjectAdapter parentAdapter, final ObjectAdapter adapter,
+        final OneToOneAssociation association) {
         field = new ObjectField(parentAdapter, association);
         this.adapter = adapter;
     }
@@ -146,7 +142,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
     public boolean isMandatory() {
         return getOneToOneAssociation().isMandatory();
     }
-    
+
     @Override
     public boolean isPersistable() {
         return getObject() != null && super.isPersistable();

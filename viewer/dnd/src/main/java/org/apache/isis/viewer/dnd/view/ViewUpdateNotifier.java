@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -33,5 +32,3 @@ public interface ViewUpdateNotifier extends DebuggableWithTitle {
     void removeViewsForDisposedObjects();
 
 }
-
-

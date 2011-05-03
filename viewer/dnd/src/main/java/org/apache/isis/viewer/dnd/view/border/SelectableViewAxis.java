@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -27,27 +26,26 @@ import org.apache.isis.viewer.dnd.view.ViewAxis;
 
 public class SelectableViewAxis implements ViewAxis {
     private View selectedView;
-    private Selectable target;
+    private final Selectable target;
 
-    public SelectableViewAxis(Selectable view) {
+    public SelectableViewAxis(final Selectable view) {
         target = view;
     }
 
-    public void selected(View view) {
+    public void selected(final View view) {
         selectedView = view;
         target.setSelectedNode(selectedView);
     }
 
-    public boolean isSelected(View view) {
+    public boolean isSelected(final View view) {
         return selectedView == view;
     }
-    
+
+    @Override
     public String toString() {
-        ToString s= new ToString(this);
+        final ToString s = new ToString(this);
         s.append("target", target.getId());
         s.append("selected", selectedView == null ? "none" : selectedView.getId());
         return s.toString();
     }
 }
-
-

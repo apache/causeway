@@ -17,16 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 
 public interface Layout {
-     Size getRequiredSize(final View view);
+    Size getRequiredSize(final View view);
 
     void layout(final View view, final Size maximumSize);
 }
-
-

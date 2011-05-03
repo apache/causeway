@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -38,16 +37,16 @@ import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.lookup.OpenDropDownBorder;
 import org.apache.isis.viewer.dnd.view.lookup.OptionContent;
 
-
 public class ColorField extends TextParseableFieldAbstract {
     public static class Specification extends AbstractFieldSpecification {
 
         @Override
-        public boolean canDisplay(ViewRequirement requirement) {
+        public boolean canDisplay(final ViewRequirement requirement) {
             return requirement.isTextParseable() && requirement.isForValueType(ColorValueFacet.class);
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             final ColorField field = new ColorField(content, this);
             return new OpenDropDownBorder(field) {
                 @Override
@@ -56,10 +55,12 @@ public class ColorField extends TextParseableFieldAbstract {
                 }
 
                 @Override
-                protected void setSelection(OptionContent selectedContent) {}
-                };
+                protected void setSelection(final OptionContent selectedContent) {
+                }
+            };
         }
 
+        @Override
         public String getName() {
             return "Color";
         }
@@ -70,7 +71,7 @@ public class ColorField extends TextParseableFieldAbstract {
     public ColorField(final Content content, final ViewSpecification specification) {
         super(content, specification);
     }
-    
+
     @Override
     public void draw(final Canvas canvas) {
         Color color;
@@ -98,22 +99,15 @@ public class ColorField extends TextParseableFieldAbstract {
         h -= 1;
         canvas.drawSolidRectangle(left, top, w, h, Toolkit.getColor(getColor()));
     }
-/*
-    @Override
-    public void firstClick(final Click click) {
-        if (((TextParseableContent) getContent()).isEditable().isAllowed()) {
-            final View overlay = new DisposeOverlay(new ColorFieldOverlay(this), new ValueDropDownAxis((TextParseableContent) getContent(), getView()));
-            final Location location = this.getAbsoluteLocation();
-            // Location location = click.getLocationWithinViewer();
-            // TODO offset by constant amount
-            // location.move(10, 10);
-            overlay.setLocation(location);
-            // overlay.setSize(overlay.getRequiredSize(new Size()));
-            // overlay.markDamaged();
-            getViewManager().setOverlayView(overlay);
-        }
-    }
-*/
+
+    /*
+     * @Override public void firstClick(final Click click) { if (((TextParseableContent)
+     * getContent()).isEditable().isAllowed()) { final View overlay = new DisposeOverlay(new ColorFieldOverlay(this),
+     * new ValueDropDownAxis((TextParseableContent) getContent(), getView())); final Location location =
+     * this.getAbsoluteLocation(); // Location location = click.getLocationWithinViewer(); // TODO offset by constant
+     * amount // location.move(10, 10); overlay.setLocation(location); // overlay.setSize(overlay.getRequiredSize(new
+     * Size())); // overlay.markDamaged(); getViewManager().setOverlayView(overlay); } }
+     */
     @Override
     public int getBaseline() {
         return VPADDING + Toolkit.getText(ColorsAndFonts.TEXT_NORMAL).getAscent();
@@ -126,7 +120,7 @@ public class ColorField extends TextParseableFieldAbstract {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(45, 15);
     }
 

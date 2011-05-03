@@ -23,9 +23,8 @@ import org.apache.isis.viewer.bdd.common.CellBinding;
 
 public class AbstractSetUpFixturePeer extends AbstractFixturePeer {
 
-	public AbstractSetUpFixturePeer(AliasRegistry aliasRegistry,
-			CellBinding... cellBindings) {
-		super(aliasRegistry, cellBindings);
-	}
+    public AbstractSetUpFixturePeer(final AliasRegistry aliasRegistry, final CellBinding... cellBindings) {
+        super(aliasRegistry, cellBindings);
+    }
 
 }

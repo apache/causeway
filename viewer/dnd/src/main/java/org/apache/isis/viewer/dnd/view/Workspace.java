@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 
 public interface Workspace extends View {
 
     View addIconFor(ObjectAdapter adapter, Placement placement);
 
     View addWindowFor(ObjectAdapter object, Placement placement);
-    
+
     void addWindow(View window, Placement placement);
-    
+
     void addDialog(View dialog, Placement placement);
-    
+
     /**
      * Lower the specified view so it is below all the other views.
      */

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -31,33 +30,35 @@ public class FieldOrderBorder extends AbstractViewDecorator {
 
     private boolean isReversed;
 
-    public FieldOrderBorder(View wrappedView) {
+    public FieldOrderBorder(final View wrappedView) {
         super(wrappedView);
     }
-    
+
+    @Override
     public View[] getSubviews() {
         View[] subviews = super.getSubviews();
         if (isReversed) {
-            View[] v = new View[subviews.length];
+            final View[] v = new View[subviews.length];
             for (int i = 0; i < v.length; i++) {
                 v[i] = subviews[v.length - i - 1];
             }
             subviews = v;
         }
-        
+
         return subviews;
     }
-    
-    public void viewMenuOptions(UserActionSet menuOptions) {
+
+    @Override
+    public void viewMenuOptions(final UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
-        
+
         menuOptions.add(new UserActionAbstract("Reverse view order") {
-            public void execute(Workspace workspace, View view, Location at) {
-                isReversed = ! isReversed;
-                invalidateLayout(); 
-            }});
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
+                isReversed = !isReversed;
+                invalidateLayout();
+            }
+        });
     }
 
 }
-
-

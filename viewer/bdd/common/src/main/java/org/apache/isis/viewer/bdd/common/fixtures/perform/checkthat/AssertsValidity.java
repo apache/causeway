@@ -28,13 +28,13 @@ import org.apache.isis.viewer.bdd.common.CellBinding;
  */
 public enum AssertsValidity {
 
-    VALID(true, "is valid for", "is valid", "valid"), INVALID(false,
-            "is not valid for", "is not valid", "not valid", "invalid");
+    VALID(true, "is valid for", "is valid", "valid"), INVALID(false, "is not valid for", "is not valid", "not valid",
+                                                              "invalid");
 
     private final String[] keys;
     private final boolean valid;
 
-    AssertsValidity(boolean valid, String... keys) {
+    AssertsValidity(final boolean valid, final String... keys) {
         this.keys = keys;
         this.valid = valid;
     }
@@ -48,8 +48,7 @@ public enum AssertsValidity {
     }
 
     public boolean satisfiedBy(final Consent validityConsent) {
-        return validityConsent.isAllowed() && isValid()
-                || validityConsent.isVetoed() && !isValid();
+        return validityConsent.isAllowed() && isValid() || validityConsent.isVetoed() && !isValid();
     }
 
     /**

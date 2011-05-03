@@ -17,15 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import static org.apache.isis.core.commons.lang.CastUtils.enumerationOver;
 
 import java.util.Enumeration;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -36,7 +32,8 @@ import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
+import org.apache.log4j.Appender;
+import org.apache.log4j.Logger;
 
 /**
  * Display debug window

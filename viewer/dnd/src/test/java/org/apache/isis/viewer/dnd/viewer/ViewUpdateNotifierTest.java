@@ -17,25 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
 import junit.framework.Assert;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -66,19 +58,25 @@ import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.ViewUpdateNotifierImpl;
 import org.apache.isis.viewer.dnd.view.content.RootObject;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ViewUpdateNotifierTest {
 
-    private Mockery mockery = new JUnit4Mockery();
-    
+    private final Mockery mockery = new JUnit4Mockery();
+
     private ExposedViewUpdateNotifier notifier;
     private TestProxyAdapter object;
-    
+
     protected TemplateImageLoader mockTemplateImageLoader;
     protected SpecificationLoader mockSpecificationLoader;
     private UserProfileLoader mockUserProfileLoader;
@@ -89,9 +87,7 @@ public class ViewUpdateNotifierTest {
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
 
-	private List<Object> servicesList;
-
-
+    private List<Object> servicesList;
 
     @Before
     public void setUp() throws Exception {
@@ -108,47 +104,43 @@ public class ViewUpdateNotifierTest {
         mockTransaction = mockery.mock(IsisTransaction.class);
         mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
         mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-        
-        mockery.checking(new Expectations() {{
-            ignoring(mockTemplateImageLoader);
-            ignoring(mockSpecificationLoader);
-            ignoring(mockAuthenticationManager);
-            ignoring(mockAuthorizationManager);
 
-            one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
-            will(returnValue(new UserProfile()));
-            
-            ignoring(mockUserProfileLoader);
+        mockery.checking(new Expectations() {
+            {
+                ignoring(mockTemplateImageLoader);
+                ignoring(mockSpecificationLoader);
+                ignoring(mockAuthenticationManager);
+                ignoring(mockAuthorizationManager);
 
-            allowing(mockPersistenceSessionFactory).createPersistenceSession();
-            will(returnValue(mockPersistenceSession));
+                one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
+                will(returnValue(new UserProfile()));
 
-            ignoring(mockPersistenceSessionFactory);
-            
-            allowing(mockPersistenceSession).getTransactionManager();
-            will(returnValue(mockTransactionManager));
+                ignoring(mockUserProfileLoader);
 
-            ignoring(mockPersistenceSession);
+                allowing(mockPersistenceSessionFactory).createPersistenceSession();
+                will(returnValue(mockPersistenceSession));
 
-            allowing(mockTransactionManager).getTransaction();
-            will(returnValue(mockTransaction));
-            
-            ignoring(mockTransaction);
-        }});
+                ignoring(mockPersistenceSessionFactory);
 
-        IsisSessionFactory sessionFactory = 
-            new IsisSessionFactoryDefault(
-                    DeploymentType.EXPLORATION, 
-                    new IsisConfigurationDefault(), 
-                    mockTemplateImageLoader, 
-                    mockSpecificationLoader, 
-                    mockAuthenticationManager, 
-    		        mockAuthorizationManager,
-                    mockUserProfileLoader, 
-                    mockPersistenceSessionFactory, servicesList);
+                allowing(mockPersistenceSession).getTransactionManager();
+                will(returnValue(mockTransactionManager));
+
+                ignoring(mockPersistenceSession);
+
+                allowing(mockTransactionManager).getTransaction();
+                will(returnValue(mockTransaction));
+
+                ignoring(mockTransaction);
+            }
+        });
+
+        final IsisSessionFactory sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
+                mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager,
+                mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
-        
+
         IsisContext.openSession(new ExplorationSession());
 
         notifier = new ExposedViewUpdateNotifier();
@@ -160,7 +152,7 @@ public class ViewUpdateNotifierTest {
     public void tearDown() {
         IsisContext.closeSession();
     }
-    
+
     private DummyView createView(final ObjectAdapter object) {
         final DummyView view = new DummyView();
         view.setupContent(new RootObject(object));
@@ -192,7 +184,8 @@ public class ViewUpdateNotifierTest {
         try {
             notifier.add(view);
             fail();
-        } catch (final IsisException expected) {}
+        } catch (final IsisException expected) {
+        }
     }
 
     @Test
@@ -217,11 +210,10 @@ public class ViewUpdateNotifierTest {
     @Test
     public void testViewDirty() {
         // nasty ... need to tidy up the setup
-        TestProxySystem testProxySystem = new TestProxySystem();
+        final TestProxySystem testProxySystem = new TestProxySystem();
         testProxySystem.init();
-        
-        object.setupResolveState(ResolveState.RESOLVED);
 
+        object.setupResolveState(ResolveState.RESOLVED);
 
         final Vector vector = new Vector();
         final DummyView view1 = createView(object);
@@ -238,7 +230,7 @@ public class ViewUpdateNotifierTest {
 
         IsisContext.getUpdateNotifier().addChangedObject(object);
         notifier.invalidateViewsForChangedObjects();
-        
+
         assertEquals(1, view1.invalidateContent);
         assertEquals(1, view2.invalidateContent);
     }
@@ -246,9 +238,9 @@ public class ViewUpdateNotifierTest {
     @Test
     public void testDisposedViewsRemoved() {
         // nasty ... need to tidy up the setup
-        TestProxySystem testProxySystem = new TestProxySystem();
+        final TestProxySystem testProxySystem = new TestProxySystem();
         testProxySystem.init();
-        
+
         final DummyWorkspaceView workspace = new DummyWorkspaceView();
 
         final Vector vector = new Vector();
@@ -271,7 +263,7 @@ public class ViewUpdateNotifierTest {
         IsisContext.getUpdateNotifier().addDisposedObject(object);
         notifier.removeViewsForDisposedObjects();
         assertEquals(0, workspace.getSubviews().length);
-        
+
     }
 }
 
@@ -279,7 +271,7 @@ class ExposedViewUpdateNotifier extends ViewUpdateNotifierImpl {
 
     public void assertContainsViewForObject(final View view, final ObjectAdapter object) {
         Assert.assertTrue(viewListByAdapter.containsKey(object));
-        final Vector viewsForObject = (Vector) viewListByAdapter.get(object);
+        final Vector viewsForObject = viewListByAdapter.get(object);
         Assert.assertTrue(viewsForObject.contains(view));
     }
 

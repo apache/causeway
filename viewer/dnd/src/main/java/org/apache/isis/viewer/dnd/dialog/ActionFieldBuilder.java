@@ -17,11 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.dialog;
 
-
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,7 +32,7 @@ import org.apache.isis.viewer.dnd.view.action.ObjectParameterImpl;
 import org.apache.isis.viewer.dnd.view.action.ParameterContent;
 import org.apache.isis.viewer.dnd.view.action.TextParseableParameter;
 import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
-
+import org.apache.log4j.Logger;
 
 public class ActionFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ActionFieldBuilder.class);
@@ -46,7 +43,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
     }
 
     @Override
-    public void build(final View view, Axes axes) {
+    public void build(final View view, final Axes axes) {
         Assert.assertEquals(view.getView(), view);
 
         final ActionContent actionContent = ((ActionContent) view.getContent());
@@ -58,7 +55,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
     }
 
-    private View createFieldView(final View view, final ParameterContent parameter, int sequence) {
+    private View createFieldView(final View view, final ParameterContent parameter, final int sequence) {
         final View fieldView = subviewDesign.createView(parameter, null, sequence);
         if (fieldView == null) {
             throw new IsisException("All parameters must be shown");
@@ -100,7 +97,8 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
             if (content instanceof ObjectParameter) {
                 if (subviewsObject != invocationsObject) {
-                    final ObjectParameter parameter = new ObjectParameterImpl((ObjectParameterImpl) content, invocationsObject);
+                    final ObjectParameter parameter =
+                        new ObjectParameterImpl((ObjectParameterImpl) content, invocationsObject);
                     final View fieldView = createFieldView(view, parameter, i);
                     view.replaceView(subview, decorateSubview(view.getViewAxes(), fieldView));
                 }

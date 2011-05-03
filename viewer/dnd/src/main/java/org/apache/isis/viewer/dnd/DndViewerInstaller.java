@@ -17,24 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
-
 public class DndViewerInstaller extends IsisViewerInstallerAbstract {
 
-	public DndViewerInstaller() {
-		super("dnd");
-	}
+    public DndViewerInstaller() {
+        super("dnd");
+    }
 
-	@Override
-	public IsisViewer doCreateViewer() {
+    @Override
+    public IsisViewer doCreateViewer() {
         return new DndViewer();
     }
 
-
 }
-

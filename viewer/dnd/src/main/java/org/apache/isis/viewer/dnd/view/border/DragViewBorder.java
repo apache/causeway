@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -36,8 +35,8 @@ import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.base.DragViewOutline;
 
 /**
- * A drag view border provides a line and handle that appears when the mouse moves over the contained view
- * and allows the view to be dragged.
+ * A drag view border provides a line and handle that appears when the mouse moves over the contained view and allows
+ * the view to be dragged.
  */
 public class DragViewBorder extends AbstractBorder {
     private final int handleWidth = 14;

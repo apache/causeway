@@ -31,12 +31,9 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections.
 public class CheckCollection extends PerformCheckThatAbstract {
 
     public CheckCollection(final Perform.Mode mode) {
-        super("check collection", OnMemberColumn.REQUIRED, mode, new Hidden(),
-                new Visible(), new Disabled(), new Usable(), new Emptiness(
-                AssertsEmpty.EMPTY), new Emptiness(
-                AssertsEmpty.NOT_EMPTY), new Containment(
-                AssertsContainment.CONTAINS), new Containment(
-                AssertsContainment.DOES_NOT_CONTAIN));
+        super("check collection", OnMemberColumn.REQUIRED, mode, new Hidden(), new Visible(), new Disabled(),
+            new Usable(), new Emptiness(AssertsEmpty.EMPTY), new Emptiness(AssertsEmpty.NOT_EMPTY), new Containment(
+                AssertsContainment.CONTAINS), new Containment(AssertsContainment.DOES_NOT_CONTAIN));
     }
 
 }

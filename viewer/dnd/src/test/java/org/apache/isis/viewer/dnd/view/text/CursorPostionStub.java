@@ -17,11 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
-import org.apache.isis.viewer.dnd.view.text.CursorPosition;
-import org.apache.isis.viewer.dnd.view.text.TextContent;
 
 public class CursorPostionStub extends CursorPosition {
     public CursorPostionStub(final TextContent content, final int line, final int afterCharacter) {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import java.awt.event.KeyEvent;
@@ -28,11 +27,10 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractViewDecorator;
 
-
 public class DisposeOverlay extends AbstractViewDecorator {
     private final SelectionListAxis axis;
 
-    public DisposeOverlay(final View wrappedView, SelectionListAxis axis) {
+    public DisposeOverlay(final View wrappedView, final SelectionListAxis axis) {
         super(wrappedView);
         this.axis = axis;
     }

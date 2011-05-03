@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -35,7 +33,7 @@ import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
+import org.apache.log4j.Logger;
 
 public abstract class ResizeBorder extends AbstractBorder {
     private static final Logger LOG = Logger.getLogger(ResizeBorder.class);
@@ -53,7 +51,8 @@ public abstract class ResizeBorder extends AbstractBorder {
 
     // TODO allow a minimum and maximum sizes to be specified and then ensure
     // the user doesn't go outside them.
-    public ResizeBorder(final View view, final int allowDirections, final int widthOnMovingSides, final int widthOnStaticSides) {
+    public ResizeBorder(final View view, final int allowDirections, final int widthOnMovingSides,
+        final int widthOnStaticSides) {
         super(view);
         this.allowDirections = allowDirections;
         top = canExtend(UP) ? widthOnMovingSides : widthOnStaticSides;
@@ -69,7 +68,7 @@ public abstract class ResizeBorder extends AbstractBorder {
         debug.appendln("width", width == 0 ? "no change" : Integer.toString(width));
         debug.appendln("height ", height == 0 ? "no change" : Integer.toString(height));
         debug.appendln("resizable ", (canExtend(UP) ? "Up " : "") + (canExtend(DOWN) ? "Down " : "")
-                + (canExtend(LEFT) ? "Left " : "") + (canExtend(RIGHT) ? "Right " : ""));
+            + (canExtend(LEFT) ? "Left " : "") + (canExtend(RIGHT) ? "Right " : ""));
     }
 
     @Override
@@ -171,38 +170,37 @@ public abstract class ResizeBorder extends AbstractBorder {
     }
 
     /**
-     * Detects whether the point is on the resize border, and if so changes the cursor to show it can be
-     * resized.
+     * Detects whether the point is on the resize border, and if so changes the cursor to show it can be resized.
      */
     @Override
     public void mouseMoved(final Location at) {
         final int onBorder = onBorder(at);
         if (this.onBorder != onBorder) {
             switch (onBorder) {
-            case ResizeDrag.RIGHT:
-                getFeedbackManager().showResizeRightCursor();
-                resizing = true;
-                markDamaged();
-                break;
+                case ResizeDrag.RIGHT:
+                    getFeedbackManager().showResizeRightCursor();
+                    resizing = true;
+                    markDamaged();
+                    break;
 
-            case ResizeDrag.BOTTOM:
-                getFeedbackManager().showResizeDownCursor();
-                resizing = true;
-                markDamaged();
-                break;
+                case ResizeDrag.BOTTOM:
+                    getFeedbackManager().showResizeDownCursor();
+                    resizing = true;
+                    markDamaged();
+                    break;
 
-            case ResizeDrag.BOTTOM_RIGHT:
-                getFeedbackManager().showResizeDownRightCursor();
-                resizing = true;
-                markDamaged();
-                break;
+                case ResizeDrag.BOTTOM_RIGHT:
+                    getFeedbackManager().showResizeDownRightCursor();
+                    resizing = true;
+                    markDamaged();
+                    break;
 
-            default:
-                getFeedbackManager().showDefaultCursor();
-                super.mouseMoved(at);
-                resizing = false;
-                markDamaged();
-                break;
+                default:
+                    getFeedbackManager().showDefaultCursor();
+                    super.mouseMoved(at);
+                    resizing = false;
+                    markDamaged();
+                    break;
             }
             UI_LOG.debug("on resize border " + onBorder + " " + resizing);
         }
@@ -221,8 +219,10 @@ public abstract class ResizeBorder extends AbstractBorder {
 
     private int onBorder(final Location at) {
         final Bounds area = contentArea();
-        final boolean right = canExtend(RIGHT) && at.getX() >= area.getWidth() && at.getX() <= area.getWidth() + getRight();
-        final boolean bottom = canExtend(DOWN) && at.getY() >= area.getHeight() && at.getY() <= area.getHeight() + getBottom();
+        final boolean right =
+            canExtend(RIGHT) && at.getX() >= area.getWidth() && at.getX() <= area.getWidth() + getRight();
+        final boolean bottom =
+            canExtend(DOWN) && at.getY() >= area.getHeight() && at.getY() <= area.getHeight() + getBottom();
 
         final int status;
         if (right && bottom) {

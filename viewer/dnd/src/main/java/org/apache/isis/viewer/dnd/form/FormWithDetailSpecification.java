@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import java.util.List;
@@ -34,9 +33,8 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.border.SelectObjectBorder;
 import org.apache.isis.viewer.dnd.view.composite.MasterDetailPanel;
 
-
 public class FormWithDetailSpecification implements ViewSpecification {
-    private FormSpecification leftHandSideSpecification;
+    private final FormSpecification leftHandSideSpecification;
 
     public FormWithDetailSpecification() {
         leftHandSideSpecification = new FormSpecification();
@@ -44,24 +42,25 @@ public class FormWithDetailSpecification implements ViewSpecification {
     }
 
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isObject() && requirement.isOpen() && !requirement.isSubview() && containsEnoughFields(requirement.getContent());
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isObject() && requirement.isOpen() && !requirement.isSubview()
+            && containsEnoughFields(requirement.getContent());
     }
 
-    private boolean containsEnoughFields(Content content) {
-        ObjectSpecification specification = content.getSpecification();
-        List<ObjectAssociation> associations = specification.getAssociations(new Filter<ObjectAssociation>() {
+    private boolean containsEnoughFields(final Content content) {
+        final ObjectSpecification specification = content.getSpecification();
+        final List<ObjectAssociation> associations = specification.getAssociations(new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(ObjectAssociation t) {
+            public boolean accept(final ObjectAssociation t) {
                 return t.isOneToManyAssociation()
-                        || (t.isOneToOneAssociation() && !((OneToOneAssociation) t).getSpecification().isParseable());
+                    || (t.isOneToOneAssociation() && !((OneToOneAssociation) t).getSpecification().isParseable());
             }
         });
         return associations.size() >= 1;
     }
 
     @Override
-    public View createView(Content content, Axes axes, int sequence) {
+    public View createView(final Content content, final Axes axes, final int sequence) {
         return new MasterDetailPanel(content, this, leftHandSideSpecification);
     }
 
@@ -96,4 +95,3 @@ public class FormWithDetailSpecification implements ViewSpecification {
     }
 
 }
-

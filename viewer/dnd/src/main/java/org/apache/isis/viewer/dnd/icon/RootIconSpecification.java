@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.icon;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractViewDecorator;
 import org.apache.isis.viewer.dnd.view.border.ObjectBorder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
 
 class IconOpenAction extends AbstractViewDecorator {
     protected IconOpenAction(final View wrappedView) {
@@ -62,18 +60,19 @@ class IconOpenAction extends AbstractViewDecorator {
 }
 
 public class RootIconSpecification extends IconSpecification {
-    
+
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         return super.canDisplay(requirement) && requirement.is(ViewRequirement.ROOT);
     }
-    
+
     @Override
-    public View createView(final Content content, Axes axes, int sequence) {
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final View icon = super.createView(content, axes, sequence);
         return new ObjectBorder(new IconOpenAction(icon));
     }
-    
+
+    @Override
     public boolean isReplaceable() {
         return false;
     }

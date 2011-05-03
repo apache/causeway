@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer;
 
 import org.apache.isis.core.commons.ensure.Assert;
@@ -35,9 +34,9 @@ import org.apache.isis.viewer.dnd.view.field.OneToManyFieldImpl;
 import org.apache.isis.viewer.dnd.view.field.OneToOneFieldImpl;
 import org.apache.isis.viewer.dnd.view.field.TextParseableFieldImpl;
 
-
 public class DefaultContentFactory implements ContentFactory {
 
+    @Override
     public Content createRootContent(final ObjectAdapter object) {
         Assert.assertNotNull(object);
         final ObjectSpecification objectSpec = object.getSpecification();
@@ -46,14 +45,15 @@ public class DefaultContentFactory implements ContentFactory {
         }
         if (objectSpec.isNotCollection()) {
             return new RootObject(object);
-        } 
-    
+        }
+
         throw new IllegalArgumentException("Must be an object or collection: " + object);
     }
 
+    @Override
     public Content createFieldContent(final ObjectAssociation field, final ObjectAdapter object) {
         Content content;
-        ObjectAdapter associatedObject = field.get(object);
+        final ObjectAdapter associatedObject = field.get(object);
         if (field instanceof OneToManyAssociation) {
             content = new OneToManyFieldImpl(object, associatedObject, (OneToManyAssociation) field);
         } else if (field instanceof OneToOneAssociation) {

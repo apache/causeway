@@ -17,24 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -49,18 +37,24 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.viewer.dnd.drawing.Location;
-import org.apache.isis.viewer.dnd.view.text.CursorPosition;
-import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
-import org.apache.isis.viewer.dnd.view.text.TextContent;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class TextFieldContentTest {
 
     private TextContent content;
 
-    private Mockery mockery = new JUnit4Mockery();
-    
+    private final Mockery mockery = new JUnit4Mockery();
+
     protected TemplateImageLoader mockTemplateImageLoader;
     protected SpecificationLoader mockSpecificationLoader;
     private UserProfileLoader mockUserProfileLoader;
@@ -69,9 +63,7 @@ public class TextFieldContentTest {
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
 
-	private List<Object> servicesList;
-
-
+    private List<Object> servicesList;
 
     @Before
     public void setUp() throws Exception {
@@ -86,7 +78,7 @@ public class TextFieldContentTest {
         mockPersistenceSession = mockery.mock(PersistenceSession.class);
         mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
         mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-        
+
         mockery.checking(new Expectations() {
             {
                 ignoring(mockTemplateImageLoader);
@@ -98,16 +90,10 @@ public class TextFieldContentTest {
             }
         });
 
-        IsisSessionFactory sessionFactory = 
-            new IsisSessionFactoryDefault(
-                    DeploymentType.EXPLORATION, 
-                    new IsisConfigurationDefault(), 
-                    mockTemplateImageLoader, 
-                    mockSpecificationLoader, 
-                    mockAuthenticationManager, 
-    		        mockAuthorizationManager,
-                    mockUserProfileLoader, 
-                    mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactory sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
+                mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager,
+                mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
 
@@ -149,9 +135,9 @@ public class TextFieldContentTest {
 
     @Test
     public void testInsert() {
-    /*
-     * CursorPosition cursor = new CursorPosition(0,0); content.insert(cursor, "test string");
-     */
+        /*
+         * CursorPosition cursor = new CursorPosition(0,0); content.insert(cursor, "test string");
+         */
     }
 
     @Test
@@ -175,11 +161,12 @@ public class TextFieldContentTest {
     }
 
     @Test
-    @Ignore // TODO reinstate once name has be set
+    @Ignore
+    // TODO reinstate once name has be set
     public void testAlignField() {
         // the following text wraps so it takes up 9 line
         content
-                .setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2010 Apache Software Foundation");
+            .setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2010 Apache Software Foundation");
 
         assertEquals(9, content.getNoLinesOfContent());
 
@@ -215,10 +202,11 @@ public class TextFieldContentTest {
     @Test
     public void testInstertOverTheEndOfLine() {
         final CursorPosition cursor = new CursorPosition(content, 0, 0);
-        content.insert(cursor, "test insert that is longer than the four lines that were originally allocated for this test");
+        content.insert(cursor,
+            "test insert that is longer than the four lines that were originally allocated for this test");
 
-        assertEquals("test insert that is longer than the four lines that were originally allocated for this test", content
-                .getText());
+        assertEquals("test insert that is longer than the four lines that were originally allocated for this test",
+            content.getText());
         assertEquals(4, content.getNoDisplayLines());
         assertEquals(6, content.getNoLinesOfContent());
     }

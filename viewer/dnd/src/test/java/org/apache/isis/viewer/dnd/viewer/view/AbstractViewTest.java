@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.view;
 
 import junit.framework.TestCase;
@@ -31,7 +30,6 @@ import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 
-
 public class AbstractViewTest extends TestCase {
     private AbstractView av;
 
@@ -41,7 +39,8 @@ public class AbstractViewTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        av = new AbstractView(new NullContent()) {};
+        av = new AbstractView(new NullContent()) {
+        };
         super.setUp();
     }
 
@@ -78,12 +77,14 @@ public class AbstractViewTest extends TestCase {
     public void testBoundsSetSizeAndLocation() throws Exception {
         final Location l = new Location();
         final Size z = new Size();
-        View view = new AbstractView(new NullContent()) {
-            public void setLocation(Location location) {
+        final View view = new AbstractView(new NullContent()) {
+            @Override
+            public void setLocation(final Location location) {
                 l.translate(location);
             }
 
-            public void setSize(Size size) {
+            @Override
+            public void setSize(final Size size) {
                 z.extend(size);
             }
         };
@@ -92,7 +93,7 @@ public class AbstractViewTest extends TestCase {
         assertEquals(new Location(20, 30), l);
         assertEquals(new Size(40, 50), z);
     }
-    
+
     public void testRequiredSizeIsLimitedToTheMaximumSize() throws Exception {
         assertEquals(Size.createMax(), av.getRequiredSize(Size.createMax()));
         assertEquals(new Size(100, 50), av.getRequiredSize(new Size(100, 50)));

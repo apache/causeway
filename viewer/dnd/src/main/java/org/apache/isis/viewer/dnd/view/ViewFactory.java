@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
-
 
 public interface ViewFactory {
     /**
-     * Create a new view to this specification for the specified context, and using the specified axis if
-     * specified (which can be null).
+     * Create a new view to this specification for the specified context, and using the specified axis if specified
+     * (which can be null).
      */
 
     View createView(Content content, Axes axes, int sequence);

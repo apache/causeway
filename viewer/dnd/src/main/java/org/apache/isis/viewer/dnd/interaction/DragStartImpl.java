@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Offset;
 import org.apache.isis.viewer.dnd.view.DragStart;
-
 
 public class DragStartImpl extends PointerEvent implements DragStart {
     private final Location location;
@@ -34,14 +32,17 @@ public class DragStartImpl extends PointerEvent implements DragStart {
         this.location = location;
     }
 
+    @Override
     public Location getLocation() {
         return location;
     }
 
+    @Override
     public void subtract(final Location location) {
         this.location.subtract(location);
     }
 
+    @Override
     public void subtract(final int x, final int y) {
         location.subtract(x, y);
     }
@@ -58,5 +59,3 @@ public class DragStartImpl extends PointerEvent implements DragStart {
         return str.toString();
     }
 }
-
-

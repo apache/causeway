@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.swing;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -29,12 +28,14 @@ import org.apache.isis.viewer.dnd.view.border.ResizeViewRender;
 
 public class ResizeView3DRender implements ResizeViewRender {
 
-    public void draw(Canvas canvas, int x, int width, int height, boolean hasFocus) {
-        final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit
+    @Override
+    public void draw(final Canvas canvas, final int x, final int width, final int height, final boolean hasFocus) {
+        final Color borderColor =
+            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit
                 .getColor(ColorsAndFonts.COLOR_SECONDARY3);
         canvas.drawSolidRectangle(x, 0, width, height, borderColor);
 
-        Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
+        final Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
         canvas.drawRectangle(x, -1, width, height + 2, secondary2);
 
         int h1 = 30;
@@ -50,5 +51,3 @@ public class ResizeView3DRender implements ResizeViewRender {
     }
 
 }
-
-

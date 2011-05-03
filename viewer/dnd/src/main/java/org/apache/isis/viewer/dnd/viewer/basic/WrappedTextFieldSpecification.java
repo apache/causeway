@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.field.WrappedTextField;
@@ -29,20 +28,21 @@ import org.apache.isis.viewer.dnd.view.base.AbstractFieldSpecification;
 import org.apache.isis.viewer.dnd.view.border.TextFieldResizeBorder;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 
-
 public class WrappedTextFieldSpecification extends AbstractFieldSpecification {
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isTextParseable()                 && ((TextParseableContent) requirement.getContent()).getNoLines() > 1;
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isTextParseable() && ((TextParseableContent) requirement.getContent()).getNoLines() > 1;
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final WrappedTextField wrappedTextField = new WrappedTextField((TextParseableContent) content, this, true);
         wrappedTextField.setNoLines(((TextParseableContent) content).getNoLines());
         wrappedTextField.setWrapping(((TextParseableContent) content).canWrap());
         return new TextFieldResizeBorder(wrappedTextField);
     }
 
+    @Override
     public String getName() {
         return "Wrapped Text Field";
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.Content;
-
 
 public class RootCollection extends AbstractCollectionContent {
     private final ObjectAdapter collection;
@@ -49,26 +47,32 @@ public class RootCollection extends AbstractCollectionContent {
         return collection;
     }
 
+    @Override
     public String getHelp() {
         return "No help for this collection";
     }
 
+    @Override
     public String getIconName() {
         return null;
     }
 
+    @Override
     public String getId() {
         return "";
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return collection;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return collection.getSpecification();
     }
 
+    @Override
     public boolean isTransient() {
         return collection != null;
     }
@@ -77,6 +81,7 @@ public class RootCollection extends AbstractCollectionContent {
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public String title() {
         return collection.titleString();
     }
@@ -91,10 +96,12 @@ public class RootCollection extends AbstractCollectionContent {
         return "Root Collection: " + collection;
     }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         return null;
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         return Veto.DEFAULT;
     }

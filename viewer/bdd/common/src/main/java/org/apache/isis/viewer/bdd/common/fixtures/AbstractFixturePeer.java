@@ -34,61 +34,58 @@ import org.apache.isis.viewer.bdd.common.CellBinding;
 
 public abstract class AbstractFixturePeer {
 
-	private final AliasRegistry aliasRegistry;
+    private final AliasRegistry aliasRegistry;
     private final List<CellBinding> cellBindings;
 
-    public AbstractFixturePeer(AliasRegistry aliasRegistry,
-    		CellBinding... cellBindings) {
-    	this(aliasRegistry, Arrays.asList(cellBindings));
+    public AbstractFixturePeer(final AliasRegistry aliasRegistry, final CellBinding... cellBindings) {
+        this(aliasRegistry, Arrays.asList(cellBindings));
     }
 
-    public AbstractFixturePeer(AliasRegistry storyRegistries,
-    		List<CellBinding> cellBindings) {
-    	this.aliasRegistry = storyRegistries;
-    	this.cellBindings = cellBindings;
+    public AbstractFixturePeer(final AliasRegistry storyRegistries, final List<CellBinding> cellBindings) {
+        this.aliasRegistry = storyRegistries;
+        this.cellBindings = cellBindings;
     }
-    
+
     public AliasRegistry getAliasRegistry() {
         return aliasRegistry;
-	}
+    }
 
-	public List<CellBinding> getCellBindings() {
-		return cellBindings;
-	}
-	
-	
-	public List<Object> getServices() {
-		return IsisContext.getServices();
-	}
-	
+    public List<CellBinding> getCellBindings() {
+        return cellBindings;
+    }
+
+    public List<Object> getServices() {
+        return IsisContext.getServices();
+    }
+
     public SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
-	public AuthenticationSession getAuthenticationSession() {
-		return IsisContext.getAuthenticationSession();
-	}
-	
+    public AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
     public PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
     protected AdapterManager getAdapterManager() {
-    	return getPersistenceSession().getAdapterManager();
+        return getPersistenceSession().getAdapterManager();
     }
-    
-	protected ObjectStorePersistence getObjectStore() {
-		final PersistenceSessionObjectStore persistenceSession = (PersistenceSessionObjectStore) getPersistenceSession();
+
+    protected ObjectStorePersistence getObjectStore() {
+        final PersistenceSessionObjectStore persistenceSession =
+            (PersistenceSessionObjectStore) getPersistenceSession();
         return persistenceSession.getObjectStore();
-	}
+    }
 
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
 
-    public boolean isValidAlias(String alias) {
+    public boolean isValidAlias(final String alias) {
         return getAliasRegistry().getAliased(alias) != null;
     }
 
-	
 }

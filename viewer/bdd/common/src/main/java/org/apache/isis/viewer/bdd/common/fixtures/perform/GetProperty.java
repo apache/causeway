@@ -34,14 +34,14 @@ public class GetProperty extends PerformAbstractTypeParams {
     public void doHandle(final PerformContext performContext) {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final ObjectMember nakedObjectMember = performContext
-                .getObjectMember();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
 
         final OneToOneAssociation otoa = (OneToOneAssociation) nakedObjectMember;
 
         result = otoa.get(onAdapter);
     }
 
+    @Override
     public ObjectAdapter getResult() {
         return result;
     }

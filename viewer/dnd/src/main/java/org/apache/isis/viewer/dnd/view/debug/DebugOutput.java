@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import java.awt.FileDialog;
@@ -38,10 +37,9 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class DebugOutput {
     private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS");
@@ -91,13 +89,12 @@ public class DebugOutput {
     /*
      * 
      * 
-     * Frame frame = new Frame(); PrintJob job = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print
-     * object", null);
+     * Frame frame = new Frame(); PrintJob job = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print object", null);
      * 
      * if (job != null) { Graphics pg = job.getGraphics(); Dimension pageSize = job.getPageDimension();
      * 
-     * if (pg != null) { pg.translate(LEFT, HEIGHT); pg.drawRect(0, 0, pageSize.width - LEFT - 1,
-     * pageSize.height - HEIGHT - 1); view.print(new PrintCanvas(pg, view)); pg.dispose(); }
+     * if (pg != null) { pg.translate(LEFT, HEIGHT); pg.drawRect(0, 0, pageSize.width - LEFT - 1, pageSize.height -
+     * HEIGHT - 1); view.print(new PrintCanvas(pg, view)); pg.dispose(); }
      * 
      * job.end(); } frame.dispose();
      */

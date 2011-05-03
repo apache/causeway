@@ -25,20 +25,19 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 
 public class Visible extends ThatSubcommandAbstract {
 
-	public Visible() {
-		super("is visible", "is not hidden");
-	}
+    public Visible() {
+        super("is visible", "is not hidden");
+    }
 
-	public ObjectAdapter that(final PerformContext performContext)
-			throws ScenarioBoundValueException {
+    @Override
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-		if (performContext.visibleMemberConsent().isVetoed()) {
-			CellBinding onMemberBinding = performContext.getPeer()
-					.getOnMemberBinding();
-			throw ScenarioBoundValueException.current(onMemberBinding, "(hidden)");
-		}
+        if (performContext.visibleMemberConsent().isVetoed()) {
+            final CellBinding onMemberBinding = performContext.getPeer().getOnMemberBinding();
+            throw ScenarioBoundValueException.current(onMemberBinding, "(hidden)");
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

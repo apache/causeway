@@ -25,9 +25,8 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections.
 public class CheckRemoveFromCollection extends PerformCheckThatAbstract {
 
     public CheckRemoveFromCollection(final Perform.Mode mode) {
-        super("check remove from collection", OnMemberColumn.REQUIRED, mode,
-                new ProposedRemoveFrom(AssertsValidity.VALID),
-                new ProposedRemoveFrom(AssertsValidity.INVALID));
+        super("check remove from collection", OnMemberColumn.REQUIRED, mode, new ProposedRemoveFrom(
+            AssertsValidity.VALID), new ProposedRemoveFrom(AssertsValidity.INVALID));
     }
 
 }

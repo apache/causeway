@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Font;
@@ -25,14 +24,12 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.util.Properties;
-
+import org.apache.log4j.Logger;
 
 public class AwtText implements Text {
     private static final String ASCENT_ADJUST = Properties.PROPERTY_BASE + "ascent-adjust";
@@ -69,14 +66,16 @@ public class AwtText implements Text {
 
         ascentAdjust = cfg.getBoolean(ASCENT_ADJUST, false);
 
-        LOG.debug("font " + propertyName + " height=" + metrics.getHeight() + ", leading=" + metrics.getLeading() + ", ascent="
-                + metrics.getAscent() + ", descent=" + metrics.getDescent() + ", line spacing=" + lineSpacing);
+        LOG.debug("font " + propertyName + " height=" + metrics.getHeight() + ", leading=" + metrics.getLeading()
+            + ", ascent=" + metrics.getAscent() + ", descent=" + metrics.getDescent() + ", line spacing=" + lineSpacing);
     }
 
+    @Override
     public int charWidth(final char c) {
         return metrics.charWidth(c);
     }
 
+    @Override
     public int getAscent() {
         return metrics.getAscent() - (ascentAdjust ? metrics.getDescent() : 0);
     }
@@ -90,30 +89,37 @@ public class AwtText implements Text {
         return font;
     }
 
+    @Override
     public int getDescent() {
         return metrics.getDescent();
     }
 
+    @Override
     public int getLineHeight() {
         return metrics.getHeight() + getLineSpacing();
     }
 
+    @Override
     public int getLineSpacing() {
         return lineSpacing;
     }
 
+    @Override
     public String getName() {
         return propertyName;
     }
 
+    @Override
     public int getMidPoint() {
         return getAscent() / 2;
     }
 
+    @Override
     public int getTextHeight() {
         return metrics.getHeight() - (ascentAdjust ? metrics.getDescent() : 0);
     }
 
+    @Override
     public int stringHeight(final String text, final int maxWidth) {
         int noLines = 0;
         final StringTokenizer lines = new StringTokenizer(text, "\n\r");
@@ -140,6 +146,7 @@ public class AwtText implements Text {
         return noLines * getLineHeight();
     }
 
+    @Override
     public int stringWidth(final String text, final int maxWidth) {
         int width = 0;
         final StringTokenizer lines = new StringTokenizer(text, "\n\r");
@@ -172,6 +179,7 @@ public class AwtText implements Text {
     private final java.util.Hashtable stringWidthByString = new java.util.Hashtable();
 
     // DKH 20060404: new implementation that caches
+    @Override
     public int stringWidth(final String text) {
         int[] cachedStringWidth = (int[]) stringWidthByString.get(text);
         if (cachedStringWidth == null) {
@@ -187,8 +195,8 @@ public class AwtText implements Text {
         if (stringWidth > text.length() * maxCharWidth) {
             LOG.debug("spurious width of string; calculating manually: " + stringWidth + " for " + this + ": " + text);
             /*
-             * This fixes an intermittent bug in .NET where stringWidth() returns a ridiculous number is
-             * returned for the width.
+             * This fixes an intermittent bug in .NET where stringWidth() returns a ridiculous number is returned for
+             * the width.
              * 
              * TODO don't do this when running Java
              */
@@ -219,12 +227,12 @@ public class AwtText implements Text {
     public static int defaultFontSizeSmall() {
         final IsisConfiguration cfg = IsisContext.getConfiguration();
         return cfg.getInteger(FONT_PROPERTY_STEM + "size.small", 10);
-     }
+    }
 
     public static int defaultFontSizeMedium() {
         final IsisConfiguration cfg = IsisContext.getConfiguration();
         return cfg.getInteger(FONT_PROPERTY_STEM + "size.medium", 11);
-     }
+    }
 
     public static int defaultFontSizeLarge() {
         final IsisConfiguration cfg = IsisContext.getConfiguration();

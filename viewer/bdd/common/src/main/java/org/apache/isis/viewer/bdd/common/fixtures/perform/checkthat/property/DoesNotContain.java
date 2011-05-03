@@ -33,19 +33,18 @@ public class DoesNotContain extends ThatSubcommandAbstract {
         super("does not contain", "is not");
     }
 
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-        final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getObjectMember();
+        final OneToOneAssociation otoa = (OneToOneAssociation) performContext.getObjectMember();
 
         // if we have an expected result
-        CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
+        final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
+        final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
         final String expected = arg0Cell.getText();
 
         // get
-        final ObjectAdapter resultAdapter = otoa.get(performContext
-                .getOnAdapter());
+        final ObjectAdapter resultAdapter = otoa.get(performContext.getOnAdapter());
 
         // see if matches null
         if (resultAdapter == null) {
@@ -69,7 +68,7 @@ public class DoesNotContain extends ThatSubcommandAbstract {
 
             // otherwise, compare title
             if (StringUtils.nullSafeEquals(resultTitle, expected)) {
-            	throw ScenarioBoundValueException.current(arg0Binding, "(does contain)");
+                throw ScenarioBoundValueException.current(arg0Binding, "(does contain)");
             }
         }
 

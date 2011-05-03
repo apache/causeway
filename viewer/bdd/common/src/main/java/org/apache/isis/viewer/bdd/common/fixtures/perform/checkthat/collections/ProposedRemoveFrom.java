@@ -32,12 +32,10 @@ public class ProposedRemoveFrom extends ProposedArgumentValidityAbstract {
     }
 
     @Override
-    protected Consent determineConsent(final PerformContext performContext,
-            final ObjectAdapter toValidateAdapter) {
+    protected Consent determineConsent(final PerformContext performContext, final ObjectAdapter toValidateAdapter) {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final OneToManyAssociation otma = (OneToManyAssociation) performContext
-                .getObjectMember();
+        final OneToManyAssociation otma = (OneToManyAssociation) performContext.getObjectMember();
 
         return otma.isValidToRemove(onAdapter, toValidateAdapter);
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -41,21 +40,21 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
 
-
 public class IconBorder extends AbstractBorder {
-    
+
     public static class Factory implements CompositeViewDecorator {
         private final Text textStyle;
-        
+
         public Factory() {
             this(Toolkit.getText(ColorsAndFonts.TEXT_TITLE));
         }
 
-        public Factory(Text textStyle) {
+        public Factory(final Text textStyle) {
             this.textStyle = textStyle;
         }
 
-        public View decorate(View child, Axes axes) {
+        @Override
+        public View decorate(final View child, final Axes axes) {
             return new IconBorder(child, textStyle);
         }
     }
@@ -65,16 +64,16 @@ public class IconBorder extends AbstractBorder {
     private final IconGraphic icon;
     private final TitleText text;
 
-    public IconBorder(final View wrappedView, Text style) {
+    public IconBorder(final View wrappedView, final Text style) {
         this(wrappedView, null, null, style);
     }
-    
-    public IconBorder(final View wrappedView, TitleText titleText, IconGraphic iconGraphic,  Text style) {
+
+    public IconBorder(final View wrappedView, final TitleText titleText, final IconGraphic iconGraphic, final Text style) {
         super(wrappedView);
 
         icon = iconGraphic == null ? new IconGraphic(this, style) : iconGraphic;
         text = titleText == null ? new ObjectTitleText(this, style) : titleText;
-        titlebarHeight =  VPADDING + icon.getSize().getHeight() + 1;
+        titlebarHeight = VPADDING + icon.getSize().getHeight() + 1;
 
         top = titlebarHeight + VPADDING;
         left = right = HPADDING;
@@ -103,14 +102,15 @@ public class IconBorder extends AbstractBorder {
         int x = left - 2;
 
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(getSize()), baseline, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
+            canvas.drawDebugOutline(new Bounds(getSize()), baseline,
+                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
         }
 
         // icon & title
         icon.draw(canvas, x, baseline);
         x += icon.getSize().getWidth();
         x += View.HPADDING;
-        int maxWidth = getSize().getWidth() - x - right;
+        final int maxWidth = getSize().getWidth() - x - right;
         text.draw(canvas, x, baseline, maxWidth);
 
         // components
@@ -119,7 +119,7 @@ public class IconBorder extends AbstractBorder {
 
     @Override
     public int getBaseline() {
-        return baseline; //wrappedView.getBaseline() + baseline + titlebarHeight;
+        return baseline; // wrappedView.getBaseline() + baseline + titlebarHeight;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class IconBorder extends AbstractBorder {
         final int y = click.getLocation().getY();
         if (y < top && click.button2()) {
             final Location location = new Location(click.getLocationWithinViewer());
-            getViewManager().showInOverlay(getContent(), location);            
+            getViewManager().showInOverlay(getContent(), location);
         } else {
             super.firstClick(click);
         }

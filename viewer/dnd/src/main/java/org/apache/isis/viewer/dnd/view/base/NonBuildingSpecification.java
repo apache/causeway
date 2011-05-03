@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -27,7 +26,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
-
 public class NonBuildingSpecification implements ViewSpecification {
     private final String name;
 
@@ -36,35 +34,43 @@ public class NonBuildingSpecification implements ViewSpecification {
         this.name = name.substring(name.lastIndexOf('.') + 1);
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return false;
     }
 

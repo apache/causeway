@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.help;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Viewer;
-
 
 public class InternalHelpViewer implements HelpViewer {
     private final Viewer viewer;
@@ -32,6 +30,7 @@ public class InternalHelpViewer implements HelpViewer {
         this.viewer = viewer;
     }
 
+    @Override
     public void open(final Location location, final String name, final String description, final String help) {
         viewer.clearAction();
 

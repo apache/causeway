@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.option.IconizeViewOption;
 
-
 public class IconizeWindowControl extends WindowControl {
     private static IconizeWindowRender render;
-    
-    public static void setRender(IconizeWindowRender render) {
+
+    public static void setRender(final IconizeWindowRender render) {
         IconizeWindowControl.render = render;
     }
-    
+
     public IconizeWindowControl(final View target) {
         super(new IconizeViewOption(), target);
     }
@@ -40,5 +38,5 @@ public class IconizeWindowControl extends WindowControl {
     public void draw(final Canvas canvas) {
         render.draw(canvas, WIDTH, HEIGHT, false, isOver(), isPressed());
     }
-    
+
 }

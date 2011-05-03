@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 public interface Selectable {
@@ -27,5 +26,3 @@ public interface Selectable {
     void setSelectedNode(View selectedView);
 
 }
-
-

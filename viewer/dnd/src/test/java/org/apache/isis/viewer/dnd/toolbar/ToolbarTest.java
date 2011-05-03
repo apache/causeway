@@ -17,26 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.toolbar;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.TestToolkit;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
-import org.apache.isis.viewer.dnd.toolbar.ToolbarView;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.look.LookFactory;
-
-import static org.junit.Assert.assertEquals;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class ToolbarTest {
 
@@ -70,29 +67,29 @@ public class ToolbarTest {
     @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsLessThanMaximumWidth() throws Exception {
-        Size size = toolbar.getRequiredSize(Size.createMax());
+        final Size size = toolbar.getRequiredSize(Size.createMax());
         assertEquals(new Size(View.HPADDING + (100 + View.HPADDING) * 3, 10 + View.VPADDING), size);
     }
 
     @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsGreaterThanMaximumWidth() throws Exception {
-        Size size = toolbar.getRequiredSize(new Size(250, 100));
+        final Size size = toolbar.getRequiredSize(new Size(250, 100));
         assertEquals(new Size(View.HPADDING * 3 + 220, (10 + View.VPADDING) * 2), size);
     }
 
     @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsJustGreaterThanMaximumWidth() throws Exception {
-        int width = View.HPADDING + (100 + View.HPADDING) * 3;
-        Size size = toolbar.getRequiredSize(new Size(width + 1, 100));
+        final int width = View.HPADDING + (100 + View.HPADDING) * 3;
+        final Size size = toolbar.getRequiredSize(new Size(width + 1, 100));
         assertEquals(new Size(width, 10 + View.VPADDING), size);
     }
 
     @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsSameAsMaximumWidth() throws Exception {
-        Size size = toolbar.getRequiredSize(new Size(View.HPADDING + (100 + View.HPADDING) * 3, 100));
+        final Size size = toolbar.getRequiredSize(new Size(View.HPADDING + (100 + View.HPADDING) * 3, 100));
         assertEquals(new Size(View.HPADDING * 3 + 220, (10 + View.VPADDING) * 2), size);
     }
 
@@ -110,18 +107,16 @@ public class ToolbarTest {
     public void layoutLocationForButtonsLessThanMaximumWidth() throws Exception {
         toolbar.doLayout(Size.createMax());
         assertEquals(new Location(View.HPADDING, 0), button1.getLocation());
-        assertEquals(new Location(View.HPADDING * 2 + 120 , 0), button2.getLocation());
-        assertEquals(new Location(View.HPADDING * 3 + 220 , 0), button3.getLocation());
+        assertEquals(new Location(View.HPADDING * 2 + 120, 0), button2.getLocation());
+        assertEquals(new Location(View.HPADDING * 3 + 220, 0), button3.getLocation());
     }
-
 
     @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void layoutLocationForButtonsGreaterThanMaximumWidth() throws Exception {
         toolbar.doLayout(new Size(250, 100));
         assertEquals(new Location(View.HPADDING, 0), button1.getLocation());
-        assertEquals(new Location(View.HPADDING * 2 + 120 , 0), button2.getLocation());
+        assertEquals(new Location(View.HPADDING * 2 + 120, 0), button2.getLocation());
         assertEquals(new Location(View.HPADDING, 13), button3.getLocation());
     }
 }
-

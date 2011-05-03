@@ -33,19 +33,17 @@ public class ProposedClear extends ThatValidityAbstract {
         super(assertion);
     }
 
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getObjectMember();
+        final OneToOneAssociation otoa = (OneToOneAssociation) performContext.getObjectMember();
 
-        final Consent validityConsent = otoa
-                .isAssociationValid(onAdapter, null);
+        final Consent validityConsent = otoa.isAssociationValid(onAdapter, null);
 
         if (!getAssertion().satisfiedBy(validityConsent)) {
             final CellBinding thatBinding = performContext.getPeer().getThatItBinding();
-            throw ScenarioBoundValueException.current(thatBinding,
-                    getAssertion().getReason(validityConsent));
+            throw ScenarioBoundValueException.current(thatBinding, getAssertion().getReason(validityConsent));
         }
 
         // can only return null.

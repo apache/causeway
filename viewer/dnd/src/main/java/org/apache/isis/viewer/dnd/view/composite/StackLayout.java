@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -25,12 +24,11 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
-
 /**
- * A stack layout stacks its components vertically, one on top of the other, working down from the top. Each
- * component is given the space it requests. Components adopt the width of the widest component when that
- * component's view specification's <code>isAligned</code> method returns <code>true</code>, or the layout's
- * <code>fixedWidth</code> flag is set (via the two parameter constructor).
+ * A stack layout stacks its components vertically, one on top of the other, working down from the top. Each component
+ * is given the space it requests. Components adopt the width of the widest component when that component's view
+ * specification's <code>isAligned</code> method returns <code>true</code>, or the layout's <code>fixedWidth</code> flag
+ * is set (via the two parameter constructor).
  * 
  */
 public class StackLayout implements Layout {
@@ -44,13 +42,13 @@ public class StackLayout implements Layout {
         this.fixedWidth = fixedWidth;
     }
 
+    @Override
     public Size getRequiredSize(final View view) {
         int height = 0;
         int width = 0;
         final View views[] = view.getSubviews();
 
-        for (int i = 0; i < views.length; i++) {
-            final View v = views[i];
+        for (final View v : views) {
             final Size s = v.getRequiredSize(new Size(Integer.MAX_VALUE, Integer.MAX_VALUE));
             width = Math.max(width, s.getWidth());
             height += s.getHeight();
@@ -59,20 +57,19 @@ public class StackLayout implements Layout {
         return new Size(width, height);
     }
 
+    @Override
     public void layout(final View view, final Size maximumSize) {
         final int x = 0;
         int y = 0;
         final View subviews[] = view.getSubviews();
 
         int maxWidth = 0;
-        for (int i = 0; i < subviews.length; i++) {
-            final View v = subviews[i];
+        for (final View v : subviews) {
             final Size s = v.getRequiredSize(new Size(maximumSize));
             maxWidth = Math.max(maxWidth, s.getWidth());
         }
 
-        for (int i = 0; i < subviews.length; i++) {
-            final View v = subviews[i];
+        for (final View v : subviews) {
             final Size s = v.getRequiredSize(new Size(maximumSize));
             s.limitWidth(maximumSize.getWidth());
             if (fixedWidth || v.getSpecification().isAligned()) {

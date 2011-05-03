@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-
 
 public class RevertFieldOption extends UserActionAbstract {
     private final TextField field;
@@ -52,4 +50,3 @@ public class RevertFieldOption extends UserActionAbstract {
     }
 
 }
-

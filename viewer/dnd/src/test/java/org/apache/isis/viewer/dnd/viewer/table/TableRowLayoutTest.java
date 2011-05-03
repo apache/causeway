@@ -17,14 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.table;
 
 import junit.framework.Assert;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Test;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyView;
@@ -33,7 +29,9 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.table.TableAxis;
 import org.apache.isis.viewer.dnd.table.TableRowLayout;
 import org.apache.isis.viewer.dnd.view.View;
-
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Test;
 
 public class TableRowLayoutTest {
 
@@ -41,30 +39,31 @@ public class TableRowLayoutTest {
     public void layout() throws Exception {
         IsisContext.setConfiguration(new TestProxyConfiguration());
         TestToolkit.createInstance();
-        
-        
-        DummyView row = new DummyView();
-        DummyView cell1 = new DummyView();
-        DummyView cell2 = new DummyView();
-        row.setupSubviews(new View[] { cell1, cell2 });
-        
-        Mockery mockery = new Mockery();
-        final TableAxis tableAxis = mockery.mock(TableAxis.class);
-        
-        mockery.checking(new Expectations() {{
-            one(tableAxis).getColumnWidth(0); will(returnValue(80));
-            one(tableAxis).getColumnWidth(1); will(returnValue(80));
-        }});
 
-        TableRowLayout layout = new TableRowLayout(tableAxis);
-       
-        
+        final DummyView row = new DummyView();
+        final DummyView cell1 = new DummyView();
+        final DummyView cell2 = new DummyView();
+        row.setupSubviews(new View[] { cell1, cell2 });
+
+        final Mockery mockery = new Mockery();
+        final TableAxis tableAxis = mockery.mock(TableAxis.class);
+
+        mockery.checking(new Expectations() {
+            {
+                one(tableAxis).getColumnWidth(0);
+                will(returnValue(80));
+                one(tableAxis).getColumnWidth(1);
+                will(returnValue(80));
+            }
+        });
+
+        final TableRowLayout layout = new TableRowLayout(tableAxis);
+
         layout.layout(row, new Size(200, 200));
         mockery.assertIsSatisfied();
-        
+
         Assert.assertEquals(new Size(80, 10), cell1.getSize());
         Assert.assertEquals(new Size(80, 10), cell2.getSize());
-        
+
     }
 }
-

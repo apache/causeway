@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
-
 
 /**
  * Details a drag event that is internal to view.

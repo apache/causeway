@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 
-
 public interface Viewer {
 
     void markDamaged(final Bounds bounds);
@@ -34,7 +32,7 @@ public interface Viewer {
     boolean hasFocus(final View view);
 
     UndoStack getUndoStack();
-    
+
     Size getOverlaySize();
 
     void saveCurrentFieldEntry();
@@ -42,6 +40,7 @@ public interface Viewer {
     void setKeyboardFocus(final View view);
 
     boolean isRunningAsExploration();
+
     boolean isRunningAsPrototype();
 
     void clearAction();

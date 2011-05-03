@@ -66,7 +66,7 @@ import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 public class UsingIsisViewerPeer extends AbstractFixturePeer {
 
     private static List<Perform> performCommands(final Perform.Mode mode) {
-        ArrayList<Perform> commands = new ArrayList<Perform>();
+        final ArrayList<Perform> commands = new ArrayList<Perform>();
 
         commands.add(new CheckProperty(mode));
         commands.add(new CheckSetProperty(mode));
@@ -109,12 +109,12 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     private final DeploymentType deploymentType;
     private final DateParser dateParser;
 
-
     private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
 
-    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode,
-        final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
-        final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
+    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType,
+        final DateParser dateParser, final Perform.Mode mode, final CellBinding onObjectBinding,
+        final CellBinding aliasResultAsBinding, final CellBinding performBinding, final CellBinding onMemberBinding,
+        final CellBinding thatItBinding, final CellBinding arg0Binding) {
         super(aliasesRegistry, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding,
             arg0Binding);
 
@@ -124,7 +124,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         this.onMemberBinding = onMemberBinding;
         this.thatItBinding = thatItBinding;
         this.arg0Binding = arg0Binding;
-        
+
         this.deploymentType = deploymentType;
         this.dateParser = dateParser;
 
@@ -137,7 +137,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     public DeploymentType getDeploymentType() {
         return deploymentType;
     }
-    
+
     public DateParser getDateParser() {
         return dateParser;
     }
@@ -183,14 +183,13 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         return false;
     }
 
-    
     // //////////////////////////////////////////////////////////////////
     // validate API
     // //////////////////////////////////////////////////////////////////
 
     public ObjectAdapter validateOnObject() throws ScenarioBoundValueException {
 
-        ScenarioCell onObjectCell = onObjectBinding.getCurrentCell();
+        final ScenarioCell onObjectCell = onObjectBinding.getCurrentCell();
         String onObject = onObjectCell.getText();
         if (onObject == null) {
             if (previousOnObject == null) {
@@ -216,14 +215,14 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
             return null;
         }
 
-        String aliasAs = aliasCell.getText();
+        final String aliasAs = aliasCell.getText();
         if (getAliasRegistry().getAliased(aliasAs) != null) {
             throw ScenarioBoundValueException.current(aliasResultAsBinding, "(already used)");
         }
         return aliasAs;
     }
 
-    public ObjectMember validateOnMember(ObjectAdapter onAdapter) throws ScenarioBoundValueException {
+    public ObjectMember validateOnMember(final ObjectAdapter onAdapter) throws ScenarioBoundValueException {
 
         final ScenarioCell onMemberCell = onMemberBinding.getCurrentCell();
         final String onMember = onMemberCell.getText();
@@ -284,9 +283,9 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     // "perform" API
     // //////////////////////////////////////////////////////////////////
 
-    public void performCommand(ObjectAdapter onAdapter, String aliasAs, ObjectMember objectMember,
-        Perform performCommand, List<ScenarioCell> argumentStoryCells) throws ScenarioBoundValueException {
-        PerformContext performContext = new PerformContext(this, onAdapter, objectMember, argumentStoryCells);
+    public void performCommand(final ObjectAdapter onAdapter, final String aliasAs, final ObjectMember objectMember,
+        final Perform performCommand, final List<ScenarioCell> argumentStoryCells) throws ScenarioBoundValueException {
+        final PerformContext performContext = new PerformContext(this, onAdapter, objectMember, argumentStoryCells);
         try {
             performCommand.perform(performContext);
         } catch (final RuntimeException ex) {
@@ -295,7 +294,8 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         aliasResultFromPerformCommand(performCommand, aliasAs);
     }
 
-    private void aliasResultFromPerformCommand(Perform performCommand, String aliasAs) throws ScenarioBoundValueException {
+    private void aliasResultFromPerformCommand(final Perform performCommand, final String aliasAs)
+        throws ScenarioBoundValueException {
         if (StringUtils.isNullOrEmpty(aliasAs)) {
             return;
         }
@@ -315,7 +315,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     /**
      * Not public API
      */
-    public void provideDefault(ScenarioCell storySource, String resultStr) {
+    public void provideDefault(final ScenarioCell storySource, final String resultStr) {
         // TODO Auto-generated method stub
         throw new NotYetImplementedException();
     }
@@ -334,18 +334,18 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
             try {
                 return parseableFacet.parseTextEntry(contextAdapter, cellText);
             } catch (final TextEntryParseException ex) {
-                throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
+                throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '" + cellText + "')");
             } catch (final IllegalArgumentException ex) {
-                // REVIEW: isn't what is thrown, but perhaps 
-                // TextEntryParseException should inherit from IllegalArgumentException? 
-                throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
+                // REVIEW: isn't what is thrown, but perhaps
+                // TextEntryParseException should inherit from IllegalArgumentException?
+                throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '" + cellText + "')");
             }
         }
 
         // otherwise, handle as reference to known object
         final ObjectAdapter adapter = getAliasRegistry().getAliased(cellText);
         if (adapter == null) {
-            throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(unknown reference'"+cellText+"')");
+            throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(unknown reference'" + cellText + "')");
         }
 
         return adapter;
@@ -358,10 +358,10 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
      * Ensures that there are at least enough arguments for the number of parameters required.
      */
     public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction objectAction,
-        CellBinding onMemberBinding, final List<ScenarioCell> argumentCells) throws ScenarioBoundValueException {
+        final CellBinding onMemberBinding, final List<ScenarioCell> argumentCells) throws ScenarioBoundValueException {
         final List<ObjectActionParameter> parameters = objectAction.getParameters();
 
-        int parameterCount = parameters.size();
+        final int parameterCount = parameters.size();
         if (argumentCells.size() < parameterCount) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(action requires " + parameterCount
                 + " arguments)");
@@ -388,6 +388,5 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         }
         return getAdapterManager().adapterFor(choiceList);
     }
-
 
 }

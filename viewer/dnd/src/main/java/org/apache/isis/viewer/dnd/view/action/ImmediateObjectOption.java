@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.ensure.Assert;
@@ -31,10 +30,9 @@ import org.apache.isis.viewer.dnd.view.Placement;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
-
 /**
- * Options for an underlying object determined dynamically by looking for methods starting with action, veto
- * and option for specifying the action, vetoing the option and giving the option an name respectively.
+ * Options for an underlying object determined dynamically by looking for methods starting with action, veto and option
+ * for specifying the action, vetoing the option and giving the option an name respectively.
  */
 public class ImmediateObjectOption extends AbstractObjectOption {
 
@@ -70,6 +68,7 @@ public class ImmediateObjectOption extends AbstractObjectOption {
     @Override
     public void execute(final Workspace workspace, final View view, final Location at) {
         BackgroundWork.runTaskInBackground(view, new BackgroundTask() {
+            @Override
             public void execute() {
                 ObjectAdapter result;
                 result = action.execute(target, null);
@@ -78,10 +77,12 @@ public class ImmediateObjectOption extends AbstractObjectOption {
                 view.getFeedbackManager().showMessagesAndWarnings();
             }
 
+            @Override
             public String getDescription() {
                 return "Running action " + getName() + " on  " + view.getContent().getAdapter();
             }
 
+            @Override
             public String getName() {
                 return "ObjectAction " + action.getName();
             }

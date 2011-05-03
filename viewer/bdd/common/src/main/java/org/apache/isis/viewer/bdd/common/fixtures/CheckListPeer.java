@@ -31,17 +31,17 @@ public class CheckListPeer extends AbstractListFixturePeer {
 
     public static enum CheckMode {
         EXACT {
-			@Override
-			public boolean isExact() {
-				return true;
-			}
-		}, 
+            @Override
+            public boolean isExact() {
+                return true;
+            }
+        },
         NOT_EXACT {
-			@Override
-			public boolean isExact() {
-				return false;
-			}
-		};
+            @Override
+            public boolean isExact() {
+                return false;
+            }
+        };
         public abstract boolean isExact();
     }
 
@@ -58,25 +58,22 @@ public class CheckListPeer extends AbstractListFixturePeer {
      */
     private final List<ObjectAdapter> foundAdapters = new ArrayList<ObjectAdapter>();
 
-
-    public CheckListPeer(final AliasRegistry aliasesRegistry,
-            String listAlias, final CheckMode checkMode,
-            final CellBinding titleBinding) {
+    public CheckListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode,
+        final CellBinding titleBinding) {
         this(aliasesRegistry, listAlias, checkMode, titleBinding, null);
     }
 
-    public CheckListPeer(final AliasRegistry aliasesRegistry,
-        String listAlias, final CheckMode checkMode,
+    public CheckListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode,
         final CellBinding titleBinding, final CellBinding typeBinding) {
-    super(aliasesRegistry, listAlias, titleBinding, typeBinding);
-    this.checkMode = checkMode;
-    this.titleBinding = titleBinding;
-    this.typeBinding = typeBinding;
-}
+        super(aliasesRegistry, listAlias, titleBinding, typeBinding);
+        this.checkMode = checkMode;
+        this.titleBinding = titleBinding;
+        this.typeBinding = typeBinding;
+    }
 
-	public boolean isCheckModeExact() {
-		return getCheckMode().isExact();
-	}
+    public boolean isCheckModeExact() {
+        return getCheckMode().isExact();
+    }
 
     public CellBinding getTitleBinding() {
         return titleBinding;
@@ -89,31 +86,30 @@ public class CheckListPeer extends AbstractListFixturePeer {
         return typeBinding;
     }
 
-	private CheckMode getCheckMode() {
-		return checkMode;
-	}
-	
-	public List<ObjectAdapter> getFoundAdapters() {
-		return foundAdapters;
-	}
+    private CheckMode getCheckMode() {
+        return checkMode;
+    }
 
-	public List<ObjectAdapter> getNotFoundAdapters() {
-		final List<ObjectAdapter> allAdapters = 
-		    new ArrayList<ObjectAdapter>(collectionAdapters());
-		allAdapters.removeAll(foundAdapters);
-		return allAdapters;
-	}
-	
-	public boolean findAndAddObject() {
-		ObjectAdapter foundAdapter = findAdapter();
+    public List<ObjectAdapter> getFoundAdapters() {
+        return foundAdapters;
+    }
+
+    public List<ObjectAdapter> getNotFoundAdapters() {
+        final List<ObjectAdapter> allAdapters = new ArrayList<ObjectAdapter>(collectionAdapters());
+        allAdapters.removeAll(foundAdapters);
+        return allAdapters;
+    }
+
+    public boolean findAndAddObject() {
+        final ObjectAdapter foundAdapter = findAdapter();
         if (foundAdapter == null) {
-        	return false;
-        } 
+            return false;
+        }
         foundAdapters.add(foundAdapter);
-		return true;
-	}
+        return true;
+    }
 
-	private ObjectAdapter findAdapter() {
+    private ObjectAdapter findAdapter() {
         for (final ObjectAdapter adapter : collectionAdapters()) {
 
             if (!titleMatches(adapter)) {
@@ -125,8 +121,8 @@ public class CheckListPeer extends AbstractListFixturePeer {
 
             return adapter;
         }
-		return null;
-	}
+        return null;
+    }
 
     private boolean titleMatches(final ObjectAdapter adapter) {
         final String adapterTitle = adapter.titleString();
@@ -147,10 +143,8 @@ public class CheckListPeer extends AbstractListFixturePeer {
         }
 
         final String simpleSpecName = StringUtils.simpleName(specFullName);
-        final String simpleRequiredType = StringUtils
-                .simpleName(requiredTypeName);
+        final String simpleRequiredType = StringUtils.simpleName(requiredTypeName);
         return simpleSpecName.equalsIgnoreCase(simpleRequiredType);
     }
-
 
 }

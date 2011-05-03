@@ -17,32 +17,44 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.View;
 
-
 public class NullFocusManager implements FocusManager {
     private View focus;
 
-    public void focusNextView() {}
+    @Override
+    public void focusNextView() {
+    }
 
-    public void focusPreviousView() {}
+    @Override
+    public void focusPreviousView() {
+    }
 
-    public void focusParentView() {}
+    @Override
+    public void focusParentView() {
+    }
 
-    public void focusFirstChildView() {}
+    @Override
+    public void focusFirstChildView() {
+    }
 
-    public void focusLastChildView() {}
+    @Override
+    public void focusLastChildView() {
+    }
 
-    public void focusInitialChildView() {}
+    @Override
+    public void focusInitialChildView() {
+    }
 
+    @Override
     public View getFocus() {
         return focus;
     }
 
+    @Override
     public void setFocus(final View view) {
         focus = view;
     }

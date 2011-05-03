@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.dialog;
 
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractFocusManager;
 import org.apache.isis.viewer.dnd.view.border.ButtonBorder;
-
 
 public class ActionDialogFocusManager extends AbstractFocusManager {
     private final ButtonBorder buttonBorder;

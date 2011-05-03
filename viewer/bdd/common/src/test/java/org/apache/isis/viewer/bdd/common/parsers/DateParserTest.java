@@ -28,7 +28,6 @@ import java.util.Date;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
 public class DateParserTest {
 
     /**
@@ -39,12 +38,11 @@ public class DateParserTest {
     @Ignore
     @Test
     public void parsesUnder_enUK_butNotUnder_deDE() throws Exception {
-        DateParser dateParser = new DateParser();
+        final DateParser dateParser = new DateParser();
         dateParser.setDateFormat("dd-MMM-yyyy");
         dateParser.setTimeFormat("hh:mm");
-        Date parse = dateParser.parse("02-May-2010 09:20");
+        final Date parse = dateParser.parse("02-May-2010 09:20");
         assertThat(parse, is(not(nullValue())));
     }
-
 
 }

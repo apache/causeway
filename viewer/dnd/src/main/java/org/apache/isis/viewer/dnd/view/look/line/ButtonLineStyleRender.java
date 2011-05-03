@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.look.line;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -28,7 +27,6 @@ import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.control.ButtonRender;
 
-
 public class ButtonLineStyleRender implements ButtonRender {
     private static final int TEXT_PADDING = 12;
     private static final Text style = Toolkit.getText(ColorsAndFonts.TEXT_CONTROL);
@@ -38,15 +36,9 @@ public class ButtonLineStyleRender implements ButtonRender {
         this.buttonHeight = 2 + style.getTextHeight() + 2;
     }
 
-    public void draw(
-            Canvas canvas,
-            Size size,
-            boolean isDisabled,
-            boolean isDefault,
-            boolean hasFocus,
-            boolean isOver,
-            boolean isPressed,
-            String text) {
+    @Override
+    public void draw(final Canvas canvas, final Size size, final boolean isDisabled, final boolean isDefault,
+        final boolean hasFocus, final boolean isOver, final boolean isPressed, final String text) {
         final int buttonWidth = TEXT_PADDING + style.stringWidth(text) + TEXT_PADDING;
 
         final Color borderColor;
@@ -64,9 +56,10 @@ public class ButtonLineStyleRender implements ButtonRender {
         canvas.drawText(text, TEXT_PADDING, buttonHeight / 2 + style.getMidPoint(), textColor, style);
     }
 
-    public Size getMaximumSize(String text) {
-        final int buttonWidth = TEXT_PADDING + Toolkit.getText(ColorsAndFonts.TEXT_CONTROL).stringWidth(text) + TEXT_PADDING;
+    @Override
+    public Size getMaximumSize(final String text) {
+        final int buttonWidth =
+            TEXT_PADDING + Toolkit.getText(ColorsAndFonts.TEXT_CONTROL).stringWidth(text) + TEXT_PADDING;
         return new Size(buttonWidth, buttonHeight);
     }
 }
-

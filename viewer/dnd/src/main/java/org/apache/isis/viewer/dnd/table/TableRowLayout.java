@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -25,14 +24,14 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
-
 public class TableRowLayout implements Layout {
     private final TableAxis axis;
 
-    public TableRowLayout(TableAxis axis) {
+    public TableRowLayout(final TableAxis axis) {
         this.axis = axis;
     }
 
+    @Override
     public Size getRequiredSize(final View row) {
         int maxHeight = 0;
         int totalWidth = 0;
@@ -42,7 +41,8 @@ public class TableRowLayout implements Layout {
         for (int i = 0; i < cells.length; i++) {
             totalWidth += axis.getColumnWidth(i);
 
-            final Size s = cells[i].getRequiredSize(Size.createMax());//   TODO  Need to pass in a max size (is 0 at the moment)
+            final Size s = cells[i].getRequiredSize(Size.createMax());// TODO Need to pass in a max size (is 0 at the
+                                                                      // moment)
             final int b = cells[i].getBaseline();
             final int baselineOffset = Math.max(0, maxBaseline - b);
             maxHeight = Math.max(maxHeight, s.getHeight() + baselineOffset);
@@ -51,6 +51,7 @@ public class TableRowLayout implements Layout {
         return new Size(totalWidth, maxHeight);
     }
 
+    @Override
     public void layout(final View row, final Size maximumSize) {
         final View[] cells = row.getSubviews();
         final int maxBaseline = maxBaseline(cells);
@@ -58,7 +59,8 @@ public class TableRowLayout implements Layout {
         int x = 0;
         for (int i = 0; i < cells.length; i++) {
             final View cell = cells[i];
-            final Size s = cell.getRequiredSize(Size.createMax());  // TODO  Need to pass in a max size (is 0 at the moment)
+            final Size s = cell.getRequiredSize(Size.createMax()); // TODO Need to pass in a max size (is 0 at the
+                                                                   // moment)
             s.setWidth(axis.getColumnWidth(i));
             cell.setSize(s);
 
@@ -72,12 +74,10 @@ public class TableRowLayout implements Layout {
 
     private int maxBaseline(final View[] cells) {
         int maxBaseline = 0;
-        for (int i = 0; i < cells.length; i++) {
-            final View cell = cells[i];
+        for (final View cell : cells) {
             maxBaseline = Math.max(maxBaseline, cell.getBaseline());
         }
         return maxBaseline;
     }
 
 }
-

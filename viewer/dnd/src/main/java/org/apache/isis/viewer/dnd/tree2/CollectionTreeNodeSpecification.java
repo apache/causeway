@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree2;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -31,28 +30,30 @@ import org.apache.isis.viewer.dnd.view.border.IconBorder;
 import org.apache.isis.viewer.dnd.view.border.SelectObjectBorder;
 import org.apache.isis.viewer.dnd.view.composite.AbstractCollectionViewSpecification;
 
-
 public class CollectionTreeNodeSpecification extends AbstractCollectionViewSpecification {
 
     public static ViewSpecification[] create() {
-        CollectionTreeNodeSpecification collectionNodeSpec = new CollectionTreeNodeSpecification();
-        ObjectTreeNodeSpecification objectNodeSpec = new ObjectTreeNodeSpecification();
-        SubviewIconSpecification iconSpec = new SubviewIconSpecification();
+        final CollectionTreeNodeSpecification collectionNodeSpec = new CollectionTreeNodeSpecification();
+        final ObjectTreeNodeSpecification objectNodeSpec = new ObjectTreeNodeSpecification();
+        final SubviewIconSpecification iconSpec = new SubviewIconSpecification();
 
         collectionNodeSpec.addSubviewDecorator(new SelectObjectBorder.Factory());
         collectionNodeSpec.addSubviewDecorator(new ExpandableViewBorder.Factory(iconSpec, objectNodeSpec, null));
         collectionNodeSpec.addViewDecorator(new IconBorder.Factory(Toolkit.getText(ColorsAndFonts.TEXT_NORMAL)));
         objectNodeSpec.addSubviewDecorator(new SelectObjectBorder.Factory());
-        objectNodeSpec.addSubviewDecorator(new ExpandableViewBorder.Factory(iconSpec, objectNodeSpec, collectionNodeSpec));
- //       objectNodeSpec.addSubviewDecorator(new FieldLabelsDecorator());
+        objectNodeSpec.addSubviewDecorator(new ExpandableViewBorder.Factory(iconSpec, objectNodeSpec,
+            collectionNodeSpec));
+        // objectNodeSpec.addSubviewDecorator(new FieldLabelsDecorator());
         objectNodeSpec.addViewDecorator(new IconBorder.Factory(Toolkit.getText(ColorsAndFonts.TEXT_NORMAL)));
         return new ViewSpecification[] { collectionNodeSpec, objectNodeSpec };
     }
-    
+
+    @Override
     protected ViewFactory createElementFactory() {
         return new IconElementFactory();
     }
 
+    @Override
     public String getName() {
         return "Collection tree (experimental)";
     }
@@ -60,8 +61,8 @@ public class CollectionTreeNodeSpecification extends AbstractCollectionViewSpeci
     // TODO this should be available if an item can be given more space
     /*
      * @Override public boolean canDisplay(final Content content, ViewRequirement requirement) { return
-     * content.isCollection() && requirement.is(ViewRequirement.CLOSED) &&
-     * requirement.is(ViewRequirement.SUBVIEW) && requirement.is(ViewRequirement.SUBVIEW); }
+     * content.isCollection() && requirement.is(ViewRequirement.CLOSED) && requirement.is(ViewRequirement.SUBVIEW) &&
+     * requirement.is(ViewRequirement.SUBVIEW); }
      */
 
 }

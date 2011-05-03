@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.combined;
 
 import java.util.List;
@@ -25,12 +24,11 @@ import java.util.List;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.view.ViewAxis;
 
-
 public class SplitViewAccess implements ViewAxis {
 
     private final List<ObjectAssociation> fields;
 
-    public SplitViewAccess(List<ObjectAssociation> fields) {
+    public SplitViewAccess(final List<ObjectAssociation> fields) {
         this.fields = fields;
     }
 
@@ -39,4 +37,3 @@ public class SplitViewAccess implements ViewAxis {
     }
 
 }
-

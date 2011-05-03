@@ -24,10 +24,10 @@ import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 public interface Perform {
 
     public static enum Mode {
-		SETUP, TEST
-	}
+        SETUP, TEST
+    }
 
-	String getKey();
+    String getKey();
 
     void perform(PerformContext performContext) throws ScenarioBoundValueException;
 

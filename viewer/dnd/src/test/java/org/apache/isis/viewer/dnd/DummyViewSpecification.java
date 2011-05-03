@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import org.apache.isis.viewer.dnd.drawing.Size;
@@ -31,47 +30,56 @@ public class DummyViewSpecification implements ViewSpecification {
 
     private Size size;
 
-    public DummyViewSpecification() {}
+    public DummyViewSpecification() {
+    }
 
-    public DummyViewSpecification(Size size) {
+    public DummyViewSpecification(final Size size) {
         this.size = size;
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
-        DummyView dummyView = new DummyView();
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
+        final DummyView dummyView = new DummyView();
         dummyView.setupRequiredSize(new Size(size));
         return dummyView;
     }
 
+    @Override
     public String getName() {
         return null;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return false;
     }
-    
-    public void setupCreatedViewsSize(Size size) {
+
+    public void setupCreatedViewsSize(final Size size) {
         this.size = size;
     }
 

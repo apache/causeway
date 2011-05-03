@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import java.util.List;
@@ -34,27 +33,29 @@ import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 import org.apache.isis.viewer.dnd.view.composite.ViewBuilder;
 
-
 public class CalendarSpecification implements CompositeViewSpecification {
-     
-    public Layout createLayout(Content content, Axes axes) {
+
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
-    public void createAxes(Content content, Axes axes) {
-        //axes.add(new CalendarAxis());
+    public void createAxes(final Content content, final Axes axes) {
+        // axes.add(new CalendarAxis());
     }
 
-    public View createView(Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         return new CalendarView(content, this);
-        //return new ViewResizeBorder(new CalendarView(content, this));
+        // return new ViewResizeBorder(new CalendarView(content, this));
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
-        boolean openCollection =requirement.isCollection() && requirement.isOpen();
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        final boolean openCollection = requirement.isCollection() && requirement.isOpen();
         if (openCollection) {
-            List<OneToOneAssociation> propertyList = ((CollectionContent) requirement.getContent()).getElementSpecification().getProperties();
-            for (OneToOneAssociation association : propertyList) {
+            final List<OneToOneAssociation> propertyList =
+                ((CollectionContent) requirement.getContent()).getElementSpecification().getProperties();
+            for (final OneToOneAssociation association : propertyList) {
                 if (!association.isAlwaysHidden() && association.getSpecification().containsFacet(DateValueFacet.class)) {
                     return true;
                 }
@@ -63,18 +64,22 @@ public class CalendarSpecification implements CompositeViewSpecification {
         return false;
     }
 
+    @Override
     public String getName() {
         return "Calendar (experimental) ";
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return true;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
@@ -83,14 +88,14 @@ public class CalendarSpecification implements CompositeViewSpecification {
         return null;
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isResizeable() {
         return true;
     }
 
-     
 }
-

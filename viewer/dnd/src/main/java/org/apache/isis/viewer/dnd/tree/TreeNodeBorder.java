@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -58,7 +56,7 @@ import org.apache.isis.viewer.dnd.view.field.OneToManyField;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
-
+import org.apache.log4j.Logger;
 
 // TODO use ObjectBorder to provide the basic border functionality
 public class TreeNodeBorder extends AbstractBorder {
@@ -124,17 +122,15 @@ public class TreeNodeBorder extends AbstractBorder {
 
     @Override
     public void draw(final Canvas canvas) {
-        Color secondary1 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
-        Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
-        Color secondary3 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
-        /* REVIEW
-        if (getViewAxis(TableAxis.class) != null) {
-            if (((SelectableViewAxis) getViewAxis(SelectableViewAxis.class)).isSelected(getView())) {
-                canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left, top, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2));
-                secondary2 = secondary1;
-            }
-        }
-*/
+        final Color secondary1 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
+        final Color secondary3 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
+        /*
+         * REVIEW if (getViewAxis(TableAxis.class) != null) { if (((SelectableViewAxis)
+         * getViewAxis(SelectableViewAxis.class)).isSelected(getView())) { canvas.drawSolidRectangle(left, 0,
+         * getSize().getWidth() - left, top, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2)); secondary2 = secondary1;
+         * } }
+         */
         if (getState().isObjectIdentified()) {
             canvas.drawRectangle(left, 0, getSize().getWidth() - left, top, secondary2);
 
@@ -148,19 +144,20 @@ public class TreeNodeBorder extends AbstractBorder {
         final int y = top / 2;
         canvas.drawLine(x, y, x + left, y, secondary2);
 
-        boolean isOpen = getSpecification().isOpen();
+        final boolean isOpen = getSpecification().isOpen();
         final int canOpen = canOpen();
         final boolean addBox = isOpen || canOpen != NodeSpecification.CANT_OPEN;
         if (addBox) {
             x += BOX_X_OFFSET;
             canvas.drawLine(x, y, x + BOX_SIZE - 1, y, secondary3);
-            canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
+            canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE,
+                Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
             canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, secondary1);
 
             if (canOpen == NodeSpecification.UNKNOWN) {
 
             } else {
-                Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+                final Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
                 canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - 1 - BOX_PADDING, y, black);
                 if (!isOpen) {
                     x += BOX_SIZE / 2;
@@ -181,7 +178,7 @@ public class TreeNodeBorder extends AbstractBorder {
         x = left + 1;
         icon.draw(canvas, x, baseline);
         x += icon.getSize().getWidth();
-        int maxWith = getSize().getWidth() - x;
+        final int maxWith = getSize().getWidth() - x;
         text.draw(canvas, x, baseline, maxWith);
 
         if (Toolkit.debug) {
@@ -223,13 +220,10 @@ public class TreeNodeBorder extends AbstractBorder {
                 final View newView = replaceWithSpecification.createView(getContent(), getViewAxes(), -1);
                 getParent().replaceView(getView(), newView);
             }
-     /*   } else if (y < top && x > left && click.button1()) {
-            if (canOpen() == NodeSpecification.UNKNOWN) {
-                resolveContent();
-                markDamaged();
-            }
-            selectNode();
-  */
+            /*
+             * } else if (y < top && x > left && click.button1()) { if (canOpen() == NodeSpecification.UNKNOWN) {
+             * resolveContent(); markDamaged(); } selectNode();
+             */
         } else {
             super.firstClick(click);
         }
@@ -300,10 +294,9 @@ public class TreeNodeBorder extends AbstractBorder {
     // TODO remove
     private void selectNode() {
         /*
-        if (getViewAxis(SelectableViewAxis.class) != null) {
-            ((SelectableViewAxis) getViewAxis(SelectableViewAxis.class)).selected(getView());
-        }
-        */
+         * if (getViewAxis(SelectableViewAxis.class) != null) { ((SelectableViewAxis)
+         * getViewAxis(SelectableViewAxis.class)).selected(getView()); }
+         */
     }
 
     @Override
@@ -351,6 +344,7 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 
     private boolean withinBox(final int x, final int y) {
-        return x >= BOX_X_OFFSET && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2;
+        return x >= BOX_X_OFFSET && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2
+            && y <= (top + BOX_SIZE) / 2;
     }
 }

@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 
 public interface ScrollBarRender {
-    void draw(Canvas canvas, boolean isHorizontal, int x, int y, int width, int height, int scrollPosition, int visibleAmount);
+    void draw(Canvas canvas, boolean isHorizontal, int x, int y, int width, int height, int scrollPosition,
+        int visibleAmount);
 }
-
-

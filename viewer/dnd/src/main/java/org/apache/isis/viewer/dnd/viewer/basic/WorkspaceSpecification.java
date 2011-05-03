@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.service.PerspectiveContent;
@@ -31,25 +30,25 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.composite.ViewBuilder;
 
-
 public class WorkspaceSpecification implements CompositeViewSpecification {
     ApplicationWorkspaceBuilder builder = new ApplicationWorkspaceBuilder();
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         Workspace workspace;
         workspace = new ApplicationWorkspace(content, axes, this, createLayout(content, axes), builder);
         // workspace.setFocusManager(new WorkspaceFocusManager());
         return workspace;
     }
 
-    public Layout createLayout(Content content, Axes axes) {
-        return  new ApplicationWorkspaceBuilder.ApplicationLayout();
+    public Layout createLayout(final Content content, final Axes axes) {
+        return new ApplicationWorkspaceBuilder.ApplicationLayout();
     }
-    
-    public void createAxes(Content content, Axes axes) {
+
+    public void createAxes(final Content content, final Axes axes) {
     }
-    
-    public ViewAxis axis(Content content) {
+
+    public ViewAxis axis(final Content content) {
         return null;
     }
 
@@ -57,31 +56,38 @@ public class WorkspaceSpecification implements CompositeViewSpecification {
         return builder;
     }
 
+    @Override
     public String getName() {
         return "Root Workspace";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
-    
+
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isFor(PerspectiveContent.class);
     }
 

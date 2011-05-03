@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.service;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,7 +29,6 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewState;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
-
 
 public class ServiceBorder extends AbstractBorder {
     private static final int BORDER = 13;
@@ -79,8 +77,8 @@ public class ServiceBorder extends AbstractBorder {
                     canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
                 }
                 canvas.drawLine(xExtent - BORDER, left, xExtent - BORDER, left + s.getHeight(), color);
-                canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left, Toolkit
-                        .getColor(ColorsAndFonts.COLOR_SECONDARY3));
+                canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left,
+                    Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             }
         }
     }
@@ -103,7 +101,7 @@ public class ServiceBorder extends AbstractBorder {
 
     @Override
     public void secondClick(final Click click) {
-    // ignore - prevents the super class opening a view
+        // ignore - prevents the super class opening a view
     }
 
     @Override

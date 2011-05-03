@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view;
-
 
 /**
  * Details where to move the focus to.
@@ -41,8 +39,8 @@ public interface FocusManager {
     void focusParentView();
 
     /**
-     * The first child view within the container to move the focus to; move down to the first view within the
-     * current view.
+     * The first child view within the container to move the focus to; move down to the first view within the current
+     * view.
      */
     void focusFirstChildView();
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.text;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -32,10 +31,9 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewState;
 
-
 /**
- * TitleText draws the text derived from the subclass within a view. The text is properly truncated if longer
- * than the specified maximum width.
+ * TitleText draws the text derived from the subclass within a view. The text is properly truncated if longer than the
+ * specified maximum width.
  */
 public abstract class TitleText {
     private static final int NO_MAX_WIDTH = -1;
@@ -58,8 +56,8 @@ public abstract class TitleText {
     }
 
     /**
-     * Draw this TitleText's text stating from the specified x coordination and on the specified baseline. If
-     * a maximum width is specified (ie it is positive) then the text drawn will not extend past that width.
+     * Draw this TitleText's text stating from the specified x coordination and on the specified baseline. If a maximum
+     * width is specified (ie it is positive) then the text drawn will not extend past that width.
      * 
      * @param maxWidth
      *            the maximum width to display the text within; if negative no limit is imposed
@@ -79,19 +77,19 @@ public abstract class TitleText {
             color = this.color;
         }
 
-        String text = TextUtils.limitText(getTitle(), style, maxWidth);
-        
+        final String text = TextUtils.limitText(getTitle(), style, maxWidth);
+
         final int xt = x;
         final int yt = baseline;
 
         if (Toolkit.debug) {
             final int x2 = style.stringWidth(text);
-            canvas.drawDebugOutline(new Bounds(xt, yt - style.getAscent(), x2, style.getTextHeight()), baseline, Toolkit
-                    .getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
+            canvas.drawDebugOutline(new Bounds(xt, yt - style.getAscent(), x2, style.getTextHeight()), baseline,
+                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
         }
         canvas.drawText(text, xt, yt, color, style);
     }
- 
+
     public Size getSize() {
         final int height = style.getTextHeight();
         final int width = style.stringWidth(getTitle());

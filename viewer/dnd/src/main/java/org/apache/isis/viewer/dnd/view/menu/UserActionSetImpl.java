@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.menu;
 
 import java.util.Vector;
@@ -38,31 +37,34 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.action.OptionFactory;
 
-
 public class UserActionSetImpl implements UserActionSet {
 
-	private Color backgroundColor;
+    private Color backgroundColor;
 
-	private final String groupName;
+    private final String groupName;
     private final boolean includeDebug;
     private final boolean includeExploration;
     private final boolean includePrototype;
     private final Vector options = new Vector();
     private final ActionType type;
 
-    public UserActionSetImpl(final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final ActionType type) {
-    	this("", type, includeExploration, includePrototype, includeDebug, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE)); 
+    public UserActionSetImpl(final boolean includeExploration, final boolean includePrototype,
+        final boolean includeDebug, final ActionType type) {
+        this("", type, includeExploration, includePrototype, includeDebug, Toolkit
+            .getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
     }
 
     private UserActionSetImpl(final String groupName, final UserActionSetImpl parent) {
-    	this(groupName, parent, parent.getType());
+        this(groupName, parent, parent.getType());
     }
 
     private UserActionSetImpl(final String groupName, final UserActionSetImpl parent, final ActionType type) {
-    	this(groupName, type, parent.includeExploration, parent.includePrototype, parent.includeDebug, parent.getColor());
+        this(groupName, type, parent.includeExploration, parent.includePrototype, parent.includeDebug, parent
+            .getColor());
     }
 
-    private UserActionSetImpl(final String groupName, final ActionType type, final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final Color backgroundColor) {
+    private UserActionSetImpl(final String groupName, final ActionType type, final boolean includeExploration,
+        final boolean includePrototype, final boolean includeDebug, final Color backgroundColor) {
         this.groupName = groupName;
         this.type = type;
         this.includeExploration = includeExploration;
@@ -71,52 +73,60 @@ public class UserActionSetImpl implements UserActionSet {
         this.backgroundColor = backgroundColor;
     }
 
-    public UserActionSet addNewActionSet(String name) {
-        UserActionSetImpl set = new UserActionSetImpl(name, this);
+    @Override
+    public UserActionSet addNewActionSet(final String name) {
+        final UserActionSetImpl set = new UserActionSetImpl(name, this);
         add(set);
         return set;
     }
 
-    public UserActionSet addNewActionSet(String name, ActionType type) {
-        UserActionSetImpl set = new UserActionSetImpl(name, this, type);
+    @Override
+    public UserActionSet addNewActionSet(final String name, final ActionType type) {
+        final UserActionSetImpl set = new UserActionSetImpl(name, this, type);
         add(set);
         return set;
     }
-    
+
     /**
      * Add the specified option if it is of the right type for this menu.
      */
+    @Override
     public void add(final UserAction option) {
         final ActionType section = option.getType();
-        if (section == ActionType.USER || 
-        	(includeExploration && section == ActionType.EXPLORATION) || 
-        	(includePrototype && section == ActionType.PROTOTYPE) || 
-        	(includeDebug && section == ActionType.DEBUG)) {
+        if (section == ActionType.USER || (includeExploration && section == ActionType.EXPLORATION)
+            || (includePrototype && section == ActionType.PROTOTYPE) || (includeDebug && section == ActionType.DEBUG)) {
             options.addElement(option);
         }
     }
 
+    @Override
     public Consent disabled(final View view) {
         return Allow.DEFAULT;
     }
 
-    public void execute(final Workspace workspace, final View view, final Location at) {}
+    @Override
+    public void execute(final Workspace workspace, final View view, final Location at) {
+    }
 
     /**
      * Returns the background colour for the menu
      */
+    @Override
     public Color getColor() {
         return backgroundColor;
     }
 
+    @Override
     public String getDescription(final View view) {
         return "";
     }
 
+    @Override
     public String getHelp(final View view) {
         return "";
     }
 
+    @Override
     public UserAction[] getUserActions() {
         final UserAction[] v = new UserAction[options.size()];
         for (int i = 0; i < v.length; i++) {
@@ -125,10 +135,12 @@ public class UserActionSetImpl implements UserActionSet {
         return v;
     }
 
+    @Override
     public String getName(final View view) {
         return groupName;
     }
 
+    @Override
     public ActionType getType() {
         return type;
     }
@@ -136,6 +148,7 @@ public class UserActionSetImpl implements UserActionSet {
     /**
      * Specifies the background colour for the menu
      */
+    @Override
     public void setColor(final Color color) {
         backgroundColor = color;
     }
@@ -150,11 +163,13 @@ public class UserActionSetImpl implements UserActionSet {
         return str.toString();
     }
 
-    public void addCreateOptions(ObjectSpecification specification) {
+    @Override
+    public void addCreateOptions(final ObjectSpecification specification) {
         OptionFactory.addCreateOptions(specification, this);
     }
 
-    public void addObjectMenuOptions(ObjectAdapter object) {
+    @Override
+    public void addObjectMenuOptions(final ObjectAdapter object) {
         OptionFactory.addObjectMenuOptions(object, this);
     }
 }

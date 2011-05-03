@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.combined;
 
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 
-
 public abstract class SplitViewSpecification extends CompositeViewSpecification {
 
     public SplitViewSpecification() {
@@ -44,9 +42,9 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
     }
 
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         if (requirement.isObject() && requirement.is(ViewRequirement.OPEN) && !requirement.isSubview()) {
-            Content fieldContent = determineSecondaryContent(requirement.getContent());
+            final Content fieldContent = determineSecondaryContent(requirement.getContent());
             return fieldContent != null && fieldContent.getAdapter() != null;
         } else {
             return false;
@@ -54,28 +52,25 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
     }
 
     abstract View createMainView(Axes axes, Content mainContent, final Content secondaryContent);
-    
+
     abstract View createSecondaryView(Axes axes, final Content fieldContent);
 
     abstract Content determineSecondaryContent(Content content);
-    
-    
-    
-    
-    
-    Content field(ObjectAssociation field, Content content) {
-        ObjectSpecification spec = content.getSpecification();
-        ObjectAdapter target = content.getAdapter();
+
+    Content field(final ObjectAssociation field, final Content content) {
+        final ObjectSpecification spec = content.getSpecification();
+        final ObjectAdapter target = content.getAdapter();
         return Toolkit.getContentFactory().createFieldContent(field, target);
     }
 
-    List<ObjectAssociation> determineAvailableFields(Content content) {
-        ObjectSpecification spec = content.getSpecification();
-        ObjectAdapter target = content.getAdapter();
-        AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
-        List<ObjectAssociation> selectableFields = new ArrayList<ObjectAssociation>();
-        for (ObjectAssociation field : fields) {
+    List<ObjectAssociation> determineAvailableFields(final Content content) {
+        final ObjectSpecification spec = content.getSpecification();
+        final ObjectAdapter target = content.getAdapter();
+        final AuthenticationSession session = IsisContext.getAuthenticationSession();
+        final List<ObjectAssociation> fields =
+            spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        final List<ObjectAssociation> selectableFields = new ArrayList<ObjectAssociation>();
+        for (final ObjectAssociation field : fields) {
             if (validField(field)) {
                 selectableFields.add(field);
             }
@@ -85,6 +80,4 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
 
     abstract boolean validField(ObjectAssociation field);
 
-
 }
-

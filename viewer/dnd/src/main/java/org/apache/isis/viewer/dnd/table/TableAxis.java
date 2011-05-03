@@ -17,29 +17,27 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAxis;
 
-
 public interface TableAxis extends ViewAxis {
 
     void ensureOffset(final int offset);
 
     /**
-     * Returns the number of the column found at the specificied position, ignoring the columns two borders.
-     * Returns 0 for the first column, 1 for second column, etc.
+     * Returns the number of the column found at the specificied position, ignoring the columns two borders. Returns 0
+     * for the first column, 1 for second column, etc.
      * 
      * If over the column border then returns -1.
      */
     int getColumnAt(final int xPosition);
 
     /**
-     * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second
-     * column, etc.
+     * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second column,
+     * etc.
      * 
      * If no column border is identified then returns -1.
      */
@@ -67,4 +65,3 @@ public interface TableAxis extends ViewAxis {
 
     void setWidth(final int index, final int width);
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree2;
 
 import org.apache.isis.viewer.dnd.form.AbstractObjectViewSpecification;
@@ -25,17 +24,19 @@ import org.apache.isis.viewer.dnd.icon.IconElementFactory;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 
-
 public class ObjectTreeNodeSpecification extends AbstractObjectViewSpecification {
- 
-    public boolean canDisplay(ViewRequirement requirement) {
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return super.canDisplay(requirement) && requirement.isExpandable();
     }
 
+    @Override
     protected ViewFactory createFieldFactory() {
         return new IconElementFactory();
     }
-    
+
+    @Override
     public String getName() {
         return "Object tree (experimental)";
     }

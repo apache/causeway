@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
-
 
 /**
  * Links an action on an object to a view.
@@ -56,24 +54,28 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public void debugDetails(final DebugBuilder debug) {
         debug.appendln("action", getActionName());
         debug.appendln("target", getAdapter());
         String parameterSet = "";
-        for (int i = 0; i < parameters.length; i++) {
-            parameterSet += parameters[i];
+        for (final ParameterContent parameter : parameters) {
+            parameterSet += parameter;
         }
         debug.appendln("parameters", parameterSet);
     }
 
+    @Override
     public Consent disabled() {
         return actionHelper.disabled();
     }
 
+    @Override
     public ObjectAdapter execute() {
         return actionHelper.invoke();
     }
 
+    @Override
     public String getActionName() {
         return actionHelper.getName();
     }
@@ -83,10 +85,12 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         return actionHelper.getIconName();
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return actionHelper.getTarget();
     }
 
+    @Override
     public int getNoParameters() {
         return parameters.length;
     }
@@ -96,14 +100,17 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         return actionHelper.getTarget();
     }
 
+    @Override
     public ParameterContent getParameterContent(final int index) {
         return parameters[index];
     }
 
+    @Override
     public ObjectAdapter getParameterObject(final int index) {
         return actionHelper.getParameter(index);
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return getObject().getSpecification();
     }
@@ -121,6 +128,7 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         return true;
     }
 
+    @Override
     public boolean isTransient() {
         return true;
     }
@@ -130,6 +138,7 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public String title() {
         return actionHelper.title();
     }
@@ -139,22 +148,27 @@ public class ObjectActionContent extends AbstractObjectContent implements Action
         return getActionName();
     }
 
+    @Override
     public String getId() {
         return actionHelper.getName();
     }
 
+    @Override
     public String getDescription() {
         return actionHelper.getDescription();
     }
 
+    @Override
     public String getHelp() {
         return actionHelper.getHelp();
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }

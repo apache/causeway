@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -31,47 +30,53 @@ import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.border.IconBorder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
-
 public class NewViewSpecification implements ViewSpecification {
 
-    protected Layout createLayout(Content content, Axes axes) {
+    protected Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isObject() && requirement.isOpen();
     }
 
+    @Override
     public String getName() {
         return "Object View";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
 
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
-    public View createView(Content content, Axes axes, int sequence) {
-        NewObjectView view = new NewObjectView(content, this);
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
+        final NewObjectView view = new NewObjectView(content, this);
         View view2 = new IconBorder(view, Toolkit.getText(ColorsAndFonts.TEXT_TITLE));
         view2 = new ViewDesignBorder(view2, view);
         return view2;
     }
 
 }
-

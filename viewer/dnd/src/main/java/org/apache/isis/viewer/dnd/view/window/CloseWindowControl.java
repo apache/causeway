@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.option.CloseViewOption;
 
-
 public class CloseWindowControl extends WindowControl {
     private static CloseWindowRender render;
-    
-    public static void setRender(CloseWindowRender render) {
+
+    public static void setRender(final CloseWindowRender render) {
         CloseWindowControl.render = render;
     }
 

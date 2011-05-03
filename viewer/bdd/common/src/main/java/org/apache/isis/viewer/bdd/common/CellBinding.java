@@ -194,8 +194,8 @@ public abstract class CellBinding {
     public void captureCurrent(final ScenarioCell cell) {
         final ScenarioCell previousCell = getCurrentCell();
         setCurrentCell(cell);
-        boolean shouldDitto = StringUtils.isNullOrEmpty(cell.getText());
-        boolean canDitto = isDitto() && previousCell != null;
+        final boolean shouldDitto = StringUtils.isNullOrEmpty(cell.getText());
+        final boolean canDitto = isDitto() && previousCell != null;
         if (shouldDitto && canDitto) {
             ditto(previousCell);
             dittoed = true;

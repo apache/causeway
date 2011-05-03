@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,37 +39,45 @@ import org.apache.isis.viewer.dnd.view.text.TitleText;
 
 public class FieldOfSpecification implements ViewSpecification {
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isOpen() && !requirement.isSubview() && requirement.getContent() instanceof FieldContent;
     }
 
+    @Override
     public String getName() {
         return "Field Of";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return false;
     }
 
+    @Override
     public boolean isReplaceable() {
         return false;
     }
 
+    @Override
     public boolean isResizeable() {
         return false;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }
 
-    public View createView(Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         final FieldContent fieldContent = (FieldContent) content;
-        ObjectAdapter parent = fieldContent.getParent();
+        final ObjectAdapter parent = fieldContent.getParent();
         final Content parentContent = Toolkit.getContentFactory().createRootContent(parent);
         View view = new InternalFieldView(parentContent, fieldContent, axes, this);
         view = addBorder(parentContent, fieldContent, view);
@@ -78,9 +85,9 @@ public class FieldOfSpecification implements ViewSpecification {
     }
 
     private View addBorder(final Content parentContent, final FieldContent fieldContent, View view) {
-        Text textStyle = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
-        Color colorStyle = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
-        TitleText titleText = new TitleText(view, textStyle, colorStyle) {
+        final Text textStyle = Toolkit.getText(ColorsAndFonts.TEXT_TITLE);
+        final Color colorStyle = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+        final TitleText titleText = new TitleText(view, textStyle, colorStyle) {
             @Override
             protected String title() {
                 return parentContent.title() + "/" + fieldContent.getFieldName();
@@ -93,34 +100,34 @@ public class FieldOfSpecification implements ViewSpecification {
 }
 
 class InternalFieldView extends CompositeView {
-  //  final View[] subviews = new View[1];
-    
+    // final View[] subviews = new View[1];
+
     private final Content fieldContent;
 
-    public InternalFieldView(Content content, Content fieldContent, Axes axes, ViewSpecification specification) {
+    public InternalFieldView(final Content content, final Content fieldContent, final Axes axes,
+        final ViewSpecification specification) {
         super(content, specification);
         this.fieldContent = fieldContent;
     }
-    
-  /*  
-    public void draw(Canvas canvas) {
-        subviews[0].draw(canvas);
-    }
-    
-    public View[] getSubviews() {
-        return subviews;
-    }
-    */
-    public Size requiredSize(Size availableSpace) {
+
+    /*
+     * public void draw(Canvas canvas) { subviews[0].draw(canvas); }
+     * 
+     * public View[] getSubviews() { return subviews; }
+     */
+    @Override
+    public Size requiredSize(final Size availableSpace) {
         return getSubviews()[0].getRequiredSize(availableSpace);
     }
-    
-    protected void doLayout(Size maximumSize) {
-        View view = getSubviews()[0];
+
+    @Override
+    protected void doLayout(final Size maximumSize) {
+        final View view = getSubviews()[0];
         view.setSize(view.getRequiredSize(maximumSize));
         view.layout();
     }
 
+    @Override
     protected void buildView() {
         ViewSpecification internalSpecification;
         if (fieldContent.isCollection()) {
@@ -131,5 +138,3 @@ class InternalFieldView extends CompositeView {
         addView(internalSpecification.createView(fieldContent, new Axes(), 0));
     }
 }
-
-

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-
 
 public class DefaultColumnWidthStrategy implements ColumnWidthStrategy {
 
@@ -45,14 +43,17 @@ public class DefaultColumnWidthStrategy implements ColumnWidthStrategy {
         this.maximum = maximum;
     }
 
+    @Override
     public int getMinimumWidth(final int i, final ObjectAssociation specification) {
         return minimum;
     }
 
+    @Override
     public int getPreferredWidth(final int i, final ObjectAssociation specification) {
         return preferred;
     }
 
+    @Override
     public int getMaximumWidth(final int i, final ObjectAssociation specification) {
         return maximum;
     }

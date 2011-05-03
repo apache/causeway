@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -28,78 +27,109 @@ import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Shape;
 import org.apache.isis.viewer.dnd.drawing.Text;
 
-
 public class DummyCanvas implements Canvas {
 
     public DummyCanvas() {
         super();
     }
 
+    @Override
     public Canvas createSubcanvas() {
         return null;
     }
 
+    @Override
     public Canvas createSubcanvas(final Bounds bounds) {
         return null;
     }
 
+    @Override
     public Canvas createSubcanvas(final int x, final int y, final int width, final int height) {
         return null;
     }
 
-    public void draw3DRectangle(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final Color color,
-            final boolean raised) {}
+    @Override
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
+        final boolean raised) {
+    }
 
-    public void drawImage(final Image icon, final int x, final int y) {}
+    @Override
+    public void drawImage(final Image icon, final int x, final int y) {
+    }
 
-    public void drawImage(final Image icon, final int x, final int y, final int width, final int height) {}
+    @Override
+    public void drawImage(final Image icon, final int x, final int y, final int width, final int height) {
+    }
 
-    public void drawLine(final int x, final int y, final int x2, final int y2, final Color color) {}
+    @Override
+    public void drawLine(final int x, final int y, final int x2, final int y2, final Color color) {
+    }
 
-    public void drawLine(final Location start, final int xExtent, final int yExtent, final Color color) {}
+    @Override
+    public void drawLine(final Location start, final int xExtent, final int yExtent, final Color color) {
+    }
 
-    public void drawOval(final int x, final int y, final int width, final int height, final Color color) {}
+    @Override
+    public void drawOval(final int x, final int y, final int width, final int height, final Color color) {
+    }
 
-    public void drawRectangle(final int x, final int y, final int width, final int height, final Color color) {}
+    @Override
+    public void drawRectangle(final int x, final int y, final int width, final int height, final Color color) {
+    }
 
-    public void drawRectangleAround(final Bounds bounds, final Color color) {}
+    @Override
+    public void drawRectangleAround(final Bounds bounds, final Color color) {
+    }
 
-    public void drawRoundedRectangle(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final int arcWidth,
-            final int arcHeight,
-            final Color color) {}
+    @Override
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
+        final int arcHeight, final Color color) {
+    }
 
-    public void drawShape(final Shape shape, final Color color) {}
+    @Override
+    public void drawShape(final Shape shape, final Color color) {
+    }
 
-    public void drawShape(final Shape shape, final int x, final int y, final Color color) {}
+    @Override
+    public void drawShape(final Shape shape, final int x, final int y, final Color color) {
+    }
 
-    public void drawSolidOval(final int x, final int y, final int width, final int height, final Color color) {}
+    @Override
+    public void drawSolidOval(final int x, final int y, final int width, final int height, final Color color) {
+    }
 
-    public void drawSolidRectangle(final int x, final int y, final int width, final int height, final Color color) {}
+    @Override
+    public void drawSolidRectangle(final int x, final int y, final int width, final int height, final Color color) {
+    }
 
-    public void drawSolidShape(final Shape shape, final Color color) {}
+    @Override
+    public void drawSolidShape(final Shape shape, final Color color) {
+    }
 
-    public void drawSolidShape(final Shape shape, final int x, final int y, final Color color) {}
+    @Override
+    public void drawSolidShape(final Shape shape, final int x, final int y, final Color color) {
+    }
 
-    public void drawText(final String text, final int x, final int y, final Color color, final Text style) {}
+    @Override
+    public void drawText(final String text, final int x, final int y, final Color color, final Text style) {
+    }
 
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {}
+    @Override
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
+        final Text style) {
+    }
 
-    public void offset(final int x, final int y) {}
+    @Override
+    public void offset(final int x, final int y) {
+    }
 
+    @Override
     public boolean overlaps(final Bounds bounds) {
         return false;
     }
 
-    public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {}
+    @Override
+    public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {
+    }
 
 }

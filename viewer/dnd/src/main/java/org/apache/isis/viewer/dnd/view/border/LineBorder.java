@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
-import org.apache.isis.viewer.dnd.drawing.Padding;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
@@ -87,11 +85,12 @@ public class LineBorder extends AbstractBorder {
         return wrappedView.toString() + "/LineBorder";
     }
 
-    public void setWidth(int width) {
-        this.width = width;     calculateBorderWidth();
+    public void setWidth(final int width) {
+        this.width = width;
+        calculateBorderWidth();
     }
 
-    public void setPadding(int padding) {
+    public void setPadding(final int padding) {
         this.padding = padding;
         calculateBorderWidth();
     }
@@ -103,7 +102,7 @@ public class LineBorder extends AbstractBorder {
         right = width + padding;
     }
 
-    public void setColor(Color color) {
+    public void setColor(final Color color) {
         this.color = color;
     }
 

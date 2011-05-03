@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public class TypeComparator implements Comparator {
     private String type;
 
+    @Override
     public void init(final ObjectAdapter element) {
         type = element.getSpecification().getShortIdentifier();
     }
 
+    @Override
     public int compare(final ObjectAdapter sortedElement) {
         final String sortedType = sortedElement.getSpecification().getShortIdentifier();
         return sortedType.compareTo(type);

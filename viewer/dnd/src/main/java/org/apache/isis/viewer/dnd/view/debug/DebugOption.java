@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.debug;
 
 import java.util.List;
@@ -37,7 +36,6 @@ import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
 import com.google.common.collect.Lists;
 
-
 /**
  * Display debug window
  */
@@ -51,9 +49,9 @@ public class DebugOption extends UserActionAbstract {
         final Content content = view.getContent();
         final ObjectAdapter object = content == null ? null : content.getAdapter();
 
-        List<DebuggableWithTitle> debug = Lists.newArrayList();
+        final List<DebuggableWithTitle> debug = Lists.newArrayList();
         if (content instanceof PerspectiveContent) {
-            PerspectiveEntry perspectiveEntry = ((PerspectiveContent)content).getPerspective();
+            final PerspectiveEntry perspectiveEntry = ((PerspectiveContent) content).getPerspective();
             debug.add(UserProfilesDebugUtil.asDebuggableWithTitle(perspectiveEntry));
         } else {
             debug.add(new DebugObjectSpecification(content.getSpecification()));
@@ -62,15 +60,15 @@ public class DebugOption extends UserActionAbstract {
             debug.add(new DebugAdapter(object));
             debug.add(new DebugObjectGraph(object));
         }
-        
+
         debug.add(new DebugViewStructure(view));
         debug.add(new DebugContent(view));
         debug.add(new DebugDrawing(view));
         debug.add(new DebugDrawingAbsolute(view));
-        
-        DebuggableWithTitle[] info = debug.toArray(new DebuggableWithTitle[debug.size()]);
+
+        final DebuggableWithTitle[] info = debug.toArray(new DebuggableWithTitle[debug.size()]);
         at.add(50, 6);
-        //at.getX() + 50, at.getY() + 6
+        // at.getX() + 50, at.getY() + 6
         Toolkit.getViewer().showDebugFrame(info, at);
     }
 

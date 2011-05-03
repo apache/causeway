@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.control;
 
 import java.awt.event.KeyEvent;
@@ -55,7 +54,6 @@ import org.apache.isis.viewer.dnd.view.Viewer;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
-
 public abstract class AbstractControlView implements View {
     protected final UserAction action;
     private final View parent;
@@ -70,74 +68,113 @@ public abstract class AbstractControlView implements View {
         this.action = action;
         this.parent = target;
     }
-     
+
+    @Override
     public Axes getViewAxes() {
         return new Axes();
     }
-    
-    public void addView(final View view) {}
 
+    @Override
+    public void addView(final View view) {
+    }
+
+    @Override
     public Consent canChangeValue() {
         return Veto.DEFAULT;
     }
 
+    @Override
     public boolean canFocus() {
         return action.disabled(parent).isAllowed();
     }
 
+    @Override
     public boolean contains(final View view) {
         return false;
     }
 
+    @Override
     public boolean containsFocus() {
         return false;
     }
 
-    public void contentMenuOptions(final UserActionSet menuOptions) {}
+    @Override
+    public void contentMenuOptions(final UserActionSet menuOptions) {
+    }
 
-    public void debug(final DebugBuilder debug) {}
+    @Override
+    public void debug(final DebugBuilder debug) {
+    }
 
-    public void debugStructure(final DebugBuilder b) {}
+    @Override
+    public void debugStructure(final DebugBuilder b) {
+    }
 
-    public void dispose() {}
+    @Override
+    public void dispose() {
+    }
 
-    public void drag(final ContentDrag contentDrag) {}
+    @Override
+    public void drag(final ContentDrag contentDrag) {
+    }
 
-    public void drag(final InternalDrag drag) {}
-    
-    public void drag(ViewDrag drag) {}
+    @Override
+    public void drag(final InternalDrag drag) {
+    }
 
-    public void dragCancel(final InternalDrag drag) {}
+    @Override
+    public void drag(final ViewDrag drag) {
+    }
 
+    @Override
+    public void dragCancel(final InternalDrag drag) {
+    }
+
+    @Override
     public View dragFrom(final Location location) {
         return null;
     }
 
-    public void dragIn(final ContentDrag drag) {}
+    @Override
+    public void dragIn(final ContentDrag drag) {
+    }
 
-    public void dragOut(final ContentDrag drag) {}
+    @Override
+    public void dragOut(final ContentDrag drag) {
+    }
 
+    @Override
     public DragEvent dragStart(final DragStart drag) {
         return null;
     }
 
-    public void dragTo(final InternalDrag drag) {}
+    @Override
+    public void dragTo(final InternalDrag drag) {
+    }
 
-    public void draw(final Canvas canvas) {}
+    @Override
+    public void draw(final Canvas canvas) {
+    }
 
-    public void drop(final ContentDrag drag) {}
+    @Override
+    public void drop(final ContentDrag drag) {
+    }
 
+    @Override
     public void drop(final ViewDrag drag) {
         getParent().drop(drag);
     }
 
-    public void editComplete(boolean moveFocus, boolean toNextField) {}
+    @Override
+    public void editComplete(final boolean moveFocus, final boolean toNextField) {
+    }
 
+    @Override
     public void entered() {
         final View target = getParent();
         final Consent consent = action.disabled(target);
-        String actionText = action.getName(target) + " - "
-                + (consent.isVetoed() ? consent.getReason() : action.getDescription(target));
+        final String actionText =
+            action.getName(target) + " - " + (consent.isVetoed() ? consent.getReason() : action.getDescription(target));
         getFeedbackManager().setAction(actionText);
 
         isOver = true;
@@ -145,6 +182,7 @@ public abstract class AbstractControlView implements View {
         markDamaged();
     }
 
+    @Override
     public void exited() {
         getFeedbackManager().clearAction();
         isOver = false;
@@ -152,8 +190,10 @@ public abstract class AbstractControlView implements View {
         markDamaged();
     }
 
-    public void exitedSubview() {}
+    public void exitedSubview() {
+    }
 
+    @Override
     public void firstClick(final Click click) {
         executeAction();
     }
@@ -167,10 +207,15 @@ public abstract class AbstractControlView implements View {
         }
     }
 
-    public void focusLost() {}
+    @Override
+    public void focusLost() {
+    }
 
-    public void focusReceived() {}
+    @Override
+    public void focusReceived() {
+    }
 
+    @Override
     public Location getAbsoluteLocation() {
         final Location location = parent.getAbsoluteLocation();
         getViewManager().getSpy().addTrace(this, "parent location", location);
@@ -190,100 +235,133 @@ public abstract class AbstractControlView implements View {
         return isPressed;
     }
 
+    @Override
     public int getBaseline() {
         return 0;
     }
 
+    @Override
     public Bounds getBounds() {
         return new Bounds(x, y, width, height);
     }
 
+    @Override
     public Content getContent() {
         return null;
     }
 
+    @Override
     public int getId() {
         return 0;
     }
 
+    @Override
     public FocusManager getFocusManager() {
         return getParent() == null ? null : getParent().getFocusManager();
     }
 
+    @Override
     public Location getLocation() {
         return new Location(x, y);
     }
 
+    @Override
     public Padding getPadding() {
         return null;
     }
 
+    @Override
     public View getParent() {
         return parent;
     }
 
+    @Override
     public Size getSize() {
         return new Size(width, height);
     }
 
+    @Override
     public ViewSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public ViewState getState() {
         return null;
     }
 
+    @Override
     public View[] getSubviews() {
         return new View[0];
     }
 
+    @Override
     public View getView() {
         return this;
     }
 
+    @Override
     public Viewer getViewManager() {
         return Toolkit.getViewer();
     }
 
+    @Override
     public Feedback getFeedbackManager() {
         return Toolkit.getFeedbackManager();
     }
 
+    @Override
     public Workspace getWorkspace() {
         return null;
     }
 
+    @Override
     public boolean hasFocus() {
         return getViewManager().hasFocus(getView());
     }
 
+    @Override
     public View identify(final Location location) {
         return this;
     }
 
-    public void invalidateContent() {}
+    @Override
+    public void invalidateContent() {
+    }
 
-    public void invalidateLayout() {}
+    @Override
+    public void invalidateLayout() {
+    }
 
+    @Override
     public void keyPressed(final KeyboardAction key) {
         if (key.getKeyCode() == KeyEvent.VK_ENTER) {
             executeAction();
         }
     }
 
-    public void keyReleased(KeyboardAction action) {}
+    @Override
+    public void keyReleased(final KeyboardAction action) {
+    }
 
-    public void keyTyped(KeyboardAction action) {}
+    @Override
+    public void keyTyped(final KeyboardAction action) {
+    }
 
-    public void layout() {}
+    @Override
+    public void layout() {
+    }
 
-    public void limitBoundsWithin(final Size size) {}
+    @Override
+    public void limitBoundsWithin(final Size size) {
+    }
 
+    @Override
     public void markDamaged() {
         markDamaged(getView().getBounds());
     }
 
+    @Override
     public void markDamaged(final Bounds bounds) {
         if (parent == null) {
             getViewManager().markDamaged(bounds);
@@ -294,91 +372,135 @@ public abstract class AbstractControlView implements View {
         }
     }
 
+    @Override
     public void mouseDown(final Click click) {
         final View target = getParent().getView();
         if (action.disabled(target).isAllowed()) {
             markDamaged();
             getViewManager().saveCurrentFieldEntry();
-            //action.execute(target.getWorkspace(), target, getLocation());
+            // action.execute(target.getWorkspace(), target, getLocation());
         }
-        boolean vetoed = action.disabled(target).isVetoed();
+        final boolean vetoed = action.disabled(target).isVetoed();
         if (!vetoed) {
             isPressed = true;
             markDamaged();
         }
     }
 
+    @Override
     public void mouseUp(final Click click) {
         final View target = getParent().getView();
-        boolean vetoed = action.disabled(target).isVetoed();
+        final boolean vetoed = action.disabled(target).isVetoed();
         if (!vetoed) {
             isPressed = false;
             markDamaged();
         }
     }
 
-    public void mouseMoved(final Location location) {}
+    @Override
+    public void mouseMoved(final Location location) {
+    }
 
-    public void objectActionResult(final ObjectAdapter result, final Placement placement) {}
+    @Override
+    public void objectActionResult(final ObjectAdapter result, final Placement placement) {
+    }
 
+    @Override
     public View pickupContent(final Location location) {
         return null;
     }
 
+    @Override
     public View pickupView(final Location location) {
         return null;
     }
 
-    public void print(final Canvas canvas) {}
+    @Override
+    public void print(final Canvas canvas) {
+    }
 
-    public void refresh() {}
+    @Override
+    public void refresh() {
+    }
 
-    public void removeView(final View view) {}
+    @Override
+    public void removeView(final View view) {
+    }
 
-    public void replaceView(final View toReplace, final View replacement) {}
+    @Override
+    public void replaceView(final View toReplace, final View replacement) {
+    }
 
-    public void secondClick(final Click click) {}
+    @Override
+    public void secondClick(final Click click) {
+    }
 
-    public void setBounds(final Bounds bounds) {}
+    @Override
+    public void setBounds(final Bounds bounds) {
+    }
 
-    public void setFocusManager(final FocusManager focusManager) {}
-    
-    public void setLayout(Layout layout) {}
+    @Override
+    public void setFocusManager(final FocusManager focusManager) {
+    }
 
+    public void setLayout(final Layout layout) {
+    }
+
+    @Override
     public void setLocation(final Location point) {
         x = point.getX();
         y = point.getY();
     }
 
-    public void setParent(final View view) {}
+    @Override
+    public void setParent(final View view) {
+    }
 
-    public void setMaximumSize(final Size size) {}
+    public void setMaximumSize(final Size size) {
+    }
 
+    @Override
     public void setSize(final Size size) {
         width = size.getWidth();
         height = size.getHeight();
     }
 
-    public void setView(final View view) {}
+    @Override
+    public void setView(final View view) {
+    }
 
+    @Override
     public View subviewFor(final Location location) {
         return null;
     }
 
-    public void thirdClick(final Click click) {}
+    @Override
+    public void thirdClick(final Click click) {
+    }
 
-    public void update(final ObjectAdapter object) {}
+    @Override
+    public void update(final ObjectAdapter object) {
+    }
 
-    public void updateView() {}
+    @Override
+    public void updateView() {
+    }
 
+    @Override
     public ViewAreaType viewAreaType(final Location mouseLocation) {
         return null;
     }
 
-    public void viewMenuOptions(final UserActionSet menuOptions) {}
-    
-    public void loadOptions(Options viewOptions) {}
-    
-    public void saveOptions(Options viewOptions) {}
+    @Override
+    public void viewMenuOptions(final UserActionSet menuOptions) {
+    }
+
+    @Override
+    public void loadOptions(final Options viewOptions) {
+    }
+
+    @Override
+    public void saveOptions(final Options viewOptions) {
+    }
 
 }

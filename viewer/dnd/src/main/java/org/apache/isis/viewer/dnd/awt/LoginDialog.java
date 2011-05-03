@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.BorderLayout;
@@ -39,13 +38,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-
+import org.apache.log4j.Logger;
 
 public class LoginDialog extends Frame implements ActionListener, KeyListener {
     private static final long serialVersionUID = 1L;
@@ -63,30 +60,31 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
     private AuthenticationSession session;
     private Label instructionLabel;
 
-    public LoginDialog(AuthenticationManager authenticationManager) {
+    public LoginDialog(final AuthenticationManager authenticationManager) {
         super("Apache Isis Login");
         this.authenticationManager = authenticationManager;
 
         setBackground(new Color(0xe0e0e0));
-        
+
         AWTUtilities.addWindowIcon(this, "login-logo.png");
 
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            @Override
+            public void windowClosing(final WindowEvent e) {
                 cancel(e.getComponent());
             }
         });
-        
-    	setLayout(new BorderLayout(0, 10));
 
-    	createInstructionLabel();
-    	createLoginFields();
-    	createButtonsPanel();
+        setLayout(new BorderLayout(0, 10));
 
-    	setResizable(false);
+        createInstructionLabel();
+        createLoginFields();
+        createButtonsPanel();
+
+        setResizable(false);
         pack();
         final int height = getSize().height;
-        final int width = getFontMetrics(getFont()).charWidth('x') * 48; 
+        final int width = getFontMetrics(getFont()).charWidth('x') * 48;
         setSize(width, height);
         final Dimension screen = getToolkit().getScreenSize();
 
@@ -103,18 +101,19 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
 
     private void createInstructionLabel() {
         instructionLabel = new Label("Please enter your user name and password.");
-    	add(instructionLabel, BorderLayout.NORTH);
+        add(instructionLabel, BorderLayout.NORTH);
     }
 
-	private void createLoginFields() {
-	    Panel form = new Panel(new GridLayout(2, 2, 6, 8)) {
-	        private static final long serialVersionUID = 1L;
+    private void createLoginFields() {
+        final Panel form = new Panel(new GridLayout(2, 2, 6, 8)) {
+            private static final long serialVersionUID = 1L;
 
+            @Override
             public Insets getInsets() {
-	            return new Insets(12, 0, 6, 80);
-	        }
-	    };
-	    add(form, BorderLayout.CENTER);
+                return new Insets(12, 0, 6, 80);
+            }
+        };
+        add(form, BorderLayout.CENTER);
 
         form.add(new Label("User name:", Label.RIGHT));
         form.add(user = new TextField());
@@ -124,12 +123,12 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
         form.add(password = new TextField());
         password.addKeyListener(this);
         password.setEchoChar('*');
-	}
-	
-	private void createButtonsPanel() {
-        Panel buttons = new Panel(new FlowLayout(FlowLayout.RIGHT));
+    }
+
+    private void createButtonsPanel() {
+        final Panel buttons = new Panel(new FlowLayout(FlowLayout.RIGHT));
         add(buttons, BorderLayout.SOUTH);
-        
+
         buttons.add(cancel = new Button(CANCEL_LABEL));
         cancel.addActionListener(this);
         cancel.addKeyListener(this);
@@ -137,7 +136,7 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
         buttons.add(login = new Button(LOGIN_LABEL));
         login.addActionListener(this);
         login.addKeyListener(this);
-	}
+    }
 
     @Override
     public Insets getInsets() {
@@ -149,14 +148,17 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
         return in;
     }
 
+    @Override
     public void actionPerformed(final ActionEvent evt) {
         action(evt.getSource());
     }
 
+    @Override
     public void keyPressed(final KeyEvent e) {
-    // ignore
+        // ignore
     }
 
+    @Override
     public void keyReleased(final KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             action(e.getComponent());
@@ -166,8 +168,9 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
         }
     }
 
+    @Override
     public void keyTyped(final KeyEvent e) {
-    // ignore
+        // ignore
     }
 
     private synchronized void cancel(final Object widget) {
@@ -182,13 +185,15 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             instructionLabel.setText("Authorising...");
             instructionLabel.setForeground(Color.BLACK);
-            
-            AuthenticationRequestPassword authenticationRequest = new AuthenticationRequestPassword(getUser(), getPassword());
+
+            final AuthenticationRequestPassword authenticationRequest =
+                new AuthenticationRequestPassword(getUser(), getPassword());
             session = authenticationManager.authenticate(authenticationRequest);
             if (session == null) {
                 try {
                     Thread.sleep(750);
-                } catch (InterruptedException ignore) {}
+                } catch (final InterruptedException ignore) {
+                }
                 instructionLabel.setText("Invalid user name or password; please try again.");
                 instructionLabel.setForeground(Color.RED);
             } else {
@@ -212,15 +217,15 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
     private String getUser() {
         return StringUtils.removeTabs(user.getText()).trim();
     }
-    
-    public void setUserName(String name) {
+
+    public void setUserName(final String name) {
         user.setText(name);
     }
 
     private String getPassword() {
         return StringUtils.removeTabs(password.getText()).trim();
     }
-    
+
     public AuthenticationSession getSession() {
         return session;
     }
@@ -228,7 +233,8 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
     public synchronized boolean login() {
         try {
             wait();
-        } catch (final InterruptedException e) {}
+        } catch (final InterruptedException e) {
+        }
         return logIn;
     }
 

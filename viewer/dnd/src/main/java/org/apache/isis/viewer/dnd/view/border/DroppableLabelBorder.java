@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,7 +37,6 @@ import org.apache.isis.viewer.dnd.view.action.ParameterContent;
 import org.apache.isis.viewer.dnd.view.axis.LabelAxis;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 
-
 public class DroppableLabelBorder extends LabelBorder {
 
     public static View createObjectFieldLabelBorder(final LabelAxis axis, final View wrappedView) {
@@ -54,12 +52,11 @@ public class DroppableLabelBorder extends LabelBorder {
     private final ViewState labelState = new ViewState();
     private boolean overContent;
 
-
     public DroppableLabelBorder(final FieldContent fieldContent, final LabelAxis axis, final View wrappedView) {
-        super(fieldContent,  axis, wrappedView);
+        super(fieldContent, axis, wrappedView);
     }
 
-    public DroppableLabelBorder(ParameterContent fieldContent, final LabelAxis axis, View wrappedView) {
+    public DroppableLabelBorder(final ParameterContent fieldContent, final LabelAxis axis, final View wrappedView) {
         super(fieldContent, axis, wrappedView);
     }
 
@@ -113,8 +110,7 @@ public class DroppableLabelBorder extends LabelBorder {
         } else {
             labelState.setCantDrop();
         }
-        String actionText = canDrop.isVetoed() ? 
-                            canDrop.getReason() : "Set to " + sourceContent.title();
+        final String actionText = canDrop.isVetoed() ? canDrop.getReason() : "Set to " + sourceContent.title();
         getFeedbackManager().setAction(actionText);
     }
 
@@ -173,4 +169,3 @@ public class DroppableLabelBorder extends LabelBorder {
         return color;
     }
 }
-

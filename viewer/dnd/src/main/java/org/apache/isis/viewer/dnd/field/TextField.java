@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -54,7 +52,7 @@ import org.apache.isis.viewer.dnd.view.text.CursorPosition;
 import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
 import org.apache.isis.viewer.dnd.view.text.TextSelection;
-
+import org.apache.log4j.Logger;
 
 public abstract class TextField extends TextParseableFieldAbstract implements TextBlockTarget {
     private static final Logger LOG = Logger.getLogger(TextField.class);
@@ -70,20 +68,13 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     protected TextContent textContent;
     protected boolean useEmptyLines;
 
-    public TextField(
-            final TextParseableContent content,
-            final ViewSpecification specification,
-            final boolean showLines,
-            final int wrapStyle) {
+    public TextField(final TextParseableContent content, final ViewSpecification specification,
+        final boolean showLines, final int wrapStyle) {
         this(content, specification, showLines, wrapStyle, false);
     }
 
-    public TextField(
-            final TextParseableContent content,
-            final ViewSpecification specification,
-            final boolean showLines,
-            final int wrapStyle,
-            final boolean useEmptyLines) {
+    public TextField(final TextParseableContent content, final ViewSpecification specification,
+        final boolean showLines, final int wrapStyle, final boolean useEmptyLines) {
         super(content, specification);
         this.showLines = showLines;
 
@@ -187,14 +178,10 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
         final Location anchor = getAbsoluteLocation();
         // TODO adjust anchor so only the field is rubberbanded
         /*
-        final Size size = getView().getSize();
-        final ViewAxis axis = getViewAxis(LabelAxis.class);
-        if (axis instanceof LabelAxis) {
-            final int width = ((LabelAxis) axis).getWidth();
-            size.contractWidth(width);
-            anchor.add(width, 0);
-        }
-*/
+         * final Size size = getView().getSize(); final ViewAxis axis = getViewAxis(LabelAxis.class); if (axis
+         * instanceof LabelAxis) { final int width = ((LabelAxis) axis).getWidth(); size.contractWidth(width);
+         * anchor.add(width, 0); }
+         */
         if (canChangeValue().isAllowed()) {
             cursor.cursorAt(at);
             resetSelection();
@@ -228,12 +215,10 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
         }
 
         /*
-        if (showLines == true && canChangeValue().isAllowed()) {
-            Color color = identified ? Toolkit.getColor(ColorsAndFonts.COLOR_IDENTIFIED) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
-            color = hasFocus() ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1) : color;
-            drawLines(canvas, color, width);
-        }
-*/
+         * if (showLines == true && canChangeValue().isAllowed()) { Color color = identified ?
+         * Toolkit.getColor(ColorsAndFonts.COLOR_IDENTIFIED) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3); color
+         * = hasFocus() ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1) : color; drawLines(canvas, color, width); }
+         */
         Color textColor;
         Color lineColor;
         if (getState().isInvalid()) {
@@ -249,12 +234,12 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
             }
         } else if (identified) {
             textColor = Toolkit.getColor(ColorsAndFonts.COLOR_IDENTIFIED);
-            lineColor = Toolkit.getColor(ColorsAndFonts.COLOR_IDENTIFIED);            
+            lineColor = Toolkit.getColor(ColorsAndFonts.COLOR_IDENTIFIED);
         } else {
             textColor = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
             lineColor = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
         }
-        
+
         if (showLines == true && canChangeValue().isAllowed()) {
             drawLines(canvas, lineColor, width);
         }
@@ -268,14 +253,14 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     protected abstract void drawText(final Canvas canvas, final Color textColor, final int width);
 
     @Override
-    public void editComplete(final boolean moveFocus, boolean toNextField) {
+    public void editComplete(final boolean moveFocus, final boolean toNextField) {
         if (canChangeValue().isAllowed() && !isSaved) {
             isSaved = true;
             initiateSave(moveFocus);
         } else if (moveFocus) {
             if (toNextField) {
                 getFocusManager().focusNextView();
-            } else {                
+            } else {
                 getFocusManager().focusPreviousView();
             }
         }
@@ -293,8 +278,8 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     }
 
     /**
-     * Called when 'enter' has been pressed. Return indicates whether event has been consumed; by default it
-     * hasn't. This default implementation marks field as having edit completed.
+     * Called when 'enter' has been pressed. Return indicates whether event has been consumed; by default it hasn't.
+     * This default implementation marks field as having edit completed.
      */
     protected boolean enter() {
         editComplete(false, false);
@@ -332,8 +317,7 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     }
 
     /**
-     * Responds to first click by placing the cursor between the two characters nearest the point of the
-     * mouse.
+     * Responds to first click by placing the cursor between the two characters nearest the point of the mouse.
      */
     @Override
     public void firstClick(final Click click) {
@@ -346,22 +330,22 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
             // testing
             if (cursor.getLine() > textContent.getNoLinesOfContent()) {
                 throw new IsisException("not inside content for line " + cursor.getLine() + " : "
-                        + textContent.getNoLinesOfContent());
+                    + textContent.getNoLinesOfContent());
             }
 
             markDamaged();
         }
 
         if (!canChangeValue().isAllowed() || click.isShift() || click.button2()) {
-            ObjectAdapter valueAdapter = getContent().getAdapter();
+            final ObjectAdapter valueAdapter = getContent().getAdapter();
             if (valueAdapter != null && valueAdapter.titleString().length() > 0) {
-                final View textView = new BackgroundBorder(Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3), 
-                        new LineBorder(1, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), 
-                        new TextView(getContent(), null)));
+                final View textView =
+                    new BackgroundBorder(Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3), new LineBorder(1,
+                        Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), new TextView(getContent(), null)));
                 getViewManager().setOverlayView(textView);
-                
-                int offset = getView().getPadding().getLeft();
-                Location location = getAbsoluteLocation();
+
+                final int offset = getView().getPadding().getLeft();
+                final Location location = getAbsoluteLocation();
                 location.add(offset, 0);
                 textView.setLocation(location);
                 textView.markDamaged();
@@ -387,7 +371,7 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final int width = HPADDING + displayWidth + HPADDING;
         int height;
         if (textContent.getNoDisplayLines() == 1) {
@@ -399,10 +383,12 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
         return new Size(width, height);
     }
 
+    @Override
     public int getMaxFieldWidth() {
         return displayWidth;
     }
 
+    @Override
     public Text getText() {
         return style;
     }
@@ -417,8 +403,7 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
     }
 
     /**
-     * modifies the selection object so that text is selected if the flag is true, or text is unselected if
-     * false.
+     * modifies the selection object so that text is selected if the flag is true, or text is unselected if false.
      */
     private void highlight(final boolean select) {
         if (canChangeValue().isAllowed()) {
@@ -489,76 +474,76 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
         final boolean ctrl = (modifiers & InputEvent.CTRL_MASK) > 0;
 
         switch (keyCode) {
-        case KeyEvent.VK_PAGE_UP:
-            key.consume();
-            pageUp(shift, ctrl);
-            break;
-        case KeyEvent.VK_PAGE_DOWN:
-            key.consume();
-            pageDown(shift, ctrl);
-            break;
-        case KeyEvent.VK_V:
-            if (ctrl) {
+            case KeyEvent.VK_PAGE_UP:
                 key.consume();
-                pasteFromClipboard();
-                highlight(false);
-            }
-            break;
-        case KeyEvent.VK_C:
-            if (ctrl) {
+                pageUp(shift, ctrl);
+                break;
+            case KeyEvent.VK_PAGE_DOWN:
                 key.consume();
-                copyToClipboard();
-            }
-            break;
-        case KeyEvent.VK_DOWN:
-            key.consume();
-            down(shift);
-            break;
-        case KeyEvent.VK_UP:
-            key.consume();
-            up(shift);
-            break;
-        case KeyEvent.VK_HOME:
-            key.consume();
-            home(alt, shift);
-            break;
-        case KeyEvent.VK_END:
-            key.consume();
-            end(alt, shift);
-            break;
-        case KeyEvent.VK_LEFT:
-            key.consume();
-            left(alt, shift);
-            break;
-        case KeyEvent.VK_RIGHT:
-            key.consume();
-            right(alt, shift);
-            break;
-        case KeyEvent.VK_DELETE:
-            key.consume();
-            deleteForward();
-            break;
-        case KeyEvent.VK_BACK_SPACE:
-            key.consume();
-            delete();
-            break;
-        case KeyEvent.VK_TAB:
-            key.consume();
-            boolean moveToNextField = !shift;
-            tab(moveToNextField);
-            break;
-        case KeyEvent.VK_ENTER:
-            if (!enter()) {
-                getParent().keyPressed(key);
-            }
-            break;
-        case KeyEvent.VK_ESCAPE:
-            key.consume();
-            escape();
-            break;
+                pageDown(shift, ctrl);
+                break;
+            case KeyEvent.VK_V:
+                if (ctrl) {
+                    key.consume();
+                    pasteFromClipboard();
+                    highlight(false);
+                }
+                break;
+            case KeyEvent.VK_C:
+                if (ctrl) {
+                    key.consume();
+                    copyToClipboard();
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                key.consume();
+                down(shift);
+                break;
+            case KeyEvent.VK_UP:
+                key.consume();
+                up(shift);
+                break;
+            case KeyEvent.VK_HOME:
+                key.consume();
+                home(alt, shift);
+                break;
+            case KeyEvent.VK_END:
+                key.consume();
+                end(alt, shift);
+                break;
+            case KeyEvent.VK_LEFT:
+                key.consume();
+                left(alt, shift);
+                break;
+            case KeyEvent.VK_RIGHT:
+                key.consume();
+                right(alt, shift);
+                break;
+            case KeyEvent.VK_DELETE:
+                key.consume();
+                deleteForward();
+                break;
+            case KeyEvent.VK_BACK_SPACE:
+                key.consume();
+                delete();
+                break;
+            case KeyEvent.VK_TAB:
+                key.consume();
+                final boolean moveToNextField = !shift;
+                tab(moveToNextField);
+                break;
+            case KeyEvent.VK_ENTER:
+                if (!enter()) {
+                    getParent().keyPressed(key);
+                }
+                break;
+            case KeyEvent.VK_ESCAPE:
+                key.consume();
+                escape();
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         LOG.debug("character at " + cursor.getCharacter() + " line " + cursor.getLine());
@@ -569,15 +554,15 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
      * Called when the user releases any key on the keyboard while this view has the focus.
      */
     @Override
-    public void keyReleased(KeyboardAction action) {}
+    public void keyReleased(final KeyboardAction action) {
+    }
 
     /**
-     * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow etc). Such
-     * a key press will result in a prior call to <code>keyPressed</code> and a subsequent call to
-     * <code>keyReleased</code>.
+     * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow etc). Such a key
+     * press will result in a prior call to <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>.
      */
     @Override
-    public void keyTyped(KeyboardAction action) {
+    public void keyTyped(final KeyboardAction action) {
         if (canChangeValue().isAllowed()) {
             insert("" + action.getKeyChar());
         }
@@ -668,7 +653,8 @@ public abstract class TextField extends TextParseableFieldAbstract implements Te
         // do nothing if entry is same as the value object
         final ObjectAdapter value = getValue();
         if (!entry.equals(value == null ? "" : value.titleString())) {
-            LOG.debug("field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString()) + "\'");
+            LOG.debug("field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString())
+                + "\'");
 
             try {
                 parseEntry(entry.toString());

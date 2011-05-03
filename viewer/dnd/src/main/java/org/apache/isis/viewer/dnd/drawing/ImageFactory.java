@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
 
 /*
-import java.awt.Toolkit;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.RGBImageFilter;
-*/
+ import java.awt.Toolkit;
+ import java.awt.image.FilteredImageSource;
+ import java.awt.image.RGBImageFilter;
+ */
 import java.util.Hashtable;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -32,7 +31,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.util.Properties;
-
 
 public abstract class ImageFactory {
     private static final String DEFAULT_IMAGE_NAME = "Default";
@@ -47,33 +45,30 @@ public abstract class ImageFactory {
         return instance;
     }
 
-    
     /**
-     * Keyed list of icons (each derived from an image, of a specific size etc), where the key is the name of
-     * the icon and its size.
+     * Keyed list of icons (each derived from an image, of a specific size etc), where the key is the name of the icon
+     * and its size.
      */
-    private final Hashtable<String,Image> templateImages = new Hashtable<String,Image>();
+    private final Hashtable<String, Image> templateImages = new Hashtable<String, Image>();
 
-    
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // Constructor
-    //////////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////////
+
     public ImageFactory() {
         instance = this;
     }
 
-    
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // loadIcon for Specifications
-    //////////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////////
+
     public Image loadIcon(final ObjectSpecification specification, final int iconHeight, final Color tint) {
         return findIcon(specification, iconHeight, null);
     }
 
     private Image findIcon(final ObjectSpecification specification, final int iconHeight, final Color tint) {
-        Image loadIcon = null;       
+        Image loadIcon = null;
         if (loadIcon == null) {
             final String fullClassNameSlashes = specification.getFullIdentifier().replace(".", "/");
             loadIcon = loadIcon(fullClassNameSlashes, iconHeight, tint);
@@ -97,7 +92,7 @@ public abstract class ImageFactory {
 
     private Image findIconForSuperClass(final ObjectSpecification specification, final int iconHeight, final Color tint) {
         final ObjectSpecification superclassSpecification = specification.superclass();
-        Image loadIcon; 
+        Image loadIcon;
         if (superclassSpecification == null) {
             loadIcon = null;
         } else {
@@ -107,8 +102,8 @@ public abstract class ImageFactory {
     }
 
     private Image findIconForInterfaces(final ObjectSpecification specification, final int iconHeight, final Color tint) {
-        Image loadIcon = null; 
-        for (ObjectSpecification interfaceSpecification : specification.interfaces()) {
+        Image loadIcon = null;
+        for (final ObjectSpecification interfaceSpecification : specification.interfaces()) {
             loadIcon = findIcon(interfaceSpecification, iconHeight, tint);
             if (loadIcon != null) {
                 return loadIcon;
@@ -117,14 +112,12 @@ public abstract class ImageFactory {
         return loadIcon;
     }
 
-    
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // loadIcon for arbitrary path
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
 
     /**
-     * Loads an icon of the specified size, and with the specified tint. If color is null then no tint is
-     * applied.
+     * Loads an icon of the specified size, and with the specified tint. If color is null then no tint is applied.
      */
     public Image loadIcon(final String name, final int height, final Color tint) {
         final String id = name + SEPARATOR + height + SEPARATOR + tint;
@@ -139,9 +132,9 @@ public abstract class ImageFactory {
         return icon;
     }
 
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // loadDefaultIcon
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
 
     /**
      * Loads the fall back icon image, for use when no specific image can be found
@@ -158,30 +151,26 @@ public abstract class ImageFactory {
         return icon;
     }
 
-
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // loadImage
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
 
     /**
      * Load an image with the given name.
      */
-    public abstract Image loadImage(final String path);    
+    public abstract Image loadImage(final String path);
 
     /**
      * Load an image with the given name, but of a specific height and of a specific hint.
      */
     protected abstract Image loadImage(final String name, final int height, final Color tint);
 
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
     // Dependencies (from singleton)
-    //////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////
 
     private IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
-
-
-
 
 }

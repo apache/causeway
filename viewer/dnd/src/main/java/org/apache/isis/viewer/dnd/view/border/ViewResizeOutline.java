@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -28,7 +27,6 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
-
 
 public class ViewResizeOutline extends AbstractView {
     private final int thickness = 1;
@@ -46,7 +44,7 @@ public class ViewResizeOutline extends AbstractView {
 
         final Size s = getSize();
         // Logger.getLogger(getClass()).debug("drag outline size " + s);
-        Color color = Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2);
+        final Color color = Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2);
         for (int i = 0; i < thickness; i++) {
             canvas.drawRectangle(i, i, s.getWidth() - i * 2 - 1, s.getHeight() - i * 2 - 1, color);
         }
@@ -64,7 +62,7 @@ public class ViewResizeOutline extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         return new Size(size);
     }
 }

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.border.ScrollBorder;
-
 
 public class DialogBorder extends AbstractWindowBorder {
 

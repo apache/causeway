@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import org.apache.isis.viewer.dnd.view.ViewAxis;
@@ -25,14 +24,12 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
 public class ConfigurationAxis implements ViewAxis {
     private ViewSpecification elementSpecification;
-    
-    public void setElementSpecification(ViewSpecification elementSpecification) {
+
+    public void setElementSpecification(final ViewSpecification elementSpecification) {
         this.elementSpecification = elementSpecification;
     }
-    
+
     public ViewSpecification getElementSpecification() {
         return elementSpecification;
     }
 }
-
-

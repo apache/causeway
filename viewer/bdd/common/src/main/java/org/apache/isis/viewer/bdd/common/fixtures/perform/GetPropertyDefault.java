@@ -34,8 +34,7 @@ public class GetPropertyDefault extends PerformAbstractTypeParams {
     public void doHandle(final PerformContext performContext) {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
-        final ObjectMember nakedObjectMember = performContext
-                .getObjectMember();
+        final ObjectMember nakedObjectMember = performContext.getObjectMember();
 
         final OneToOneAssociation otoa = (OneToOneAssociation) nakedObjectMember;
 
@@ -45,6 +44,7 @@ public class GetPropertyDefault extends PerformAbstractTypeParams {
         result = otoa.getDefault(onAdapter);
     }
 
+    @Override
     public ObjectAdapter getResult() {
         return result;
     }

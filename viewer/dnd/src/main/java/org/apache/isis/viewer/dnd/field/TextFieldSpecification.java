@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -29,18 +28,19 @@ import org.apache.isis.viewer.dnd.view.border.TextFieldResizeBorder;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.lookup.OpenValueDropDownBorder;
 
-
 /**
  * Creates a single line text field with the base line drawn.
  */
 public class TextFieldSpecification extends AbstractFieldSpecification {
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isTextParseable() && ((TextParseableContent)  requirement.getContent()).getNoLines() == 1;
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isTextParseable() && ((TextParseableContent) requirement.getContent()).getNoLines() == 1;
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
-        final View field = new TextFieldResizeBorder(new SingleLineTextField((TextParseableContent) content, this, true));
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
+        final View field =
+            new TextFieldResizeBorder(new SingleLineTextField((TextParseableContent) content, this, true));
         if (content.isOptionEnabled()) {
             return new OpenValueDropDownBorder(field);
         } else {
@@ -48,6 +48,7 @@ public class TextFieldSpecification extends AbstractFieldSpecification {
         }
     }
 
+    @Override
     public String getName() {
         return "Single Line Text Field";
     }

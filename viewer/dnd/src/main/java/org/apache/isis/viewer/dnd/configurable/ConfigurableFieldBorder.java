@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.configurable;
 
 import java.util.Enumeration;
@@ -45,31 +44,34 @@ import org.apache.isis.viewer.dnd.view.border.LabelBorder;
 import org.apache.isis.viewer.dnd.view.option.ReplaceViewOption;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class ConfigurableFieldBorder extends AbstractBorder {
     public static final class Factory implements SubviewDecorator {
-        public ViewAxis createAxis(Content content) {
+        @Override
+        public ViewAxis createAxis(final Content content) {
             return null;
         }
 
-        public View decorate(Axes axes, View view) {
+        @Override
+        public View decorate(final Axes axes, final View view) {
             return new ConfigurableFieldBorder(view);
         }
     }
 
     private static final int BORDER = 10;
 
-    protected ConfigurableFieldBorder(View view) {
+    protected ConfigurableFieldBorder(final View view) {
         super(view);
         right = BORDER;
     }
 
-    public void viewMenuOptions(UserActionSet menuOptions) {
+    @Override
+    public void viewMenuOptions(final UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
         menuOptions.add(new UserActionAbstract("Hide") {
-            public void execute(Workspace workspace, View view, Location at) {
-                View parent = wrappedView.getParent();
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
+                final View parent = wrappedView.getParent();
                 wrappedView = new BlankView(getContent());
                 wrappedView.setParent(parent);
                 wrappedView.setView(ConfigurableFieldBorder.this);
@@ -79,37 +81,42 @@ public class ConfigurableFieldBorder extends AbstractBorder {
         });
 
         menuOptions.add(new UserActionAbstract("Show label") {
-            public void execute(Workspace workspace, View view, Location at) {
+            @Override
+            public void execute(final Workspace workspace, final View view, final Location at) {
                 if (wrappedView instanceof LabelBorder) {
                     wrappedView = ((LabelBorder) wrappedView).getWrapped();
                 } else {
-                    wrappedView = LabelBorder.createFieldLabelBorder(view.getParent().getViewAxes().getAxis(LabelAxis.class), wrappedView);
+                    wrappedView =
+                        LabelBorder.createFieldLabelBorder(view.getParent().getViewAxes().getAxis(LabelAxis.class),
+                            wrappedView);
                 }
                 wrappedView.setView(ConfigurableFieldBorder.this);
                 getView().invalidateLayout();
             }
         });
 
-        
-        
-        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.CLOSED | ViewRequirement.SUBVIEW)),
-                menuOptions); // openSubviews(content, this), options);
+        replaceOptions(
+            Toolkit.getViewFactory().availableViews(
+                new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.CLOSED
+                    | ViewRequirement.SUBVIEW)), menuOptions); // openSubviews(content, this), options);
 
     }
 
     // TODO copied from AbstractView
     protected void replaceOptions(final Enumeration possibleViews, final UserActionSet options) {
         if (possibleViews.hasMoreElements()) {
-            UserActionSet suboptions = options.addNewActionSet("Replace with");
+            final UserActionSet suboptions = options.addNewActionSet("Replace with");
             while (possibleViews.hasMoreElements()) {
                 final ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
 
                 if (specification != getSpecification()) {
                     final UserAction viewAs = new ReplaceViewOption(specification) {
-                        protected void replace(View view, View withReplacement) {
-                            View parent = wrappedView.getParent();
-                            wrappedView = LabelBorder.createFieldLabelBorder(view.getParent().getViewAxes().getAxis(LabelAxis.class),
-                                    withReplacement);
+                        @Override
+                        protected void replace(final View view, final View withReplacement) {
+                            final View parent = wrappedView.getParent();
+                            wrappedView =
+                                LabelBorder.createFieldLabelBorder(
+                                    view.getParent().getViewAxes().getAxis(LabelAxis.class), withReplacement);
                             wrappedView.setParent(parent);
                             wrappedView.setView(ConfigurableFieldBorder.this);
                             invalidateLayout();
@@ -118,7 +125,7 @@ public class ConfigurableFieldBorder extends AbstractBorder {
                     suboptions.add(viewAs);
                 }
             }
-        }   
+        }
     }
 
     @Override
@@ -130,8 +137,8 @@ public class ConfigurableFieldBorder extends AbstractBorder {
             final Size s = getSize();
             final int xExtent = s.getWidth();
             if (state.isViewIdentified()) {
-                canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top, Toolkit
-                        .getColor(ColorsAndFonts.COLOR_SECONDARY3));
+                canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top,
+                    Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             }
         }
     }
@@ -151,4 +158,3 @@ public class ConfigurableFieldBorder extends AbstractBorder {
     }
 
 }
-

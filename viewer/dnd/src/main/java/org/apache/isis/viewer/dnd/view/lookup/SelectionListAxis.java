@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.viewer.dnd.view.ViewAxis;
-
 
 public class SelectionListAxis implements ViewAxis {
     private final OpenDropDownBorder view;

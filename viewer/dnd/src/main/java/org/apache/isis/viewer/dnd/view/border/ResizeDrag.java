@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -28,8 +27,7 @@ import org.apache.isis.viewer.dnd.view.InternalDrag;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Viewer;
 
-
-public class ResizeDrag  extends DragImpl implements InternalDrag {
+public class ResizeDrag extends DragImpl implements InternalDrag {
     public static final int BOTTOM = 2;
     public static final int BOTTOM_LEFT = 7;
     public static final int BOTTOM_RIGHT = 8;
@@ -52,12 +50,8 @@ public class ResizeDrag  extends DragImpl implements InternalDrag {
         this(view, resizeArea, direction, null, null);
     }
 
-    public ResizeDrag(
-            final View view,
-            final Bounds resizeArea,
-            final int direction,
-            final Size minimumSize,
-            final Size maximumSize) {
+    public ResizeDrag(final View view, final Bounds resizeArea, final int direction, final Size minimumSize,
+        final Size maximumSize) {
         this.view = view;
         this.direction = direction;
         this.anchor = resizeArea.getLocation();
@@ -76,44 +70,44 @@ public class ResizeDrag  extends DragImpl implements InternalDrag {
     public void drag(final View target, final Location location, final int mods) {
 
         switch (direction) {
-        case TOP:
-            extendUpward(location);
-            break;
+            case TOP:
+                extendUpward(location);
+                break;
 
-        case BOTTOM:
-            extendDownward(location);
-            break;
+            case BOTTOM:
+                extendDownward(location);
+                break;
 
-        case LEFT:
-            extendLeft(location);
-            break;
+            case LEFT:
+                extendLeft(location);
+                break;
 
-        case RIGHT:
-            extendRight(location);
-            break;
+            case RIGHT:
+                extendRight(location);
+                break;
 
-        case TOP_RIGHT:
-            extendRight(location);
-            extendUpward(location);
-            break;
+            case TOP_RIGHT:
+                extendRight(location);
+                extendUpward(location);
+                break;
 
-        case BOTTOM_RIGHT:
-            extendRight(location);
-            extendDownward(location);
-            break;
+            case BOTTOM_RIGHT:
+                extendRight(location);
+                extendDownward(location);
+                break;
 
-        case TOP_LEFT:
-            extendLeft(location);
-            extendUpward(location);
-            break;
+            case TOP_LEFT:
+                extendLeft(location);
+                extendUpward(location);
+                break;
 
-        case BOTTOM_LEFT:
-            extendLeft(location);
-            extendDownward(location);
-            break;
+            case BOTTOM_LEFT:
+                extendLeft(location);
+                extendDownward(location);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -124,14 +118,13 @@ public class ResizeDrag  extends DragImpl implements InternalDrag {
     }
 
     /*
-     * public ViewResizeOutline(View forView, int direction) { this(forView, direction,
-     * forView.getAbsoluteLocation(), forView.getSize()); }
+     * public ViewResizeOutline(View forView, int direction) { this(forView, direction, forView.getAbsoluteLocation(),
+     * forView.getSize()); }
      * 
-     * public ViewResizeOutline(View forView, int direction, Location location, Size size) {
-     * super(forView.getContent(), null, null);
+     * public ViewResizeOutline(View forView, int direction, Location location, Size size) { super(forView.getContent(),
+     * null, null);
      * 
-     * Logger.getLogger(getClass()).debug("drag outline for " + forView); setLocation(location);
-     * setSize(size);
+     * Logger.getLogger(getClass()).debug("drag outline for " + forView); setLocation(location); setSize(size);
      * 
      * Logger.getLogger(getClass()).debug("drag outline initial size " + getSize() + " " + forView.getSize());
      * 
@@ -206,6 +199,7 @@ public class ResizeDrag  extends DragImpl implements InternalDrag {
         return direction;
     }
 
+    @Override
     public Location getLocation() {
         final Size size = overlay.getSize();
         return new Location(size.getWidth(), size.getHeight());

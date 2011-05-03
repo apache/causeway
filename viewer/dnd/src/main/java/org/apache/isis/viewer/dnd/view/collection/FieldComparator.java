@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-
 
 public class FieldComparator implements Comparator {
     private final ObjectAssociation field;
@@ -32,12 +30,14 @@ public class FieldComparator implements Comparator {
         this.field = field;
     }
 
+    @Override
     public void init(final ObjectAdapter element) {
         final ObjectAdapter refTo = field.get(element);
         title = refTo == null ? null : refTo.titleString();
         title = title == null ? "" : title;
     }
 
+    @Override
     public int compare(final ObjectAdapter sortedElement) {
         final ObjectAdapter refTo = field.get(sortedElement);
         String sortedTitle = refTo == null ? null : refTo.titleString();

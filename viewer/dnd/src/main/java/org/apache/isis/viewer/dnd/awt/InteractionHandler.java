@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.Point;
@@ -28,7 +27,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.interaction.ClickImpl;
@@ -42,7 +40,7 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
-
+import org.apache.log4j.Logger;
 
 public class InteractionHandler implements MouseMotionListener, MouseListener, KeyListener {
     private static final Logger LOG = Logger.getLogger(InteractionHandler.class);
@@ -61,11 +59,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private View draggedView;
     private final XFeedbackManager feedbackManager;
 
-    public InteractionHandler(
-            final XViewer viewer,
-            final XFeedbackManager feedbackManager,
-            final KeyboardManager keyboardManager,
-            final InteractionSpy spy) {
+    public InteractionHandler(final XViewer viewer, final XFeedbackManager feedbackManager,
+        final KeyboardManager keyboardManager, final InteractionSpy spy) {
         this.viewer = viewer;
         this.feedbackManager = feedbackManager;
         this.spy = spy;
@@ -119,11 +114,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Listener for key presses. Cancels popup and drags, and forwards key presses to the view that has the
-     * keyboard focus.
+     * Listener for key presses. Cancels popup and drags, and forwards key presses to the view that has the keyboard
+     * focus.
      * 
      * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
      */
+    @Override
     public void keyPressed(final KeyEvent ke) {
         if (isBusy(identifiedView)) {
             return;
@@ -140,7 +136,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             } else if (ke.getKeyCode() == KeyEvent.VK_F5) {
                 draggedView = identifiedView;
             } else if (draggedView != null && ke.getKeyCode() == KeyEvent.VK_F6) {
-                final ContentDrag content = new ContentDragImpl(draggedView, new Location(), new AbstractView(new NullContent()) {});
+                final ContentDrag content =
+                    new ContentDragImpl(draggedView, new Location(), new AbstractView(new NullContent()) {
+                    });
                 if (identifiedView != null) {
                     identifiedView.drop(content);
                 }
@@ -162,6 +160,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * 
      * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
      */
+    @Override
     public void keyReleased(final KeyEvent ke) {
         if (isBusy(identifiedView)) {
             return;
@@ -170,7 +169,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
         try {
             if (lastTyped == null && ke.getKeyCode() != KeyEvent.VK_SHIFT && ke.getKeyCode() != KeyEvent.VK_ALT
-                    && ke.getKeyCode() != KeyEvent.VK_CONTROL) {
+                && ke.getKeyCode() != KeyEvent.VK_CONTROL) {
                 if (ke.getKeyCode() >= KeyEvent.VK_0 && ke.getKeyCode() <= KeyEvent.VK_DIVIDE) {
                     LOG.error("no type event for '" + KeyEvent.getKeyText(ke.getKeyCode()) + "':  " + ke);
                 }
@@ -186,11 +185,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Listener for key press, and subsequent release, and forward it as one event to the view that has the
-     * keyboard focus.
+     * Listener for key press, and subsequent release, and forward it as one event to the view that has the keyboard
+     * focus.
      * 
      * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
      */
+    @Override
     public void keyTyped(final KeyEvent ke) {
         if (isBusy(identifiedView)) {
             return;
@@ -219,6 +219,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * 
      * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
      */
+    @Override
     public void mouseClicked(final MouseEvent me) {
         if (isBusy(identifiedView)) {
             return;
@@ -244,7 +245,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private void overlayClick(final Click click) {
         final View overlayView = viewer.getOverlayView();
         if (overlayView == identifiedView
-                || (identifiedView != null && identifiedView.getParent() != null && overlayView == identifiedView.getParent())) {
+            || (identifiedView != null && identifiedView.getParent() != null && overlayView == identifiedView
+                .getParent())) {
             viewer.firstClick(click);
         } else {
             viewer.clearAction();
@@ -269,29 +271,29 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         viewer.setKeyboardFocus(identifiedView);
 
         switch (clickCount) {
-        case 1:
-            viewer.firstClick(click);
-            break;
+            case 1:
+                viewer.firstClick(click);
+                break;
 
-        case 2:
-            viewer.secondClick(click);
-            break;
+            case 2:
+                viewer.secondClick(click);
+                break;
 
-        case 3:
-            viewer.thirdClick(click);
-            break;
+            case 3:
+                viewer.thirdClick(click);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 
     /**
-     * Responds to mouse dragged according to the button used. If the left button then identified view is
-     * moved.
+     * Responds to mouse dragged according to the button used. If the left button then identified view is moved.
      * 
      * @see java.awt.event.MouseMotionListener#mouseDragged(MouseEvent)
      */
+    @Override
     public void mouseDragged(final MouseEvent me) {
         if (isBusy(identifiedView)) {
             return;
@@ -329,22 +331,27 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * 
      * @see java.awt.event.MouseListener#mouseEntered(MouseEvent)
      */
-    public void mouseEntered(final MouseEvent arg0) {}
+    @Override
+    public void mouseEntered(final MouseEvent arg0) {
+    }
 
     /**
      * event ignored
      * 
      * @see java.awt.event.MouseListener#mouseExited(MouseEvent)
      */
-    public void mouseExited(final MouseEvent arg0) {}
+    @Override
+    public void mouseExited(final MouseEvent arg0) {
+    }
 
     /**
-     * responds to mouse moved event by setting the view found underneath the mouse as the idetified view.
-     * Views normally respond by changing the colour of themselves so they are visual distinct and hence shows
-     * itself as special compared to the rest.
+     * responds to mouse moved event by setting the view found underneath the mouse as the idetified view. Views
+     * normally respond by changing the colour of themselves so they are visual distinct and hence shows itself as
+     * special compared to the rest.
      * 
      * @see java.awt.event.MouseMotionListener#mouseMoved(MouseEvent)
      */
+    @Override
     public void mouseMoved(final MouseEvent me) {
         try {
             if (drag == null) {
@@ -398,12 +405,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Responds to the mouse pressed event (with the left button pressed) by initiating a drag. This sets up
-     * the <code>View</code>'s dragging state to the view that the mouse was over when the button was
-     * pressed.
+     * Responds to the mouse pressed event (with the left button pressed) by initiating a drag. This sets up the
+     * <code>View</code>'s dragging state to the view that the mouse was over when the button was pressed.
      * 
      * @see java.awt.event.MouseListener#mousePressed(MouseEvent)
      */
+    @Override
     public void mousePressed(final MouseEvent me) {
         try {
             if (isBusy(identifiedView)) {
@@ -443,13 +450,14 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Responds to the mouse released event (with the left button pressed) by telling the identified view (the
-     * drop zone) that the dragged object is being dropped on it (via the views <code>drop</code> method).
-     * If the drop takes place outside of all of the other views then the <code>workspaceDrop</code> method
-     * is called instead to indicate a drop onto the workspace.
+     * Responds to the mouse released event (with the left button pressed) by telling the identified view (the drop
+     * zone) that the dragged object is being dropped on it (via the views <code>drop</code> method). If the drop takes
+     * place outside of all of the other views then the <code>workspaceDrop</code> method is called instead to indicate
+     * a drop onto the workspace.
      * 
      * @see java.awt.event.MouseListener#mouseReleased(MouseEvent)
      */
+    @Override
     public void mouseReleased(final MouseEvent me) {
         if (isBusy(identifiedView) || downAt == null) {
             return;

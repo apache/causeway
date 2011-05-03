@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.field;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -31,14 +29,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
-
+import org.apache.log4j.Logger;
 
 public class OneToManyFieldElementImpl extends AbstractObjectContent implements OneToManyFieldElement {
     private static final Logger LOG = Logger.getLogger(OneToManyFieldElementImpl.class);
     private final ObjectAdapter element;
     private final ObjectField field;
 
-    public OneToManyFieldElementImpl(final ObjectAdapter parent, final ObjectAdapter element, final OneToManyAssociation association) {
+    public OneToManyFieldElementImpl(final ObjectAdapter parent, final ObjectAdapter element,
+        final OneToManyAssociation association) {
         field = new ObjectField(parent, association);
         this.element = element;
     }
@@ -61,6 +60,7 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
         return consent;
     }
 
+    @Override
     public Consent isEditable() {
         return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());
     }
@@ -78,19 +78,23 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
         association.removeElement(parentObject, element);
     }
 
+    @Override
     public void debugDetails(final DebugBuilder debug) {
         field.debugDetails(debug);
         debug.appendln("element", element);
     }
 
+    @Override
     public String getFieldName() {
         return field.getName();
     }
 
+    @Override
     public ObjectAssociation getField() {
         return field.getObjectAssociation();
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return element;
     }
@@ -100,6 +104,7 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
         return element;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }
@@ -108,14 +113,17 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
         return (OneToManyAssociation) field.getObjectAssociation();
     }
 
+    @Override
     public ObjectAdapter getParent() {
         return field.getParent();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return field.getSpecification();
     }
 
+    @Override
     public boolean isMandatory() {
         return false;
     }
@@ -125,10 +133,12 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
         return true;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return false;
     }
@@ -142,15 +152,15 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
 
     @Override
     public void setObject(final ObjectAdapter object) {
-    /*
-     * ObjectAdapter parentObject = getParent(); OneToManyAssociationSpecification association =
-     * getOneToManyAssociation(); ObjectAdapter associatedObject = getObject(); LOG.debug("remove " +
-     * associatedObject + " from " + parentObject); association.clearAssociation(parentObject,
-     * associatedObject);
-     */
+        /*
+         * ObjectAdapter parentObject = getParent(); OneToManyAssociationSpecification association =
+         * getOneToManyAssociation(); ObjectAdapter associatedObject = getObject(); LOG.debug("remove " +
+         * associatedObject + " from " + parentObject); association.clearAssociation(parentObject, associatedObject);
+         */
 
     }
 
+    @Override
     public String title() {
         return element.titleString();
     }
@@ -165,14 +175,17 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
         return field.getName() + " element" + " for " + field.getParent().titleString();
     }
 
+    @Override
     public String getId() {
         return getOneToManyAssociation().getName();
     }
 
+    @Override
     public String getDescription() {
         return field.getName() + ": " + getOneToManyAssociation().getDescription();
     }
 
+    @Override
     public String getHelp() {
         return getOneToManyAssociation().getHelp();
     }

@@ -27,6 +27,7 @@ import org.apache.isis.viewer.dnd.view.window.ResizeWindowControl;
 
 public class LinuxLook implements Look {
 
+    @Override
     public void install() {
         Button.setButtonRender(new Button3DStyleRender());
         AbstractWindowBorder.setBorderRenderer(new CustomStyleWindowBorder());
@@ -35,6 +36,7 @@ public class LinuxLook implements Look {
         IconizeWindowControl.setRender(new IconizeWindow3DRender());
     }
 
+    @Override
     public String getName() {
         return "Linux";
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.table;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -26,20 +25,22 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 
-
 public class TableRowSpecification extends CompositeViewSpecification {
     public TableRowSpecification() {
         builder = new TableCellBuilder();
     }
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new TableRowLayout(axes.getAxis(TableAxis.class));
     }
-    
-    public boolean canDisplay(ViewRequirement requirement) {
+
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isObject();
     }
 
+    @Override
     public String getName() {
         return "Table Row";
     }

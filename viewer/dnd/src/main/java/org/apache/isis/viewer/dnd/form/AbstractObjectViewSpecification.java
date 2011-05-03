@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.form;
 
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -30,26 +29,28 @@ import org.apache.isis.viewer.dnd.view.composite.ObjectFieldBuilder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 import org.apache.isis.viewer.dnd.view.composite.StandardFields;
 
-
 public abstract class AbstractObjectViewSpecification extends CompositeViewSpecification {
 
     public AbstractObjectViewSpecification() {
         builder = new ObjectFieldBuilder(createFieldFactory());
         init();
     }
-        
-    protected void init() {}
+
+    protected void init() {
+    }
 
     protected ViewFactory createFieldFactory() {
         return new StandardFields();
     }
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference() && requirement.isOpen();
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference()
+            && requirement.isOpen();
     }
 }
-

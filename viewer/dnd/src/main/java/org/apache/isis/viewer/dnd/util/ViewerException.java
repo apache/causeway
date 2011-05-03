@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.util;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -25,24 +24,23 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 public class ViewerException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public ViewerException() {}
+    public ViewerException() {
+    }
 
-    public ViewerException(String message) {
+    public ViewerException(final String message) {
         super(message);
     }
 
-    public ViewerException(String messageFormat, Object... args) {
+    public ViewerException(final String messageFormat, final Object... args) {
         super(messageFormat, args);
     }
 
-    public ViewerException(String message, Throwable cause) {
+    public ViewerException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ViewerException(Throwable cause) {
+    public ViewerException(final Throwable cause) {
         super(cause);
     }
 
 }
-
-

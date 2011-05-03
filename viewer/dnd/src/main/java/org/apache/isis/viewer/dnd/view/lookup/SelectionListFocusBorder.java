@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import java.awt.event.InputEvent;
@@ -27,11 +26,10 @@ import org.apache.isis.viewer.dnd.view.KeyboardAction;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 
-
 // TODO incorporate this big hack into the rewrite of the focus mechanism
 class SelectionListFocusBorder extends AbstractBorder {
     final SelectionListAxis axis;
-    
+
     protected SelectionListFocusBorder(final View view, final SelectionListAxis axis) {
         super(view);
         this.axis = axis;
@@ -74,9 +72,9 @@ class SelectionListFocusBorder extends AbstractBorder {
 
     private void selectOption() {
         final View[] subviews = getSubviews();
-        for (int i = 0; i < subviews.length; i++) {
-            if (subviews[i].getState().isViewIdentified()) {
-                axis.setSelection((OptionContent) subviews[i].getContent());
+        for (final View subview : subviews) {
+            if (subview.getState().isViewIdentified()) {
+                axis.setSelection((OptionContent) subview.getContent());
                 final View view = axis.getOriginalView();
                 final View parentView = view.getParent();
 
@@ -100,7 +98,7 @@ class SelectionListFocusBorder extends AbstractBorder {
     }
 
     @Override
-    public void keyTyped(KeyboardAction action) {
+    public void keyTyped(final KeyboardAction action) {
         final View[] subviews = getSubviews();
         int i;
         int old = 0;

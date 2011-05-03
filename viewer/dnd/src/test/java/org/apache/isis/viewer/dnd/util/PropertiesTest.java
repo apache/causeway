@@ -17,31 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.util;
 
+import static org.junit.Assert.assertEquals;
+
+import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.apache.isis.core.runtime.userprofile.Options;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
-import org.apache.isis.viewer.dnd.util.Properties;
-
-import static org.junit.Assert.*;
-
 
 public class PropertiesTest {
 
-	@Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
+    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void getOptionsCreatesNewOptionsSet() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
         new TestProxySystemII().init();
-        
-        Options options = Properties.getOptions("test");
+
+        final Options options = Properties.getOptions("test");
         assertEquals(false, options.names().hasNext());
     }
 }
-
-

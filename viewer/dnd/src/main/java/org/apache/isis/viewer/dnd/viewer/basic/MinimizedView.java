@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -51,32 +50,37 @@ import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 import org.apache.isis.viewer.dnd.view.window.WindowControl;
 
-
 public class MinimizedView extends AbstractView {
     private class CloseWindowControl extends WindowControl {
 
         public CloseWindowControl(final View target) {
             super(new UserAction() {
+                @Override
                 public Consent disabled(final View view) {
                     return Allow.DEFAULT;
                 }
 
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     ((MinimizedView) view).close();
                 }
 
+                @Override
                 public String getDescription(final View view) {
                     return "Close " + view.getSpecification().getName();
                 }
 
+                @Override
                 public String getHelp(final View view) {
                     return null;
                 }
 
+                @Override
                 public String getName(final View view) {
                     return "Close view";
                 }
 
+                @Override
                 public ActionType getType() {
                     return ActionType.USER;
                 }
@@ -99,26 +103,32 @@ public class MinimizedView extends AbstractView {
         public RestoreWindowControl(final View target) {
             super(new UserAction() {
 
+                @Override
                 public Consent disabled(final View view) {
                     return Allow.DEFAULT;
                 }
 
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     ((MinimizedView) view).restore();
                 }
 
+                @Override
                 public String getDescription(final View view) {
                     return "Restore " + view.getSpecification().getName() + " to normal size";
                 }
 
+                @Override
                 public String getHelp(final View view) {
                     return null;
                 }
 
+                @Override
                 public String getName(final View view) {
                     return "Restore view";
                 }
 
+                @Override
                 public ActionType getType() {
                     return ActionType.USER;
                 }
@@ -129,7 +139,7 @@ public class MinimizedView extends AbstractView {
         public void draw(final Canvas canvas) {
             final int x = 0;
             final int y = 0;
-            Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+            final Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
             canvas.drawRectangle(x + 1, y + 1, WIDTH - 1, HEIGHT - 1, black);
             canvas.drawLine(x + 2, y + 2, x + WIDTH - 2, y + 2, black);
             canvas.drawLine(x + 2, y + 3, x + WIDTH - 2, y + 3, black);
@@ -138,34 +148,42 @@ public class MinimizedView extends AbstractView {
 
     private static class Specification implements ViewSpecification {
 
-        public boolean canDisplay(ViewRequirement requirement) {
+        @Override
+        public boolean canDisplay(final ViewRequirement requirement) {
             return false;
         }
 
-        public View createView(final Content content, Axes axes, int sequence) {
+        @Override
+        public View createView(final Content content, final Axes axes, final int sequence) {
             return null;
         }
 
+        @Override
         public String getName() {
             return "minimized view";
         }
 
+        @Override
         public boolean isAligned() {
             return false;
         }
 
+        @Override
         public boolean isOpen() {
             return false;
         }
 
+        @Override
         public boolean isReplaceable() {
             return false;
         }
-        
+
+        @Override
         public boolean isResizeable() {
             return false;
         }
 
+        @Override
         public boolean isSubView() {
             return false;
         }
@@ -181,7 +199,8 @@ public class MinimizedView extends AbstractView {
     public MinimizedView(final View viewToMinimize) {
         super(viewToMinimize.getContent(), new Specification());
         this.minimizedView = viewToMinimize;
-        iconView = new SubviewIconSpecification().createView(viewToMinimize.getContent(), viewToMinimize.getViewAxes(), -1);
+        iconView =
+            new SubviewIconSpecification().createView(viewToMinimize.getContent(), viewToMinimize.getViewAxes(), -1);
         iconView.setParent(this);
         controls = new WindowControl[] { new RestoreWindowControl(this), new CloseWindowControl(this) };
     }
@@ -226,7 +245,9 @@ public class MinimizedView extends AbstractView {
         final int top = 3;
 
         final boolean hasFocus = containsFocus();
-        final Color lightColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
+        final Color lightColor =
+            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit
+                .getColor(ColorsAndFonts.COLOR_SECONDARY2);
         clearBackground(canvas, Toolkit.getColor(ColorsAndFonts.COLOR_WINDOW));
         canvas.drawRectangle(1, 0, width - 2, height, lightColor);
         canvas.drawRectangle(0, 1, width, height - 2, lightColor);
@@ -236,11 +257,13 @@ public class MinimizedView extends AbstractView {
         final ViewState state = getState();
         if (state.isActive()) {
             final int i = left;
-            canvas.drawRectangle(i, top, width - 2 * i, height - 2 * i - top, Toolkit.getColor(ColorsAndFonts.COLOR_ACTIVE));
+            canvas.drawRectangle(i, top, width - 2 * i, height - 2 * i - top,
+                Toolkit.getColor(ColorsAndFonts.COLOR_ACTIVE));
         }
 
         final int bw = controls[0].getLocation().getX() - 3; // controls.length * WindowControl.WIDTH;
-        canvas.drawSolidRectangle(bw, top, width - bw - 3, height - top * 2, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+        canvas.drawSolidRectangle(bw, top, width - bw - 3, height - top * 2,
+            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         canvas.drawLine(bw - 1, top, bw - 1, height - top * 2, lightColor);
 
         for (int i = 0; controls != null && i < controls.length; i++) {
@@ -253,7 +276,7 @@ public class MinimizedView extends AbstractView {
     }
 
     @Override
-    public Size getRequiredSize(Size availableSpace) {
+    public Size getRequiredSize(final Size availableSpace) {
         final Size size = new Size();
 
         size.extendWidth(BORDER_WIDTH);
@@ -298,9 +321,9 @@ public class MinimizedView extends AbstractView {
         x -= widthControl * controls.length;
         final int y = BORDER_WIDTH;
 
-        for (int i = 0; i < controls.length; i++) {
-            controls[i].setSize(controls[i].getRequiredSize(Size.createMax()));
-            controls[i].setLocation(new Location(x, y));
+        for (final WindowControl control : controls) {
+            control.setSize(control.getRequiredSize(Size.createMax()));
+            control.setLocation(new Location(x, y));
             x += widthControl;
         }
     }
@@ -308,8 +331,8 @@ public class MinimizedView extends AbstractView {
     private void restore() {
         final Workspace workspace = getWorkspace();
         final View[] views = workspace.getSubviews();
-        for (int i = 0; i < views.length; i++) {
-            if (views[i] == this) {
+        for (final View view : views) {
+            if (view == this) {
                 dispose();
 
                 minimizedView.setParent(workspace);
@@ -326,8 +349,8 @@ public class MinimizedView extends AbstractView {
     private void close() {
         final Workspace workspace = getWorkspace();
         final View[] views = workspace.getSubviews();
-        for (int i = 0; i < views.length; i++) {
-            if (views[i] == this) {
+        for (final View view : views) {
+            if (view == this) {
                 dispose();
 
                 minimizedView.setParent(workspace);
@@ -378,10 +401,9 @@ public class MinimizedView extends AbstractView {
         final View button = overControl(click.getLocation());
         if (button == null) {
             /*
-             * if (overBorder(click.getLocation())) { Workspace workspace = getWorkspace(); if (workspace !=
-             * null) { if (click.button2()) { workspace.lower(getView()); } else if (click.button1()) {
-             * workspace.raise(getView()); } } } else { super.firstClick(click); }
-             * 
+             * if (overBorder(click.getLocation())) { Workspace workspace = getWorkspace(); if (workspace != null) { if
+             * (click.button2()) { workspace.lower(getView()); } else if (click.button1()) { workspace.raise(getView());
+             * } } } else { super.firstClick(click); }
              */} else {
             button.firstClick(click);
         }
@@ -389,8 +411,7 @@ public class MinimizedView extends AbstractView {
     }
 
     private View overControl(final Location location) {
-        for (int i = 0; i < controls.length; i++) {
-            final WindowControl control = controls[i];
+        for (final WindowControl control : controls) {
             if (control.getBounds().contains(location)) {
                 return control;
             }

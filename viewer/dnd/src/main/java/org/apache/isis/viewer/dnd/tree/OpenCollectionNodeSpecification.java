@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,18 +29,18 @@ import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.composite.CollectionElementBuilder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
-
 /**
  * Specification for a tree node that will display an open collection as a root node or within an object.
  * 
- * @see org.apache.isis.viewer.dnd.tree.ClosedCollectionNodeSpecification for displaying a closed
- *      collection within an object.
+ * @see org.apache.isis.viewer.dnd.tree.ClosedCollectionNodeSpecification for displaying a closed collection within an
+ *      object.
  */
 public class OpenCollectionNodeSpecification extends CompositeNodeSpecification {
     /**
      * A collection tree can only be displayed for a collection that has elements.
      */
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         final ObjectAdapter collection = requirement.getAdapter();
         if (collection == null) {
             return false;
@@ -54,8 +53,9 @@ public class OpenCollectionNodeSpecification extends CompositeNodeSpecification 
     public OpenCollectionNodeSpecification() {
         builder = new CollectionElementBuilder(this);
     }
-    
-    public Layout createLayout(Content content, Axes axes) {
+
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout();
     }
 
@@ -63,7 +63,7 @@ public class OpenCollectionNodeSpecification extends CompositeNodeSpecification 
     public boolean isOpen() {
         return true;
     }
-    
+
     @Override
     public boolean isSubView() {
         return false;
@@ -74,6 +74,7 @@ public class OpenCollectionNodeSpecification extends CompositeNodeSpecification 
         return CAN_OPEN;
     }
 
+    @Override
     public String getName() {
         return "Collection tree node - open";
     }

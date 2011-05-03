@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.histogram;
 
 import java.util.List;
@@ -34,14 +33,13 @@ import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.composite.CollectionElementBuilder;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 
-
 public class HistogramSpecification extends CompositeViewSpecification {
 
-    static List<? extends ObjectAssociation> availableFields(CollectionContent content) {
+    static List<? extends ObjectAssociation> availableFields(final CollectionContent content) {
         List<? extends ObjectAssociation> associationList;
         associationList = content.getElementSpecification().getAssociations(new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(ObjectAssociation t) {
+            public boolean accept(final ObjectAssociation t) {
                 return NumberAdapters.contains(t);
             }
         });
@@ -51,24 +49,25 @@ public class HistogramSpecification extends CompositeViewSpecification {
     public HistogramSpecification() {
         builder = new CollectionElementBuilder(new ViewFactory() {
             @Override
-            public View createView(Content content, Axes axes, int sequence) {
+            public View createView(final Content content, final Axes axes, final int sequence) {
                 return new HistogramBar(content, axes.getAxis(HistogramAxis.class), HistogramSpecification.this);
             }
         });
     }
 
     @Override
-    public Layout createLayout(Content content, Axes axes) {
+    public Layout createLayout(final Content content, final Axes axes) {
         return new HistogramLayout();
     }
 
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
-        return requirement.isCollection() && requirement.isOpen() && availableFields((CollectionContent) requirement.getContent()).size() > 0;
+    public boolean canDisplay(final ViewRequirement requirement) {
+        return requirement.isCollection() && requirement.isOpen()
+            && availableFields((CollectionContent) requirement.getContent()).size() > 0;
     }
-   
+
     @Override
-    public void createAxes(Content content, Axes axes) {
+    public void createAxes(final Content content, final Axes axes) {
         super.createAxes(content, axes);
         axes.add(new HistogramAxis(content));
     }
@@ -99,4 +98,3 @@ public class HistogramSpecification extends CompositeViewSpecification {
     }
 
 }
-

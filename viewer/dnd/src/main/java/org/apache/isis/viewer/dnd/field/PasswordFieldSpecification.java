@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
 import org.apache.isis.core.progmodel.facets.value.password.PasswordValueFacet;
@@ -27,17 +26,18 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.base.AbstractFieldSpecification;
 
-
 public class PasswordFieldSpecification extends AbstractFieldSpecification {
     @Override
-    public boolean canDisplay(ViewRequirement requirement) {
+    public boolean canDisplay(final ViewRequirement requirement) {
         return requirement.isTextParseable() && requirement.isForValueType(PasswordValueFacet.class);
     }
 
-    public View createView(final Content content, Axes axes, int sequence) {
+    @Override
+    public View createView(final Content content, final Axes axes, final int sequence) {
         return new PasswordField(content, this);
     }
 
+    @Override
     public String getName() {
         return "Password Field";
     }

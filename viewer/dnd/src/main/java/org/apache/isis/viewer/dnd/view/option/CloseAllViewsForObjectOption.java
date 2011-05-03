@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.option;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-
 
 public class CloseAllViewsForObjectOption extends UserActionAbstract {
     public CloseAllViewsForObjectOption() {
@@ -33,9 +31,9 @@ public class CloseAllViewsForObjectOption extends UserActionAbstract {
 
     @Override
     public void execute(final Workspace workspace, final View view, final Location at) {
-        ObjectAdapter object = view.getContent().getAdapter();
+        final ObjectAdapter object = view.getContent().getAdapter();
         final View views[] = workspace.getSubviews();
-        for (View v : views) {
+        for (final View v : views) {
             if (v.getContent().getAdapter() == object) {
                 v.dispose();
             }

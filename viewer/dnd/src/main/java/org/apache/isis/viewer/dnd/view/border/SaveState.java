@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 class SaveState {
@@ -55,4 +54,3 @@ class SaveState {
         return error;
     }
 }
-

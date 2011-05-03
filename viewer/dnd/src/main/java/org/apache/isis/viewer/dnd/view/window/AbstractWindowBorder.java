@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -39,16 +38,15 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.border.BorderDrawing;
 
-
 public abstract class AbstractWindowBorder extends AbstractBorder {
     protected static BorderDrawing borderRender;
     protected WindowControl controls[];
     private WindowControl overControl;
 
-    public static void setBorderRenderer(BorderDrawing borderRender) {
+    public static void setBorderRenderer(final BorderDrawing borderRender) {
         AbstractWindowBorder.borderRender = borderRender;
     }
-    
+
     public AbstractWindowBorder(final View enclosedView) {
         super(enclosedView);
         left = borderRender.getLeft();
@@ -64,7 +62,7 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
         if (controls.length > 0) {
             debug.appendln("controls:-");
             debug.indent();
-            for (WindowControl control : controls) {
+            for (final WindowControl control : controls) {
                 debug.append(control);
                 debug.appendln();
             }
@@ -112,14 +110,15 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
     public void draw(final Canvas canvas) {
         // blank background
         final Bounds bounds = getBounds();
-        Color color = Toolkit.getColor(ColorsAndFonts.COLOR_WINDOW + "." + getSpecification().getName());
+        final Color color = Toolkit.getColor(ColorsAndFonts.COLOR_WINDOW + "." + getSpecification().getName());
         canvas.drawSolidRectangle(1, 1, bounds.getWidth() - 2, bounds.getHeight() - 2, color);
 
         final boolean hasFocus = containsFocus();
         final ViewState state = getState();
-        borderRender.draw(canvas, getSize(), hasFocus, state, controls, title() + " (" + getSpecification().getName() + ")");
-//        canvas.drawRectangle(0, 0, getSize().getWidth(), borderRender.getTop(), Toolkit.getColor(0xfff));
-        
+        borderRender.draw(canvas, getSize(), hasFocus, state, controls, title() + " (" + getSpecification().getName()
+            + ")");
+        // canvas.drawRectangle(0, 0, getSize().getWidth(), borderRender.getTop(), Toolkit.getColor(0xfff));
+
         // controls
         for (int i = 0; controls != null && i < controls.length; i++) {
             final Canvas controlCanvas = canvas.createSubcanvas(controls[i].getBounds());
@@ -137,7 +136,7 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
         right = borderRender.getRight();
         top = borderRender.getTop();
         bottom = borderRender.getBottom();
-        
+
         final Size size = super.getRequiredSize(maximumSize);
         borderRender.getRequiredSize(size, title(), controls);
         return size;
@@ -180,9 +179,9 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
             control.firstClick(click);
         }
     }
-    
+
     @Override
-    public void mouseMoved(Location at) {
+    public void mouseMoved(final Location at) {
         final WindowControl control = (WindowControl) overControl(at);
         if (control != null) {
             if (control != overControl) {
@@ -201,8 +200,7 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
     }
 
     private View overControl(final Location location) {
-        for (int i = 0; i < controls.length; i++) {
-            final WindowControl control = controls[i];
+        for (final WindowControl control : controls) {
             if (control.getBounds().contains(location)) {
                 return control;
             }

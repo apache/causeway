@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.control;
 
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.view.ButtonAction;
 import org.apache.isis.viewer.dnd.view.View;
-
 
 public abstract class AbstractButtonAction implements ButtonAction {
     private final String name;
@@ -40,26 +38,32 @@ public abstract class AbstractButtonAction implements ButtonAction {
         this.defaultButton = defaultButton;
     }
 
+    @Override
     public Consent disabled(final View view) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public String getDescription(final View view) {
         return "";
     }
 
+    @Override
     public String getHelp(final View view) {
         return "No help available for button";
     }
 
+    @Override
     public String getName(final View view) {
         return name;
     }
 
+    @Override
     public ActionType getType() {
         return ActionType.USER;
     }
 
+    @Override
     public boolean isDefault() {
         return defaultButton;
     }

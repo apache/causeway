@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.list;
 
 import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.IconGraphic;
-
 
 public class InternalCollectionIconGraphic extends IconGraphic {
 
@@ -32,8 +30,8 @@ public class InternalCollectionIconGraphic extends IconGraphic {
     }
 
     /*
-     * protected Image iconPicture(ObjectAdapter object) { final InternalCollection cls = (InternalCollection)
-     * object; final ObjectSpecification spec = cls.getElementSpecification(); Image icon =
-     * loadIcon(spec, ""); if(icon == null) { icon = loadIcon(spec, ""); } return icon; }
+     * protected Image iconPicture(ObjectAdapter object) { final InternalCollection cls = (InternalCollection) object;
+     * final ObjectSpecification spec = cls.getElementSpecification(); Image icon = loadIcon(spec, ""); if(icon == null)
+     * { icon = loadIcon(spec, ""); } return icon; }
      */
 }

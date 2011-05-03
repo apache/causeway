@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd;
 
 import java.util.Enumeration;
@@ -47,7 +46,6 @@ import org.apache.isis.viewer.dnd.view.Viewer;
 import org.apache.isis.viewer.dnd.viewer.basic.NullColor;
 import org.apache.isis.viewer.dnd.viewer.drawing.DummyText;
 
-
 public class TestToolkit extends Toolkit {
 
     public static void createInstance() {
@@ -56,205 +54,316 @@ public class TestToolkit extends Toolkit {
         }
     }
 
-    private TestToolkit() {}
+    private TestToolkit() {
+    }
 
     @Override
     protected void init() {
         colorsAndFonts = new ColorsAndFonts() {
 
+            @Override
             public int defaultBaseline() {
                 return 0;
             }
 
+            @Override
             public int defaultFieldHeight() {
                 return 0;
             }
 
+            @Override
             public Color getColor(final int rgbColor) {
                 return null;
             }
 
+            @Override
             public Color getColor(final String name) {
                 return new NullColor();
             }
 
+            @Override
             public Text getText(final String name) {
                 return new DummyText();
             }
 
-            public void init() {}
+            @Override
+            public void init() {
+            }
         };
 
         viewer = new Viewer() {
 
-            public void addToNotificationList(final View view) {}
+            @Override
+            public void addToNotificationList(final View view) {
+            }
 
-            public void clearAction() {}
+            @Override
+            public void clearAction() {
+            }
 
-            public void clearOverlayView() {}
+            @Override
+            public void clearOverlayView() {
+            }
 
-            public void clearOverlayView(final View view) {}
+            @Override
+            public void clearOverlayView(final View view) {
+            }
 
-            public void disposeUnneededViews() {}
+            @Override
+            public void disposeUnneededViews() {
+            }
 
+            @Override
             public Object getClipboard(final Class<?> class1) {
                 return null;
             }
 
+            @Override
             public InteractionSpy getSpy() {
                 return null;
             }
 
             UndoStack undoStack = new UndoStack();
 
+            @Override
             public UndoStack getUndoStack() {
                 return undoStack;
             }
 
+            @Override
             public boolean hasFocus(final View view) {
                 return false;
             }
 
+            @Override
             public boolean isRunningAsExploration() {
                 return false;
             }
 
+            @Override
             public boolean isRunningAsPrototype() {
                 return false;
             }
 
-            public void markDamaged(final Bounds bounds) {}
+            @Override
+            public void markDamaged(final Bounds bounds) {
+            }
 
-            public void removeFromNotificationList(final View view) {}
+            @Override
+            public void removeFromNotificationList(final View view) {
+            }
 
-            public void scheduleRepaint() {}
+            @Override
+            public void scheduleRepaint() {
+            }
 
-            public void saveCurrentFieldEntry() {}
+            @Override
+            public void saveCurrentFieldEntry() {
+            }
 
+            @Override
             public String selectFilePath(final String title, final String directory) {
                 return null;
             }
 
-            public void setBackground(final Background background) {}
+            @Override
+            public void setBackground(final Background background) {
+            }
 
-            public void setClipboard(final String clip, final Class<?> class1) {}
+            @Override
+            public void setClipboard(final String clip, final Class<?> class1) {
+            }
 
-            public void setKeyboardFocus(final View view) {}
+            @Override
+            public void setKeyboardFocus(final View view) {
+            }
 
-            public void setOverlayView(final View view) {}
+            @Override
+            public void setOverlayView(final View view) {
+            }
 
-            public void showInOverlay(Content content, Location location) {}
+            @Override
+            public void showInOverlay(final Content content, final Location location) {
+            }
 
-            public void showDebugFrame(DebuggableWithTitle[] info, Location at) {}
-            
+            @Override
+            public void showDebugFrame(final DebuggableWithTitle[] info, final Location at) {
+            }
+
+            @Override
             public Size getOverlaySize() {
                 return null;
             }
 
-            public void saveOpenObjects() {}
+            @Override
+            public void saveOpenObjects() {
+            }
 
         };
 
         feedbackManager = new Feedback() {
 
-            public void showArrowCursor() {}
+            @Override
+            public void showArrowCursor() {
+            }
 
-            public void showCrosshairCursor() {}
+            @Override
+            public void showCrosshairCursor() {
+            }
 
-            public void showDefaultCursor() {}
+            @Override
+            public void showDefaultCursor() {
+            }
 
-            public void showException(final Throwable e) {}
+            @Override
+            public void showException(final Throwable e) {
+            }
 
-            public void showHandCursor() {}
+            @Override
+            public void showHandCursor() {
+            }
 
-            public void showMoveCursor() {}
+            @Override
+            public void showMoveCursor() {
+            }
 
-            public void showResizeDownCursor() {}
+            @Override
+            public void showResizeDownCursor() {
+            }
 
-            public void showResizeDownLeftCursor() {}
+            @Override
+            public void showResizeDownLeftCursor() {
+            }
 
-            public void showResizeDownRightCursor() {}
+            @Override
+            public void showResizeDownRightCursor() {
+            }
 
-            public void showResizeLeftCursor() {}
+            @Override
+            public void showResizeLeftCursor() {
+            }
 
-            public void showResizeRightCursor() {}
+            @Override
+            public void showResizeRightCursor() {
+            }
 
-            public void showResizeUpCursor() {}
+            @Override
+            public void showResizeUpCursor() {
+            }
 
-            public void showResizeUpLeftCursor() {}
+            @Override
+            public void showResizeUpLeftCursor() {
+            }
 
-            public void showResizeUpRightCursor() {}
+            @Override
+            public void showResizeUpRightCursor() {
+            }
 
-            public void showTextCursor() {}
+            @Override
+            public void showTextCursor() {
+            }
 
-            public void addMessage(final String string) {}
+            @Override
+            public void addMessage(final String string) {
+            }
 
-            public void clearAction() {}
+            @Override
+            public void clearAction() {
+            }
 
-            public void clearBusy(final View view) {}
+            @Override
+            public void clearBusy(final View view) {
+            }
 
-            public void clearError() {}
+            @Override
+            public void clearError() {
+            }
 
+            @Override
             public String getStatusBarOutput() {
                 return null;
             }
 
+            @Override
             public boolean isBusy(final View view) {
                 return false;
             }
 
-            public void setAction(final String string) {}
+            @Override
+            public void setAction(final String string) {
+            }
 
-            public void setBusy(final View view, final BackgroundTask task) {}
+            @Override
+            public void setBusy(final View view, final BackgroundTask task) {
+            }
 
-            public void setError(final String string) {}
+            @Override
+            public void setError(final String string) {
+            }
 
-            public void setViewDetail(final String string) {}
+            @Override
+            public void setViewDetail(final String string) {
+            }
 
-            public void showBusyState(final View view) {}
+            @Override
+            public void showBusyState(final View view) {
+            }
 
-            public void showMessagesAndWarnings() {}
+            @Override
+            public void showMessagesAndWarnings() {
+            }
         };
-        
+
         viewFactory = new GlobalViewFactory() {
 
-            public Enumeration<ViewSpecification> availableViews(ViewRequirement viewRequirement) {
+            @Override
+            public Enumeration<ViewSpecification> availableViews(final ViewRequirement viewRequirement) {
                 throw new UnexpectedCallException();
             }
 
-            public View createDialog(Content content) {
+            @Override
+            public View createDialog(final Content content) {
                 throw new UnexpectedCallException();
             }
 
-            public DragEvent createDragContentOutline(View view, Location location) {
+            @Override
+            public DragEvent createDragContentOutline(final View view, final Location location) {
                 throw new UnexpectedCallException();
             }
 
-            public View createDragViewOutline(View view) {
+            @Override
+            public View createDragViewOutline(final View view) {
                 throw new UnexpectedCallException();
             }
 
-            public View createMinimizedView(View view) {
+            @Override
+            public View createMinimizedView(final View view) {
                 throw new UnexpectedCallException();
             }
 
-            public View createView(ViewRequirement requirement) {
+            @Override
+            public View createView(final ViewRequirement requirement) {
                 return new DummyView();
             }
 
-            public void debugData(DebugBuilder debug) {}
+            @Override
+            public void debugData(final DebugBuilder debug) {
+            }
 
+            @Override
             public String debugTitle() {
                 throw new UnexpectedCallException();
             }
 
-            public void addSpecification(ViewSpecification spec) {}
+            @Override
+            public void addSpecification(final ViewSpecification spec) {
+            }
 
-            public Enumeration<ViewSpecification> availableDesigns(ViewRequirement viewRequirement) {
+            @Override
+            public Enumeration<ViewSpecification> availableDesigns(final ViewRequirement viewRequirement) {
                 return null;
             }
-            
+
         };
     }
 }
-

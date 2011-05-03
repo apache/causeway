@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.drawing;
-
-
 
 /**
  * A strategy for rendering the background of the application window.

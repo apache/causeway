@@ -27,7 +27,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformOwner;
 
 public interface ThatSubcommand {
 
-	ObjectAdapter that(PerformContext performContext) throws ScenarioBoundValueException;
+    ObjectAdapter that(PerformContext performContext) throws ScenarioBoundValueException;
 
     List<String> getSubkeys();
 

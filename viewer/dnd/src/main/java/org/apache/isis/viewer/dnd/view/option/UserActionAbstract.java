@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.option;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -29,13 +28,13 @@ import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
-
 /**
- * Each option that a user is shown in an objects popup menu a MenuOption. A MenuOption details: the name of
- * an option (in the users language);
+ * Each option that a user is shown in an objects popup menu a MenuOption. A MenuOption details: the name of an option
+ * (in the users language);
  * <ul>
  * the type of object that might result when requesting this option
- * </ul>; a way to determine whether a user can select this option on the current object.
+ * </ul>
+ * ; a way to determine whether a user can select this option on the current object.
  */
 public abstract class UserActionAbstract implements UserAction {
     private String description;
@@ -51,16 +50,20 @@ public abstract class UserActionAbstract implements UserAction {
         this.type = type;
     }
 
+    @Override
     public Consent disabled(final View view) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public abstract void execute(final Workspace workspace, final View view, final Location at);
 
+    @Override
     public String getDescription(final View view) {
         return description;
     }
 
+    @Override
     public String getHelp(final View view) {
         return "No help available for user action";
     }
@@ -68,10 +71,12 @@ public abstract class UserActionAbstract implements UserAction {
     /**
      * Returns the stored name of the menu option.
      */
+    @Override
     public String getName(final View view) {
         return name;
     }
 
+    @Override
     public ActionType getType() {
         return type;
     }

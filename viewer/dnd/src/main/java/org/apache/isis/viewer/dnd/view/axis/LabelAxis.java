@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.axis;
 
 import org.apache.isis.core.commons.lang.ToString;
@@ -26,7 +25,8 @@ import org.apache.isis.viewer.dnd.view.ViewAxis;
 public class LabelAxis implements ViewAxis {
     private int width;
 
-    public LabelAxis() {}
+    public LabelAxis() {
+    }
 
     public void accommodateWidth(final int width) {
         this.width = Math.max(this.width, width);
@@ -35,9 +35,10 @@ public class LabelAxis implements ViewAxis {
     public int getWidth() {
         return width;
     }
-    
+
+    @Override
     public String toString() {
-        ToString str = new ToString(this);
+        final ToString str = new ToString(this);
         str.append("width", width);
         return str.toString();
     }

@@ -17,23 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.easymock.MockControl;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -56,14 +43,24 @@ import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.easymock.MockControl;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ActionFieldBuilderTest {
     private ActionFieldBuilder builder;
 
-    private Mockery mockery = new JUnit4Mockery();
-    
+    private final Mockery mockery = new JUnit4Mockery();
+
     private IsisConfiguration configuration;
     private List<Object> servicesList;
     protected TemplateImageLoader mockTemplateImageLoader;
@@ -72,7 +69,6 @@ public class ActionFieldBuilderTest {
     private UserProfileLoader mockUserProfileLoader;
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
-    
 
     @Before
     public void setUp() throws Exception {
@@ -80,47 +76,44 @@ public class ActionFieldBuilderTest {
 
         configuration = new IsisConfigurationDefault();
         servicesList = Collections.emptyList();
-        
+
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
         mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
         mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
         mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
         mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
         mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-        
-        mockery.checking(new Expectations(){{
-            ignoring(mockSpecificationLoader);
-            ignoring(mockPersistenceSessionFactory);
-            
-            one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
-            will(returnValue(new UserProfile()));
 
-            ignoring(mockTemplateImageLoader);
-            ignoring(mockAuthenticationManager);
-            ignoring(mockAuthorizationManager);
-        }});
-        
+        mockery.checking(new Expectations() {
+            {
+                ignoring(mockSpecificationLoader);
+                ignoring(mockPersistenceSessionFactory);
+
+                one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
+                will(returnValue(new UserProfile()));
+
+                ignoring(mockTemplateImageLoader);
+                ignoring(mockAuthenticationManager);
+                ignoring(mockAuthorizationManager);
+            }
+        });
+
         final ViewFactory subviewSpec = new ViewFactory() {
-            public View createView(final Content content, Axes axes, int fieldNumber) {
+            @Override
+            public View createView(final Content content, final Axes axes, final int fieldNumber) {
                 return new DummyView();
             }
         };
 
+        final IsisSessionFactoryDefault sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
+                mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
+                mockPersistenceSessionFactory, servicesList);
 
-		final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(
-		        DeploymentType.EXPLORATION, 
-		        configuration, 
-		        mockTemplateImageLoader, 
-		        mockSpecificationLoader, 
-		        mockAuthenticationManager, 
-		        mockAuthorizationManager,
-		        mockUserProfileLoader, 
-		        mockPersistenceSessionFactory, servicesList);
-        
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
-		IsisContextStatic.createRelaxedInstance(sessionFactory);
+        IsisContextStatic.createRelaxedInstance(sessionFactory);
         IsisContextStatic.openSession(new ExplorationSession());
-        
+
         builder = new ActionFieldBuilder(subviewSpec);
 
     }
@@ -151,18 +144,17 @@ public class ActionFieldBuilderTest {
     }
 
     /*
-     * // TODO fails on server as cant load X11 for Text class public void xxxtestNewBuild() {
-     * view.setupSubviews(new View[0]);
+     * // TODO fails on server as cant load X11 for Text class public void xxxtestNewBuild() { view.setupSubviews(new
+     * View[0]);
      * 
      * view.addAction("add TextView0 null"); view.addAction("add MockView1/LabelBorder"); view.addAction("add
      * MockView2/LabelBorder");
      * 
      * builder.build(view);
      * 
-     * view.verify(); } public void xxxtestUpdateBuildWhereParameterHasChangedFromNullToAnObject() {
-     * DummyView[] views = new DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new
-     * ObjectParameter("name", null, null, false, 1, actionContent); views[1].setupContent(objectParameter);
-     * view.setupSubviews(views);
+     * view.verify(); } public void xxxtestUpdateBuildWhereParameterHasChangedFromNullToAnObject() { DummyView[] views =
+     * new DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name", null,
+     * null, false, 1, actionContent); views[1].setupContent(objectParameter); view.setupSubviews(views);
      * 
      * actionContent.setParameter(0, new DummyObjectAdapter());
      * 
@@ -173,8 +165,8 @@ public class ActionFieldBuilderTest {
      * view.verify(); }
      * 
      * public void xxxtestUpdateBuildWhereParameterHasChangedFromAnObjectToNull() { DummyView[] views = new
-     * DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name",
-     * new DummyObjectAdapter(), null, false, 1, actionContent); views[1].setupContent(objectParameter);
+     * DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name", new
+     * DummyObjectAdapter(), null, false, 1, actionContent); views[1].setupContent(objectParameter);
      * view.setupSubviews(views);
      * 
      * objectParameter.setObject(null);
@@ -185,10 +177,10 @@ public class ActionFieldBuilderTest {
      * 
      * view.verify(); }
      * 
-     * public void xxxtestUpdateBuildWhereParameterHasChangedFromOneObjectToAnother() { DummyView[] views =
-     * new DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new
-     * ObjectParameter("name", new DummyObjectAdapter(), null, false, 1, actionContent);
-     * views[1].setupContent(objectParameter); view.setupSubviews(views);
+     * public void xxxtestUpdateBuildWhereParameterHasChangedFromOneObjectToAnother() { DummyView[] views = new
+     * DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name", new
+     * DummyObjectAdapter(), null, false, 1, actionContent); views[1].setupContent(objectParameter);
+     * view.setupSubviews(views);
      * 
      * objectParameter.setObject(new DummyObjectAdapter());
      * 
@@ -198,10 +190,10 @@ public class ActionFieldBuilderTest {
      * 
      * view.verify(); }
      * 
-     * public void xxtestUpdateBuildWhereParameterObjectSetButToSameObject() { DummyView[] views = new
-     * DummyView[2]; views[1] = new DummyView(); DummyObjectAdapter dummyObjectAdapter = new DummyObjectAdapter();
-     * ObjectParameter objectParameter = new ObjectParameter("name", dummyObjectAdapter, null, false, 1,
-     * actionContent); views[1].setupContent(objectParameter); view.setupSubviews(views);
+     * public void xxtestUpdateBuildWhereParameterObjectSetButToSameObject() { DummyView[] views = new DummyView[2];
+     * views[1] = new DummyView(); DummyObjectAdapter dummyObjectAdapter = new DummyObjectAdapter(); ObjectParameter
+     * objectParameter = new ObjectParameter("name", dummyObjectAdapter, null, false, 1, actionContent);
+     * views[1].setupContent(objectParameter); view.setupSubviews(views);
      * 
      * actionContent.setParameter(0, dummyObjectAdapter); // objectParameter.setObject(dummyObjectAdapter);
      * 
@@ -212,7 +204,7 @@ public class ActionFieldBuilderTest {
      * class MockActionHelper extends ActionHelper {
      * 
      * protected MockActionHelper( ObjectAdapter target, Action action, String[] labels, ObjectAdapter[] parameters,
-     * ObjectSpecification[] parameterTypes, boolean[] required) { super(target, action, labels,
-     * parameters, parameterTypes, required); }
+     * ObjectSpecification[] parameterTypes, boolean[] required) { super(target, action, labels, parameters,
+     * parameterTypes, required); }
      */
 }

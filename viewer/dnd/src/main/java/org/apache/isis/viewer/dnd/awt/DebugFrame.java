@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.awt.BorderLayout;
@@ -44,11 +43,10 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.view.debug.DebugOutput;
-
+import org.apache.log4j.Logger;
 
 /**
  * A specialised frame for displaying the details of an object and its display mechanisms.
@@ -70,8 +68,8 @@ public abstract class DebugFrame extends Frame {
             f[i] = (Frame) frames.elementAt(i);
         }
 
-        for (int i = 0; i < f.length; i++) {
-            f[i].dispose();
+        for (final Frame element : f) {
+            element.dispose();
         }
     }
 
@@ -135,6 +133,7 @@ public abstract class DebugFrame extends Frame {
 
         buttons.add(b);
         b.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 showDebugForPane();
             }
@@ -145,6 +144,7 @@ public abstract class DebugFrame extends Frame {
 
         buttons.add(b);
         b.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 DebugOutput.print("Debug " + tabPane.getName(), field.getText());
             }
@@ -155,6 +155,7 @@ public abstract class DebugFrame extends Frame {
 
         buttons.add(b);
         b.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 DebugOutput.saveToFile("Save details", "Debug " + tabPane.getName(), field.getText());
             }
@@ -165,6 +166,7 @@ public abstract class DebugFrame extends Frame {
 
         buttons.add(b);
         b.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 DebugOutput.saveToClipboard(field.getText());
             }
@@ -175,6 +177,7 @@ public abstract class DebugFrame extends Frame {
 
         buttons.add(b);
         b.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 closeDialog();
             }
@@ -199,7 +202,8 @@ public abstract class DebugFrame extends Frame {
         dispose();
     }
 
-    public void dialogClosing() {}
+    public void dialogClosing() {
+    }
 
     @Override
     public void dispose() {
@@ -217,9 +221,8 @@ public abstract class DebugFrame extends Frame {
      */
     public void show(final int x, final int y) {
         /*
-         * WARNING - When refresh button is pressed it is in the AWT thread; if the repository
-         * is thread based then the wrong set of components will be used giving strange results, particularly
-         * in the object persistor.
+         * WARNING - When refresh button is pressed it is in the AWT thread; if the repository is thread based then the
+         * wrong set of components will be used giving strange results, particularly in the object persistor.
          */
         // TODO run in correct thread
         refresh();

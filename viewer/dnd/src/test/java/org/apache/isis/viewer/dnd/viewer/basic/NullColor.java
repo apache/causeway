@@ -17,24 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.isis.viewer.dnd.drawing.Color;
 
-
 public class NullColor implements Color {
 
+    @Override
     public Color brighter() {
         return null;
     }
 
+    @Override
     public Color darker() {
         return null;
     }
 
+    @Override
     public String getName() {
         return null;
     }
 }
-

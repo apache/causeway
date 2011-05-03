@@ -29,7 +29,7 @@ public abstract class AbstractHelper {
     }
 
     protected Scenario getStory() {
-		return story;
-	}
+        return story;
+    }
 
 }

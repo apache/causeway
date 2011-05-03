@@ -27,32 +27,28 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcomma
 
 public class Empty extends ThatSubcommandAbstract {
 
-	public Empty() {
-		super("is empty");
-	}
+    public Empty() {
+        super("is empty");
+    }
 
-	public ObjectAdapter that(final PerformContext performContext)
-			throws ScenarioBoundValueException {
+    @Override
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
-		final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-				.getObjectMember();
+        final OneToOneAssociation otoa = (OneToOneAssociation) performContext.getObjectMember();
 
-		// get
-		final ObjectAdapter resultAdapter = otoa.get(performContext
-				.getOnAdapter());
+        // get
+        final ObjectAdapter resultAdapter = otoa.get(performContext.getOnAdapter());
 
-		if (resultAdapter != null) {
-			String actualStr = performContext.getPeer().getAliasRegistry()
-					.getAlias(resultAdapter);
-			if (actualStr == null) {
-				actualStr = resultAdapter.titleString();
-			}
-			CellBinding thatItBinding = performContext.getPeer()
-					.getThatItBinding();
-			throw ScenarioBoundValueException.current(thatItBinding, actualStr);
-		}
+        if (resultAdapter != null) {
+            String actualStr = performContext.getPeer().getAliasRegistry().getAlias(resultAdapter);
+            if (actualStr == null) {
+                actualStr = resultAdapter.titleString();
+            }
+            final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
+            throw ScenarioBoundValueException.current(thatItBinding, actualStr);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.window;
 
 import java.util.Enumeration;
@@ -41,7 +40,6 @@ import org.apache.isis.viewer.dnd.view.option.CloseViewOption;
 import org.apache.isis.viewer.dnd.view.option.IconizeViewOption;
 import org.apache.isis.viewer.dnd.view.option.ReplaceViewOption;
 
-
 public class WindowBorder extends AbstractWindowBorder {
     private static final UserAction CLOSE_ALL_OPTION = new CloseAllViewsOption();
     private static final UserAction CLOSE_OPTION = new CloseViewOption();
@@ -56,7 +54,7 @@ public class WindowBorder extends AbstractWindowBorder {
             setControls(new WindowControl[] { new CloseWindowControl(this) });
         } else {
             setControls(new WindowControl[] { new IconizeWindowControl(this), new ResizeWindowControl(this),
-                    new CloseWindowControl(this) });
+                new CloseWindowControl(this) });
         }
     }
 
@@ -100,11 +98,13 @@ public class WindowBorder extends AbstractWindowBorder {
         menuOptions.add(CLOSE_OTHER_VIEWS_FOR_OBJECT);
 
         super.viewMenuOptions(menuOptions);
-        
-        Content content = getContent(); 
-        UserActionSet suboptions = menuOptions.addNewActionSet("Replace with");
-        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.OPEN)), suboptions);
-        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.CLOSED)), suboptions);
+
+        final Content content = getContent();
+        final UserActionSet suboptions = menuOptions.addNewActionSet("Replace with");
+        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.OPEN)),
+            suboptions);
+        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.CLOSED)),
+            suboptions);
     }
 
     protected void replaceOptions(final Enumeration possibleViews, final UserActionSet options) {

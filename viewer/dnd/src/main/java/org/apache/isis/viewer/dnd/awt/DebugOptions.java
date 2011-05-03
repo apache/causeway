@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import java.io.ByteArrayOutputStream;
@@ -36,7 +35,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class DebugOptions implements MenuOptions {
     private final XViewer viewer;
 
@@ -44,8 +42,10 @@ public class DebugOptions implements MenuOptions {
         this.viewer = viewer;
     }
 
+    @Override
     public void menuOptions(final UserActionSet options) {
-        final String showExplorationMenu = "Always show exploration menu " + (viewer.showExplorationMenuByDefault ? "off" : "on");
+        final String showExplorationMenu =
+            "Always show exploration menu " + (viewer.showExplorationMenuByDefault ? "off" : "on");
         options.add(new UserActionAbstract(showExplorationMenu, ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
@@ -82,36 +82,37 @@ public class DebugOptions implements MenuOptions {
 
         // I've commented this out because in the new design we should close the ExecutionContext
         // and then re-login.
-//        options.add(new AbstractUserAction("Restart object loader/persistor", UserAction.DEBUG) {
-//            @Override
-//            public void execute(final Workspace workspace, final View view, final Location at) {
-//                IsisContext.getObjectPersistor().reset();
-//            }
-//        });
-        
+        // options.add(new AbstractUserAction("Restart object loader/persistor", UserAction.DEBUG) {
+        // @Override
+        // public void execute(final Workspace workspace, final View view, final Location at) {
+        // IsisContext.getObjectPersistor().reset();
+        // }
+        // });
+
         options.add(new UserActionAbstract("Diagnostics...", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
-                DebuggableWithTitle info = new DebuggableWithTitle() {
+                final DebuggableWithTitle info = new DebuggableWithTitle() {
 
-                    public void debugData(DebugBuilder debug) {
-                        ByteArrayOutputStream out2 = new ByteArrayOutputStream();
-                        PrintStream out = new PrintStream(out2);
+                    @Override
+                    public void debugData(final DebugBuilder debug) {
+                        final ByteArrayOutputStream out2 = new ByteArrayOutputStream();
+                        final PrintStream out = new PrintStream(out2);
                         new SystemPrinter(out).printDiagnostics();
                         debug.append(out2.toString());
                     }
 
+                    @Override
                     public String debugTitle() {
                         return "Diagnostics";
                     }
-                    
+
                 };
                 f.setInfo(info);
                 f.show(at.getX() + 50, workspace.getBounds().getY() + 6);
             }
         });
-
 
         options.add(new UserActionAbstract("Debug system...", ActionType.DEBUG) {
             @Override
@@ -122,7 +123,6 @@ public class DebugOptions implements MenuOptions {
                 f.show(at.getX() + 50, workspace.getBounds().getY() + 6);
             }
         });
-
 
         options.add(new UserActionAbstract("Debug session...", ActionType.DEBUG) {
             @Override
@@ -154,4 +154,3 @@ public class DebugOptions implements MenuOptions {
     }
 
 }
-

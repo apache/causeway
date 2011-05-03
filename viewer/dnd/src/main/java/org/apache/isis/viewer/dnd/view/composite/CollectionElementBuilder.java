@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -35,7 +33,7 @@ import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.collection.CollectionElement;
 import org.apache.isis.viewer.dnd.view.field.OneToManyField;
 import org.apache.isis.viewer.dnd.view.field.OneToManyFieldElementImpl;
-
+import org.apache.log4j.Logger;
 
 public class CollectionElementBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(CollectionElementBuilder.class);
@@ -45,19 +43,19 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
     public CollectionElementBuilder(final ViewFactory subviewDesign) {
         this.subviewDesign = subviewDesign;
     }
-    
+
     public CollectionElementBuilder(final ViewFactory subviewDesign, final SubviewDecorator decorator) {
         this.subviewDesign = subviewDesign;
         addSubviewDecorator(decorator);
     }
 
     @Override
-    public void build(final View view, Axes axes) {
+    public void build(final View view, final Axes axes) {
         Assert.assertEquals(view.getView(), view);
 
         final Content content = view.getContent();
-        final OneToManyAssociation field = content instanceof OneToManyField ? ((OneToManyField) content)
-                .getOneToManyAssociation() : null;
+        final OneToManyAssociation field =
+            content instanceof OneToManyField ? ((OneToManyField) content).getOneToManyAssociation() : null;
 
         LOG.debug("rebuild view " + view + " for " + content);
 
@@ -65,11 +63,11 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         Enumeration elements;
         elements = collectionContent.allElements();
 
-   //     addViewAxes(view);
-        
+        // addViewAxes(view);
+
         /*
-         * remove all subviews from the view and then work through the elements of the collection adding in a
-         * view for each element. Where a subview for the that element already exists it should be reused.
+         * remove all subviews from the view and then work through the elements of the collection adding in a view for
+         * each element. Where a subview for the that element already exists it should be reused.
          */
         final View[] subviews = view.getSubviews();
         final ObjectAdapter[] existingElements = new ObjectAdapter[subviews.length];
@@ -107,7 +105,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
             }
         }
     }
-    
+
     @Override
     public boolean canDragView() {
         return canDragView;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.composite;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -28,19 +27,19 @@ import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
-
 public class CompositeViewUsingBuilder extends CompositeView {
     private final ViewBuilder builder;
     private final Layout layout;
     private final Axes axes = new Axes();
 
-    public CompositeViewUsingBuilder(final Content content, final ViewSpecification specification, Axes axes, Layout layout, ViewBuilder builder) {
+    public CompositeViewUsingBuilder(final Content content, final ViewSpecification specification, final Axes axes,
+        final Layout layout, final ViewBuilder builder) {
         super(content, specification);
         this.layout = layout;
         this.builder = builder;
         this.axes.add(axes);
     }
-    
+
     @Override
     public void debugStructure(final DebugBuilder debug) {
         debug.appendln("Builder", builder);
@@ -49,25 +48,28 @@ public class CompositeViewUsingBuilder extends CompositeView {
     }
 
     @Override
-    public Size requiredSize(Size availableSpace) {
+    public Size requiredSize(final Size availableSpace) {
         final Size size = layout.getRequiredSize(this);
         size.extend(getPadding());
         size.ensureHeight(1);
         return size;
     }
 
+    @Override
     protected void buildView() {
         builder.build(getView(), axes);
     }
 
-    protected void doLayout(Size maximumSize) {
+    @Override
+    protected void doLayout(final Size maximumSize) {
         layout.layout(getView(), new Size(maximumSize));
     }
 
+    @Override
     public Axes getViewAxes() {
         return axes;
     }
-    
+
     @Override
     protected void appendDebug(final DebugBuilder debug) {
         super.appendDebug(debug);
@@ -77,8 +79,9 @@ public class CompositeViewUsingBuilder extends CompositeView {
     public Layout getLayout() {
         return layout;
     }
-    
-    public void viewMenuOptions(UserActionSet options) {
+
+    @Override
+    public void viewMenuOptions(final UserActionSet options) {
         super.viewMenuOptions(options);
         builder.viewMenuOptions(options, this);
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -35,7 +34,6 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class ObjectParameterImpl extends AbstractObjectContent implements ObjectParameter {
     private final ObjectAdapter adapter;
     private final ActionHelper invocation;
@@ -43,12 +41,8 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
     private final ObjectAdapter[] optionAdapters;
     private final OneToOneActionParameter objectActionParameter;
 
-    public ObjectParameterImpl(
-            final OneToOneActionParameter objectActionParameter,
-            final ObjectAdapter adapter,
-            final ObjectAdapter[] optionAdapters,
-            final int i,
-            final ActionHelper invocation) {
+    public ObjectParameterImpl(final OneToOneActionParameter objectActionParameter, final ObjectAdapter adapter,
+        final ObjectAdapter[] optionAdapters, final int i, final ActionHelper invocation) {
         this.objectActionParameter = objectActionParameter;
         this.optionAdapters = optionAdapters;
         this.index = i;
@@ -85,12 +79,14 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         setObject(null);
     }
 
+    @Override
     public void debugDetails(final DebugBuilder debug) {
         debug.appendln("name", getParameterName());
         debug.appendln("required", isRequired());
         debug.appendln("object", adapter);
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return adapter;
     }
@@ -100,6 +96,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         return adapter;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return optionAdapters;
     }
@@ -109,6 +106,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         return true;
     }
 
+    @Override
     public boolean isRequired() {
         return !objectActionParameter.isOptional();
     }
@@ -118,10 +116,12 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         return false;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return optionAdapters != null && optionAdapters.length > 0;
     }
 
+    @Override
     public boolean isTransient() {
         return adapter != null && adapter.isTransient();
     }
@@ -151,6 +151,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         invocation.setParameter(index, object);
     }
 
+    @Override
     public String title() {
         return adapter == null ? "" : adapter.titleString();
     }
@@ -165,14 +166,17 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         return toString.toString();
     }
 
+    @Override
     public String getParameterName() {
         return objectActionParameter.getName();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return objectActionParameter.getSpecification();
     }
 
+    @Override
     public String getDescription() {
         final String title = adapter == null ? "" : ": " + adapter.titleString();
         final String name = getParameterName();
@@ -182,10 +186,12 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         return name + type + title + " " + objectActionParameter.getDescription();
     }
 
+    @Override
     public String getHelp() {
         return invocation.getHelp();
     }
 
+    @Override
     public String getId() {
         return null;
     }

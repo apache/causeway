@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -37,7 +35,7 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 import org.apache.isis.viewer.dnd.view.content.RootObject;
 import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
-
+import org.apache.log4j.Logger;
 
 public class SaveTransientObjectBorder extends ButtonBorder {
     private static final Logger LOG = Logger.getLogger(SaveTransientObjectBorder.class);
@@ -47,6 +45,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
             super("Discard");
         }
 
+        @Override
         public void execute(final Workspace workspace, final View view, final Location at) {
             close(workspace, view);
         }
@@ -62,6 +61,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
             return canSave(view);
         }
 
+        @Override
         public void execute(final Workspace workspace, final View view, final Location at) {
             save(view);
             // by recreating the view the transient border is removed
@@ -78,9 +78,9 @@ public class SaveTransientObjectBorder extends ButtonBorder {
         // check each of the fields, and capture invalid state if known
         final SaveState saveState = new SaveState();
         checkFields(saveState, view, transientNO);
-        StringBuilder errorBuf = new StringBuilder(saveState.getMessage());
+        final StringBuilder errorBuf = new StringBuilder(saveState.getMessage());
 
-        ObjectSpecification viewContentSpec = view.getContent().getSpecification();
+        final ObjectSpecification viewContentSpec = view.getContent().getSpecification();
         final Consent consent = viewContentSpec.isValid(transientNO);
         if (consent.isVetoed()) {
             if (errorBuf.length() > 0) {
@@ -102,8 +102,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
         }
 
         final View[] subviews = view.getSubviews();
-        for (int i = 0; i < subviews.length; i++) {
-            final View fieldView = subviews[i];
+        for (final View fieldView : subviews) {
             final Content content = fieldView.getContent();
             if (content instanceof RootObject) {
                 checkFields(saveState, fieldView, forObject);
@@ -134,6 +133,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
             return canSave(view);
         }
 
+        @Override
         public void execute(final Workspace workspace, final View view, final Location at) {
             save(view);
             close(workspace, view);

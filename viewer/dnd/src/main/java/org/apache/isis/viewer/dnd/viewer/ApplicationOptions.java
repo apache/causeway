@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer;
 
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -34,7 +33,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
-
 public class ApplicationOptions implements MenuOptions {
     private final ShutdownListener listener;
 
@@ -42,11 +40,12 @@ public class ApplicationOptions implements MenuOptions {
         this.listener = listener;
     }
 
+    @Override
     public void menuOptions(final UserActionSet options) {
         options.add(new UserActionAbstract("About...") {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
-                AboutView dialogView = new AboutView();
+                final AboutView dialogView = new AboutView();
                 final Size windowSize = dialogView.getRequiredSize(new Size());
                 final Size workspaceSize = workspace.getSize();
                 final int x = workspaceSize.getWidth() / 2 - windowSize.getWidth() / 2;
@@ -82,4 +81,3 @@ public class ApplicationOptions implements MenuOptions {
 
     }
 }
-

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.view.Toolkit;
-
 
 public class CalendarConstants {
     public final static String[] days = new String[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
@@ -34,4 +32,3 @@ public class CalendarConstants {
     public final static Text style = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
 
 }
-

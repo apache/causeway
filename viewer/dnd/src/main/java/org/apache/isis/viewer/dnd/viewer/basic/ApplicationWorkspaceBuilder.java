@@ -17,13 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -35,12 +31,12 @@ import org.apache.isis.viewer.dnd.view.Placement;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
-
+import org.apache.log4j.Logger;
 
 /**
- * WorkspaceBuilder builds a workspace view for an ObjectContent view by finding a collection of classes from
- * a field called 'classes' and adding an icon for each element. Similarly, if there is a collection called
- * 'objects' its elements are also added to the display.
+ * WorkspaceBuilder builds a workspace view for an ObjectContent view by finding a collection of classes from a field
+ * called 'classes' and adding an icon for each element. Similarly, if there is a collection called 'objects' its
+ * elements are also added to the display.
  * 
  * <p>
  * During lay-out any icons that have an UNPLACED location (-1, -1) are given a location. Objects of type
@@ -51,8 +47,9 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ApplicationWorkspaceBuilder.class);
     private static final int PADDING = 10;
     public static final Location UNPLACED = new Location(-1, -1);
-    
+
     public static class ApplicationLayout implements Layout {
+        @Override
         public Size getRequiredSize(final View view) {
             return new Size(600, 400);
         }
@@ -61,6 +58,7 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
             return "Simple Workspace";
         }
 
+        @Override
         public void layout(final View view1, final Size maximumSize) {
             final ApplicationWorkspace view = (ApplicationWorkspace) view1;
 
@@ -83,8 +81,7 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
             int yMinimized = maxHeight - 1;
 
             final View windows[] = view.getWindowViews();
-            for (int i = 0; i < windows.length; i++) {
-                final View v = windows[i];
+            for (final View v : windows) {
                 final Size componentSize = v.getRequiredSize(new Size(size));
                 v.setSize(componentSize);
                 if (v instanceof MinimizedView) {
@@ -105,8 +102,7 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
                 v.limitBoundsWithin(maximumSize);
             }
 
-            for (int i = 0; i < windows.length; i++) {
-                final View window = windows[i];
+            for (final View window : windows) {
                 window.layout();
             }
         }
@@ -122,8 +118,7 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
             int maxServiceWidth = 0;
 
             final View views[] = view.getServiceIconViews();
-            for (int i = 0; i < views.length; i++) {
-                final View v = views[i];
+            for (final View v : views) {
                 final Size componentSize = v.getRequiredSize(new Size(size));
                 v.setSize(componentSize);
                 final int height = componentSize.getHeight() + 6;
@@ -157,8 +152,7 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
             int yObject = PADDING;
 
             final View views[] = view.getObjectIconViews();
-            for (int i = 0; i < views.length; i++) {
-                final View v = views[i];
+            for (final View v : views) {
                 final Size componentSize = v.getRequiredSize(new Size(size));
                 v.setSize(componentSize);
                 if (v.getLocation().equals(UNPLACED)) {
@@ -170,24 +164,24 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
             }
         }
     }
-    
+
     @Override
-    public void build(final View view1, Axes axes) {
+    public void build(final View view1, final Axes axes) {
         final ApplicationWorkspace workspace = (ApplicationWorkspace) view1;
 
-        PerspectiveContent perspectiveContent = (PerspectiveContent) view1.getContent();
-        
+        final PerspectiveContent perspectiveContent = (PerspectiveContent) view1.getContent();
+
         // REVIEW is this needed?
         workspace.clearServiceViews();
 
-        PerspectiveEntry perspective = perspectiveContent.getPerspective();
-        for (Object object : perspective.getObjects()) {
-            ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(object);
+        final PerspectiveEntry perspective = perspectiveContent.getPerspective();
+        for (final Object object : perspective.getObjects()) {
+            final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(object);
             workspace.addIconFor(adapter, new Placement(ApplicationWorkspaceBuilder.UNPLACED));
         }
-        
-        for (Object service : perspective.getServices()) {
-            ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(service);
+
+        for (final Object service : perspective.getServices()) {
+            final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(service);
             if (isHidden(adapter)) {
                 continue;
             }
@@ -195,8 +189,8 @@ public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
         }
     }
 
-    private boolean isHidden(ObjectAdapter serviceNO) {
-        ObjectSpecification serviceNoSpec = serviceNO.getSpecification();
+    private boolean isHidden(final ObjectAdapter serviceNO) {
+        final ObjectSpecification serviceNoSpec = serviceNO.getSpecification();
         return serviceNoSpec.isHidden();
     }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.lookup;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -34,23 +33,24 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
-
 public abstract class SelectionListSpecification extends CompositeViewSpecification {
 
     public SelectionListSpecification() {
         builder = new SelectionListBuilder(new ViewFactory() {
+            @Override
             public View createView(final Content content, final Axes axes, final int fieldNumber) {
-                View elementView = createElementView(content);
-                final SelectionListAxis axis = (SelectionListAxis) axes.getAxis(SelectionListAxis.class);
+                final View elementView = createElementView(content);
+                final SelectionListAxis axis = axes.getAxis(SelectionListAxis.class);
                 axes.add(axis);
                 return new SelectionItemSelector(elementView, axis);
             }
 
         });
         addViewDecorator(new CompositeViewDecorator() {
-            public View decorate(View view, Axes axes) {
+            @Override
+            public View decorate(final View view, final Axes axes) {
                 final SelectionListAxis axis = axes.getAxis(SelectionListAxis.class);
-                View list = new SelectionListFocusBorder(view, axis);
+                final View list = new SelectionListFocusBorder(view, axis);
                 return new DisposeOverlay(new BackgroundBorder(new LineBorder(new ScrollBorder(list))), axis);
             }
         });
@@ -58,17 +58,19 @@ public abstract class SelectionListSpecification extends CompositeViewSpecificat
 
     protected abstract View createElementView(Content content);
 
-    public Layout createLayout(Content content, Axes axes) {
+    @Override
+    public Layout createLayout(final Content content, final Axes axes) {
         return new StackLayout(true);
     }
 
-    public boolean canDisplay(ViewRequirement requirement) {
+    @Override
+    public boolean canDisplay(final ViewRequirement requirement) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public String getName() {
         return "Object Drop Down Overlay";
     }
 
 }
-

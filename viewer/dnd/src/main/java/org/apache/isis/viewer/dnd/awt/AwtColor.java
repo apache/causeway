@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.awt;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.util.Properties;
-
 
 public class AwtColor implements Color {
     public static final AwtColor DEBUG_BASELINE = new AwtColor(java.awt.Color.magenta);
@@ -58,8 +56,8 @@ public class AwtColor implements Color {
 
     public AwtColor(final String propertyName, final String defaultColor) {
         this.name = propertyName;
-        color = IsisContext.getConfiguration()
-                .getColor(PROPERTY_STEM + propertyName, java.awt.Color.decode(defaultColor));
+        color =
+            IsisContext.getConfiguration().getColor(PROPERTY_STEM + propertyName, java.awt.Color.decode(defaultColor));
     }
 
     public AwtColor(final String propertyName, final AwtColor defaultColor) {
@@ -67,10 +65,12 @@ public class AwtColor implements Color {
         color = IsisContext.getConfiguration().getColor(PROPERTY_STEM + propertyName, defaultColor.getAwtColor());
     }
 
+    @Override
     public Color brighter() {
         return new AwtColor(color.brighter());
     }
 
+    @Override
     public Color darker() {
         return new AwtColor(color.darker());
     }
@@ -84,8 +84,8 @@ public class AwtColor implements Color {
         return name + " (" + "#" + Integer.toHexString(color.getRGB()) + ")";
     }
 
+    @Override
     public String getName() {
         return name;
     }
 }
-

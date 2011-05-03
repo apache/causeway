@@ -17,20 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.field;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
+import org.apache.log4j.Logger;
 
 public abstract class TextParseableFieldAbstract extends AbstractField {
     private static final Logger LOG = Logger.getLogger(TextField.class);
 
-    protected TextParseableFieldAbstract(Content content, ViewSpecification design) {
+    protected TextParseableFieldAbstract(final Content content, final ViewSpecification design) {
         super(content, design);
     }
 
@@ -38,7 +37,7 @@ public abstract class TextParseableFieldAbstract extends AbstractField {
     protected boolean provideClearCopyPaste() {
         return true;
     }
-    
+
     @Override
     protected void pasteFromClipboard() {
         try {
@@ -67,26 +66,25 @@ public abstract class TextParseableFieldAbstract extends AbstractField {
             LOG.debug("cleared");
         } catch (final Throwable e) {
             LOG.error("invalid paste operation " + e);
-        }    
+        }
     }
-    
+
     @Override
     protected void copyToClipboard() {
         final TextParseableContent content = (TextParseableContent) getContent();
-        ObjectAdapter object = content.getAdapter();
+        final ObjectAdapter object = content.getAdapter();
         if (object != null) {
-            String text = object.titleString();
+            final String text = object.titleString();
             getViewManager().setClipboard(text, String.class);
             LOG.debug("copied " + text);
         }
     }
 
-    
+    @Override
     public boolean isEmpty() {
         final TextParseableContent content = (TextParseableContent) getContent();
         return content.isEmpty();
     }
-
 
     @Override
     public Consent canChangeValue() {
@@ -105,5 +103,3 @@ public abstract class TextParseableFieldAbstract extends AbstractField {
     }
 
 }
-
-

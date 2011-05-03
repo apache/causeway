@@ -54,22 +54,22 @@ import com.google.common.collect.Iterables;
 public abstract class AbstractIsisConcordionScenario {
 
     public static final String DEFAULT_CONCORDION_CSS = "concordion.css";
-    
+
     /**
      * The system property that is searched for to use as the {@link #outputDir() target directory}.
      */
     public static final String DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY = "concordion.output.dir";
-    
+
     /**
-     * The directory used by default if the {@link #DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY default property}
-     * for the {@link #outputDir() target directory} is not specified (and the {@link #outputDir()} method
-     * has not been overridden). 
+     * The directory used by default if the {@link #DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY default property} for the
+     * {@link #outputDir() target directory} is not specified (and the {@link #outputDir()} method has not been
+     * overridden).
      */
     public static final String DEFAULT_OUTPUT_DIR = "/tmp/concordion";
 
     public static final String NS_URI = "http://isis.apache.org/2010/concordion";
     private static final String CMD_EXECUTE = "execute";
-    
+
     private static ThreadLocal<Scenario> scenarioThreadLocal = new ThreadLocal<Scenario>() {
         @Override
         protected Scenario initialValue() {
@@ -88,8 +88,8 @@ public abstract class AbstractIsisConcordionScenario {
     @Test
     public void runScenario() throws Throwable {
         try {
-            Concordion concordion = createConcordion();
-            ResultSummary resultSummary = concordion.process(this);
+            final Concordion concordion = createConcordion();
+            final ResultSummary resultSummary = concordion.process(this);
             resultSummary.print(System.out, this);
             resultSummary.assertIsSatisfied(this);
         } finally {
@@ -98,31 +98,31 @@ public abstract class AbstractIsisConcordionScenario {
     }
 
     private void copyCustomCssIfDefined() {
-        Class<?> cssClass = customCssPackage();
-        String customCss = customCss();
+        final Class<?> cssClass = customCssPackage();
+        final String customCss = customCss();
         if (cssClass == null || customCss == null) {
             return;
         }
-        InputStream cssInputFile = cssClass.getResourceAsStream(customCss);
-        String cssPackageName = cssClass.getPackage().getName();
-        String cssPackagePath = asPath(cssPackageName);
-        String cssOutputFileName = StringUtils.combinePaths(outputDir(), cssPackagePath, customCss);
+        final InputStream cssInputFile = cssClass.getResourceAsStream(customCss);
+        final String cssPackageName = cssClass.getPackage().getName();
+        final String cssPackagePath = asPath(cssPackageName);
+        final String cssOutputFileName = StringUtils.combinePaths(outputDir(), cssPackagePath, customCss);
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             IoUtils.copy(cssInputFile, baos);
             if (baos.size() > 0) {
                 IoUtils.copy(new ByteArrayInputStream(baos.toByteArray()), new FileOutputStream(cssOutputFileName));
             }
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             System.err.printf("failed to copy custom CSS to '%s'\n", customCss, cssOutputFileName);
             return;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             System.err.printf("failed to copy custom CSS '%s' to '%s'\n", customCss, cssOutputFileName);
             return;
         }
     }
 
-    private String asPath(String name) {
+    private String asPath(final String name) {
         return name.replace('.', File.separatorChar);
     }
 
@@ -134,18 +134,15 @@ public abstract class AbstractIsisConcordionScenario {
      * The directory to which the processed HTML should be copied.
      * 
      * <p>
-     * Defaults to the value of the {@value #DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY} system property,
-     * or {@value #DEFAULT_OUTPUT_DIR} if that property is not specified.
+     * Defaults to the value of the {@value #DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY} system property, or
+     * {@value #DEFAULT_OUTPUT_DIR} if that property is not specified.
      * 
      * <p>
-     * Can either be overridden if wish to specify some other mechanism for determining where
-     * the output is generated.
+     * Can either be overridden if wish to specify some other mechanism for determining where the output is generated.
      */
     protected String outputDir() {
-        String concordionOutputDir = System
-                .getProperty(DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY);
-        return StringUtils.isNullOrEmpty(concordionOutputDir)  ? DEFAULT_OUTPUT_DIR
-                : concordionOutputDir;
+        final String concordionOutputDir = System.getProperty(DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY);
+        return StringUtils.isNullOrEmpty(concordionOutputDir) ? DEFAULT_OUTPUT_DIR : concordionOutputDir;
     }
 
     /**
@@ -176,15 +173,14 @@ public abstract class AbstractIsisConcordionScenario {
     }
 
     private Concordion createConcordion() {
-        String targetDir = outputDir();
+        final String targetDir = outputDir();
         if (targetDir == null) {
             throw new IllegalStateException("targetDir() cannot be null");
         }
-        ConcordionBuilder builder =
-            new ConcordionBuilder(){
-        }.withTarget(
-                new FileTarget(new File(targetDir)))
-                .withCommand(NS_URI, CMD_EXECUTE, new IsisExecuteCommandWithHeader());
+        final ConcordionBuilder builder =
+            new ConcordionBuilder() {
+            }.withTarget(new FileTarget(new File(targetDir))).withCommand(NS_URI, CMD_EXECUTE,
+                new IsisExecuteCommandWithHeader());
         return builder.build();
     }
 
@@ -197,7 +193,7 @@ public abstract class AbstractIsisConcordionScenario {
      * 
      * @see {@link #bootstrapIsis(String, String)}
      */
-    public void bootstrapIsis(String configDirectory, DeploymentType deploymentType) {
+    public void bootstrapIsis(final String configDirectory, final DeploymentType deploymentType) {
         getScenario().bootstrapIsis(StringUtils.normalized(configDirectory), deploymentType);
     }
 
@@ -207,7 +203,7 @@ public abstract class AbstractIsisConcordionScenario {
      * @see #bootstrapIsis(String, DeploymentType)
      * @return <tt>boolean</tt> so that XHTML can assert on it.
      */
-    public boolean bootstrapIsis(String configDirectory, String deploymentTypeStr) {
+    public boolean bootstrapIsis(final String configDirectory, final String deploymentTypeStr) {
         bootstrapIsis(configDirectory, DeploymentType.lookup(StringUtils.normalized(deploymentTypeStr)));
         return true; // any runtime exception will propagate
     }
@@ -220,22 +216,22 @@ public abstract class AbstractIsisConcordionScenario {
     // logon as / switch user
     // ////////////////////////////////////////////////////////////////////////
 
-    public boolean logonAs(String userName) {
+    public boolean logonAs(final String userName) {
         getScenario().logonAsOrSwitchUserTo(StringUtils.normalized(userName));
         return true;
     }
 
-    public boolean logonAsWithRoles(String userName, String roleListStr) {
-        List<String> roleList = StringUtils.splitOnCommas(StringUtils.normalized(roleListStr));
+    public boolean logonAsWithRoles(final String userName, final String roleListStr) {
+        final List<String> roleList = StringUtils.splitOnCommas(StringUtils.normalized(roleListStr));
         getScenario().logonAsOrSwitchUserTo(userName, roleList);
         return true;
     }
 
-    public void switchUser(String userName) {
+    public void switchUser(final String userName) {
         logonAs(userName);
     }
 
-    public void switchUserWithRoles(String userName, String roleListStr) {
+    public void switchUserWithRoles(final String userName, final String roleListStr) {
         logonAsWithRoles(userName, roleListStr);
     }
 
@@ -243,25 +239,25 @@ public abstract class AbstractIsisConcordionScenario {
     // date is / time is
     // ////////////////////////////////////////////////////////////////////////
 
-    public boolean usingDateFormat(String dateFormatStr)  {
+    public boolean usingDateFormat(final String dateFormatStr) {
         getScenario().usingDateFormat(dateFormatStr);
         return true;
     }
 
-    public boolean usingTimeFormat(String timeFormatStr)  {
+    public boolean usingTimeFormat(final String timeFormatStr) {
         getScenario().usingTimeFormat(timeFormatStr);
         return true;
     }
 
-    public boolean dateIs(String dateAndTimeStr) throws ScenarioValueException {
+    public boolean dateIs(final String dateAndTimeStr) throws ScenarioValueException {
         return dateAndTimeIs(dateAndTimeStr);
     }
 
-    public boolean timeIs(String dateAndTimeStr) throws ScenarioValueException {
+    public boolean timeIs(final String dateAndTimeStr) throws ScenarioValueException {
         return dateAndTimeIs(dateAndTimeStr);
     }
 
-    private boolean dateAndTimeIs(String dateAndTimeStr) throws ScenarioValueException {
+    private boolean dateAndTimeIs(final String dateAndTimeStr) throws ScenarioValueException {
         return getScenario().dateAndTimeIs(dateAndTimeStr);
     }
 
@@ -269,11 +265,12 @@ public abstract class AbstractIsisConcordionScenario {
     // alias service
     // ////////////////////////////////////////////////////////////////////////
 
-    public boolean aliasService(String aliasAs, String className) {
+    public boolean aliasService(final String aliasAs, final String className) {
         try {
-            getScenario().getAliasRegistry().aliasService(StringUtils.normalized(aliasAs), StringUtils.normalized(className));
+            getScenario().getAliasRegistry().aliasService(StringUtils.normalized(aliasAs),
+                StringUtils.normalized(className));
             return true;
-        } catch (ScenarioValueException e) {
+        } catch (final ScenarioValueException e) {
             return false;
         }
     }
@@ -282,49 +279,53 @@ public abstract class AbstractIsisConcordionScenario {
     // setup object
     // ////////////////////////////////////////////////////////////////////////
 
-    public String setUpObject(String className, String alias, String arg0) {
+    public String setUpObject(final String className, final String alias, final String arg0) {
         return setUpObjectsVarargs(className, alias, arg0);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1) {
         return setUpObjectsVarargs(className, alias, arg0, arg1);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3,
-        String arg4) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3, final String arg4) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3, arg4);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3,
-        String arg4, String arg5) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3, final String arg4, final String arg5) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3, arg4, arg5);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3,
-        String arg4, String arg5, String arg6) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3, final String arg4, final String arg5, final String arg6) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3,
-        String arg4, String arg5, String arg6, String arg7) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3, final String arg4, final String arg5, final String arg6, final String arg7) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3,
-        String arg4, String arg5, String arg6, String arg7, String arg8) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3, final String arg4, final String arg5, final String arg6,
+        final String arg7, final String arg8) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
     }
 
-    public String setUpObject(String className, String alias, String arg0, String arg1, String arg2, String arg3,
-        String arg4, String arg5, String arg6, String arg7, String arg8, String arg9) {
+    public String setUpObject(final String className, final String alias, final String arg0, final String arg1,
+        final String arg2, final String arg3, final String arg4, final String arg5, final String arg6,
+        final String arg7, final String arg8, final String arg9) {
         return setUpObjectsVarargs(className, alias, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
     }
 
@@ -333,11 +334,13 @@ public abstract class AbstractIsisConcordionScenario {
     /**
      * Workaround for OGNL defect.
      */
-    protected String setUpObjectsVarargs(String className, String alias, String... propertyValues) {
-        return setUpObjectsVarargsNormalized(StringUtils.normalized(className), StringUtils.normalized(alias), StringUtils.normalized(propertyValues));
+    protected String setUpObjectsVarargs(final String className, final String alias, final String... propertyValues) {
+        return setUpObjectsVarargsNormalized(StringUtils.normalized(className), StringUtils.normalized(alias),
+            StringUtils.normalized(propertyValues));
     }
 
-    private String setUpObjectsVarargsNormalized(String className, String alias, String... propertyValues) {
+    private String setUpObjectsVarargsNormalized(final String className, final String alias,
+        final String... propertyValues) {
         if (executingInline()) {
             setUpObjects = new SetUpObjectsForConcordion(getScenario().getAliasRegistry(), className, Mode.PERSIST);
             setUpObjects.executeHeader(alias, propertyValues);
@@ -358,71 +361,76 @@ public abstract class AbstractIsisConcordionScenario {
 
     private UsingIsisViewerForConcordion usingIsisViewer;
 
-    public String usingIsisViewer(String onObject, String aliasResultAs, String perform, String usingMember) {
+    public String usingIsisViewer(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, null, null, null);
     }
 
-    public String usingIsisViewerThat(String onObject, String aliasResultAs, String perform, String usingMember,
-        String thatIt) {
+    public String usingIsisViewerThat(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, null, null, null);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String arg0) {
+    public String usingIsisViewerArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String arg0) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String arg0, String arg1) {
+    public String usingIsisViewerArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String arg0, final String arg1) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String arg0, String arg1, String arg2) {
+    public String usingIsisViewerArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String arg0, final String arg1, final String arg2) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String arg0, String arg1, String arg2, String arg3) {
+    public String usingIsisViewerArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String arg0, final String arg1, final String arg2, final String arg3) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2,
             arg3);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String arg0, String arg1, String arg2, String arg3, String arg4) {
+    public String usingIsisViewerArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String arg0, final String arg1, final String arg2, final String arg3,
+        final String arg4) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2,
             arg3, arg4);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String arg0, String arg1, String arg2, String arg3, String arg4, String arg5) {
+    public String usingIsisViewerArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String arg0, final String arg1, final String arg2, final String arg3,
+        final String arg4, final String arg5) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2,
             arg3, arg4, arg5);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String thatIt, String arg0) {
+    public String usingIsisViewerThatArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String thatIt, String arg0, String arg1) {
+    public String usingIsisViewerThatArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0, final String arg1) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String thatIt, String arg0, String arg1, String arg2) {
+    public String usingIsisViewerThatArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0, final String arg1, final String arg2) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1, arg2);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String thatIt, String arg0, String arg1, String arg2, String arg3) {
+    public String usingIsisViewerThatArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0, final String arg1, final String arg2,
+        final String arg3) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1, arg2,
             arg3);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
-        String thatIt, String arg0, String arg1, String arg2, String arg3, String arg4) {
+    public String usingIsisViewerThatArgs(final String onObject, final String aliasResultAs, final String perform,
+        final String usingMember, final String thatIt, final String arg0, final String arg1, final String arg2,
+        final String arg3, final String arg4) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1, arg2,
             arg3, arg4);
     }
@@ -430,22 +438,30 @@ public abstract class AbstractIsisConcordionScenario {
     /**
      * With <tt>protected</tt> visibility so that it can be called by custom methods if required.
      */
-    protected String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0, String... remainingArgs) {
-        return usingIsisViewerThatArgsVarargsNormalized(StringUtils.normalized(onObject), StringUtils.normalized(aliasResultAs), StringUtils.normalized(perform), StringUtils.normalized(usingMember), StringUtils.normalized(thatIt), StringUtils.normalized(arg0),
+    protected String usingIsisViewerThatArgsVarargs(final String onObject, final String aliasResultAs,
+        final String perform, final String usingMember, final String thatIt, final String arg0,
+        final String... remainingArgs) {
+        return usingIsisViewerThatArgsVarargsNormalized(StringUtils.normalized(onObject),
+            StringUtils.normalized(aliasResultAs), StringUtils.normalized(perform),
+            StringUtils.normalized(usingMember), StringUtils.normalized(thatIt), StringUtils.normalized(arg0),
             StringUtils.normalized(remainingArgs));
     }
 
-    private String usingIsisViewerThatArgsVarargsNormalized(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0, String... remainingArgs) {
+    private String usingIsisViewerThatArgsVarargsNormalized(final String onObject, final String aliasResultAs,
+        final String perform, final String usingMember, final String thatIt, final String arg0,
+        final String... remainingArgs) {
         if (executingInline()) {
-            usingIsisViewer = new UsingIsisViewerForConcordion(getScenario().getAliasRegistry(), getScenario().getDeploymentType(), getScenario().getDateParser(), Perform.Mode.TEST);
+            usingIsisViewer =
+                new UsingIsisViewerForConcordion(getScenario().getAliasRegistry(), getScenario().getDeploymentType(),
+                    getScenario().getDateParser(), Perform.Mode.TEST);
             usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, remainingArgs);
             return usingIsisViewer.executeRow(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                 remainingArgs);
         } else {
             if (executingTableHeader()) {
-                usingIsisViewer = new UsingIsisViewerForConcordion(getScenario().getAliasRegistry(), getScenario().getDeploymentType(), getScenario().getDateParser(), Perform.Mode.TEST);
+                usingIsisViewer =
+                    new UsingIsisViewerForConcordion(getScenario().getAliasRegistry(), getScenario()
+                        .getDeploymentType(), getScenario().getDateParser(), Perform.Mode.TEST);
                 return usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                     remainingArgs);
             } else {
@@ -459,38 +475,40 @@ public abstract class AbstractIsisConcordionScenario {
     // check collection
     // ////////////////////////////////////////////////////////////////////////
 
-
-    public String checkCollectionIsEmpty(String listAlias) {
-        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).isEmpty();
+    public String checkCollectionIsEmpty(final String listAlias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(),
+            StringUtils.normalized(listAlias)).isEmpty();
     }
 
-    public String checkCollectionIsNotEmpty(String listAlias) {
-        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).isNotEmpty();
+    public String checkCollectionIsNotEmpty(final String listAlias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(),
+            StringUtils.normalized(listAlias)).isNotEmpty();
     }
-    
-    public String checkCollectionContains(String listAlias, String alias) {
-        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).contains(StringUtils.normalized(alias));
+
+    public String checkCollectionContains(final String listAlias, final String alias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(),
+            StringUtils.normalized(listAlias)).contains(StringUtils.normalized(alias));
     }
-    
-    public String checkCollectionDoesNotContain(String listAlias, String alias) {
-        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).doesNotContain(StringUtils.normalized(alias));
+
+    public String checkCollectionDoesNotContain(final String listAlias, final String alias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(),
+            StringUtils.normalized(listAlias)).doesNotContain(StringUtils.normalized(alias));
     }
-    
-    public String checkCollectionSize(String listAlias, int size) {
-        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).assertSize(size);
+
+    public String checkCollectionSize(final String listAlias, final int size) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(),
+            StringUtils.normalized(listAlias)).assertSize(size);
     }
-    
-    
 
     // ////////////////////////////////////////////////////////////////////////
     // check list
     // ////////////////////////////////////////////////////////////////////////
 
     private CheckListForConcordion checkList;
-    
-    public String checkList(String listAlias, String title) {
-        if(executingTable()) {
-            if(executingTableHeader()) {
+
+    public String checkList(final String listAlias, final String title) {
+        if (executingTable()) {
+            if (executingTableHeader()) {
                 checkList = new CheckListForConcordion(getScenario().getAliasRegistry(), listAlias);
                 return checkList.executeHeader(title);
             } else {
@@ -503,29 +521,29 @@ public abstract class AbstractIsisConcordionScenario {
         }
     }
 
-
     // ////////////////////////////////////////////////////////////////////////
     // getListContents() (for verifyRow)
     // ////////////////////////////////////////////////////////////////////////
-    
-    public Iterable<Object> getListContents(String listAlias) {
-        ObjectAdapter listAdapter = getScenario().getAliasRegistry().getAliased(StringUtils.normalized(listAlias));
-        if(listAdapter == null) {
+
+    public Iterable<Object> getListContents(final String listAlias) {
+        final ObjectAdapter listAdapter =
+            getScenario().getAliasRegistry().getAliased(StringUtils.normalized(listAlias));
+        if (listAdapter == null) {
             return Collections.emptyList();
         }
-        CollectionFacet facet = listAdapter.getSpecification().getFacet(CollectionFacet.class);
-        if(facet==null){
+        final CollectionFacet facet = listAdapter.getSpecification().getFacet(CollectionFacet.class);
+        if (facet == null) {
             return Collections.emptyList();
         }
-        Iterable<ObjectAdapter> objectAdapters = facet.iterable(listAdapter);
-        return Iterables.transform(objectAdapters, new Function<ObjectAdapter, Object>(){
+        final Iterable<ObjectAdapter> objectAdapters = facet.iterable(listAdapter);
+        return Iterables.transform(objectAdapters, new Function<ObjectAdapter, Object>() {
 
             @Override
-            public Object apply(ObjectAdapter from) {
+            public Object apply(final ObjectAdapter from) {
                 return from.getObject();
-            }});
+            }
+        });
     }
-
 
     // ////////////////////////////////////////////////////////////////////////
     // alias items in list
@@ -533,21 +551,24 @@ public abstract class AbstractIsisConcordionScenario {
 
     private AliasItemsInListForConcordion aliasItemsInList;
 
-    public String aliasItemsInList(String listAlias, String title, String aliasAs) {
+    public String aliasItemsInList(final String listAlias, final String title, final String aliasAs) {
         return aliasItemsInList(listAlias, title, null, aliasAs);
     }
 
-    public String aliasItemsInList(String listAlias, String title, String type, String aliasAs) {
-        aliasItemsInList = new AliasItemsInListForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias));
-        return aliasItemsInList.execute(StringUtils.normalized(aliasAs), StringUtils.normalized(title), StringUtils.normalized(type));
+    public String aliasItemsInList(final String listAlias, final String title, final String type, final String aliasAs) {
+        aliasItemsInList =
+            new AliasItemsInListForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias));
+        return aliasItemsInList.execute(StringUtils.normalized(aliasAs), StringUtils.normalized(title),
+            StringUtils.normalized(type));
     }
 
     private boolean executingTableHeader() {
-        return executingTable() && IsisExecuteCommandWithHeader.tableRow.get() == IsisExecuteCommandWithHeader.TableRow.HEADER;
+        return executingTable()
+            && IsisExecuteCommandWithHeader.tableRow.get() == IsisExecuteCommandWithHeader.TableRow.HEADER;
     }
 
     private boolean executingTable() {
-        IsisExecuteCommandWithHeader.Context context = IsisExecuteCommandWithHeader.context.get();
+        final IsisExecuteCommandWithHeader.Context context = IsisExecuteCommandWithHeader.context.get();
         return context == IsisExecuteCommandWithHeader.Context.TABLE;
     }
 

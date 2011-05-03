@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.interaction;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -33,20 +32,22 @@ public abstract class DragImpl extends PointerEvent implements DragEvent {
     /**
      * Indicates the drag has been cancelled; no action should be taken.
      */
+    @Override
     public abstract void cancel(final Viewer viewer);
 
     /**
      * Indicates that the drag state has changed.
      */
+    @Override
     public abstract void drag(final View target, final Location location, final int mods);
 
     /**
      * Indicates the drag has properly ended (the mouse button has been released)
      * 
      */
+    @Override
     public abstract void end(final Viewer viewer);
 
+    @Override
     public abstract View getOverlay();
 }
-
-

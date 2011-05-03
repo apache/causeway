@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -33,7 +32,6 @@ import org.apache.isis.viewer.dnd.view.axis.LabelAxis;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 
-
 public class LabelBorder extends AbstractBorder {
     public static final int NORMAL = 0;
     public static final int DISABLED = 1;
@@ -44,7 +42,7 @@ public class LabelBorder extends AbstractBorder {
         return new LabelBorder(fieldContent, axis, wrappedView);
     }
 
-    public static View createValueParameterLabelBorder(LabelAxis axis, final View wrappedView) {
+    public static View createValueParameterLabelBorder(final LabelAxis axis, final View wrappedView) {
         final ParameterContent fieldContent = (ParameterContent) wrappedView.getContent();
         return new LabelBorder(fieldContent, axis, wrappedView);
     }
@@ -52,9 +50,9 @@ public class LabelBorder extends AbstractBorder {
     private final String label;
     private Text style;
     private Color color;
-    private LabelAxis axis;
+    private final LabelAxis axis;
 
-    protected LabelBorder(FieldContent fieldContent, LabelAxis axis, View wrappedView) {
+    protected LabelBorder(final FieldContent fieldContent, final LabelAxis axis, final View wrappedView) {
         super(wrappedView);
         this.axis = axis;
         if (fieldContent.isEditable().isVetoed()) {
@@ -65,7 +63,7 @@ public class LabelBorder extends AbstractBorder {
             setOptionalStyling();
         }
 
-        String name = fieldContent.getFieldName();
+        final String name = fieldContent.getFieldName();
         this.label = name + ":";
 
         final int width = HPADDING + style.stringWidth(this.label) + HPADDING;
@@ -76,7 +74,7 @@ public class LabelBorder extends AbstractBorder {
         }
     }
 
-    protected LabelBorder(ParameterContent fieldContent, LabelAxis axis, View wrappedView) {
+    protected LabelBorder(final ParameterContent fieldContent, final LabelAxis axis, final View wrappedView) {
         super(wrappedView);
         this.axis = axis;
         if (fieldContent.isRequired()) {
@@ -85,7 +83,7 @@ public class LabelBorder extends AbstractBorder {
             setOptionalStyling();
         }
 
-        String name = fieldContent.getParameterName();
+        final String name = fieldContent.getParameterName();
         this.label = name + ":";
 
         final int width = HPADDING + style.stringWidth(this.label) + HPADDING;

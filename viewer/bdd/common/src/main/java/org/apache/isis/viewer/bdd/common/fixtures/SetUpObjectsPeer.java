@@ -60,7 +60,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
             this(null);
         }
 
-        private SetUpObjectResult(String errorMessage) {
+        private SetUpObjectResult(final String errorMessage) {
             this.errorMessage = errorMessage;
         }
 
@@ -94,8 +94,8 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
     // constructor
     // ///////////////////////////////////////////////////////////////////////
 
-    public SetUpObjectsPeer(AliasRegistry aliasRegistry, final String className, final SetUpObjectsPeer.Mode mode,
-        final CellBinding aliasBinding) {
+    public SetUpObjectsPeer(final AliasRegistry aliasRegistry, final String className,
+        final SetUpObjectsPeer.Mode mode, final CellBinding aliasBinding) {
         super(aliasRegistry, aliasBinding);
 
         this.spec = loadSpecIfValid(className);
@@ -128,7 +128,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
     // header
     // ///////////////////////////////////////////////////////////////////////
 
-    public PropertyResult definePropertyOrAlias(String heading, int colNum) {
+    public PropertyResult definePropertyOrAlias(final String heading, final int colNum) {
 
         OneToOneAssociation otoa = null;
 
@@ -170,13 +170,13 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
      * FitNesse, on the other hand, uses a more fine-grained approach, calling the underlying methods.
      */
     public void createObject() throws ScenarioBoundValueException {
-        ObjectAdapter adapter = createInstance();
+        final ObjectAdapter adapter = createInstance();
 
         for (int colNum = 0; colNum < getProperties().size(); colNum++) {
-            SetUpObjectResult result = setUpProperty(adapter, colNum);
+            final SetUpObjectResult result = setUpProperty(adapter, colNum);
 
             if (!result.isHandled()) {
-                CellBinding cellBinding = getCellBindings().get(colNum);
+                final CellBinding cellBinding = getCellBindings().get(colNum);
                 throw ScenarioBoundValueException.current(cellBinding, result.getErrorMessage());
             }
         }
@@ -198,7 +198,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         return getPersistenceSession().createInstance(spec);
     }
 
-    public SetUpObjectResult setUpProperty(ObjectAdapter adapter, int colNum) {
+    public SetUpObjectResult setUpProperty(final ObjectAdapter adapter, final int colNum) {
 
         final OneToOneAssociation association = getProperties().get(colNum);
         if (association == null) {
@@ -259,7 +259,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         return SetUpObjectResult.OK;
     }
 
-    public void persistIfNecessary(ObjectAdapter adapter) {
+    public void persistIfNecessary(final ObjectAdapter adapter) {
         if (mode.isPersist()) {
             // xactn mgmt now done by PersistenceSession#makePersistent()
             // getTransactionManager().startTransaction();
@@ -268,21 +268,21 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         }
     }
 
-    public void alias(ObjectAdapter adapter) {
+    public void alias(final ObjectAdapter adapter) {
         final String alias = aliasFor(adapter);
         getAliasRegistry().aliasAs(alias, adapter);
     }
 
-    public String aliasFor(ObjectAdapter adapter) {
+    public String aliasFor(final ObjectAdapter adapter) {
         if (alias != null) {
             return alias;
         } else {
-            String specShortName = StringUtils.lowerLeading(spec.getShortIdentifier());
+            final String specShortName = StringUtils.lowerLeading(spec.getShortIdentifier());
             return getAliasRegistry().aliasPrefixedAs(specShortName, adapter);
         }
     }
 
-    public void forEachAssociation(AssociationVisitor visitor) {
+    public void forEachAssociation(final AssociationVisitor visitor) {
         for (int colNum = 0; colNum < getProperties().size(); colNum++) {
             final OneToOneAssociation association = getProperties().get(colNum);
             if (association != null) {
@@ -291,11 +291,11 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         }
     }
 
-    public boolean addPropertyValueOrAlias(String propertyValue) {
+    public boolean addPropertyValueOrAlias(final String propertyValue) {
         cellTextList.add(propertyValue);
 
         // capture alias if just added
-        int aliasColumn1based = getAliasBinding().getColumn() + 1;
+        final int aliasColumn1based = getAliasBinding().getColumn() + 1;
         if (cellTextList.size() == aliasColumn1based) {
             alias = propertyValue;
         }

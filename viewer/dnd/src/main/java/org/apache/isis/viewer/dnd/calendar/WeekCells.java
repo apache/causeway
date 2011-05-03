@@ -17,43 +17,45 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.dnd.calendar;
 
 import java.util.Calendar;
 
-
 public class WeekCells extends Cells {
 
-    public WeekCells(Cells replacing) {
+    public WeekCells(final Cells replacing) {
         super(replacing);
     }
 
+    @Override
     public int defaultColumns() {
         return 4;
     }
 
+    @Override
     public int defaultRows() {
         return 3;
     }
 
-    public void add(int interval) {
+    @Override
+    public void add(final int interval) {
         add(date, interval);
     }
 
-    public void add(Calendar d, int interval) {
+    public void add(final Calendar d, final int interval) {
         d.add(Calendar.DAY_OF_MONTH, 7 * interval);
     }
 
-    public String title(int cell) {
-        Calendar d = (Calendar) date.clone();
+    @Override
+    public String title(final int cell) {
+        final Calendar d = (Calendar) date.clone();
         add(d, cell);
-        String displayName = d.get(Calendar.DAY_OF_MONTH) + " " + monthFormat.format(d.getTime());
+        final String displayName = d.get(Calendar.DAY_OF_MONTH) + " " + monthFormat.format(d.getTime());
         return "w/b " + displayName;
     }
 
-    protected int period(Calendar forDate) {
+    @Override
+    protected int period(final Calendar forDate) {
         return forDate.get(Calendar.YEAR) * 12 - forDate.get(Calendar.WEEK_OF_YEAR);
     }
 }
-
