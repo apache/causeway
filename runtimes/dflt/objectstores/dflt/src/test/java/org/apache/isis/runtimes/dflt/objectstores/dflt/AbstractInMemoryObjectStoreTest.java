@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import java.util.Collections;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-
 
 public abstract class AbstractInMemoryObjectStoreTest extends ProxyJunit3TestCase {
     protected InMemoryObjectStore store;
@@ -45,7 +43,6 @@ public abstract class AbstractInMemoryObjectStoreTest extends ProxyJunit3TestCas
         super.tearDown();
     }
 
-
     protected void resetIdentityMap() {
         IsisContext.getPersistenceSession().testReset();
     }
@@ -53,8 +50,7 @@ public abstract class AbstractInMemoryObjectStoreTest extends ProxyJunit3TestCas
     protected void addObjectToStore(final ObjectAdapter object) {
         final PersistenceCommand command = store.createCreateObjectCommand(object);
         assertEquals(object, command.onObject());
-        store.execute(Collections.<PersistenceCommand>singletonList(command));
+        store.execute(Collections.<PersistenceCommand> singletonList(command));
     }
 
 }
-

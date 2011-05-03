@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
@@ -38,6 +35,12 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemoryCreateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemoryDestroyObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemorySaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
@@ -54,13 +57,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemoryCreateObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemoryDestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemorySaveObjectCommand;
-
+import org.apache.log4j.Logger;
 
 public class InMemoryObjectStore implements ObjectStore {
 
@@ -87,69 +84,71 @@ public class InMemoryObjectStore implements ObjectStore {
 
     @Override
     public void open() {
-        // TODO: all a bit hacky, but is to keep tests running.  Should really sort out using mocks.
-        InMemoryPersistenceSessionFactory inMemoryPersistenceSessionFactory = getInMemoryPersistenceSessionFactory();
-        persistedObjects = inMemoryPersistenceSessionFactory == null ? null : inMemoryPersistenceSessionFactory.getPersistedObjects();
+        // TODO: all a bit hacky, but is to keep tests running. Should really sort out using mocks.
+        final InMemoryPersistenceSessionFactory inMemoryPersistenceSessionFactory =
+            getInMemoryPersistenceSessionFactory();
+        persistedObjects =
+            inMemoryPersistenceSessionFactory == null ? null : inMemoryPersistenceSessionFactory.getPersistedObjects();
         if (persistedObjects == null) {
-        	if (inMemoryPersistenceSessionFactory != null) {
-        		persistedObjects = inMemoryPersistenceSessionFactory.createPersistedObjects();
-        	} else {
-        		persistedObjects = new ObjectStorePersistedObjectsDefault();
-        	}
+            if (inMemoryPersistenceSessionFactory != null) {
+                persistedObjects = inMemoryPersistenceSessionFactory.createPersistedObjects();
+            } else {
+                persistedObjects = new ObjectStorePersistedObjectsDefault();
+            }
         } else {
             recreateAdapters();
         }
     }
 
     protected void recreateAdapters() {
-        for(ObjectSpecification noSpec: persistedObjects.specifications()) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("recreating adapters for: " + noSpec.getFullIdentifier());
-			}
-        	recreateAdapters(persistedObjects.instancesFor(noSpec));
+        for (final ObjectSpecification noSpec : persistedObjects.specifications()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("recreating adapters for: " + noSpec.getFullIdentifier());
+            }
+            recreateAdapters(persistedObjects.instancesFor(noSpec));
         }
     }
 
-	private void recreateAdapters(ObjectStoreInstances objectStoreInstances) {
-		for (Oid oid : objectStoreInstances.getOids()) {
+    private void recreateAdapters(final ObjectStoreInstances objectStoreInstances) {
+        for (final Oid oid : objectStoreInstances.getOids()) {
 
-		    // it's important not to "touch" the pojo, not even in log messages.  That's because 
-		    // the toString() will cause bytecode enhancement to try to resolve references.
+            // it's important not to "touch" the pojo, not even in log messages. That's because
+            // the toString() will cause bytecode enhancement to try to resolve references.
 
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("recreating adapter: oid=" + oid);
-			}
-		    Object pojo = objectStoreInstances.getPojo(oid);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("recreating adapter: oid=" + oid);
+            }
+            final Object pojo = objectStoreInstances.getPojo(oid);
 
-		    ObjectAdapter existingAdapterLookedUpByPojo = getAdapterManager().getAdapterFor(pojo);
-		    if (existingAdapterLookedUpByPojo != null) {
-		    	// this could happen if we rehydrate a persisted object that depends on another persisted object
-		    	// not yet rehydrated.
-		    	getAdapterManager().removeAdapter(existingAdapterLookedUpByPojo);
-		    }
+            final ObjectAdapter existingAdapterLookedUpByPojo = getAdapterManager().getAdapterFor(pojo);
+            if (existingAdapterLookedUpByPojo != null) {
+                // this could happen if we rehydrate a persisted object that depends on another persisted object
+                // not yet rehydrated.
+                getAdapterManager().removeAdapter(existingAdapterLookedUpByPojo);
+            }
 
-		    ObjectAdapter existingAdapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
-		    if (existingAdapterLookedUpByOid != null) {
-		        throw new IsisException("A mapping already exists for " + oid  + ": " + existingAdapterLookedUpByOid);
-		    }
+            final ObjectAdapter existingAdapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
+            if (existingAdapterLookedUpByOid != null) {
+                throw new IsisException("A mapping already exists for " + oid + ": " + existingAdapterLookedUpByOid);
+            }
 
-		    ObjectAdapter recreatedAdapter = getHydrator().recreateAdapter(oid, pojo);
-		    
-		    Version version = objectStoreInstances.getVersion(oid);
-		    recreatedAdapter.setOptimisticLock(version);
-		}
-	}
+            final ObjectAdapter recreatedAdapter = getHydrator().recreateAdapter(oid, pojo);
 
-	@Override
-    public void close() {
-        final InMemoryPersistenceSessionFactory inMemoryPersistenceSessionFactory = getInMemoryPersistenceSessionFactory();
-        // TODO: this is hacky, only here to keep tests running.  Should sort out using mocks
-        if (inMemoryPersistenceSessionFactory != null) {
-        	inMemoryPersistenceSessionFactory.attach(getPersistenceSession(), persistedObjects);
-        	persistedObjects = null;
-        } 
+            final Version version = objectStoreInstances.getVersion(oid);
+            recreatedAdapter.setOptimisticLock(version);
+        }
     }
 
+    @Override
+    public void close() {
+        final InMemoryPersistenceSessionFactory inMemoryPersistenceSessionFactory =
+            getInMemoryPersistenceSessionFactory();
+        // TODO: this is hacky, only here to keep tests running. Should sort out using mocks
+        if (inMemoryPersistenceSessionFactory != null) {
+            inMemoryPersistenceSessionFactory.attach(getPersistenceSession(), persistedObjects);
+            persistedObjects = null;
+        }
+    }
 
     // ///////////////////////////////////////////////////////
     // fixtures
@@ -168,20 +167,24 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void reset() {}
+    public void reset() {
+    }
 
     // ///////////////////////////////////////////////////////
     // Transaction management
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void startTransaction() {}
+    public void startTransaction() {
+    }
 
     @Override
-    public void endTransaction() {}
+    public void endTransaction() {
+    }
 
     @Override
-    public void abortTransaction() {}
+    public void abortTransaction() {
+    }
 
     // ///////////////////////////////////////////////////////
     // Command Creation
@@ -211,7 +214,7 @@ public class InMemoryObjectStore implements ObjectStore {
         if (LOG.isInfoEnabled()) {
             LOG.info("execute commands");
         }
-        for (PersistenceCommand command : commands) {
+        for (final PersistenceCommand command : commands) {
             command.execute(null);
         }
         LOG.info("end execution");
@@ -223,7 +226,7 @@ public class InMemoryObjectStore implements ObjectStore {
 
     @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
-            ObjectPersistenceException {
+        ObjectPersistenceException {
         LOG.debug("getObject " + oid);
         final ObjectStoreInstances ins = instancesFor(hint);
         final ObjectAdapter object = ins.retrieveObject(oid);
@@ -238,27 +241,27 @@ public class InMemoryObjectStore implements ObjectStore {
     @Override
     public void resolveImmediately(final ObjectAdapter adapter) throws ObjectPersistenceException {
 
-        // this is a nasty hack, but even though this method is called by 
+        // this is a nasty hack, but even though this method is called by
         // PersistenceSessionObjectStore#resolveImmediately which has a check,
-    	// seem to be hitting a race condition with another thread that is resolving the object
-    	// before I get here.
-    	// as belt-n-braces, have also made PSOS#resolveImmediately synchronize on
-    	// the object being resolved.
+        // seem to be hitting a race condition with another thread that is resolving the object
+        // before I get here.
+        // as belt-n-braces, have also made PSOS#resolveImmediately synchronize on
+        // the object being resolved.
         if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("resolve " + adapter);
             setupReferencedObjects(adapter);
-            
-        	PersistorUtil.start(adapter, ResolveState.RESOLVING);
-        	PersistorUtil.end(adapter); // moves to RESOLVED
+
+            PersistorUtil.start(adapter, ResolveState.RESOLVING);
+            PersistorUtil.end(adapter); // moves to RESOLVED
         } else {
-        	LOG.warn("resolveImmediately ignored, " +
-        			 "adapter's current state is: " + adapter.getResolveState() + 
-        			 " ; oid: " + adapter.getOid());
+            LOG.warn("resolveImmediately ignored, " + "adapter's current state is: " + adapter.getResolveState()
+                + " ; oid: " + adapter.getOid());
         }
     }
 
     @Override
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field)
+        throws ObjectPersistenceException {
         final ObjectAdapter reference = field.get(object);
         PersistorUtil.start(reference, ResolveState.RESOLVING);
         PersistorUtil.end(reference);
@@ -269,7 +272,7 @@ public class InMemoryObjectStore implements ObjectStore {
     }
 
     private void setupReferencedObjects(final ObjectAdapter adapter, final Vector all) {
-    	// TODO: is this code needed, then?  Looks like it isn't...
+        // TODO: is this code needed, then? Looks like it isn't...
         if (true) {
             return;
         }
@@ -305,20 +308,17 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) 
-    throws ObjectPersistenceException,
-            UnsupportedFindException {
+    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) throws ObjectPersistenceException,
+        UnsupportedFindException {
 
-    	if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
-    		throw new IllegalArgumentException(MessageFormat.format(
-							"Provided PersistenceQuery not supported; was {0}; " +
-							"the in-memory object store only supports {1}",
-							persistenceQuery.getClass().getName(), 
-							PersistenceQueryBuiltIn.class.getName()));
-    	}
-		PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
-    	
-    	final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
+        if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
+            throw new IllegalArgumentException(MessageFormat.format(
+                "Provided PersistenceQuery not supported; was {0}; " + "the in-memory object store only supports {1}",
+                persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));
+        }
+        final PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
+
+        final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
         final ObjectSpecification spec = persistenceQuery.getSpecification();
         findInstances(spec, builtIn, instances);
         return toInstancesArray(instances);
@@ -329,7 +329,7 @@ public class InMemoryObjectStore implements ObjectStore {
         if (instancesFor(spec).hasInstances()) {
             return true;
         }
-        
+
         // includeSubclasses
         final List<ObjectSpecification> subclasses = spec.subclasses();
         for (int i = 0; i < subclasses.size(); i++) {
@@ -337,15 +337,13 @@ public class InMemoryObjectStore implements ObjectStore {
                 return true;
             }
         }
-        
+
         return false;
     }
 
-    private void findInstances(
-            final ObjectSpecification spec,
-            final PersistenceQueryBuiltIn persistenceQuery,
-            final Vector<ObjectAdapter> foundInstances) {
-    	
+    private void findInstances(final ObjectSpecification spec, final PersistenceQueryBuiltIn persistenceQuery,
+        final Vector<ObjectAdapter> foundInstances) {
+
         instancesFor(spec).findInstancesAndAdd(persistenceQuery, foundInstances);
 
         // include subclasses
@@ -353,7 +351,7 @@ public class InMemoryObjectStore implements ObjectStore {
         for (int i = 0; i < subclasses.size(); i++) {
             findInstances(subclasses.get(i), persistenceQuery, foundInstances);
         }
-        
+
     }
 
     private ObjectAdapter[] toInstancesArray(final Vector<ObjectAdapter> instances) {
@@ -374,7 +372,6 @@ public class InMemoryObjectStore implements ObjectStore {
     // Services
     // ///////////////////////////////////////////////////////
 
-
     @Override
     public Oid getOidForService(final String name) {
         return persistedObjects.getService(name);
@@ -382,11 +379,11 @@ public class InMemoryObjectStore implements ObjectStore {
 
     @Override
     public void registerService(final String name, final Oid oid) {
-    	persistedObjects.registerService(name, oid);
+        persistedObjects.registerService(name, oid);
     }
 
     private ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
-    	return persistedObjects.instancesFor(spec);
+        return persistedObjects.instancesFor(spec);
     }
 
     // ///////////////////////////////////////////////////////
@@ -401,7 +398,7 @@ public class InMemoryObjectStore implements ObjectStore {
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Domain Objects");
-        for(final ObjectSpecification spec: persistedObjects.specifications()) {
+        for (final ObjectSpecification spec : persistedObjects.specifications()) {
             debug.appendln(spec.getFullIdentifier());
             final ObjectStoreInstances instances = instancesFor(spec);
             instances.debugData(debug);
@@ -465,7 +462,7 @@ public class InMemoryObjectStore implements ObjectStore {
         recursiveElements.addElement(object);
 
         // work through all its fields
-        List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
 
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
@@ -497,9 +494,6 @@ public class InMemoryObjectStore implements ObjectStore {
         s.append(DebugUtils.indentString(4) + "+--");
     }
 
-    
-
-    
     // ///////////////////////////////////////////////////////
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////
@@ -507,12 +501,11 @@ public class InMemoryObjectStore implements ObjectStore {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject the session into not only
-     * this object but also the {@link ObjectStoreInstances} that do the work.
+     * The alternative design would be to laboriously inject the session into not only this object but also the
+     * {@link ObjectStoreInstances} that do the work.
      */
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
@@ -521,12 +514,11 @@ public class InMemoryObjectStore implements ObjectStore {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject the session into not only
-     * this object but also the {@link ObjectStoreInstances} that do the work.
+     * The alternative design would be to laboriously inject the session into not only this object but also the
+     * {@link ObjectStoreInstances} that do the work.
      */
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
@@ -535,30 +527,28 @@ public class InMemoryObjectStore implements ObjectStore {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject the session into not only
-     * this object but also the {@link ObjectStoreInstances} that do the work.
+     * The alternative design would be to laboriously inject the session into not only this object but also the
+     * {@link ObjectStoreInstances} that do the work.
      */
     protected PersistenceSessionHydrator getHydrator() {
         return getPersistenceSession();
     }
 
-    
-	/**
-	 * Downcasts the {@link PersistenceSessionFactory} to {@link InMemoryPersistenceSessionFactory}.
-	 */
-	protected InMemoryPersistenceSessionFactory getInMemoryPersistenceSessionFactory() {
-		PersistenceSessionFactory persistenceSessionFactory = getPersistenceSession().getPersistenceSessionFactory();
+    /**
+     * Downcasts the {@link PersistenceSessionFactory} to {@link InMemoryPersistenceSessionFactory}.
+     */
+    protected InMemoryPersistenceSessionFactory getInMemoryPersistenceSessionFactory() {
+        final PersistenceSessionFactory persistenceSessionFactory =
+            getPersistenceSession().getPersistenceSessionFactory();
 
         if (!(persistenceSessionFactory instanceof InMemoryPersistenceSessionFactory)) {
-        	// for testing support
+            // for testing support
             return null;
         }
         return (InMemoryPersistenceSessionFactory) persistenceSessionFactory;
-	}
-
+    }
 
 }

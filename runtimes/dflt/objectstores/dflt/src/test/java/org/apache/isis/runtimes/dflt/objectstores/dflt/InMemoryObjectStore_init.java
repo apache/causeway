@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-
 
 public class InMemoryObjectStore_init extends ProxyJunit3TestCase {
     private InMemoryObjectStore store;
@@ -33,12 +31,8 @@ public class InMemoryObjectStore_init extends ProxyJunit3TestCase {
         store.open();
     }
 
-
     public void testStartsUpInUnitializedSate() throws Exception {
         assertFalse(store.isFixturesInstalled());
     }
 
-
-
 }
-

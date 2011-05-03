@@ -17,25 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-
 public interface DataManager {
 
     void shutdown();
 
-    
     /**
      * Return data for all instances that match the pattern.
      */
     public ObjectDataVector getInstances(final ObjectData pattern);
-    
-    
+
     /**
      * Return the number of instances that match the specified data
      */
@@ -43,8 +39,6 @@ public interface DataManager {
 
     public Data loadData(final SerialOid oid);
 
-    
-    
     /**
      * Save the data for an object and adds the reference to a list of instances
      */

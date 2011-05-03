@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.internal;
 
 import java.util.ArrayList;
@@ -57,15 +56,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.runtimes.embedded.EmbeddedContext;
 
 /**
- * Acts as a bridge between the {@link RuntimeContext} (as used internally
- * within the meta-model) and the {@link EmbeddedContext} 
- * provided by the embedder (which deals only with pojos).
+ * Acts as a bridge between the {@link RuntimeContext} (as used internally within the meta-model) and the
+ * {@link EmbeddedContext} provided by the embedder (which deals only with pojos).
  */
 public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract implements ApplicationScopedComponent {
 
-	private final List<Object> services;
-	private List<ObjectAdapter> serviceAdapters;
-	private ServicesInjector servicesInjector;
+    private final List<Object> services;
+    private List<ObjectAdapter> serviceAdapters;
+    private ServicesInjector servicesInjector;
     private final AdapterMap adapterMap;
     private final ObjectInstantiator objectInstantiator;
     private final ObjectDirtier objectDirtier;
@@ -75,85 +73,86 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
     private final DomainObjectServices domainObjectServices;
     private final QuerySubmitter querySubmitter;
     private final DependencyInjector dependencyInjector;
-    
-	public RuntimeContextForEmbeddedMetaModel(
-			final EmbeddedContext context, 
-			final List<Object> services) {
-		this.services = services;
-		this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
-		    @Override
-		    public AuthenticationSession getAuthenticationSession() {
-		        return context.getAuthenticationSession();
-		    }
+
+    public RuntimeContextForEmbeddedMetaModel(final EmbeddedContext context, final List<Object> services) {
+        this.services = services;
+        this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
+            @Override
+            public AuthenticationSession getAuthenticationSession() {
+                return context.getAuthenticationSession();
+            }
         };
         this.querySubmitter = new QuerySubmitterAbstract() {
             @Override
-            public List<ObjectAdapter> allMatchingQuery(Query query) {
+            public List<ObjectAdapter> allMatchingQuery(final Query query) {
                 return wrap(context.allMatchingQuery(query));
             }
+
             @Override
-            public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
+            public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
                 return getAdapterMap().adapterFor(context.firstMatchingQuery(query));
             }
 
         };
-		this.adapterMap = new AdapterMapAbstract() {
-	        @Override
-	        public ObjectAdapter adapterFor(Object domainObject) {
-	            ObjectSpecification domainObjectSpec = getSpecificationLookup().loadSpecification(domainObject.getClass());
-	            PersistenceState persistenceState = context.getPersistenceState(domainObject);
-	            return new StandaloneAdapter(domainObjectSpec, domainObject, persistenceState);
-	        }
+        this.adapterMap = new AdapterMapAbstract() {
+            @Override
+            public ObjectAdapter adapterFor(final Object domainObject) {
+                final ObjectSpecification domainObjectSpec =
+                    getSpecificationLookup().loadSpecification(domainObject.getClass());
+                final PersistenceState persistenceState = context.getPersistenceState(domainObject);
+                return new StandaloneAdapter(domainObjectSpec, domainObject, persistenceState);
+            }
 
-	        @Override
-	        public ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
-	            return adapterFor(domainObject);
-	        }
-            
-	        @Override
-            public ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent) {
+            @Override
+            public ObjectAdapter adapterFor(final Object domainObject, final ObjectAdapter ownerAdapter,
+                final IdentifiedHolder identifiedHolder) {
+                return adapterFor(domainObject);
+            }
+
+            @Override
+            public ObjectAdapter adapterForAggregated(final Object domainObject, final ObjectAdapter parent) {
                 return adapterFor(domainObject);
             };
 
-	        @Override
-	        public ObjectAdapter getAdapterFor(Object domainObject) {
-	            return adapterFor(domainObject);
-	        }
-	    };
-        this.objectInstantiator = new ObjectInstantiatorAbstract() {
-            
             @Override
-            public Object instantiate(Class<?> type) throws ObjectInstantiationException {
+            public ObjectAdapter getAdapterFor(final Object domainObject) {
+                return adapterFor(domainObject);
+            }
+        };
+        this.objectInstantiator = new ObjectInstantiatorAbstract() {
+
+            @Override
+            public Object instantiate(final Class<?> type) throws ObjectInstantiationException {
                 return context.instantiate(type);
             }
         };
-        
+
         this.objectPersistor = new ObjectPersistorAbstract() {
-            
+
             @Override
-            public void makePersistent(ObjectAdapter adapter) {
+            public void makePersistent(final ObjectAdapter adapter) {
                 context.makePersistent(adapter.getObject());
             }
 
             @Override
-            public void remove(ObjectAdapter adapter) {
+            public void remove(final ObjectAdapter adapter) {
                 context.remove(adapter.getObject());
             }
-            
+
         };
-		this.objectDirtier = new ObjectDirtierAbstract(){
+        this.objectDirtier = new ObjectDirtierAbstract() {
 
-	        @Override
-	        public void objectChanged(ObjectAdapter adapter) {
-	            context.objectChanged(adapter.getObject());
-	        }
+            @Override
+            public void objectChanged(final ObjectAdapter adapter) {
+                context.objectChanged(adapter.getObject());
+            }
 
-	        @Override
-	        public void objectChanged(Object object) {
-	            context.objectChanged(object);
-	        }
-	        
-	    };
+            @Override
+            public void objectChanged(final Object object) {
+                context.objectChanged(object);
+            }
+
+        };
 
         this.servicesProvider = new ServicesProviderAbstract() {
             @Override
@@ -162,43 +161,41 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
             }
         };
 
-
-	    this.domainObjectServices = new DomainObjectServicesAbstract() {
-
-	        @Override
-	        public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
-	            Object domainObject = spec.createObject(CreationMode.INITIALIZE);
-	            return adapterMap.adapterFor(domainObject);
-	        }
+        this.domainObjectServices = new DomainObjectServicesAbstract() {
 
             @Override
-            public ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent) {
-                throw new UnsupportedOperationException(
-                    "Not yet supported by this implementation of RuntimeContext");
+            public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
+                final Object domainObject = spec.createObject(CreationMode.INITIALIZE);
+                return adapterMap.adapterFor(domainObject);
             }
 
-	        @Override
-	        public void resolve(Object parent) {
-	            context.resolve(parent);
-	        }
+            @Override
+            public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
+                throw new UnsupportedOperationException("Not yet supported by this implementation of RuntimeContext");
+            }
 
-	        @Override
-	        public void resolve(Object parent, Object field) {
-	            context.resolve(parent, field);
-	        }
+            @Override
+            public void resolve(final Object parent) {
+                context.resolve(parent);
+            }
 
-	        @Override
-	        public boolean flush() {
-	            return context.flush();
-	        }
-	        
-	        @Override
-	        public void commit() {
-	            context.commit();
-	        }
+            @Override
+            public void resolve(final Object parent, final Object field) {
+                context.resolve(parent, field);
+            }
 
-	        @Override
-            public String getProperty(String name) {
+            @Override
+            public boolean flush() {
+                return context.flush();
+            }
+
+            @Override
+            public void commit() {
+                context.commit();
+            }
+
+            @Override
+            public String getProperty(final String name) {
                 return RuntimeContextForEmbeddedMetaModel.this.getProperty(name);
             }
 
@@ -208,71 +205,67 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
             }
 
             @Override
-            public void informUser(String message) {
+            public void informUser(final String message) {
                 context.informUser(message);
             }
 
             @Override
-            public void warnUser(String message) {
+            public void warnUser(final String message) {
                 context.warnUser(message);
             }
 
             @Override
-            public void raiseError(String message) {
+            public void raiseError(final String message) {
                 context.raiseError(message);
             }
         };
         this.dependencyInjector = new DependencyInjectorAbstract() {
             @Override
-            public void injectDependenciesInto(Object domainObject) {
+            public void injectDependenciesInto(final Object domainObject) {
                 if (servicesInjector == null) {
                     throw new IllegalStateException("must setContainer before using this method");
                 }
                 servicesInjector.injectDependencies(domainObject);
             }
         };
-	}
+    }
 
+    // ///////////////////////////////////////////
+    // init, shutdown
+    // ///////////////////////////////////////////
 
-	/////////////////////////////////////////////
-	// init, shutdown
-	/////////////////////////////////////////////
-
-	@Override
+    @Override
     public void init() {
-		this.serviceAdapters = adaptersFor(services);
-		
-		servicesInjector = new ServicesInjectorDefault();
-		servicesInjector.setContainer(getContainer());
-		servicesInjector.setServices(services);
-	}
-	
+        this.serviceAdapters = adaptersFor(services);
 
-	@Override
+        servicesInjector = new ServicesInjectorDefault();
+        servicesInjector.setContainer(getContainer());
+        servicesInjector.setServices(services);
+    }
+
+    @Override
     public void shutdown() {
-		// does nothing
-	}
+        // does nothing
+    }
 
+    private List<ObjectAdapter> adaptersFor(final List<Object> services) {
+        final List<ObjectAdapter> serviceAdapters = new ArrayList<ObjectAdapter>();
+        for (final Object service : services) {
+            final ObjectSpecification spec = getSpecificationLookup().loadSpecification(service.getClass());
+            serviceAdapters.add(new ServiceAdapter(spec, service));
+        }
+        return Collections.unmodifiableList(serviceAdapters);
+    }
 
-	private List<ObjectAdapter> adaptersFor(List<Object> services) {
-		List<ObjectAdapter> serviceAdapters = new ArrayList<ObjectAdapter>();
-		for(Object service: services) {
-			ObjectSpecification spec = getSpecificationLookup().loadSpecification(service.getClass());
-			serviceAdapters.add(new ServiceAdapter(spec, service));
-		}
-		return Collections.unmodifiableList(serviceAdapters);
-	}
+    // ///////////////////////////////////////////
+    // Components
+    // ///////////////////////////////////////////
 
-	
-	/////////////////////////////////////////////
-	// Components
-	/////////////////////////////////////////////
+    @Override
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
 
-	@Override
-	public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-	    return authenticationSessionProvider;
-	}
-	
     @Override
     public AdapterMap getAdapterMap() {
         return adapterMap;
@@ -282,7 +275,7 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
     public ObjectInstantiator getObjectInstantiator() {
         return objectInstantiator;
     }
-    
+
     @Override
     public ObjectDirtier getObjectDirtier() {
         return objectDirtier;
@@ -307,33 +300,30 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
     }
-	
 
     @Override
     public ObjectPersistor getObjectPersistor() {
         return objectPersistor;
     }
 
-	
-	/////////////////////////////////////////////
-	// firstMatchingQuery
-	/////////////////////////////////////////////
+    // ///////////////////////////////////////////
+    // firstMatchingQuery
+    // ///////////////////////////////////////////
 
-	private List<ObjectAdapter> wrap(List<?> pojos) {
-		List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
-		for(Object pojo: pojos) {
-			adapters.add(getAdapterMap().adapterFor(pojo));
-		}
-		return adapters;
-	}
+    private List<ObjectAdapter> wrap(final List<?> pojos) {
+        final List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
+        for (final Object pojo : pojos) {
+            adapters.add(getAdapterMap().adapterFor(pojo));
+        }
+        return adapters;
+    }
 
+    // ///////////////////////////////////////////
+    // getServices
+    // ///////////////////////////////////////////
 
-	/////////////////////////////////////////////
-	// getServices
-	/////////////////////////////////////////////
-
-	public ServicesInjector getServicesInjector() {
-		return servicesInjector;
-	}
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
 
 }

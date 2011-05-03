@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.version;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.adapter.version.VersionUserAndTimeAbstract;
-
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
 
 public class FileVersion extends VersionUserAndTimeAbstract implements Encodable, Serializable {
     private static final long serialVersionUID = 1L;
@@ -57,26 +55,27 @@ public class FileVersion extends VersionUserAndTimeAbstract implements Encodable
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
-    	super.encode(output);
+        super.encode(output);
     }
 
-	private void initialized() {
-		// nothing to do
-	}
+    private void initialized() {
+        // nothing to do
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     //
-    /////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////
 
     public long getSequence() {
         return getTime().getTime();
     }
 
+    @Override
     public String sequence() {
         return Long.toString(getSequence(), 16);
     }
 
+    @Override
     public boolean different(final Version version) {
         if (version instanceof FileVersion) {
             final FileVersion other = (FileVersion) version;
@@ -91,11 +90,11 @@ public class FileVersion extends VersionUserAndTimeAbstract implements Encodable
     }
 
     // don't think is used...
-//    @Override
-//    protected VersionAbstract next() {
-//        // return new FileVersion(user);
-//        throw new NotYetImplementedException();
-//    }
+    // @Override
+    // protected VersionAbstract next() {
+    // // return new FileVersion(user);
+    // throw new NotYetImplementedException();
+    // }
 
     @Override
     public boolean equals(final Object obj) {

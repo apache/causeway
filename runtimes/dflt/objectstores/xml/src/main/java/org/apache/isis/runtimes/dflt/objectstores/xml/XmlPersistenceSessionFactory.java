@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
@@ -26,11 +25,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class XmlPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
-    public XmlPersistenceSessionFactory(
-            final DeploymentType deploymentType, 
-            final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public XmlPersistenceSessionFactory(final DeploymentType deploymentType,
+        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 }
-
-

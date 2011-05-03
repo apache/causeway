@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,46 +24,41 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.runtimes.embedded.EmbeddedContext;
-import org.apache.isis.runtimes.embedded.IsisMetaModel;
-import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
-
 
 @RunWith(JMock.class)
 public class GivenMetaModelWhenInstantiate {
-	
-	private Mockery mockery = new JUnit4Mockery();
-	
-	private EmbeddedContext mockContext;
-	
-	private IsisMetaModel metaModel;
-	
-	
-	@Before
-	public void setUp() {
-		mockContext = mockery.mock(EmbeddedContext.class);
-	}
 
-	@Test
-	public void shouldSucceedWithoutThrowingAnyExceptions() {
-		metaModel = new IsisMetaModel(mockContext);
-	}
+    private final Mockery mockery = new JUnit4Mockery();
 
-	@Test
-	public void shouldBeAbleToRegisterServices() {
-		metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
-		List<Class<?>> serviceTypes = metaModel.getServiceTypes();
-		assertThat(serviceTypes.size(), is(2));
-		assertThat(serviceTypes.contains(EmployeeRepositoryImpl.class), is(true));
-		assertThat(serviceTypes.contains(ClaimRepositoryImpl.class), is(true));
-	}
+    private EmbeddedContext mockContext;
 
+    private IsisMetaModel metaModel;
+
+    @Before
+    public void setUp() {
+        mockContext = mockery.mock(EmbeddedContext.class);
+    }
+
+    @Test
+    public void shouldSucceedWithoutThrowingAnyExceptions() {
+        metaModel = new IsisMetaModel(mockContext);
+    }
+
+    @Test
+    public void shouldBeAbleToRegisterServices() {
+        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+        final List<Class<?>> serviceTypes = metaModel.getServiceTypes();
+        assertThat(serviceTypes.size(), is(2));
+        assertThat(serviceTypes.contains(EmployeeRepositoryImpl.class), is(true));
+        assertThat(serviceTypes.contains(ClaimRepositoryImpl.class), is(true));
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.claim;
 
 import org.apache.isis.applib.AbstractDomainObject;
@@ -25,47 +24,52 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 
-
 public class ClaimItem extends AbstractDomainObject {
 
-	// {{ Title
+    // {{ Title
     public String title() {
         return getDescription();
     }
+
     // }}
-	
-    
-	// {{ DateIncurred
-	private Date dateIncurred;
-    @MemberOrder(sequence="1")
+
+    // {{ DateIncurred
+    private Date dateIncurred;
+
+    @MemberOrder(sequence = "1")
     public Date getDateIncurred() {
         return dateIncurred;
     }
-    public void setDateIncurred(Date dateIncurred) {
+
+    public void setDateIncurred(final Date dateIncurred) {
         this.dateIncurred = dateIncurred;
     }
+
     // }}
-    
-    
+
     // {{ Description
     private String description;
-    @MemberOrder(sequence="2")
+
+    @MemberOrder(sequence = "2")
     public String getDescription() {
         return description;
     }
-    public void setDescription(String description) {
+
+    public void setDescription(final String description) {
         this.description = description;
     }
-    // }}
 
+    // }}
 
     // {{ Amount
     private Money amount;
-    @MemberOrder(sequence="3")
+
+    @MemberOrder(sequence = "3")
     public Money getAmount() {
         return amount;
     }
-    public void setAmount(Money price) {
+
+    public void setAmount(final Money price) {
         this.amount = price;
     }
     // }}

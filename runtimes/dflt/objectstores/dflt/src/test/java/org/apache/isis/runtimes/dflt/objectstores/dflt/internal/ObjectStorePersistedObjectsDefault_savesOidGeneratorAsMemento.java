@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import static org.hamcrest.Matchers.is;
@@ -34,33 +33,33 @@ import org.junit.Test;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 
-	private ObjectStorePersistedObjectsDefault persistedObjects;
+    private ObjectStorePersistedObjectsDefault persistedObjects;
 
-	private Mockery context = new JUnit4Mockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
+    private final Mockery context = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	private SimpleOidGenerator.Memento mockMemento;
-	
-	@Before
-	public void setUp() throws Exception {
-		persistedObjects = new ObjectStorePersistedObjectsDefault();
-		mockMemento = context.mock(SimpleOidGenerator.Memento.class);
-	}
-	
+    private SimpleOidGenerator.Memento mockMemento;
 
-	@Test
-	public void noOidGeneratorInitially() throws Exception {
-		Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
-		assertThat(oidGeneratorMemento, is(nullValue()));
-	}
+    @Before
+    public void setUp() throws Exception {
+        persistedObjects = new ObjectStorePersistedObjectsDefault();
+        mockMemento = context.mock(SimpleOidGenerator.Memento.class);
+    }
 
-	
-	@Test
-	public void oidGeneratorStoredOnceSaved() throws Exception {
-		persistedObjects.saveOidGeneratorMemento(mockMemento);
-		Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
-		assertThat(oidGeneratorMemento, is(mockMemento));
-	}
+    @Test
+    public void noOidGeneratorInitially() throws Exception {
+        final Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
+        assertThat(oidGeneratorMemento, is(nullValue()));
+    }
+
+    @Test
+    public void oidGeneratorStoredOnceSaved() throws Exception {
+        persistedObjects.saveOidGeneratorMemento(mockMemento);
+        final Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
+        assertThat(oidGeneratorMemento, is(mockMemento));
+    }
 
 }

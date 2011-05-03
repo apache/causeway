@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.adapter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,14 +26,14 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterM
 
 public class XmlAdapterManager extends AdapterManagerDefault {
 
-	@Override
-	protected ObjectAdapter createAggregatedAdapter(
-			Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
-		if (identifiedHolder instanceof OneToOneAssociation) {
-			// do not yet support AggregatedOids for aggregated associations 
-			return adapterFor(pojo);
-		} else {
-			return super.createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
-		}
-	}
+    @Override
+    protected ObjectAdapter createAggregatedAdapter(final Object pojo, final ObjectAdapter ownerAdapter,
+        final IdentifiedHolder identifiedHolder) {
+        if (identifiedHolder instanceof OneToOneAssociation) {
+            // do not yet support AggregatedOids for aggregated associations
+            return adapterFor(pojo);
+        } else {
+            return super.createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
+        }
+    }
 }

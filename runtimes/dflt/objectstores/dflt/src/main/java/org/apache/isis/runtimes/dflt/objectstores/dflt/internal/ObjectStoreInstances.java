@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -37,14 +35,13 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryObjectStore;
-
 
 /*
  * The objects need to store in a repeatable sequence so the elements and instances method return the same data for any repeated
@@ -52,52 +49,48 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryObjectStore;
  * where created.
  */
 public class ObjectStoreInstances {
-    
+
     private final Map<Oid, Object> pojoByOidMap = new HashMap<Oid, Object>();
     private final Map<Oid, String> titleByOidMap = new HashMap<Oid, String>();
     private final Map<Oid, SerialNumberVersion> versionByOidMap = new HashMap<Oid, SerialNumberVersion>();
-    
-	@SuppressWarnings("unused")
-	private final ObjectSpecification spec;
 
-    
-    /////////////////////////////////////////////////////////
+    @SuppressWarnings("unused")
+    private final ObjectSpecification spec;
+
+    // ///////////////////////////////////////////////////////
     // Constructors
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-    public ObjectStoreInstances(ObjectSpecification spec) {
-    	this.spec = spec;
+    public ObjectStoreInstances(final ObjectSpecification spec) {
+        this.spec = spec;
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Object Instances
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     /**
      * TODO: shouldn't really be exposing this directly.
      */
-	public Map<Oid, Object> getObjectInstances() {
-		return pojoByOidMap;
-	}
+    public Map<Oid, Object> getObjectInstances() {
+        return pojoByOidMap;
+    }
 
-	public Set<Oid> getOids() {
-		return Collections.unmodifiableSet(pojoByOidMap.keySet());
-	}
+    public Set<Oid> getOids() {
+        return Collections.unmodifiableSet(pojoByOidMap.keySet());
+    }
 
-	public Object getPojo(Oid oid) {
-		return pojoByOidMap.get(oid);
-	}
+    public Object getPojo(final Oid oid) {
+        return pojoByOidMap.get(oid);
+    }
 
-	public Version getVersion(Oid oid) {
-		return versionByOidMap.get(oid);
-	}
+    public Version getVersion(final Oid oid) {
+        return versionByOidMap.get(oid);
+    }
 
-
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // shutdown
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     public void shutdown() {
         pojoByOidMap.clear();
@@ -105,69 +98,65 @@ public class ObjectStoreInstances {
         versionByOidMap.clear();
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // save, remove
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     public void save(final ObjectAdapter adapter) {
         pojoByOidMap.put(adapter.getOid(), adapter.getObject());
         titleByOidMap.put(adapter.getOid(), adapter.titleString().toLowerCase());
-        
-        SerialNumberVersion version = versionByOidMap.get(adapter.getOid());
-        SerialNumberVersion nextVersion = nextVersion(version);
-		versionByOidMap.put(adapter.getOid(), nextVersion);
+
+        final SerialNumberVersion version = versionByOidMap.get(adapter.getOid());
+        final SerialNumberVersion nextVersion = nextVersion(version);
+        versionByOidMap.put(adapter.getOid(), nextVersion);
         adapter.setOptimisticLock(nextVersion);
     }
 
-    private synchronized SerialNumberVersion nextVersion(SerialNumberVersion version) {
-    	long sequence = (version != null? version.getSequence(): 0) +1;
-		return new SerialNumberVersion(sequence, getAuthenticationSession().getUserName(), new Date(Clock.getTime()));
-	}
+    private synchronized SerialNumberVersion nextVersion(final SerialNumberVersion version) {
+        final long sequence = (version != null ? version.getSequence() : 0) + 1;
+        return new SerialNumberVersion(sequence, getAuthenticationSession().getUserName(), new Date(Clock.getTime()));
+    }
 
-
-	public void remove(final Oid oid) {
-		pojoByOidMap.remove(oid);
+    public void remove(final Oid oid) {
+        pojoByOidMap.remove(oid);
         titleByOidMap.remove(oid);
         versionByOidMap.remove(oid);
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // retrieveObject
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     /**
-     * If the pojo exists in the object store, then looks up the
-     * {@link ObjectAdapter adapter} from the {@link AdapterManager}, and only
-     * if none found does it {@link PersistenceSessionHydrator#recreateAdapter(Oid, Object) recreate}
-     * a new {@link ObjectAdapter adapter}.
+     * If the pojo exists in the object store, then looks up the {@link ObjectAdapter adapter} from the
+     * {@link AdapterManager}, and only if none found does it
+     * {@link PersistenceSessionHydrator#recreateAdapter(Oid, Object) recreate} a new {@link ObjectAdapter adapter}.
      */
     public ObjectAdapter retrieveObject(final Oid oid) {
         final Object pojo = getObjectInstances().get(oid);
         if (pojo == null) {
             return null;
         }
-        ObjectAdapter adapterLookedUpByPojo = getAdapterManager().getAdapterFor(pojo);
+        final ObjectAdapter adapterLookedUpByPojo = getAdapterManager().getAdapterFor(pojo);
         if (adapterLookedUpByPojo != null) {
             return adapterLookedUpByPojo;
         }
-        ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
+        final ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
         if (adapterLookedUpByOid != null) {
             return adapterLookedUpByOid;
         }
         return getHydrator().recreateAdapter(oid, pojo);
     }
 
-
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // instances, numberOfInstances, hasInstances
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     /**
      * Not API, but <tt>public</tt> so can be called by {@link InMemoryObjectStore}.
      */
-    public void findInstancesAndAdd(final PersistenceQueryBuiltIn persistenceQuery, final List<ObjectAdapter> foundInstances) {
+    public void findInstancesAndAdd(final PersistenceQueryBuiltIn persistenceQuery,
+        final List<ObjectAdapter> foundInstances) {
         if (persistenceQuery instanceof PersistenceQueryFindByTitle) {
             for (final Oid oid : titleByOidMap.keySet()) {
                 final String title = titleByOidMap.get(oid);
@@ -194,7 +183,6 @@ public class ObjectStoreInstances {
         return numberOfInstances() > 0;
     }
 
-
     private List<ObjectAdapter> elements() {
         final List<ObjectAdapter> v = new ArrayList<ObjectAdapter>(getObjectInstances().size());
         for (final Oid oid : getObjectInstances().keySet()) {
@@ -203,10 +191,9 @@ public class ObjectStoreInstances {
         return v;
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Debugging
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     public void debugData(final DebugBuilder debug) {
         debug.indent();
@@ -222,8 +209,6 @@ public class ObjectStoreInstances {
         debug.unindent();
     }
 
-
-
     // ///////////////////////////////////////////////////////
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////
@@ -231,12 +216,10 @@ public class ObjectStoreInstances {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the
-     * {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
      */
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
@@ -245,12 +228,10 @@ public class ObjectStoreInstances {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the
-     * {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
      */
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
@@ -259,12 +240,10 @@ public class ObjectStoreInstances {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the
-     * {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
      */
     protected PersistenceSessionHydrator getHydrator() {
         return getPersistenceSession();
@@ -273,16 +252,13 @@ public class ObjectStoreInstances {
     /**
      * Must use {@link IsisContext context}, because although this object is recreated with each
      * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple
-     * sessions.
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the
-     * {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
      */
-	protected AuthenticationSession getAuthenticationSession() {
-		return IsisContext.getAuthenticationSession();
-	}
-
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
 }

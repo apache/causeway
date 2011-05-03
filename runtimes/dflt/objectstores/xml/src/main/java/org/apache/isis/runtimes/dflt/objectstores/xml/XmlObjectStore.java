@@ -22,23 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.xml;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlCreateObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlDestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlUpdateObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVector;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.XmlDataManager;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.XmlFileUtil;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml.XmlServiceManager;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -55,6 +38,21 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlCreateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlDestroyObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands.XmlUpdateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.XmlDataManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.XmlFileUtil;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml.XmlServiceManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
@@ -69,6 +67,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
+import org.apache.log4j.Logger;
 
 public class XmlObjectStore implements ObjectStore {
 
@@ -78,9 +77,9 @@ public class XmlObjectStore implements ObjectStore {
     private final ServiceManager serviceManager;
     private boolean isFixturesInstalled;
 
-    public XmlObjectStore(IsisConfiguration configuration) {
-        String charset = XmlFileUtil.lookupCharset(configuration);
-        String directory = configuration.getString(XMLOS_DIR, "xml/objects");
+    public XmlObjectStore(final IsisConfiguration configuration) {
+        final String charset = XmlFileUtil.lookupCharset(configuration);
+        final String directory = configuration.getString(XMLOS_DIR, "xml/objects");
         final XmlFile xmlFile = new XmlFile(charset, directory);
         dataManager = new XmlDataManager(xmlFile);
         serviceManager = new XmlServiceManager(xmlFile);
@@ -289,7 +288,7 @@ public class XmlObjectStore implements ObjectStore {
     @Override
     public void execute(final List<PersistenceCommand> commands) {
         LOG.debug("start execution of transaction");
-        for (PersistenceCommand command : commands) {
+        for (final PersistenceCommand command : commands) {
             command.execute(null);
         }
         LOG.debug("end execution");
@@ -354,7 +353,7 @@ public class XmlObjectStore implements ObjectStore {
                 "Provided PersistenceQuery not supported; was {0}; " + "the XML object store only supports {1}",
                 persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));
         }
-        PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
+        final PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
 
         LOG.debug("getInstances of " + builtIn.getSpecification() + " where " + builtIn);
         final ObjectData patternData = new ObjectData(builtIn.getSpecification(), null, null);

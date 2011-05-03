@@ -17,41 +17,38 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;
-
 
 public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
     private ObjectStorePersistedObjects persistedObjects;
 
-    public InMemoryPersistenceSessionFactory(
-            final DeploymentType deploymentType,
-            final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType,
+        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 
     protected ObjectStorePersistedObjects getPersistedObjects() {
-		return persistedObjects;
-	}
+        return persistedObjects;
+    }
 
     @Override
     public PersistenceSession createPersistenceSession() {
-        PersistenceSession persistenceSession =  super.createPersistenceSession();
+        final PersistenceSession persistenceSession = super.createPersistenceSession();
         if (persistedObjects != null) {
-            OidGenerator oidGenerator = persistenceSession.getOidGenerator();
+            final OidGenerator oidGenerator = persistenceSession.getOidGenerator();
             if (oidGenerator instanceof SimpleOidGenerator) {
-                SimpleOidGenerator simpleOidGenerator = (SimpleOidGenerator) oidGenerator;
+                final SimpleOidGenerator simpleOidGenerator = (SimpleOidGenerator) oidGenerator;
                 simpleOidGenerator.resetTo(persistedObjects.getOidGeneratorMemento());
             }
         }
@@ -59,36 +56,33 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
         return persistenceSession;
     }
 
-
     /**
      * Not API - called when {@link InMemoryObjectStore} first {@link InMemoryObjectStore#open() open}ed.
      */
-	public ObjectStorePersistedObjects createPersistedObjects() {
-		return new ObjectStorePersistedObjectsDefault();
-	}
+    public ObjectStorePersistedObjects createPersistedObjects() {
+        return new ObjectStorePersistedObjectsDefault();
+    }
 
     /**
      * Not API - called when {@link InMemoryObjectStore} is {@link InMemoryObjectStore#close() close}d.
      */
     public void attach(final PersistenceSession persistenceSession, final ObjectStorePersistedObjects persistedObjects) {
-        OidGenerator oidGenerator = persistenceSession.getOidGenerator();
+        final OidGenerator oidGenerator = persistenceSession.getOidGenerator();
         if (oidGenerator instanceof SimpleOidGenerator) {
-            SimpleOidGenerator simpleOidGenerator = (SimpleOidGenerator) oidGenerator;
+            final SimpleOidGenerator simpleOidGenerator = (SimpleOidGenerator) oidGenerator;
             persistedObjects.saveOidGeneratorMemento(simpleOidGenerator.getMemento());
         }
         this.persistedObjects = persistedObjects;
     }
 
-    
     @Override
     protected void doShutdown() {
         if (persistedObjects != null) {
-        	for (ObjectStoreInstances inst: persistedObjects.instances()) {
-        		inst.shutdown();
-        	}
-        	persistedObjects.clear();
+            for (final ObjectStoreInstances inst : persistedObjects.instances()) {
+                inst.shutdown();
+            }
+            persistedObjects.clear();
         }
     }
 
 }
-

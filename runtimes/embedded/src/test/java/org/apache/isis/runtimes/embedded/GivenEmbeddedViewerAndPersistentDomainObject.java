@@ -17,13 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.progmodel.wrapper.applib.DisabledException;
+import org.apache.isis.progmodel.wrapper.applib.HiddenException;
+import org.apache.isis.progmodel.wrapper.applib.InvalidException;
+import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.Employee;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
+import org.apache.isis.runtimes.embedded.internal.PersistenceState;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -32,146 +40,127 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.progmodel.wrapper.applib.DisabledException;
-import org.apache.isis.progmodel.wrapper.applib.HiddenException;
-import org.apache.isis.progmodel.wrapper.applib.InvalidException;
-import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.runtimes.embedded.EmbeddedContext;
-import org.apache.isis.runtimes.embedded.IsisMetaModel;
-import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.runtimes.embedded.dom.employee.Employee;
-import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
-import org.apache.isis.runtimes.embedded.internal.PersistenceState;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-
 
 @RunWith(JMock.class)
 public class GivenEmbeddedViewerAndPersistentDomainObject {
-	
-	private Mockery mockery = new JUnit4Mockery();
-	
-	private EmbeddedContext mockContext;
 
-	private AuthenticationSession mockAuthenticationSession;
+    private final Mockery mockery = new JUnit4Mockery();
 
-	private IsisMetaModel metaModel;
+    private EmbeddedContext mockContext;
 
-	private WrapperFactory viewer;
+    private AuthenticationSession mockAuthenticationSession;
 
-	private Employee employeeDO;
+    private IsisMetaModel metaModel;
 
-	private Employee employeeVO;
-	
-	
-	@Before
-	public void setUp() {
-		
-		employeeDO = new Employee();
-		employeeDO.setName("Smith");
-		
-		mockContext = mockery.mock(EmbeddedContext.class);
-		mockAuthenticationSession = mockery.mock(AuthenticationSession.class);
+    private WrapperFactory viewer;
 
+    private Employee employeeDO;
 
-		mockery.checking(new Expectations(){{
-			allowing(mockContext).getPersistenceState(with(any(Employee.class)));
-			will(returnValue(PersistenceState.PERSISTENT));
-			
-			allowing(mockContext).getPersistenceState(with(any(String.class)));
-			will(returnValue(PersistenceState.STANDALONE));
-			
-			allowing(mockContext).getAuthenticationSession();
-			will(returnValue(mockAuthenticationSession));
-		}});
+    private Employee employeeVO;
 
-		metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
-		metaModel.init();
-		
-		viewer = metaModel.getViewer();
-	}
-	
-	@Test
-	public void shouldBeAbleToGetViewOfDomainObject() {
-		employeeVO = viewer.wrap(employeeDO);
-		assertThat(employeeVO, is(notNullValue()));
-	}
+    @Before
+    public void setUp() {
 
-	
-	@Test
-	public void shouldBeAbleToReadVisibleProperty() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		assertThat(employeeVO.getName(), is(employeeDO.getName()));
-	}
+        employeeDO = new Employee();
+        employeeDO.setName("Smith");
 
-	@Test(expected=HiddenException.class)
-	public void shouldNotBeAbleToViewHiddenProperty() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeDO.whetherHideName = true;
-		employeeVO.getName(); // should throw exception
-	}
+        mockContext = mockery.mock(EmbeddedContext.class);
+        mockAuthenticationSession = mockery.mock(AuthenticationSession.class);
 
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockContext).getPersistenceState(with(any(Employee.class)));
+                will(returnValue(PersistenceState.PERSISTENT));
 
-	@Test
-	public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeVO.setName("Jones");
-		assertThat(employeeDO.getName(), is("Jones"));
-		assertThat(employeeVO.getName(), is(employeeDO.getName()));
-	}
+                allowing(mockContext).getPersistenceState(with(any(String.class)));
+                will(returnValue(PersistenceState.STANDALONE));
 
-	@Test(expected=DisabledException.class)
-	public void shouldNotBeAbleToModifyDisabledProperty() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeDO.reasonDisableName = "sorry, no change allowed";
-		employeeVO.setName("Jones");
-	}
+                allowing(mockContext).getAuthenticationSession();
+                will(returnValue(mockAuthenticationSession));
+            }
+        });
 
+        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+        metaModel.init();
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void shouldNotBeAbleToModifyPropertyUsingModify() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeVO.modifyName("Jones"); // should throw exception
-	}
+        viewer = metaModel.getViewer();
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void shouldNotBeAbleToModifyPropertyUsingClear() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeVO.clearName(); // should throw exception
-	}
+    @Test
+    public void shouldBeAbleToGetViewOfDomainObject() {
+        employeeVO = viewer.wrap(employeeDO);
+        assertThat(employeeVO, is(notNullValue()));
+    }
 
+    @Test
+    public void shouldBeAbleToReadVisibleProperty() {
+        employeeVO = viewer.wrap(employeeDO);
 
-	@Test(expected=InvalidException.class)
-	public void shouldNotBeAbleToModifyPropertyIfInvalid() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeDO.reasonValidateName = "sorry, invalid data";
-		employeeVO.setName("Jones");
-	}
+        assertThat(employeeVO.getName(), is(employeeDO.getName()));
+    }
 
+    @Test(expected = HiddenException.class)
+    public void shouldNotBeAbleToViewHiddenProperty() {
+        employeeVO = viewer.wrap(employeeDO);
 
-	@Test(expected=DisabledException.class)
-	public void shouldNotBeAbleToModifyPropertyForTransientOnly() {
-		employeeVO = viewer.wrap(employeeDO);
-		
-		employeeVO.setPassword("12345678");
-	}
+        employeeDO.whetherHideName = true;
+        employeeVO.getName(); // should throw exception
+    }
 
-	
-	
-	@Ignore("incomplete")
-	@Test
-	public void shouldBeAbleToInjectIntoDomainObjects() {
-		
-		// TODO: also ... be able to inject EmbeddedViewer as a service itself, if required.
-		
-		employeeVO.setPassword("12345678");
-		
-	}
+    @Test
+    public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
+        employeeVO = viewer.wrap(employeeDO);
+
+        employeeVO.setName("Jones");
+        assertThat(employeeDO.getName(), is("Jones"));
+        assertThat(employeeVO.getName(), is(employeeDO.getName()));
+    }
+
+    @Test(expected = DisabledException.class)
+    public void shouldNotBeAbleToModifyDisabledProperty() {
+        employeeVO = viewer.wrap(employeeDO);
+
+        employeeDO.reasonDisableName = "sorry, no change allowed";
+        employeeVO.setName("Jones");
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void shouldNotBeAbleToModifyPropertyUsingModify() {
+        employeeVO = viewer.wrap(employeeDO);
+
+        employeeVO.modifyName("Jones"); // should throw exception
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void shouldNotBeAbleToModifyPropertyUsingClear() {
+        employeeVO = viewer.wrap(employeeDO);
+
+        employeeVO.clearName(); // should throw exception
+    }
+
+    @Test(expected = InvalidException.class)
+    public void shouldNotBeAbleToModifyPropertyIfInvalid() {
+        employeeVO = viewer.wrap(employeeDO);
+
+        employeeDO.reasonValidateName = "sorry, invalid data";
+        employeeVO.setName("Jones");
+    }
+
+    @Test(expected = DisabledException.class)
+    public void shouldNotBeAbleToModifyPropertyForTransientOnly() {
+        employeeVO = viewer.wrap(employeeDO);
+
+        employeeVO.setPassword("12345678");
+    }
+
+    @Ignore("incomplete")
+    @Test
+    public void shouldBeAbleToInjectIntoDomainObjects() {
+
+        // TODO: also ... be able to inject EmbeddedViewer as a service itself, if required.
+
+        employeeVO.setPassword("12345678");
+
+    }
 
 }

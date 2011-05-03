@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.employee;
 
 import java.util.List;
 
-
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
+    @Override
     public List<Employee> allEmployees() {
-    	return null;
+        return null;
     }
 
-    public List<Employee> findEmployees(String name) {
-    	return null;
+    @Override
+    public List<Employee> findEmployees(final String name) {
+        return null;
     }
 }

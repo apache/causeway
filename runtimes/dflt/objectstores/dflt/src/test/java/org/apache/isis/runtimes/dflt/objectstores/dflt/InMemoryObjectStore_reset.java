@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 public class InMemoryObjectStore_reset extends AbstractInMemoryObjectStoreTest {
-
 
     public void testResetClearsAdapterFromLoader() throws Exception {
         final ObjectAdapter object = system.createPersistentTestObject();
@@ -34,6 +31,4 @@ public class InMemoryObjectStore_reset extends AbstractInMemoryObjectStoreTest {
         assertNull(getAdapterManager().getAdapterFor(object.getObject()));
     }
 
-
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import static org.hamcrest.Matchers.is;
@@ -40,87 +39,86 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) 
- * and <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
+ * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and <i>Growing Object-Oriented Software</i>
+ * (Freeman &amp; Pryce).
  */
 @RunWith(JMock.class)
 public class ObjectStoreInstances_save {
 
-	private ObjectStoreInstances instances;
+    private ObjectStoreInstances instances;
 
-	private Mockery context = new JUnit4Mockery();
+    private final Mockery context = new JUnit4Mockery();
 
-	private ObjectSpecification mockSpec;
-	private ObjectAdapter mockAdapter;
-	private AuthenticationSession mockAuthSession;
-	
-	@Before
-	public void setUp() throws Exception {
-		mockSpec = context.mock(ObjectSpecification.class);
-		mockAdapter = context.mock(ObjectAdapter.class);
-		mockAuthSession = context.mock(AuthenticationSession.class);
-		instances = new ObjectStoreInstances(mockSpec) {
-			@Override
-			protected AuthenticationSession getAuthenticationSession() {
-				return mockAuthSession;
-			}
-		};
-		ignoreAuthenticationSession();
-	}
+    private ObjectSpecification mockSpec;
+    private ObjectAdapter mockAdapter;
+    private AuthenticationSession mockAuthSession;
 
-	private void ignoreAuthenticationSession() {
-		context.checking(new Expectations() {
-			{
-				ignoring(mockAuthSession);
-			}
-		});
-	}
+    @Before
+    public void setUp() throws Exception {
+        mockSpec = context.mock(ObjectSpecification.class);
+        mockAdapter = context.mock(ObjectAdapter.class);
+        mockAuthSession = context.mock(AuthenticationSession.class);
+        instances = new ObjectStoreInstances(mockSpec) {
+            @Override
+            protected AuthenticationSession getAuthenticationSession() {
+                return mockAuthSession;
+            }
+        };
+        ignoreAuthenticationSession();
+    }
 
-	@Test
-	public void saveUpdatesTheOptimisticLock() throws Exception {
-		allowingGetOidAndGetObjectAndTitleStringFromAdapter();
-		context.checking(new Expectations() {
-			{
-				one(mockAdapter).setOptimisticLock(with(any(Version.class)));
-			}
-		});
-		instances.save(mockAdapter);
-		
-	}
+    private void ignoreAuthenticationSession() {
+        context.checking(new Expectations() {
+            {
+                ignoring(mockAuthSession);
+            }
+        });
+    }
 
-	@Test
-	public void saveStoresObject() throws Exception {
-		allowingGetOidAndGetObjectAndTitleStringFromAdapter();
-		ignoringInteractionsWithAdapter();
-		instances.save(mockAdapter);
-		
-		Map<Oid, Object> objectInstances = instances.getObjectInstances();
-		assertThat(objectInstances.size(), is(1));
-		
-		Set<Oid> oids = instances.getOids();
-		assertThat(oids.size(), is(1));
-		
-		assertThat(instances.hasInstances(), is(true));
-		
-	}
+    @Test
+    public void saveUpdatesTheOptimisticLock() throws Exception {
+        allowingGetOidAndGetObjectAndTitleStringFromAdapter();
+        context.checking(new Expectations() {
+            {
+                one(mockAdapter).setOptimisticLock(with(any(Version.class)));
+            }
+        });
+        instances.save(mockAdapter);
 
-	private void ignoringInteractionsWithAdapter() {
-		context.checking(new Expectations() {
-			{
-				ignoring(mockAdapter);
-			}
-		});
-	}
+    }
 
-	private void allowingGetOidAndGetObjectAndTitleStringFromAdapter() {
-		context.checking(new Expectations() {
-			{
-				allowing(mockAdapter).getOid();
-				allowing(mockAdapter).getObject();
-				allowing(mockAdapter).titleString();
-			}
-		});
-	}
-	
+    @Test
+    public void saveStoresObject() throws Exception {
+        allowingGetOidAndGetObjectAndTitleStringFromAdapter();
+        ignoringInteractionsWithAdapter();
+        instances.save(mockAdapter);
+
+        final Map<Oid, Object> objectInstances = instances.getObjectInstances();
+        assertThat(objectInstances.size(), is(1));
+
+        final Set<Oid> oids = instances.getOids();
+        assertThat(oids.size(), is(1));
+
+        assertThat(instances.hasInstances(), is(true));
+
+    }
+
+    private void ignoringInteractionsWithAdapter() {
+        context.checking(new Expectations() {
+            {
+                ignoring(mockAdapter);
+            }
+        });
+    }
+
+    private void allowingGetOidAndGetObjectAndTitleStringFromAdapter() {
+        context.checking(new Expectations() {
+            {
+                allowing(mockAdapter).getOid();
+                allowing(mockAdapter).getObject();
+                allowing(mockAdapter).titleString();
+            }
+        });
+    }
 
 }

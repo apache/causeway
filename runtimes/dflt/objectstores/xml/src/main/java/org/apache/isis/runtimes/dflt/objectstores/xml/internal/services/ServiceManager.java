@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-
 
 public interface ServiceManager {
 
@@ -32,4 +30,3 @@ public interface ServiceManager {
     Oid getOidForService(String name);
 
 }
-

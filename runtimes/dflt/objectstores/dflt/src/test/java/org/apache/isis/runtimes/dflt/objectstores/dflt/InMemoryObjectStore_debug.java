@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import java.util.Collections;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-
 
 public class InMemoryObjectStore_debug extends ProxyJunit3TestCase {
     private InMemoryObjectStore store;
@@ -44,7 +42,7 @@ public class InMemoryObjectStore_debug extends ProxyJunit3TestCase {
         final ObjectAdapter object = system.createPersistentTestObject();
 
         final CreateObjectCommand command = store.createCreateObjectCommand(object);
-        store.execute(Collections.<PersistenceCommand>singletonList(command));
+        store.execute(Collections.<PersistenceCommand> singletonList(command));
 
         store.debugTitle();
         final DebugBuilder debug = new DebugString();
@@ -57,4 +55,3 @@ public class InMemoryObjectStore_debug extends ProxyJunit3TestCase {
         store.debugData(debug);
     }
 }
-

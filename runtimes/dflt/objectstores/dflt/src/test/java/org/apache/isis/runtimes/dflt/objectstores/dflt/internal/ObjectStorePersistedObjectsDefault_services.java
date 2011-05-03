@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import static org.hamcrest.Matchers.is;
@@ -35,40 +34,40 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class ObjectStorePersistedObjectsDefault_services {
 
-	private Mockery context = new JUnit4Mockery();
-	
-	private ObjectStorePersistedObjectsDefault persistedObjects;
+    private final Mockery context = new JUnit4Mockery();
 
-	private Oid mockOidForFooService, mockOidForBarService;
-	
-	@Before
-	public void setUp() throws Exception {
-		persistedObjects = new ObjectStorePersistedObjectsDefault();
-		mockOidForFooService = context.mock(Oid.class, "fooServiceOid");
-		mockOidForBarService = context.mock(Oid.class, "barServiceOid");
-	}
-	
-	@Test
-	public void noServicesInitially() throws Exception {
-		Oid service = persistedObjects.getService("fooService");
-		assertThat(service, is(nullValue()));
-	}
+    private ObjectStorePersistedObjectsDefault persistedObjects;
 
-	@Test
-	public void registerServicesMakesAvailable() throws Exception {
-		persistedObjects.registerService("fooService", mockOidForFooService);
-		
-		Oid service = persistedObjects.getService("fooService");
-		assertThat(service, is(mockOidForFooService));
-	}
+    private Oid mockOidForFooService, mockOidForBarService;
 
-	@Test
-	public void registerServicesWhenMoreThanOnePullsOutTheCorrectOne() throws Exception {
-		persistedObjects.registerService("fooService", mockOidForFooService);
-		persistedObjects.registerService("barService", mockOidForBarService);
-		
-		Oid service = persistedObjects.getService("fooService");
-		assertThat(service, is(mockOidForFooService));
-	}
+    @Before
+    public void setUp() throws Exception {
+        persistedObjects = new ObjectStorePersistedObjectsDefault();
+        mockOidForFooService = context.mock(Oid.class, "fooServiceOid");
+        mockOidForBarService = context.mock(Oid.class, "barServiceOid");
+    }
+
+    @Test
+    public void noServicesInitially() throws Exception {
+        final Oid service = persistedObjects.getService("fooService");
+        assertThat(service, is(nullValue()));
+    }
+
+    @Test
+    public void registerServicesMakesAvailable() throws Exception {
+        persistedObjects.registerService("fooService", mockOidForFooService);
+
+        final Oid service = persistedObjects.getService("fooService");
+        assertThat(service, is(mockOidForFooService));
+    }
+
+    @Test
+    public void registerServicesWhenMoreThanOnePullsOutTheCorrectOne() throws Exception {
+        persistedObjects.registerService("fooService", mockOidForFooService);
+        persistedObjects.registerService("barService", mockOidForBarService);
+
+        final Oid service = persistedObjects.getService("fooService");
+        assertThat(service, is(mockOidForFooService));
+    }
 
 }

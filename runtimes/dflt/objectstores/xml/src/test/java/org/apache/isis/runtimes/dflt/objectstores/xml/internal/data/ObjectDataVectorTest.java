@@ -17,54 +17,50 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-
 public class ObjectDataVectorTest {
-	private ObjectDataVector objectDataVector;
-	private ObjectData objectData;
+    private ObjectDataVector objectDataVector;
+    private ObjectData objectData;
     private TestProxySpecification spec;
-	private SerialOid oid;
-	private FileVersion version;
+    private SerialOid oid;
+    private FileVersion version;
 
-	@Before
-	public void setUp() throws Exception {
-		boolean isTransient = true;
-		long serialNum = Long.parseLong("1", 16);
-		oid = isTransient ? SerialOid.createTransient(serialNum) : SerialOid.createPersistent(serialNum);
+    @Before
+    public void setUp() throws Exception {
+        final boolean isTransient = true;
+        final long serialNum = Long.parseLong("1", 16);
+        oid = isTransient ? SerialOid.createTransient(serialNum) : SerialOid.createPersistent(serialNum);
 
-		spec = new TestProxySpecification(this.getClass());
+        spec = new TestProxySpecification(this.getClass());
         spec.fields = Collections.emptyList();
 
         version = new FileVersion("", System.currentTimeMillis());
         objectData = new ObjectData(spec, oid, version);
-		objectDataVector = new ObjectDataVector();
-	}
-	
-	@Test 
-	public void validatesObjectDataIsStored()throws Exception {
-		objectDataVector.addElement(objectData);
-		assertTrue(objectDataVector.contains(objectData));
-		assertTrue(objectDataVector.element(0).equals(objectData));
-	}
-	
-	@Test 
-	public void validatesObjectDataVectorSize()throws Exception {
-		objectDataVector.addElement(objectData);
-		assertTrue(objectDataVector.size() == 1);
-	}
-	
+        objectDataVector = new ObjectDataVector();
+    }
+
+    @Test
+    public void validatesObjectDataIsStored() throws Exception {
+        objectDataVector.addElement(objectData);
+        assertTrue(objectDataVector.contains(objectData));
+        assertTrue(objectDataVector.element(0).equals(objectData));
+    }
+
+    @Test
+    public void validatesObjectDataVectorSize() throws Exception {
+        objectDataVector.addElement(objectData);
+        assertTrue(objectDataVector.size() == 1);
+    }
+
 }
-
-

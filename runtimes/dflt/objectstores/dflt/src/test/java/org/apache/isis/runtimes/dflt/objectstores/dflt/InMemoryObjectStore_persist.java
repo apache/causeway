@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import java.util.Collections;
@@ -28,33 +27,33 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
 
-
 public class InMemoryObjectStore_persist extends AbstractInMemoryObjectStoreTest {
 
+    private ObjectAdapter object;
 
-	private ObjectAdapter object;
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        addObjectToStore();
+    }
 
-	public void setUp() throws Exception {
-		super.setUp();
-		addObjectToStore();
-	}
+    private void addObjectToStore() {
+        object = system.createPersistentTestObject();
+        addObjectToStore(object);
+        resetIdentityMap();
+    }
 
-	private void addObjectToStore() {
-		object = system.createPersistentTestObject();
-		addObjectToStore(object);
-		resetIdentityMap();
-	}
-	
     public void testSaveInstance() throws Exception {
 
         final ObjectSpecification specification = object.getSpecification();
-        ObjectAdapter[] retrievedInstance = store.getInstances(new PersistenceQueryFindByTitle(specification, "changed"));
+        ObjectAdapter[] retrievedInstance =
+            store.getInstances(new PersistenceQueryFindByTitle(specification, "changed"));
         assertEquals(0, retrievedInstance.length);
 
         ((TestProxyAdapter) object).setupTitleString("changed title");
         final PersistenceCommand command = store.createSaveObjectCommand(object);
         assertEquals(object, command.onObject());
-        store.execute(Collections.<PersistenceCommand>singletonList(command));
+        store.execute(Collections.<PersistenceCommand> singletonList(command));
 
         resetIdentityMap();
 
@@ -66,7 +65,7 @@ public class InMemoryObjectStore_persist extends AbstractInMemoryObjectStoreTest
     public void testRemoveInstance() throws Exception {
         final PersistenceCommand command = store.createDestroyObjectCommand(object);
         assertEquals(object, command.onObject());
-        store.execute(Collections.<PersistenceCommand>singletonList(command));
+        store.execute(Collections.<PersistenceCommand> singletonList(command));
 
         resetIdentityMap();
 
@@ -75,4 +74,3 @@ public class InMemoryObjectStore_persist extends AbstractInMemoryObjectStoreTest
     }
 
 }
-

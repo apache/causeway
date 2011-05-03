@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.version;
 
 import static org.junit.Assert.assertFalse;
@@ -35,46 +34,53 @@ import org.junit.Test;
 
 public class FileVersionTest extends ProxyJunit4TestCase {
     Mockery context = new JUnit4Mockery();
-    final DataInputExtended extended = context.mock(DataInputExtended.class);; 
+    final DataInputExtended extended = context.mock(DataInputExtended.class);;
 
     @Before
-	public void setUp() throws Exception {
-		
-	}
-	@Test
-	public void testFileVersionDataInputExtended() throws Exception { 
-        context.checking(new Expectations() {{
-            ignoring (extended);
-        }});		
-		FileVersion fileVersion = new FileVersion(extended);
-	}
+    public void setUp() throws Exception {
 
-	@Test
-	public void testFileVersionEncoding() throws Exception { 
-		final DataOutputExtended outputExtended = context.mock(DataOutputExtended.class);
-        context.checking(new Expectations() {{
-            ignoring (extended);
-            ignoring (outputExtended);
-        }});		
-		FileVersion fileVersion = new FileVersion(extended);
+    }
+
+    @Test
+    public void testFileVersionDataInputExtended() throws Exception {
+        context.checking(new Expectations() {
+            {
+                ignoring(extended);
+            }
+        });
+        final FileVersion fileVersion = new FileVersion(extended);
+    }
+
+    @Test
+    public void testFileVersionEncoding() throws Exception {
+        final DataOutputExtended outputExtended = context.mock(DataOutputExtended.class);
+        context.checking(new Expectations() {
+            {
+                ignoring(extended);
+                ignoring(outputExtended);
+            }
+        });
+        final FileVersion fileVersion = new FileVersion(extended);
         fileVersion.encode(outputExtended);
-	}
+    }
 
-	@Test
-	public void testFileVersionDifferenceAndSequenceAndEquals() throws Exception { 
-		final Version version = context.mock(Version.class);
-        context.checking(new Expectations() {{
-        	ignoring (extended);
-            one (version);
-            	
-        }});		
-		FileVersion testVersion = new FileVersion(extended);
-		assertFalse(testVersion.different(version));
-		assertTrue(testVersion.sequence().length() > 0);
-		assertTrue(testVersion.getSequence() == 0);
-		assertTrue(testVersion.toString().length() > 0);
-		assertTrue(testVersion.equals(testVersion));
-		assertFalse(testVersion.equals(version));
-	}
+    @Test
+    public void testFileVersionDifferenceAndSequenceAndEquals() throws Exception {
+        final Version version = context.mock(Version.class);
+        context.checking(new Expectations() {
+            {
+                ignoring(extended);
+                one(version);
+
+            }
+        });
+        final FileVersion testVersion = new FileVersion(extended);
+        assertFalse(testVersion.different(version));
+        assertTrue(testVersion.sequence().length() > 0);
+        assertTrue(testVersion.getSequence() == 0);
+        assertTrue(testVersion.toString().length() > 0);
+        assertTrue(testVersion.equals(testVersion));
+        assertFalse(testVersion.equals(version));
+    }
 
 }

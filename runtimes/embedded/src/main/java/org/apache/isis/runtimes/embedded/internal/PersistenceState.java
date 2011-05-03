@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.internal;
 
 public enum PersistenceState {
-	TRANSIENT(true,false),
-	PERSISTENT(false,true),
-	STANDALONE(false,false);
-	private boolean trans;
-	private boolean persistent;
-	PersistenceState(boolean trans, boolean persistent) {
-		this.trans = trans;
-		this.persistent = persistent;
-	}
-	public boolean isTransient() {
-		return trans;
-	}
-	public boolean isPersistent() {
-		return persistent;
-	}
+    TRANSIENT(true, false), PERSISTENT(false, true), STANDALONE(false, false);
+    private boolean trans;
+    private boolean persistent;
+
+    PersistenceState(final boolean trans, final boolean persistent) {
+        this.trans = trans;
+        this.persistent = persistent;
+    }
+
+    public boolean isTransient() {
+        return trans;
+    }
+
+    public boolean isPersistent() {
+        return persistent;
+    }
 }

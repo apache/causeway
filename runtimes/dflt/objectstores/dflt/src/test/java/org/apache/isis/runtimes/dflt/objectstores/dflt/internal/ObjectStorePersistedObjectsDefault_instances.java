@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import static org.hamcrest.Matchers.is;
@@ -35,62 +34,58 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class ObjectStorePersistedObjectsDefault_instances {
 
-	private ObjectStorePersistedObjectsDefault persistedObjects;
+    private ObjectStorePersistedObjectsDefault persistedObjects;
 
-	private Mockery context = new JUnit4Mockery();
+    private final Mockery context = new JUnit4Mockery();
 
-	private ObjectSpecification mockSpec;
-	
-	@Before
-	public void setUp() throws Exception {
-		persistedObjects = new ObjectStorePersistedObjectsDefault();
-		mockSpec = context.mock(ObjectSpecification.class);
-	}
+    private ObjectSpecification mockSpec;
 
-	@Test
-	public void instancesLazilyPopulatedWhenAskForThem() throws Exception {
-		neverInteractsWithSpec();
+    @Before
+    public void setUp() throws Exception {
+        persistedObjects = new ObjectStorePersistedObjectsDefault();
+        mockSpec = context.mock(ObjectSpecification.class);
+    }
 
-		// no instances
-		Iterable<ObjectStoreInstances> instancesBefore = persistedObjects.instances();
-		assertThat(instancesBefore.iterator().hasNext(), is(false));
+    @Test
+    public void instancesLazilyPopulatedWhenAskForThem() throws Exception {
+        neverInteractsWithSpec();
 
-		ensureThereAreSomeInstances();
+        // no instances
+        final Iterable<ObjectStoreInstances> instancesBefore = persistedObjects.instances();
+        assertThat(instancesBefore.iterator().hasNext(), is(false));
 
-		// now there are
-		Iterable<ObjectStoreInstances> instancesAfter = persistedObjects.instances();
-		assertThat(instancesAfter.iterator().hasNext(), is(true));
-	}
+        ensureThereAreSomeInstances();
 
+        // now there are
+        final Iterable<ObjectStoreInstances> instancesAfter = persistedObjects.instances();
+        assertThat(instancesAfter.iterator().hasNext(), is(true));
+    }
 
-	@Test
-	public void clearZapsTheInstances() throws Exception {
-		neverInteractsWithSpec();
+    @Test
+    public void clearZapsTheInstances() throws Exception {
+        neverInteractsWithSpec();
 
-		ensureThereAreSomeInstances();
-		Iterable<ObjectStoreInstances> instancesAfter = persistedObjects.instances();
-		assertThat(instancesAfter.iterator().hasNext(), is(true));
-		
-		persistedObjects.clear();
-		
-		// now there are no more instances
-		Iterable<ObjectStoreInstances> instancesBefore = persistedObjects.instances();
-		assertThat(instancesBefore.iterator().hasNext(), is(false));
-	}
+        ensureThereAreSomeInstances();
+        final Iterable<ObjectStoreInstances> instancesAfter = persistedObjects.instances();
+        assertThat(instancesAfter.iterator().hasNext(), is(true));
 
-	
-	private void ensureThereAreSomeInstances() {
-		persistedObjects.instancesFor(mockSpec);
-	}
+        persistedObjects.clear();
 
+        // now there are no more instances
+        final Iterable<ObjectStoreInstances> instancesBefore = persistedObjects.instances();
+        assertThat(instancesBefore.iterator().hasNext(), is(false));
+    }
 
-	private void neverInteractsWithSpec() {
-		context.checking(new Expectations() {
-			{
-				never(mockSpec);
-			}
-		});
-	}
+    private void ensureThereAreSomeInstances() {
+        persistedObjects.instancesFor(mockSpec);
+    }
 
+    private void neverInteractsWithSpec() {
+        context.checking(new Expectations() {
+            {
+                never(mockSpec);
+            }
+        });
+    }
 
 }

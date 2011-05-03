@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -34,102 +33,104 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 /**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) 
- * and <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
+ * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and <i>Growing Object-Oriented Software</i>
+ * (Freeman &amp; Pryce).
  */
 @RunWith(JMock.class)
 public class InMemoryObjectStore_openAndClose {
-	
-	private InMemoryObjectStore objectStore;
 
-	private Mockery context = new JUnit4Mockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
+    private InMemoryObjectStore objectStore;
 
-	private InMemoryPersistenceSessionFactory mockInMemoryPersistenceSessionFactory;
-	private PersistenceSession mockPersistenceSession;
+    private final Mockery context = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
-	private ObjectStorePersistedObjects mockObjectStorePersistedObjects;
+    private InMemoryPersistenceSessionFactory mockInMemoryPersistenceSessionFactory;
+    private PersistenceSession mockPersistenceSession;
 
-	private boolean recreatedAdapters = false;
-	
-	@Before
-	public void setUp() throws Exception {
-		mockInMemoryPersistenceSessionFactory = context.mock(InMemoryPersistenceSessionFactory.class);
-		mockObjectStorePersistedObjects = context.mock(ObjectStorePersistedObjects.class);
-		mockPersistenceSession = context.mock(PersistenceSession.class);
-		objectStore = new InMemoryObjectStore() {
-			@Override
-			protected InMemoryPersistenceSessionFactory getInMemoryPersistenceSessionFactory() {
-				return mockInMemoryPersistenceSessionFactory;
-			}
-			@Override
-			protected PersistenceSession getPersistenceSession() {
-				return mockPersistenceSession;
-			}
-			@Override
-			protected void recreateAdapters() {
-				recreatedAdapters = true;
-			}
-		};
-	}
+    private ObjectStorePersistedObjects mockObjectStorePersistedObjects;
 
+    private boolean recreatedAdapters = false;
 
-	private void neverInteractsDirectlyWithPersistenceSession() {
-		context.checking(new Expectations() {
-			{
-				never(mockPersistenceSession);
-			}
-		});
-	}
+    @Before
+    public void setUp() throws Exception {
+        mockInMemoryPersistenceSessionFactory = context.mock(InMemoryPersistenceSessionFactory.class);
+        mockObjectStorePersistedObjects = context.mock(ObjectStorePersistedObjects.class);
+        mockPersistenceSession = context.mock(PersistenceSession.class);
+        objectStore = new InMemoryObjectStore() {
+            @Override
+            protected InMemoryPersistenceSessionFactory getInMemoryPersistenceSessionFactory() {
+                return mockInMemoryPersistenceSessionFactory;
+            }
 
-	@Test
-	public void whenOpenForFirstTimeThenCreatesPersistedObjects() throws Exception {
-		neverInteractsDirectlyWithPersistenceSession();
-		context.checking(new Expectations() {
-			{
-				one(mockInMemoryPersistenceSessionFactory).getPersistedObjects();
-				will(returnValue(null));
+            @Override
+            protected PersistenceSession getPersistenceSession() {
+                return mockPersistenceSession;
+            }
 
-				one(mockInMemoryPersistenceSessionFactory).createPersistedObjects();
-				will(returnValue(mockObjectStorePersistedObjects));
-			}
-		});
-		objectStore.open();
-	}
+            @Override
+            protected void recreateAdapters() {
+                recreatedAdapters = true;
+            }
+        };
+    }
 
-	@Test
-	public void whenOpenSubsequentlyThenObtainsPersistedObjectsFromObjectStoreFactoryAndRecreatesAdapters() throws Exception {
-		neverInteractsDirectlyWithPersistenceSession();
-		context.checking(new Expectations() {
-			{
-				one(mockInMemoryPersistenceSessionFactory).getPersistedObjects();
-				will(returnValue(mockObjectStorePersistedObjects));
-			}
-		});
-		
-		assertThat(recreatedAdapters, is(false));
-		objectStore.open();
-		assertThat(recreatedAdapters, is(true));
-	}
+    private void neverInteractsDirectlyWithPersistenceSession() {
+        context.checking(new Expectations() {
+            {
+                never(mockPersistenceSession);
+            }
+        });
+    }
 
-	@Test
-	public void whenCloseThenGivesObjectsBackToObjectStoreFactory() throws Exception {
-		neverInteractsDirectlyWithPersistenceSession();
+    @Test
+    public void whenOpenForFirstTimeThenCreatesPersistedObjects() throws Exception {
+        neverInteractsDirectlyWithPersistenceSession();
+        context.checking(new Expectations() {
+            {
+                one(mockInMemoryPersistenceSessionFactory).getPersistedObjects();
+                will(returnValue(null));
 
-		whenOpenSubsequentlyThenObtainsPersistedObjectsFromObjectStoreFactoryAndRecreatesAdapters();
+                one(mockInMemoryPersistenceSessionFactory).createPersistedObjects();
+                will(returnValue(mockObjectStorePersistedObjects));
+            }
+        });
+        objectStore.open();
+    }
 
-		context.checking(new Expectations() {
-			{
-				one(mockInMemoryPersistenceSessionFactory).attach(
-						with(mockPersistenceSession), with(mockObjectStorePersistedObjects));
-				never(mockPersistenceSession);
-			}
-		});
-		objectStore.close();
-	}
-	
+    @Test
+    public void whenOpenSubsequentlyThenObtainsPersistedObjectsFromObjectStoreFactoryAndRecreatesAdapters()
+        throws Exception {
+        neverInteractsDirectlyWithPersistenceSession();
+        context.checking(new Expectations() {
+            {
+                one(mockInMemoryPersistenceSessionFactory).getPersistedObjects();
+                will(returnValue(mockObjectStorePersistedObjects));
+            }
+        });
+
+        assertThat(recreatedAdapters, is(false));
+        objectStore.open();
+        assertThat(recreatedAdapters, is(true));
+    }
+
+    @Test
+    public void whenCloseThenGivesObjectsBackToObjectStoreFactory() throws Exception {
+        neverInteractsDirectlyWithPersistenceSession();
+
+        whenOpenSubsequentlyThenObtainsPersistedObjectsFromObjectStoreFactoryAndRecreatesAdapters();
+
+        context.checking(new Expectations() {
+            {
+                one(mockInMemoryPersistenceSessionFactory).attach(with(mockPersistenceSession),
+                    with(mockObjectStorePersistedObjects));
+                never(mockPersistenceSession);
+            }
+        });
+        objectStore.close();
+    }
+
 }
-

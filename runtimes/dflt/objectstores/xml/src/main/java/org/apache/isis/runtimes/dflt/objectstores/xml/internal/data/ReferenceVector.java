@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.Vector;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-
 
 public class ReferenceVector {
     private final Vector elements = new Vector();

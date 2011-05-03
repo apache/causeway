@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 
-
 public class InMemoryObjectStore_serviceRegistry extends AbstractInMemoryObjectStoreTest {
 
     private TestProxyOid oid14;
 
-	public void noServicesRegisteredWhenEmpty() throws Exception {
+    public void noServicesRegisteredWhenEmpty() throws Exception {
         final Oid oidForService = store.getOidForService("service name");
         assertEquals(null, oidForService);
     }
@@ -42,32 +40,32 @@ public class InMemoryObjectStore_serviceRegistry extends AbstractInMemoryObjectS
     }
 
     public void testCantRegisterServiceMoreThanOnce() throws Exception {
-    	registerService14();
+        registerService14();
         try {
-        	registerService14();
+            registerService14();
             fail();
-        } catch (final IsisException expected) {}
+        } catch (final IsisException expected) {
+        }
     }
 
     public void testCanRegisterMoreThanOneService() throws Exception {
-    	registerService14();
-    	registerService15();
+        registerService14();
+        registerService15();
     }
 
-	private TestProxyOid registerService14() {
-		return oid14 = registerService(14);
-	}
+    private TestProxyOid registerService14() {
+        return oid14 = registerService(14);
+    }
 
-	private TestProxyOid registerService15() {
-		return registerService(15);
-	}
+    private TestProxyOid registerService15() {
+        return registerService(15);
+    }
 
-	private TestProxyOid registerService(int id) {
-		TestProxyOid oid = new TestProxyOid(id);
+    private TestProxyOid registerService(final int id) {
+        final TestProxyOid oid = new TestProxyOid(id);
         store.registerService("service name", oid);
         resetIdentityMap();
-		return oid;
-	}
+        return oid;
+    }
 
 }
-

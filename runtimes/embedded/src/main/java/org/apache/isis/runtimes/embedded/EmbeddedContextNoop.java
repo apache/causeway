@@ -17,60 +17,80 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded;
 
 import java.util.List;
 
-import org.apache.isis.runtimes.embedded.internal.PersistenceState;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.runtimes.embedded.internal.PersistenceState;
 
 public class EmbeddedContextNoop implements EmbeddedContext {
-	
-	public AuthenticationSession getAuthenticationSession() {
-		return null;
-	}
 
-	public PersistenceState getPersistenceState(Object object) {
-		return null;
-	}
+    @Override
+    public AuthenticationSession getAuthenticationSession() {
+        return null;
+    }
 
-	public Object instantiate(Class<?> type) {
-		return null;
-	}
-	public void makePersistent(Object object) {
-	}
-	public void remove(Object object) {
-	}
+    @Override
+    public PersistenceState getPersistenceState(final Object object) {
+        return null;
+    }
 
+    @Override
+    public Object instantiate(final Class<?> type) {
+        return null;
+    }
 
-	public void resolve(Object parent) {
-	}
-	public void resolve(Object parent, Object field) {
-	}
-	public void objectChanged(Object object) {
-	}
+    @Override
+    public void makePersistent(final Object object) {
+    }
 
-	public <T> List<T> allMatchingQuery(Query<T> query) {
-		return null;
-	}
-	public <T> T firstMatchingQuery(Query<T> query) {
-		return null;
-	}
+    @Override
+    public void remove(final Object object) {
+    }
 
-	
-	public void commit() {
-	}
-	public boolean flush() {
-		return false;
-	}
-	
-	public void informUser(String message) {
-	}
-	public void warnUser(String message) {
-	}
-	public void raiseError(String message) {
-	}
+    @Override
+    public void resolve(final Object parent) {
+    }
+
+    @Override
+    public void resolve(final Object parent, final Object field) {
+    }
+
+    @Override
+    public void objectChanged(final Object object) {
+    }
+
+    @Override
+    public <T> List<T> allMatchingQuery(final Query<T> query) {
+        return null;
+    }
+
+    @Override
+    public <T> T firstMatchingQuery(final Query<T> query) {
+        return null;
+    }
+
+    @Override
+    public void commit() {
+    }
+
+    @Override
+    public boolean flush() {
+        return false;
+    }
+
+    @Override
+    public void informUser(final String message) {
+    }
+
+    @Override
+    public void warnUser(final String message) {
+    }
+
+    @Override
+    public void raiseError(final String message) {
+    }
 
 }

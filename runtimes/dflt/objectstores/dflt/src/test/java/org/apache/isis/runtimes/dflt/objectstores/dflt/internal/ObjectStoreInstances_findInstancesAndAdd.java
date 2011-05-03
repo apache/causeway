@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import java.util.List;
@@ -38,66 +37,64 @@ import org.junit.runner.RunWith;
 import com.google.common.collect.Lists;
 
 /**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers)
- * and <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
+ * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and <i>Growing Object-Oriented Software</i>
+ * (Freeman &amp; Pryce).
  */
 @RunWith(JMock.class)
 public class ObjectStoreInstances_findInstancesAndAdd {
 
-	private ObjectStoreInstances instances;
+    private ObjectStoreInstances instances;
 
-	private Mockery context = new JUnit4Mockery();
+    private final Mockery context = new JUnit4Mockery();
 
-	private ObjectSpecification mockSpec;
-	private PersistenceQueryBuiltIn mockPersistenceQueryBuiltIn;
-//	private ObjectAdapter mockAdapter;
-	private AuthenticationSession mockAuthSession;
+    private ObjectSpecification mockSpec;
+    private PersistenceQueryBuiltIn mockPersistenceQueryBuiltIn;
+    // private ObjectAdapter mockAdapter;
+    private AuthenticationSession mockAuthSession;
 
-	@Before
-	public void setUp() throws Exception {
-		mockSpec = context.mock(ObjectSpecification.class);
-		mockPersistenceQueryBuiltIn = context.mock(PersistenceQueryBuiltIn.class);
-		// mockAdapter = context.mock(ObjectAdapter.class);
-		mockAuthSession = context.mock(AuthenticationSession.class);
-		instances = new ObjectStoreInstances(mockSpec) {
-			@Override
-			protected AuthenticationSession getAuthenticationSession() {
-				return mockAuthSession;
-			}
-		};
-		ignoreAuthenticationSession();
-	}
+    @Before
+    public void setUp() throws Exception {
+        mockSpec = context.mock(ObjectSpecification.class);
+        mockPersistenceQueryBuiltIn = context.mock(PersistenceQueryBuiltIn.class);
+        // mockAdapter = context.mock(ObjectAdapter.class);
+        mockAuthSession = context.mock(AuthenticationSession.class);
+        instances = new ObjectStoreInstances(mockSpec) {
+            @Override
+            protected AuthenticationSession getAuthenticationSession() {
+                return mockAuthSession;
+            }
+        };
+        ignoreAuthenticationSession();
+    }
 
-	private void ignoreAuthenticationSession() {
-		context.checking(new Expectations() {
-			{
-				ignoring(mockAuthSession);
-			}
-		});
-	}
+    private void ignoreAuthenticationSession() {
+        context.checking(new Expectations() {
+            {
+                ignoring(mockAuthSession);
+            }
+        });
+    }
 
+    @Test
+    public void findInstancesAndAddWhenEmpty() throws Exception {
+        neverInteractsWithPersistenceQueryBuiltIn();
+        final List<ObjectAdapter> foundInstances = Lists.newArrayList();
+        instances.findInstancesAndAdd(mockPersistenceQueryBuiltIn, foundInstances);
+    }
 
+    @Ignore
+    // not yet implemented
+    @Test
+    public void findInstancesAndNotEmpty() throws Exception {
 
-	@Test
-	public void findInstancesAndAddWhenEmpty() throws Exception {
-		neverInteractsWithPersistenceQueryBuiltIn();
-		List<ObjectAdapter> foundInstances = Lists.newArrayList();
-		instances.findInstancesAndAdd(mockPersistenceQueryBuiltIn, foundInstances);
-	}
+    }
 
-	@Ignore // not yet implemented
-	@Test
-	public void findInstancesAndNotEmpty() throws Exception {
-
-	}
-
-	private void neverInteractsWithPersistenceQueryBuiltIn() {
-		context.checking(new Expectations() {
-			{
-				never(mockPersistenceQueryBuiltIn);
-			}
-		});
-	}
-
+    private void neverInteractsWithPersistenceQueryBuiltIn() {
+        context.checking(new Expectations() {
+            {
+                never(mockPersistenceQueryBuiltIn);
+            }
+        });
+    }
 
 }

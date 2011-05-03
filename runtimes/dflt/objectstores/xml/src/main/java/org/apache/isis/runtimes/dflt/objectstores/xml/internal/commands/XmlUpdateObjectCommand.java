@@ -17,44 +17,40 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
-public final class XmlUpdateObjectCommand 
-		extends AbstractXmlPersistenceCommand 
-		implements SaveObjectCommand {
-	
-	private static final Logger LOG = Logger.getLogger(XmlUpdateObjectCommand.class);
+public final class XmlUpdateObjectCommand extends AbstractXmlPersistenceCommand implements SaveObjectCommand {
 
-	public XmlUpdateObjectCommand(final ObjectAdapter adapter, final DataManager dataManager) {
-		super(adapter, dataManager);
-	}
+    private static final Logger LOG = Logger.getLogger(XmlUpdateObjectCommand.class);
 
-	public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("  save object " + onObject());
-		}
-	    final String user = getAuthenticationSession().getUserName();
-	    onObject().setOptimisticLock(new FileVersion(user));
+    public XmlUpdateObjectCommand(final ObjectAdapter adapter, final DataManager dataManager) {
+        super(adapter, dataManager);
+    }
 
-	    final Data data = createObjectData(onObject(), true);
-	    getDataManager().save(data);
-	}
+    @Override
+    public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  save object " + onObject());
+        }
+        final String user = getAuthenticationSession().getUserName();
+        onObject().setOptimisticLock(new FileVersion(user));
 
-	@Override
-	public String toString() {
-	    return "SaveObjectCommand [object=" + onObject() + "]";
-	}
+        final Data data = createObjectData(onObject(), true);
+        getDataManager().save(data);
+    }
 
-	
+    @Override
+    public String toString() {
+        return "SaveObjectCommand [object=" + onObject() + "]";
+    }
 
 }

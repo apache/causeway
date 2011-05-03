@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock;
 
-
-
 public class DefaultClock implements Clock {
+    @Override
     public long getTime() {
         return System.currentTimeMillis();
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,33 +28,33 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 
-
 public class InMemoryObjectStore_retrieve extends AbstractInMemoryObjectStoreTest {
 
+    private ObjectAdapter originalAdapter;
 
-	private ObjectAdapter originalAdapter;
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        originalAdapter = system.createPersistentTestObject();
+    }
 
-	public void setUp() throws Exception {
-		super.setUp();
-		originalAdapter = system.createPersistentTestObject();
-	}
+    private void addObjectToStoreAndDiscardAdapters() {
+        addObjectToStore(originalAdapter);
+        resetIdentityMap();
+    }
 
-	private void addObjectToStoreAndDiscardAdapters() {
-		addObjectToStore(originalAdapter);
-		resetIdentityMap();
-	}
-	
     public void testGetObjectByOidWhenEmpty() {
         final ObjectSpecification spec = system.getSpecification(TestPojo.class);
         final Oid oid = new TestProxyOid(10, true);
         try {
             store.getObject(oid, spec);
             fail();
-        } catch (final ObjectNotFoundException expected) {}
+        } catch (final ObjectNotFoundException expected) {
+        }
     }
-    
+
     public void testGetObjectReturnsANewAdapter() throws Exception {
-		addObjectToStoreAndDiscardAdapters();
+        addObjectToStoreAndDiscardAdapters();
 
         final ObjectSpecification specification = originalAdapter.getSpecification();
         final ObjectAdapter retrievedObject = store.getObject(originalAdapter.getOid(), specification);
@@ -70,25 +69,26 @@ public class InMemoryObjectStore_retrieve extends AbstractInMemoryObjectStoreTes
     }
 
     public void testGetInstancesByTitle() throws Exception {
-		addObjectToStoreAndDiscardAdapters();
+        addObjectToStoreAndDiscardAdapters();
 
-		final ObjectSpecification specification = originalAdapter.getSpecification();
-        final ObjectAdapter[] retrievedInstance = store.getInstances(new PersistenceQueryFindByTitle(specification, "le STR"));
+        final ObjectSpecification specification = originalAdapter.getSpecification();
+        final ObjectAdapter[] retrievedInstance =
+            store.getInstances(new PersistenceQueryFindByTitle(specification, "le STR"));
         assertEquals(1, retrievedInstance.length);
         assertNotSame(originalAdapter, retrievedInstance[0]);
         assertSame(originalAdapter.getObject(), retrievedInstance[0].getObject());
     }
 
     public void testGetInstancesReturnsANewAdapter() throws Exception {
-		addObjectToStoreAndDiscardAdapters();
+        addObjectToStoreAndDiscardAdapters();
 
-		final ObjectSpecification specification = originalAdapter.getSpecification();
-        final ObjectAdapter[] retrievedAdapters = store.getInstances(new PersistenceQueryFindAllInstances(specification));
+        final ObjectSpecification specification = originalAdapter.getSpecification();
+        final ObjectAdapter[] retrievedAdapters =
+            store.getInstances(new PersistenceQueryFindAllInstances(specification));
         assertEquals(1, retrievedAdapters.length);
         assertSame(originalAdapter.getObject(), retrievedAdapters[0].getObject());
         assertNotSame(originalAdapter, retrievedAdapters[0]);
     }
-
 
     public void testHasInstancesWhenEmpty() throws Exception {
         final ObjectSpecification spec = system.getSpecification(TestPojo.class);
@@ -96,12 +96,10 @@ public class InMemoryObjectStore_retrieve extends AbstractInMemoryObjectStoreTes
     }
 
     public void testHasInstances() throws Exception {
-		addObjectToStoreAndDiscardAdapters();
+        addObjectToStoreAndDiscardAdapters();
 
         final ObjectSpecification specification = originalAdapter.getSpecification();
         assertEquals(true, store.hasInstances(specification));
     }
 
-
 }
-

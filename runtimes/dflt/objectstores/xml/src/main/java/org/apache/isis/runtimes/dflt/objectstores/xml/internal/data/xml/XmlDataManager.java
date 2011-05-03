@@ -17,13 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Vector;
 
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.xml.ContentWriter;
+import org.apache.isis.core.commons.xml.XmlFile;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
@@ -32,11 +36,6 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVe
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.PersistorException;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.xml.ContentWriter;
-import org.apache.isis.core.commons.xml.XmlFile;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -45,7 +44,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 public class XmlDataManager implements DataManager {
     private final XmlFile xmlFile;
 
@@ -53,17 +51,17 @@ public class XmlDataManager implements DataManager {
         this.xmlFile = xmlFile;
     }
 
-    
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // shutdown
-    //////////////////////////////////////////////////////////
-    
-    public void shutdown() {}
+    // ////////////////////////////////////////////////////////
 
+    @Override
+    public void shutdown() {
+    }
 
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // SAX Handlers
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
     // TODO the following methods are being called repeatedly - is there no
     // caching? See the print statements
@@ -92,7 +90,7 @@ public class XmlDataManager implements DataManager {
 
         @Override
         public void startElement(final String ns, final String name, final String tagName, final Attributes attributes)
-                throws SAXException {
+            throws SAXException {
             if (object != null) {
                 if (tagName.equals("value")) {
                     fieldName = attributes.getValue("field");
@@ -142,11 +140,12 @@ public class XmlDataManager implements DataManager {
         Vector<SerialOid> instances = new Vector<SerialOid>();
 
         @Override
-        public void characters(final char[] arg0, final int arg1, final int arg2) throws SAXException {}
+        public void characters(final char[] arg0, final int arg1, final int arg2) throws SAXException {
+        }
 
         @Override
         public void startElement(final String ns, final String name, final String tagName, final Attributes attrs)
-                throws SAXException {
+            throws SAXException {
             if (tagName.equals("instance")) {
                 final long oid = Long.valueOf(attrs.getValue("id"), 16).longValue();
                 instances.addElement(SerialOid.createPersistent(oid));
@@ -167,25 +166,25 @@ public class XmlDataManager implements DataManager {
 
         @Override
         public void startElement(final String ns, final String name, final String tagName, final Attributes attrs)
-                throws SAXException {
+            throws SAXException {
             captureValue = tagName.equals("number");
         }
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // fixtures
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public boolean isFixturesInstalled() {
         return xmlFile.isFixturesInstalled();
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // loadData
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public Data loadData(final SerialOid oid) {
         final DataHandler handler = new DataHandler();
         xmlFile.parse(handler, filename(oid));
@@ -197,11 +196,11 @@ public class XmlDataManager implements DataManager {
         }
     }
 
-    
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // getInstances, numberOfInstances
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public ObjectDataVector getInstances(final ObjectData pattern) {
         final Vector<SerialOid> instances = loadInstances(pattern.getSpecification());
 
@@ -210,7 +209,7 @@ public class XmlDataManager implements DataManager {
         }
 
         final ObjectDataVector matches = new ObjectDataVector();
-        for (SerialOid oid: instances) {
+        for (final SerialOid oid : instances) {
             final ObjectData instanceData = (ObjectData) loadData(oid);
             // TODO check loader first
             if (instanceData == null) {
@@ -223,52 +222,46 @@ public class XmlDataManager implements DataManager {
         return matches;
     }
 
-
-	public int numberOfInstances(final ObjectData pattern) {
+    @Override
+    public int numberOfInstances(final ObjectData pattern) {
         return getInstances(pattern).size();
     }
 
-	private Vector<SerialOid> loadInstances(ObjectSpecification noSpec) {
-		final InstanceHandler handler = new InstanceHandler();
-		parseSpecAndSubclasses(handler, noSpec);
-		return handler.instances;
-	}
+    private Vector<SerialOid> loadInstances(final ObjectSpecification noSpec) {
+        final InstanceHandler handler = new InstanceHandler();
+        parseSpecAndSubclasses(handler, noSpec);
+        return handler.instances;
+    }
 
+    private void parseSpecAndSubclasses(final InstanceHandler handler, final ObjectSpecification noSpec) {
+        parseIfNotAbstract(noSpec, handler);
+        for (final ObjectSpecification subSpec : noSpec.subclasses()) {
+            parseSpecAndSubclasses(handler, subSpec);
+        }
+    }
 
-	private void parseSpecAndSubclasses(final InstanceHandler handler,
-			ObjectSpecification noSpec) {
-		parseIfNotAbstract(noSpec, handler);
-		for(ObjectSpecification subSpec: noSpec.subclasses()) {
-			parseSpecAndSubclasses(handler, subSpec);
-		}
-	}
+    private void parseIfNotAbstract(final ObjectSpecification noSpec, final InstanceHandler handler) {
+        if (noSpec.isAbstract()) {
+            return;
+        }
+        xmlFile.parse(handler, noSpec.getFullIdentifier());
+    }
 
-
-	private void parseIfNotAbstract(ObjectSpecification noSpec,
-			final InstanceHandler handler) {
-		if (noSpec.isAbstract()) {
-			return;
-		}
-		xmlFile.parse(handler, noSpec.getFullIdentifier());
-	}
-
-
-    
     /**
-     * A helper that determines if two sets of data match. A match occurs when the types are the same and any
-     * field in the pattern also occurs in the data set under test.
+     * A helper that determines if two sets of data match. A match occurs when the types are the same and any field in
+     * the pattern also occurs in the data set under test.
      */
     // TODO we need to be able to find collection instances as well
     protected boolean matchesPattern(final ObjectData patternData, final ObjectData candidateData) {
         if (patternData == null || candidateData == null) {
             throw new NullPointerException("Can't match on nulls " + patternData + " " + candidateData);
         }
-        
+
         if (!candidateData.getSpecification().isOfType(patternData.getSpecification())) {
-        	return false;
+            return false;
         }
 
-        for(final String field: patternData.fields()) {
+        for (final String field : patternData.fields()) {
             final Object patternFieldValue = patternData.get(field);
             final Object candidateFieldValue = candidateData.get(field);
 
@@ -310,7 +303,8 @@ public class XmlDataManager implements DataManager {
         xmlFile.parse(handler, "oid");
 
         xmlFile.writeXml("oid", new ContentWriter() {
-            public void write(Writer writer) throws IOException {
+            @Override
+            public void write(final Writer writer) throws IOException {
                 final StringBuffer data = new StringBuffer();
                 data.append("<number>");
                 data.append(handler.value + 1);
@@ -322,13 +316,14 @@ public class XmlDataManager implements DataManager {
         return handler.value + 1;
     }
 
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // insertObject, remove
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
     /**
      * Save the data for an object and adds the reference to a list of instances
      */
+    @Override
     public final void insertObject(final ObjectData data) {
         if (data.getOid() == null) {
             throw new IllegalArgumentException("Oid must be non-null");
@@ -338,19 +333,17 @@ public class XmlDataManager implements DataManager {
         addReferenceToInstancesFile(data.getOid(), data.getSpecification());
     }
 
-    
-
     private void addReferenceToInstancesFile(final SerialOid oid, final ObjectSpecification noSpec) {
-    	final Vector<SerialOid> instances = loadInstances(noSpec);
-		instances.addElement(oid);
-		writeInstanceFile(noSpec, instances);
+        final Vector<SerialOid> instances = loadInstances(noSpec);
+        instances.addElement(oid);
+        writeInstanceFile(noSpec, instances);
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // remove
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public final void remove(final SerialOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
         final Data data = loadData(oid);
         removeReferenceFromInstancesFile(oid, data.getSpecification());
@@ -364,29 +357,27 @@ public class XmlDataManager implements DataManager {
         xmlFile.delete(filename(oid));
     }
 
-
     private void removeReferenceFromInstancesFile(final SerialOid oid, final ObjectSpecification noSpec) {
-		final Vector<SerialOid> instances = loadInstances(noSpec);
-		instances.removeElement(oid);
-		writeInstanceFile(noSpec, instances);
+        final Vector<SerialOid> instances = loadInstances(noSpec);
+        instances.removeElement(oid);
+        writeInstanceFile(noSpec, instances);
     }
 
-
-    
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // helpers (used by both add & remove)
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
     private void writeInstanceFile(final ObjectSpecification noSpec, final Vector<SerialOid> instances) {
-    	writeInstanceFile(noSpec.getFullIdentifier(), instances);
+        writeInstanceFile(noSpec.getFullIdentifier(), instances);
     }
 
     private void writeInstanceFile(final String name, final Vector<SerialOid> instances) {
         xmlFile.writeXml(name, new ContentWriter() {
-            public void write(Writer writer) throws IOException {
+            @Override
+            public void write(final Writer writer) throws IOException {
                 final StringBuffer data = new StringBuffer();
                 data.append("<instances name=\"" + name + "\">\n");
-                for (SerialOid elementAt: instances) {
+                for (final SerialOid elementAt : instances) {
                     data.append("  <instance id=\"" + encodedOid(elementAt) + "\"/>\n");
                 }
                 data.append("</instances>");
@@ -395,141 +386,132 @@ public class XmlDataManager implements DataManager {
         });
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // save
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
     /**
      * Save the data for latter retrieval.
      */
+    @Override
     public final void save(final Data data) {
         writeInstanceToItsDataFile(data);
     }
 
     private void writeInstanceToItsDataFile(final Data data) {
-		xmlFile.writeXml(filename(data.getOid()), new ContentWriter() {
-		    public void write(Writer writer) throws IOException {
-		        final StringBuffer xml = new StringBuffer();
-		        final boolean isObject = data instanceof ObjectData;
-		        final String tag = isObject ? "isis" : "collection";
-		        xml.append("<" + tag);
-		        xml.append(attribute("type", data.getTypeName()));
-		        xml.append(attribute("id", "" + encodedOid(data.getOid())));
-		        xml.append(attribute("user", "" + IsisContext.getAuthenticationSession().getUserName()));
-		        
-		        final long sequence = data.getVersion().getSequence();
-		        final String sequenceString = Long.toHexString(sequence).toUpperCase();
-		        xml.append(attribute("ver", "" + sequenceString));
-		        
-		        xml.append(">\n");
-		        
-		        if (isObject) {
-		            writeObject(data, xml);
-		        } else {
-		            writeCollection(data, xml);
-		        }
-		        
-		        xml.append("</" + tag + ">\n");
-		        writer.write(xml.toString());
-		    }
-		});
+        xmlFile.writeXml(filename(data.getOid()), new ContentWriter() {
+            @Override
+            public void write(final Writer writer) throws IOException {
+                final StringBuffer xml = new StringBuffer();
+                final boolean isObject = data instanceof ObjectData;
+                final String tag = isObject ? "isis" : "collection";
+                xml.append("<" + tag);
+                xml.append(attribute("type", data.getTypeName()));
+                xml.append(attribute("id", "" + encodedOid(data.getOid())));
+                xml.append(attribute("user", "" + IsisContext.getAuthenticationSession().getUserName()));
+
+                final long sequence = data.getVersion().getSequence();
+                final String sequenceString = Long.toHexString(sequence).toUpperCase();
+                xml.append(attribute("ver", "" + sequenceString));
+
+                xml.append(">\n");
+
+                if (isObject) {
+                    writeObject(data, xml);
+                } else {
+                    writeCollection(data, xml);
+                }
+
+                xml.append("</" + tag + ">\n");
+                writer.write(xml.toString());
+            }
+        });
     }
 
+    private void writeObject(final Data data, final StringBuffer xml) {
+        final ObjectData object = (ObjectData) data;
+        for (final String field : object.fields()) {
+            writeField(xml, object, field);
+        }
+    }
 
-	private void writeObject(final Data data, final StringBuffer xml) {
-		final ObjectData object = (ObjectData) data;
-		for(final String field: object.fields()) {
-		    writeField(xml, object, field);
-		}
-	}
+    private void writeField(final StringBuffer xml, final ObjectData object, final String field) {
+        final Object entry = object.get(field);
 
+        if (entry instanceof SerialOid) {
+            writeAssociationField(xml, field, entry);
+        } else if (entry instanceof ReferenceVector) {
+            writeMultipleAssociationField(xml, field, entry);
+        } else {
+            writeValueField(xml, field, entry);
+        }
+    }
 
-	private void writeField(final StringBuffer xml, final ObjectData object,
-			final String field) {
-		final Object entry = object.get(field);
+    private void writeAssociationField(final StringBuffer xml, final String field, final Object entry) {
+        Assert.assertFalse(((SerialOid) entry).isTransient());
+        xml.append("  <association field=\"" + field + "\" ");
+        xml.append("ref=\"" + encodedOid((SerialOid) entry) + "\"/>\n");
+    }
 
-		if (entry instanceof SerialOid) {
-		    writeAssociationField(xml, field, entry);
-		} else if (entry instanceof ReferenceVector) {
-		    writeMultipleAssociationField(xml, field, entry);
-		} else {
-		    writeValueField(xml, field, entry);
-		}
-	}
+    private void writeMultipleAssociationField(final StringBuffer xml, final String field, final Object entry) {
+        final ReferenceVector references = (ReferenceVector) entry;
+        final int size = references.size();
 
-	private void writeAssociationField(final StringBuffer xml, final String field,
-			final Object entry) {
-		Assert.assertFalse(((SerialOid) entry).isTransient());
-		xml.append("  <association field=\"" + field + "\" ");
-		xml.append("ref=\"" + encodedOid((SerialOid) entry) + "\"/>\n");
-	}
+        if (size > 0) {
+            xml.append("  <multiple-association field=\"" + field + "\" ");
+            xml.append(">\n");
+            for (int i = 0; i < size; i++) {
+                final Object oid = references.elementAt(i);
+                if (((SerialOid) oid).isTransient()) {
+                    throw new ObjectPersistenceException("Can't add tranisent OID (" + oid + ") to " + field
+                        + " element.");
+                }
+                xml.append("    <element ");
+                xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");
+            }
+            xml.append("  </multiple-association>\n");
+        }
+    }
 
-	private void writeMultipleAssociationField(final StringBuffer xml,
-			final String field, final Object entry) {
-		final ReferenceVector references = (ReferenceVector) entry;
-		final int size = references.size();
+    private void writeValueField(final StringBuffer xml, final String field, final Object entry) {
+        xml.append("  <value field=\"" + field + "\">");
+        xml.append(XmlFile.getValueWithSpecialsEscaped(entry.toString()));
+        xml.append("</value>\n");
+    }
 
-		if (size > 0) {
-		    xml.append("  <multiple-association field=\"" + field + "\" ");
-		    xml.append(">\n");
-		    for (int i = 0; i < size; i++) {
-		        final Object oid = references.elementAt(i);
-		        if (((SerialOid) oid).isTransient()) {
-		            throw new ObjectPersistenceException("Can't add tranisent OID (" + oid + ") to " + field + " element.");
-		        }
-		        xml.append("    <element ");
-		        xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");
-		    }
-		    xml.append("  </multiple-association>\n");
-		}
-	}
-
-	private void writeValueField(final StringBuffer xml, final String field,
-			final Object entry) {
-		xml.append("  <value field=\"" + field + "\">");
-		xml.append(XmlFile.getValueWithSpecialsEscaped(entry.toString()));
-		xml.append("</value>\n");
-	}
-
-
-	private void writeCollection(final Data data, final StringBuffer xml) {
-		final CollectionData collection = (CollectionData) data;
-		final ReferenceVector refs = collection.references();
-		for (int i = 0; i < refs.size(); i++) {
-		    final Object oid = refs.elementAt(i);
-		    xml.append("  <element ");
-		    xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");
-		}
-	}
-
+    private void writeCollection(final Data data, final StringBuffer xml) {
+        final CollectionData collection = (CollectionData) data;
+        final ReferenceVector refs = collection.references();
+        for (int i = 0; i < refs.size(); i++) {
+            final Object oid = refs.elementAt(i);
+            xml.append("  <element ");
+            xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");
+        }
+    }
 
     private String attribute(final String name, final String value) {
         return " " + name + "=\"" + value + "\"";
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // Helpers
-    //////////////////////////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////
 
     private String filename(final SerialOid oid) {
         return encodedOid(oid);
     }
 
     private String encodedOid(final SerialOid oid) {
-    	return Long.toHexString(oid.getSerialNo()).toUpperCase();
+        return Long.toHexString(oid.getSerialNo()).toUpperCase();
     }
-    
 
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // Debugging
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public String getDebugData() {
         return "Data directory " + xmlFile.getDirectory();
     }
-
 
 }

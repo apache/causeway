@@ -17,34 +17,33 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.log4j.Logger;
 
-public final class InMemoryDestroyObjectCommand 
-		extends AbstractInMemoryPersistenceCommand 
-		implements DestroyObjectCommand {
-	private final static Logger LOG = Logger.getLogger(InMemoryDestroyObjectCommand.class);
+public final class InMemoryDestroyObjectCommand extends AbstractInMemoryPersistenceCommand implements
+    DestroyObjectCommand {
+    private final static Logger LOG = Logger.getLogger(InMemoryDestroyObjectCommand.class);
 
-	public InMemoryDestroyObjectCommand(final ObjectAdapter adapter, final ObjectStorePersistedObjects persistedObjects) {
-		super(adapter, persistedObjects);
-	}
+    public InMemoryDestroyObjectCommand(final ObjectAdapter adapter, final ObjectStorePersistedObjects persistedObjects) {
+        super(adapter, persistedObjects);
+    }
 
-	public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
-		if (LOG.isInfoEnabled()) {
-			LOG.info("  delete object '" + onObject() + "'");
-		}
-	    destroy(onObject());
-	}
+    @Override
+    public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("  delete object '" + onObject() + "'");
+        }
+        destroy(onObject());
+    }
 
-	@Override
-	public String toString() {
-	    return "DestroyObjectCommand [object=" + onObject() + "]";
-	}
+    @Override
+    public String toString() {
+        return "DestroyObjectCommand [object=" + onObject() + "]";
+    }
 }

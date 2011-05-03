@@ -17,21 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 public class DummyServiceManager implements ServiceManager {
 
+    @Override
     public Oid getOidForService(final String name) {
         return null;
     }
 
-    public void loadServices() {}
+    @Override
+    public void loadServices() {
+    }
 
-    public void registerService(final String name, final Oid oid) {}
+    @Override
+    public void registerService(final String name, final Oid oid) {
+    }
 
 }
-

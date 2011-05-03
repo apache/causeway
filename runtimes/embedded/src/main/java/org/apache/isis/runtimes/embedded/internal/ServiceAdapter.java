@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.internal;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ServiceAdapter extends StandaloneAdapter {
 
-	
-	public ServiceAdapter(ObjectSpecification spec, Object serviceObject) {
-		super(spec, serviceObject, PersistenceState.PERSISTENT);
-	}
+    public ServiceAdapter(final ObjectSpecification spec, final Object serviceObject) {
+        super(spec, serviceObject, PersistenceState.PERSISTENT);
+    }
 
 }

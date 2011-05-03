@@ -30,11 +30,11 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.testsupport.testdomain.Movie;
 import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.core.testsupport.testdomain.Role;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -72,20 +72,20 @@ public class ObjectFixtureServiceTest {
     public void loadNothingIfNoFileExists() throws Exception {
         service.loadFile();
 
-        Set<Object> objects = service.allSavedObjects();
+        final Set<Object> objects = service.allSavedObjects();
         Assert.assertEquals(0, objects.size());
     }
 
     @Test
     public void loadInstanceFromFile() throws Exception {
-        String key = ConfigurationConstants.ROOT + "exploration-objects.file";
-        String fileName = "test.data";
+        final String key = ConfigurationConstants.ROOT + "exploration-objects.file";
+        final String fileName = "test.data";
         system.addToConfiguration(key, fileName);
         service.loadFile();
 
-        Set<Object> objects = service.allSavedObjects();
+        final Set<Object> objects = service.allSavedObjects();
         Assert.assertEquals(1, objects.size());
-        Object object = objects.toArray()[0];
+        final Object object = objects.toArray()[0];
         assertThat(object instanceof Person, is(true));
         Assert.assertEquals("Fred Smith", ((Person) object).getName());
         Assert.assertEquals(new Date(110, 2, 8, 13, 32), ((Person) object).getDate());
@@ -93,16 +93,16 @@ public class ObjectFixtureServiceTest {
 
     @Test
     public void saveObjectAddedToList() throws Exception {
-        Person person = new Person();
+        final Person person = new Person();
         person.setName("Fred Smith");
         person.setDate(new Date(110, 2, 8, 13, 32));
-        Movie movie = new Movie();
+        final Movie movie = new Movie();
         movie.setDirector(person);
         movie.addToRoles(new Role());
         movie.addToRoles(new Role());
         service.save(movie);
 
-        Set<Object> savedObjects = service.allSavedObjects();
+        final Set<Object> savedObjects = service.allSavedObjects();
         Assert.assertEquals(4, savedObjects.size());
     }
 

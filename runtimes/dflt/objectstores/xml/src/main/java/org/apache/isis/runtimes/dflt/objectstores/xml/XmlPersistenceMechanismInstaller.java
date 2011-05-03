@@ -17,13 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml;
 
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.adapter.XmlAdapterManager;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.adapter.XmlAdapterManager;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
@@ -34,20 +33,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.log4j.Logger;
 
-
 public class XmlPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
-    
-	@SuppressWarnings("unused")
+
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(XmlPersistenceMechanismInstaller.class);
     private XmlObjectStore objectStore;
 
     public XmlPersistenceMechanismInstaller() {
-    	super("xml");
+        super("xml");
     }
-    
 
     @Override
-    protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory objectFactory, AdapterManager adapterManager) {
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
+        final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
         if (objectStore == null) {
             objectStore = new XmlObjectStore(configuration);
             objectStore.setClock(new DefaultClock());
@@ -55,17 +53,17 @@ public class XmlPersistenceMechanismInstaller extends ObjectStorePersistenceMech
         return objectStore;
     }
 
-    
     @Override
     protected AdapterManagerExtended createAdapterManager(final IsisConfiguration configuration) {
         return new XmlAdapterManager();
     }
 
     @Override
-    protected OidGenerator createOidGenerator(IsisConfiguration configuration) {
+    protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
         return new TimeBasedOidGenerator();
     }
 
+    @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
         return new XmlPersistenceSessionFactory(deploymentType, this);
     }

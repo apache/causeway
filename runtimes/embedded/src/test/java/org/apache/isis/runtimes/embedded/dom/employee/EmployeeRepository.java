@@ -17,20 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.employee;
 
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Named;
 
-
 @Named("Employees")
 public interface EmployeeRepository {
 
     public List<Employee> allEmployees();
 
-    public List<Employee> findEmployees(
-    		@Named("Name") 
-    		String name);
+    public List<Employee> findEmployees(@Named("Name") String name);
 }

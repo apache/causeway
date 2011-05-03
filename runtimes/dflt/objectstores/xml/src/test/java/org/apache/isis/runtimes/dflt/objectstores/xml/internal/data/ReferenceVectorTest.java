@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import static org.junit.Assert.assertFalse;
@@ -28,47 +27,44 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ReferenceVectorTest {
-	private ReferenceVector referenceVector;
-	private SerialOid oid;
+    private ReferenceVector referenceVector;
+    private SerialOid oid;
 
-	@Before
-	public void setUp() throws Exception {
-		long serialNum = Long.parseLong("1", 16);
-		oid = SerialOid.createTransient(serialNum);
-		referenceVector = new ReferenceVector();
-	}
-	
-	@Test 
-	public void validatesSerialOidIsStoredInElements()throws Exception {
-		referenceVector.add(oid);
-		assertTrue(referenceVector.elementAt(0).equals(oid));
-	}
-	
-	@Test 
-	public void validatesSerialOidIsRemovedInElements()throws Exception {
-		referenceVector.add(oid);
-		referenceVector.remove(oid);
-		assertTrue(referenceVector.size() == 0);
-	}
-	
-	@Test 
-	public void validatesReferenceVectorIsEqual()throws Exception {
-		assertTrue(referenceVector.equals(referenceVector));
-		assertTrue(referenceVector.equals(new ReferenceVector()));
-		assertFalse(referenceVector.equals(new Object()));
-	}
-	
-	@Test 
-	public void validateReferenceVectorHashCode()throws Exception {
-		assertTrue(referenceVector.hashCode() == 630);
-	}
-	
-	@Test 
-	public void validateReferenceToString()throws Exception {
-		assertTrue(referenceVector.toString() != null);
-	}
-	
+    @Before
+    public void setUp() throws Exception {
+        final long serialNum = Long.parseLong("1", 16);
+        oid = SerialOid.createTransient(serialNum);
+        referenceVector = new ReferenceVector();
+    }
+
+    @Test
+    public void validatesSerialOidIsStoredInElements() throws Exception {
+        referenceVector.add(oid);
+        assertTrue(referenceVector.elementAt(0).equals(oid));
+    }
+
+    @Test
+    public void validatesSerialOidIsRemovedInElements() throws Exception {
+        referenceVector.add(oid);
+        referenceVector.remove(oid);
+        assertTrue(referenceVector.size() == 0);
+    }
+
+    @Test
+    public void validatesReferenceVectorIsEqual() throws Exception {
+        assertTrue(referenceVector.equals(referenceVector));
+        assertTrue(referenceVector.equals(new ReferenceVector()));
+        assertFalse(referenceVector.equals(new Object()));
+    }
+
+    @Test
+    public void validateReferenceVectorHashCode() throws Exception {
+        assertTrue(referenceVector.hashCode() == 630);
+    }
+
+    @Test
+    public void validateReferenceToString() throws Exception {
+        assertTrue(referenceVector.toString() != null);
+    }
 
 }
-
-

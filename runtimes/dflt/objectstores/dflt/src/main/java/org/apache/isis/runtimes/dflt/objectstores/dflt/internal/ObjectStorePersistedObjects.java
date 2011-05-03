@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -32,17 +31,19 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Sim
 public interface ObjectStorePersistedObjects {
 
     public Memento getOidGeneratorMemento();
+
     public void saveOidGeneratorMemento(Memento memento);
 
     public void registerService(String name, Oid oid);
+
     public Oid getService(String name);
 
-	public Iterable<ObjectSpecification> specifications();
-	public ObjectStoreInstances instancesFor(ObjectSpecification spec);
-	public Iterable<ObjectStoreInstances> instances();
+    public Iterable<ObjectSpecification> specifications();
 
-	public void clear();
+    public ObjectStoreInstances instancesFor(ObjectSpecification spec);
+
+    public Iterable<ObjectStoreInstances> instances();
+
+    public void clear();
 
 }
-
-

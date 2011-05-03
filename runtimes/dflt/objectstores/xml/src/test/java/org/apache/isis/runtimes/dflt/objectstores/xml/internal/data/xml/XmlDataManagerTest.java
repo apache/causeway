@@ -22,14 +22,14 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.apache.isis.core.commons.xml.XmlFile;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Role;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Team;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.core.commons.xml.XmlFile;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
@@ -45,7 +45,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         FileVersion.setClock(new DefaultClock());
 
         clearTestDirectory();
-        String charset = XmlFileUtil.lookupCharset(system.getConfiguration());
+        final String charset = XmlFileUtil.lookupCharset(system.getConfiguration());
         manager = new XmlDataManager(new XmlFile(charset, "tmp/tests"));
     }
 
@@ -64,8 +64,8 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         });
 
         if (files != null) {
-            for (int f = 0; f < files.length; f++) {
-                new File(directory, files[f]).delete();
+            for (final String file : files) {
+                new File(directory, file).delete();
             }
         }
     }

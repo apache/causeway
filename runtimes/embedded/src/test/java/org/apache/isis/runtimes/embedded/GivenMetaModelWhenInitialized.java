@@ -17,46 +17,41 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.runtimes.embedded.EmbeddedContext;
-import org.apache.isis.runtimes.embedded.IsisMetaModel;
-import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
-
 
 @RunWith(JMock.class)
 public class GivenMetaModelWhenInitialized {
-	
-	private Mockery mockery = new JUnit4Mockery();
-	
-	private EmbeddedContext mockContext;
-	
-	private IsisMetaModel metaModel;
-	
-	
-	@Before
-	public void setUp() {
-		mockContext = mockery.mock(EmbeddedContext.class);
 
-		metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
-		metaModel.init();
-	}
-	
-	@Test
-	public void shouldBeAbleToGetViewer() {
-		assertThat(metaModel.getViewer(), is(notNullValue()));
-	}
+    private final Mockery mockery = new JUnit4Mockery();
+
+    private EmbeddedContext mockContext;
+
+    private IsisMetaModel metaModel;
+
+    @Before
+    public void setUp() {
+        mockContext = mockery.mock(EmbeddedContext.class);
+
+        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+        metaModel.init();
+    }
+
+    @Test
+    public void shouldBeAbleToGetViewer() {
+        assertThat(metaModel.getViewer(), is(notNullValue()));
+    }
 
 }

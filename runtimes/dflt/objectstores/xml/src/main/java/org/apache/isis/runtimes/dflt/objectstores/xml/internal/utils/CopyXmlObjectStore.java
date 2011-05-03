@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.utils;
 
 import java.io.BufferedInputStream;
@@ -28,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-
 
 public class CopyXmlObjectStore {
     public static void main(final String[] args) {
@@ -50,8 +48,8 @@ public class CopyXmlObjectStore {
         }
 
         final String list[] = from.list();
-        for (int i = 0; i < list.length; i++) {
-            copyFile(new File(from, list[i]), new File(to, list[i]));
+        for (final String element : list) {
+            copyFile(new File(from, element), new File(to, element));
         }
     }
 
@@ -69,18 +67,19 @@ public class CopyXmlObjectStore {
                 bos.write(buffer, 0, len);
             }
         } catch (final IOException e) {
-            throw new IsisException("Error copying file " + from.getAbsolutePath() + " to " + to.getAbsolutePath(),
-                    e);
+            throw new IsisException("Error copying file " + from.getAbsolutePath() + " to " + to.getAbsolutePath(), e);
         } finally {
             if (bis != null) {
                 try {
                     bis.close();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
             }
             if (bos != null) {
                 try {
                     bos.close();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
             }
         }
     }

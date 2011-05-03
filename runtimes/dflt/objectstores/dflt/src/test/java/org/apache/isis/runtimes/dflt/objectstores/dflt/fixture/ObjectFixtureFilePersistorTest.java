@@ -35,11 +35,11 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.FixtureException;
-import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureFilePersistor;
 import org.apache.isis.core.testsupport.testdomain.Movie;
 import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.FixtureException;
+import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureFilePersistor;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -73,12 +73,12 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void loadInstance() throws Exception {
-        StringReader reader =
+        final StringReader reader =
             new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name: Fred Smith\n  date: 08-Mar-2010 00:00");
-        Set<Object> objects = persistor.loadData(reader);
+        final Set<Object> objects = persistor.loadData(reader);
 
         Assert.assertEquals(1, objects.size());
-        Object object = objects.toArray()[0];
+        final Object object = objects.toArray()[0];
         assertThat(object instanceof Person, is(true));
         Assert.assertEquals("Fred Smith", ((Person) object).getName());
         Assert.assertEquals(new Date(110, 2, 8, 0, 0), ((Person) object).getDate());
@@ -87,10 +87,10 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void invalidFieldLine() throws Exception {
         try {
-            StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name Fred Smith");
+            final StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name Fred Smith");
             persistor.loadData(reader);
             Assert.fail();
-        } catch (FixtureException e) {
+        } catch (final FixtureException e) {
             Assert.assertEquals("failed to load data at line 2", e.getMessage());
             Assert.assertEquals("no colon (:) in: name Fred Smith", e.getCause().getMessage());
         }
@@ -98,9 +98,9 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void oldFieldNameSkipped() throws Exception {
-        StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  xname: Fred Smith");
-        Set<Object> objects = persistor.loadData(reader);
-        Object object = objects.toArray()[0];
+        final StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  xname: Fred Smith");
+        final Set<Object> objects = persistor.loadData(reader);
+        final Object object = objects.toArray()[0];
         Assert.assertNull(((Person) object).getName());
 
     }
@@ -108,21 +108,22 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void saveNoObjects() throws Exception {
         // Person person = new Person();
-        Set<Object> objects = new HashSet<Object>();
-        StringWriter out = new StringWriter();
+        final Set<Object> objects = new HashSet<Object>();
+        final StringWriter out = new StringWriter();
         persistor.save(objects, out);
         Assert.assertEquals("", out.toString());
     }
 
     @Test
     public void saveOneObject() throws Exception {
-        Set<Object> objects = new HashSet<Object>();
+        final Set<Object> objects = new HashSet<Object>();
         objects.add(person);
 
-        StringWriter out = new StringWriter();
+        final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        String string1 = PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
-        String string2 = PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
+        final String string1 = PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+        final String string2 =
+            PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
         // *nix vs Windows?
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
@@ -131,11 +132,11 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void saveTwoObjects() throws Exception {
-        Set<Object> objects = new AbstractSet<Object>() {
+        final Set<Object> objects = new AbstractSet<Object>() {
             @Override
             public Iterator<Object> iterator() {
-                List<Object> list = new ArrayList<Object>();
-                Person person = new Person();
+                final List<Object> list = new ArrayList<Object>();
+                final Person person = new Person();
                 person.setName("Fred Smith");
                 person.setDate(new Date(110, 2, 8, 0, 0));
                 list.add(person);
@@ -149,14 +150,14 @@ public class ObjectFixtureFilePersistorTest {
             }
         };
 
-        StringWriter out = new StringWriter();
+        final StringWriter out = new StringWriter();
         persistor.save(objects, out);
 
         // *nix vs Windows?
-        String string1 =
+        final String string1 =
             PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n" + PACKAGE_BASE
                 + ".testdomain.Person#3\n  date: \n  name: \n";
-        String string2 =
+        final String string2 =
             PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n" + PACKAGE_BASE
                 + ".testdomain.Person#3\r\n  date: \r\n  name: \r\n";
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
@@ -166,12 +167,12 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void saveAssociatedObjects() throws Exception {
-        Set<Object> objects = new AbstractSet<Object>() {
+        final Set<Object> objects = new AbstractSet<Object>() {
 
             @Override
             public Iterator<Object> iterator() {
-                List<Object> list = new ArrayList<Object>();
-                Movie movie = new Movie();
+                final List<Object> list = new ArrayList<Object>();
+                final Movie movie = new Movie();
                 movie.setName("The Blockbuster");
                 movie.setDirector(person);
                 list.add(movie);
@@ -185,13 +186,13 @@ public class ObjectFixtureFilePersistorTest {
             }
         };
 
-        StringWriter out = new StringWriter();
+        final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        String string1 =
+        final String string1 =
             PACKAGE_BASE + ".testdomain.Movie#2\n  director: " + PACKAGE_BASE
                 + ".testdomain.Person#3\n  name: The Blockbuster\n  roles: \n" + PACKAGE_BASE
                 + ".testdomain.Person#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
-        String string2 =
+        final String string2 =
             PACKAGE_BASE + ".testdomain.Movie#2\r\n  director: " + PACKAGE_BASE
                 + ".testdomain.Person#3\r\n  name: The Blockbuster\r\n  roles: \r\n" + PACKAGE_BASE
                 + ".testdomain.Person#3\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";

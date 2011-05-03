@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml;
 
 import java.io.IOException;
@@ -25,16 +24,15 @@ import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 
 class ServiceElement {
     final SerialOid oid;
@@ -53,7 +51,7 @@ class ServiceHandler extends DefaultHandler {
 
     @Override
     public void startElement(final String ns, final String name, final String tagName, final Attributes attrs)
-            throws SAXException {
+        throws SAXException {
         if (tagName.equals("service")) {
             final long oid = Long.valueOf(attrs.getValue("oid"), 16).longValue();
             final String id = attrs.getValue("id");
@@ -77,6 +75,7 @@ public class XmlServiceManager implements ServiceManager {
         return Long.toHexString(oid.getSerialNo()).toUpperCase();
     }
 
+    @Override
     public Oid getOidForService(final String name) {
         for (final Enumeration e = services.elements(); e.hasMoreElements();) {
             final ServiceElement element = (ServiceElement) e.nextElement();
@@ -87,12 +86,14 @@ public class XmlServiceManager implements ServiceManager {
         return null;
     }
 
+    @Override
     public void loadServices() {
         final ServiceHandler handler = new ServiceHandler();
         xmlFile.parse(handler, SERVICES_FILE_NAME);
         services = handler.services;
     }
 
+    @Override
     public void registerService(final String name, final Oid oid) {
         final SerialOid soid = (SerialOid) oid;
         final ServiceElement element = new ServiceElement(soid, name);
@@ -102,7 +103,8 @@ public class XmlServiceManager implements ServiceManager {
 
     public final void saveServices() {
         xmlFile.writeXml(SERVICES_FILE_NAME, new ContentWriter() {
-            public void write(Writer writer) throws IOException {
+            @Override
+            public void write(final Writer writer) throws IOException {
                 final String tag = SERVICES_FILE_NAME;
                 writer.append("<" + tag + ">\n");
                 for (final Enumeration e = services.elements(); e.hasMoreElements();) {
@@ -118,4 +120,3 @@ public class XmlServiceManager implements ServiceManager {
         });
     }
 }
-

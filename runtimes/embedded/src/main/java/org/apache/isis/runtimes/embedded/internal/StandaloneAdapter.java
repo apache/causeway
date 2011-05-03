@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.internal;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,230 +34,223 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * Only provides a concrete implementation of the methods corresponding to 
- * the {@link ObjectMetaModel} interface.
+ * Only provides a concrete implementation of the methods corresponding to the {@link ObjectMetaModel} interface.
  */
 public class StandaloneAdapter implements ObjectAdapter {
 
-	private final ObjectSpecification spec;
-	private final PersistenceState persistenceState;
-	private Object domainObject;
+    private final ObjectSpecification spec;
+    private final PersistenceState persistenceState;
+    private Object domainObject;
 
     private ElementSpecificationProvider elementSpecificationProvider;
 
-	public StandaloneAdapter(ObjectSpecification spec, Object domainObject, PersistenceState persistenceState) {
-		this.spec = spec;
-		this.domainObject = domainObject;
-		this.persistenceState = persistenceState;
-	}
+    public StandaloneAdapter(final ObjectSpecification spec, final Object domainObject,
+        final PersistenceState persistenceState) {
+        this.spec = spec;
+        this.domainObject = domainObject;
+        this.persistenceState = persistenceState;
+    }
 
-	/**
-	 * Returns the {@link ObjectSpecification} as provided in the constructor.
-	 */
-	@Override
+    /**
+     * Returns the {@link ObjectSpecification} as provided in the constructor.
+     */
+    @Override
     public ObjectSpecification getSpecification() {
-		return spec;
-	}
+        return spec;
+    }
 
-	/**
-	 * Returns the domain object as provided in the constructor.
-	 */
-	@Override
+    /**
+     * Returns the domain object as provided in the constructor.
+     */
+    @Override
     public Object getObject() {
-		return domainObject;
-	}
-	
-	/**
-	 * Replaces the {@link #getObject() domain object}.
-	 */
-	@Override
-    public void replacePojo(Object pojo) {
-		this.domainObject = pojo;
-	}
+        return domainObject;
+    }
 
-	/**
-	 * Whether the object is persisted.
-	 * 
-	 * <p>
-	 * As per the {@link PersistenceState} provided in the constructor.
-	 */
-	@Override
+    /**
+     * Replaces the {@link #getObject() domain object}.
+     */
+    @Override
+    public void replacePojo(final Object pojo) {
+        this.domainObject = pojo;
+    }
+
+    /**
+     * Whether the object is persisted.
+     * 
+     * <p>
+     * As per the {@link PersistenceState} provided in the constructor.
+     */
+    @Override
     public boolean isPersistent() {
-		return persistenceState.isPersistent();
-	}
+        return persistenceState.isPersistent();
+    }
 
-	/**
-	 * Whether the object is not persisted.
-	 * 
-	 * <p>
-	 * As per the {@link PersistenceState} provided in the constructor.
-	 */
-	@Override
+    /**
+     * Whether the object is not persisted.
+     * 
+     * <p>
+     * As per the {@link PersistenceState} provided in the constructor.
+     */
+    @Override
     public boolean isTransient() {
-		return persistenceState.isTransient();
-	}
+        return persistenceState.isTransient();
+    }
 
-	/**
-	 * Always returns <tt>null</tt>.
-	 */
-	@Override
+    /**
+     * Always returns <tt>null</tt>.
+     */
+    @Override
     public ObjectAdapter getOwner() {
-		return null;
-	}
+        return null;
+    }
 
-	@Override
+    @Override
     public String titleString() {
-		final ObjectSpecification specification = getSpecification();
+        final ObjectSpecification specification = getSpecification();
         if (specification.isCollection()) {
             return "A collection of " + (" " + specification.getPluralName()).toLowerCase();
-        } 
-        // TODO do we want to localize titles  for embedded work?
-        String title = specification.getTitle(this, null);
+        }
+        // TODO do we want to localize titles for embedded work?
+        final String title = specification.getTitle(this, null);
         if (title != null) {
-        	return title;
+            return title;
         }
         return "A " + specification.getSingularName().toLowerCase();
-	}
-
+    }
 
     @Override
     public ObjectSpecification getElementSpecification() {
-        if(elementSpecificationProvider==null) {
+        if (elementSpecificationProvider == null) {
             return null;
         }
         return elementSpecificationProvider.getElementType();
     }
 
     @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
         this.elementSpecificationProvider = elementSpecificationProvider;
     }
 
+    // /////////////////////////////////////////////////////////
+    // Methods specified to ObjectAdapter (as opposed to
+    // ObjectMetaModel) do not need to be implemented.
+    // /////////////////////////////////////////////////////////
 
-
-	///////////////////////////////////////////////////////////
-	// Methods specified to ObjectAdapter (as opposed to 
-	// ObjectMetaModel) do not need to be implemented.
-	///////////////////////////////////////////////////////////
-	
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public ResolveState getResolveState() {
-		throw new UnsupportedOperationException();
-	}
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
-    public void changeState(ResolveState newState) {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
+    public void changeState(final ResolveState newState) {
+        throw new UnsupportedOperationException();
+    }
 
-
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public Oid getOid() {
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean isAggregated() {
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public String getIconName() {
-		throw new UnsupportedOperationException();
-	}
+        throw new UnsupportedOperationException();
+    }
 
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
+    public Instance getInstance(final Specification specification) {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
-    public Instance getInstance(Specification specification) {
-		throw new UnsupportedOperationException();
-	}
-
-	
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public Version getVersion() {
-		throw new UnsupportedOperationException();
-	}
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
-    public void checkLock(Version version) {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
+    public void checkLock(final Version version) {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
-    public void setOptimisticLock(Version version) {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
+    public void setOptimisticLock(final Version version) {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Not supported, always throws an exception.
-	 * 
-	 * @throws UnsupportedOperationException
-	 */
-	@Override
+    /**
+     * Not supported, always throws an exception.
+     * 
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public void fireChangedEvent() {
-		throw new UnsupportedOperationException();
-	}
+        throw new UnsupportedOperationException();
+    }
 
-	
     @Override
     public ObjectAdapter getAggregateRoot() {
         if (getSpecification().isAggregated()) {
-            Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
+            final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
             return getAdapterManager().getAdapterFor(parentOid);
         } else {
             return this;
         }
     }
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    //////////////////////////////////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////
+
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -266,6 +258,5 @@ public class StandaloneAdapter implements ObjectAdapter {
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-
 
 }

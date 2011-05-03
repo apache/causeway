@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,7 +24,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-
 
 public class InMemoryObjectStore_interactionWithAdapterManager extends ProxyJunit3TestCase {
     private InMemoryObjectStore store;
@@ -56,9 +54,8 @@ public class InMemoryObjectStore_interactionWithAdapterManager extends ProxyJuni
         try {
             store.getObject(object.getOid(), specification);
             fail();
-        } catch (final ObjectNotFoundException expected) {}
+        } catch (final ObjectNotFoundException expected) {
+        }
     }
 
-
 }
-

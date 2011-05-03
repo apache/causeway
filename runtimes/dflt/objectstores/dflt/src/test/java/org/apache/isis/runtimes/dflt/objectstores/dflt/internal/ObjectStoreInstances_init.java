@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import static org.hamcrest.Matchers.is;
@@ -36,34 +35,33 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) 
- * and <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
+ * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and <i>Growing Object-Oriented Software</i>
+ * (Freeman &amp; Pryce).
  */
 @RunWith(JMock.class)
 public class ObjectStoreInstances_init {
 
-	private ObjectStoreInstances instances;
+    private ObjectStoreInstances instances;
 
-	private Mockery context = new JUnit4Mockery();
+    private final Mockery context = new JUnit4Mockery();
 
-	private ObjectSpecification mockSpec;
-	
-	@Before
-	public void setUp() throws Exception {
-		mockSpec = context.mock(ObjectSpecification.class);
-		instances = new ObjectStoreInstances(mockSpec);
-	}
+    private ObjectSpecification mockSpec;
 
+    @Before
+    public void setUp() throws Exception {
+        mockSpec = context.mock(ObjectSpecification.class);
+        instances = new ObjectStoreInstances(mockSpec);
+    }
 
-	@Test
-	public void initiallyEmpty() throws Exception {
-		Map<Oid, Object> objectInstances = instances.getObjectInstances();
-		assertThat(objectInstances.size(), is(0));
-		
-		Set<Oid> oids = instances.getOids();
-		assertThat(oids.size(), is(0));
-		
-		assertThat(instances.hasInstances(), is(false));
-	}
+    @Test
+    public void initiallyEmpty() throws Exception {
+        final Map<Oid, Object> objectInstances = instances.getObjectInstances();
+        assertThat(objectInstances.size(), is(0));
+
+        final Set<Oid> oids = instances.getOids();
+        assertThat(oids.size(), is(0));
+
+        assertThat(instances.hasInstances(), is(false));
+    }
 
 }

@@ -17,33 +17,31 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.log4j.Logger;
 
-public final class InMemorySaveObjectCommand 
-		extends AbstractInMemoryPersistenceCommand 
-		implements SaveObjectCommand {
-	
-	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(InMemorySaveObjectCommand.class);
+public final class InMemorySaveObjectCommand extends AbstractInMemoryPersistenceCommand implements SaveObjectCommand {
 
-	public InMemorySaveObjectCommand(ObjectAdapter object, final ObjectStorePersistedObjects persistedObjects) {
-		super(object, persistedObjects);
-	}
+    @SuppressWarnings("unused")
+    private final static Logger LOG = Logger.getLogger(InMemorySaveObjectCommand.class);
 
-	public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
-	    save(onObject());
-	}
+    public InMemorySaveObjectCommand(final ObjectAdapter object, final ObjectStorePersistedObjects persistedObjects) {
+        super(object, persistedObjects);
+    }
 
-	@Override
-	public String toString() {
-	    return "SaveObjectCommand [object=" + onObject() + "]";
-	}
+    @Override
+    public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+        save(onObject());
+    }
+
+    @Override
+    public String toString() {
+        return "SaveObjectCommand [object=" + onObject() + "]";
+    }
 }

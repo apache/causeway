@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands;
 
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
@@ -29,23 +28,24 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceExcept
 import org.apache.log4j.Logger;
 
 public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand implements DestroyObjectCommand {
-	private static final Logger LOG = Logger.getLogger(XmlDestroyObjectCommand.class);
-	
-	public XmlDestroyObjectCommand(final ObjectAdapter adapter, final DataManager dataManager) {
-		super(adapter, dataManager);
-	}
+    private static final Logger LOG = Logger.getLogger(XmlDestroyObjectCommand.class);
 
-	public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("  destroy object " + onObject());
-		}
-	    final SerialOid oid = (SerialOid) onObject().getOid();
-	    getDataManager().remove(oid);
-	    onObject().setOptimisticLock(null);
-	}
+    public XmlDestroyObjectCommand(final ObjectAdapter adapter, final DataManager dataManager) {
+        super(adapter, dataManager);
+    }
 
-	@Override
-	public String toString() {
-	    return "DestroyObjectCommand [object=" + onObject() + "]";
-	}
+    @Override
+    public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  destroy object " + onObject());
+        }
+        final SerialOid oid = (SerialOid) onObject().getOid();
+        getDataManager().remove(oid);
+        onObject().setOptimisticLock(null);
+    }
+
+    @Override
+    public String toString() {
+        return "DestroyObjectCommand [object=" + onObject() + "]";
+    }
 }

@@ -17,18 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock;
-
-
-
-
-
-
 
 public class TestClock implements Clock {
     long time = 0;
 
+    @Override
     public synchronized long getTime() {
         time += 1;
         return time;

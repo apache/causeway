@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import java.util.HashMap;
@@ -38,66 +37,66 @@ public class ObjectStorePersistedObjectsDefault implements ObjectStorePersistedO
     private final Map<ObjectSpecification, ObjectStoreInstances> instancesBySpecMap;
     private final Map<String, Oid> serviceOidByIdMap;
 
-	private Memento oidGeneratorMemento;
+    private Memento oidGeneratorMemento;
 
     public ObjectStorePersistedObjectsDefault() {
         instancesBySpecMap = new HashMap<ObjectSpecification, ObjectStoreInstances>();
         serviceOidByIdMap = new HashMap<String, Oid>();
     }
 
-    
+    @Override
     public Memento getOidGeneratorMemento() {
-		return oidGeneratorMemento;
-	}
-	public void saveOidGeneratorMemento(Memento memento) {
-		this.oidGeneratorMemento = memento;
-	}
+        return oidGeneratorMemento;
+    }
 
-	public Oid getService(String name) {
-		return serviceOidByIdMap.get(name);
-	}
-	public void registerService(String name, Oid oid) {
-    	Oid oidLookedUpByName = serviceOidByIdMap.get(name);
-    	if (oidLookedUpByName != null) {
-    		if (oidLookedUpByName.equals(oid)) {
-    			throw new IsisException(
-    					"Already another service registered as name: " + name + 
-    					" (existing Oid: " + oidLookedUpByName + ", " +
-    					"intended: " + oid + ")");
-    		}
-    	} else {
-    		serviceOidByIdMap.put(name, oid);
-    	}
-	}
+    @Override
+    public void saveOidGeneratorMemento(final Memento memento) {
+        this.oidGeneratorMemento = memento;
+    }
 
+    @Override
+    public Oid getService(final String name) {
+        return serviceOidByIdMap.get(name);
+    }
 
+    @Override
+    public void registerService(final String name, final Oid oid) {
+        final Oid oidLookedUpByName = serviceOidByIdMap.get(name);
+        if (oidLookedUpByName != null) {
+            if (oidLookedUpByName.equals(oid)) {
+                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: "
+                    + oidLookedUpByName + ", " + "intended: " + oid + ")");
+            }
+        } else {
+            serviceOidByIdMap.put(name, oid);
+        }
+    }
 
-
-	// TODO: this is where the clever logic needs to go to determine how to save into our custom Map.
-	// also think we shouldn't surface the entire Map, just the API we require (keySet, values etc).
-	public ObjectStoreInstances instancesFor(ObjectSpecification spec) {
+    // TODO: this is where the clever logic needs to go to determine how to save into our custom Map.
+    // also think we shouldn't surface the entire Map, just the API we require (keySet, values etc).
+    @Override
+    public ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
         ObjectStoreInstances ins = instancesBySpecMap.get(spec);
         if (ins == null) {
             ins = new ObjectStoreInstances(spec);
             instancesBySpecMap.put(spec, ins);
         }
         return ins;
-	}
+    }
 
+    @Override
+    public Iterable<ObjectSpecification> specifications() {
+        return instancesBySpecMap.keySet();
+    }
 
-	public Iterable<ObjectSpecification> specifications() {
-		return instancesBySpecMap.keySet();
-	}
+    @Override
+    public void clear() {
+        instancesBySpecMap.clear();
+    }
 
-	public void clear() {
-		instancesBySpecMap.clear();		
-	}
-
-	public Iterable<ObjectStoreInstances> instances() {
-		return instancesBySpecMap.values();
-	}
-
+    @Override
+    public Iterable<ObjectStoreInstances> instances() {
+        return instancesBySpecMap.values();
+    }
 
 }
-
-

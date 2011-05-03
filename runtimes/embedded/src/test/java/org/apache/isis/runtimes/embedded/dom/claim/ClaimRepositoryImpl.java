@@ -17,32 +17,30 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.claim;
 
 import java.util.List;
 
-
-
 public class ClaimRepositoryImpl implements ClaimRepository {
 
+    @Override
     public List<Claim> allClaims() {
-    	return null;
+        return null;
     }
 
-    public List<Claim> findClaims(
-    		String description
-    		) {
-    	return null;
+    @Override
+    public List<Claim> findClaims(final String description) {
+        return null;
     }
 
-    public List<Claim> claimsFor(Claimant claimant) {
-    	return null;
+    @Override
+    public List<Claim> claimsFor(final Claimant claimant) {
+        return null;
     }
 
-    
-	public Claim newClaim(Claimant claimant) {
-		return null;
-	}
-	
+    @Override
+    public Claim newClaim(final Claimant claimant) {
+        return null;
+    }
+
 }

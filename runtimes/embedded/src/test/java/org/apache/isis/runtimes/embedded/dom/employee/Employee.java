@@ -17,82 +17,91 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.employee;
 
-import org.apache.isis.runtimes.embedded.dom.claim.Approver;
-import org.apache.isis.runtimes.embedded.dom.claim.Claimant;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.When;
-
+import org.apache.isis.runtimes.embedded.dom.claim.Approver;
+import org.apache.isis.runtimes.embedded.dom.claim.Claimant;
 
 public class Employee extends AbstractDomainObject implements Claimant, Approver {
 
-	// {{ Title
+    // {{ Title
     public String title() {
         return getName();
     }
+
     // }}
 
-    
     // {{ Name
     private String name;
-    @MemberOrder(sequence="1")
+
+    @MemberOrder(sequence = "1")
     public String getName() {
         return name;
     }
+
     public void setName(final String name) {
         this.name = name;
     }
+
     public void modifyName(final String name) {
         setName(name);
     }
+
     public void clearName() {
         setName(null);
     }
-    
+
     public boolean whetherHideName;
+
     public boolean hideName() {
         return whetherHideName;
     }
+
     public String reasonDisableName;
+
     public String disableName() {
-    	return reasonDisableName;
+        return reasonDisableName;
     }
+
     public String reasonValidateName;
-    public String validateName(String name) {
-    	return reasonValidateName;
+
+    public String validateName(final String name) {
+        return reasonValidateName;
     }
+
     // }}
-    
+
     // {{ Password
     private String password;
-    @MemberOrder(sequence="2")
+
+    @MemberOrder(sequence = "2")
     @Disabled(When.ONCE_PERSISTED)
     public String getPassword() {
         return password;
     }
+
     public void setPassword(final String password) {
         this.password = password;
     }
+
     // }}
-    
 
     // {{ Approver
     private Approver approver;
-    @MemberOrder(sequence="2")
+
+    @Override
+    @MemberOrder(sequence = "2")
     public Approver getApprover() {
         return approver;
     }
+
     public void setApprover(final Approver approver) {
         this.approver = approver;
     }
     // }}
- 
-    
-    
+
 }
-
-

@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.claim;
 
 public interface Claimant {
 
-	Approver getApprover();
-    
+    Approver getApprover();
+
 }

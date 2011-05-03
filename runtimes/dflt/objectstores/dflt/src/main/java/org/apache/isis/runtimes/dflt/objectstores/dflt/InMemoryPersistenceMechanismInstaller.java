@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -28,44 +27,35 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-
 /**
  * Installs the in-memory object store.
  */
-public class InMemoryPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract  {
-    
-    
+public class InMemoryPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
 
     public InMemoryPersistenceMechanismInstaller() {
-		super("in-memory");
-	}
+        super("in-memory");
+    }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // createPersistenceSessionFactory
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
+    @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
         return new InMemoryPersistenceSessionFactory(deploymentType, this);
     }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Hook methods
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
     /**
-     * Hook method to return {@link ObjectStore}. 
+     * Hook method to return {@link ObjectStore}.
      */
-    protected ObjectStore createObjectStore(
-            final IsisConfiguration configuration, 
-            final ObjectAdapterFactory adapterFactory, 
-            final AdapterManager adapterManager) {
+    @Override
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
+        final ObjectAdapterFactory adapterFactory, final AdapterManager adapterManager) {
         return new InMemoryObjectStore();
     }
-
-
-
-
 
 }

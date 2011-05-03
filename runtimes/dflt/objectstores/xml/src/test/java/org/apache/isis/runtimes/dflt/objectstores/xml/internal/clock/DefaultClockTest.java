@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock;
 
 import static org.junit.Assert.assertTrue;
@@ -25,17 +24,12 @@ import static org.junit.Assert.assertTrue;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.junit.Test;
 
-
-
-
-
-
-public class DefaultClockTest extends ProxyJunit4TestCase{
+public class DefaultClockTest extends ProxyJunit4TestCase {
     DefaultClock clock;
 
     @Test
     public void testGetTime() {
-    	clock = new DefaultClock();
-       	assertTrue(clock.getTime()>0);        
+        clock = new DefaultClock();
+        assertTrue(clock.getTime() > 0);
     }
 }

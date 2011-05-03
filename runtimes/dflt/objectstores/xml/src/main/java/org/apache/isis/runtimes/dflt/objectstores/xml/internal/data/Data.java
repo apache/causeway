@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
-
 public abstract class Data {
-	private final ObjectSpecification noSpec;
+    private final ObjectSpecification noSpec;
     private final SerialOid oid;
     private final FileVersion version;
 
     Data(final ObjectSpecification noSpec, final SerialOid oid, final FileVersion version) {
-    	this.noSpec = noSpec;
+        this.noSpec = noSpec;
         this.oid = oid;
         this.version = version;
     }
@@ -45,9 +43,9 @@ public abstract class Data {
     }
 
     public ObjectSpecification getSpecification() {
-		return noSpec;
-	}
-    
+        return noSpec;
+    }
+
     public String getTypeName() {
         return noSpec.getFullIdentifier();
     }

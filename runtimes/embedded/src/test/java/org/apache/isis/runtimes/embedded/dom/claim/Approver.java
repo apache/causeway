@@ -17,9 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded.dom.claim;
 
 public interface Approver {
-	
+
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import static org.junit.Assert.assertTrue;
@@ -34,22 +33,24 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-public class XmlPersistenceMechanismInstallerTest  extends ProxyJunit4TestCase {
-	
-    private Mockery context = new JUnit4Mockery();
+public class XmlPersistenceMechanismInstallerTest extends ProxyJunit4TestCase {
+
+    private final Mockery context = new JUnit4Mockery();
     private DeploymentType mockDeploymentType;
     XmlPersistenceMechanismInstaller mockInstaller;
-    
+
     @Before
     public void setUp() throws Exception {
-    	mockDeploymentType = new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
-    	mockInstaller = new XmlPersistenceMechanismInstaller();
+        mockDeploymentType =
+            new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC,
+                SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
+        mockInstaller = new XmlPersistenceMechanismInstaller();
     }
-    
+
     @Test
-	public void testCreatePersistenceSessionFactory() throws Exception {
-    	PersistenceSessionFactory factory = mockInstaller.createPersistenceSessionFactory(mockDeploymentType);
-		assertTrue(factory != null);
-	}
-    
+    public void testCreatePersistenceSessionFactory() throws Exception {
+        final PersistenceSessionFactory factory = mockInstaller.createPersistenceSessionFactory(mockDeploymentType);
+        assertTrue(factory != null);
+    }
+
 }

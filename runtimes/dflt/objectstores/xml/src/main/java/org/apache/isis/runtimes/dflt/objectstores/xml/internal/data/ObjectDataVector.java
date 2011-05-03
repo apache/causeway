@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.Vector;
-
 
 public class ObjectDataVector {
     Vector elements = new Vector();

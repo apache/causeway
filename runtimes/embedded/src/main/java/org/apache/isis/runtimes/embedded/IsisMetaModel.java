@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.embedded;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -32,8 +31,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
-import org.apache.isis.runtimes.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -58,317 +55,305 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
+import org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
+import org.apache.isis.runtimes.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 
 /**
  * Facade for the entire Isis metamodel and supporting components.
  */
 public class IsisMetaModel implements ApplicationScopedComponent {
 
-	private static enum State {
-		NOT_INITIALIZED,
-		INITIALIZED,
-		SHUTDOWN;
-	}
+    private static enum State {
+        NOT_INITIALIZED, INITIALIZED, SHUTDOWN;
+    }
 
+    private final List<Class<?>> serviceTypes = new ArrayList<Class<?>>();
+    private State state = State.NOT_INITIALIZED;
 
-	private final List<Class<?>> serviceTypes = new ArrayList<Class<?>>();
-	private State state = State.NOT_INITIALIZED;
+    private ObjectReflectorDefault reflector;
+    private RuntimeContextForEmbeddedMetaModel runtimeContext;
 
-	private ObjectReflectorDefault reflector;
-	private RuntimeContextForEmbeddedMetaModel runtimeContext;
+    private IsisConfiguration configuration;
+    private ClassSubstitutor classSubstitutor;
+    private CollectionTypeRegistry collectionTypeRegistry;
+    private ProgrammingModel programmingModel;
+    private SpecificationTraverser specificationTraverser;
+    private MemberLayoutArranger memberLayoutArranger;
+    private Set<FacetDecorator> facetDecorators;
+    private MetaModelValidator metaModelValidator;
 
-	private IsisConfiguration configuration;
-	private ClassSubstitutor classSubstitutor;
-	private CollectionTypeRegistry collectionTypeRegistry;
-	private ProgrammingModel programmingModel;
-	private SpecificationTraverser specificationTraverser;
-	private MemberLayoutArranger memberLayoutArranger;
-	private Set<FacetDecorator> facetDecorators;
-	private MetaModelValidator metaModelValidator;
+    private WrapperFactory viewer;
+    private final EmbeddedContext context;
+    private List<Object> services;
 
-	private WrapperFactory viewer;
-	private EmbeddedContext context;
-	private List<Object> services;
+    public IsisMetaModel(final EmbeddedContext context, final Class<?>... serviceTypes) {
 
+        this.serviceTypes.addAll(Arrays.asList(serviceTypes));
+        setConfiguration(new IsisConfigurationDefault());
+        setClassSubstitutor(new ClassSubstitutorIdentity());
+        setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
+        setSpecificationTraverser(new SpecificationTraverserDefault());
+        setMemberLayoutArranger(new MemberLayoutArrangerDefault());
+        setFacetDecorators(new TreeSet<FacetDecorator>());
+        setProgrammingModelFacets(new ProgrammingModelFacetsJava5());
 
-    
-	public IsisMetaModel(
-			final EmbeddedContext context,
-			final Class<?>... serviceTypes) {
+        setMetaModelValidator(new MetaModelValidatorDefault());
 
-		this.serviceTypes.addAll(Arrays.asList(serviceTypes));
-		setConfiguration(new IsisConfigurationDefault());
-		setClassSubstitutor(new ClassSubstitutorIdentity());
-		setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
-		setSpecificationTraverser(new SpecificationTraverserDefault());
-		setMemberLayoutArranger(new MemberLayoutArrangerDefault());
-		setFacetDecorators(new TreeSet<FacetDecorator>());
-		setProgrammingModelFacets(new ProgrammingModelFacetsJava5());
-		
-		setMetaModelValidator(new MetaModelValidatorDefault());
+        this.context = context;
+    }
 
-		this.context = context;
-	}
+    /**
+     * The list of classes representing services, as specified in the {@link #IsisMetaModel(EmbeddedContext, Class...)
+     * constructor}.
+     * 
+     * <p>
+     * To obtain the instantiated services, use the {@link ServicesInjector#getRegisteredServices()} (available from
+     * {@link #getServicesInjector()}).
+     */
+    public List<Class<?>> getServiceTypes() {
+        return Collections.unmodifiableList(serviceTypes);
+    }
 
+    // ///////////////////////////////////////////////////////
+    // init, shutdown
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * The list of classes representing services, as specified in the {@link #IsisMetaModel(EmbeddedContext, Class...) constructor}.
-	 *
-	 * <p>
-	 * To obtain the instantiated services, use the {@link ServicesInjector#getRegisteredServices()} (available from {@link #getServicesInjector()}).
-	 */
-	public List<Class<?>> getServiceTypes() {
-		return Collections.unmodifiableList(serviceTypes);
-	}
-
-	/////////////////////////////////////////////////////////
-	// init, shutdown
-	/////////////////////////////////////////////////////////
-
-	@Override
+    @Override
     public void init() {
-		ensureNotInitialized();
-		reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+        ensureNotInitialized();
+        reflector =
+            new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser,
+                memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
-		services = createServices(serviceTypes);
-		runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
-		DomainObjectContainerDefault container = new DomainObjectContainerWrapperFactory();
+        services = createServices(serviceTypes);
+        runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
+        final DomainObjectContainerDefault container = new DomainObjectContainerWrapperFactory();
 
-		runtimeContext.injectInto(container);
-		runtimeContext.setContainer(container);
-		runtimeContext.injectInto(reflector);
-		reflector.injectInto(runtimeContext);
+        runtimeContext.injectInto(container);
+        runtimeContext.setContainer(container);
+        runtimeContext.injectInto(reflector);
+        reflector.injectInto(runtimeContext);
 
-		reflector.init();
-		runtimeContext.init();
+        reflector.init();
+        runtimeContext.init();
 
-		for(Class<?> serviceType: serviceTypes) {
-			ObjectSpecification serviceSpec = reflector.loadSpecification(serviceType);
-			serviceSpec.markAsService();
-		}
-		state = State.INITIALIZED;
+        for (final Class<?> serviceType : serviceTypes) {
+            final ObjectSpecification serviceSpec = reflector.loadSpecification(serviceType);
+            serviceSpec.markAsService();
+        }
+        state = State.INITIALIZED;
 
-		viewer = new WrapperFactoryDefault();
-	}
+        viewer = new WrapperFactoryDefault();
+    }
 
-	@Override
+    @Override
     public void shutdown() {
-		ensureInitialized();
-		state = State.SHUTDOWN;
-	}
+        ensureInitialized();
+        state = State.SHUTDOWN;
+    }
 
-	private List<Object> createServices(List<Class<?>> serviceTypes) {
-		List<Object> services = new ArrayList<Object>();
-		for(Class<?> serviceType: serviceTypes) {
-			try {
-				services.add(serviceType.newInstance());
-			} catch (InstantiationException e) {
-				throw new IsisException("Unable to instantiate service", e);
-			} catch (IllegalAccessException e) {
-				throw new IsisException("Unable to instantiate service", e);
-			}
-		}
-		return services;
-	}
+    private List<Object> createServices(final List<Class<?>> serviceTypes) {
+        final List<Object> services = new ArrayList<Object>();
+        for (final Class<?> serviceType : serviceTypes) {
+            try {
+                services.add(serviceType.newInstance());
+            } catch (final InstantiationException e) {
+                throw new IsisException("Unable to instantiate service", e);
+            } catch (final IllegalAccessException e) {
+                throw new IsisException("Unable to instantiate service", e);
+            }
+        }
+        return services;
+    }
 
+    // ///////////////////////////////////////////////////////
+    // SpecificationLoader
+    // ///////////////////////////////////////////////////////
 
+    /**
+     * Available once {@link #init() initialized}.
+     */
+    public SpecificationLoader getSpecificationLoader() {
+        return reflector;
+    }
 
-	/////////////////////////////////////////////////////////
-	// SpecificationLoader
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Viewer
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * Available once {@link #init() initialized}.
-	 */
-	public SpecificationLoader getSpecificationLoader() {
-		return reflector;
-	}
+    /**
+     * Available once {@link #init() initialized}.
+     */
+    public WrapperFactory getViewer() {
+        ensureInitialized();
+        return viewer;
+    }
 
-	/////////////////////////////////////////////////////////
-	// Viewer
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // ServicesInjector
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * Available once {@link #init() initialized}.
-	 */
-	public WrapperFactory getViewer() {
-		ensureInitialized();
-		return viewer;
-	}
+    /**
+     * The {@link ServicesInjector}; can use to obtain the set of registered services.
+     * 
+     * <p>
+     * Available once {@link #init() initialized}.
+     */
+    public ServicesInjector getServicesInjector() {
+        ensureInitialized();
+        return runtimeContext.getServicesInjector();
+    }
 
-	/////////////////////////////////////////////////////////
-	// ServicesInjector
-	/////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
+    // Override defaults
+    // ///////////////////////////////////////////////////////
 
-	/**
-	 * The {@link ServicesInjector}; can use to obtain the set of registered services.
-	 *
-	 * <p>
-	 * Available once {@link #init() initialized}.
-	 */
-	public ServicesInjector getServicesInjector() {
-		ensureInitialized();
-		return runtimeContext.getServicesInjector();
-	}
+    /**
+     * The {@link IsisConfiguration} in force, either defaulted or specified
+     * {@link #setConfiguration(IsisConfiguration) explicitly.}
+     */
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 
-	/////////////////////////////////////////////////////////
-	// Override defaults
-	/////////////////////////////////////////////////////////
+    /**
+     * Optionally specify the {@link IsisConfiguration}.
+     * 
+     * <p>
+     * Call prior to {@link #init()}.
+     */
+    public void setConfiguration(final IsisConfiguration configuration) {
+        ensureNotInitialized();
+        ensureThatArg(configuration, is(notNullValue()));
+        this.configuration = configuration;
+    }
 
-	/**
-	 * The {@link IsisConfiguration} in force, either defaulted or specified
-	 * {@link #setConfiguration(IsisConfiguration) explicitly.}
-	 */
-	public IsisConfiguration getConfiguration() {
-		return configuration;
-	}
+    /**
+     * The {@link ClassSubstitutor} in force, either defaulted or specified
+     * {@link #setClassSubstitutor(ClassSubstitutor) explicitly}.
+     */
+    public ClassSubstitutor getClassSubstitutor() {
+        return classSubstitutor;
+    }
 
-	/**
-	 * Optionally specify the {@link IsisConfiguration}.
-	 *
-	 * <p>
-	 * Call prior to {@link #init()}.
-	 */
-	public void setConfiguration(IsisConfiguration configuration) {
-		ensureNotInitialized();
-		ensureThatArg(configuration, is(notNullValue()));
-		this.configuration = configuration;
-	}
+    /**
+     * Optionally specify the {@link ClassSubstitutor}.
+     * 
+     * <p>
+     * Call prior to {@link #init()}.
+     */
+    public void setClassSubstitutor(final ClassSubstitutor classSubstitutor) {
+        ensureNotInitialized();
+        ensureThatArg(classSubstitutor, is(notNullValue()));
+        this.classSubstitutor = classSubstitutor;
+    }
 
-	/**
-	 * The {@link ClassSubstitutor} in force, either defaulted or
-	 * specified {@link #setClassSubstitutor(ClassSubstitutor) explicitly}.
-	 */
-	public ClassSubstitutor getClassSubstitutor() {
-		return classSubstitutor;
-	}
+    /**
+     * The {@link CollectionTypeRegistry} in force, either defaulted or specified
+     * {@link #setCollectionTypeRegistry(CollectionTypeRegistry) explicitly.}
+     */
+    public CollectionTypeRegistry getCollectionTypeRegistry() {
+        return collectionTypeRegistry;
+    }
 
-	/**
-	 * Optionally specify the {@link ClassSubstitutor}.
-	 *
-	 * <p>
-	 * Call prior to {@link #init()}.
-	 */
-	public void setClassSubstitutor(ClassSubstitutor classSubstitutor) {
-		ensureNotInitialized();
-		ensureThatArg(classSubstitutor, is(notNullValue()));
-		this.classSubstitutor = classSubstitutor;
-	}
+    /**
+     * Optionally specify the {@link CollectionTypeRegistry}.
+     * 
+     * <p>
+     * Call prior to {@link #init()}.
+     */
+    public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
+        ensureNotInitialized();
+        ensureThatArg(collectionTypeRegistry, is(notNullValue()));
+        this.collectionTypeRegistry = collectionTypeRegistry;
+    }
 
-	/**
-	 * The {@link CollectionTypeRegistry} in force, either defaulted or
-	 * specified {@link #setCollectionTypeRegistry(CollectionTypeRegistry) explicitly.}
-	 */
-	public CollectionTypeRegistry getCollectionTypeRegistry() {
-		return collectionTypeRegistry;
-	}
+    /**
+     * The {@link SpecificationTraverser} in force, either defaulted or specified
+     * {@link #setSpecificationTraverser(SpecificationTraverser) explicitly}.
+     */
+    public SpecificationTraverser getSpecificationTraverser() {
+        return specificationTraverser;
+    }
 
-	/**
-	 * Optionally specify the {@link CollectionTypeRegistry}.
-	 *
-	 * <p>
-	 * Call prior to {@link #init()}.
-	 */
-	public void setCollectionTypeRegistry(
-			CollectionTypeRegistry collectionTypeRegistry) {
-		ensureNotInitialized();
-		ensureThatArg(collectionTypeRegistry, is(notNullValue()));
-		this.collectionTypeRegistry = collectionTypeRegistry;
-	}
-
-	/**
-	 * The {@link SpecificationTraverser} in force, either defaulted or
-	 * specified {@link #setSpecificationTraverser(SpecificationTraverser) explicitly}.
-	 */
-	public SpecificationTraverser getSpecificationTraverser() {
-		return specificationTraverser;
-	}
-
-	/**
-	 * Optionally specify the {@link SpecificationTraverser}.
-	 */
-	public void setSpecificationTraverser(
-			SpecificationTraverser specificationTraverser) {
-		this.specificationTraverser = specificationTraverser;
-	}
+    /**
+     * Optionally specify the {@link SpecificationTraverser}.
+     */
+    public void setSpecificationTraverser(final SpecificationTraverser specificationTraverser) {
+        this.specificationTraverser = specificationTraverser;
+    }
 
     /**
      * Optionally specify the {@link MemberLayoutArranger}.
      */
-    public void setMemberLayoutArranger(MemberLayoutArranger memberLayoutArranger) {
+    public void setMemberLayoutArranger(final MemberLayoutArranger memberLayoutArranger) {
         this.memberLayoutArranger = memberLayoutArranger;
     }
 
-	/**
-	 * The {@link ProgrammingModel} in force, either defaulted or
-	 * specified {@link #setProgrammingModelFacets(ProgrammingModel) explicitly}.
-	 */
-	public ProgrammingModel getProgrammingModelFacets() {
-		return programmingModel;
-	}
+    /**
+     * The {@link ProgrammingModel} in force, either defaulted or specified
+     * {@link #setProgrammingModelFacets(ProgrammingModel) explicitly}.
+     */
+    public ProgrammingModel getProgrammingModelFacets() {
+        return programmingModel;
+    }
 
-	/**
-	 * Optionally specify the {@link ProgrammingModel}.
-	 *
-	 * <p>
-	 * Call prior to {@link #init()}.
-	 */
-	public void setProgrammingModelFacets(
-			ProgrammingModel programmingModel) {
-		ensureNotInitialized();
-		ensureThatArg(programmingModel, is(notNullValue()));
-		this.programmingModel = programmingModel;
-	}
+    /**
+     * Optionally specify the {@link ProgrammingModel}.
+     * 
+     * <p>
+     * Call prior to {@link #init()}.
+     */
+    public void setProgrammingModelFacets(final ProgrammingModel programmingModel) {
+        ensureNotInitialized();
+        ensureThatArg(programmingModel, is(notNullValue()));
+        this.programmingModel = programmingModel;
+    }
 
-	/**
-	 * The {@link FacetDecorator}s in force, either defaulted or specified
-	 * {@link #setFacetDecorators(Set) explicitly}.
-	 */
-	public Set<FacetDecorator> getFacetDecorators() {
-		return Collections.unmodifiableSet(facetDecorators);
-	}
+    /**
+     * The {@link FacetDecorator}s in force, either defaulted or specified {@link #setFacetDecorators(Set) explicitly}.
+     */
+    public Set<FacetDecorator> getFacetDecorators() {
+        return Collections.unmodifiableSet(facetDecorators);
+    }
 
-	/**
-	 * Optionally specify the {@link FacetDecorator}s.
-	 *
-	 * <p>
-	 * Call prior to {@link #init()}.
-	 */
-	public void setFacetDecorators(Set<FacetDecorator> facetDecorators) {
-		ensureNotInitialized();
-		ensureThatArg(facetDecorators, is(notNullValue()));
-		this.facetDecorators = facetDecorators;
-	}
+    /**
+     * Optionally specify the {@link FacetDecorator}s.
+     * 
+     * <p>
+     * Call prior to {@link #init()}.
+     */
+    public void setFacetDecorators(final Set<FacetDecorator> facetDecorators) {
+        ensureNotInitialized();
+        ensureThatArg(facetDecorators, is(notNullValue()));
+        this.facetDecorators = facetDecorators;
+    }
 
+    /**
+     * The {@link MetaModelValidator} in force, either defaulted or specified
+     * {@link #setMetaModelValidator(MetaModelValidator) explicitly}.
+     */
+    public MetaModelValidator getMetaModelValidator() {
+        return metaModelValidator;
+    }
 
-	/**
-	 * The {@link MetaModelValidator} in force, either defaulted or specified
-	 * {@link #setMetaModelValidator(MetaModelValidator) explicitly}.
-	 */
-	public MetaModelValidator getMetaModelValidator() {
-		return metaModelValidator;
-	}
+    /**
+     * Optionally specify the {@link MetaModelValidator}.
+     */
+    public void setMetaModelValidator(final MetaModelValidator metaModelValidator) {
+        this.metaModelValidator = metaModelValidator;
+    }
 
-	/**
-	 * Optionally specify the {@link MetaModelValidator}.
-	 */
-	public void setMetaModelValidator(
-			MetaModelValidator metaModelValidator) {
-		this.metaModelValidator = metaModelValidator;
-	}
+    // ///////////////////////////////////////////////////////
+    // State management
+    // ///////////////////////////////////////////////////////
 
+    private State ensureNotInitialized() {
+        return ensureThatState(state, is(State.NOT_INITIALIZED));
+    }
 
-	/////////////////////////////////////////////////////////
-	// State management
-	/////////////////////////////////////////////////////////
-
-	private State ensureNotInitialized() {
-		return ensureThatState(state, is(State.NOT_INITIALIZED));
-	}
-
-	private State ensureInitialized() {
-		return ensureThatState(state, is(State.INITIALIZED));
-	}
+    private State ensureInitialized() {
+        return ensureThatState(state, is(State.INITIALIZED));
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.Iterator;
@@ -28,7 +27,6 @@ import junit.framework.Assert;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-
 
 public class MockDataManager implements DataManager {
     private final Vector actions = new Vector();
@@ -48,55 +46,69 @@ public class MockDataManager implements DataManager {
         return null;
     }
 
-    public void insertObject(final ObjectData data) throws ObjectPersistenceException {}
+    @Override
+    public void insertObject(final ObjectData data) throws ObjectPersistenceException {
+    }
 
+    @Override
     public boolean isFixturesInstalled() {
         return true;
     }
 
+    @Override
     public void remove(final SerialOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
-    	ObjectDataVector vector = new ObjectDataVector();
-        Iterator i = actions.iterator();
+        final ObjectDataVector vector = new ObjectDataVector();
+        final Iterator i = actions.iterator();
         while (i.hasNext()) {
-        	ObjectData data = (ObjectData)i.next();
-            if (data.getOid().equals(oid))
-             	actions.remove(data);        		  
+            final ObjectData data = (ObjectData) i.next();
+            if (data.getOid().equals(oid)) {
+                actions.remove(data);
+            }
         }
     }
 
+    @Override
     public void save(final Data data) throws ObjectPersistenceException {
         actions.addElement(data);
     }
 
-    public void shutdown() {}
+    @Override
+    public void shutdown() {
+    }
 
+    @Override
     public ObjectDataVector getInstances(final ObjectData pattern) {
-    	ObjectDataVector vector = new ObjectDataVector();
-        Iterator i = actions.iterator();
+        final ObjectDataVector vector = new ObjectDataVector();
+        final Iterator i = actions.iterator();
         while (i.hasNext()) {
-        	ObjectData data = (ObjectData)i.next();
-          if (pattern.getSpecification().equals(data.getSpecification()))
-        		  vector.addElement(data);
+            final ObjectData data = (ObjectData) i.next();
+            if (pattern.getSpecification().equals(data.getSpecification())) {
+                vector.addElement(data);
+            }
         }
-    	
+
         return vector;
     }
 
+    @Override
     public Data loadData(final SerialOid oid) {
-       	ObjectDataVector vector = new ObjectDataVector();
-        Iterator i = actions.iterator();
+        final ObjectDataVector vector = new ObjectDataVector();
+        final Iterator i = actions.iterator();
         while (i.hasNext()) {
-        	ObjectData data = (ObjectData)i.next();
-          if (data.getOid().equals(oid))
-        		  return data;
+            final ObjectData data = (ObjectData) i.next();
+            if (data.getOid().equals(oid)) {
+                return data;
+            }
         }
-         return null;
+        return null;
     }
 
+    @Override
     public int numberOfInstances(final ObjectData pattern) {
         return actions.size();
     }
 
+    @Override
     public String getDebugData() {
         return null;
     }

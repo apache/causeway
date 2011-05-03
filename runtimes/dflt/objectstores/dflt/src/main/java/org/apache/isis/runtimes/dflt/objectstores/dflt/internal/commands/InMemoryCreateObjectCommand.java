@@ -17,33 +17,33 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.log4j.Logger;
 
 public final class InMemoryCreateObjectCommand extends AbstractInMemoryPersistenceCommand implements
-		CreateObjectCommand {
-	private final static Logger LOG = Logger.getLogger(InMemoryCreateObjectCommand.class);
+    CreateObjectCommand {
+    private final static Logger LOG = Logger.getLogger(InMemoryCreateObjectCommand.class);
 
-	public InMemoryCreateObjectCommand(ObjectAdapter object, final ObjectStorePersistedObjects persistedObjects) {
-		super(object, persistedObjects);
-	}
+    public InMemoryCreateObjectCommand(final ObjectAdapter object, final ObjectStorePersistedObjects persistedObjects) {
+        super(object, persistedObjects);
+    }
 
-	public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("  create object " + onObject());
-		}
-	    save(onObject());
-	}
+    @Override
+    public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  create object " + onObject());
+        }
+        save(onObject());
+    }
 
-	@Override
-	public String toString() {
-	    return "CreateObjectCommand [object=" + onObject() + "]";
-	}
+    @Override
+    public String toString() {
+        return "CreateObjectCommand [object=" + onObject() + "]";
+    }
 }
