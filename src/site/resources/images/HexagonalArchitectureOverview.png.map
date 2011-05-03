@@ -35,10 +35,10 @@
 <area shape="rect" coords="516,139,618,161" alt="Sockets" href="./runtimes/dflt/remoting/sockets/index.html" />
 <area shape="rect" coords="517,112,618,135" alt="Http" href="./runtimes/dflt/remoting/http/index.html" />
 
+<area shape="rect" coords="533,293,633,314" alt="Dflt (in-mem)" href="./runtimes/dflt/profilestores/dflt/index.html" />
+<area shape="rect" coords="533,319,633,340" alt="XML" href="./runtimes/dflt/profilestores/xml/index.html" />
+
 <area shape="rect" coords="300,49,401,71" alt="LDAP" href="./security/ldap/index.html" />
 <area shape="rect" coords="239,20,341,43" alt="Noop" href="./security/dflt/index.html" />
 <area shape="rect" coords="183,48,283,72" alt="File" href="./security/file/index.html" />
-
-<area shape="rect" coords="533,293,633,314" alt="Dflt (in-mem)" href="./profilestores/dflt/index.html" />
-<area shape="rect" coords="533,319,633,340" alt="XML" href="./profilestores/xml/index.html" />
 </map>
