@@ -671,6 +671,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         if (adapter.getResolveState().isValue()) {
             return;
         }
+        if (adapter.isAggregated()) {
+            return;
+        }
         ensurePojoAdapterMapConsistent(adapter);
         ensureOidAdapterMapConsistent(adapter);
     }
