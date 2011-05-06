@@ -50,7 +50,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     @Override
     public void appendln() {
         if (tableLevel > 0) {
-            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >end line<td></tr>");
+            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >end line</td></tr>");
         } else {
             appendHtml("<p>end line</p>");
         }
@@ -59,7 +59,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     @Override
     public void blankLine() {
         if (tableLevel > 0) {
-            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >blank line<td></tr>");
+            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >blank line</td></tr>");
         } else {
             appendHtml("<p>blank line</p>");
         }
@@ -103,7 +103,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
         } else {
             appendln(label, object[0]);
             for (int i = 1; i < object.length; i++) {
-                appendHtml(row() + "<td></td><td>" + object[i] + "<td></tr>");
+                appendHtml(row() + "<td></td><td>" + object[i] + "</td></tr>");
             }
         }
     }
@@ -171,7 +171,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
         appendTitle("Exception");
         final String message = e.getMessage();
         if (message != null) {
-            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >" + message + "<td></tr>");
+            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >" + message + "</td></tr>");
         }
         causingException(e);
         appendHtml(row() + "<td class=\"code\" colspan=\"2\" ><pre>");
@@ -179,14 +179,14 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
         final PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);
         appendHtml(stringWriter.toString());
-        appendHtml("</pre><td></tr>");
+        appendHtml("</pre></td></tr>");
 
     }
 
     private void causingException(final Throwable throwable) {
         final Throwable cause = throwable.getCause();
         if (cause != null && cause != throwable) {
-            appendHtml(row() + "<td colspan=\"2\" >" + cause.getMessage() + "<td></tr>");
+            appendHtml(row() + "<td colspan=\"2\" >" + cause.getMessage() + "</td></tr>");
             causingException(cause);
         }
     }
@@ -202,7 +202,7 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
 
     private void appendln(final String name, final String value) {
         startTableIfNeeded(false);
-        appendHtml(row() + "<td class=\"label\">" + name + "</td><td>" + value + "<td></tr>");
+        appendHtml(row() + "<td class=\"label\">" + name + "</td><td>" + value + "</td></tr>");
     }
 
     private String row() {
