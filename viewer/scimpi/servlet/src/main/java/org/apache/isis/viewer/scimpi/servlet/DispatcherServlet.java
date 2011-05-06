@@ -32,12 +32,14 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 import org.apache.log4j.Logger;
 
 public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(DispatcherServlet.class);
     private Dispatcher dispatcher;
+    private DebugUsers debugUsers;
 
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
@@ -56,7 +58,7 @@ public class DispatcherServlet extends HttpServlet {
     private void process(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
         IOException {
         try {
-            final ServletRequestContext context = new ServletRequestContext();
+            final ServletRequestContext context = new ServletRequestContext(debugUsers);
             final HttpSession httpSession = request.getSession(false);
             // TODO when using version 3.0 of Servlet API use the HttpOnly setting for improved security
             if (httpSession != null) {
@@ -80,7 +82,10 @@ public class DispatcherServlet extends HttpServlet {
 
         // TODO get directory from servlet parameter
         ImageLookup.setImageDirectory(getServletContext(), "images");
-
+        
+        debugUsers = new DebugUsers();
+        debugUsers.initialize();
+        
         dispatcher = new Dispatcher();
         final Enumeration initParameterNames = getInitParameterNames();
         while (initParameterNames.hasMoreElements()) {
@@ -89,7 +94,7 @@ public class DispatcherServlet extends HttpServlet {
             dispatcher.addParameter(name, value);
         }
         final String dir = getServletContext().getRealPath("/WEB-INF");
-        dispatcher.init(dir);
+        dispatcher.init(dir, debugUsers);
 
         new UserManager(IsisContext.getAuthenticationManager());
     }

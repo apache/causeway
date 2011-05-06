@@ -39,6 +39,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.DispatchException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
 
 public class ServletRequestContext extends RequestContext {
@@ -46,6 +47,10 @@ public class ServletRequestContext extends RequestContext {
     private HttpServletResponse response;
     private ServletContext servletContext;
     private boolean isAborted;
+
+    public ServletRequestContext(final DebugUsers debugUsers) {
+        super(debugUsers);
+    }
 
     public void append(final DebugWriter view) {
         /*

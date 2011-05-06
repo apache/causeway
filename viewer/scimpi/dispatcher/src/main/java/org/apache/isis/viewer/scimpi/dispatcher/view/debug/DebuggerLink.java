@@ -28,6 +28,7 @@ public class DebuggerLink extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         if (request.getContext().isDebugDisabled()) {
+            request.skipUntilClose();
             return;
         }
 
@@ -40,7 +41,10 @@ public class DebuggerLink extends AbstractElementProcessor {
             request.appendHtml(" <a href=\"/debug/object.shtml?_result=" + result
                 + "\" target=\"debug\"  title=\"debug instance\">...</a>");
         }
+        request.appendHtml(" <span class=\"debug-link\" onclick=\"$('#page-debug').toggle()\" alt=\"show/hide debug details\">...</span>");
         request.appendHtml("</div>");
+        
+        request.processUtilCloseTag();
     }
 
     @Override

@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
@@ -42,6 +43,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 import org.apache.log4j.Logger;
 
 public abstract class RequestContext {
@@ -53,10 +55,6 @@ public abstract class RequestContext {
 
     public enum Debug {
         ON, OFF, PAGE
-    }
-
-    private enum DebugMode {
-        OFF, ON, SYSADMIN_ONLY
     }
 
     public static Scope scope(final String scopeName) {
@@ -87,12 +85,12 @@ public abstract class RequestContext {
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
     private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION,
         Scope.GLOBAL };
-    private static DebugMode debugMode = null;
 
     private final ObjectMapping objectMapping;
     private final VersionMapping versionMapping;
     private final Map<Scope, Map<String, Object>> variables;
-    private final StringBuffer debugTrace = new StringBuffer();
+    private final StringBuffer debugTrace = new StringBuffer(); 
+    private final DebugUsers debugUsers;
 
     private String forwardTo;
     private String requestedFile;
@@ -103,7 +101,9 @@ public abstract class RequestContext {
     private String resourceParentPath;
     private ObjectAdapter collection;
 
-    public RequestContext() {
+    public RequestContext(final DebugUsers debugUsers) {
+        this.debugUsers = debugUsers;
+
         String className =
             IsisContext.getConfiguration().getString("scimpi.object-mapping.class",
                 DefaultOidObjectMapping.class.getName());
@@ -336,6 +336,10 @@ public abstract class RequestContext {
                 }
             }
         }
+    }
+    
+    public List<String> getDebugUsers() {
+        return debugUsers.getNames();
     }
 
     // ////////////////////////////
@@ -642,6 +646,10 @@ public abstract class RequestContext {
     public String getResourceFile() {
         return resourceFile;
     }
+    
+    public String getResourceParentPath() {
+        return resourceParentPath;
+    }
 
     public void setResourcePath(final String filePath) {
         if (filePath == null) {
@@ -766,20 +774,7 @@ public abstract class RequestContext {
     }
 
     public boolean isDebugDisabled() {
-        // TODO set up mode on startup
-        if (debugMode == null) {
-            final String property = System.getProperties().getProperty("debug-mode");
-            if (property != null) {
-                debugMode = DebugMode.valueOf(property);
-            }
-            if (debugMode == null) {
-                debugMode = DebugMode.ON;
-            }
-        }
-        final boolean allowDebug =
-            debugMode == DebugMode.ON
-                || (debugMode == DebugMode.SYSADMIN_ONLY && getSession().getRoles().contains("sysadmin"));
-        return !allowDebug;
+        return !debugUsers.isDebugEnabled(getSession());
     }
 
     public boolean isDebug() {

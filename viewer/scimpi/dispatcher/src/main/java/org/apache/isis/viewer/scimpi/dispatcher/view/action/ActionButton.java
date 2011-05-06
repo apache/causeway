@@ -48,14 +48,14 @@ public class ActionButton extends AbstractElementProcessor {
         final String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         final String idName = request.getOptionalProperty(ID, methodName);
-        final String className = request.getOptionalProperty(CLASS);
+        String className = request.getOptionalProperty(CLASS);
         final boolean showMessage = request.isRequested(SHOW_MESSAGE, false);
         final String completionMessage = request.getOptionalProperty(MESSAGE);
 
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
         final String version = request.getContext().mapVersion(object);
         final ObjectAction action = MethodsUtils.findAction(object, methodName);
-
+        
         final ActionContent parameterBlock = new ActionContent(action);
         request.setBlockContent(parameterBlock);
         request.processUtilCloseTag();
@@ -70,7 +70,6 @@ public class ActionButton extends AbstractElementProcessor {
                 final ParseableFacet facet = typ.getFacet(ParseableFacet.class);
                 objectParameters[i] = facet.parseTextEntry(null, parameters[i]);
             } else {
-                // objectParameters[i] = request.getContext().getMappedObject(parameters[i]);
                 objectParameters[i] = MethodsUtils.findObject(request.getContext(), parameters[i]);
             }
             i++;
@@ -86,10 +85,21 @@ public class ActionButton extends AbstractElementProcessor {
         if (showMessage) {
             final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
             if (usable.isVetoed()) {
-                final String notUsable = MethodsUtils.isUsable(object, action);
-
+                String notUsable = usable.getReason();
                 if (notUsable != null) {
+                    if (className == null) {
+                        className = "access";
+                    }
                     request.appendHtml("<div class=\"" + className + "-message\" >" + notUsable + "</div>");
+                }
+            } else {
+                Consent valid = action.isProposedArgumentSetValid(object, objectParameters);
+                String notValid = valid.getReason();
+                if (notValid != null) {
+                    if (className == null) {
+                        className = "access";
+                    }
+                    request.appendHtml("<div class=\"" + className + "-message\" >" + notValid + "</div>");
                 }
             }
         }

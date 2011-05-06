@@ -44,7 +44,7 @@ public class RemoveElement extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         final String title = request.getOptionalProperty(BUTTON_TITLE, "Remove From List");
-        final String cls = request.getOptionalProperty(CLASS, "action in-line delete");
+        final String cls = request.getOptionalProperty(CLASS, "action in-line delete confirm");
         final String object = request.getOptionalProperty(OBJECT);
         final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         final RequestContext context = request.getContext();

@@ -20,9 +20,10 @@ package org.apache.isis.viewer.scimpi.dispatcher.view;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-public class HelpLink {
+public class HelpLink extends AbstractElementProcessor {
 
     private static String site;
     private static String suffix;
@@ -55,6 +56,16 @@ public class HelpLink {
             return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\""
                 + description + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
         }
+    }
+    
+    public String getName() {
+        return "help";
+    }
+    
+    public void process(Request request) {
+        String description = "description...";
+        String helpReference = request.getRequiredProperty("ref");
+        append(request, description, helpReference);
     }
 
 }

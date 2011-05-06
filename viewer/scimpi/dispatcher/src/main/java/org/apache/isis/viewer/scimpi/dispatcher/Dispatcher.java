@@ -54,6 +54,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Debug;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugAction;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUserAction;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.LogAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
@@ -443,11 +445,12 @@ public class Dispatcher {
          */
     }
 
-    public void init(final String dir) {
+    public void init(final String dir, final DebugUsers debugUsers) {
         addAction(new ActionAction());
 
         // TODO remove
         addAction(new DebugAction(this));
+        addAction(new DebugUserAction(debugUsers));
         addAction(new EditAction());
         addAction(new RemoveAction());
         addAction(new LogonAction());
