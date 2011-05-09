@@ -43,7 +43,9 @@ public class Services extends AbstractElementProcessor {
         for (final ObjectAdapter adapter : serviceAdapters) {
             final String serviceId = request.getContext().mapObject(adapter, Scope.REQUEST);
             request.appendHtml("<div class=\"actions\">");
-            request.appendHtml("<h3>" + adapter.titleString() + "</h3>");
+            request.appendHtml("<h3>");
+            request.appendAsHtmlEncoded(adapter.titleString());
+            request.appendHtml("</h3>");
             Methods.writeMethods(request, serviceId, adapter, showForms, inclusionList);
             request.appendHtml("</div>");
         }

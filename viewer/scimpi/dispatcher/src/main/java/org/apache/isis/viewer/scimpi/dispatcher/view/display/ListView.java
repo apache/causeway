@@ -72,7 +72,7 @@ public class ListView extends AbstractObjectProcessor {
                 request.appendHtml("<a class=\"item-select\" href=\"" + linkRow.getForwardView() + "?"
                     + linkRow.getVariable() + "=" + rowId + "\">");
             }
-            request.appendHtml(element.titleString());
+            request.appendAsHtmlEncoded(element.titleString());
             if (linkRow != null) {
                 request.appendHtml("</a>");
             }

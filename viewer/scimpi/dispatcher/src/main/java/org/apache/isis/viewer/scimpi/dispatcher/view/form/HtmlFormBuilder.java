@@ -34,7 +34,9 @@ public class HtmlFormBuilder {
             + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
         if (formTitle != null && formTitle.trim().length() > 0) {
             classSegment = " class=\"title\"";
-            request.appendHtml("<div" + classSegment + ">" + formTitle + "</div>\n");
+            request.appendHtml("<div" + classSegment + ">");
+            request.appendAsHtmlEncoded(formTitle);
+            request.appendHtml("</div>\n");
         }
 
         // TODO reinstate fieldsets when we can specify them
@@ -42,33 +44,39 @@ public class HtmlFormBuilder {
 
         final String cls = "errors";
         if (errors != null) {
-            request.appendHtml("<div class=\"" + cls + "\">" + errors + "</div>");
+            request.appendHtml("<div class=\"" + cls + "\">" );
+            request.appendAsHtmlEncoded(errors);
+            request.appendHtml("</div>");
         }
         for (final HiddenInputField hiddenField : hiddenFields) {
             if (hiddenField == null) {
                 continue;
             }
-            request.appendHtml("  <input type=\"hidden\" name=\"" + hiddenField.getName() + "\" value=\""
-                + hiddenField.getValue() + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + hiddenField.getName() + "\" value=\"");
+            request.appendAsHtmlEncoded(hiddenField.getValue() );
+            request.appendHtml("\" />\n");
         }
         request.appendHtml(request.getContext().interactionFields());
         for (final InputField fld : fields) {
             if (fld.isHidden()) {
-                request.appendHtml("  <input type=\"hidden\" name=\"" + fld.getName() + "\" value=\"" + fld.getValue()
-                    + "\" />\n");
+                request.appendHtml("  <input type=\"hidden\" name=\"" + fld.getName() + "\" value=\"");
+                request.appendAsHtmlEncoded(fld.getValue());
+                request.appendHtml("\" />\n");
             } else {
                 final String errorSegment =
                     fld.getErrorText() == null ? "" : "<span class=\"error\">" + fld.getErrorText() + "</span>";
                 final String fieldSegment = createField(fld);
                 final String helpSegment = HelpLink.createHelpSegment(fld.getDescription(), fld.getHelpReference());
                 final String title = fld.getDescription().equals("") ? "" : " title=\"" + fld.getDescription() + "\"";
-                request.appendHtml("  <div class=\"field\"><label" + title + ">" + fld.getLabel() + ":</label>"
-                    + fieldSegment + errorSegment + helpSegment + "</div>\n");
+                request.appendHtml("  <div class=\"field\"><label" + title + ">");
+                request.appendAsHtmlEncoded(fld.getLabel());
+                request.appendHtml(":</label>" + fieldSegment + errorSegment + helpSegment + "</div>\n");
             }
         }
 
-        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle
-            + "\" name=\"execute\" />\n");
+        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"");
+        request.appendAsHtmlEncoded(buttonTitle);
+        request.appendHtml("\" name=\"execute\" />\n");
         HelpLink.append(request, description, helpReference);
         // TODO reinstate fieldsets when we can specify them
         // request.appendHtml("</fieldset>\n");
@@ -118,7 +126,7 @@ public class HtmlFormBuilder {
         final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
         final String maxLength = field.getMaxLength() == 0 ? "" : " rows=\"" + field.getMaxLength() + "\"";
         return "<textarea name=\"" + field.getName() + "\"" + columnsSegment + rowsSegment + wrapSegment + maxLength
-            + disabled + ">" + field.getValue() + "</textarea>" + requiredSegment;
+            + disabled + ">" + Request.getEncoder().encoder(field.getValue()) + "</textarea>" + requiredSegment;
     }
 
     private static String createPasswordField(final InputField field) {
@@ -132,7 +140,7 @@ public class HtmlFormBuilder {
 
     private static String createTextField(final InputField field, final String type, final String additionalAttributes) {
         final String value = field.getValue();
-        final String valueSegment = value == null ? "" : " value=\"" + value + "\"";
+        final String valueSegment = value == null ? "" : " value=\"" + Request.getEncoder().encoder(value) + "\"";
         final String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
         final String maxLengthSegment = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
         final String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
@@ -164,7 +172,7 @@ public class HtmlFormBuilder {
             if (field.getType() == InputField.TEXT && options[i].equals("__other")) {
                 offerOther = true;
             } else {
-                str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
+                str.append("    <option value=\"" +  Request.getEncoder().encoder(ids[i]) + "\"" + selectedSegment + ">" + Request.getEncoder().encoder(options[i]) + "</option>\n");
             }
         }
         if (!field.isRequired() || length == 0) {

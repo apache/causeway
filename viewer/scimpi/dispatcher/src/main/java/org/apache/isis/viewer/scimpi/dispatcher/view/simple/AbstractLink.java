@@ -81,7 +81,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             if (buffer.trim().length() > 0) {
                 request.appendHtml(buffer);
             } else {
-                request.appendHtml(linkLabel(name, adapter));
+                request.appendAsHtmlEncoded(linkLabel(name, adapter));
             }
             request.appendHtml("</a>");
         } else {

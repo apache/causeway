@@ -43,6 +43,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,7 +101,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         try {
             final List<ObjectAdapter> savedObject = new ArrayList<ObjectAdapter>();
             final JSONObject data = encodeTransientData(object, savedObject);
-            return "D" + data.toString(4); // StringEscapeUtils.escapeHtml(data.toString(4));
+            return "D" + data.toString(4);
         } catch (final JSONException e) {
             throw new ScimpiException(e);
         }
@@ -255,15 +256,20 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                     ((OneToOneAssociation) association).initAssociation(object, fromEncodedString);
                 }
             } else if (association instanceof OneToManyAssociation) {
-                final List<JSONObject> collection = new ArrayList<JSONObject>();
-                if (!collection.isEmpty()) {
-                    throw new ScimpiException("Unexpected association for transient object " + association);
+                final JSONArray collection = (JSONArray) fieldValue;
+                for (int i = 0; i < collection.length(); i++) {
+                    JSONObject jsonElement = (JSONObject) collection.get(i);
+                    ObjectAdapter objectToAdd = restoreTransientObject(jsonElement);
+                    ((OneToManyAssociation) association).addElement(object, objectToAdd);
                 }
-                /*
-                 * CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class); for
-                 * (ObjectAdapter element : facet.iterable(fieldValue)) { collection.add(saveData(element,
-                 * savedObject)); } data.put(fieldName, collection);
-                 */
+                
+/*                
+                CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class);
+                for (ObjectAdapter element : facet.iterable(fieldValue)) {
+                    collection.add(saveData(element, savedObject));
+                }
+                data.put(fieldName, collection);
+*/
             } else {
                 if (fieldValue == null) {
                     ((OneToOneAssociation) association).initAssociation(object, null);

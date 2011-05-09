@@ -51,7 +51,7 @@ public class ParameterName extends AbstractElementProcessor {
             throw new ScimpiException("Parameter numbers should be between 1 and " + parameters.size() + ": " + index);
         }
 
-        request.appendHtml(parameters.get(index).getName());
+        request.appendAsHtmlEncoded(parameters.get(index).getName());
     }
 
     @Override

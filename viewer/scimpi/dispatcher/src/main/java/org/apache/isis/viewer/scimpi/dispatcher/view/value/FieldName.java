@@ -41,7 +41,7 @@ public class FieldName extends AbstractElementProcessor {
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
-        request.appendHtml(field.getName());
+        request.appendAsHtmlEncoded(field.getName());
     }
 
     @Override

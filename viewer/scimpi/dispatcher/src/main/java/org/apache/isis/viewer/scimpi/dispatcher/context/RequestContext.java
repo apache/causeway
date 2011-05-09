@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -179,7 +180,7 @@ public abstract class RequestContext {
         }
 
         if (id.startsWith("D")) {
-            return objectMapping.mappedTransientObject(id.substring(1));
+            return objectMapping.mappedTransientObject(StringEscapeUtils.unescapeHtml(id.substring(1)));
         }
 
         final String[] idParts = id.split("@");

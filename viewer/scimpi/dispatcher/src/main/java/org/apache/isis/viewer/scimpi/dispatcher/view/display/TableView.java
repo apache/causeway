@@ -92,7 +92,9 @@ public class TableView extends AbstractTableView {
         private void titleRow(final PageWriter writer) {
             if (title != null) {
                 writer.appendHtml("<tr colspan=\"" + fields.size() + "\">");
-                writer.appendHtml("<th class=\"title\">" + title + "</th>");
+                writer.appendHtml("<th class=\"title\">");
+                writer.appendAsHtmlEncoded(title);
+                writer.appendHtml("</th>");
                 writer.appendHtml("</tr>");
             }
         }
@@ -103,10 +105,12 @@ public class TableView extends AbstractTableView {
             final String[] columnHeaders = headers;
             for (final String columnHeader : columnHeaders) {
                 if (columnHeader != null) {
-                    writer.appendHtml("<th>" + columnHeader + "</th>");
+                    writer.appendHtml("<th>" + columnHeader);
+                    writer.appendAsHtmlEncoded(columnHeader);
+                    writer.appendHtml("</th>");
                 }
             }
-            writer.appendHtml("<th>" + "</th>");
+            writer.appendHtml("<th></th>");
             writer.appendHtml("</tr>");
         }
 
@@ -118,15 +122,21 @@ public class TableView extends AbstractTableView {
             result = context.encodedInteractionParameters();
 
             if (fields.size() == 0) {
+                request.appendHtml("<td>");
                 if (linkRow != null) {
                     request.appendHtml("<td><a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "="
-                        + rowId + result + scope + "\">" + element.titleString() + "</a></td>");
+                        + rowId + result + scope + "\">");
+                    request.appendAsHtmlEncoded(element.titleString());
+                    request.appendHtml("</a>");
                 } else {
-                    request.appendHtml("<td>" + element.titleString() + "</td>");
+                    request.appendAsHtmlEncoded(element.titleString());
                 }
+                request.appendHtml("</td>");
 
             } else {
-                request.appendHtml("<td>" + element.titleString() + "</td>");
+                request.appendHtml("<td>");
+                request.appendAsHtmlEncoded(element.titleString());
+                request.appendHtml("</td>");
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i).isOneToManyAssociation()) {
                         continue;
@@ -151,9 +161,9 @@ public class TableView extends AbstractTableView {
 
                         }
                         try {
-                            request.appendHtml(field.titleString());
+                            request.appendAsHtmlEncoded(field.titleString());
                         } catch (final ObjectNotFoundException e) {
-                            request.appendHtml(e.getMessage());
+                            request.appendAsHtmlEncoded(e.getMessage());
                         }
                         if (linkRow != null || linkedFields[i] != null) {
                             request.appendHtml("</a>");

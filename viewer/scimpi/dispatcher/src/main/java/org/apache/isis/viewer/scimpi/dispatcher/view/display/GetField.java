@@ -80,7 +80,7 @@ public class GetField extends AbstractElementProcessor {
             final Date date = facet.dateValue(fieldReference);
             final String value = format.format(date);
             request.appendDebug("    " + object + " -> " + value);
-            request.getContext().addVariable(name, value, scope);
+            request.getContext().addVariable(name, Request.getEncoder().encoder(value), scope);
         } else {
             final String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, scope);
             request.appendDebug("    " + object + " -> " + source);

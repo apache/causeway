@@ -60,7 +60,9 @@ public class User extends AbstractElementProcessor {
         if (user == null) {
             user = IsisContext.getAuthenticationSession().getUserName();
         }
-        request.appendHtml("Welcome <span class=\"name\">" + user + "</span>, ");
+        request.appendHtml("Welcome <span class=\"name\">");
+        request.appendAsHtmlEncoded(user );
+        request.appendHtml("</span>, ");
         final String logoutView = request.getOptionalProperty(LOGOUT_VIEW, DEFAULT_LOGOUT_VIEW);
         request.appendHtml("<a class=\"link\" href=\"logout.app?view=" + logoutView + "\">Log out</a>");
     }

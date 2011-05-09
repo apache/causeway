@@ -62,9 +62,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.RemoveAction;
 import org.apache.isis.viewer.scimpi.dispatcher.logon.LogonAction;
 import org.apache.isis.viewer.scimpi.dispatcher.logon.LogoutAction;
+import org.apache.isis.viewer.scimpi.dispatcher.processor.Encoder;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.HtmlFileParser;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.ProcessorLookup;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.processor.SimpleEncoder;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.TagProcessingException;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
@@ -87,6 +89,7 @@ public class Dispatcher {
     private final Map<String, String> parameters = new HashMap<String, String>();
     private final ProcessorLookup processors = new ProcessorLookup();
     private final HtmlFileParser parser = new HtmlFileParser(processors);
+    private final Encoder encoder  = new SimpleEncoder();
 
     public void process(final RequestContext context, final String servletPath) {
         LOG.info("processing request " + servletPath);
@@ -329,7 +332,7 @@ public class Dispatcher {
 
         context.addVariable("title", "Untitled Page", Scope.REQUEST);
         final Stack<Snippet> tags = loadPageTemplate(context, fullPath);
-        final Request request = new Request(file, context, tags, processors);
+        final Request request = new Request(file, context, encoder, tags, processors);
         request.appendDebug("processing " + fullPath);
         try {
             request.processNextTag();

@@ -36,7 +36,7 @@ public class ActionName extends AbstractElementProcessor {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
         final ObjectAction action = MethodsUtils.findAction(object, methodName);
 
-        request.appendHtml(action.getName());
+        request.appendAsHtmlEncoded(action.getName());
     }
 
     @Override

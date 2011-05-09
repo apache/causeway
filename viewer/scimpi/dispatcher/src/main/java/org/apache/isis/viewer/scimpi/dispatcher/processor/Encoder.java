@@ -19,10 +19,9 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
-public interface PageWriter {
+public interface Encoder {
 
-    void appendAsHtmlEncoded(String string);
-
-    void appendHtml(String string);
+    String encoder(String text);
 
 }
+

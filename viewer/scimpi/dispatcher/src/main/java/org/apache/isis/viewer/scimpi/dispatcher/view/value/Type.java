@@ -46,7 +46,7 @@ public class Type extends AbstractElementProcessor {
         final ObjectSpecification specification = object.getSpecification();
         final String name = showPlural != null ? specification.getPluralName() : specification.getSingularName();
 
-        request.appendHtml(name);
+        request.appendAsHtmlEncoded(name);
     }
 
     @Override

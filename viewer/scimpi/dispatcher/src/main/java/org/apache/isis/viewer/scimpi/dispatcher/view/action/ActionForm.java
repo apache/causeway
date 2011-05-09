@@ -86,7 +86,9 @@ public class ActionForm extends AbstractElementProcessor {
                 if (!withoutProcessing) {
                     request.skipUntilClose();
                 }
-                request.appendHtml("<div class=\"" + parameterObject.className + "-message\" >" + notUsable + "</div>");
+                request.appendHtml("<div class=\"" + parameterObject.className + "-message\" >");
+                request.appendAsHtmlEncoded(notUsable);
+                request.appendHtml("</div>");
                 return;
             }
         }

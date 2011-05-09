@@ -27,6 +27,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
+
 public class FieldLabel extends AbstractElementProcessor {
 
     @Override
@@ -57,10 +58,9 @@ public class FieldLabel extends AbstractElementProcessor {
 
     public static void write(final Request content, final ObjectAssociation field, final String delimiter) {
         final String description = field.getDescription();
-        final String titleSegment =
-            description == null || description.equals("") ? null : ("title=\"" + description + "\"");
+        final String titleSegment = description == null || description.equals("") ? null : ("title=\"" + description + "\"");
         content.appendHtml("<span class=\"label\"" + titleSegment + ">");
-        content.appendHtml(field.getName());
+        content.appendAsHtmlEncoded(field.getName());
         if (delimiter != null) {
             content.appendHtml("<span class=\"delimiter\">" + delimiter + "</span>");
         }

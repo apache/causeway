@@ -50,7 +50,7 @@ public class ElementType extends AbstractElementProcessor {
         final ObjectSpecification elementSpecification = collection.getElementSpecification();
         final String name = elementSpecification.getSingularName();
 
-        request.appendHtml(name);
+        request.appendAsHtmlEncoded(name);
     }
 
     @Override

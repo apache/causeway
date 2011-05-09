@@ -46,13 +46,13 @@ public class TableCell extends AbstractElementProcessor {
             final String source =
                 fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
             final String name = request.getOptionalProperty(RESULT_NAME, fieldName);
-            request.getContext().addVariable(name, source, Scope.REQUEST);
+            request.getContext().addVariable(name, Request.getEncoder().encoder(source), Scope.REQUEST);
 
             request.pushNewBuffer();
             request.processUtilCloseTag();
             final String buffer = request.popBuffer();
             if (buffer.trim().length() == 0) {
-                request.appendHtml(fieldReference == null ? "" : fieldReference.titleString());
+                request.appendAsHtmlEncoded(fieldReference == null ? "" : fieldReference.titleString());
             } else {
                 request.appendHtml(buffer);
             }

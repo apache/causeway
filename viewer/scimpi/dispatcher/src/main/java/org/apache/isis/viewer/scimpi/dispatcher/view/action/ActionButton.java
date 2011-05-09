@@ -90,7 +90,9 @@ public class ActionButton extends AbstractElementProcessor {
                     if (className == null) {
                         className = "access";
                     }
-                    request.appendHtml("<div class=\"" + className + "-message\" >" + notUsable + "</div>");
+                    request.appendHtml("<div class=\"" + className + "-message\" >");
+                    request.appendAsHtmlEncoded(notUsable);
+                    request.appendHtml("</div>");
                 }
             } else {
                 Consent valid = action.isProposedArgumentSetValid(object, objectParameters);
@@ -99,7 +101,9 @@ public class ActionButton extends AbstractElementProcessor {
                     if (className == null) {
                         className = "access";
                     }
-                    request.appendHtml("<div class=\"" + className + "-message\" >" + notValid + "</div>");
+                    request.appendHtml("<div class=\"" + className + "-message\" >");
+                    request.appendAsHtmlEncoded(notValid);
+                    request.appendHtml("</div>");
                 }
             }
         }

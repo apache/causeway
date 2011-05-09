@@ -91,7 +91,7 @@ public class ActionLink extends AbstractElementProcessor {
             + version + "&amp;" + "_" + METHOD + "=" + method + forwardResultSegment + forwardVoidSegment
             + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment
             + interactionParamters + "\">");
-        request.appendHtml(text);
+        request.appendAsHtmlEncoded(text);
         request.appendHtml("</a>");
         HelpLink.append(request, action.getDescription(), action.getHelp());
     }

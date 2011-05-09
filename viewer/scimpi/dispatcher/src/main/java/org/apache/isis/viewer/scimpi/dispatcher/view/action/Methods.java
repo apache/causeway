@@ -93,7 +93,9 @@ public class Methods extends AbstractElementProcessor {
                     final String realTargetId = request.getContext().mapObject(realTarget, Scope.INTERACTION);
                     writeMethod(request, adapter, new String[] { objectId }, action, realTargetId, showForms);
                 } else {
-                    request.appendHtml("<div class=\"action\">" + action.getName() + "???</div>");
+                    request.appendHtml("<div class=\"action\">");
+                    request.appendAsHtmlEncoded(action.getName());
+                    request.appendHtml("???</div>");
                 }
             } else {
                 writeMethod(request, adapter, new String[0], action, objectId, showForms);
@@ -109,7 +111,7 @@ public class Methods extends AbstractElementProcessor {
             request.appendHtml("<div class=\"action\">");
             if (IsisContext.getSession() == null) {
                 request.appendHtml("<span class=\"disabled\" title=\"no user logged in\">");
-                request.appendHtml(action.getName());
+                request.appendAsHtmlEncoded(action.getName());
                 request.appendHtml("</span>");
                 /*
                  * } else if (action.isUsable(IsisContext.getSession(), null).isVetoed()) {
@@ -118,7 +120,7 @@ public class Methods extends AbstractElementProcessor {
                  */} else if (action.isUsable(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
                 request.appendHtml("<span class=\"disabled\" title=\""
                     + action.isUsable(IsisContext.getAuthenticationSession(), adapter).getReason() + "\">");
-                request.appendHtml(action.getName());
+                request.appendAsHtmlEncoded(action.getName());
                 request.appendHtml("</span>");
             } else {
                 final String version = request.getContext().mapVersion(adapter);
@@ -140,8 +142,10 @@ public class Methods extends AbstractElementProcessor {
                     ActionForm.createForm(request, params, true);
                 } else {
                     request.appendHtml("<a href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId
-                        + "&amp;" + VERSION + "=" + version + "&method=" + action.getId() + "\" title="
-                        + action.getDescription() + ">" + action.getName() + "</a>");
+                            + "&amp;" + VERSION + "=" + version + "&method=" + action.getId() + "\" title="
+                            + action.getDescription() + ">");
+                    request.appendAsHtmlEncoded(action.getName());
+                    request.appendHtml("</a>");
                 }
             }
             request.appendHtml("</div>");

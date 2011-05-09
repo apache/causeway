@@ -48,6 +48,11 @@ public class Request implements PageWriter {
     private static Logger LOG = Logger.getLogger(Request.class);
     public static final boolean ENSURE_VARIABLES_EXIST = true;
     public static final boolean NO_VARIABLE_CHECKING = false;
+    private static Encoder encoder;
+    
+    public static Encoder getEncoder() {
+        return encoder;
+    }
 
     private final RequestContext context;
     private final Stack<Snippet> snippets;
@@ -58,10 +63,11 @@ public class Request implements PageWriter {
     private int index = -1;
     private final String path;
 
-    public Request(final String path, final RequestContext context, final Stack<Snippet> snippets,
+    public Request(final String path, final RequestContext context, final Encoder encoder, final Stack<Snippet> snippets,
         final ProcessorLookup processors) {
         this.path = path;
         this.context = context;
+        Request.encoder = encoder;
         this.snippets = snippets;
         this.processors = processors;
 
@@ -75,7 +81,7 @@ public class Request implements PageWriter {
             index++;
             final Snippet snippet = snippets.get(index);
             if (snippet instanceof HtmlSnippet) {
-                append((HtmlSnippet) snippet);
+                appendSnippet((HtmlSnippet) snippet);
             } else {
                 final SwfTag tag = (SwfTag) snippet;
                 final String name = tag.getName();
@@ -88,7 +94,7 @@ public class Request implements PageWriter {
         }
     }
 
-    private void append(final HtmlSnippet snippet) {
+    private void appendSnippet(final HtmlSnippet snippet) {
         String html = snippet.getHtml();
         try {
             if (snippet.isContainsVariable()) {
@@ -108,16 +114,30 @@ public class Request implements PageWriter {
     }
 
     @Override
+    public void appendAsHtmlEncoded(String string) {
+        appendHtml(encodeHtml(string));
+       // appendHtml(string);
+    }
+    
+    @Override
     public void appendHtml(final String html) {
         final StringBuffer buffer = buffers.peek();
         buffer.append(html);
+    }
+
+    public void appendDebug(final String line) {
+        context.appendDebugTrace(encodeHtml(line));
+    }
+
+    private String encodeHtml(String text) {
+        return encoder.encoder(text);
     }
 
     public void appendTruncated(String text, final int truncateTo) {
         if (truncateTo > 0 && text.length() > truncateTo) {
             text = text.substring(0, truncateTo) + "...";
         }
-        appendHtml(text);
+        appendAsHtmlEncoded(text);
     }
 
     private void process(final SwfTag tag, final ElementProcessor processor) {
@@ -145,7 +165,7 @@ public class Request implements PageWriter {
             index++;
             final Snippet snippet = snippets.get(index);
             if (snippet instanceof HtmlSnippet) {
-                append((HtmlSnippet) snippet);
+                appendSnippet((HtmlSnippet) snippet);
             } else {
                 final SwfTag nextTag = (SwfTag) snippet;
                 if (tag.getName().equals(nextTag.getName())) {
@@ -302,9 +322,5 @@ public class Request implements PageWriter {
 
     public RepeatMarker createMarker() {
         return new RepeatMarker(index);
-    }
-
-    public void appendDebug(final String line) {
-        context.appendDebugTrace(line);
     }
 }
