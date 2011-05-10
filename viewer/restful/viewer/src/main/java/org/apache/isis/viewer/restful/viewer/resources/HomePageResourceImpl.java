@@ -38,7 +38,7 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
         init();
         final XhtmlTemplate xhtml = new XhtmlTemplate("Home Page", getServletRequest());
 
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         return xhtml.toXML();

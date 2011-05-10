@@ -39,6 +39,8 @@ import nu.xom.ValidityException;
  */
 final class UrlConnectionUtils {
 
+    static final String MIME_TYPE = "application/xhtml+xml";
+
     private UrlConnectionUtils() {
     }
 
@@ -59,7 +61,7 @@ final class UrlConnectionUtils {
         final URL url = new URL(uri);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setInstanceFollowRedirects(false);
-        connection.setRequestProperty("Content-Type", AbstractRestfulClient.MIME_TYPE);
+        connection.setRequestProperty("Content-Type", MIME_TYPE);
         return connection;
     }
 

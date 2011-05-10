@@ -131,7 +131,7 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected Element asDivNofSession() {
+    protected Element asDivIsisSession() {
         final Element div = xhtmlRenderer.div_p("Logged in as", null);
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.SESSION);
@@ -253,7 +253,7 @@ public abstract class ResourceAbstract {
     }
 
     protected Response responseOfGone(final String reason) {
-        return Response.status(Status.GONE).header("nof-reason", reason).build();
+        return Response.status(Status.GONE).header("isis-reason", reason).build();
     }
 
     protected Response responseOfBadRequest(final Consent consent) {
@@ -261,11 +261,11 @@ public abstract class ResourceAbstract {
     }
 
     protected Response responseOfNoContent(final String reason) {
-        return Response.status(Status.NO_CONTENT).header("nof-reason", reason).build();
+        return Response.status(Status.NO_CONTENT).header("isis-reason", reason).build();
     }
 
     protected Response responseOfBadRequest(final String reason) {
-        return Response.status(Status.BAD_REQUEST).header("nof-reason", reason).build();
+        return Response.status(Status.BAD_REQUEST).header("isis-reason", reason).build();
     }
 
     protected Response responseOfNotFound(final IllegalArgumentException e) {
@@ -273,7 +273,7 @@ public abstract class ResourceAbstract {
     }
 
     protected Response responseOfNotFound(final String reason) {
-        return Response.status(Status.NOT_FOUND).header("nof-reason", reason).build();
+        return Response.status(Status.NOT_FOUND).header("isis-reason", reason).build();
     }
 
     protected Response responseOfInternalServerError(final Exception ex) {
@@ -281,7 +281,7 @@ public abstract class ResourceAbstract {
     }
 
     protected Response responseOfInternalServerError(final String reason) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).header("nof-reason", reason).build();
+        return Response.status(Status.INTERNAL_SERVER_ERROR).header("isis-reason", reason).build();
     }
 
     // //////////////////////////////////////////////////////////////

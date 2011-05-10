@@ -60,7 +60,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final XhtmlTemplate xhtml = new XhtmlTemplate("Specifications", getServletRequest());
 
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         final Element div = xhtmlRenderer.div_p("Specifications", HtmlClass.SECTION);
@@ -95,7 +95,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     public String spec(final String specFullName) {
         init();
         final XhtmlTemplate xhtml = new XhtmlTemplate(specFullName, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
 
@@ -178,7 +178,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndFacet = specFullName + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndFacet, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
 
@@ -212,7 +212,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndProperty = specFullName + "/property/" + propertyName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndProperty, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         // owners
         final Element div = xhtmlRenderer.div_p("Owners", null);
@@ -242,7 +242,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndCollection = specFullName + "/collection/" + collectionName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndCollection, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         // owners
         final Element div = xhtmlRenderer.div_p("Owners", null);
@@ -272,7 +272,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndAction = specFullName + "/action/" + actionId;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndAction, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         // owners
         final Element div = xhtmlRenderer.div_p("Owners", null);
@@ -303,7 +303,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndPropertyAndFacet = specFullName + "/property/" + propertyName + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndPropertyAndFacet, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAssociation property = noSpec.getAssociation(propertyName);
@@ -351,7 +351,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndPropertyAndFacet = specFullName + "/collection/" + collectionId + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndPropertyAndFacet, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAssociation collection = noSpec.getAssociation(collectionId);
@@ -398,7 +398,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final String specAndPropertyAndFacet = specFullName + "/action/" + actionId + "/facet/" + facetTypeName;
         final XhtmlTemplate xhtml = new XhtmlTemplate(specAndPropertyAndFacet, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
         final ObjectAction action = noSpec.getObjectAction(null, actionId);

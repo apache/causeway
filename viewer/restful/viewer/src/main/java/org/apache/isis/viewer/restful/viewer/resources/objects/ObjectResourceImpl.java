@@ -96,9 +96,9 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // html template
         final XhtmlTemplate xhtml =
             new XhtmlTemplate(nakedObject.titleString(), getServletRequest(), javascriptFile,
-                Constants.NOF_REST_SUPPORT_JS);
+                Constants.ISIS_REST_SUPPORT_JS);
 
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // object div
@@ -245,7 +245,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // html template
         final XhtmlTemplate xhtml =
             new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
@@ -282,7 +282,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // html template
         final XhtmlTemplate xhtml =
             new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
@@ -323,7 +323,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // html template
         final XhtmlTemplate xhtml =
             new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
@@ -398,7 +398,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         // html template
         final XhtmlTemplate xhtml =
             new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
@@ -462,7 +462,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         // html template
         final XhtmlTemplate xhtml = new XhtmlTemplate(nakedObject.titleString() + "." + actionId, getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
 
         // title & Oid
         Element div = asDivTableObjectDetails(nakedObject);

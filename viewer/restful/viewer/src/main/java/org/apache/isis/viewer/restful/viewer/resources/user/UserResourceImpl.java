@@ -41,7 +41,7 @@ public class UserResourceImpl extends ResourceAbstract implements UserResource {
         init();
 
         final XhtmlTemplate xhtml = new XhtmlTemplate("User", getServletRequest());
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         final Element div = xhtmlRenderer.div_p("Roles", HtmlClass.SECTION);

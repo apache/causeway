@@ -52,7 +52,7 @@ public final class TableColumnOneToManyAssociationAddTo extends
     }
 
     /**
-     * Calls the <tt>addToCollection()</tt> Javascript function that lives in <tt>nof-rest-support.js</tt>
+     * Calls the <tt>addToCollection()</tt> Javascript function that lives in <tt>isis-rest-support.js</tt>
      * 
      * @param url
      * @param associationId

@@ -3,11 +3,11 @@
 "file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <book>
   <bookinfo>
-    <title>Restful Objects 1.0 Users Guide</title>
+    <title><?eval ${docbkxGuideTitle}?></title>
 
-    <subtitle>RESTful Web Services for Naked Objects 4.0.x</subtitle>
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
 
-    <releaseinfo>0.1</releaseinfo>
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
@@ -31,23 +31,91 @@
   <preface id="preface">
     <title>Preface</title>
 
-    <para><ulink url="http://restfulobjects.sourceforge.net">Restful
-    Objects</ulink> is a sister project to <ulink
-    url="http://nakedobjects.org">Naked Objects</ulink> and provides an
-    implementation of a web-based viewer that exposes a RESTful web service
-    for a Naked Objects domain model.</para>
-
-    <para>This manual describes how to use the <emphasis>Restful
-    Objects</emphasis> in both prototype mode and how to deploy it into
-    production as a webapp. It also describes how to use <emphasis>Restful
-    Objects</emphasis>' applib to write client-side applications.</para>
-
-    <para><emphasis>Restful Objects</emphasis> is hosted on <ulink
-    url="http://restfulobjects.sourceforge.net">SourceForge</ulink>, and is
-    licensed under <ulink
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework that supports supports variouys
+    viewers, along with <acronym>API</acronym>s and implementations relating
+    to security, the programming model, the runtime (persistence) and profile
+    stores (user preferences). <emphasis>Apache Isis</emphasis> is hosted at
+    the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
-    License v2</ulink>. Naked Objects is also hosted on SourceForge, and is
-    also licensed under Apache Software License v2.</para>
+    License v2</ulink>.</para>
+
+    <para><emphasis>Isis</emphasis>' <emphasis>restful</emphasis> viewer
+    <package>[oai.viewer:restful]</package> renders each domain objects as
+    <ulink
+    url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
+    resources. Each domain object is exposed as an (<acronym>XHTML</acronym>)
+    resource through <acronym>HTTP GET</acronym> and can be used to access
+    other related objects by following links that represent the associations
+    of the domain object. The domain object can be interacted with by
+    modifying its state (through <acronym>HTTP PUT</acronym>) or by invoking
+    its actions (through <acronym>HTTP POST</acronym>).</para>
+
+    <sect1>
+      <title>Who this Guide is For</title>
+
+      <para>This guide describes how to use the <emphasis>restful viewer
+      </emphasis>both in prototype mode and how to deploy it into production
+      as a webapp. It also describes how to use the <emphasis>restful
+      viewer</emphasis>'s application library
+      <package>[oai.viewer.restful:applib]</package> to write client-side
+      applications. It is divided into the following chapters:<itemizedlist>
+          <listitem>
+            <para>Introduction</para>
+
+            <para>This chapter briefly introduces the concept of
+            <acronym>REST</acronym> and how it is mapped to the Isis domain
+            model. </para>
+          </listitem>
+
+          <listitem>
+            <para>The Restful Viewer Modules</para>
+
+            <para>This ....</para>
+          </listitem>
+
+          <listitem>
+            <para>Xxx</para>
+          </listitem>
+
+          <listitem>
+            <para>Xxx</para>
+          </listitem>
+
+          <listitem>
+            <para>Xxx</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect1>
+
+    <sect1>
+      <title>Abbreviations used in this Guide</title>
+
+      <para><emphasis>Apache Isis</emphasis> is built using Maven, which
+      identifies every module with a <emphasis>groupId</emphasis>, an
+      <emphasis>artifactId</emphasis>, a <emphasis>version</emphasis>, and a
+      <emphasis>type</emphasis>. These are called the Maven
+      <emphasis>co-ordinates</emphasis>. In this guide we identify each module
+      using notation <package>(groupId:artifactId)</package>; you should
+      assume that the <emphasis>version</emphasis> is the latest version, and
+      the <emphasis>type</emphasis> is the default JAR artifact<footnote>
+          <para>Maven modules can create other artifacts too, such as a test
+          JAR artifact. This would be indicated with a type of test-jar. But
+          the default artifact is a regular JAR.</para>
+        </footnote>. Hence <package>(org.apache.isis:core)</package> is the
+      Maven module with a <emphasis>groupId</emphasis> of
+      <package>org.apache.isis</package> and an
+      <emphasis>artifactId</emphasis> of <package>core</package>.</para>
+
+      <para>As a further convenience, we use "oai" as an abbreviation for
+      <package>org.apache.isis</package>. Hence
+      <package>(oai.viewer:restful)</package> refers to the parent module for
+      Restful viewer. We also use the "oai" abbreviation within package
+      names.</para>
+    </sect1>
   </preface>
 
   <!-- main content -->
@@ -55,10 +123,15 @@
   <chapter id="chp.Introduction">
     <title>Introduction</title>
 
-    <para><emphasis>Restful Objects</emphasis> is a Naked Objects viewer
-    implementation to expose a domain model using <acronym>REST</acronym>. So
-    let's briefly explain what <acronym>REST</acronym> is, and why you might
-    want to use it.</para>
+    <abstract>
+      <para>An introduction to <acronym>REST</acronym> and how it maps onto an
+      <emphasis>Apache Isis</emphasis> domain model.</para>
+    </abstract>
+
+    <para>This chapter briefly explains what <acronym>REST</acronym> is, and
+    why you might want to use it. It then explains how the <emphasis>restful
+    viewer</emphasis> exposes your domain model using <acronym>REST</acronym>.
+    </para>
 
     <sect1>
       <title>Introducing REST</title>
@@ -80,10 +153,11 @@
       sort of dispatcher to route the message so it can be processed
       correctly.</para>
 
-      <para><acronym>REST</acronym> (standing for <emphasis>REpresentational
-      State Transfer</emphasis>) in contrast is a style of designing web
-      services that is modelled on the human web sites. Rather than expose a
-      single endpoint, it exposes multiple endpoints. And these endpoints
+      <para><acronym>REST</acronym> (standing for <ulink
+      url="http://en.wikipedia.org/wiki/Representational_State_Transfer"><emphasis>REpresentational
+      State Transfer</emphasis></ulink>) in contrast is a style of designing
+      web services that is modelled on the human web sites. Rather than expose
+      a single endpoint, it exposes multiple endpoints. And these endpoints
       don't represent verbs, they represent things (or nouns). But
       <acronym>REST</acronym> goes further than this, because it also
       restricts what we can do with those resources to the standard
@@ -117,13 +191,13 @@
     </sect1>
 
     <sect1 id="sec.IntroducingRestfulObjects">
-      <title>Introducing Restful Objects</title>
+      <title>Introducing the Restful Viewer</title>
 
-      <para>As already stated, <emphasis>Restful Objects</emphasis> is a Naked
-      Objects viewer implementation to expose a domain model using
-      <acronym>REST</acronym>. That is, the resources are the actual domain
-      objects, or - in some cases - a class member of one of those objects.
-      The following table shows the resources exposed:</para>
+      <para>As already stated, the <emphasis>Isis</emphasis>'
+      <emphasis>restful viewer</emphasis> automatically exposes a domain model
+      using <acronym>REST</acronym>. That is, the resources are the actual
+      domain objects, or - in some cases - a class member of one of those
+      objects. The following table shows the resources exposed:</para>
 
       <table>
         <title>Verbs by Resources</title>
@@ -197,8 +271,8 @@
         </tgroup>
       </table>
 
-      <para>Restul Objects exposes a <acronym>URL</acronym> for each of the
-      columns. So, for example:</para>
+      <para>The <emphasis>restful viewer</emphasis> exposes a
+      <acronym>URL</acronym> for each of the columns. So, for example:</para>
 
       <itemizedlist>
         <listitem>
@@ -222,14 +296,14 @@
 
       <para>So much for interacting with the resources, but what of their
       representation? Well, (following the suggestion in Richardson &amp;
-      Ruby's book) <emphasis>Restful Objects</emphasis> renders the domain
+      Ruby's book) the <emphasis>restful viewer </emphasis>renders the domain
       objects using <acronym>XHTML</acronym>. This gives us a natural way to
       express links between resources: we just use hyperlinks using the
       <sgmltag>&lt;a href="..."/&gt;</sgmltag> tag. It also means that we can
       inspect the domain objects from an web browser. For example, here's
       Firefox displaying the resource representing an
       <classname>EmployeeRepository</classname> (part of of the example claims
-      application that is in the Naked Objects Maven download):</para>
+      application, in trunk/examples/claims):</para>
 
       <screenshot>
         <screeninfo>OID / Naked Object / pojo relationship and
@@ -242,7 +316,7 @@
         </mediaobject>
       </screenshot>
 
-      <para>In fact, <emphasis>Restful Objects</emphasis> also serves up a
+      <para>In fact, the <emphasis>restful viewer </emphasis>also serves up a
       smidgeon of Javascript as well, to allow the web browser to perform
       <acronym>PUT</acronym> and <acronym>DELETE</acronym> as well as the
       usual <acronym>GET</acronym> and <acronym>POST</acronym>. This won't be
@@ -250,8 +324,10 @@
       needed once <acronym>XHTML</acronym> 5 - with its support for these
       additional <acronym>HTTP</acronym> verbs - becomes mainstream).</para>
 
-      <para>Restful Objects itself is implemented using <ulink
-      url="http://jboss.org/resteasy">JBoss RestEasy</ulink>.</para>
+      <para>In case you're interested, behind the scenes the <emphasis>restful
+      viewer</emphasis> is implemented using <ulink
+      url="http://jboss.org/resteasy">JBoss RestEasy</ulink> (licensed under
+      Apache License v2, the same as <emphasis>Isis</emphasis> itself).</para>
     </sect1>
 
     <sect1>
@@ -263,146 +339,519 @@
       <acronym>WS-*</acronym> specifications deal with such things as security
       credentials and transaction propagation. At the time of writing
       <acronym>REST</acronym> is yet to gain these sorts of additional
-      support. That said, <emphasis>Restful Objects</emphasis> provides some
-      basic support for security, however.</para>
+      support. That said, the <emphasis>restful viewer</emphasis> provides
+      some basic support for security. This is discussed in the chapters that
+      follow.</para>
     </sect1>
   </chapter>
 
   <chapter>
-    <title id="chp.Prototyping">Using Restful Objects in Prototypes</title>
+    <title id="chp.Prototyping">Using the QuickStart Archetype and the Restful
+    Viewer</title>
 
-    <para>Exposing a <abbrev>REST</abbrev>ful domain model with
-    <emphasis>Restful Objects</emphasis> is really pretty straightforward; we
-    just need to boot Naked Objects to use the <emphasis>Restful
-    Objects</emphasis>' viewer rather than the <acronym>DnD</acronym> viewer
-    or <acronym>HTML</acronym> viewer that comes out-of-the-box. That means
-    adding references to the <acronym>POM</acronym>, and the running with the
-    appropriate command line flags.</para>
+    <abstract>
+      <para>How to get started prototyping with <emphasis>restful
+      viewer.</emphasis></para>
+    </abstract>
 
-    <para>If you ran the Naked Objects archetype then you'll have a Maven
-    parent module with a number of child modules:</para>
+    <para>The easiest way to get started is to run the
+    <emphasis>Isis</emphasis> quickstart archetype (eg as documented on
+    <emphasis>Isis</emphasis>' website). Once you've done this, you'll end up
+    with an set of modules that allow the application to be booted using the
+    <emphasis>restful viewer</emphasis>. It includes the following
+    modules:</para>
 
-    <programlisting>xxx/pom.xml
-    xxx-dom/pom.xml          # domain object model
-    xxx-fixture/pom.xml      # fixtures for seeding object store
-    xxx-service/pom.xml      # in-memory object store implementations of repositories
-    xxx-commandline/pom.xml  # for deploying as a commandline, also for prototyping
-    xxx-webapp/pom.xml       # for deploying as a webapp</programlisting>
+    <programlisting>myapp/pom.xml
+    myapp-dom/pom.xml             # domain object model
+    myapp-fixture/pom.xml         # fixtures for seeding object store
+    myapp-objstore-dflt/pom.xml   # repository implementations for the default object store
+    myapp-quickrun/pom.xml        # run the application during development/prototyping
+    myapp-viewer-restful/pom.xml  # run the application as a webapp using the restful viewer</programlisting>
 
-    <para>The instructions here assume this directory structure.</para>
+    <para>where 'myapp' is the artifactId specified when you ran the <code>mvn
+    archetype:generate</code> goal.</para>
+
+    <para>This chapter describes in more detail the contents of these modules,
+    and then describes how to get started with running the <emphasis>restful
+    viewer</emphasis> for prototyping purposes.</para>
 
     <sect1 id="sec.ParentModule">
-      <title>Parent Module</title>
+      <title>Understanding the Generated Modules</title>
 
-      <para>In the parent module, first add in a
-      <sgmltag>&lt;properties&gt;</sgmltag> section to specify the version of
-      <emphasis>Restful Objects</emphasis>. This will transitively bring in
-      any dependencies:</para>
+      <para>Before we run the application, let's look at the modules generated
+      for us by the archetype.</para>
 
-      <programlisting>&lt;properties&gt;
-  &lt;restfulobjects.version&gt;1.0.0&lt;/restfulobjects.version&gt;             &lt;!-- or whatever --&gt;
+      <sect2>
+        <title>The Parent Module</title>
+
+        <para>The parent module includes as an import a reference to the
+        Apache Isis <emphasis>release</emphasis> artifact
+        <package>[oai:release]</package>:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
+  &lt;dependencies&gt;
+
+    &lt;!-- Apache Isis --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
+      &lt;artifactId&gt;release&lt;/artifactId&gt;
+      &lt;version&gt;x.x.x&lt;/version&gt;
+      &lt;type&gt;pom&lt;/type&gt;
+      &lt;scope&gt;import&lt;/scope&gt;
+    &lt;/dependency&gt;
+    ...
+
+  &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</programlisting>
+
+        <para>where <emphasis>x.x.x</emphasis> is the version of
+        <emphasis>Isis</emphasis> that you are using. The <code>scope</code>
+        of <emphasis>import</emphasis> means that all
+        <code>&lt;properties&gt;</code> of this artifact are imported, and any
+        <code>&lt;dependencyManagement&gt;/&lt;dependencies&gt;</code> are
+        imported also.</para>
+
+        <para>If you locate the <acronym>POM</acronym> for this artifact (eg
+        by looking in <filename>~/.m2/repository</filename>) then you'll see
+        that it defines:</para>
+
+        <programlisting>&lt;properties&gt;
+    &lt;isis.viewer-restful.version&gt;y.y.y&lt;/isis.viewer-restful.version&gt;
+    ....
 &lt;/properties&gt;</programlisting>
 
-      <para>Then, add in references to the <emphasis>Restful
-      Objects</emphasis>' <filename>applib</filename> and
-      <filename>viewer</filename> modules to the
-      <sgmltag>&lt;dependencyManagement&gt;</sgmltag>:</para>
+        <para>where y.y.y is the corresponding version of the restful
+        viewer.</para>
 
-      <programlisting>&lt;dependencyManagement&gt;
+        <note>
+          <para>At the time of writing the version of Isis
+          <emphasis>core</emphasis> (x.x.x) and the version of
+          <emphasis>restful viewer</emphasis> (y.y.y) have been the same. This
+          may not always remain the case (just as Maven's plugins are
+          versioned separately from Maven itself).</para>
+        </note>
+
+        <para>In the <emphasis>release</emphasis> artifact's
+        <code>&lt;dependencyManagement&gt;</code> section you'll also find the
+        following:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
   &lt;dependencies&gt;
     ...
+    &lt;!-- viewer: restful --&gt;
     &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.restful&lt;/groupId&gt;
-      &lt;artifactId&gt;applib&lt;/artifactId&gt;
-      &lt;version&gt;${restfulobjects.version}&lt;/version&gt;
+      &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+      &lt;artifactId&gt;restful&lt;/artifactId&gt;
+      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.restful&lt;/groupId&gt;
-      &lt;artifactId&gt;viewer&lt;/artifactId&gt;
-      &lt;version&gt;${restfulobjects.version}&lt;/version&gt;
+      &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+      &lt;artifactId&gt;restful-applib&lt;/artifactId&gt;
+      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+      &lt;artifactId&gt;restful-viewer&lt;/artifactId&gt;
+      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
     &lt;/dependency&gt;
     ...
   &lt;/dependencies&gt;
 &lt;/dependencyManagement&gt;</programlisting>
 
-      <para>Note that an alternate approach for setting up dependencies is to
-      have the parent module inherit from
-      <classname>org.starobjects.restful:release</classname>. Doing it this
-      way means that it isn't necessary to add entries to
-      <sgmltag>&lt;dependencyManagement&gt;</sgmltag> because they are
-      inherited. However, Maven2 does only allow a single parent, so this may
-      not be an option for you if you want to use some other
-      <acronym>POM</acronym> as your parent.</para>
+        <para>The <package>[oai.viewer:restful]</package> module is the parent
+        for <emphasis>restful viewer</emphasis>
+        (<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>). That means that
+        it doesn't provide any Java classesper se. The <emphasis>restful
+        viewer</emphasis> module
+        <package>[oai.viewer.restful:viewer]</package> on the other hand does
+        provide a <acronym>JAR</acronym> artifact, being the main
+        implementation of the viewer. The <emphasis>restful applib</emphasis>
+        module <package>[oai.viewer.restful:applib]</package> meanwhile is
+        used for writing client-side applications that use an exposed Isis
+        module, the topic of <xref
+        linkend="chp.WritingClientSideApps" />.</para>
+      </sect2>
+
+      <sect2 id="sec.TheQuickRunModule">
+        <title>The QuickRun Module</title>
+
+        <para>First, the <emphasis>quickrun</emphasis> module's parent is the
+        parent module of the previous section, so all of the definitions in
+        the parent <acronym>POM</acronym> are inherited. Delving further, If
+        you look at the <classname>&lt;dependencies&gt;</classname> for the
+        generated quickrun module, then you'll see a dependency on the
+        <emphasis>restful viewer</emphasis>'s <emphasis>viewer</emphasis>
+        module:</para>
+
+        <programlisting>&lt;dependencies&gt;
+  ...
+  &lt;!-- viewer: restful --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+    &lt;artifactId&gt;restful-viewer&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+    ...
+&lt;/dependencyManagement&gt;</programlisting>
+
+        <para>It also includes a <classname>&lt;profile&gt;</classname> to
+        allow the application to be run as a standalone JAR, with an embedded
+        Jetty viewer.</para>
+
+        <programlisting>&lt;profiles&gt;
+  ...
+  &lt;profile&gt;
+    &lt;!-- prereqs: mvn package --&gt;
+    &lt;!-- mvn antrun:run -D exec=restful --&gt;
+    &lt;id&gt;exec-restful&lt;/id&gt;
+    &lt;activation&gt;
+      &lt;property&gt;
+        &lt;name&gt;exec&lt;/name&gt;
+        &lt;value&gt;restful&lt;/value&gt;
+      &lt;/property&gt;
+    &lt;/activation&gt;
+    ...
+  &lt;/profile&gt;
+  ...
+&lt;/profiles&gt;</programlisting>
+
+        <para>This profile defines a goal for the antrun plugin to execute the
+        generated <acronym>JAR</acronym><footnote>
+            <para>The generated JAR uses the maven-shade-plugin to package up
+            all dependencies. </para>
+          </footnote> from the command line using:</para>
+
+        <para><programlisting>java -jar xxx.jar -type exploration -viewer org.apache.isis.viewer.restful.viewer.embedded.RestfulViewerInstaller</programlisting></para>
+
+        <para>The installer specified by the <code>-viewer</code> flag acts as
+        a bridge to the embedded Jetty viewer.</para>
+
+        <para>Taking all the above together, it allows us to run the
+        application from the command line if we wish (discussed further in
+        <xref linkend="sec.RunningFromTheQuickRunModule" />). Moreover, the
+        generated <acronym>JAR</acronym> is built using the <ulink
+        url="http://maven.apache.org/plugins/maven-shade-plugin/">Maven shade
+        plugin</ulink>, so that it also packages up all dependencies. This
+        means that you can distribute this <acronym>JAR</acronym> - eg to your
+        project's stakeholders for review - as a self-contained entity.</para>
+
+        <para>Finally, the <emphasis>quickrun</emphasis> module also includes
+        a <filename>.launch</filename> configuration (in
+        <filename>ide/eclipse/launch</filename>) which lets us run the
+        application from within the Eclipse <acronym>IDE</acronym>. This is
+        equivalent to the <acronym>POM</acronym> profile described
+        above.</para>
+      </sect2>
+
+      <sect2>
+        <title>The Viewer-Restful Module</title>
+
+        <para>Although the <emphasis>quickrun</emphasis> module is convenient
+        for prototyping, it isn't intended for runtime deployment. Instead,
+        you'll want a module that follows the webapp conventions and generates
+        a <acronym>WAR</acronym> file. This is the point of the generated
+        <emphasis>viewer-restful</emphasis> module.</para>
+
+        <para>Like the <emphasis>quickrun</emphasis> module, the
+        <emphasis>viewer-restful</emphasis> module inherits from the parent
+        module and so inherits the various definitions of the parent module.
+        And, not surprisingly, its <code>&lt;dependencies&gt;</code> section
+        includes a reference to the
+        <package>[oai.viewer.restful:viewer]</package> module.</para>
+
+        <para>More significantly, the <emphasis>viewer-restful</emphasis> has
+        the standard directory structure for a webapp, with
+        <filename>src/main/webapp/WEB-INF</filename> holding the
+        <filename>web.xml</filename> along with <emphasis>Isis</emphasis>' own
+        configuration files (<filename>isis.properties</filename> and
+        others).</para>
+
+        <para>The following sections look at the <filename>web.xml</filename>
+        in more detail</para>
+
+        <sect3>
+          <title>JAX-RS Configuration</title>
+
+          <para>The <filename>web.xml</filename> defines the following context
+          parameter:</para>
+
+          <programlisting>&lt;context-param&gt;
+  &lt;param-name&gt;javax.ws.rs.Application&lt;/param-name&gt;
+  &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.RestfulApplication&lt;/param-value&gt;
+&lt;/context-param&gt;</programlisting>
+
+          <para>This is used by <emphasis>RestEasy</emphasis> (the underlying
+          <acronym>JAX-RS</acronym> reference implementation) to define the
+          resources to be exposed. (These resources are discussed further in
+          <xref linkend="chp.Resources" />). <emphasis>RestEasy</emphasis>
+          itself is loaded through a context listener:</para>
+
+          <programlisting>&lt;listener&gt;
+  &lt;listener-class&gt;org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap&lt;/listener-class&gt;
+&lt;/listener&gt;</programlisting>
+
+          <para><emphasis>RestEasy</emphasis> also requires that its servlet
+          is registered:<programlisting>&lt;servlet&gt;
+  &lt;servlet-name&gt;RestEasy&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+...
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;RestEasy&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</programlisting></para>
+        </sect3>
+
+        <sect3>
+          <title>Isis Session handling (using the <emphasis>Default
+          Runtime</emphasis>)</title>
+
+          <para>An <emphasis>Isis</emphasis> session is required in order for
+          the <emphasis>restful viewer</emphasis> to interact with the
+          <emphasis>Isis</emphasis> runtime and interrogate the
+          metamodel/retrieve domain objects. This is accomplished through the
+          <classname>IsisSessionFilter</classname> (defined in the default
+          runtime, <package>[oai.runtimes.dflt:webapp]</package>):</para>
+
+          <programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
+    &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;
+...
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;</programlisting>
+
+          <para>Note the <code>&lt;init-param&gt;</code> for the filter, which
+          defines a strategy for obtaining the authenticationSession (that is,
+          the user's credentials). In the architect specifies a strategy
+          whereby the caller is effectively trusted. However, other strategies
+          can be plugged in as required. This is discussed further in <xref
+          linkend="chp.DeployingRestfulObjectsWebapps" />.</para>
+        </sect3>
+
+        <sect3>
+          <title>Resources</title>
+
+          <para>Finally, the <filename>web.xml</filename> also declares a
+          servlet and a filter which are used for serving up and caching
+          certain supporting resources, most notably Javascript. The
+          Javascript is referenced by the generated <acronym>XHTML</acronym>
+          resources, and allow the web browser to submit RESTful requests
+          using HTTP PUT and HTTP DELETE (as well as the usual HTTP GET and
+          HTTP POST).</para>
+
+          <para>The <classname>ResourceServlet</classname> (defined by
+          <package>[oai.core:webapp]</package>) is used serve up static
+          content from either the classpath or file:</para>
+
+          <programlisting>&lt;servlet&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.apache.isis.core.webapp.content.ResourceServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+...
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;*.gif&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;*.png&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</programlisting>
+
+          <para>The <classname>ResourceCachingFilter</classname> (also defined
+          by <package>[oai.core:webapp]</package>) is used to decorate any
+          static resources (Javascript, CSS or images) so that they are cached
+          client-side:</para>
+
+          <programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.apache.isis.core.webapp.content.ResourceCachingFilter&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;CacheTime&lt;/param-name&gt;
+    &lt;param-value&gt;86400&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;
+...
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.css&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.jpg&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.png&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.gif&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;</programlisting>
+        </sect3>
+      </sect2>
     </sect1>
 
     <sect1>
-      <title>CommandLine Module</title>
+      <title>Running the Viewer</title>
 
-      <para>When prototyping we run the viewer from the command line (rather
-      than deploying to a full webapp, a topic we cover in <xref
-      linkend="chp.DeployingRestfulObjectsWebapps" />). We therefore need to
-      add a reference to the viewer in the <filename>commandline</filename>
-      project's <filename>pom.xml</filename>:</para>
+      <para>The viewer can be run in a number of ways.</para>
 
-      <programlisting>&lt;dependencies&gt;
-  ...
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.restful&lt;/groupId&gt;
-    &lt;artifactId&gt;viewer&lt;/artifactId&gt;
-    &lt;version&gt;${restfulobjects.version}&lt;/version&gt;
-  &lt;/dependency&gt;
-  ...
-&lt;/dependencies&gt;</programlisting>
-    </sect1>
+      <sect2 id="sec.RunningFromTheQuickRunModule">
+        <title>Running from the QuickRun Module</title>
 
-    <sect1 id="sec.AlternativeApproach">
-      <title>Launch Configuration</title>
+        <para>To run the viewer in a prototyping mode (that is, using the
+        standalone <acronym>JAR</acronym> and embedded Jetty webserver), you
+        can either:</para>
 
-      <para>To run using the Restul Viewer, we use the standard commandline
-      bootstrapper
-      <classname>org.nakedobjects.runtime.NakedObjects</classname> (as used
-      for <acronym>DnD</acronym> and <acronym>HTML</acronym> viewer in
-      prototype mode). Run with the arguments:</para>
+        <itemizedlist>
+          <listitem>
+            <para>run from the command-line using Maven:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>--type exploration</para>
-        </listitem>
+            <programlisting>cd viewer-restful
+mvn antrun:run -D exec=restful</programlisting>
+          </listitem>
 
-        <listitem>
-          <para>--viewer
-          <classname>org.starobjects.restful.viewer.embedded.RestfulViewerInstaller</classname></para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>import into your <acronym>IDE</acronym> and use its in-built
+            support for running Maven goals, and run the above-mentioned
+            goal</para>
 
-      <para>This sets up Jetty to run with the Restful Objects servlets and
-      filters.</para>
+            <para>In the case of Eclipse, this support is provided through the
+            <emphasis>m2eclipse</emphasis> plugin.</para>
+          </listitem>
+
+          <listitem>
+            <para>import into the Eclipse <acronym>IDE</acronym> and run using
+            the <filename>.launch</filename> configuration</para>
+
+            <para>Navigate to the <emphasis>quickrun</emphasis> module's
+            <filename>ide/eclipse/launch</filename> directory, select the
+            <filename>quickstart-quickrun-restful.launch</filename>
+            configuration, and use Run &gt; Run As &gt;
+            quickstart-quickrun-restful to launch in regular mode (or Debug
+            &gt; Debug As &gt; quickstart-quickrun-restful to launch in debug
+            mode).</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2>
+        <title>Running from the Viewer-Restful Module</title>
+
+        <para>To run the viewer as a webapp (that is, by hosting the
+        <acronym>WAR</acronym> in an separate instance of a Jetty web server),
+        you can either:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>run from the command-line using Maven:</para>
+
+            <programlisting>cd viewer-restful
+mvn jetty:run</programlisting>
+          </listitem>
+
+          <listitem>
+            <para>import into your <acronym>IDE</acronym> and use its in-built
+            support for running Maven goals, and run the above-mentioned
+            goal</para>
+
+            <para>In the case of Eclipse, this support is provided through the
+            <emphasis>m2eclipse</emphasis> plugin.</para>
+          </listitem>
+
+          <listitem>
+            <para>import into the Eclipse <acronym>IDE</acronym> and run using
+            the <filename>.launch</filename> configuration</para>
+
+            <para>Navigate to the <emphasis>viewer-restful</emphasis> module's
+            <filename>ide/eclipse/launch</filename> directory, select the
+            <filename>quickstart-viewer-restful.launch</filename>
+            configuration, and use Run &gt; Run As &gt;
+            quickstart-viewer-restful to launch in regular mode (or Debug &gt;
+            Debug As &gt; quickstart-viewer-restful to launch in debug
+            mode).</para>
+
+            <note>
+              <para>It's confusing perhaps, but this isn't quite the same as
+              running from the quickrun module: this launch configuration runs
+              the <classname>oai.WebServer</classname> utility class provided
+              by <emphasis>Isis</emphasis> which simply runs up the webapp
+              defined by <filename>web.xml</filename>. The quickrun module, on
+              the other hand, uses the special bridge class discussed in <xref
+              linkend="sec.TheQuickRunModule" />.</para>
+            </note>
+          </listitem>
+
+          <listitem>
+            <para>import into your <acronym>IDE</acronym> and use your
+            <acronym>IDE</acronym>'s native support for running
+            webapps.</para>
+
+            <para>In the case of Eclipse, this is its <acronym>WTP</acronym>
+            support (in the enterprise editions).</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
     </sect1>
 
     <sect1>
       <title>Testing the Viewer</title>
 
-      <para>Boot up Firefox and browse to <ulink
+      <para>The point of restful viewer is to allow the domain objects to be
+      interacted with programmatically through <acronym>HTTP</acronym>, which
+      implies writing a custom client that submits the relevant
+      <acronym>HTTP</acronym> requests. Indeed, this is the topic of <xref
+      linkend="chp.WritingClientSideApps" />.</para>
+
+      <para>However, it is also useful to be able to browse the resources
+      directly, and because they are exposed using XHTML, this is possible to
+      do using a web browser. Therefore, boot up Firefox and browse to <ulink
       url="http://localhost:8080">http://localhost:8080</ulink>. You should
-      see links to access the services; these are (representations of) the
-      registered services (typically repositories) in
-      <filename>nakedobjects.properties</filename> configuration file.</para>
+      either immediately be connected to the site, or see a link to the
+      context where the site is hosted.</para>
 
       <note>
         <para>Firefox is currently the only supported web browser for testing
         in this way.</para>
       </note>
+
+      <para>From the site, you should see links to access the services; these
+      are (representations of) the registered services (typically
+      repositories) in <filename>isis.properties</filename> configuration
+      file.</para>
+
+      <para>These structure of the resources is discussed further in <xref
+      linkend="chp.Resources" />.</para>
     </sect1>
   </chapter>
 
   <chapter id="chp.Resources">
     <title>Resources</title>
 
+    <abstract>
+      <para>A walk-through of the resources exposed by the restful viewer, and
+      how they are linked together.</para>
+    </abstract>
+
     <para>Understanding how to interact with resources and how to interpret
     their representations is central to the <acronym>REST</acronym>ful
     approach. This chapter describes in detail the resources that are
     available; in effect, the <acronym>API</acronym> for using domain objects
-    exposed using <emphasis>Restful Objects</emphasis>.</para>
+    exposed using the <emphasis>restful viewer</emphasis>.</para>
 
     <para>In order to invoke a <acronym>HTTP</acronym> method on a resource,
     the <acronym>URL</acronym> must be constructed correctly. After that, the
@@ -412,14 +861,14 @@
     <classname>javax.ws.rs</classname> (<acronym>JAX-RS</acronym>)
     annotations. <acronym>JAX-RS</acronym> is the Java <acronym>API</acronym>
     for Restful Web Services, part of Java EE 6. Its annotations are used by
-    <acronym>JAX-RS</acronym> libraries such as RestEasy, or <ulink
-    url="https://jersey.dev.java.net/">Jersey</ulink> (the latter is the
-    reference implementation). These libraries expose the resources as
+    <acronym>JAX-RS</acronym> libraries such as <emphasis>RestEasy</emphasis>,
+    or <ulink url="https://jersey.dev.java.net/">Jersey</ulink> (the latter is
+    the reference implementation). These libraries expose the resources as
     endpoints and route requests through to server-side methods (implemented
-    by <emphasis>Restful Objects</emphasis>).</para>
+    by the <emphasis>restful viewer</emphasis>).</para>
 
     <para>As such, we can use these interfaces as a way of describing the
-    resources provided by <emphasis>Restful Objects</emphasis>. Let's go
+    resources provided by the <emphasis>restful viewer</emphasis>. Let's go
     through each in turn.</para>
 
     <sect1 id="sec.HomePageResource">
@@ -468,25 +917,25 @@ public interface HomePageResource {
   &lt;body id="body"&gt;
     &lt;div&gt;
       &lt;p&gt;Logged in as&lt;/p&gt;
-      &lt;ul class="nof-session"&gt;
-        &lt;li&gt;&lt;a href="/user" rel="user" rev="resource" class="nof-user"&gt;sven&lt;/a&gt;&lt;/li&gt;
+      &lt;ul class="isis-session"&gt;
+        &lt;li&gt;&lt;a href="/user" rel="user" rev="resource" class="isis-user"&gt;sven&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
     &lt;/div&gt;
-    &lt;div class="nof-section"&gt;
-      &lt;p class="nof-section"&gt;Resources&lt;/p&gt;
-      &lt;ul class="nof-resources"&gt;
+    &lt;div class="isis-section"&gt;
+      &lt;p class="isis-section"&gt;Resources&lt;/p&gt;
+      &lt;ul class="isis-resources"&gt;
         &lt;li&gt;
-          &lt;a href="/services" rel="services" rev="resources" class="nof-resource"&gt;
+          &lt;a href="/services" rel="services" rev="resources" class="isis-resource"&gt;
             Services
           &lt;/a&gt;
         &lt;/li&gt;
         &lt;li&gt;
-          &lt;a href="/specs" rel="specs" rev="resources" class="nof-resource"&gt;
+          &lt;a href="/specs" rel="specs" rev="resources" class="isis-resource"&gt;
             Specifications (MetaModel)
           &lt;/a&gt;
         &lt;/li&gt;
         &lt;li&gt;
-          &lt;a href="/user" rel="user" rev="resources" class="nof-resource"&gt;
+          &lt;a href="/user" rel="user" rev="resources" class="isis-resource"&gt;
             User (Security)
           &lt;/a&gt;
         &lt;/li&gt;
@@ -497,14 +946,15 @@ public interface HomePageResource {
 
       <para>Note the use of <varname>class</varname> attributes to distinguish
       the different types of properties. For example, the XPath expression
-      <emphasis>//a[@class='nof-resource']/@href</emphasis> will return the
+      <emphasis>//a[@class='isis-resource']/@href</emphasis> will return the
       links to all resources available. One of these -
       <emphasis>/services</emphasis> - is the list of services, so lets look
       at that next.</para>
 
       <para><note>
-          <para>Depending on feedback, the format of the XHTML may evolve in
-          the future, eg to add in further class attributes.</para>
+          <para>Depending on feedback, the format of the
+          <acronym>XHTML</acronym> may evolve in the future, eg to add in
+          further class attributes.</para>
         </note></para>
     </sect1>
 
@@ -527,19 +977,19 @@ public interface ServicesResource {
   public String services();
 }</programlisting>
 
-      <para>The implementation of this interface in <emphasis>Restful
-      Objects</emphasis> viewer (<classname>ServicesResourceImpl</classname>)
-      also defines a <code>@Path("/services")</code> for the class as a whole.
-      This therefore defines a <acronym>URL</acronym> in the form
+      <para>The implementation of this interface in the <emphasis>restful
+      viewer</emphasis> (<classname>ServicesResourceImpl</classname>) also
+      defines a <code>@Path("/services")</code> for the class as a whole. This
+      therefore defines a <acronym>URL</acronym> in the form
       <emphasis>/services</emphasis> supporting the <acronym>GET</acronym>
       method.</para>
 
       <note>
-        <para>I believe that the <code>@Path("/services")</code> annotation
-        should reside on the interface, not the implementation. This seems to
-        be a limitation with RestEasy, the underlying library used by
-        <emphasis>Restful Objects</emphasis>. Certainly for RestEasy 1.0.2 and
-        also 1.1-rc2 this did not work, however.</para>
+        <para>It would be preferable, perhaps, for the
+        <code>@Path("/services")</code> annotation should reside on the
+        interface, not the implementation. This does not seem to be the way
+        that <emphasis>RestEasy</emphasis>, the underlying library used by the
+        <emphasis>restful viewer</emphasis>, works, however.</para>
       </note>
 
       <para>Here's the resource that's returned, as shown in a browser:</para>
@@ -554,24 +1004,24 @@ public interface ServicesResource {
           </mediaobject>
         </screenshot>The first two sections are the same; what's new is the
       list of services, corresponding to the registered services in
-      <filename>nakedobjects.properties</filename>. The
-      <acronym>XHTML</acronym> for this is:</para>
+      <filename>isis.properties</filename>. The <acronym>XHTML</acronym> for
+      this is:</para>
 
       <programlisting>&lt;?xml version="1.0"?&gt;
 &lt;html&gt;
   &lt;head&gt;&lt;title&gt;Services&lt;/title&gt;&lt;/head&gt;
   &lt;body id="body"&gt;
     ...
-    &lt;div class="nof-section"&gt;
-      &lt;p class="nof-section"&gt;Services&lt;/p&gt;
-      &lt;ul class="nof-services"&gt;
+    &lt;div class="isis-section"&gt;
+      &lt;p class="isis-section"&gt;Services&lt;/p&gt;
+      &lt;ul class="isis-services"&gt;
         &lt;li&gt;
-          &lt;a href="/object/OID:1" rel="service" rev="services" class="nof-service"&gt;
+          &lt;a href="/object/OID:1" rel="service" rev="services" class="isis-service"&gt;
             Employees
           &lt;/a&gt;
         &lt;/li&gt;
         &lt;li&gt;
-          &lt;a href="/object/OID:2" rel="service" rev="services" class="nof-service"&gt;
+          &lt;a href="/object/OID:2" rel="service" rev="services" class="isis-service"&gt;
             Claims
           &lt;/a&gt;
         &lt;/li&gt;
@@ -584,7 +1034,7 @@ public interface ServicesResource {
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>//a[@class='nof-service']/@href</emphasis> will
+          <para><emphasis>//a[@class='isis-service']/@href</emphasis> will
           return the hyperlinks to the object resources representing these
           services, in the form <emphasis>/object/OID</emphasis>.</para>
         </listitem>
@@ -617,17 +1067,17 @@ public interface ObjectResource {
   ...
 }</programlisting>
 
-      <para>The implementation of this interface in <emphasis>Restful
-      Objects</emphasis> viewer (<classname>ObjectResourceImpl</classname>)
-      also defines a <code>@Path("/object")</code> for the class as a whole.
-      All <acronym>URL</acronym> paths are therefore prefixed
+      <para>The implementation of this interface in the <emphasis>restful
+      viewer</emphasis> (<classname>ObjectResourceImpl</classname>) also
+      defines a <code>@Path("/object")</code> for the class as a whole. All
+      <acronym>URL</acronym> paths are therefore prefixed
       <emphasis>/object/{oid}</emphasis>.</para>
 
       <note>
-        <para>I believe that the <code>@Path</code> annotation should reside
-        on the interface, not the implementation. This seems to be a
-        limitation with RestEasy 1.0.2, the underlying library used by
-        <emphasis>Restful Objects</emphasis>.</para>
+        <para>Again, it would be preferable if the <code>@Path</code>
+        annotation resided on the interface, not the implementation. This does
+        not seem to be the way that <emphasis>RestEasy</emphasis> works,
+        however.</para>
       </note>
 
       <para>Let's break it down into sections, starting with the
@@ -705,24 +1155,24 @@ public interface ObjectResource {
   &lt;table border="1"&gt;
     &lt;tr&gt;
       &lt;td&gt;Object title&lt;/td&gt;
-      &lt;td class="nof-title"&gt;
+      &lt;td class="isis-title"&gt;
         &lt;p&gt;New - 2009-11-28&lt;/p&gt;
      &lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;OID&lt;/td&gt;
-      &lt;td class="nof-oid"&gt;
-        &lt;a href="/object/OID:C" rel="object" rev="object" class="nof-oid"&gt;
+      &lt;td class="isis-oid"&gt;
+        &lt;a href="/object/OID:C" rel="object" rev="object" class="isis-oid"&gt;
           OID:C
         &lt;/a&gt;
       &lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;Specification&lt;/td&gt;
-      &lt;td class="nof-specification"&gt;
-        &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim" 
-           rel="spec" rev="object" class="nof-specification"&gt;
-          org.nakedobjects.examples.claims.dom.claim.Claim
+      &lt;td class="isis-specification"&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" 
+           rel="spec" rev="object" class="isis-specification"&gt;
+          org.apache.isis.examples.claims.dom.claim.Claim
         &lt;/a&gt;
       &lt;/td&gt;
     &lt;/tr&gt;
@@ -733,17 +1183,17 @@ public interface ObjectResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//td[@class='nof-title']/p/text()</emphasis> will
+            <para><emphasis>//td[@class='isis-title']/p/text()</emphasis> will
             return the title</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//td[@class='nof-oid']/a/text()</emphasis> is the
+            <para><emphasis>//td[@class='isis-oid']/a/text()</emphasis> is the
             OID (as a string)</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//td[@class='nof-specification']/a/@href</emphasis>
+            <para><emphasis>//td[@class='isis-specification']/a/@href</emphasis>
             is a link the (resource repreenting the) specification of this
             object, in the form
             <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
@@ -766,8 +1216,8 @@ public interface ObjectResource {
         <para>The raw <acronym>XHTML</acronym> (abbreviated; just the first
         property is listed) is:</para>
 
-        <programlisting>&lt;div class="nof-properties"&gt;
-  &lt;p class="nof-properties"&gt;Properties&lt;/p&gt;
+        <programlisting>&lt;div class="isis-properties"&gt;
+  &lt;p class="isis-properties"&gt;Properties&lt;/p&gt;
   &lt;table border="1"&gt;
     &lt;tr&gt;
       &lt;th&gt;Name&lt;/th&gt;
@@ -783,30 +1233,30 @@ public interface ObjectResource {
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;
-        &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/property/description" 
-           rel="propertySpec" rev="property" class="nof-property"&gt;Description&lt;/a&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/description" 
+           rel="propertySpec" rev="property" class="isis-property"&gt;Description&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
         &lt;a href="/specs/java.lang.String" rel="propertyTypeSpec" 
-           rev="property" class="nof-property"&gt;java.lang.String&lt;/a&gt;
+           rev="property" class="isis-property"&gt;java.lang.String&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-visible"&gt;N&lt;/p&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-property"&gt;Meeting at clients&lt;/p&gt;
+        &lt;p class="isis-property"&gt;Meeting at clients&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-usable"&gt;N&lt;/p&gt;
+        &lt;p class="isis-usable"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
         &lt;p /&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-visible"&gt;N&lt;/p&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;div class="nof-property"&gt;
+        &lt;div class="isis-property"&gt;
           &lt;form name="property-description"&gt;
             &lt;input type="value" name="proposedValue" /&gt;
             &lt;input type="button" value="Set" 
@@ -815,7 +1265,7 @@ public interface ObjectResource {
         &lt;/div&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;div class="nof-property"&gt;
+        &lt;div class="isis-property"&gt;
           &lt;form name="property-description"&gt;
             &lt;input type="button" value="Clear" 
               onclick="clearProperty(&amp;quot;/object/OID:C&amp;quot;,&amp;quot;description&amp;quot;);" /&gt;
@@ -823,7 +1273,7 @@ public interface ObjectResource {
         &lt;/div&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-valid" id="property-invalid-description" /&gt;
+        &lt;p class="isis-valid" id="property-invalid-description" /&gt;
       &lt;/td&gt;
     &lt;/tr&gt;
     ...
@@ -834,24 +1284,24 @@ public interface ObjectResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//tr/td[1]/a/text()</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[1]/a/text()</emphasis>
             returns the property names</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//tr/td[2]/a/@href</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[2]/a/@href</emphasis>
             returns links to (resources representing the) property types, in
             the form
             <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//tr/td[3]/p/text()</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[3]/p/text()</emphasis>
             returns whether properties are invisible (N=not invisible)</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//tr/td[4]</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[4]</emphasis>
             returns the <sgmltag>&lt;td&gt;</sgmltag> table cells containing
             the values; the values will either be <sgmltag>&lt;p&gt;</sgmltag>
             (values) or <sgmltag>&lt;a href=...&gt;</sgmltag>
@@ -872,7 +1322,7 @@ public interface ObjectResource {
 
         <para>The values that are entered into modify for value properties is
         the parseable text form (eg TRUE for a boolean); for reference
-        properties it is the OID.</para>
+        properties it is the <acronym>OID</acronym>.</para>
 
         <para>If a property is disabled, then the "disabled reason" column
         will indicate why. If a property is enabled but the proposed property
@@ -895,8 +1345,8 @@ public interface ObjectResource {
 
         <para>The raw <acronym>XHTML</acronym> is:</para>
 
-        <programlisting>&lt;div class="nof-collections"&gt;
-  &lt;p class="nof-collections"&gt;Collections&lt;/p&gt;
+        <programlisting>&lt;div class="isis-collections"&gt;
+  &lt;p class="isis-collections"&gt;Collections&lt;/p&gt;
   &lt;table border="1"&gt;
     &lt;tr&gt;
       &lt;th&gt;Name&lt;/th&gt;
@@ -910,29 +1360,29 @@ public interface ObjectResource {
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;
-        &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/collection/items" 
-           rel="propertySpec" rev="collection" class="nof-collection"&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/collection/items" 
+           rel="propertySpec" rev="collection" class="isis-collection"&gt;
           Items
         &lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.ClaimItem" 
-           rel="propertyTypeSpec" rev="property" class="nof-property"&gt;
-          org.nakedobjects.examples.claims.dom.claim.ClaimItem
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.ClaimItem" 
+           rel="propertyTypeSpec" rev="property" class="isis-property"&gt;
+          org.apache.isis.examples.claims.dom.claim.ClaimItem
         &lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-visible"&gt;N&lt;/p&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-usable"&gt;N&lt;/p&gt;
+        &lt;p class="isis-usable"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
        &lt;a href="/object/OID:C/collection/items" 
-          rel="collection" rev="nakedObject" class="nof-collection"&gt;items&lt;/a&gt;
+          rel="collection" rev="nakedObject" class="isis-collection"&gt;items&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;div class="nof-collection"&gt;
+        &lt;div class="isis-collection"&gt;
           &lt;form name="collection-items"&gt;
             &lt;input type="value" name="proposedValue" /&gt;
             &lt;input type="button" value="Add" 
@@ -941,7 +1391,7 @@ public interface ObjectResource {
         &lt;/div&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;div class="nof-collection"&gt;
+        &lt;div class="isis-collection"&gt;
           &lt;form name="collection-items"&gt;
             &lt;input type="value" name="proposedValue" /&gt;
             &lt;input type="button" value="Remove" 
@@ -950,7 +1400,7 @@ public interface ObjectResource {
         &lt;/div&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-valid" id="collection-invalid-items" /&gt;
+        &lt;p class="isis-valid" id="collection-invalid-items" /&gt;
       &lt;/td&gt;
     &lt;/tr&gt;
   &lt;/table&gt;
@@ -963,24 +1413,24 @@ public interface ObjectResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-collections']//tr/td[1]/a/text()</emphasis>
+            <para><emphasis>//div[@class='isis-collections']//tr/td[1]/a/text()</emphasis>
             returns the collection names</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//tr/td[2]/a/@href</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[2]/a/@href</emphasis>
             returns links to (resources representing the) type of the
             collection, in the form
             <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//tr/td[3]/p/text()</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[3]/p/text()</emphasis>
             returns whether collections are invisible (N=not invisible)</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-collections']//tr/td[5]/a/@href</emphasis>
+            <para><emphasis>//div[@class='isis-collections']//tr/td[5]/a/@href</emphasis>
             returns a link to a resource representing the contents of the
             collection, in the form
             <emphasis>/object/{oid}/collection/{collectionId}</emphasis></para>
@@ -1012,8 +1462,8 @@ public interface ObjectResource {
         <para>The raw <acronym>XHTML</acronym> (abbreviated; just the first
         action is listed) is:</para>
 
-        <programlisting>&lt;div class="nof-actions"&gt;
-  &lt;p class="nof-actions"&gt;Actions&lt;/p&gt;
+        <programlisting>&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;Actions&lt;/p&gt;
   &lt;table border="1"&gt;
     &lt;tr&gt;
       &lt;th&gt;Name&lt;/th&gt;
@@ -1028,32 +1478,32 @@ public interface ObjectResource {
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;
-        &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/action/addItem(int,double,java.lang.String)"
-           rel="actionSpec" rev="action" class="nof-action"&gt;Add Item&lt;/a&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/action/addItem(int,double,java.lang.String)"
+           rel="actionSpec" rev="action" class="isis-action"&gt;Add Item&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-action"&gt;USER&lt;/p&gt;
+        &lt;p class="isis-action"&gt;USER&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;a href="/specs/void" rel="actionReturnTypeSpec" rev="action" class="nof-action"&gt;void&lt;/a&gt;
+        &lt;a href="/specs/void" rel="actionReturnTypeSpec" rev="action" class="isis-action"&gt;void&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-action"&gt;3&lt;/p&gt;
+        &lt;p class="isis-action"&gt;3&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-visible"&gt;N&lt;/p&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p class="nof-usable"&gt;N&lt;/p&gt;
+        &lt;p class="isis-usable"&gt;N&lt;/p&gt;
       &lt;/td&gt;
       &lt;td&gt;
         &lt;p /&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;a href="/object/OID:C" rel="actionRealTarget" rev="action" class="nof-action"&gt;OID:C&lt;/a&gt;
+        &lt;a href="/object/OID:C" rel="actionRealTarget" rev="action" class="isis-action"&gt;OID:C&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;div class="nof-action"&gt;
+        &lt;div class="isis-action"&gt;
           &lt;form name="action-addItem(int,double,java.lang.String)" method="POST" 
                 action="/object/OID:C/action/addItem(int,double,java.lang.String)"&gt;
             &lt;p&gt;Days since&lt;/p&gt;
@@ -1075,31 +1525,31 @@ public interface ObjectResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-actions']//tr/td[1]/a/text()</emphasis>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[1]/a/text()</emphasis>
             returns the names of each action</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-actions']//tr/td[3]/a/@href</emphasis>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[3]/a/@href</emphasis>
             returns links to (resources representing the) type of the returned
             result of each action, in the form
             <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-actions']//tr/td[5]/p/text()</emphasis>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[5]/p/text()</emphasis>
             returns whether each action is invisible or not (N=not
             invisible)</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-actions']//tr/td[8]/a/text()</emphasis>
-            returns the OID of the real target; more on this in a
-            moment</para>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[8]/a/text()</emphasis>
+            returns the <acronym>OID</acronym> of the real target; more on
+            this in a moment</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-actions']//tr/td[9]//form</emphasis>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[9]//form</emphasis>
             returns a form to invoke the action using
             <acronym>POST</acronym></para>
           </listitem>
@@ -1110,8 +1560,8 @@ public interface ObjectResource {
 
         <para>There is no javascript calls this time; invoking actions is just
         a <acronym>POST</acronym>. The arguments provided are the same as for
-        properties: text for parseable values, or the OIDs of objects for
-        references.</para>
+        properties: text for parseable values, or the <acronym>OID</acronym>s
+        of objects for references.</para>
 
         <para>The "realTarget" column is provided to support contributed
         actions. For example, here are the actions listed for a domain object
@@ -1130,9 +1580,9 @@ public interface ObjectResource {
           </mediaobject>
         </screenshot>
 
-        <para>In the DnD viewer this action would appear to reside on the
-        domain object. In reality though the action resides on the repository,
-        taking a single argument - the domain object
+        <para>In the <emphasis>DnD viewer</emphasis> this action would appear
+        to reside on the domain object. In reality though the action resides
+        on the repository, taking a single argument - the domain object
         (<classname>Employee</classname>).</para>
 
         <para>And that concludes our run-through of the <acronym>GET</acronym>
@@ -1194,7 +1644,7 @@ public interface ObjectResource {
           <listitem>
             <para>If the validation fails, then an exception will be thrown.
             This translates to a response with error code in the range [400,
-            500), and with a response header of "nof-reason".</para>
+            500), and with a response header of "isis-reason".</para>
           </listitem>
 
           <listitem>
@@ -1266,7 +1716,7 @@ public interface ObjectResource {
         <acronym>DELETE</acronym> is similar to that of properties. The
         proposed value is validated first, and if invalid then a exception is
         thrown resulting in a response in range [400, 500) with a response
-        header of "nof-reason". Otherwise the object's title and OID are
+        header of "isis-reason". Otherwise the object's title and OID are
         returned.</para>
 
         <note>
@@ -1290,16 +1740,16 @@ public interface ObjectResource {
         <para>The raw <acronym>XHTML</acronym> for the contents part of this
         is:</para>
 
-        <programlisting>&lt;div class="nof-collection"&gt;
-  &lt;p class="nof-collection"&gt;items&lt;/p&gt;
-  &lt;ul class="nof-collection"&gt;
+        <programlisting>&lt;div class="isis-collection"&gt;
+  &lt;p class="isis-collection"&gt;items&lt;/p&gt;
+  &lt;ul class="isis-collection"&gt;
     &lt;li&gt;
-      &lt;a href="/object/OID:D" rel="object" rev="results" class="nof-action-result"&gt;
+      &lt;a href="/object/OID:D" rel="object" rev="results" class="isis-action-result"&gt;
         Car parking
       &lt;/a&gt;
     &lt;/li&gt;
     &lt;li&gt;
-      &lt;a href="/object/OID:E" rel="object" rev="results" class="nof-action-result"&gt;
+      &lt;a href="/object/OID:E" rel="object" rev="results" class="isis-action-result"&gt;
         Reading - London (return)
       &lt;/a&gt;
     &lt;/li&gt;
@@ -1310,7 +1760,7 @@ public interface ObjectResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-collection']//li/a/@href</emphasis>
+            <para><emphasis>//div[@class='isis-collection']//li/a/@href</emphasis>
             to return the links to object resources in the collection</para>
           </listitem>
         </itemizedlist>
@@ -1337,11 +1787,10 @@ public interface ObjectResource {
 
         <para>This defines
         <emphasis>/object/{oid}/property/{actionId}</emphasis> as a
-        <acronym>URL</acronym> supporting a <acronym>POST</acronym>. What's
-        noteworthy here is the last argument, an
-        <classname>java.io.InputStream</classname>. This provides a handle to
-        the POST's input stream which contains the parameter/argument
-        pairs.</para>
+        <acronym>URL</acronym> supporting a POST. What's noteworthy here is
+        the last argument, an <classname>java.io.InputStream</classname>. This
+        provides a handle to the POST's input stream which contains the
+        parameter/argument pairs.</para>
 
         <para>The parameters should be named arg0, arg1, arg2 and so on, with
         the parameter value representing the argument. What this value is will
@@ -1351,7 +1800,7 @@ public interface ObjectResource {
         <itemizedlist>
           <listitem>
             <para>for reference types, the value should be the (string
-            representation of the) OID of the entity</para>
+            representation of the) <acronym>OID</acronym> of the entity</para>
           </listitem>
 
           <listitem>
@@ -1359,12 +1808,13 @@ public interface ObjectResource {
             format. In practical terms, use the same string format as would
             work in the the DnD viewer. (To be precise, it's the format
             understood by the <classname>ParseableFacet</classname> for the
-            parameter's type) </para>
+            parameter's type)</para>
           </listitem>
         </itemizedlist>
 
-        <para>For example, for an action findCustomers(registeredDate,
-        CustomerType) then the parameters would be something like: </para>
+        <para>For example, for an action <code>findCustomers(registeredDate,
+        CustomerType)</code> then the parameters would be something
+        like:</para>
 
         <itemizedlist>
           <listitem>
@@ -1379,11 +1829,11 @@ public interface ObjectResource {
         <para>where <userinput>20090103</userinput> is 3-Jan-2009 in parseable
         format, and <userinput>CTP|12</userinput> is the
         <acronym>OID</acronym> (as assigned by the object store) for
-        <classname>CustomerType</classname> with ID=12. </para>
+        <classname>CustomerType</classname> with ID=12.</para>
 
-        <para>When an action is invoked, the response always includes the OID
-        and title of the object on which the action was invoked. In
-        addition:</para>
+        <para>When an action is invoked, the response always includes the
+        <acronym>OID</acronym> and title of the object on which the action was
+        invoked. In addition:</para>
 
         <itemizedlist>
           <listitem>
@@ -1427,25 +1877,25 @@ public interface SpecsResource {
   ...
 }</programlisting>
 
-      <para>The implementation of this interface in <emphasis>Restful
-      Objects</emphasis> viewer (<classname>SpecsResourceImpl</classname>)
-      also defines a <code>@Path("/specs")</code> for the class as a whole.
-      This therefore defines a <acronym>URL</acronym> in the form
-      <emphasis>/services</emphasis> supporting the <acronym>GET</acronym>
-      method.</para>
+      <para>The implementation of this interface in <emphasis>restful
+      viewer</emphasis> (<classname>SpecsResourceImpl</classname>) also
+      defines a <code>@Path("/specs")</code> for the class as a whole. This
+      therefore defines a <acronym>URL</acronym> in the form
+      <emphasis>/services</emphasis> supporting the GET method.</para>
 
       <note>
-        <para>I believe that the <code>@Path</code> annotation should reside
-        on the interface, not the implementation. This seems to be a
-        limitation with RestEasy 1.0.2, the underlying library used by
-        <emphasis>Restful Objects</emphasis>.</para>
+        <para>As elsewhere, it would be preferable that the <code>@Path</code>
+        annotation should reside on the interface, not the implementation.
+        This seems to be a limitation with <emphasis>RestEasy</emphasis>, the
+        underlying library used by the <emphasis>restful
+        viewer</emphasis>.</para>
       </note>
 
-      <para>The purpose of the /specs/ family of resources is to describe the
-      structure of the domain objects, ie expose a metamodel for the domain
-      objects. Client-side applications might choose to iterate through all
-      the specs resources first and cache them; this would then simplify the
-      task of rendering domain objects.</para>
+      <para>The purpose of the <emphasis>/specs/</emphasis> family of
+      resources is to describe the structure of the domain objects, ie expose
+      a metamodel for the domain objects. Client-side applications might
+      choose to iterate through all the specs resources first and cache them;
+      this would then simplify the task of rendering domain objects.</para>
 
       <para>Again, let's break the resources provided by
       <classname>SpecsResource</classname> into sections.</para>
@@ -1488,37 +1938,37 @@ public interface SpecsResource {
         <para>The raw <acronym>XHTML</acronym> produced (abbreviated)
         is:</para>
 
-        <programlisting>&lt;div class="nof-section"&gt;
-  &lt;p class="nof-section"&gt;Specifications&lt;/p&gt;
-  &lt;ul class="nof-specifications"&gt;
+        <programlisting>&lt;div class="isis-section"&gt;
+  &lt;p class="isis-section"&gt;Specifications&lt;/p&gt;
+  &lt;ul class="isis-specifications"&gt;
     ...
     &lt;li&gt;
       &lt;a href="/specs/int" rel="spec" rev="specs" 
-         class="nof-specification"&gt;int&lt;/a&gt;
+         class="isis-specification"&gt;int&lt;/a&gt;
     &lt;/li&gt;
     ...
     &lt;li&gt;
       &lt;a href="/specs/java.lang.String" rel="spec" rev="specs" 
-         class="nof-specification"&gt;java.lang.String&lt;/a&gt;
+         class="isis-specification"&gt;java.lang.String&lt;/a&gt;
     &lt;/li&gt;
     ...
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.applib.value.Date" rel="spec" rev="specs" 
-         class="nof-specification"&gt;org.nakedobjects.applib.value.Date&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.applib.value.Date" rel="spec" rev="specs" 
+         class="isis-specification"&gt;org.apache.isis.applib.value.Date&lt;/a&gt;
     &lt;/li&gt;
     ..
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim" rel="spec" rev="specs" 
-         class="nof-specification"&gt;org.nakedobjects.examples.claims.dom.claim.Claim&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" rel="spec" rev="specs" 
+         class="isis-specification"&gt;org.apache.isis.examples.claims.dom.claim.Claim&lt;/a&gt;
     &lt;/li&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.ClaimItem" rel="spec" rev="specs" 
-         class="nof-specification"&gt;org.nakedobjects.examples.claims.dom.claim.ClaimItem&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.ClaimItem" rel="spec" rev="specs" 
+         class="isis-specification"&gt;org.apache.isis.examples.claims.dom.claim.ClaimItem&lt;/a&gt;
     &lt;/li&gt;
     ...
     &lt;li&gt;
       &lt;a href="/specs/void" rel="spec" rev="specs" 
-         class="nof-specification"&gt;void&lt;/a&gt;
+         class="isis-specification"&gt;void&lt;/a&gt;
     &lt;/li&gt;
   &lt;/ul&gt;
 &lt;/div&gt;</programlisting>
@@ -1527,7 +1977,7 @@ public interface SpecsResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//a[@class='nof-specification']/@href</emphasis>
+            <para><emphasis>//a[@class='isis-specification']/@href</emphasis>
             will give links to resources for all specifications</para>
           </listitem>
         </itemizedlist>
@@ -1536,7 +1986,7 @@ public interface SpecsResource {
       </sect2>
 
       <sect2 id="sec.spec">
-        <title>Class (<classname>NakedObjectSpecification</classname>)</title>
+        <title>Class (<classname>ObjectSpecification</classname>)</title>
 
         <para>The resource for a specification is:</para>
 
@@ -1572,8 +2022,8 @@ public interface SpecsResource {
         <para>First (abbreviated) we have the facets, which define additional
         semantics to the holder (in this case, the spec):</para>
 
-        <programlisting>&lt;div class="nof-facets"&gt;
-  &lt;p class="nof-facets"&gt;Facets&lt;/p&gt;
+        <programlisting>&lt;div class="isis-facets"&gt;
+  &lt;p class="isis-facets"&gt;Facets&lt;/p&gt;
   &lt;table border="1"&gt;
      &lt;tr&gt;
        &lt;th&gt;FacetType&lt;/th&gt;
@@ -1583,32 +2033,32 @@ public interface SpecsResource {
      ...
      &lt;tr&gt;
        &lt;td&gt;
-         &lt;a href="org.nakedobjects.examples.claims.dom.claim.Claim/facet/org.nakedobjects.metamodel.facets.object.ident.plural.PluralFacet"
-            rel="facet" rev="spec" class="nof-facet"&gt;org.nakedobjects.metamodel.facets.object.ident.plural.PluralFacet&lt;/a&gt;
+         &lt;a href="org.apache.isis.examples.claims.dom.claim.Claim/facet/org.apache.isis.core.metamodel.facets.object.plural.PluralFacet"
+            rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.object.plural.PluralFacet&lt;/a&gt;
        &lt;/td&gt;
        &lt;td&gt;
-         &lt;p&gt;org.nakedobjects.metamodel.facets.object.ident.plural.PluralFacetInferred&lt;/p&gt;
-       &lt;/td&gt;
-       ...
-     &lt;/tr&gt;
-     ...
-     &lt;tr&gt;
-       &lt;td&gt;
-         &lt;a href="org.nakedobjects.examples.claims.dom.claim.Claim/facet/org.nakedobjects.metamodel.facets.naming.named.NamedFacet"
-            rel="facet" rev="spec" class="nof-facet"&gt;org.nakedobjects.metamodel.facets.naming.named.NamedFacet&lt;/a&gt;
-       &lt;/td&gt;
-       &lt;td&gt;
-         &lt;p&gt;org.nakedobjects.metamodel.facets.naming.named.NamedFacetInferred&lt;/p&gt;
+         &lt;p&gt;org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred&lt;/p&gt;
        &lt;/td&gt;
        ...
      &lt;/tr&gt;
      ...
      &lt;tr&gt;
        &lt;td&gt;
-         &lt;a href="org.nakedobjects.examples.claims.dom.claim.Claim/facet/org.nakedobjects.metamodel.facets.naming.describedas.DescribedAsFacet" rel="facet" rev="spec" class="nof-facet"&gt;org.nakedobjects.metamodel.facets.naming.describedas.DescribedAsFacet&lt;/a&gt;
+         &lt;a href="org.apache.isis.claims.dom.claim.Claim/facet/org.apache.isis.core.metamodel.facets.named.NamedFacet"
+            rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.named.NamedFacet&lt;/a&gt;
        &lt;/td&gt;
        &lt;td&gt;
-         &lt;p&gt;org.nakedobjects.metamodel.facets.naming.describedas.DescribedAsFacetNone&lt;/p&gt;
+         &lt;p&gt;org.apache.isis.core.metamodel.facets.named.NamedFacetInferred&lt;/p&gt;
+       &lt;/td&gt;
+       ...
+     &lt;/tr&gt;
+     ...
+     &lt;tr&gt;
+       &lt;td&gt;
+         &lt;a href="org.apache.isis.examples.claims.dom.claim.Claim/facet/org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet&lt;/a&gt;
+       &lt;/td&gt;
+       &lt;td&gt;
+         &lt;p&gt;org.apache.isis.core.progmodel.facets.fallback.DescribedAsFacetNone&lt;/p&gt;
        &lt;/td&gt;
        ...
      &lt;/tr&gt;
@@ -1624,19 +2074,21 @@ public interface SpecsResource {
         presentation purposes. It is also possible to define additional facets
         that might be relevant to your own client-side application. For
         example, if you were writing a mash-up <acronym>GUI</acronym> and
-        wanted to render an Address domain object within a map, you might want
-        to define a <classname>MapCoordinatesFacet</classname>.</para>
+        wanted to render an <classname>Address</classname> domain object
+        within a map, you might want to define a
+        <classname>MapCoordinatesFacet</classname>.</para>
 
         <note>
-          <para>Actually, this isn't quite true; there is currently no way to
-          evaluate a facet for a particular domain object instance.</para>
+          <para>Actually, this isn't quite true; there is currently no way in
+          the <emphasis>restful viewer</emphasis> to evaluate a facet for a
+          particular domain object instance.</para>
         </note>
 
         <para>As ever, we can use XPath to pull out values:</para>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-facets']//a[.='org.nakedobjects.metamodel.facets.object.ident.plural.PluralFacet']/@href</emphasis>
+            <para><emphasis>//div[@class='isis-facets']//a[.='org.apache.isis.core.metamodel.facets.object.plural.PluralFacet']/@href</emphasis>
             will pull out the link for the <classname>PluralFacet</classname>,
             if there is one.</para>
           </listitem>
@@ -1645,16 +2097,16 @@ public interface SpecsResource {
         <para>Next we have the (definition of the) properties for a
         spec:</para>
 
-        <programlisting>&lt;div class="nof-properties"&gt;
-  &lt;p class="nof-properties"&gt;Properties&lt;/p&gt;
-  &lt;ul class="nof-properties"&gt;
+        <programlisting>&lt;div class="isis-properties"&gt;
+  &lt;p class="isis-properties"&gt;Properties&lt;/p&gt;
+  &lt;ul class="isis-properties"&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/property/description" 
-         rel="property" rev="spec" class="nof-property"&gt;description&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/description" 
+         rel="property" rev="spec" class="isis-property"&gt;description&lt;/a&gt;
     &lt;/li&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/property/date" 
-         rel="property" rev="spec" class="nof-property"&gt;date&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/date" 
+         rel="property" rev="spec" class="isis-property"&gt;date&lt;/a&gt;
    &lt;/li&gt;
    ...
   &lt;/ul&gt;
@@ -1664,12 +2116,12 @@ public interface SpecsResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//a/text()</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//a/text()</emphasis>
             returns the property names</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-properties']//a/@href</emphasis>
+            <para><emphasis>//div[@class='isis-properties']//a/@href</emphasis>
             returns links to the property definitions (see <xref
             linkend="sec.SpecMembers" />)</para>
           </listitem>
@@ -1677,12 +2129,12 @@ public interface SpecsResource {
 
         <para>Similarly, we have collections:</para>
 
-        <programlisting>&lt;div class="nof-collections"&gt;
-  &lt;p class="nof-collections"&gt;Collections&lt;/p&gt;
-  &lt;ul class="nof-collections"&gt;
+        <programlisting>&lt;div class="isis-collections"&gt;
+  &lt;p class="isis-collections"&gt;Collections&lt;/p&gt;
+  &lt;ul class="isis-collections"&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/collection/items"
-         rel="collection" rev="spec" class="nof-collection"&gt;items&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/collection/items"
+         rel="collection" rev="spec" class="isis-collection"&gt;items&lt;/a&gt;
     &lt;/li&gt;
     ...
   &lt;/ul&gt;
@@ -1692,12 +2144,12 @@ public interface SpecsResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-collections']//a/text()</emphasis>
+            <para><emphasis>//div[@class='isis-collections']//a/text()</emphasis>
             returns the collection names</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-collections']//a/@href</emphasis>
+            <para><emphasis>//div[@class='sis-collections']//a/@href</emphasis>
             returns links to the collection definitions (see <xref
             linkend="sec.SpecMembers" />)</para>
           </listitem>
@@ -1708,45 +2160,45 @@ public interface SpecsResource {
         <classname>@Debug</classname>) and exploration actions (that are
         available only in exploration mode):</para>
 
-        <programlisting>&lt;div class="nof-actions"&gt;
-  &lt;p class="nof-actions"&gt;USER actions&lt;/p&gt;
-  &lt;ul class="nof-actions"&gt;
+        <programlisting>&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;USER actions&lt;/p&gt;
+  &lt;ul class="isis-actions"&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/action/addItem(int,double,java.lang.String)"
-         rel="action" rev="spec" class="nof-action"&gt;addItem(int,double,java.lang.String)&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/action/addItem(int,double,java.lang.String)"
+         rel="action" rev="spec" class="isis-action"&gt;addItem(int,double,java.lang.String)&lt;/a&gt;
     &lt;/li&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/action/submit(org.nakedobjects.examples.claims.dom.claim.Approver)"
-         rel="action" rev="spec" class="nof-action"&gt;submit(org.nakedobjects.examples.claims.dom.claim.Approver)&lt;/a&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/action/submit(org.apache.isis.examples.claims.dom.claim.Approver)"
+         rel="action" rev="spec" class="isis-action"&gt;submit(org.apache.isis.examples.claims.dom.claim.Approver)&lt;/a&gt;
     &lt;/li&gt;
   &lt;/ul&gt;
 &lt;/div&gt;
-&lt;div class="nof-actions"&gt;
-  &lt;p class="nof-actions"&gt;DEBUG actions&lt;/p&gt;
-  &lt;ul class="nof-actions" /&gt;
+&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;DEBUG actions&lt;/p&gt;
+  &lt;ul class="isis-actions" /&gt;
 &lt;/div&gt;
-&lt;div class="nof-actions"&gt;
-  &lt;p class="nof-actions"&gt;EXPLORATION actions&lt;/p&gt;
-  &lt;ul class="nof-actions" /&gt;
+&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;EXPLORATION actions&lt;/p&gt;
+  &lt;ul class="isis-actions" /&gt;
 &lt;/div&gt;</programlisting>
 
         <para>Useful XPath queries here:</para>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-actions' and p/text()='USER
+            <para><emphasis>//div[@class='isis-actions' and p/text()='USER
             actions']//a/@href</emphasis> returns links to the regular user
             actions</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-actions' and p/text()='DEBUG
+            <para><emphasis>//div[@class='isis-actions' and p/text()='DEBUG
             actions']//a/@href</emphasis> returns links to the debug
             actions</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-actions' and
+            <para><emphasis>//div[@class='isis-actions' and
             p/text()='EXPLORATION actions']//a/@href</emphasis> returns links
             to the exploration actions</para>
           </listitem>
@@ -1754,8 +2206,7 @@ public interface SpecsResource {
       </sect2>
 
       <sect2 id="sec.SpecMembers">
-        <title>Class Members
-        (<classname>NakedObjectMember</classname>)</title>
+        <title>Class Members (<classname>ObjectMember</classname>)</title>
 
         <para>The next set of resources provided by SpecsResource are for the
         individual class members (properties, collections or actions):</para>
@@ -1825,12 +2276,12 @@ public interface SpecsResource {
 
         <programlisting>&lt;div&gt;
   &lt;p&gt;Owners&lt;/p&gt;
-  &lt;ul class="nof-specification"&gt;
-    &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim" rel="spec" rev="property" class="nof-specification"&gt;owning spec&lt;/a&gt;
+  &lt;ul class="isis-specification"&gt;
+    &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" rel="spec" rev="property" class="isis-specification"&gt;owning spec&lt;/a&gt;
   &lt;/ul&gt;
 &lt;/div&gt;
-&lt;div class="nof-facets"&gt;
-  &lt;p class="nof-facets"&gt;Facets&lt;/p&gt;
+&lt;div class="isis-facets"&gt;
+  &lt;p class="isis-facets"&gt;Facets&lt;/p&gt;
   &lt;table border="1"&gt;
     &lt;tr&gt;
       &lt;th&gt;FacetType&lt;/th&gt;
@@ -1839,29 +2290,29 @@ public interface SpecsResource {
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;
-        &lt;a href="description/facet/org.nakedobjects.metamodel.facets.propparam.typicallength.TypicalLengthFacet" rel="facet" rev="spec" class="nof-facet"&gt;org.nakedobjects.metamodel.facets.propparam.typicallength.TypicalLengthFacet&lt;/a&gt;
+        &lt;a href="description/facet/org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p&gt;org.nakedobjects.metamodel.facets.propparam.typicallength.TypicalLengthFacetDerivedFromType&lt;/p&gt;
+        &lt;p&gt;org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetForPropertyDerivedFromType&lt;/p&gt;
       &lt;/td&gt;
       ...
     &lt;/tr&gt;
     ...
     &lt;tr&gt;
       &lt;td&gt;
-        &lt;a href="description/facet/org.nakedobjects.metamodel.facets.ordering.memberorder.MemberOrderFacet" rel="facet" rev="spec" class="nof-facet"&gt;org.nakedobjects.metamodel.facets.ordering.memberorder.MemberOrderFacet&lt;/a&gt;
+        &lt;a href="description/facet/org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p&gt;org.nakedobjects.metamodel.facets.ordering.memberorder.MemberOrderFacetAnnotation&lt;/p&gt;
+        &lt;p&gt;org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacetAnnotation&lt;/p&gt;
       &lt;/td&gt;
       ...
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;
-        &lt;a href="description/facet/org.nakedobjects.metamodel.facets.propparam.validate.mandatory.MandatoryFacet" rel="facet" rev="spec" class="nof-facet"&gt;org.nakedobjects.metamodel.facets.propparam.validate.mandatory.MandatoryFacet&lt;/a&gt;
+        &lt;a href="description/facet/org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet&lt;/a&gt;
       &lt;/td&gt;
       &lt;td&gt;
-        &lt;p&gt;org.nakedobjects.metamodel.facets.propparam.validate.mandatory.MandatoryFacetDefault&lt;/p&gt;
+        &lt;p&gt;org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault&lt;/p&gt;
       &lt;/td&gt;
       ...
     &lt;/tr&gt;
@@ -1962,17 +2413,19 @@ public interface SpecsResource {
         </itemizedlist>
 
         <note>
-          <para>In addition we need a resource to allow the facets of an
-          actions parameter to be queried.</para>
+          <para>The <emphasis>restful viewer</emphasis> currently does not
+          provide a resource to allow the facets of an actions parameter to be
+          queried.</para>
         </note>
 
         <note>
-          <para>(Mentioned elsewhere), we also need to provide the ability to
-          evaluate facets per instance. Although many facets are per class,
-          some (such as <classname>TitleFacet</classname>) will vary by
-          instance. This will (presumably) need some additional resource
-          methods (eg <methodname>specActionFacetFor(...)</methodname>) that
-          take an oid as a parameter.</para>
+          <para>(Mentioned elsewhere), the <emphasis>restful viewer</emphasis>
+          currently does not provide the ability to evaluate facets per
+          instance. Although many facets are per class, some (such as
+          <classname>TitleFacet</classname>) will vary by instance. This will
+          (presumably) need some additional resource methods (eg
+          <methodname>specActionFacetFor(...)</methodname>) that take an oid
+          as a parameter.</para>
         </note>
 
         <para>Each of these resources generates a similar representation,
@@ -1993,32 +2446,32 @@ public interface SpecsResource {
 
         <programlisting>&lt;div&gt;
   &lt;p&gt;Owners&lt;/p&gt;
-  &lt;ul class="nof-properties"&gt;
+  &lt;ul class="isis-properties"&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim" rel="owning spec" 
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" rel="owning spec" 
          rev="spec" class="facet"&gt;
-        org.nakedobjects.examples.claims.dom.claim.Claim
+        org.apache.isis.examples.claims.dom.claim.Claim
       &lt;/a&gt;
     &lt;/li&gt;
     &lt;li&gt;
-      &lt;a href="/specs/org.nakedobjects.examples.claims.dom.claim.Claim/property/description"
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/description"
          rel="owning property" rev="property" class="facet"&gt;
         description
       &lt;/a&gt;
     &lt;/li&gt;
   &lt;/ul&gt;
 &lt;/div&gt;
-&lt;div class="nof-facet-elements"&gt;
-  &lt;p class="nof-facet-elements"&gt;Facet Elements&lt;/p&gt;
-  &lt;dl class="nof-facet-elements"&gt;
+&lt;div class="isis-facet-elements"&gt;
+  &lt;p class="isis-facet-elements"&gt;Facet Elements&lt;/p&gt;
+  &lt;dl class="isis-facet-elements"&gt;
     &lt;dt&gt;class&lt;/dt&gt;
-    &lt;dd&gt;class org.nakedobjects.metamodel.facets.propparam.typicallength.TypicalLengthFacetDerivedFromType&lt;/dd&gt;
+    &lt;dd&gt;class org.apache.isis.core.progmodel.facets.properties.typicallen.fromtype.TypicalLengthFacetDerivedFromType&lt;/dd&gt;
     &lt;dt&gt;derived&lt;/dt&gt;
     &lt;dd&gt;false&lt;/dd&gt;
     &lt;dt&gt;facetHolder&lt;/dt&gt;
-    &lt;dd&gt;Reference Association [name="org.nakedobjects.examples.claims.dom.claim.Claim#description(), type=JavaSpecification@9c22ff[class=java.lang.String,type=Object,persistable=User Persistable,superclass=Object] ]&lt;/dd&gt;
+    &lt;dd&gt;Reference Association [name="org.apache.isis.examples.claims.dom.claim.Claim#description(), type=JavaSpecification@9c22ff[class=java.lang.String,type=Object,persistable=User Persistable,superclass=Object] ]&lt;/dd&gt;
     &lt;dt&gt;identified&lt;/dt&gt;
-    &lt;dd&gt;Reference Association [name="org.nakedobjects.examples.claims.dom.claim.Claim#description(), type=JavaSpecification@9c22ff[class=java.lang.String,type=Object,persistable=User Persistable,superclass=Object] ]&lt;/dd&gt;
+    &lt;dd&gt;Reference Association [name="org.apache.isis.examples.claims.dom.claim.Claim#description(), type=JavaSpecification@9c22ff[class=java.lang.String,type=Object,persistable=User Persistable,superclass=Object] ]&lt;/dd&gt;
     &lt;dt&gt;noop&lt;/dt&gt;
     &lt;dd&gt;false&lt;/dd&gt;
     &lt;dt&gt;underlyingFacet&lt;/dt&gt;
@@ -2043,13 +2496,13 @@ public interface SpecsResource {
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>//div[@class='nof-facet-elements']//dt[.='class']/following-sibling::dd[1]</emphasis>
+            <para><emphasis>//div[@class='isis-facet-elements']//dt[.='class']/following-sibling::dd[1]</emphasis>
             will return the <sgmltag>&lt;dd&gt;</sgmltag> element
             corresponding to the 'class' <sgmltag>&lt;dt&gt;</sgmltag></para>
           </listitem>
 
           <listitem>
-            <para><emphasis>//div[@class='nof-facet-elements']//dt[.='derived']/following-sibling::dd[1]</emphasis>
+            <para><emphasis>//div[@class='isis-facet-elements']//dt[.='derived']/following-sibling::dd[1]</emphasis>
             will return the <sgmltag>&lt;dd&gt;</sgmltag> element
             corresponding to the 'derived'
             <sgmltag>&lt;dt&gt;d</sgmltag></para>
@@ -2084,10 +2537,11 @@ public interface UserResource {
       method.</para>
 
       <note>
-        <para>I believe that the <code>@Path("/user")</code> annotation should
-        reside on the interface, not the implementation. This seems to be a
-        limitation with RestEasy 1.0.2, the underlying library used by
-        <emphasis>Restful Objects</emphasis>.</para>
+        <para>As mentioned elsewhere, it would be preferable if the
+        <code>@Path("/user")</code> annotation resided on the interface, not
+        the implementation. This seems to be a limitation with
+        <emphasis>RestEasy</emphasis>, the underlying library used by the
+        <emphasis>restful viewer</emphasis>.</para>
       </note>
 
       <para>Here's the resource that's returned, as shown in a browser:</para>
@@ -2110,18 +2564,18 @@ public interface UserResource {
   &lt;body id="body"&gt;
     &lt;div&gt;
       &lt;p&gt;Logged in as&lt;/p&gt;
-      &lt;ul class="nof-session"&gt;
+      &lt;ul class="isis-session"&gt;
         &lt;li&gt;
-          &lt;a href="/user" rel="user" rev="resource" class="nof-user"&gt;sven&lt;/a&gt;
+          &lt;a href="/user" rel="user" rev="resource" class="isis-user"&gt;sven&lt;/a&gt;
         &lt;/li&gt;
       &lt;/ul&gt;
     &lt;/div&gt;
     ...
-    &lt;div class="nof-section"&gt;
-      &lt;p class="nof-section"&gt;Roles&lt;/p&gt;
-      &lt;ul class="nof-roles"&gt;
+    &lt;div class="isis-section"&gt;
+      &lt;p class="isis-section"&gt;Roles&lt;/p&gt;
+      &lt;ul class="isis-roles"&gt;
         &lt;li&gt;
-          &lt;p class="nof-role"&gt;role1&lt;/p&gt;
+          &lt;p class="isis-role"&gt;role1&lt;/p&gt;
         &lt;/li&gt;
       &lt;/ul&gt;
     &lt;/div&gt;
@@ -2132,56 +2586,65 @@ public interface UserResource {
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>//a[@class="nof-user"]/text()</emphasis> returns the
-          current user name</para>
+          <para><emphasis>//a[@class="isis-user"]/text()</emphasis> returns
+          the current user name</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>//p[@class="nof-role"]/text()</emphasis> returns the
-          role names</para>
+          <para><emphasis>//p[@class="isis-role"]/text()</emphasis> returns
+          the role names</para>
         </listitem>
       </itemizedlist>
     </sect1>
   </chapter>
 
-  <chapter>
+  <chapter id="chp.WritingClientSideApps">
     <title>Writing Client-side Applications</title>
 
-    <para>The point of <emphasis>Restful Objects</emphasis> is to provide our
-    domain objects as <acronym>REST</acronym>ful resources so that they can be
-    used by any other client application. These applications can be written in
-    any language; so long as they can submit <acronym>HTTP </acronym>requests
-    and can parse <acronym>XHTML</acronym>, they can interact with the
-    resources provided by <emphasis>Restful Objects</emphasis>.</para>
+    <abstract>
+      <para>How to write custom client-side applications to consume the
+      RESTful resources.</para>
+    </abstract>
+
+    <para>The point of the <emphasis>restful viewer</emphasis> is to provide
+    our domain objects as <acronym>REST</acronym>ful resources so that they
+    can be used by any other client application. These applications can be
+    written in any language; so long as they can submit <acronym>HTTP
+    </acronym>requests and can parse <acronym>XHTML</acronym>, they can
+    interact with the resources provided by the viewer.</para>
 
     <para>That said, if you are writing Java applications, then
-    <emphasis>Restful Objects</emphasis> provides an application library
+    <emphasis>restful Objects</emphasis> provides an application library
     (applib) to simplify the task. To reference this applib, add the following
     to your Maven pom's <sgmltag>&lt;dependencies&gt;</sgmltag>
     section:</para>
 
     <programlisting>&lt;properties&gt;
-  &lt;restfulobjects.version&gt;1.0.0&lt;/restfulobjects.version&gt;   &lt;!-- OR WHATEVER --&gt;
+    &lt;isis.viewer-restful.version&gt;y.y.y&lt;/isis.viewer-restful.version&gt;
+    ....
 &lt;/properties&gt;
 
 &lt;dependencies&gt;
   ...
   &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.restful&lt;/groupId&gt;
+    &lt;groupId&gt;org.apache.isis.viewer.restful&lt;/groupId&gt;
     &lt;artifactId&gt;applib&lt;/artifactId&gt;
-    &lt;version&gt;${restfulobjects.version}&lt;/version&gt;
+    &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
   &lt;/dependency&gt;
   ...
 &lt;/dependencies&gt;</programlisting>
 
+    <para>where y.y.y is the version of <emphasis>restful viewer</emphasis>
+    module of <emphasis>Isis</emphasis> that you are using.</para>
+
     <para>You then have a choice of approaches.</para>
 
     <sect1>
-      <title>AbstractRestfulClient</title>
+      <title><classname>AbstractRestfulClient</classname></title>
 
       <para>To get you started you might want to use the adapter,
       <classname>AbstractRestfulClient</classname>, available in the
-      <emphasis>Restful Objects</emphasis>' applib. This exposes some of the
+      <emphasis>restful viewer</emphasis>' applib. This exposes some of the
       <acronym>HTTP</acronym> methods, including <acronym>GET</acronym> and
       <acronym>POST</acronym>, and serves up resources as
       <acronym>XML</acronym> documents (using Elliot Rusty Harold's <ulink
@@ -2198,10 +2661,10 @@ public interface UserResource {
     </sect1>
 
     <sect1 id="sec.CodingApproaches">
-      <title>RestEasy's Client-side Framework</title>
+      <title><emphasis>RestEasy</emphasis>'s Client-side Framework</title>
 
-      <para>Alternatively, you might want to look into JBoss RestEasy, which
-      provides a <ulink
+      <para>Alternatively, you might want to look into JBoss
+      <emphasis>RestEasy</emphasis>, which provides a <ulink
       url="http://www.jboss.org/file-access/default/members/resteasy/freezone/docs/1.0.2.GA/userguide/html_single/index.html#RESTEasy_Client_Framework">client-side
       framework</ulink> to eliminate some of the boilerplate. This uses the
       resource interfaces (see <xref linkend="chp.Resources" />) to create
@@ -2214,355 +2677,35 @@ public interface UserResource {
         <classname>ServiceResource</classname>,
         <classname>SpecsResource</classname> and
         <classname>UserResource</classname>, it's possible that this approach
-        will not work until we upgrade the version of RestEasy.</para>
+        will not work until we upgrade the version of
+        <emphasis>RestEasy</emphasis>.</para>
       </note>
     </sect1>
   </chapter>
 
   <chapter id="chp.DeployingRestfulObjectsWebapps">
-    <title>Deploying Restful Objects Webapps</title>
+    <title>Deploying Restful Viewer Webapps</title>
+
+    <abstract>
+      <para>Guidance on how to deploy Isis using the <emphasis>restful
+      viewer</emphasis>.</para>
+    </abstract>
 
     <para>At some point you'll presumably want to deploy your domain object
-    using <emphasis>Restful Objects</emphasis> as a webapp.</para>
+    using <emphasis>restful viewer</emphasis> as a webapp. The quickstart
+    archetype already sets up the viewer-restful module that will generate a
+    WAR file; however, you may want to adjust its configuration in terms of
+    two areas: authentication, and persistence. This chapter discusses these
+    points.</para>
 
-    <para>If you've used the Naked Objects archetype then it will have created
-    a webapp project for you, with its <filename>web.xml</filename> set up
-    with the servlets and filters for the <acronym>HTML</acronym> viewer. We
-    can use this as the basis for <emphasis>Restful Objects</emphasis>'
-    configuration. (In principle, the <filename>web.xml</filename> could
-    support both the <acronym>HTML</acronym> viewer and <emphasis>Restful
-    Objects</emphasis>. This chapter assumes you only want to expose the
-    latter interface, however).</para>
+    <para></para>
 
-    <para>In addition, you'll need to decide on the authentication mechanism.
-    <emphasis>Restful Objects</emphasis> comes with some out-of-the-box
-    support, but you may want to extend it for your own purposes. This chapter
-    shows you how.d</para>
+    <para>*** hmmm... just discovered two versions of IsisSessionFilter... one
+    in </para>
 
-    <sect1>
-      <title>Update POM Dependencies</title>
+    <para></para>
 
-      <para>First up (just as we did when prototyping, see <xref
-      linkend="chp.Prototyping" />), we need to reference the
-      <emphasis>Restful Objects</emphasis> viewer:</para>
-
-      <programlisting>&lt;dependencies&gt;
-  ...
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.restful&lt;/groupId&gt;
-    &lt;artifactId&gt;viewer&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-  ...
-&lt;/dependencies&gt;</programlisting>
-
-      <para>Here I'm assuming that this is in the webapp submodule where the
-      parent defines the version in its
-      <sgmltag>&lt;dependencyManagement&gt;</sgmltag> section (see <xref
-      linkend="sec.ParentModule" />).</para>
-    </sect1>
-
-    <sect1>
-      <title>web.xml</title>
-
-      <para>Next, we need to update <filename>web.xml</filename> to specify
-      the servlets, listeners and filters needed for <emphasis>Restful
-      Objects</emphasis>. You'll find that some of these are shared with
-      <acronym>HTML</acronym> viewer.</para>
-
-      <sect2>
-        <title>DTD and Display Name</title>
-
-        <para>To start with, we have the boilerplate DTD reference and
-        <sgmltag>&lt;displayname&gt;</sgmltag>:t</para>
-
-        <programlisting>&lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"[]&gt;
-&lt;web-app&gt;
-  &lt;display-name&gt;Restful Objects&lt;/display-name&gt;
-
-  ...
-&lt;/web-app&gt; </programlisting>
-      </sect2>
-
-      <sect2>
-        <title>Context Parameters</title>
-
-        <para>There is one context parameter to add:</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;context-param&gt;
-    &lt;param-name&gt;javax.ws.rs.Application&lt;/param-name&gt;
-    &lt;param-value&gt;org.starobjects.restful.viewer.RestfulApplication&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  ...
-&lt;/web-app&gt;</programlisting>
-
-        <para>This is used by RestEasy to defines the supported
-        resources.</para>
-      </sect2>
-
-      <sect2>
-        <title>Filters and Filter Mappings</title>
-
-        <para>Next, filters.</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;filter&gt;
-    &lt;filter-name&gt;NakedObjectsSessionFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.nakedobjects.webapp.NakedObjectsSessionFilter&lt;/filter-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
-      &lt;param-value&gt;org.starobjects.restful.viewer.authentication.AuthenticationSessionLookupStrategyExtended&lt;/param-value&gt;
-    &lt;/init-param&gt;
-  &lt;/filter&gt;
-
-  &lt;filter&gt;
-    &lt;filter-name&gt;NakedObjectsStaticContentFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.nakedobjects.webapp.NakedObjectsSessionFilter&lt;/filter-class&gt;
-  &lt;/filter&gt;
-  ...
-&lt;/web-app&gt;</programlisting>
-
-        <para>The <classname>NakedObjectsSessionFilter</classname> is used to
-        ensure that there is an authentication session in place. As you might
-        infer from its <sgmltag>&lt;init-param&gt;</sgmltag>, the mechanism it
-        does to lookup this authentication session is pluggable. The one
-        specified will fake a session if running in EXPLORATION mode. But,
-        again, more on this in <xref linkend="sec.Authentication" />.</para>
-
-        <para>The <classname>NakedObjectsStaticContentFilter</classname> is
-        used to decorate any static resources (Javascript, CSS or images) so
-        that they are cached client-side.</para>
-
-        <para>The mappings for these two filters are:</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;NakedObjectsSessionFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;NakedObjectsStaticContentFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;NakedObjectsStaticContentFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;*.css&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;NakedObjectsStaticContentFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;*.png&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;NakedObjectsStaticContentFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;*.jpg&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;NakedObjectsStaticContentFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;*.gif&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-  ...
-&lt;/web-app&gt;</programlisting>
-      </sect2>
-
-      <sect2>
-        <title>Listeners</title>
-
-        <para>Two listeners are required, one for <emphasis>Restful
-        Objects</emphasis>/Naked Objects and one for RestEasy. These both
-        bootstrap the respective libraries:</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;listener&gt;
-    &lt;listener-class&gt;org.nakedobjects.webapp.NakedObjectsWebAppBootstrapper&lt;/listener-class&gt;
-  &lt;/listener&gt;
-
-  &lt;listener&gt;
-    &lt;listener-class&gt;org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap&lt;/listener-class&gt;
-  &lt;/listener&gt;
-  ...
-&lt;/web-app&gt;</programlisting>
-      </sect2>
-
-      <sect2>
-        <title>Servlets and Servlet Mappings</title>
-
-        <para>Finally, we have the servlets:</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;RestEasyDispatcher&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;ResourceServlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.nakedobjects.webapp.servlets.ResourceServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  ...
-&lt;/web-app&gt;</programlisting>
-
-        <para>The main servlet is RestEasy's
-        <classname>HttpServletDispatcher</classname> servlet, that handles all
-        inbound requests. In addition though we configure a Naked Objects'
-        <classname>ResourceServlet</classname> to serve up Javascript, CSS and
-        images (the same as those decorated by the
-        <classname>NakedObjectsStaticContentFilter</classname>).</para>
-
-        <para>The mappings for these servlets are:</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;RestEasyDispatcher&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ResourceServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ResourceServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.css&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ResourceServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.png&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ResourceServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.jpg&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ResourceServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.gif&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-&lt;/web-app&gt;</programlisting>
-      </sect2>
-    </sect1>
-
-    <sect1>
-      <title>Testing</title>
-
-      <para>There are several ways you can run up the webapp.</para>
-
-      <sect2 id="sec.NakedObjectsWebServer">
-        <title>Using NakedObjectsWebServer</title>
-
-        <para>The Naked Objects framework provides a simple bootstrapper class
-        that will run an embedded instance of Jetty against the
-        <methodname>web.xml</methodname>. By default the reference to this
-        bootstrapper is deliberately excluded, so to use it comment back in
-        the reference to
-        <classname>org.nakedobjects.core:webserver</classname>:</para>
-
-        <programlisting>&lt;dependency&gt;
-  &lt;groupId&gt;org.nakedobjects.core&lt;/groupId&gt;
-  &lt;artifactId&gt;webserver&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</programlisting>
-
-        <para>To run, just run
-        <classname>org.nakedobjects.webserver.WebServer</classname>. This
-        takes the following arguments:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>--deploymentType (defaults to SERVER)</para>
-          </listitem>
-
-          <listitem>
-            <para>--port (defaults to 8080)</para>
-          </listitem>
-
-          <listitem>
-            <para>--address (defaults to localhost)</para>
-          </listitem>
-
-          <listitem>
-            <para>--webapp resourceDirectory</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>For testing purposes you'll probably want EXPLORATION, which
-        means you don't have to worry about authentication. For production
-        you'll probably want SERVER, in which case you <emphasis>do</emphasis>
-        need to decide how to handle authentication; but we'll discuss this
-        more in <xref linkend="sec.Authentication" />.</para>
-      </sect2>
-
-      <sect2>
-        <title>Using Maven Jetty plugin</title>
-
-        <para>Using the maven-jetty-plugin, we can use Maven to run an
-        embedded instance of Jetty. First, add:</para>
-
-        <programlisting>&lt;build&gt;
-  &lt;plugins&gt;
-    &lt;plugin&gt;
-      &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;
-      &lt;artifactId&gt;maven-jetty-plugin&lt;/artifactId&gt;
-      &lt;configuration&gt;
-        &lt;contextPath&gt;/&lt;/contextPath&gt;
-      &lt;/configuration&gt;
-    &lt;/plugin&gt;
-  &lt;/plugins&gt;
-&lt;/build&gt;</programlisting>
-
-        <note>
-          <para>Due to a bug in <emphasis>Restful Objects</emphasis>, it is
-          currently necessary to deploy to the root context
-          (<code>/</code>).</para>
-        </note>
-
-        <para>Next, to run in EXPLORATION mode, update the
-        <filename>web.xml</filename>:</para>
-
-        <programlisting>&lt;web-app&gt;
-  ...
-  &lt;context-param&gt;
-    &lt;param-name&gt;deploymentType&lt;/param-name&gt;
-    &lt;param-value&gt;EXPLORATION&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  ...
-&lt;/web-app&gt;</programlisting>
-
-        <para>As we've already mentioned, for testing you'll probably want
-        EXPLORATION, while for production you'll probably want SERVER. See
-        <xref linkend="sec.Authentication" /> for more on this.</para>
-
-        <note>
-          <para>In case you were wondering,
-          <classname>NakedObjectsWebServer</classname> (<xref
-          linkend="sec.NakedObjectsWebServer" />) does not currently honour
-          deploymentType setting.</para>
-        </note>
-
-        <para>You can then run Jetty from Maven using:</para>
-
-        <programlisting>mvn jetty:run</programlisting>
-      </sect2>
-
-      <sect2>
-        <title>Deploy to an External Servlet Container</title>
-
-        <para>Finally, you can copy the WAR file and deploy it to an external
-        servlet container.</para>
-
-        <note>
-          <para>Again, because of a bug in <emphasis>Restful
-          Objects</emphasis> you will need to map it to the root context for
-          this to work.</para>
-        </note>
-      </sect2>
-    </sect1>
+    <para></para>
 
     <sect1 id="sec.Authentication">
       <title>Authentication</title>
@@ -2575,9 +2718,10 @@ public interface UserResource {
       because <acronym>HTTP</acronym> is stateless we don't even get the
       notion of a session or a connection.</para>
 
-      <para><emphasis>Restful Objects</emphasis> therefore uses Naked Objects'
-      authentication mechanism, with authentication performed for each RESTful
-      call. What this means depends on the deploymentType:</para>
+      <para>The <emphasis>restful viewer</emphasis> therefore uses
+      <emphasis>Isis</emphasis>' own authentication mechanism, with
+      authentication performed for each RESTful call. What this means depends
+      on the deploymentType:</para>
 
       <itemizedlist>
         <listitem>
@@ -2663,13 +2807,19 @@ public interface UserResource {
           <varname>nakedobjects.authentication</varname> key in
           <filename>nakedobjects.properties</filename>:</para>
 
-          <programlisting>nakedobjects.authentication=com.mycompany.nakedobjects.authentication.MyAuthenticationManagerInstaller</programlisting>
+          <programlisting>isis.authentication=com.mycompany.nakedobjects.authentication.MyAuthenticationManagerInstaller</programlisting>
         </listitem>
       </itemizedlist>
 
       <para>In the future there will doubtless be standardized (WS-* style)
       approaches for RESTful authenticatication, but the above should provide
       enough flexibility in the meantime.</para>
+    </sect1>
+
+    <sect1>
+      <title>Runtime / Persistence</title>
+
+      <para></para>
     </sect1>
   </chapter>
 </book>

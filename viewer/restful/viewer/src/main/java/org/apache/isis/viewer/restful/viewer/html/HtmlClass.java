@@ -20,41 +20,41 @@ package org.apache.isis.viewer.restful.viewer.html;
 
 public final class HtmlClass {
 
-    public static final String SECTION = "nof-section";
+    public static final String SECTION = "isis-section";
 
-    public static final String FACETS = "nof-facets";
-    public static final String FACET = "nof-facet";
-    public static final String FACET_ELEMENTS = "nof-facet-elements";
-    public static final String FACET_ELEMENT = "nof-facet-element";
+    public static final String FACETS = "isis-facets";
+    public static final String FACET = "isis-facet";
+    public static final String FACET_ELEMENTS = "isis-facet-elements";
+    public static final String FACET_ELEMENT = "isis-facet-element";
 
-    public static final String SPECIFICATIONS = "nof-specifications";
-    public static final String SPECIFICATION = "nof-specification";
-    public static final String PROPERTIES = "nof-properties";
-    public static final String PROPERTY = "nof-property";
-    public static final String COLLECTIONS = "nof-collections";
-    public static final String COLLECTION = "nof-collection";
-    public static final String ACTIONS = "nof-actions";
-    public static final String ACTION = "nof-action";
-    public static final String SERVICES = "nof-services";
-    public static final String SERVICE = "nof-service";
-    public static final String RESOURCES = "nof-resources";
-    public static final String RESOURCE = "nof-resource";
+    public static final String SPECIFICATIONS = "isis-specifications";
+    public static final String SPECIFICATION = "isis-specification";
+    public static final String PROPERTIES = "isis-properties";
+    public static final String PROPERTY = "isis-property";
+    public static final String COLLECTIONS = "isis-collections";
+    public static final String COLLECTION = "isis-collection";
+    public static final String ACTIONS = "isis-actions";
+    public static final String ACTION = "isis-action";
+    public static final String SERVICES = "isis-services";
+    public static final String SERVICE = "isis-service";
+    public static final String RESOURCES = "isis-resources";
+    public static final String RESOURCE = "isis-resource";
 
-    public static final String SESSION = "nof-session";
-    public static final String USER = "nof-user";
-    public static final String ROLES = "nof-roles";
-    public static final String ROLE = "nof-role";
+    public static final String SESSION = "isis-session";
+    public static final String USER = "isis-user";
+    public static final String ROLES = "isis-roles";
+    public static final String ROLE = "isis-role";
 
-    public static final String TITLE = "nof-title";
-    public static final String OBJECT = "nof-object";
-    public static final String OID = "nof-oid";
-    public static final String ACTION_RESULT = "nof-action-result";
+    public static final String TITLE = "isis-title";
+    public static final String OBJECT = "isis-object";
+    public static final String OID = "isis-oid";
+    public static final String ACTION_RESULT = "isis-action-result";
 
-    public static final String VISIBLE = "nof-visible";
-    public static final String USABLE = "nof-usable";
-    public static final String VALID = "nof-valid";
+    public static final String VISIBLE = "isis-visible";
+    public static final String USABLE = "isis-usable";
+    public static final String VALID = "isis-valid";
 
-    public static final String OBJECT_SPECS = "nof-object-specs";
+    public static final String OBJECT_SPECS = "isis-object-specs";
 
     private HtmlClass() {
     }

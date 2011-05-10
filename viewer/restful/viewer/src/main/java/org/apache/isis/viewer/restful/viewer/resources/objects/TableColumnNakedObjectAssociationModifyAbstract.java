@@ -108,7 +108,7 @@ public abstract class TableColumnNakedObjectAssociationModifyAbstract<T extends 
     protected abstract String getHtmlClassAttribute();
 
     /**
-     * Invoke the appropriate Javascript function from <tt>nof-rest-support.js</tt>.
+     * Invoke the appropriate Javascript function from <tt>isis-rest-support.js</tt>.
      * 
      * @param url
      * @param associationId

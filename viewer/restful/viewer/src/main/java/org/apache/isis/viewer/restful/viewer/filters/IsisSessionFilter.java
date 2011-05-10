@@ -40,12 +40,9 @@ import org.apache.log4j.Logger;
 
 public class IsisSessionFilter implements Filter {
 
-    private static final String NOF_SESSION_REQUEST_KEY = "session";
     public static final String AUTHENTICATION_MANAGER_WEBAPP_CONTEXT_KEY = "authenticationManager";
 
-    private static final long serialVersionUID = 1L;
-    @SuppressWarnings("unused")
-    private final Logger LOG = Logger.getLogger(IsisSessionFilter.class);
+    private static final String ISIS_SESSION_REQUEST_KEY = "session";
 
     /**
      * does nothing.
@@ -63,17 +60,17 @@ public class IsisSessionFilter implements Filter {
     }
 
     /**
-     * If the {@link DeploymentType} of effective {@link NakedObjectsContext} is {@link DeploymentType#isExploration()
+     * If the {@link DeploymentType} of effective {@link IsisContext} is {@link DeploymentType#isExploration()
      * exploration}, then automatically create a session.
      */
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
         throws IOException, ServletException {
 
-        final AuthenticationSession nofSession = getNofSession(request);
+        final AuthenticationSession isisSession = getIsisSession(request);
 
-        if (nofSession != null) {
-            IsisContext.openSession(nofSession);
+        if (isisSession != null) {
+            IsisContext.openSession(isisSession);
         }
         chain.doFilter(request, response);
 
@@ -98,7 +95,7 @@ public class IsisSessionFilter implements Filter {
      * @param request
      * @return
      */
-    private AuthenticationSession getNofSession(final ServletRequest request) {
+    private AuthenticationSession getIsisSession(final ServletRequest request) {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         final HttpSession httpSession = httpRequest.getSession(true);
@@ -111,29 +108,29 @@ public class IsisSessionFilter implements Filter {
             throw new IllegalStateException("No authentication manager configured.");
         }
 
-        AuthenticationSession nofSession = null;
+        AuthenticationSession isisAuthSession = null;
 
         final DeploymentType deploymentType = IsisContext.getDeploymentType();
 
         if (deploymentType.isExploring()) {
-            nofSession = new ExplorationSession();
+            isisAuthSession = new ExplorationSession();
         } else {
-            nofSession = (AuthenticationSession) httpSession.getAttribute(NOF_SESSION_REQUEST_KEY);
-            if (nofSession != null) {
-                if (!authenticationManager.isSessionValid(nofSession)) {
-                    nofSession = null;
+            isisAuthSession = (AuthenticationSession) httpSession.getAttribute(ISIS_SESSION_REQUEST_KEY);
+            if (isisAuthSession != null) {
+                if (!authenticationManager.isSessionValid(isisAuthSession)) {
+                    isisAuthSession = null;
                 }
             }
 
-            if (nofSession == null) {
+            if (isisAuthSession == null) {
                 final String user = httpRequest.getParameter("user");
                 final String password = httpRequest.getParameter("password");
                 final AuthenticationRequest passwordRequest = new AuthenticationRequestPassword(user, password);
-                nofSession = authenticationManager.authenticate(passwordRequest);
+                isisAuthSession = authenticationManager.authenticate(passwordRequest);
             }
         }
-        httpSession.setAttribute(NOF_SESSION_REQUEST_KEY, nofSession);
-        return nofSession;
+        httpSession.setAttribute(ISIS_SESSION_REQUEST_KEY, isisAuthSession);
+        return isisAuthSession;
     }
 
 }

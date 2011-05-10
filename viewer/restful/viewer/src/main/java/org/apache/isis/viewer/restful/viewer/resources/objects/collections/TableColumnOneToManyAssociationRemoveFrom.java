@@ -52,7 +52,7 @@ public final class TableColumnOneToManyAssociationRemoveFrom extends
     }
 
     /**
-     * Calls the <tt>removeFromCollection()</tt> Javascript function that lives in <tt>nof-rest-support.js</tt>
+     * Calls the <tt>removeFromCollection()</tt> Javascript function that lives in <tt>isis-rest-support.js</tt>
      * 
      * @param url
      * @param associationId

@@ -43,7 +43,7 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
         init();
         final XhtmlTemplate xhtml = new XhtmlTemplate("Services", getServletRequest());
 
-        xhtml.appendToBody(asDivNofSession());
+        xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         final Element div = xhtmlRenderer.div_p("Services", HtmlClass.SECTION);

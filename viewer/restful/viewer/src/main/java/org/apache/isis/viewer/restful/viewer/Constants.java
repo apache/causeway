@@ -25,7 +25,7 @@ public final class Constants {
     public static final String VIEWER_PREFIX_KEY = SystemConstants.VIEWER_KEY + ".restful";
     public static final String JAVASCRIPT_DEBUG_KEY = VIEWER_PREFIX_KEY + ".javascript-debug";
 
-    public static final String NOF_REST_SUPPORT_JS = "nof-rest-support.js";
+    public static final String ISIS_REST_SUPPORT_JS = "isis-rest-support.js";
     public static final String XMLHTTP_REQUEST_SRC_JS = "XMLHttpRequest.src.js";
     public static final String XMLHTTP_REQUEST_JS = "XMLHttpRequest.js";
     public static final String URL_ENCODING_CHAR_SET =

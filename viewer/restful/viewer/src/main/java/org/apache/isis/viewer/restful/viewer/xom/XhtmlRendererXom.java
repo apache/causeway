@@ -118,7 +118,7 @@ public class XhtmlRendererXom {
      * 
      * <pre>
      *   &lt;form name=&quot;[propertyName]&quot; action=&quot;form&quot; method=&quot;POST&quot;&gt;
-     *     &lt;input type=&quot;text&quot; name=&quot;value&quot; value=&quot;&quot; class=&quot;nof-property&quot;&gt;
+     *     &lt;input type=&quot;text&quot; name=&quot;value&quot; value=&quot;&quot; class=&quot;isis-property&quot;&gt;
      *     &lt;input type=&quot;submit&quot; value=&quot;Modify&quot;&gt;
      *   &lt;/form&gt;
      * </pre>

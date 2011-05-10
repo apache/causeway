@@ -40,8 +40,6 @@ public abstract class AbstractRestfulClient {
 
     private static Logger LOG = Logger.getLogger(AbstractRestfulClient.class);
 
-    static final String MIME_TYPE = "application/xhtml+xml";
-
     private final String hostUri;
 
     public String getHostUri() {
