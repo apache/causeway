@@ -78,13 +78,17 @@
                     href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
                 <item name="Subscribe"
                     href="mailto:isis-dev-subscribe@incubator.apache.org" />
+                <item name="Markmail (RSS)"
+                    href="http://incubator.markmail.org/search/?q=isis-dev" />
+                <item name="Gmane (NNTP)"
+                    href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.devel" />
             </item>
             <!-- 
             <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
             -->
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
-            <item name="CI" href="https://hudson.apache.org/hudson/job/isis-trunk-ubuntu" />
+            <item name="CI" href="https://builds.apache.org/hudson/job/isis-trunk-windows" />
             <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
 

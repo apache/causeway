@@ -26,24 +26,26 @@ QuickStart App
 mvn archetype:generate  \
     -D archetypeCatalog=http://incubator.apache.org/isis \
     -D archetypeGroupId=org.apache.isis.support \
-    -D archetypeArtifactId=quickstart-archetype
+    -D archetypeArtifactId=quickstart-archetype \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp
 
 +------------------------------------------------------------
+
+  where:
+  
+  * groupId represents your own organization, and
+  
+  * artifactId is a unique identifier for this app within your organization.
+
+  []
 
   Note: <currently the archetype is only available from the Apache snapshot
   repository; hence the need to specify the archetypeCatalog property to pick 
   it up.>
-
-  You'll prompted for some properties:
   
-  * enter a groupId
+  You'll then be prompted for some further properties:
   
-    * eg com.mycompany.mygroup
-    
-  * enter an artifactId
-  
-    * eg myapp
-    
   * enter a version
   
     * eg 1.0-SNAPSHOT
@@ -54,8 +56,6 @@ mvn archetype:generate  \
     
   * enter a package
   
-    * eg com.mycompany.mygroup
-    
     * can generally leave as default
     
   * Confirm the entry
@@ -130,7 +130,7 @@ App Structure
   configured only to support the default in-memory object store.  What this
   means is that any changes you make to objects will not be persisted between
   runs.  Isis does provide several 
-  {{{./alternatives/objectstore/index.html}alternative object store}}
+  {{{./runtimes/dflt/objectstores/index.html}alternative object store}}
   implementations which you are free to start configuring for yourself as
   you gain more experience.  
 
@@ -146,6 +146,163 @@ mvn clean install
   while for the first time as modules are brought down from the remote
   repo.  
 
+Running the app using the DnD viewer
+
+  It's possible to run the application from the command line in a number of ways,
+  each of which configuring a different user interface (what we call 'viewers'). 
+
+  The {{{./viewer/dnd/index.html}DnD viewer}} runs the application a Java client app,
+  with a user interface that provides a desktop, "drag-n-drop" metaphor.
+   
+  To run the app using this viewer, use:
+  
+  * <<<cd quickrun; mvn antrun:run -D exec=dnd>>>
+  
+  []
+
+  The app runs from a self-contained JAR (the artifact of the <<<quickrun>>> module). 
+  The app is configured to run standalone (not client/server), and using the
+  in-memory object store (meaning that changes to objects are not persisted between
+  runs).  This makes it appropriate for 'exploratory' prototyping work, but obviously could
+  not be deployed in this form without reconfiguring to use a different persistence
+  mechanism.   
+
+Running the app using the HTML viewer
+
+  The application can also be run using the {{{./viewer/html/index.html}HTML viewer}},
+  which provides a basic, non-customizable web view.  There are two ways to run the 
+  application with this viewer (again each time configured to use with the in-memory object store):
+    
+  * <<<cd quickrun; mvn antrun:run -D exec=html>>>
+  
+    like the DnD viewer, this runs the application from a self-contained JAR, 
+    but with the app hosted by an embedded Jetty webserver.  This is intended for prototyping only,
+    (eg the JAR can be distributed to stakeholders for feedback with only a minimal set of dependencies).  
+    
+    The app can be accessed using {{{http://localhost:8080/logon.app}http://localhost:8080/logon.app}}.
+
+  * <<<cd viewer-html ; mvn jetty:run>>>
+  
+    runs the same application, but this time from a regular WAR archive, and uses
+    Maven's jetty plugin to host the WAR.  This WAR could be in theory be deployed into
+    production (though in practice a different object store would need to be configured).
+     
+    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-html}http://localhost:8080/myapp-quickviewer-html}}
+    (where 'myapp' is the artifactId that you entered when generating the app).
+
+  []
+
+Running the app using the Restful viewer
+
+  The application can also be run using the {{{./viewer/restful/index.html}RESTful viewer}}.
+  This exposes the domain model as a set of resources, in XHTML format.  This
+  means that the RESTful resources can be consumed directly by a browser as
+  well as by a custom RESTful client.
+
+  As for the HTML viewer, there are two ways to run the same application with the Restful viewer:
+
+  * <<<cd quickrun; mvn antrun:run -D exec=restful>>>
+  
+    also runs the application within an embedded Jetty webserver, but using the Restful viewer.
+    The app can be accessed using {{{http://localhost:8080/}http://localhost:8080/}}.
+    
+    Note: <only firefox is currently supported as a RESTful client.  HTTP PUTs
+    and DELETEs are supported using a small amount of Javascript>.
+    
+  * <<<cd viewer-restful; mvn jetty:run>>>
+  
+    runs the same application, but this time from a regular WAR archive, and uses
+    Maven's jetty plugin to host the WAR.  The app is configured with the in-memory object store.
+
+    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-restful}http://localhost:8080/myapp-quickviewer-restful}} 
+    (where 'myapp' is the artifactId that you entered when generating the app).
+
+  []
+      
+Running the app using the Scimpi viewer
+
+  The application can also be run using the {{{./viewer/scimpi/index.html}Scimpi viewer}}.
+  This exposes the domain model as a webapp.  Like all Isis viewers, a default
+  view is provided but each object's view can be customized using a set of tags
+  if required.  
+
+  The Scimpi viewer can be run using:
+  
+  * <<<cd viewer-scimpi ; mvn jetty:run>>>
+
+    which runs the application from a regular WAR archive, and uses
+    Maven's jetty plugin to host the WAR.  The app is configured with the in-memory object store.
+
+    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-scimpi}http://localhost:8080/myapp-quickviewer-scimpi}}
+    (where 'myapp' is the artifactId that you entered when generating the app).
+  
+  []
+  
+Running the app using the Wicket viewer
+
+  The application can also be run using the {{{./viewer/wicket/index.html}Wicket viewer}}.
+  This exposes the domain model as a webapp, using 
+  {{{http://wicket.apache.org}Apache Wicket}} as the enabling web framework.
+    
+  Like all Isis viewers, a default view is provided, but each object's view can
+  be customized using custom Wicket components if required.  
+
+  The Wicket viewer can be run using:
+
+  * <<<cd viewer-wicket ; mvn jetty:run>>>
+
+    which runs the application from a regular WAR archive, and uses
+    Maven's jetty plugin to host the WAR.  The app is configured with the in-memory object store.
+
+    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-wicket}http://localhost:8080/myapp-quickviewer-wicket}}
+    (where 'myapp' is the artifactId that you entered when generating the app).
+  
+  []
+
+Running the app's JUnit tests
+
+  Isis provides the means to test domain object logic using a 
+  {{{./viewer/junit/index.html}custom runner}} for {{{http://junit.org}JUnit}}.
+
+  To run the tests, use:
+
+  * <<<cd tests-junit ; mvn test>>>
+  
+  []
+
+Running the app's BDD (Concordion) tests
+
+  Isis provides the means to test domain object logic using an 
+  {{{./viewer/bdd/index.html}integration}} with the
+  {{{http://concordion.org}Concordion}} BDD framework.
+  
+  Concordion tests are written as XHTML; the Concordion framework then uses
+  annotations within the XHTML to call into (what Concordion calls) "fixture" 
+  code, written in Java.  The tests can be found in 
+  <<<src/test/resources/viewer/bdd/stories>>> (in the tests-bdd module).   
+  
+  Normally the developer would need to write the fixtures called by Concordion.  
+  The Isis integration however provides these fixtures already, so using
+  BDD testing in Concordion/Isis amounts to annotating the XHTML to call the
+  pre-defined fixtures (eg to invoke an action or check the value of a 
+  property). 
+  
+  To run the tests, use:
+  
+  * <<<cd tests-bdd ; mvn test>>>
+
+    Concordion itself integrates with JUnit, so as you can see the tests 
+    are run in the usual way.
+  
+  []
+
+  As a byproduct of running the tests, Concordion generates output HTML which
+  are marked up versions of the the original scenarios.  The idea is to make it easy 
+  for a (non-technical) stakeholder to view the outcome of the tests.
+  The location of this output HTML should be printed to the console; the default
+  location is <<</tmp/concordion/viewer/bdd/stories>>>.  
+
+
 Import into an IDE
 
   You can use any IDE that supports Maven; the Isis developers tend to use
@@ -158,159 +315,135 @@ Exploring the App
 
   As already noted, the application consists of a very simple domain model
   consisting for a task manager app, consisting of a single domain object,
-  ToDoItem, and a single repository, ToDoItemRepository.
+  ToDoItem, and a single repository, <<<ToDoItemRepository>>>.
   
-  * open up ToDoItem and ToDoItemRepository (in the dom module)
+  * open up <<<ToDoItem>>> and <<<ToDoItemRepository>>> (in the dom module)
   
-  * open up ToDoItemsFixture (in the fixture module)
+  * open up <<<ToDoItemsFixture>>> (in the fixture module)
   
     This is used to initialize the in-memory object store between runs.
     
-  * open up ToDoItemRepositoryDefault (in the objstore-dflt module)
+  * open up <<<ToDoItemRepositoryDefault>>> (in the objstore-dflt module)
   
     This is an implementation of the repository that delegates to the in-memory 
     object store
     
-  * open up the isis.properties file, used to bootstrap Isis.
+  * open up the <<<isis.properties>>> file, used to bootstrap Isis.
   
-    You'll find this file either in config/ directory (for the quickrun module)
-    or in the WEB-INF directory (for the webapp viewers).
+    You'll find this file either in <<<src/main/resources>>> directory (for the quickrun module)
+    or in the <<<WEB-INF>>> directory (for the webapp viewers).
     
-    The two most important items in this file are the isis.services key and the 
-    isis.fixtures keys; the former points to the repository(s) implementation, 
+    The two most important items in this file are the <isis.services> key and the 
+    <isis.fixtures> keys; the former points to the repository(s) implementation, 
     the latter to the fixture(s) data.
 
   []
     
-Running the app using the DnD viewer (quickrun module)
+Running the app from the IDE
 
-  To run the application using the {{{./viewer/dnd/index.html}DnD viewer}}, go 
-  to the quickrun/ide/eclipse/launch directory and then use
-  Run As > quickstart_quickrun_dnd.launch.
-  
-  Note: <the archetype currently does not provide an out-of-the-box launch
-  configuration for other IDEs.  However, if you open the Eclipse .launch file 
-  you'll see that all we are doing is running org.apache.isis.Isis with some 
+  The archetype provides a number of <<<.launch>>> configuration files for Eclipse, making it
+  easy to launch the application - with different viewers.
+  using the DnD viewer (quickrun module)
+
+  The archetype currently does not provide equivalent configuration for other IDEs.  
+  However, if you open the Eclipse .launch file 
+  you'll see that all we are doing is running <<<org.apache.isis.Isis>>> with some 
   command line arguments, so hopefully this is easy enough to reproduce in
-  other IDEs>. 
+  other IDEs.  Alternatively, you can use those IDE's in-built support for Maven
+  and have them execute the same Maven goals as documented above for running from
+  the command-line.  
 
-Running the app using the HTML viewer (quickrun / viewer-html modules)
+  To run each of the viewers in Eclipse:
+  
+  * to run the DnD viewer,
+  
+    go to the <<<quickrun/ide/eclipse/launch>>> directory and then use
+    Run As > quickstart_quickrun_dnd.launch.
+  
+  * to run the HTML viewer,
+  
+    either:
 
-  The application can also be run using the {{{./viewer/html/index.html}HTML viewer}},
-  which provides a basic, non-customizable web view.  This can be run either:
-  
-  * from the quickrun module's ide/eclipse/launch directory, using 
-    Run As > quickstart_quickrun_html.launch.
+    * go to the quickrun module's ide/eclipse/launch directory, and then use 
+      Run As > quickstart_quickrun_html.launch.
     
-    Then browse to {{{http://localhost:8080/logon.app}http://localhost:8080/logon.app}}
+      Then browse to {{{http://localhost:8080/logon.app}http://localhost:8080/logon.app}}
     
-  * from the viewer-html module, using the configured web.xml.  The app can
-    then be run using any of the following:
-  
-    * using viewer-html/ide/eclipse/launch/quickstart-viewer-html.launch.  Note
-      that this isn't the same as the quickrun module's, because it invokes
-      a different class (org.apache.isis.WebServer rather than 
+    * go to the viewer-html module's ide/eclipse/launch directory, and then use
+      Run As > quickstart-viewer-html.launch.
+      
+      Note that this isn't the same as the quickrun module's, because it invokes
+      a different class (<<<org.apache.isis.WebServer>>> rather than 
       org.apache.isis.Isis).
     
-    * mvn jetty:run 
-    
-    * using your IDE's webmodule support (eg Eclipse's WTP support lets the 
-      application be run using Run As > Run On Server)
+    * go to the viewer-html module, and use Eclipse's WTP support to run using Run As > Run On Server.
+
+    * go to the viewer-html module, and run the <<<mvn jetty:run>>> goal (as provided by the M2Eclipse plugin)
       
     []
   
-    Then browse to {{{http://localhost:8080/myapp-quickviewer-html}http://localhost:8080/myapp-quickviewer-html}}
-    (where 'myapp' is the artifactId that you entered when generating the app).
+  * to run the Restful viewer,
 
-Running the app using the Scimpi viewer (viewer-scimpi module)
+    either:
 
-  The application can also be run using the {{{./viewer/scimpi/index.html}Scimpi viewer}}.
-  This exposes the domain model as a webapp.  Like all Isis viewers, a default
-  view is provided but each object's view can be customized using a set of tags
-  if required.  
-
-  The Scimpi viewer is run from the viewer-scimpi module, using the configured 
-  web.xml.  As for the other webapps, it can be run using the Eclipse .launch 
-  file, using jetty:run or using your IDE's webmodule support (eg Eclipse WTP).
+    * go to the quickrun module's ide/eclipse/launch directory, and then use 
+      Run As > quickstart_quickrun_restful.launch.
     
-  When started, browse to {{{http://localhost:8080/myapp-quickviewer-scimpi}http://localhost:8080/myapp-quickviewer-scimpi}}
-  (where 'myapp' is the artifactId that you entered when generating the app).
-
-Running the app using the Wicket viewer (viewer-wicket module)
-
-  The application can also be run using the {{{./viewer/wicket/index.html}Wicket viewer}}.
-  This exposes the domain model as a webapp, using 
-  {{{http://wicket.apache.org}Apache Wicket}} as the enabling web framework.  
-  Like all Isis viewers, a default view is provided, but each object's view can
-  be customized using custom Wicket components if required.  
-
-  The Wicket viewer is run from the viewer-wicket module, using the configured 
-  web.xml.  As for the other webapps, it can be run using the Eclipse .launch 
-  file, using jetty:run or using your IDE's webmodule support (eg Eclipse WTP).
+      Then browse to {{{http://localhost:8080}http://localhost:8080/}}
     
-  When started, browse to http://localhost:8080/myapp-quickviewer-wicket (where 
-  'myapp' is the artifactId that you entered when generating the app).
-  
-Running the app using the RESTful viewer (quickrun / viewer-restful modules)
+    * go to the viewer-restful module's ide/eclipse/launch directory, and then use
+      Run As > quickstart-viewer-restful.launch.
+      
+    * go to the viewer-restful module, and use Eclipse's WTP support to run using Run As > Run On Server.
 
-  The application can also be run using the {{{./viewer/restful/index.html}RESTful viewer}}.
-  This exposes the domain model as a set of resources, in XHTML format.  This
-  means that the RESTful resources can be consumed directly by a browser as
-  well as by a custom RESTful client.
-
-  The RESTful viewer can be run either:
-  
-  * from the quickrun module's ide/eclipse/launch directory, using 
-    Run As > quickstart_quickrun_html.launch.
-    
-    Then browse to {{{http://localhost:8080/}http://localhost:8080/}}
-    
-  * from the viewer-restful module, using the configured web.xml.  
-  
-    As for the other webapps, it can be run using the Eclipse .launch file,
-    using jetty:run or using your IDE's webmodule support (eg Eclipse WTP).
-    
-    Then browse to {{{http://localhost:8080/myapp-quickviewer-restful}http://localhost:8080/myapp-quickviewer-restful}} (where 
-    'myapp' is the artifactId that you entered when generating the app).
-    
+    * go to the viewer-restful module, and run the <<<mvn jetty:run>>> goal 
+      
     []
   
-  []
-  
-  Note: <only firefox is currently supported as a RESTful client.  HTTP PUTs
-  and DELETEs are supported using a small amount of Javascript>.
-  
+  * to run the Scimpi viewer,
 
-Running the domain object tests under JUnit (tests-junit module)
+    either:
 
-  Isis provides the means to test domain object logic using a 
-  {{{./viewer/junit/index.html}custom runner}} for {{{http://junit.org}JUnit}}.
-  
-  The tests are in the tests-junit module and can be run using your IDE's
-  JUnit support.  Alternatively, use 'mvn test'.
-  
+    * go to the viewer-scimpi module's ide/eclipse/launch directory, and then use
+      Run As > quickstart-viewer-scimpi.launch.
+      
+    * go to the viewer-scimpi module, and use Eclipse's WTP support to run using Run As > Run On Server.
 
-Running the domain object tests under Concordion (tests-bdd module)
+    * go to the viewer-scimpi module, and run the <<<mvn jetty:run>>> goal
+      
+    []
+  
+  * to run the Wicket viewer,
 
-  Isis provides the means to test domain object logic using an 
-  {{{./viewer/bdd/index.html}integration}} with the
-  {{{http://concordion.org}Concordion}} BDD framework.
+    either:
+
+    * go to the viewer-wicket module's ide/eclipse/launch directory, and then use
+      Run As > quickstart-viewer-wicket.launch.
+      
+    * go to the viewer-wicket module, and use Eclipse's WTP support to run using Run As > Run On Server.
+
+    * go to the viewer-wicket module, and run the <<<mvn jetty:run>>> goal
+      
+    []
+
+  * to run the JUnit tests,
   
-  Concordion tests are written as XHTML; the Concordion framework then uses
-  annotations within the XHTML to call into (what Concordion calls) "fixture" 
-  code, written in Java.  The tests can be found in 
-  src/test/resources/viewer/bdd/stories (in the tests-bdd module).   
-  
-  Normally the developer would need to write the fixtures called by Concordion.  
-  The Isis integration however provides these fixtures already, so using
-  BDD testing in Concordion/Isis amounts to annotating the XHTML to call the
-  pre-defined fixtures (eg to invoke an action or check the value of a 
-  property). 
-  
-  Concordion itself integrates with JUnit, so the tests are run just by
-  using your IDE's JUnit support.  Alternatively, use 'mvn test'.
-  
-  Once the tests have run output for the tests will be generated in 
-  /tmp/concordion/viewer/bdd/stories.  These will be marked up versions of the 
-  the original scenarios.
+    either:
     
+    * go to the tests-junit module and use Eclipse's built-in JUnit support to run the tests
+
+    * go to the tests-junit module and run the <<<mvn test goal>>>
+  
+  * to run the BDD (Concordion) tests,
+  
+    either:
+    
+    * go to the tests-bdd module and use Eclipse's built-in JUnit support to run the tests
+    
+      open the console view to see the location of the generated HTML.
+
+    * go to the tests-bdd module and run the <<<mvn test goal>>>
+  
+    []
+    
+  []

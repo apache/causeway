@@ -20,7 +20,7 @@
 package org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.maxlength.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacetAbstract;
 
 public class MaxLengthFacetAnnotationForProperty extends MaxLengthFacetAbstract {
 

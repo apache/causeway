@@ -21,7 +21,7 @@ package org.apache.isis.viewer.html;
 
 import org.apache.isis.core.commons.lang.MapUtils;
 import org.apache.isis.core.webapp.content.ResourceServlet;
-import org.apache.isis.core.webapp.content.StaticContentFilter;
+import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.runtimes.dflt.runtime.Isis;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
@@ -71,7 +71,7 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
                 webAppSpec.addServletSpecification(LogonServlet.class, LOGON_PAGE_MAPPED);
                 webAppSpec.addServletSpecification(ControllerServlet.class, DYNAMIC_CONTENT);
 
-                webAppSpec.addFilterSpecification(StaticContentFilter.class, MapUtils.asMap("CacheTime", "86400"),
+                webAppSpec.addFilterSpecification(ResourceCachingFilter.class, MapUtils.asMap("CacheTime", "86400"),
                     STATIC_CONTENT);
                 webAppSpec.addServletSpecification(ResourceServlet.class, STATIC_CONTENT);
 

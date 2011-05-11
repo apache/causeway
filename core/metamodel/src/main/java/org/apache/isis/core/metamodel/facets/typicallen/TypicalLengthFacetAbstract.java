@@ -17,23 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.maxlength;
+package org.apache.isis.core.metamodel.facets.typicallen;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-/**
- * Whether the (string) property or a parameter's length must not exceed a certain length.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to the <tt>@MaxLength</tt> annotation.
- */
-public interface MaxLengthFacet extends SingleIntValueFacet, ValidatingInteractionAdvisor {
+public abstract class TypicalLengthFacetAbstract extends FacetAbstract implements TypicalLengthFacet {
 
-    /**
-     * Whether the provided string exceeds the maximum length.
-     */
-    public boolean exceeds(ObjectAdapter adapter);
+    public static Class<? extends Facet> type() {
+        return TypicalLengthFacet.class;
+    }
+
+    public TypicalLengthFacetAbstract(final FacetHolder holder, final boolean derived) {
+        super(type(), holder, false);
+    }
+
+    @Override
+    public abstract int value();
+
+    @Override
+    protected String toStringValues() {
+        final int val = value();
+        return val == 0 ? "default" : String.valueOf(val);
+    }
 
 }

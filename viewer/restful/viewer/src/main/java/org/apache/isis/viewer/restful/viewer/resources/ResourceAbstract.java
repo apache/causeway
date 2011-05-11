@@ -135,7 +135,7 @@ public abstract class ResourceAbstract {
         final Element div = xhtmlRenderer.div_p("Logged in as", null);
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.SESSION);
-        ul.appendChild(xhtmlRenderer.li_a("/user", getSession().getUserName(), "user", "resource", HtmlClass.USER));
+        ul.appendChild(xhtmlRenderer.li_a("user", getSession().getUserName(), "user", "resource", HtmlClass.USER));
         div.appendChild(ul);
 
         return div;
@@ -146,10 +146,10 @@ public abstract class ResourceAbstract {
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.RESOURCES);
 
-        ul.appendChild(xhtmlRenderer.li_a("/services", "Services", "services", "resources", HtmlClass.RESOURCE));
-        ul.appendChild(xhtmlRenderer.li_a("/specs", "Specifications (MetaModel)", "specs", "resources",
+        ul.appendChild(xhtmlRenderer.li_a("services", "Services", "services", "resources", HtmlClass.RESOURCE));
+        ul.appendChild(xhtmlRenderer.li_a("specs", "Specifications (MetaModel)", "specs", "resources",
             HtmlClass.RESOURCE));
-        ul.appendChild(xhtmlRenderer.li_a("/user", "User (Security)", "user", "resources", HtmlClass.RESOURCE));
+        ul.appendChild(xhtmlRenderer.li_a("user", "User (Security)", "user", "resources", HtmlClass.RESOURCE));
 
         div.appendChild(ul);
         return div;

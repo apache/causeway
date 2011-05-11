@@ -542,7 +542,7 @@
         above.</para>
       </sect2>
 
-      <sect2>
+      <sect2 id="sec.TheViewerRestfulModule">
         <title>The Viewer-Restful Module</title>
 
         <para>Although the <emphasis>quickrun</emphasis> module is convenient
@@ -608,9 +608,21 @@
           <para>An <emphasis>Isis</emphasis> session is required in order for
           the <emphasis>restful viewer</emphasis> to interact with the
           <emphasis>Isis</emphasis> runtime and interrogate the
-          metamodel/retrieve domain objects. This is accomplished through the
-          <classname>IsisSessionFilter</classname> (defined in the default
-          runtime, <package>[oai.runtimes.dflt:webapp]</package>):</para>
+          metamodel/retrieve domain objects.</para>
+
+          <para>The first part of the required configuration is to set up an
+          <emphasis>Isis</emphasis> "context"; basically a set of factories
+          that are used to create a session for each subsequent request. This
+          is done using a context listener (defined in the <emphasis>default
+          runtime</emphasis>,
+          <package>[oai.runtimes.dflt:webapp]</package>):</para>
+
+          <programlisting>&lt;listener&gt;
+  &lt;listener-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper&lt;/listener-class&gt;
+&lt;/listener&gt;</programlisting>
+
+          <para>The session is created for each request using the
+          <classname>IsisSessionFilter</classname>:</para>
 
           <programlisting>&lt;filter&gt;
   &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
@@ -2693,19 +2705,38 @@ public interface UserResource {
 
     <para>At some point you'll presumably want to deploy your domain object
     using <emphasis>restful viewer</emphasis> as a webapp. The quickstart
-    archetype already sets up the viewer-restful module that will generate a
-    WAR file; however, you may want to adjust its configuration in terms of
-    two areas: authentication, and persistence. This chapter discusses these
-    points.</para>
+    archetype already sets up the <package>viewer-restful</package> module
+    that will generate a <acronym>WAR</acronym> file; however, you may want to
+    adjust its configuration in terms of two areas: authentication, and
+    persistence. This chapter discusses these points.</para>
 
-    <para></para>
+    <para><note>
+        <para>These instructions assume that the restful viewer is being
+        deployed using the <emphasis>default runtime</emphasis>
+        <package>(oai.runtimes:dflt)</package>. At the time of writing this is
+        the only runtime available; in the future there may be other runtimes
+        which will have their own specific deployment requirements</para>
+      </note></para>
 
-    <para>*** hmmm... just discovered two versions of IsisSessionFilter... one
-    in </para>
+    <sect1 id="sec.DeploymentType">
+      <title>Deployment Modes</title>
 
-    <para></para>
+      <para>By default the <classname>IsisWebAppBootstrapper</classname>
+      context listener (described in <xref
+      linkend="sec.TheViewerRestfulModule" />) will bootstrap Isis in the
+      "SERVER" deployment type. This means that an authentication is required,
+      that the sessions will be bound as thread-locals, and that the
+      persistence mechanism will be defaulted appropriately.</para>
 
-    <para></para>
+      <para>The deployment type can be changed to other settings, though; most
+      notably you may wish to change to SERVER_EXPLORATION or
+      SERVER_PROTOTYPE. This is done using a context parameter:</para>
+
+      <programlisting>&lt;context-param&gt;
+  &lt;param-name&gt;deploymentType&lt;/param-name&gt;
+  &lt;param-value&gt;SERVER_EXPLORATION&lt;/param-value&gt;
+&lt;/context-param&gt;</programlisting>
+    </sect1>
 
     <sect1 id="sec.Authentication">
       <title>Authentication</title>
@@ -2721,20 +2752,21 @@ public interface UserResource {
       <para>The <emphasis>restful viewer</emphasis> therefore uses
       <emphasis>Isis</emphasis>' own authentication mechanism, with
       authentication performed for each RESTful call. What this means depends
-      on the deploymentType:</para>
+      on the deployment type (see <xref
+      linkend="sec.DeploymentType" />):</para>
 
       <itemizedlist>
         <listitem>
           <para>if running in SERVER_EXPLORATION mode, then authentication is
-          in effect switched off; no credentials are supplied, and Naked
-          Objects will use the first exploration user defined in
-          nakedobjects.properties, or a fallback "exploration" user
-          otherwise</para>
+          in effect switched off; no credentials are supplied, and the
+          framework will use the first exploration user defined in
+          <emphasis>isis.properties</emphasis>, or a fallback "exploration"
+          user otherwise</para>
 
           <para>For example, if running in SERVER_EXPLORATION mode, then you
           can specify the user using:</para>
 
-          <programlisting>nakedobjects.exploration.users=sven:role1, dick:role2, bob:role1|role2</programlisting>
+          <programlisting>isis.exploration.users=sven:role1, dick:role2, bob:role1|role2</programlisting>
         </listitem>
 
         <listitem>
@@ -2750,8 +2782,8 @@ public interface UserResource {
         supports multiple concurrent users.</para>
       </note>
 
-      <para>Calling Restful Objects in SERVER mode with no credentials will
-      result in an exception:</para>
+      <para>Running the Restful Objects in SERVER mode with no credentials
+      will result in an exception:</para>
 
       <screenshot>
         <screeninfo>Server mode, no credentials</screeninfo>
@@ -2782,44 +2814,87 @@ public interface UserResource {
 
       <itemizedlist>
         <listitem>
-          <para><classname>NakedObjectsSessionFilter</classname> uses the
+          <para><classname>IsisSessionFilter</classname> uses the
           <varname>authenticationManagerLookupStrategy</varname> property to
           specify a strategy for both finding credentials and for validating
-          them against the Naked Objects authentication manager.</para>
+          them against the <emphasis>Apache Isis</emphasis> authentication
+          manager.</para>
 
-          <para>The implementation provided by <emphasis>Restful
-          Objects</emphasis> -
-          <classname>AuthenticationSessionLookupStrategyExtended</classname>
-          in the package
+          <para>The <emphasis>restful viewer</emphasis> provides two
+          additional implementations of this that you can use:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The
+              <classname>oai.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyParams</classname>
+              implementation extends the default behaviour by also looking up
+              credentials using the username and password parameters. Once
+              validated, it also binds the results to the
+              <classname>HttpSession</classname> so that future interactions
+              do not credentials.</para>
+            </listitem>
+
+            <listitem>
+              <para>The
+              <classname>oai.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</classname>
+              implementation ensures that an (exploration) session is always
+              present (if a session isn't available from the default
+              implementation).</para>
+            </listitem>
+          </itemizedlist>
+
+          <para> -
+          <classname>AuthenticationSessionLookupStrategyParams</classname> in
+          the package
           <classname>org.starobjects.restful.viewer.authentication</classname>
-          - is responsible for looking up credentials using the username and
-          password parameters. Once validated, it also binds the results to
-          the <classname>HttpSession</classname> so that future interactions
-          do not credentials.</para>
+          - </para>
+
+          <para>In both cases these can be configured using:</para>
+
+          <programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
+    &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;</programlisting>
         </listitem>
 
         <listitem>
-          <para>If you lookup strategy implementation delegates to the Naked
-          Objects authentication manager (recommended), you might also want to
-          change the Naked Objects'
-          <classname>AuthenticationManager</classname> implementation itself.
-          This is done using the
-          <varname>nakedobjects.authentication</varname> key in
-          <filename>nakedobjects.properties</filename>:</para>
+          <para>Alternatively, you can change the implementation of
+          <classname>AuthenticationManager</classname> that
+          <emphasis>Isis</emphasis>' delegates to. This is done using the
+          <varname>isis.authentication</varname> key in
+          <filename>isis.properties</filename>:</para>
 
-          <programlisting>isis.authentication=com.mycompany.nakedobjects.authentication.MyAuthenticationManagerInstaller</programlisting>
+          <programlisting>isis.authentication=com.mycompany.isis.authentication.MyAuthenticationManagerInstaller</programlisting>
         </listitem>
       </itemizedlist>
 
       <para>In the future there will doubtless be standardized (WS-* style)
       approaches for RESTful authenticatication, but the above should provide
       enough flexibility in the meantime.</para>
+
+      <note>
+        <para>Note that the archetype explicitly specifies the authentication
+        mechanism as no-op.</para>
+      </note>
     </sect1>
 
     <sect1>
       <title>Runtime / Persistence</title>
 
-      <para></para>
+      <para>The persistence mechanism (aka object store) is determined using
+      isis.persistence key in isis.properties. For example, to use the XML
+      object store, you would specify:</para>
+
+      <programlisting>isis.persistor=xml</programlisting>
+
+      <para><note>
+          <para>Note that the archetype explicitly specifies the object store
+          as in-memory.</para>
+        </note></para>
     </sect1>
   </chapter>
 </book>

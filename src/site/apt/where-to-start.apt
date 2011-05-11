@@ -27,11 +27,13 @@ Where to Start?
 mvn archetype:generate  \
     -D archetypeCatalog=http://incubator.apache.org/isis \
     -D archetypeGroupId=org.apache.isis.support \
-    -D archetypeArtifactId=quickstart-archetype
+    -D archetypeArtifactId=quickstart-archetype \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp
 
 +------------------------------------------------------------
 
-  The {{{./quickstart-app.html}quickstart app}} page has an overview 
+  The {{{./quickstart-app.html}quickstart app}} page has more detail 
   of the generated application and how to run it.
 
   Note: <currently the archetype is only available from the Apache snapshot
@@ -58,16 +60,11 @@ Documentation
   
   After that, you probably should look through the {{{./core/docbkx/pdf/isis-core.pdf}core}}
   documentation.  This provides more detail on the design and architecture of Isis, along
-  with the key APIs.  It also describes how to deploy your application in various configurations
-  (webapp, standalone or client/server).
+  with the key APIs.
   
-  Once you have an understanding of those APIs, you may want to start using customizing the
-  {{{./default}default}} implementations (where supported), or start to use some of the 
-  {{{./alternative}alternative}} implementations.  The alternative implementations tend to be
-  more sophisticated and offer more in the way of customization.  In either case, you'll find 
-  the information you need in the user guides for each of the components.
-  
-  The documentation for all of the components is listed {{{./documentation.html}here}}.
+  Once you have an understanding of those APIs, you'll probably want to delve into individual
+  implementations of the APIs, such as the programming model, security, viewers or the
+  runtime (persistence).  You'll find documentation for all of these components {{{./documentation.html}here}}.
   
 What Else is There?  
   
@@ -76,7 +73,7 @@ What Else is There?
     
   In the future, we also hope to provide a selection of off-the-shelf domain 
   services and value types integrations for you to reuse; these will be hosted
-  within the {{{./support/domain/index.html}domain}} library. (Until then, why 
+  within a "domain" library. (Until then, why 
   not contribute some of your own ? ;-).
 
    

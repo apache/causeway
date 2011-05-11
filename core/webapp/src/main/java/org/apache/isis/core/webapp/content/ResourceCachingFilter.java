@@ -43,8 +43,8 @@ import javax.servlet.http.HttpServletResponse;
  * Usage:
  * <pre>
  * &lt;filter>
- *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
- *   &lt;filter-class>org.apache.isis.core.webapp.content.StaticContentFilter&lt;/filter-class>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter&lt;/filter-class>
  *   &lt;init-param>
  *     &lt;param-name>CacheTime&lt;/param-name>
  *     &lt;param-value>86400&lt;/param-value>
@@ -52,28 +52,28 @@ import javax.servlet.http.HttpServletResponse;
  * &lt;/filter>
  * ...
  * &lt;filter-mapping>
- *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.js&lt;/url-pattern>
  * &lt;/filter-mapping>
  * &lt;filter-mapping>
- *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.css&lt;/url-pattern>
  * &lt;/filter-mapping>
  * &lt;filter-mapping>
- *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.jpg&lt;/url-pattern>
  * &lt;/filter-mapping>
  * &lt;filter-mapping>
- *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.png&lt;/url-pattern>
  * &lt;/filter-mapping>
  * &lt;filter-mapping>
- *   &lt;filter-name>StaticContentFilter&lt;/filter-name>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.gif&lt;/url-pattern>
  * &lt;/filter-mapping>
  * </pre>
  */
-public class StaticContentFilter implements Filter {
+public class ResourceCachingFilter implements Filter {
 
     /**
      * The Constant MILLISECONDS_IN_SECOND.

@@ -3,11 +3,11 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-    <display-name>Naked Objects HTML Viewer</display-name>
+    <display-name>Apache Isis HTML Viewer</display-name>
 
 	<filter>
-		<filter-name>NakedObjectsSessionFilter</filter-name>
-		<filter-class>org.nakedobjects.webapp.NakedObjectsSessionFilter</filter-class>
+		<filter-name>IsisSessionFilter</filter-name>
+		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
 		<init-param>
 			<param-name>logonPage</param-name>
 			<param-value>/logon.app</param-value>
@@ -15,8 +15,8 @@
 	</filter>
 
 	<filter>
-		<filter-name>StaticContentFilter</filter-name>
-		<filter-class>org.nakedobjects.webapp.StaticContentFilter</filter-class>
+		<filter-name>ResourceCachingFilter</filter-name>
+		<filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
 		<init-param>
 			<param-name>CacheTime</param-name>
 			<param-value>86400</param-value>
@@ -24,44 +24,44 @@
 	</filter>
 
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.css</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.jpg</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.gif</url-pattern>
 	</filter-mapping>
     
     <filter-mapping>
-    	<filter-name>NakedObjectsSessionFilter</filter-name>
+    	<filter-name>IsisSessionFilter</filter-name>
     	<url-pattern>*.app</url-pattern>
     </filter-mapping>
 
     <listener>
-        <listener-class>org.nakedobjects.webapp.NakedObjectsWebAppBootstrapper</listener-class>
+        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
     <servlet>
         <servlet-name>Logon</servlet-name>
-        <servlet-class>org.nakedobjects.plugins.html.servlet.LogonServlet</servlet-class>
+        <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>Controller</servlet-name>
-        <servlet-class>org.nakedobjects.plugins.html.servlet.ControllerServlet</servlet-class>
+        <servlet-class>org.apache.isis.viewer.html.servlet.ControllerServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>Resource</servlet-name>
-        <servlet-class>org.nakedobjects.webapp.servlets.ResourceServlet</servlet-class>
+        <servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

@@ -57,7 +57,7 @@ public class IsisSessionFilter implements Filter {
     public static final String LOGON_PAGE_KEY = "logonPage";
 
     private AuthenticationSessionLookupStrategy authSessionLookupStrategy;
-    private String redirectResourceIfNoSession;
+    private String logonPageIfNoSession;
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -79,7 +79,7 @@ public class IsisSessionFilter implements Filter {
     }
 
     private void lookupRedirectIfNoSessionKey(final FilterConfig config) {
-        redirectResourceIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
+        logonPageIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
     }
 
     @Override
@@ -100,9 +100,9 @@ public class IsisSessionFilter implements Filter {
         // forward/redirect as required
         final AuthenticationSession authSession = authSessionLookupStrategy.lookup(request, response);
         if (!isValid(authSession)) {
-            if (redirectResourceIfNoSession != null
-                && !redirectResourceIfNoSession.equals(httpRequest.getServletPath())) {
-                httpResponse.sendRedirect(redirectResourceIfNoSession);
+            if (logonPageIfNoSession != null
+                && !logonPageIfNoSession.equals(httpRequest.getServletPath())) {
+                httpResponse.sendRedirect(logonPageIfNoSession);
             } else {
                 // the destination servlet is expected to know that there
                 // will be no open context

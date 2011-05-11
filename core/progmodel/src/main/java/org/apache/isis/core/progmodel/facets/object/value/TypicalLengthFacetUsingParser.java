@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.value;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {

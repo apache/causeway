@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
 public class MemberOrderAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 

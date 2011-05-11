@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.typicallength;
+package org.apache.isis.core.metamodel.facets.typicallen;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 

@@ -27,22 +27,31 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 
+import com.google.common.base.Strings;
+
 /**
- * Looks up from the {@link HttpSession}, failing that attempts to logon using a {@link LogonFixture} (if available and
- * not already used) or in exploration mode.
+ * Returns a valid AuthenticationSession through a number of mechanisms.
  * 
  * <p>
- * The {@link AuthenticationSession} is looked up from the {@link HttpSession} using the value
- * {@value WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}. Because we only want to use the
- * {@link LogonFixture} once, the {@link HttpSession} also stores the value
- * {@value WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY} once a logon has occurred
- * implicitly.
+ * Specifically:
+ * <ul>
+ * <li>it looks up from the {@link HttpSession} using the value
+ * {@value WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
+ * <li>failing that, if in exploration mode, then returns an exploration session</li>
+ * <li>failing that, if a {@link LogonFixture} has been provided and not already used,
+ * will provide an session for that fixture.  The {@link HttpSession} also stores the value
+ * {@value WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY} in the session
+ * to track whether this has been done</li>
+ * </ul> 
+ * <p>
  */
 public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSessionLookupStrategyAbstract {
 
@@ -83,7 +92,7 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
             httpSession.setAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY, true);
             return getAuthenticationManager().authenticate(new AuthenticationRequestLogonFixture(logonFixture));
         }
-
+        
         return null;
     }
 

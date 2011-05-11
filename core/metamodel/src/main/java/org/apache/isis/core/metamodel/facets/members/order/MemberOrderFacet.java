@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.member.ordering;
+package org.apache.isis.core.metamodel.facets.members.order;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.core.metamodel.facets.object.orderactions.ActionOrderFacet;

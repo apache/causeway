@@ -24,8 +24,8 @@
 	</filter>
 
 	<filter>
-		<filter-name>StaticContentFilter</filter-name>
-		<filter-class>org.apache.isis.core.webapp.content.StaticContentFilter</filter-class>
+		<filter-name>ResourceCachingFilter</filter-name>
+		<filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
 		<init-param>
 			<param-name>CacheTime</param-name>
 			<param-value>86400</param-value>
@@ -33,19 +33,19 @@
 	</filter>
 
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.css</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.jpg</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>StaticContentFilter</filter-name>
+		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.gif</url-pattern>
 	</filter-mapping>
     

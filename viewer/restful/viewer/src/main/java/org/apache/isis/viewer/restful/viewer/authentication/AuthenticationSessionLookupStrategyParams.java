@@ -27,6 +27,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 
+import com.google.common.base.Strings;
+
 public class AuthenticationSessionLookupStrategyParams extends AuthenticationSessionLookupStrategyDefault {
 
     @Override
@@ -40,7 +42,7 @@ public class AuthenticationSessionLookupStrategyParams extends AuthenticationSes
         final String user = httpServletRequest.getParameter("user");
         final String password = httpServletRequest.getParameter("password");
 
-        if (user == null || password == null) {
+        if (Strings.isNullOrEmpty(user) || Strings.isNullOrEmpty(password)) {
             return null;
         }
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword(user, password);

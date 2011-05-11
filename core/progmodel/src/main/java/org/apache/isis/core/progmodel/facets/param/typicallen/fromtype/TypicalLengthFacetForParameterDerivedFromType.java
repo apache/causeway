@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.param.typicallen.fromtype;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetForParameterDerivedFromType extends TypicalLengthFacetAbstract {
 
