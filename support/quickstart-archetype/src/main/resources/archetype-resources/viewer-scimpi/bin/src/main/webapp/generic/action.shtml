@@ -1,8 +1,0 @@
-<swf:page-title>Action <swf:action-name method="${method}"/></swf:page-title>
-<swf:template  file="../style/template.shtml" />
-
-<h2>${title}</h2>
-<swf:action-form method="${method}" view="_generic.shtml"/>
-
-
-
