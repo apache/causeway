@@ -105,7 +105,7 @@ public class TableView extends AbstractTableView {
             final String[] columnHeaders = headers;
             for (final String columnHeader : columnHeaders) {
                 if (columnHeader != null) {
-                    writer.appendHtml("<th>" + columnHeader);
+                    writer.appendHtml("<th>");
                     writer.appendAsHtmlEncoded(columnHeader);
                     writer.appendHtml("</th>");
                 }
