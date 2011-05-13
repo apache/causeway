@@ -87,14 +87,13 @@ def license_using_hash_comments="""#  Licensed to the Apache Software Foundation
 """
 
 
-def fileEndings = ["pom.xml"]
+def fileEndings = [".xml"]
 //def fileEndings = [".xml", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords"]
 
 def licenseTextByFileEnding = [
 	".java": license_using_c_style_comments,
 	".groovy": license_using_c_style_comments,
 	".css": license_using_c_style_comments,
-    "pom.xml": license_using_xml_comments,
 	".xml": license_using_xml_comments,
     ".shtml": license_using_xml_comments,
 	".properties": license_using_hash_comments,
@@ -109,8 +108,9 @@ def currentDir = new File(".");
 
 currentDir.eachFileRecurse { file ->
   fileEndings.each { fileEnding ->
-    if (! (file.canonicalPath =~ /[\\\/]target[\\\/]/) && 
-        ! (file.canonicalPath =~ /[\\\/]docbkx[\\\/]/)    ) {
+    if (! (file.canonicalPath =~ /[\\\/]target[\\\/]/)     && 
+        ! (file.canonicalPath =~ /[\\\/]docbkx[\\\/]/)     &&   {
+        ! (file.canonicalPath =~ /[\\\/]\.settings[\\\/]/)    ) {
       if (file.name.endsWith(fileEnding)) {
         def fileText = file.text;
 
