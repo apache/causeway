@@ -88,13 +88,14 @@ def license_using_hash_comments="""#  Licensed to the Apache Software Foundation
 
 
 def fileEndings = [".xml"]
-//def fileEndings = [".xml", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords"]
+//def fileEndings = [".xml", ".html", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords"]
 
 def licenseTextByFileEnding = [
 	".java": license_using_c_style_comments,
 	".groovy": license_using_c_style_comments,
 	".css": license_using_c_style_comments,
 	".xml": license_using_xml_comments,
+    ".html": license_using_xml_comments,
     ".shtml": license_using_xml_comments,
 	".properties": license_using_hash_comments,
     ".allow": license_using_hash_comments,
@@ -115,12 +116,14 @@ currentDir.eachFileRecurse { file ->
         def fileText = file.text;
 
         def hasLicense = fileText.find(".*http://www.apache.org/licenses/LICENSE-2.0.*")
+
         if(hasLicense == null) {
 
           println file.canonicalPath
 
-          // special handling for xml ... remove pragma if present
-          if (fileEnding.endsWith(".xml")) {
+          // remove pragma if present
+          def hasPragma = fileText.find("^\\<\\?xml.*")
+          if (hasPragma) {
             def sw = new StringWriter()
             file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
             fileText = sw.toString()
