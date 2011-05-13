@@ -15,10 +15,8 @@
  * limitations under the License.
  */
 
-def cli = new CliBuilder( usage: 'groovy replace [-xv]')
-cli.x(argName: 'exec', longOpt: 'exec', 'execute (perform changes if any found)'
-)
-cli.v(argName: 'verbose', longOpt: 'verbose', 'verbose')
+def cli = new CliBuilder( usage: 'groovy addmissinglicenses [-x]')
+cli.x(argName: 'exec', longOpt: 'exec', 'execute (perform changes if any found)')
 
 def options=cli.parse(args)
 
@@ -88,15 +86,19 @@ def license_using_hash_comments="""#  Licensed to the Apache Software Foundation
 """
 
 
-//def fileEndings = [".java"]
-def fileEndings = [".xml", ".css", ".java", ".sh", ".properties", ".groovy"]
+def fileEndings = ["pom.xml"]
+//def fileEndings = [".xml", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords"]
 
 def licenseTextByFileEnding = [
 	".java": license_using_c_style_comments,
 	".groovy": license_using_c_style_comments,
 	".css": license_using_c_style_comments,
+    "pom.xml": license_using_xml_comments,
 	".xml": license_using_xml_comments,
+    ".shtml": license_using_xml_comments,
 	".properties": license_using_hash_comments,
+    ".allow": license_using_hash_comments,
+    ".passwords": license_using_hash_comments,
 	".sh": license_using_hash_comments,
 	]
 
@@ -106,22 +108,20 @@ def currentDir = new File(".");
 
 currentDir.eachFileRecurse { file ->
   fileEndings.each { fileEnding ->
-    if (! (file.canonicalPath =~ /[\\\/]target[\\\/]/)) {
+    if (! (file.canonicalPath =~ /[\\\/]target[\\\/]/) && 
+        ! (file.canonicalPath =~ /[\\\/]docbkx[\\\/]/)    ) {
       if (file.name.endsWith(fileEnding)) {
         def fileText = file.text;
 
         def matchingText = fileText.find(".*Licensed to the Apache Software Foundation.*")
         if(matchingText == null) {
 
-          if(options.v || ! options.x) {
-            println file.canonicalPath
-          }
+          println file.canonicalPath
 
           if(options.x) {
             file.write(licenseTextByFileEnding[fileEnding])
             file.append(fileText)
           }
-
         }
       }    
     }
