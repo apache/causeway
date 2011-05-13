@@ -87,7 +87,7 @@ def license_using_hash_comments="""#  Licensed to the Apache Software Foundation
 """
 
 
-def fileEndings = [".html"]
+def fileEndings = [".shtml"]
 //def fileEndings = [".xml", ".html", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords"]
 
 def licenseTextByFileEnding = [
