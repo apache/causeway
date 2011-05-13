@@ -109,7 +109,7 @@ def currentDir = new File(".");
 currentDir.eachFileRecurse { file ->
   fileEndings.each { fileEnding ->
     if (! (file.canonicalPath =~ /[\\\/]target[\\\/]/)     && 
-        ! (file.canonicalPath =~ /[\\\/]docbkx[\\\/]/)     &&   {
+        ! (file.canonicalPath =~ /[\\\/]docbkx[\\\/]/)     &&  
         ! (file.canonicalPath =~ /[\\\/]\.settings[\\\/]/)    ) {
       if (file.name.endsWith(fileEnding)) {
         def fileText = file.text;
