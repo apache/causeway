@@ -114,7 +114,7 @@ currentDir.eachFileRecurse { file ->
       if (file.name.endsWith(fileEnding)) {
         def fileText = file.text;
 
-        def hasLicense = fileText.find(".*Licensed to the Apache Software Foundation.*")
+        def hasLicense = fileText.find(".*http://www.apache.org/licenses/LICENSE-2.0.*")
         if(hasLicense == null) {
 
           println file.canonicalPath
