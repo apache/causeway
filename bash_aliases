@@ -13,13 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # 
-# Intended to be sourced from a UNIX shell, eg
-# . mvn_aliases
+# Intended to be sourced from a UNIX shell, eg:
+#
+# . /path/to/isis/root/bash_aliases
 # 
+#
 
 alias mcia="mvn clean install -D modules=all -o"
 alias mci="mvn clean install -D modules=standard -o"
 
 alias msdf="mvn site-deploy -D modules=standard -D site=full -D deploy=local -o"
 alias msd="mvn site-deploy -D modules=standard -D deploy=local -o"
+
+alias svnst="svn status --ignore-externals | grep -v ^X"
+alias svnup="svn update --ignore-externals | grep -v ^X"
+

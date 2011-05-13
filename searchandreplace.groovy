@@ -70,7 +70,7 @@ currentDir.eachFileRecurse { file ->
     replacements.each { from, to -> 
       def newFileText = fileText.replaceAll(from, to)
       if(fileText != newFileText) {
-        if(options.v) {
+        if(options.v || !options.x) {
             println(file.path)
         }
         if(options.x) {
