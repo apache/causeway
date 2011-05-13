@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<project name="Sample" >
-	<path id="source.path">
-        <pathelement path="."/>
-	</path>
-</project>
