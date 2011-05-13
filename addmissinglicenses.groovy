@@ -47,7 +47,8 @@ def license_using_c_style_comments="""/*
  */
 """
 
-def license_using_xml_comments="""<!--
+def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
+<!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
   distributed with this work for additional information
@@ -113,10 +114,17 @@ currentDir.eachFileRecurse { file ->
       if (file.name.endsWith(fileEnding)) {
         def fileText = file.text;
 
-        def matchingText = fileText.find(".*Licensed to the Apache Software Foundation.*")
-        if(matchingText == null) {
+        def hasLicense = fileText.find(".*Licensed to the Apache Software Foundation.*")
+        if(hasLicense == null) {
 
           println file.canonicalPath
+
+          // special handling for xml ... remove pragma if present
+          if (fileEnding.endsWith(".xml")) {
+            def sw = new StringWriter()
+            file.filterLine(sw) { ! (it =~ /<?xml/ ) }
+            fileText = sw.toString()
+          }
 
           if(options.x) {
             file.write(licenseTextByFileEnding[fileEnding])
