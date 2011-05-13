@@ -60,7 +60,7 @@ public class JmxBeanServer {
         } catch (final NullPointerException e) {
             throw new RuntimeException(e);
         } catch (final InstanceAlreadyExistsException e) {
-            throw new RuntimeException(e);
+            LOG.info(name + " JMX mbean already registered: " + object);
         } catch (final MBeanRegistrationException e) {
             throw new RuntimeException(e);
         } catch (final NotCompliantMBeanException e) {
