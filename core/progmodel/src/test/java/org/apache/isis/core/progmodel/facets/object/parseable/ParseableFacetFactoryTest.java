@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
-import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;

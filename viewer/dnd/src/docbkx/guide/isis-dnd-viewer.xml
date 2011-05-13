@@ -69,6 +69,52 @@
   <!-- main content -->
 
   <part>
+    <title>Users Guide</title>
+
+    <chapter>
+      <title>Using the DnD Viewer</title>
+
+      <abstract>
+        <para>*** yada</para>
+      </abstract>
+
+      <section>
+        <title>*** yada</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Using Perspectives</title>
+
+        <para>A perspective represents an end-users' desktop perspective; that
+        is icons/links for domain services and domain objects). The
+        <emphasis>dnd viewer</emphasis> allows users to customize their
+        perspective:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>To remove a service icon right-click on the grey border and
+            select the close option.</para>
+          </listitem>
+
+          <listitem>
+            <para>To add a service select the Services... option from the
+            application menu (accessed by right-clicking on the application
+            background) and drag the required service onto the desktop.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </section>
+    </chapter>
+  </part>
+
+  <part>
     <title>Programmers Guide</title>
 
     <partintro>
@@ -550,112 +596,98 @@ isis.viewer.dnd.color.text.edit=0xFFFFFF</screen>
       <sect2>
         <title>From the desktop menu</title>
 
-      <para />
+        <para></para>
 
-      <itemizedlist>
-        <listitem>
-          <para>
-            <emphasis>Log Level OFF/ERROR/WARN/INFO/DEBUG</emphasis>
-          </para>
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Log Level
+            OFF/ERROR/WARN/INFO/DEBUG</emphasis></para>
 
-          <para>Change the log level in Log4j</para>
-        </listitem>
+            <para>Change the log level in Log4j</para>
+          </listitem>
 
-        <listitem>
-          <para>
-            <emphasis>Debug graphics on/off</emphasis>
-          </para>
+          <listitem>
+            <para><emphasis>Debug graphics on/off</emphasis></para>
 
-          <para>Turn on or off the debug drawing within the viewer. This
-          sets/clears the <varname>AbstractView.debug </varname>variable,
-          which is used within draw methods to do additional drawing for debug
-          purposes.</para>
+            <para>Turn on or off the debug drawing within the viewer. This
+            sets/clears the <varname>AbstractView.debug </varname>variable,
+            which is used within draw methods to do additional drawing for
+            debug purposes.</para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/degug-graphics.png" />
-            </imageobject>
-          </mediaobject>
-        </listitem>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/degug-graphics.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
 
-        <listitem>
-          <para>
-            <emphasis>Show mouse spy</emphasis>
-          </para>
+          <listitem>
+            <para><emphasis>Show mouse spy</emphasis></para>
 
-          <para>Brings up a debug window showing details about the mouse and
-          it position within the view hierarchy.</para>
-        </listitem>
+            <para>Brings up a debug window showing details about the mouse and
+            it position within the view hierarchy.</para>
+          </listitem>
 
-        <listitem>
-          <para>
-            <emphasis>Restart object loader/persistor</emphasis>
-          </para>
+          <listitem>
+            <para><emphasis>Restart object loader/persistor</emphasis></para>
 
-          <para>Calls <methodname>reset</methodname> on the
-          <classname>ObjectAdapterLoader</classname> and
-          <classname>ObjectAdapterPersistor</classname> objects. This should
-          clear all the objects and adapters from memory, forcing them to be
-          reloaded from persistent storage. It is important not have any open
-          objects on the screen as these will no longer be linked to the known
-          objects and might cause problems.</para>
-        </listitem>
+            <para>Calls <methodname>reset</methodname> on the
+            <classname>ObjectAdapterLoader</classname> and
+            <classname>ObjectAdapterPersistor</classname> objects. This should
+            clear all the objects and adapters from memory, forcing them to be
+            reloaded from persistent storage. It is important not have any
+            open objects on the screen as these will no longer be linked to
+            the known objects and might cause problems.</para>
+          </listitem>
 
-        <listitem>
-          <para>
-            <emphasis>Debug system</emphasis>
-          </para>
+          <listitem>
+            <para><emphasis>Debug system</emphasis></para>
 
-          <para>Brings up a debug frame showing debug details for the main
-          components of the system. These include the persistor, loader,
-          configuration, and specification loader.</para>
+            <para>Brings up a debug frame showing debug details for the main
+            components of the system. These include the persistor, loader,
+            configuration, and specification loader.</para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/debug-system.png" />
-            </imageobject>
-          </mediaobject>
-        </listitem>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/debug-system.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
 
-        <listitem>
-          <para>
-            <emphasis>Debug viewer</emphasis>
-          </para>
+          <listitem>
+            <para><emphasis>Debug viewer</emphasis></para>
 
-          <para>Brings up a debug frame showing debug details for the Skylark
-          viewer.</para>
+            <para>Brings up a debug frame showing debug details for the
+            Skylark viewer.</para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/debug-viewer.png" />
-            </imageobject>
-          </mediaobject>
-        </listitem>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/debug-viewer.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
 
-        <listitem>
-          <para>
-            <emphasis>Dump log to snapshot</emphasis>
-          </para>
+          <listitem>
+            <para><emphasis>Dump log to snapshot</emphasis></para>
 
-          <para>Creates a Log4j snapshot, which is send to each of the
-          snapshot appenders. This is only enabled if Log4j is setup with one
-          or more snapshot appenders.</para>
-        </listitem>
-      </itemizedlist>
+            <para>Creates a Log4j snapshot, which is send to each of the
+            snapshot appenders. This is only enabled if Log4j is setup with
+            one or more snapshot appenders.</para>
+          </listitem>
+        </itemizedlist>
       </sect2>
 
       <sect2>
         <title>From the view</title>
-    <para></para>
+
+        <para></para>
 
         <para>1. From a view we have these debug options available on the
         <emphasis>view</emphasis> menu:</para>
 
         <itemizedlist>
           <listitem>
-            <para>
-              <emphasis>Refresh view</emphasis>
-            </para>
+            <para><emphasis>Refresh view</emphasis></para>
 
             <para>Causes the view to be redisplayed after rereading the state
             of the view's content. This only affects the values and not the
@@ -663,27 +695,21 @@ isis.viewer.dnd.color.text.edit=0xFFFFFF</screen>
           </listitem>
 
           <listitem>
-            <para>
-              <emphasis>Invalidate content</emphasis>
-            </para>
+            <para><emphasis>Invalidate content</emphasis></para>
 
             <para>Flag the view's content as invalid causing the view to be
             recreated.</para>
           </listitem>
 
           <listitem>
-            <para>
-              <emphasis>Invalidate layout</emphasis>
-            </para>
+            <para><emphasis>Invalidate layout</emphasis></para>
 
             <para>Flag the view's layout as invalid causing the view to be
             relaid out.</para>
           </listitem>
 
           <listitem>
-            <para>
-              <emphasis>Debug view</emphasis>
-            </para>
+            <para><emphasis>Debug view</emphasis></para>
 
             <para>Brings up a debug frame showing debug details for the
             current view/object. These include the adapter's state, the domain
@@ -697,33 +723,27 @@ isis.viewer.dnd.color.text.edit=0xFFFFFF</screen>
               </imageobject>
             </mediaobject>
           </listitem>
+        </itemizedlist>
 
-	  </itemizedlist>
-          <para>2. Also from the view we have these debug options available on
-          the <emphasis>object</emphasis> menu:</para>
+        <para>2. Also from the view we have these debug options available on
+        the <emphasis>object</emphasis> menu:</para>
 
-	  <itemizedlist>
+        <itemizedlist>
           <listitem>
-            <para>
-              <emphasis>Destroy object</emphasis>
-            </para>
+            <para><emphasis>Destroy object</emphasis></para>
 
             <para>Forces a destory call to the object persistor.</para>
           </listitem>
 
           <listitem>
-            <para>
-              <emphasis>Clear resolve</emphasis>
-            </para>
+            <para><emphasis>Clear resolve</emphasis></para>
 
             <para>Forces the object's resolve state back to
             <emphasis>Ghost</emphasis>.</para>
           </listitem>
 
           <listitem>
-            <para>
-              <emphasis>Debug view</emphasis>
-            </para>
+            <para><emphasis>Debug view</emphasis></para>
 
             <para>Brings up a debug frame showing debug details for the
             current view/object (see above).</para>

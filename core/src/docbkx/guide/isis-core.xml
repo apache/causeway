@@ -2637,140 +2637,122 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
       <title>Command Line Flag (<classname>OptionHandler</classname>)
       API</title>
 
-      <para>*** to document. (moved from runtimes:dflt)</para>
+      <para>The
+      <classname>oai.core.runtime.optionhandler.OptionHandler</classname>
+      <acronym>API</acronym> is a mechanism to allow runtimes to write command
+      line launchers that use the <ulink
+      url="http://commons.apache.org/cli">Apache Commons CLI</ulink>
+      <acronym>API</acronym> for specifying command line flags.</para>
 
-      <para></para>
+      <para>The <classname>OptionHandler</classname> interface extends from
+      <classname>IsisConfigurationBuilderPrimer</classname>, meaning that each
+      instance is handed an <classname>IsisConfigurationBuilder</classname> in
+      order to add additional configuration properties. For example, the
+      <emphasis>default runtime</emphasis> defines a
+      <classname>OptionHandlerViewer</classname> which searches for the
+      <code>--viewer</code> flag and loads the relevant properties file (eg
+      <filename>viewer_html.properties</filename> if
+      <code>--viewer=html</code> is specified).</para>
+
+      <para>The mechanism to register <classname>OptionHandler</classname>s is
+      specific to each runtime implemenetation. For example, the default
+      runtime has an <classname>IsisRunner</classname> class which defines an
+      <methodname>addOptionHandler(...)</methodname> method.</para>
     </sect1>
 
     <sect1>
       <title>User Profiles</title>
 
-      <para>*** to tidy up (moved from runtimes:dflt)</para>
+      <para>The idea behind user profiles is to allow viewers to store
+      information about a user, for example as their preferences, bookmarks
+      and other related information. The applib itself already defines the
+      <classname>oai.applib.profiles.Profile</classname> interface to (which
+      represent an end-user's profile), and the
+      <classname>oai.applib.profiles.Perspective</classname> (which represents
+      an end-users' desktop perspective; that is icons/links for domain
+      services and domain objects). The
+      <classname>oai.core.runtime.userprofile</classname> package provides a
+      set of classes to allow runtimes to provide an implementation of these
+      applib interfaces:</para>
 
-      <para></para>
+      <itemizedlist>
+        <listitem>
+          <para>The <classname>UserProfile</classname> class is intended to
+          assist the implementation of
+          <classname>oai.applib.profiles.Profile</classname> interface. It
+          holds a reference to an <classname>Options</classname> object , an
+          collection of <classname>PerspectiveEntry</classname> objects (both
+          in <package>oai.core.runtime.userprofile</package> package, and
+          discussed below), and an <classname>oai.applib.profiles.
+          Localization</classname> object (to represent the user's current
+          locale)</para>
+        </listitem>
 
-      <para>Information about a user of the system (rather that a user of the
-      application domain model) is stored in a
-      <classname>UserProfile</classname> object which is got from the
-      <classname>UserProfileService</classname>, which in turn is accessible
-      from <classname>IsisSession</classname>. There is also convienence
-      methods on <classname>IsisContext</classname> to get both the
-      <classname>UserProfile</classname> and the
-      <classname>UserProfileService</classname>. The user profile details the
-      perspectives the user has set up and options that have been specified,
-      typically for the user interfaces. The user profile service provides a
-      way to create, save and retrieve the user profiles, specifically the
-      profile of the current user. The service in turn has a
-      <classname>UserProfilePersistor</classname> that is used to do the
-      actual persistence.</para>
+        <listitem>
+          <para>The <classname>Options</classname> class is a wrapper around a
+          <classname>java.util.Properties</classname> object, and allows the
+          viewer to store a collection of settings for the user. Options can
+          also be nested (that is, an <classname>Option</classname> can hold
+          another as one of its keys).</para>
+        </listitem>
 
-      <para>Setting up profiles</para>
+        <listitem>
+          <para>The <classname>PerspectiveEntry</classname> class is intended
+          to assist in the implementation of
+          <classname>oai.applib.profiles.Perspective</classname> interface,
+          representing a saved view representation within the viewer. A
+          <classname>PerspectiveEntry</classname> has a name, has a 'service'
+          collection of objects, and an 'objects' collection.</para>
+        </listitem>
+      </itemizedlist>
 
-      <para>Profiles can be created at start up by creating
-      <classname>UserProfileFixture</classname> subclasses. Theses are only
-      ever loaded once as the fixture installer checks with
-      <methodname>UserProfileSevice.isInitialized()</methodname> to see if the
-      service is already set up. The profile fixture (which is defined in the
-      application library and is therefore not part of the Isis framework)
-      loads the profiles into Isis by passing in an implementation of
-      ProfilePersistor that provides a way for the perspective to make
-      requests of the framework.</para>
+      <para>The <package>userprofile</package> package also defines the
+      <classname>UserProfileStore</classname> and
+      <classname>UserProfileLoader</classname> interfaces. These are suggested
+      <acronym>API</acronym>s for runtimes to implement, indicating a
+      mechanism by which viewers can have a consistent way to obtain
+      <classname>UserProfile</classname>s, irrespective of the configured
+      runtime in use. For example, the default runtime
+      <package>(oai.runtimes:dflt)</package> makes the
+      <classname>UserProfileStore</classname> available through its
+      <classname>IsisContext</classname> service locator.</para>
 
-      <para></para>
+      <para>The mechanism to specify the profile store to use depends on the
+      configured runtime. The <emphasis>default runtime</emphasis>
+      <package>(oai.runtimes:dflt)</package>, for example, allows the profile
+      store to be specified using a property in
+      <filename>isis.properties</filename> configuration file:</para>
 
-      <para></para>
+      <programlisting>isis.user-profile-store=xml</programlisting>
 
-      <para></para>
+      <para>Alternatively a command line flag (-e or --user-profile-store) can
+      be used.</para>
 
-      <para>To store profiles (during exploration) for users the a profile
-      store must be specified.</para>
-
-      <para>On the command line use -e xml to store them in an XML.</para>
-
-      <para>Without this the profile will simply be kept in memory, and lost
-      on exit.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <sect2>
-        <title>Setting up Perspectives (Profile Fixtures)</title>
-
-        <para>*** to tidy up (moved from runtimes:dflt)</para>
-
-        <para></para>
-
-        <para>Perspectives allow the set of services available to a user (eg
-        as icons in the DnD viewer) to be customized for that user. Since
-        these services represent the "start points" for the user to interact
-        with the domain model, they in a sense define an application on a
-        per-user basis.</para>
-
-        <para>The perspectives are stored in user-profiles, which are a
-        persistence mechanism independent of the object store. (The intent is
-        for user profiles to store additional information for use by viewers,
-        for example allowing a user to reskin an application or change colors
-        or fonts. As of NOF 4.0 the functionality provided is still limited,
-        however).</para>
-
-        <para>The key here is that if a user logs in and no perspective exists
-        for that user then one will be created for them. The new perspective
-        will be a copy of the 'template' perspective, or, if none was defined,
-        a perspective containing all the known services. To create a template
-        perspective add a perspective fixture that calls
-        <methodname>saveAsDefault()</methodname>, rather than
-        <methodname>saveForUser()</methodname> for a named user, as shown
-        below.</para>
-
-        <programlisting>public class PerspectivesFixture extends UserProfileFixture {
-    @Override
-    protected void installProfiles() {
-        Profile profile = newUserProfile();
-        Perspective perspective = profile.newPerspective("ECS");
-        perspective.addToServices(LocationFactory.class);
-        perspective.addToServices(CustomerRepository.class);
-        perspective.addToServices(PaymentMethodFactory.class);
-        
-        saveAsDefault(profile);
-    }
-}
-</programlisting>
-
-        <para>With that set up, when a new user now logs in they will see
-        three service icons on the screen for locations, customers and payment
-        methods. On the drag and drop user interface the user can add and
-        remove services from their perspective. To remove a service icon
-        right-click on the grey border and select the close option. To add a
-        service select the Services... option from the application menu
-        (accessed by right-clicking on the application background) and drag
-        the required service onto the desktop. Unfortunately there is no
-        similar mechanism available on the HTML user interface so you will
-        need to modify the created perspectives via the DND UI.</para>
-
-        <para></para>
-
-        <para></para>
-      </sect2>
+      <para>If a non-persisting profile store is specified, then the profile
+      will simply be kept in memory, and lost on exit.</para>
     </sect1>
 
     <sect1>
       <title>Utility Classes</title>
 
-      <para>*** to document. (moved from runtimes:dflt)</para>
-
-      <para></para>
-
       <sect2>
         <title>Sysout (SystemPrinter) Utility</title>
 
-        <para></para>
+        <para>The <classname>oai.core.runtime.sysout.SystemPrinter</classname>
+        utility is a simple wrapper to make it easy to print to any
+        <classname>java.io.Outputstream</classname> (defaulting to
+        <code>System.out</code>). It also includes a number of methods for
+        printing out the version of <emphasis>Isis</emphasis>.</para>
       </sect2>
 
       <sect2>
         <title>Profiler Utility</title>
 
-        <para></para>
+        <para>The <classname>oai.core.runtime.profiler.Profiler</classname>
+        class provides simple support for diagnosing timing and memory issues.
+        It allows the memory snapshots and timing to be captured on a per
+        thread basis, so that, for example, any memory leaks can be tracked by
+        snapshotting at the beginning or end of requests.</para>
       </sect2>
     </sect1>
 
@@ -2778,21 +2760,28 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
       <title>Logging Support</title>
 
       <sect2>
-        <title>Snapshot appenders</title>
+        <title>Log4J snapshot appenders</title>
 
-        <para>*** to tidy up (moved from runtimes:dflt)</para>
+        <para><emphasis>Apache Isis</emphasis> uses <ulink
+        url="logging.apache.org">Apache log4j</ulink> as its mechanism, and
+        provides a number of log4j appender implementations which can be used
+        in your application if you require.</para>
 
-        <para></para>
+        <para>Specifically, the framework provides a number of appenders that
+        create a snapshot of the recently logged events instead of capturing
+        all events since the system started. The benefits here are
+        twofold:<itemizedlist>
+            <listitem>
+              <para>First, writing to the appenders is minimised as they are
+              only written when errors occur or the user demands it.</para>
+            </listitem>
 
-        <para></para>
-
-        <para>The framework provides a number of appenders that create a
-        snapshot of the recently logged events instead of capturing all events
-        since the system started. The benefits here are twofold. First,
-        writing to the appenders is minimised as they are only written when
-        errors occur or the user demands it. Second, the partial log can be
-        automatically sent over the network to someone who needs to know when
-        things have gone wrong.</para>
+            <listitem>
+              <para>Second, the partial log can be automatically sent over the
+              network to someone who needs to know when things have gone
+              wrong.</para>
+            </listitem>
+          </itemizedlist></para>
 
         <para>All the snapshot appends support the same basic
         properties:-</para>
@@ -2877,7 +2866,7 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
           <para>The following example writes xml snapshots to the logs
           directory to files ending with '.xml'.</para>
 
-          <programlisting format="linespecific">log4j.appender.Snapshot=org.apache.isis.utility.logging.FileSnapshotAppender
+          <programlisting format="linespecific">log4j.appender.Snapshot=org.apache.isis.core.runtime.logging.FileSnapshotAppender
 log4j.appender.Snapshot.bufferSize=1024
 log4j.appender.Snapshot.addInfo=true
 log4j.appender.Snapshot.locationInfo=true
@@ -2894,7 +2883,7 @@ log4j.appender.Snapshot.layout=org.apache.log4j.xml.XMLLayout</programlisting>
           there will be no one sitting in front of it to see it. It has no
           properties so its configuration is short.</para>
 
-          <programlisting format="linespecific">log4j.appender.Popup=org.apache.isis.utility.logging.PopupSnapshotAppender
+          <programlisting format="linespecific">log4j.appender.Popup=org.apache.isis.core.runtime.logging.PopupSnapshotAppender
 log4j.appender.Popup.layout=org.apache.log4j.PatternLayout
 log4j.appender.Popup.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  %m%n
 </programlisting>
@@ -2936,11 +2925,11 @@ log4j.appender.Popup.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  %m%n
             </listitem>
           </itemizedlist>
 
-          <para>The following example sends a short HTML snapshot logs to
-          logs@support.acme.com, via the email server at my.emailserver.com
-          using port 25.</para>
+          <para>The following example sends a short <acronym>HTML</acronym>
+          snapshot logs to logs@support.acme.com, via the email server at
+          my.emailserver.com using port 25.</para>
 
-          <programlisting format="linespecific">log4j.appender.EmailSnapshot=org.apache.isis.utility.logging.SmtpSnapshotAppender
+          <programlisting format="linespecific">log4j.appender.EmailSnapshot=org.apache.isis.core.runtime.logging.SmtpSnapshotAppender
 log4j.appender.EmailSnapshot.bufferSize=50
 log4j.appender.EmailSnapshot.addInfo=true
 log4j.appender.EmailSnapshot.server=my.emailserver.com
@@ -2961,7 +2950,7 @@ log4j.appender.EmailSnapshot.layout=org.apache.log4j.HTMLLayout</programlisting>
           <para>The following example sends an XML snapshot to a server on a
           private network.</para>
 
-          <programlisting format="linespecific">log4j.appender.SocketSnapshot=org.apache.isis.utility.logging.SocketSnapshotAppender
+          <programlisting format="linespecific">log4j.appender.SocketSnapshot=org.apache.isis.core.runtime.logging.SocketSnapshotAppender
 log4j.appender.SocketSnapshot.bufferSize=1024
 log4j.appender.SocketSnapshot.addInfo=true
 log4j.appender.SocketSnapshot.server=191.168.1.1
@@ -2971,7 +2960,7 @@ log4j.appender.SocketSnapshot.layout=org.apache.log4j.xml.XMLLayout</programlist
           <para>The snaphot server should be directed to a maching running the
           server. The server is run using the following command:</para>
 
-          <screen format="linespecific">java -cp isis.jar org.apache.isis.utility.logging.SnapshotServer</screen>
+          <screen format="linespecific">java -cp isis.jar org.apache.isis.core.runtime.logging.SnapshotServer</screen>
 
           <para>The server needs a properties file with the following
           properties defined (with the prefix
@@ -3032,8 +3021,8 @@ isis.snapshotserver.extension=xml</programlisting>
             <listitem>
               <para><emphasis><methodname>url</methodname></emphasis></para>
 
-              <para>URL of server to post data to (including the protocol
-              'http').</para>
+              <para>The <acronym>URL</acronym> of server to post data to
+              (including the protocol 'http').</para>
             </listitem>
 
             <listitem>
@@ -3052,15 +3041,15 @@ isis.snapshotserver.extension=xml</programlisting>
           <para>The following example sends a default length snapshot to the
           webserver.</para>
 
-          <programlisting format="linespecific">log4j.appender.Remote=org.apache.isis.utility.logging.WebSnapshotAppender
+          <programlisting format="linespecific">log4j.appender.Remote=org.apache.isis.core.runtime.logging.WebSnapshotAppender
 log4j.appender.Remote.addInfo=true
 log4j.appender.Remote.locationInfo=true
 log4j.appender.Remote.url=http://192.168.1.3/support/test.php
 log4j.appender.Remote.layout=org.apache.log4j.HTMLLayout</programlisting>
 
-          <para>This appender use the HTTP POST method to upload the data. It
-          passes up a message and the snapshot as two parameters to the
-          request: <varname>error</varname> and
+          <para>This appender use the <acronym>HTTP</acronym> POST method to
+          upload the data. It passes up a message and the snapshot as two
+          parameters to the request: <varname>error</varname> and
           <varname>trace</varname>.</para>
         </sect3>
       </sect2>

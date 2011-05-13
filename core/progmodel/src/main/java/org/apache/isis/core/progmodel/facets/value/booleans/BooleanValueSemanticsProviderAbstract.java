@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

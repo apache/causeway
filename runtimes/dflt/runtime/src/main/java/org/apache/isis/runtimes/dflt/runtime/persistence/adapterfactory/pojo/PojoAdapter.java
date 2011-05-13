@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;

@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 
 public class Options implements DebuggableWithTitle {
+
     private final Properties properties = new Properties();
 
     public void addOption(String name, String value) {
@@ -39,19 +40,7 @@ public class Options implements DebuggableWithTitle {
         properties.put(name, options);
     }
 
-    public void copy(Options options) {
-        properties.putAll(options.properties);
-    }
-
-    public void debugData(DebugBuilder debug) {
-        Enumeration<Object> keys = properties.keys();
-        while (keys.hasMoreElements()) {
-            String name = (String) keys.nextElement();
-            debug.appendln(name, properties.get(name));
-        }
-    }
-
-    public Iterator<String>  names() {
+    public Iterator<String> names() {
     	final Enumeration<?> propertyNames = properties.propertyNames();
     	return new Iterator<String>() {
 			public boolean hasNext() {
@@ -66,25 +55,12 @@ public class Options implements DebuggableWithTitle {
 			}};
     }
     
-    public String debugTitle() {
-        return "Options";
-    }
-
     public String getString(String name) {
         return properties.getProperty(name);
     }
 
     public String getString(String name, String defaultValue) {
         return properties.getProperty(name, defaultValue);
-    }
-
-    public Options getOptions(String name) {
-        Options options = (Options) properties.get(name);
-        if (options == null) {
-            options = new Options();
-            addOptions(name, options);
-        }
-        return options;
     }
 
     public int getInteger(String name, int defaultValue) {
@@ -96,9 +72,41 @@ public class Options implements DebuggableWithTitle {
         }
     }
 
+    public Options getOptions(String name) {
+        Options options = (Options) properties.get(name);
+        if (options == null) {
+            options = new Options();
+            addOptions(name, options);
+        }
+        return options;
+    }
+
     public boolean isOptions(String name) {
         return properties.get(name) instanceof Options;
     }
+
+    
+    public void copy(Options options) {
+        properties.putAll(options.properties);
+    }
+
+
+    /////////////////////////////////
+    // Debugging
+    /////////////////////////////////
+
+    public String debugTitle() {
+        return "Options";
+    }
+
+    public void debugData(DebugBuilder debug) {
+        Enumeration<Object> keys = properties.keys();
+        while (keys.hasMoreElements()) {
+            String name = (String) keys.nextElement();
+            debug.appendln(name, properties.get(name));
+        }
+    }
+
 
 }
 

@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.JavaClassUtils;

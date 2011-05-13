@@ -20,6 +20,7 @@
 package org.apache.isis.applib.adapters;
 
 import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.applib.profiles.Localization;
 
 /**
  * Provides a mechanism for parsing and rendering string representations of objects.

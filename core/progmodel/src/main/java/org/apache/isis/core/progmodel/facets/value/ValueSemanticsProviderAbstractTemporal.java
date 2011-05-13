@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

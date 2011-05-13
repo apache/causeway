@@ -20,9 +20,9 @@ package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import java.util.IllegalFormatWidthException;
 
-import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;

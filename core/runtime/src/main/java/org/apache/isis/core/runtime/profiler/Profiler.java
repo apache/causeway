@@ -21,48 +21,62 @@
 package org.apache.isis.core.runtime.profiler;
 
 import java.text.NumberFormat;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Locale;
-
+import java.util.Map;
 
 public class Profiler {
+    
     private final static String DELIMITER = "\t";
-    private static NumberFormat floatFormat = NumberFormat.getNumberInstance(Locale.UK);
-    private static NumberFormat integerFormat = NumberFormat.getNumberInstance(Locale.UK);
+    private static NumberFormat FLOAT_FORMAT = NumberFormat.getNumberInstance(Locale.UK);
+    private static NumberFormat INTEGER_FORMAT = NumberFormat.getNumberInstance(Locale.UK);
+
+    private final static Map<Thread,String> threads = new HashMap<Thread,String>();
+
     private static int nextId = 0;
     private static int nextThread = 0;
+
     protected static ProfilerSystem profilerSystem = new ProfilerSystem();
-    private static Hashtable threads = new Hashtable();
+
+    /**
+     * Primarily for testing.
+     * @param profilerSystem
+     */
+    public static void setProfilerSystem(final ProfilerSystem profilerSystem) {
+        Profiler.profilerSystem = profilerSystem;
+    }
 
     public static String memoryLog() {
         final long free = memory();
-        return integerFormat.format(free) + " bytes";
-    }
-
-    private static long memory() {
-        return profilerSystem.memory();
+        return INTEGER_FORMAT.format(free) + " bytes";
     }
 
     private static long time() {
         return profilerSystem.time();
     }
 
-    public static void setProfilerSystem(final ProfilerSystem profilerSystem) {
-        Profiler.profilerSystem = profilerSystem;
+    private static long memory() {
+        return profilerSystem.memory();
     }
 
-    private long elapsedTime = 0;
-    private final int id;
-    private long memory;
-    private final String name;
-    private long start = 0;
+    //////////////////////////////////////////////////////////////
+    // Profiler instance, constructor
+    //////////////////////////////////////////////////////////////
+
     private final String thread;
+
+    private final int id;
+    private final String name;
+    
+    private long elapsedTime = 0;
+    private long memory;
+    private long start = 0;
     private boolean timing = false;
 
     public Profiler(final String name) {
         this.name = name;
         synchronized (Profiler.class) {
-            id = nextId++;
+            this.id = nextId++;
         }
         final Thread t = Thread.currentThread();
         final String thread = (String) threads.get(t);
@@ -75,21 +89,13 @@ public class Profiler {
         memory = memory();
     }
 
-    public long getElapsedTime() {
-        return timing ? time() - start : elapsedTime;
-    }
-
-    public long getMemoryUsage() {
-        return memory() - memory;
-    }
-
     public String getName() {
         return name;
     }
 
-    public String log() {
-        return id + DELIMITER + thread + DELIMITER + getName() + DELIMITER + getMemoryUsage() + DELIMITER + getElapsedTime();
-    }
+    //////////////////////////////////////////////////////////////
+    // start, stop, reset
+    //////////////////////////////////////////////////////////////
 
     public void reset() {
         elapsedTime = 0;
@@ -108,13 +114,34 @@ public class Profiler {
         elapsedTime += end - start;
     }
 
+    //////////////////////////////////////////////////////////////
+    // MemoryUsage, ElapsedTime
+    //////////////////////////////////////////////////////////////
+
+    public long getElapsedTime() {
+        return timing ? time() - start : elapsedTime;
+    }
+
+    public long getMemoryUsage() {
+        return memory() - memory;
+    }
+
+    //////////////////////////////////////////////////////////////
+    // logging
+    //////////////////////////////////////////////////////////////
+
     public String memoryUsageLog() {
-        return integerFormat.format(getMemoryUsage()) + " bytes";
+        return INTEGER_FORMAT.format(getMemoryUsage()) + " bytes";
     }
 
     public String timeLog() {
-        return floatFormat.format(getElapsedTime() / 1000.0) + " secs";
+        return FLOAT_FORMAT.format(getElapsedTime() / 1000.0) + " secs";
     }
+
+    public String log() {
+        return id + DELIMITER + thread + DELIMITER + getName() + DELIMITER + getMemoryUsage() + DELIMITER + getElapsedTime();
+    }
+
 
     @Override
     public String toString() {

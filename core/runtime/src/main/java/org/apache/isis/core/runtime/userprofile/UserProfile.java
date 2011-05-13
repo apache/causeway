@@ -23,15 +23,13 @@ package org.apache.isis.core.runtime.userprofile;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.adapters.Localization;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 import com.google.common.collect.Lists;
 
-public class UserProfile /* implements DebuggableWithTitle */ {
+public class UserProfile {
 	
 
     public UserProfile() {}
@@ -124,14 +122,12 @@ public class UserProfile /* implements DebuggableWithTitle */ {
         return Collections.unmodifiableList(entries);
     }
     
-    
 
     /////////////////////////////////////////////////////////
     // Options
     /////////////////////////////////////////////////////////
 
     private final Options options = new Options();
-    private Localization localization;
 
     public Options getOptions() {
         return options;
@@ -146,6 +142,7 @@ public class UserProfile /* implements DebuggableWithTitle */ {
     // Localization
     /////////////////////////////////
 
+    private Localization localization;
     public Localization getLocalization() {
         return localization;
     }
@@ -164,6 +161,8 @@ public class UserProfile /* implements DebuggableWithTitle */ {
         entry.save(objects);
     }
 
+
+    
 
 }
 

@@ -20,8 +20,8 @@
 package org.apache.isis.core.progmodel.facets.value.password;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

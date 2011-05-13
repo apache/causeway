@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.userprofile;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 
 public class UserLocalization implements Localization {
 

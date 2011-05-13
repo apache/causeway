@@ -4731,53 +4731,79 @@ public class Money extends Magnitude {
       <emphasis>profiles</emphasis> to be persisted into a profile
       store.</para>
 
-      <para>Every user can have one profile associated with them, a profile
-      consisting of:</para>
+      <sect1>
+        <title>Profiles and Perspectives</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>a set of options or preferences</para>
-        </listitem>
+        <para>Every user can have one profile associated with them, which
+        consists of:</para>
 
-        <listitem>
-          <para>a set of perspectives</para>
-        </listitem>
-      </itemizedlist>
+        <itemizedlist>
+          <listitem>
+            <para>a set of options or preferences</para>
+          </listitem>
 
-      <para>A perspective is something akin to a layout or desktop,
-      representing a configuration of relevant objects as might be displayed
-      on the home page of the viewer. The elements that make up a perspective
-      are:</para>
+          <listitem>
+            <para>a set of perspectives</para>
+          </listitem>
+        </itemizedlist>
 
-      <itemizedlist>
-        <listitem>
-          <para>a set of services (identified by the string returned from each
-          service's <methodname>getId()</methodname> method, see <xref
-          linkend="chp.DomainServices" />)</para>
+        <para>A perspective is something akin to a layout or desktop,
+        representing a configuration of relevant objects as might be displayed
+        on the home page of the viewer. In particular, perspectives allow the
+        set of services available to a user (eg as icons in the
+        <acronym>DnD</acronym> viewer) to be customized for that user. Since
+        these services represent the "start points" for the user to interact
+        with the domain model, they in a sense define an application on a
+        per-user basis.</para>
 
-          <para>These are the services (eg icons) that can be accessed from
-          that perspective</para>
-        </listitem>
+        <para>The elements that make up a perspective are:</para>
 
-        <listitem>
-          <para>a set of objects</para>
+        <itemizedlist>
+          <listitem>
+            <para>a set of services (identified by the string returned from
+            each service's <methodname>getId()</methodname> method, see <xref
+            linkend="chp.DomainServices" />)</para>
 
-          <para>These might represent bookmarks to objects saved from a
-          previous session.</para>
-        </listitem>
-      </itemizedlist>
+            <para>These are the services (eg icons) that can be accessed from
+            that perspective</para>
+          </listitem>
 
-      <para>The applib contains types to define these two concepts;
-      specifically <classname>Profile</classname> and
-      <classname>Perspective</classname>. These are actually interfaces, the
-      implementation is provided by framework itself.</para>
+          <listitem>
+            <para>a set of objects</para>
 
-      <para>To use profiles in an application, the system should be run using
-      a persistent implementation of the <classname>profilestore</classname>
-      component (the default is the in-memory profilestore that does not
-      persist any information between sessions). Also, not every viewer
-      understands or uses perspectives; the most notable one that does support
-      the idea is the <acronym>DnD</acronym> viewer.</para>
+            <para>These might represent bookmarks to objects saved from a
+            previous session.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The applib contains types to define these two concepts;
+        specifically <classname>Profile</classname> and
+        <classname>Perspective</classname>. These are actually interfaces, the
+        implementation is provided by framework itself.</para>
+      </sect1>
+
+      <sect1>
+        <title>Runtime and Viewer Support</title>
+
+        <para>Support for profiles will vary across runtime implementations
+        and across viewers. The <emphasis>default runtime</emphasis>
+        implementation <emphasis>does</emphasis> support profiles, however,
+        and works such that if a user logs in and no perspective exists for
+        that user one will automatically be created. This will either be a
+        copy of the 'template' perspective, or, if no such template exists,
+        then simply a perspective containing all the known services.</para>
+
+        <para>Moreover, the runtime must be configured to use some sort of
+        persistence mechanism for profiles such that they are persisted
+        between runs. The default runtime does support this (though the
+        default is the in-memory profilestore that does not persist any
+        information between sessions).</para>
+
+        <para>Even if the configured runtime does support profiles, not every
+        viewer necessarily uses the concept. The most notable viewer that
+        <emphasis>does</emphasis> support the idea is the <emphasis>dnd
+        viewer</emphasis>.</para>
+      </sect1>
     </chapter>
 
     <chapter id="chp.Fixtures">
@@ -5030,9 +5056,53 @@ plan.getOwner().modifyLeader(peterPlanner);
           <title><classname>UserProfileFixture</classname></title>
 
           <para>The <classname>UserProfileFixture</classname> is used to
-          populate the configured profile store. See <xref
-          linkend="chp.UserProfiles" /> for more details on profiles and
-          perspectives.</para>
+          populate the configured profile store<footnote>
+              <para>A profile store is a persistence mechanism provided by the
+              configured runtime that allows user profiles to be stored
+              between runs. It is similar to, but independent of, an object
+              store (which stores the domain objects themselves).</para>
+            </footnote> with user profiles (the concept of which is described
+          in <xref linkend="chp.UserProfiles" />). </para>
+
+          <para>To create a user profile for a specific user, inherit from
+          <classname>UserProfileFixture</classname>, use the inherited
+          <methodname>newUserProfile()</methodname> to create a profile and
+          use the inherited <methodname>saveForUser(...)</methodname> method
+          to save that profile.</para>
+
+          <para>It is also possible to create a 'template' perspective using
+          the <methodname>saveAsDefault(...)</methodname> method. This is used
+          as the basis for any new perspectives that are automatically
+          created, eg for users who are logging in and for whom there is no
+          perspective in existence.</para>
+
+          <para>For example:</para>
+
+          <programlisting>public class PerspectivesFixture extends UserProfileFixture {
+  @Override
+  protected void installProfiles() {
+    Profile profile = newUserProfile();
+    Perspective perspective = profile.newPerspective("ECS");
+    perspective.addToServices(LocationFactory.class);
+    perspective.addToServices(CustomerRepository.class);
+    perspective.addToServices(PaymentMethodFactory.class);
+        
+    saveAsDefault(profile);
+  }
+}</programlisting>
+
+          <para>With that set up, when a new user now logs in they will see
+          three service icons on the screen for locations, customers and
+          payment methods. In the <emphasis>dnd viewer</emphasis> the user
+          will be able to add and remove services from their perspective. See
+          the DnD Viewer documentation for further details.</para>
+
+          <para>Any fixtures, if specified, are only ever loaded once; the
+          fixture installer checks with
+          <methodname>UserProfileSevice.isInitialized()</methodname> to see if
+          the fixture is already installed. This allows fixtures to be used
+          for seeding a persisting profile store, and then be ignored
+          thereafter.</para>
         </sect2>
       </sect1>
     </chapter>

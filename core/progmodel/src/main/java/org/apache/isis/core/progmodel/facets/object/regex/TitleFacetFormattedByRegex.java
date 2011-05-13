@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.regex;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 

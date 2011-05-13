@@ -28,15 +28,13 @@ import com.google.common.collect.Lists;
 
 public class PerspectiveEntry {
 
-    private final List<Object> objects = Lists.newArrayList();
-    private final List<Object> services = Lists.newArrayList();
-    private String name;
-
     public PerspectiveEntry() {}
 
     /////////////////////////////////////////////////////////
     // Name & Title
     /////////////////////////////////////////////////////////
+
+    private String name;
 
     public String getName() {
         return name;
@@ -54,6 +52,9 @@ public class PerspectiveEntry {
     /////////////////////////////////////////////////////////
     // Objects, save
     /////////////////////////////////////////////////////////
+
+    private final List<Object> objects = Lists.newArrayList();
+
 
     // REVIEW should this deal with Isis, and the services with IDs (or Isis)
     public List<Object> getObjects() {
@@ -80,6 +81,8 @@ public class PerspectiveEntry {
     /////////////////////////////////////////////////////////
     // Services
     /////////////////////////////////////////////////////////
+
+    private final List<Object> services = Lists.newArrayList();
 
     public List<Object> getServices() {
         return services;
@@ -111,7 +114,6 @@ public class PerspectiveEntry {
             addToObjects(obj);
         }
     }
-
 
 
 }

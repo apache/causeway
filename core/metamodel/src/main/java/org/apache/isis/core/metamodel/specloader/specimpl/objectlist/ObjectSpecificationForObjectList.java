@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;

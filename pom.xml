@@ -246,7 +246,23 @@
                     </executions>
                 </plugin>
 
-
+				<!-- Apache Release Audit Tool -->
+				<plugin>
+					<groupId>org.apache.rat</groupId>
+					<artifactId>apache-rat-plugin</artifactId>
+					<version>0.7</version>
+					<!-- 
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>					
+					 -->
+				</plugin>
+      
                 <!-- IDE support for Eclipse. (NetBeans 6.7+ and IDEA 7.0 
                     have built-in support for Maven) Alternatively, use m2eclipse and import 
                     POMs directly. -->
@@ -735,6 +751,29 @@
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
 
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<!-- 
+				<executions> 
+                    <execution> 
+                        <phase>verify</phase> 
+                        <goals> 
+                            <goal>check</goal> 
+                        </goals> 
+                    </execution> 
+                </executions> 
+				-->
+				<configuration>
+					<excludeSubProjects>false</excludeSubProjects>
+					<numUnapprovedLicenses>0</numUnapprovedLicenses>
+					<excludes>
+						<exclude>**/*.hsp</exclude>
+						<exclude>**/*.svg</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+      
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

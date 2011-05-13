@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.testspec;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;

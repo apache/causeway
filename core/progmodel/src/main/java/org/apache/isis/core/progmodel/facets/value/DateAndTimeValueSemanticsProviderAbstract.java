@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.value;
 import java.text.DateFormat;
 import java.util.Map;
 
-import org.apache.isis.applib.adapters.Localization;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

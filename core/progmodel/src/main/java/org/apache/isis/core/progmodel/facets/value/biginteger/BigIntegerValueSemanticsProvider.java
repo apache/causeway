@@ -24,8 +24,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Localization;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
