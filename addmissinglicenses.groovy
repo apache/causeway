@@ -105,8 +105,8 @@ REM  under the License.
 """
 
 
-def fileEndings = [".groovy"]
-//def fileEndings = [".xml", ".html", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords", ".bat"]
+def fileEndings = [".htm"]
+//def fileEndings = [".xml", ".html", ".htm", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords", ".bat"]
 
 def licenseTextByFileEnding = [
 	".java": license_using_c_style_comments,
@@ -114,6 +114,7 @@ def licenseTextByFileEnding = [
 	".css": license_using_c_style_comments,
 	".xml": license_using_xml_comments,
     ".html": license_using_xml_comments,
+    ".htm": license_using_xml_comments,
     ".shtml": license_using_xml_comments,
 	".properties": license_using_hash_comments,
     ".allow": license_using_hash_comments,
