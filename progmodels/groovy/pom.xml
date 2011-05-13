@@ -32,7 +32,7 @@
 	<artifactId>groovy</artifactId>
 	<version>0.1.2-incubating-SNAPSHOT</version>
 
-	<name>Isis Groovy Support</name>
+	<name>Groovy ProgModel</name>
 
 	<packaging>pom</packaging>
 

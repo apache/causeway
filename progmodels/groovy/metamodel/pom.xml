@@ -29,7 +29,7 @@
 	</parent>
 
 	<artifactId>groovy-metamodel</artifactId>
-	<name>Groovy MetaModel</name>
+	<name>Groovy ProgModel MetaModel</name>
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>

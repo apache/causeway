@@ -28,7 +28,7 @@
 	</parent>
 
     <artifactId>groovy-applib</artifactId>
-    <name>Groovy AppLib</name>
+    <name>Groovy ProgModel AppLib</name>
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
