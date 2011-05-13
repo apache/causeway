@@ -122,7 +122,7 @@ currentDir.eachFileRecurse { file ->
           // special handling for xml ... remove pragma if present
           if (fileEnding.endsWith(".xml")) {
             def sw = new StringWriter()
-            file.filterLine(sw) { ! (it =~ /<?xml/ ) }
+            file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
             fileText = sw.toString()
           }
 
