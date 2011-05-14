@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -41,7 +42,7 @@ public class UserManager {
     public static AuthenticationSession startRequest(final RequestContext context) {
         AuthenticationSession session = context.getSession();
         if (session == null) {
-            session = new UserlessSession();
+            session = new AnonymousSession();
             LOG.info("start anonymous request: " + session);
         } else {
             LOG.info("start request for: " + session.getUserName());
@@ -75,7 +76,7 @@ public class UserManager {
         IsisContext.closeSession();
         getAuthenticationManager().closeSession(session);
 
-        final UserlessSession replacementSession = new UserlessSession();
+        final AnonymousSession replacementSession = new AnonymousSession();
         IsisContext.openSession(replacementSession);
     }
 

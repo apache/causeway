@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -38,7 +39,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
-import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
@@ -77,7 +77,7 @@ public class ActionAction implements Action {
             entryState = validateParameters(context, action, object);
 
             final AuthenticationSession session = context.getSession();
-            if (session == null && action.isUsable(new UserlessSession(), object).isVetoed()) {
+            if (session == null && action.isUsable(new AnonymousSession(), object).isVetoed()) {
                 throw new NotLoggedInException();
             }
 

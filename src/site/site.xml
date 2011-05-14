@@ -136,7 +136,6 @@
                 <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
                 <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
             </item>
-            <item name="Jottings" href="jottings.html" />
         </menu>
 
         <menu name="Project Info" ref="reports"/>
@@ -146,6 +145,7 @@
             <item name="License" href="http://www.apache.org/licenses/" />
             <item name="Sponsorship" href="http://www.apache.org/foundation/sponsorship.html" />
             <item name="Thanks" href="http://apache.org/foundation/thanks.html" />
+            <item name="More thanks" href="more-thanks.html" />
         </menu>
 
 	</body>

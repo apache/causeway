@@ -19,13 +19,33 @@
 
 package org.apache.isis.runtimes.dflt.runtime.authentication;
 
+import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationAuthenticator;
+import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.authentication.fixture.LogonFixtureAuthenticator;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
+/**
+ * A refinement of the {@link AuthenticationManagerStandard}, which adds support to make it
+ * easier without the palava of logging in when running in either
+ * {@link DeploymentType#EXPLORATION exploration} mode or in {@link DeploymentType#PROTOTYPE prototype}
+ * mode. 
+ * 
+ * <p>
+ * Specifically:
+ * <ul>
+ * <li>the {@link ExplorationAuthenticator} will always provide a special
+ * {@link ExplorationSession} if running in the {@link DeploymentType} of {@link DeploymentType#EXPLORATION}.
+ * <li>the {@link LogonFixtureAuthenticator} will set up a session using the
+ * login provided by a {@link LogonFixture}, but prov
+ * 
+ *
+ * @version $Rev$ $Date$
+ */
 public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationManagerStandard {
 
     public AuthenticationManagerStandardForDfltRuntime(final IsisConfiguration configuration) {

@@ -19,9 +19,9 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Secure extends AbstractElementProcessor {
@@ -29,7 +29,7 @@ public class Secure extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
-        final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession);
+        final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof AnonymousSession);
         if (!isLoggedIn) {
             IsisContext.getMessageBroker().addWarning(
                 "You are not currently logged in! Please log in so you can continue.");

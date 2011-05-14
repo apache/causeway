@@ -42,6 +42,7 @@
 		<relativeUrl>security/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Security</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-security</docbkxGuideName>
 	</properties>
 

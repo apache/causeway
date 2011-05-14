@@ -38,7 +38,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     private final String name;
     private final List<String> roles = new ArrayList<String>();
-    private final String code;
+    private final String validationCode;
 
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
 
@@ -51,17 +51,17 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         this(name, Collections.EMPTY_LIST, code);
     }
 
-    public AuthenticationSessionAbstract(final String name, final List<String> roles, final String code) {
+    public AuthenticationSessionAbstract(final String name, final List<String> roles, final String validationCode) {
         this.name = name;
         this.roles.addAll(roles);
-        this.code = code;
+        this.validationCode = validationCode;
         initialized();
     }
 
     public AuthenticationSessionAbstract(final DataInputExtended input) throws IOException {
         this.name = input.readUTF();
         this.roles.addAll(Arrays.asList(input.readUTFs()));
-        this.code = input.readUTF();
+        this.validationCode = input.readUTF();
         initialized();
     }
 
@@ -69,7 +69,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(getUserName());
         output.writeUTFs(roles.toArray(new String[] {}));
-        output.writeUTF(code);
+        output.writeUTF(validationCode);
     }
 
     private void initialized() {
@@ -103,12 +103,12 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     }
 
     // ///////////////////////////////////////////////////////
-    // Code
+    // Validation Code
     // ///////////////////////////////////////////////////////
 
     @Override
     public String getValidationCode() {
-        return code;
+        return validationCode;
     }
 
     // ///////////////////////////////////////////////////////

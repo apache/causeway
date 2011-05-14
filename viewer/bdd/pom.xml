@@ -39,6 +39,7 @@
 		<relativeUrl>viewer/bdd/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis BDD Testing Guide</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Acceptance Testing using BDD Frameworks</docbkxGuideSubTitle>
         <docbkxGuideName>isis-bdd-integration</docbkxGuideName>
     </properties>
 

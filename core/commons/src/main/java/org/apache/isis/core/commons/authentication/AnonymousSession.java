@@ -17,23 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.scimpi.dispatcher;
+package org.apache.isis.core.commons.authentication;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 
-public class UserlessSession extends AuthenticationSessionAbstract {
+/**
+ * Originally designed for webapp viewers that want to provide access without requiring that the
+ * user logs on.
+ * 
+ * <p>
+ * For example, a webapp want to have a registration/sign-up page, or a 'lost password' page.
+ */
+public class AnonymousSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public UserlessSession() {
-        super("__web_default", Arrays.asList(new String[] { "not-logged-in" }), "");
+    private static final String USER_NAME = "__web_default";
+    private static final String ROLE = "not-logged-in";
+    private static final String CODE = "";
+    
+    public AnonymousSession() {
+        super(USER_NAME, Arrays.asList( ROLE ), CODE);
     }
 
-    public UserlessSession(final DataInputExtended input) throws IOException {
+    public AnonymousSession(final DataInputExtended input) throws IOException {
         super(input);
     }
 

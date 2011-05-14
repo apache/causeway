@@ -39,6 +39,7 @@
 		<relativeUrl>runtimes/dflt/remoting/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Default Runtime Remoting Guide</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-remoting</docbkxGuideName>
 	</properties>
 

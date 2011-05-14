@@ -22,9 +22,9 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -41,7 +41,7 @@ public class Logon extends AbstractElementProcessor {
             view = (String) request.getContext().getVariable("login-path");
         }
 
-        final boolean isNotLoggedIn = IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession;
+        final boolean isNotLoggedIn = IsisContext.getSession().getAuthenticationSession() instanceof AnonymousSession;
         if (isNotLoggedIn) {
             loginForm(request, view);
         }

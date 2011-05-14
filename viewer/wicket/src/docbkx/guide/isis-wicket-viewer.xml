@@ -21,16 +21,13 @@
 "file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <book>
   <bookinfo>
-    <title>Apache Isis Wicket Viewer</title>
-
-    <subtitle>Integration between Apache Isis and Apache Wicket</subtitle>
-
-    <releaseinfo>Version 0.1</releaseinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Dan</firstname>
-
         <surname>Haywood</surname>
       </author>
     </authorgroup>

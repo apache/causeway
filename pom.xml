@@ -786,8 +786,12 @@
 					<excludeSubProjects>false</excludeSubProjects>
 					<numUnapprovedLicenses>0</numUnapprovedLicenses>
 					<excludes>
-						<exclude>**/*.hsp</exclude>
-						<exclude>**/*.svg</exclude>
+						<exclude>*.hsp</exclude>
+						<exclude>.project</exclude>
+						<exclude>*.svg</exclude>
+                        <exclude>*.classpath</exclude>
+                        <exclude>*.project</exclude>
+                        <exclude>*.ucd</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

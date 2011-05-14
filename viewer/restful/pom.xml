@@ -41,7 +41,7 @@
 		<relativeUrl>viewer/restful/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Restful Viewer</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-restful-viewer</docbkxGuideName>
     </properties>
 	

@@ -38,7 +38,7 @@
 		<relativeUrl>viewer/html/</relativeUrl>
 
 		<docbkxGuideTitle>Apache Isis HTML Viewer</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideSubTitle>Configuration, Customization and Deployment Guide</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-html-viewer</docbkxGuideName>
     </properties>
 

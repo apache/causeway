@@ -19,10 +19,10 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
-import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class User extends AbstractElementProcessor {
@@ -33,7 +33,7 @@ public class User extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
-        final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession);
+        final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof AnonymousSession);
         request.appendHtml("<div class=\"user\">");
         if (isLoggedIn) {
             displayUserAndLogoutLink(request);

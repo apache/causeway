@@ -40,7 +40,7 @@
 		<relativeUrl>viewer/scimpi/</relativeUrl>
 
 		<docbkxGuideTitle>Apache Isis Scimpi</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideSubTitle>Configuration, Customization and Deployment Guide</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-scimpi-viewer</docbkxGuideName>
     </properties>
 
