@@ -29,6 +29,8 @@ public interface StateReader {
 
     String readField(String id);
 
+    String readEncrytionType();
+
     String readObjectType();
 
     String readId();

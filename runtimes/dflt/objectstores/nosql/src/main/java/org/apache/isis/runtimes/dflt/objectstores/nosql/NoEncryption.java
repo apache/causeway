@@ -16,33 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import java.util.List;
+public class NoEncryption implements DataEncrypter {
 
-public interface StateWriter {
+    public String getType() {
+        return "none";
+    }
 
-    StateWriter addAggregate(String id);
+    public String encrypt(String plainText) {
+        return plainText;
+    }
 
-    void writeId(String oid);
-
-    void writeType(String type);
-    
-    void writeEncryptionType(String type);
-
-    void writeField(String id, String data);
-
-    void writeField(String id, long l);
-
-    void writeVersion(String currentVersion, String newVersion);
-
-    void writeTime(String time);
-
-    void writeUser(String user);
-
-    void writeCollection(String id, List<StateWriter> elements);
-
-    StateWriter createElementWriter();
+    public String decrypt(String encryptedText) {
+        return encryptedText;
+    }
 
 }

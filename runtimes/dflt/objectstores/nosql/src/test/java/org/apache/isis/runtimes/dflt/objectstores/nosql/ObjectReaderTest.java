@@ -19,11 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -38,6 +38,9 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 public class ObjectReaderTest {
 
     private ObjectReader objectReader;
@@ -46,6 +49,7 @@ public class ObjectReaderTest {
     private Mockery context;
     private KeyCreator keyCreator;
     private VersionCreator versionCreator;
+    private Map<String, DataEncrypter> dataEncrypter;
 
     @Before
     public void setup() {
@@ -58,7 +62,24 @@ public class ObjectReaderTest {
         objectReader = new ObjectReader();
         keyCreator = context.mock(KeyCreator.class);
         versionCreator = context.mock(VersionCreator.class);
-        ;
+        
+        
+        dataEncrypter = new HashMap<String, DataEncrypter>();
+        DataEncrypter dataEncrypter1 = new DataEncrypter() {
+            public String getType() {
+                return "etc1";
+            }
+
+            public String encrypt(String plainText) {
+                throw new UnexpectedCallException();
+            }
+
+            public String decrypt(String encryptedText) {
+                return encryptedText.substring(3);
+            }
+        };
+        dataEncrypter.put(dataEncrypter1.getType(), dataEncrypter1);
+
     }
 
     @Test
@@ -73,6 +94,8 @@ public class ObjectReaderTest {
                 one(reader1).readId();
                 will(returnValue("3"));
 
+                one(reader1).readEncrytionType();
+                will(returnValue("etc1"));
                 one(reader1).readVersion();
                 will(returnValue("3"));
                 one(reader1).readUser();
@@ -87,7 +110,7 @@ public class ObjectReaderTest {
             }
         });
 
-        final ObjectAdapter readObject = objectReader.load(reader1, keyCreator, versionCreator);
+        final ObjectAdapter readObject = objectReader.load(reader1, keyCreator, versionCreator, dataEncrypter);
         assertEquals(SerialOid.createPersistent(3), readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
@@ -109,6 +132,8 @@ public class ObjectReaderTest {
                 one(reader2).readId();
                 will(returnValue("4"));
 
+                one(reader2).readEncrytionType();
+                will(returnValue("etc1"));
                 one(reader2).readVersion();
                 will(returnValue("3"));
                 one(reader2).readUser();
@@ -135,7 +160,7 @@ public class ObjectReaderTest {
             }
         });
 
-        final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator);
+        final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator, dataEncrypter);
         assertEquals(SerialOid.createPersistent(4), readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
@@ -159,6 +184,8 @@ public class ObjectReaderTest {
                 one(reader2).readId();
                 will(returnValue("5"));
 
+                one(reader2).readEncrytionType();
+                will(returnValue("etc1"));
                 one(reader2).readVersion();
                 will(returnValue("3"));
                 one(reader2).readUser();
@@ -187,7 +214,7 @@ public class ObjectReaderTest {
             }
         });
 
-        final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator);
+        final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator, dataEncrypter);
         assertEquals(SerialOid.createPersistent(5), readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
@@ -206,6 +233,9 @@ public class ObjectReaderTest {
         setupObject1();
         context.checking(new Expectations() {
             {
+
+                one(reader1).readEncrytionType();
+                will(returnValue("etc1"));
                 one(reader1).readVersion();
                 will(returnValue("3"));
                 one(reader1).readUser();
@@ -216,12 +246,11 @@ public class ObjectReaderTest {
             }
         });
 
-        final ObjectSpecification specification =
-            IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
-        final ObjectAdapter readObject =
-            IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(4), specification);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
+        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(4),
+                specification);
 
-        objectReader.update(reader1, keyCreator, versionCreator, readObject);
+        objectReader.update(reader1, keyCreator, versionCreator, dataEncrypter, readObject);
 
         final ExampleValuePojo pojo = (ExampleValuePojo) readObject.getObject();
         assertEquals("Fred Smith", pojo.getName());
@@ -235,10 +264,10 @@ public class ObjectReaderTest {
         context.checking(new Expectations() {
             {
                 one(reader1).readField("name");
-                will(returnValue("Fred Smith"));
+                will(returnValue("ENCFred Smith"));
 
                 one(reader1).readField("size");
-                will(returnValue("34"));
+                will(returnValue("ENC34"));
 
                 one(reader1).readField("nullable");
                 will(returnValue("null"));

@@ -64,6 +64,8 @@ public class MongoStateWriter implements StateWriter {
         dbObject.put(id, Long.toString(l));
     }
 
+    public void writeEncryptionType(String type) {}
+    
     @Override
     public void writeVersion(final String currentVersion, final String newVersion) {
     }

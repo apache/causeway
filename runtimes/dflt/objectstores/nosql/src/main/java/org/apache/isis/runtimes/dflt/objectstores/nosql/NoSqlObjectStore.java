@@ -43,6 +43,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
+
 public class NoSqlObjectStore implements ObjectStore {
     private final NoSqlDataDatabase database;
     private final Map<String, Oid> serviceCache = new HashMap<String, Oid>();
@@ -50,14 +51,23 @@ public class NoSqlObjectStore implements ObjectStore {
     private final VersionCreator versionCreator;
     private final ObjectReader objectReader = new ObjectReader();
     private final NoSqlOidGenerator oidGenerator;
+    private final DataEncrypter wrtingDataEncrypter;
+    private final Map<String, DataEncrypter> availableDataEncrypters;
     private final boolean isDataLoaded;
 
-    public NoSqlObjectStore(final NoSqlDataDatabase db, final NoSqlOidGenerator oidGenerator,
-        final KeyCreator keyCreator, final VersionCreator versionCreator) {
+    public NoSqlObjectStore(
+            final NoSqlDataDatabase db,
+            final NoSqlOidGenerator oidGenerator,
+            final KeyCreator keyCreator,
+            final VersionCreator versionCreator,
+            final DataEncrypter writingDataEncrypter,
+            final Map<String, DataEncrypter> availableDataEncrypters) {
         this.database = db;
         this.oidGenerator = oidGenerator;
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
+        this.wrtingDataEncrypter = writingDataEncrypter;
+        this.availableDataEncrypters = availableDataEncrypters;
 
         db.open();
         isDataLoaded = db.containsData();
@@ -72,10 +82,11 @@ public class NoSqlObjectStore implements ObjectStore {
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         // TODO should this be done at a higher level so it is applicable for all OSes
         if (object.getSpecification().isAggregated()) {
-            // throw new UnexpectedCallException("Aggregated objects should not be created outside of their owner");
+            // throw new
+            // UnexpectedCallException("Aggregated objects should not be created outside of their owner");
             return null;
         } else {
-            return new NoSqlCreateObjectCommand(keyCreator, versionCreator, object);
+            return new NoSqlCreateObjectCommand(keyCreator, versionCreator, wrtingDataEncrypter, object);
         }
     }
 
@@ -95,7 +106,7 @@ public class NoSqlObjectStore implements ObjectStore {
         if (rootAdapter.getOid() instanceof AggregatedOid) {
             throw new NoSqlStoreException("Unexpected aggregated object to save: " + rootAdapter + " (" + adapter + ")");
         }
-        return new NoSqlSaveObjectCommand(keyCreator, versionCreator, rootAdapter);
+        return new NoSqlSaveObjectCommand(keyCreator, versionCreator, wrtingDataEncrypter, rootAdapter);
     }
 
     /**
@@ -118,13 +129,15 @@ public class NoSqlObjectStore implements ObjectStore {
         return instances.toArray(new ObjectAdapter[instances.size()]);
     }
 
-    private void instances(final PersistenceQuery persistenceQuery, final ObjectSpecification specification,
-        final List<ObjectAdapter> instances) {
+    private void instances(
+            final PersistenceQuery persistenceQuery,
+            final ObjectSpecification specification,
+            final List<ObjectAdapter> instances) {
         String specificationName = specification.getFullIdentifier();
         final Iterator<StateReader> instanceData = database.instancesOf(specificationName);
         while (instanceData.hasNext()) {
             final StateReader reader = instanceData.next();
-            final ObjectAdapter instance = objectReader.load(reader, keyCreator, versionCreator);
+            final ObjectAdapter instance = objectReader.load(reader, keyCreator, versionCreator, availableDataEncrypters);
             // TODO deal with this natively
             if (persistenceQuery instanceof PersistenceQueryBuiltIn) {
                 if (!((PersistenceQueryBuiltIn) persistenceQuery).matches(instance)) {
@@ -143,7 +156,7 @@ public class NoSqlObjectStore implements ObjectStore {
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
         final String key = keyCreator.key(oid);
         final StateReader reader = database.getInstance(key, hint.getFullIdentifier());
-        return objectReader.load(reader, keyCreator, versionCreator);
+        return objectReader.load(reader, keyCreator, versionCreator, availableDataEncrypters);
     }
 
     @Override
@@ -174,14 +187,12 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void reset() {
-    }
+    public void reset() {}
 
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
         final ObjectAdapter fieldValue = field.get(object);
-        if (fieldValue != null && !fieldValue.getResolveState().isResolved()
-            && !fieldValue.getSpecification().isAggregated()) {
+        if (fieldValue != null && !fieldValue.getResolveState().isResolved() && !fieldValue.getSpecification().isAggregated()) {
             resolveImmediately(fieldValue);
         }
     }
@@ -191,12 +202,13 @@ public class NoSqlObjectStore implements ObjectStore {
         final Oid oid = object.getOid();
         ;
         if (oid instanceof AggregatedOid) {
-            // throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " + object);
+            // throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " +
+            // object);
         } else {
             final String specificationName = object.getSpecification().getFullIdentifier();
             final String key = keyCreator.key(oid);
             final StateReader reader = database.getInstance(key, specificationName);
-            objectReader.update(reader, keyCreator, versionCreator, object);
+            objectReader.update(reader, keyCreator, versionCreator, availableDataEncrypters, object);
         }
     }
 
@@ -226,16 +238,13 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void abortTransaction() {
-    }
+    public void abortTransaction() {}
 
     @Override
-    public void endTransaction() {
-    }
+    public void endTransaction() {}
 
     @Override
-    public void startTransaction() {
-    }
+    public void startTransaction() {}
 
     // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)

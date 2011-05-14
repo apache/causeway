@@ -99,6 +99,21 @@ public class JsonStateReader implements StateReader {
     }
 
     @Override
+    public String readEncrytionType() {
+        try {
+            String encryptionType;
+            if (instance.has("_encrypt")) {
+                encryptionType = instance.getString("_encrypt");
+            } else {
+                encryptionType = "none";
+            }
+            return encryptionType;
+        } catch (final JSONException e) {
+            throw new NoSqlStoreException("failed to read field _encrypt", e);
+        }
+    }
+        
+    @Override
     public String readUser() {
         return readRequiredField("_user");
     }
@@ -113,7 +128,7 @@ public class JsonStateReader implements StateReader {
             final Object value = instance.get(name);
             return (String) value;
         } catch (final JSONException e) {
-            throw new NoSqlStoreException("failed to read long field value", e);
+            throw new NoSqlStoreException("failed to read field " + name, e);
         }
     }
 

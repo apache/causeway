@@ -23,9 +23,12 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 
 final class NoSqlCreateObjectCommand extends WriteObjectCommand implements CreateObjectCommand {
 
-    public NoSqlCreateObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator,
-        final ObjectAdapter object) {
-        super(false, keyCreator, versionCreator, object);
+    public NoSqlCreateObjectCommand(
+            final KeyCreator keyCreator,
+            final VersionCreator versionCreator,
+            final DataEncrypter dataEncrypter,
+            final ObjectAdapter object) {
+        super(false, keyCreator, versionCreator, dataEncrypter, object);
     }
 
 }

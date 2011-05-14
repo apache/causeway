@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -44,6 +45,7 @@ public class WriteObjectCommandTest {
     private KeyCreator keyCreator;
     private NoSqlCommandContext commandContext;
     private Mockery context;
+    private DataEncrypter dataEncrypter;
 
     @Before
     public void setup() {
@@ -81,7 +83,6 @@ public class WriteObjectCommandTest {
         commandContext = context.mock(NoSqlCommandContext.class);
         keyCreator = context.mock(KeyCreator.class);
         versionCreator = context.mock(VersionCreator.class);
-        ;
 
         final Version version = new SerialNumberVersion(2, "username", null);
 
@@ -95,6 +96,20 @@ public class WriteObjectCommandTest {
                 will(returnValue("1057"));
             }
         });
+        
+        dataEncrypter = new DataEncrypter() {
+            public String getType() {
+                return "etc1";
+            }
+
+            public String encrypt(String plainText) {
+                return "ENC" + plainText;
+            }
+
+            public String decrypt(String encryptedText) {
+                throw new UnexpectedCallException();
+            }
+        };
 
     }
 
@@ -111,19 +126,20 @@ public class WriteObjectCommandTest {
 
                 one(writer).writeId("3");
                 one(writer).writeType(specification.getFullIdentifier());
-                one(writer).writeField("name", "Fred Smith");
-                one(writer).writeField("size", "108");
+                one(writer).writeField("name", "ENCFred Smith");
+                one(writer).writeField("size", "ENC108");
                 one(writer).writeField("nullable", null);
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
                 one(writer).writeTime("1057");
-
+                one(writer).writeEncryptionType("etc1");
+                
                 one(commandContext).insert(writer);
 
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, object1).execute(commandContext);
+        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, object1).execute(commandContext);
 
         context.assertIsSatisfied();
     }
@@ -148,12 +164,13 @@ public class WriteObjectCommandTest {
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
                 one(writer).writeTime("1057");
+                one(writer).writeEncryptionType("etc1");
 
                 one(commandContext).insert(writer);
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, object3).execute(commandContext);
+        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, object3).execute(commandContext);
 
         context.assertIsSatisfied();
     }
@@ -181,12 +198,13 @@ public class WriteObjectCommandTest {
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
                 one(writer).writeTime("1057");
+                one(writer).writeEncryptionType("etc1");
 
                 one(commandContext).insert(writer);
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, object4).execute(commandContext);
+        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, object4).execute(commandContext);
 
         context.assertIsSatisfied();
     }

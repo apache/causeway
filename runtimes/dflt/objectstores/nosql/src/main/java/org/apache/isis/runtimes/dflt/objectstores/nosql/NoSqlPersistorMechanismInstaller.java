@@ -19,6 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
@@ -60,7 +63,14 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
             final VersionCreator versionCreator = createVersionCreator();
             final NoSqlDataDatabase db = createNoSqlDatabase(configuration);
             final NoSqlOidGenerator oidGenerator = createOidGenerator(db);
-            objectStore = new NoSqlObjectStore(db, oidGenerator, keyCreator, versionCreator);
+            
+            DataEncrypter writingDataEncrypter = new Rot13Encryption();
+            Map<String, DataEncrypter> availableDataEncrypters = new HashMap<String, DataEncrypter>();
+            availableDataEncrypters.put(writingDataEncrypter.getType(), writingDataEncrypter);
+            DataEncrypter passThoughEncrypter = new NoEncryption();
+            availableDataEncrypters.put(passThoughEncrypter.getType(), passThoughEncrypter);
+            
+            objectStore = new NoSqlObjectStore(db, oidGenerator, keyCreator, versionCreator, writingDataEncrypter, availableDataEncrypters);
         }
         return objectStore;
     }

@@ -65,6 +65,11 @@ public class JsonStateWriter implements StateWriter {
     }
 
     @Override
+    public void writeEncryptionType(String type) {
+        writeField("_encrypt", type);
+    }
+    
+    @Override
     public void writeVersion(final String currentVersion, final String newVersion) {
         this.currentVersion = currentVersion;
         this.newVersion = newVersion;
@@ -128,4 +133,5 @@ public class JsonStateWriter implements StateWriter {
             throw new NoSqlStoreException(e);
         }
     }
+
 }

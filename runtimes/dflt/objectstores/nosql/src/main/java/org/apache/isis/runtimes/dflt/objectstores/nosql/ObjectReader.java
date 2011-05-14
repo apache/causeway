@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,7 +40,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 class ObjectReader {
 
-    public ObjectAdapter load(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator) {
+    public ObjectAdapter load(
+            final StateReader reader,
+            final KeyCreator keyCreator,
+            final VersionCreator versionCreator,
+            final Map<String, DataEncrypter> dataEncrypters) {
         final String className = reader.readObjectType();
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
         final String id = reader.readId();
@@ -64,18 +69,26 @@ class ObjectReader {
 
         // TODO move lock to common method
         // object.setOptimisticLock(version);
-        loadState(reader, keyCreator, versionCreator, object);
+        loadState(reader, keyCreator, versionCreator, dataEncrypters, object);
         return object;
     }
 
-    public void update(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator,
-        final ObjectAdapter object) {
-        loadState(reader, keyCreator, versionCreator, object);
+    public void update(
+            final StateReader reader,
+            final KeyCreator keyCreator,
+            final VersionCreator versionCreator,
+            final Map<String, DataEncrypter> dataEncrypters,
+            final ObjectAdapter object) {
+        loadState(reader, keyCreator, versionCreator, dataEncrypters, object);
     }
 
-    private void loadState(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator,
-        final ObjectAdapter object) {
-        final ResolveState resolveState = ResolveState.RESOLVING;
+    private void loadState(
+            final StateReader reader,
+            final KeyCreator keyCreator,
+            final VersionCreator versionCreator,
+            final Map<String, DataEncrypter> dataEncrypters,
+            final ObjectAdapter object) {
+    final ResolveState resolveState = ResolveState.RESOLVING;
         object.changeState(resolveState);
         Version version = null;
         final String versionString = reader.readVersion();
@@ -84,12 +97,17 @@ class ObjectReader {
             final String time = reader.readTime();
             version = versionCreator.version(versionString, user, time);
         }
-        readFields(reader, object, keyCreator);
+        String encryptionType = reader.readEncrytionType();
+        readFields(reader, object, keyCreator, dataEncrypters.get(encryptionType));
         object.setOptimisticLock(version);
         object.changeState(resolveState.getEndState());
     }
 
-    private void readFields(final StateReader reader, final ObjectAdapter object, final KeyCreator keyCreator) {
+    private void readFields(
+            final StateReader reader,
+            final ObjectAdapter object,
+            final KeyCreator keyCreator,
+            final DataEncrypter dataEncrypter) {
         final ObjectAssociationContainer specification = object.getSpecification();
         final List<ObjectAssociation> associations = specification.getAssociations();
         for (final ObjectAssociation association : associations) {
@@ -97,53 +115,65 @@ class ObjectReader {
                 continue;
             }
             if (association.isOneToManyAssociation()) {
-                readCollection(reader, keyCreator, (OneToManyAssociation) association, object);
+                readCollection(reader, keyCreator, dataEncrypter, (OneToManyAssociation) association, object);
             } else if (association.getSpecification().isValue()) {
-                readValue(reader, (OneToOneAssociation) association, object);
+                readValue(reader, dataEncrypter, (OneToOneAssociation) association, object);
             } else if (association.getSpecification().isAggregated()) {
-                readAggregate(reader, keyCreator, (OneToOneAssociation) association, object);
+                readAggregate(reader, keyCreator, dataEncrypter, (OneToOneAssociation) association, object);
             } else {
                 readReference(reader, keyCreator, (OneToOneAssociation) association, object);
             }
         }
     }
 
-    private void readAggregate(final StateReader reader, final KeyCreator keyCreator,
-        final OneToOneAssociation association, final ObjectAdapter object) {
+    private void readAggregate(
+            final StateReader reader,
+            final KeyCreator keyCreator,
+            final DataEncrypter dataEncrypter,
+            final OneToOneAssociation association,
+            final ObjectAdapter object) {
         final String id = association.getId();
         final StateReader aggregateReader = reader.readAggregate(id);
         if (aggregateReader != null) {
             final String id2 = aggregateReader.readId();
             final AggregatedOid oid = new AggregatedOid(object.getOid(), id2);
-            final ObjectAdapter fieldObject = restoreAggregatedObject(aggregateReader, oid, keyCreator);
+            final ObjectAdapter fieldObject = restoreAggregatedObject(aggregateReader, oid, keyCreator, dataEncrypter);
             association.initAssociation(object, fieldObject);
         } else {
             association.initAssociation(object, null);
         }
     }
 
-    private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final Oid oid,
-        final KeyCreator keyCreator) {
+    private ObjectAdapter restoreAggregatedObject(
+            final StateReader aggregateReader,
+            final Oid oid,
+            final KeyCreator keyCreator,
+            final DataEncrypter dataEncrypter) {
         final String objectType = aggregateReader.readObjectType();
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(objectType);
         final ObjectAdapter fieldObject = getAdapter(specification, oid);
         if (fieldObject.getResolveState().isGhost()) {
             final ResolveState resolveState = ResolveState.RESOLVING;
             fieldObject.changeState(resolveState);
-            readFields(aggregateReader, fieldObject, keyCreator);
+            readFields(aggregateReader, fieldObject, keyCreator, dataEncrypter);
             fieldObject.changeState(resolveState.getEndState());
         }
         return fieldObject;
     }
 
-    private void readValue(final StateReader reader, final OneToOneAssociation association, final ObjectAdapter object) {
+    private void readValue(
+            final StateReader reader,
+            final DataEncrypter dataEncrypter,
+            final OneToOneAssociation association,
+            final ObjectAdapter object) {
         final String fieldData = reader.readField(association.getId());
         if (fieldData != null) {
             if (fieldData.equals("null")) {
                 association.initAssociation(object, null);
             } else {
                 final EncodableFacet encodeableFacet = association.getSpecification().getFacet(EncodableFacet.class);
-                final ObjectAdapter value = encodeableFacet.fromEncodedString(fieldData);
+                String decryptedData = dataEncrypter.decrypt(fieldData);
+                final ObjectAdapter value = encodeableFacet.fromEncodedString(decryptedData);
                 association.initAssociation(object, value);
             }
         }
@@ -163,8 +193,12 @@ class ObjectReader {
         association.initAssociation(object, fieldObject);
     }
 
-    private void readCollection(final StateReader reader, final KeyCreator keyCreator,
-        final OneToManyAssociation association, final ObjectAdapter object) {
+    private void readCollection(
+            final StateReader reader,
+            final KeyCreator keyCreator,
+            final DataEncrypter dataEncrypter,
+            final OneToManyAssociation association,
+            final ObjectAdapter object) {
         final ObjectAdapter collection = association.get(object);
         final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         if (association.getSpecification().isAggregated()) {
@@ -175,7 +209,7 @@ class ObjectReader {
             for (final StateReader elementReader : readers) {
                 final String id = elementReader.readId();
                 final AggregatedOid oid = new AggregatedOid(object.getOid(), id);
-                elements[i++] = restoreAggregatedObject(elementReader, oid, keyCreator);
+                elements[i++] = restoreAggregatedObject(elementReader, oid, keyCreator, dataEncrypter);
             }
             facet.init(collection, elements);
         } else {

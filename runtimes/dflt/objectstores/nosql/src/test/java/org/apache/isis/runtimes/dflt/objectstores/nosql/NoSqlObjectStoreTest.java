@@ -19,13 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -40,6 +39,10 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class NoSqlObjectStoreTest {
 
@@ -74,8 +77,25 @@ public class NoSqlObjectStoreTest {
         });
         keyCreator = context.mock(KeyCreator.class);
         versionCreator = context.mock(VersionCreator.class);
-        ;
-        store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), keyCreator, versionCreator);
+        
+        Map<String, DataEncrypter> dataEncrypter = new HashMap<String, DataEncrypter>();
+        DataEncrypter dataEncrypter1 = new DataEncrypter() {
+            public String getType() {
+                return "etc";
+            }
+
+            public String encrypt(String plainText) {
+                throw new UnexpectedCallException();
+            }
+
+            public String decrypt(String encryptedText) {
+                return encryptedText.substring(3);
+            }
+        };
+        dataEncrypter.put(dataEncrypter1.getType(), dataEncrypter1);
+
+        
+        store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), keyCreator, versionCreator, null, dataEncrypter);
     }
 
     @Test
@@ -113,7 +133,7 @@ public class NoSqlObjectStoreTest {
                 one(db).close();
             }
         });
-        store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), null, null);
+        store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), null, null, null, new HashMap<String, DataEncrypter>());
         assertTrue(store.isFixturesInstalled());
     }
 

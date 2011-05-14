@@ -38,13 +38,19 @@ class WriteObjectCommand implements PersistenceCommand {
     private final KeyCreator keyCreator;
     private final ObjectAdapter object;
     private final VersionCreator versionCreator;
+    private final DataEncrypter dataEncrypter;
     private final boolean isUpdate;
 
-    WriteObjectCommand(final boolean isUpdate, final KeyCreator keyCreator, final VersionCreator versionCreator,
-        final ObjectAdapter object) {
+    WriteObjectCommand(
+            final boolean isUpdate,
+            final KeyCreator keyCreator,
+            final VersionCreator versionCreator,
+            final DataEncrypter dataEncrypter,
+            final ObjectAdapter object) {
         this.isUpdate = isUpdate;
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
+        this.dataEncrypter = dataEncrypter;
         this.object = object;
     }
 
@@ -66,6 +72,7 @@ class WriteObjectCommand implements PersistenceCommand {
             writer.writeVersion(version, versionCreator.versionString(newVersion));
             writer.writeUser(newVersion.getUser());
             writer.writeTime(versionCreator.timeString(newVersion));
+            writer.writeEncryptionType(dataEncrypter.getType());
         }
 
         if (isUpdate) {
@@ -128,6 +135,7 @@ class WriteObjectCommand implements PersistenceCommand {
         } else {
             final EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
             data = encodeableFacet.toEncodedString(value);
+            data  = dataEncrypter.encrypt(data);
         }
         writer.writeField(association.getId(), data);
     }
