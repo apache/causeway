@@ -39,12 +39,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
  * Specifically:
  * <ul>
  * <li>the {@link ExplorationAuthenticator} will always provide a special
- * {@link ExplorationSession} if running in the {@link DeploymentType} of {@link DeploymentType#EXPLORATION}.
+ * {@link ExplorationSession} if running in the {@link DeploymentType} of {@link DeploymentType#EXPLORATION exploration}.
  * <li>the {@link LogonFixtureAuthenticator} will set up a session using the
- * login provided by a {@link LogonFixture}, but prov
- * 
- *
- * @version $Rev$ $Date$
+ * login provided by a {@link LogonFixture}, provided that the {@link DeploymentType} is {@link DeploymentType#EXPLORATION exploration}
+ * or {@link DeploymentType#PROTOTYPE prototyping}
+ * </ul>
  */
 public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationManagerStandard {
 

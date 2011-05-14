@@ -32,11 +32,19 @@
         <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>domain-libs/</relativeUrl>
+    </properties>
+
     <scm>
-        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/distribution/examples</connection>
-        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/distribution/examples</developerConnection>
-        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/distribution/examples</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</url>
     </scm>
+
+    <!-- used in Site generation for relative references. -->
+    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<build>
 	    <plugins>

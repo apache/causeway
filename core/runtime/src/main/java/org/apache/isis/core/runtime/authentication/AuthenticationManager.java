@@ -28,6 +28,10 @@ public interface AuthenticationManager extends ApplicationScopedComponent {
     /**
      * Caches and returns an authentication {@link AuthenticationSession} if the {@link AuthenticationRequest request} is 
      * valid; otherwise returns <tt>null</tt>.
+     * 
+     * <p>
+     * If the provided {@link AuthenticationRequest} is also {@link Trusted}, then
+     * the {@link AuthenticationManager} is expected to always allow the request to succeed.
      */
     AuthenticationSession authenticate(AuthenticationRequest request);
 

@@ -306,10 +306,17 @@ Running the app's BDD (Concordion) tests
 Import into an IDE
 
   You can use any IDE that supports Maven; the Isis developers tend to use
-  Eclipse but NetBeans and IntelliJ are equally as good. 
+  Eclipse with the {{{http://m2eclipse.sonatype.org}m2eclipse}} plugin, but 
+  NetBeans and IntelliJ are equally as good. 
+
+  In Eclipse, you can install m2eclipse from the {{{http://m2eclipse.sonatype.org/sites/m2e}m2eclipse update site}};
+  depending on the version of Eclipse you have installed, you might find that
+  you need to install the {{{http://download.eclipse.org/tools/gef/updates/releases/}Zest visualization}}
+  prerequisite.  (It's a bug in m2eclipse that this prerequisite is not bundled up 
 
   In Eclipse, use File > Import > Maven > Existing Maven Project, and navigate
   to the root (myapp) directory.
+  
 
 Exploring the App
 

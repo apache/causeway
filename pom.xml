@@ -77,16 +77,8 @@
 
     <inceptionYear>2010</inceptionYear>
 
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk</url>
-    </scm>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://incubator.apache.org/isis/</url>
-
     <properties>
+        <relativeUrl></relativeUrl>
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -111,6 +103,14 @@
         <maven-project-info-reports-plugin>2.2</maven-project-info-reports-plugin>
     </properties>
 
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</url>
+    </scm>
+
+    <!-- used in Site generation for relative references. -->
+    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <mailingLists>
         <mailingList>

@@ -57,8 +57,15 @@
         </plugins>
     </build>
 
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</url>
+    </scm>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+    <!-- used in Site generation for relative references. -->
+    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
 
 	<modules>
 		<module>runtime</module>
