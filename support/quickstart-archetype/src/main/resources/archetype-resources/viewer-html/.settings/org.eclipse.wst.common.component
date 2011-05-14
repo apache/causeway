@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="quickstart-viewer-html">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/quickstart-dom/quickstart-dom">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/quickstart-fixture/quickstart-fixture">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/quickstart-objstore-dflt/quickstart-objstore-dflt">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="quickstart-viewer-html"/>
+        <property name="java-output-path" value="/quickstart-viewer-html/target/classes"/>
+    </wb-module>
+</project-modules>
