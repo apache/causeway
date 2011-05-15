@@ -35,19 +35,13 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
+        <siteBaseDir>../../..</siteBaseDir>
 		<relativeUrl>runtimes/dflt/remoting/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Default Runtime Remoting Guide</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-remoting</docbkxGuideName>
 	</properties>
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</url>
-    </scm>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>

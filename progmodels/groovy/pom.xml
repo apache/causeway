@@ -43,12 +43,6 @@
 		<groovy.version>1.7.2</groovy.version>
 	</properties>
 
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</url>
-    </scm>
-
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 

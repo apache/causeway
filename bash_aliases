@@ -30,3 +30,4 @@ alias msd="mvn site-deploy -D modules=standard -D deploy=local -o"
 alias svnst="svn status --ignore-externals | grep -v ^X"
 alias svnup="svn update --ignore-externals | grep -v ^X"
 
+alias asfrat="java -jar apache-rat-0.8-SNAPSHOT.jar -d . -exclude .project .classpath .settings dtd-4.5 fop-cust.xsl html-cust.xsl .ucd .java.hsp target MANIFEST.MF .launch .ent .dtd"

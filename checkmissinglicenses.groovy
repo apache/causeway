@@ -34,16 +34,24 @@ def currentDir=new File(".")
 currentDir.eachFileRecurse { file ->
   if ( file.name == "licenses.xml" ) {
 
-    println( file.canonicalPath )
 
     def fileXml = new XmlSlurper().parseText(file.text)
 
+    def anyMissingLicenses = false
 
     fileXml.dependencies.dependency.each { dependency ->
 
       def url = dependency.licenses.license.url.text()
 
       if(! url) {
+
+        if (!anyMissingLicenses) {
+          println( "----------------------------------------------------------" )
+          println( file.canonicalPath )
+          println( "----------------------------------------------------------" )
+          anyMissingLicenses = true
+        }
+
 	println( dependency.groupId.text() + " : " + dependency.artifactId.text() + " : " + dependency.version.text() )
       }
 

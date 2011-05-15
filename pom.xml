@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
-        <version>8</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.apache.isis</groupId>
@@ -78,6 +78,7 @@
     <inceptionYear>2010</inceptionYear>
 
     <properties>
+        <siteBaseDir>.</siteBaseDir>
         <relativeUrl></relativeUrl>
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
@@ -756,6 +757,42 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.2</version>
+                <!-- required while Isis is in the incubator -->
+                <dependencies>
+                    <dependency>
+					    <groupId>org.apache</groupId>
+					    <artifactId>apache-incubator-disclaimer-resource-bundle</artifactId>
+					    <version>1.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                  <execution>
+                    <id>process-remote-resources</id>
+                    <goals>
+                      <goal>process</goal>
+                    </goals>
+                    <configuration>
+                        <appendedResourcesDirectory>${basedir}/${siteBaseDir}/src/main/appended-resources</appendedResourcesDirectory>
+                      <supplementalModels>
+                        <supplementalModel>supplemental-models.xml</supplementalModel>
+                      </supplementalModels>
+                      <resourceBundles>
+                          <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+                          <!-- required while Isis is in the incubator -->
+                          <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.1</resourceBundle>
+                      </resourceBundles>
+                      <properties>
+                        <projectTimespan>2010~2011</projectTimespan>
+                      </properties>
+                     </configuration>
+                     
+                  </execution>
+                </executions>
+              </plugin>
 
 			<plugin>
 				<groupId>org.apache.rat</groupId>

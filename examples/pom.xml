@@ -30,13 +30,6 @@
 
     <!--  ???REVIEW: is the intent to formally release these as Maven modules??? -->
     <!-- 
-    for now, I've commented out stuff relating to release.
-    <scm>
-        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/distribution/examples</connection>
-        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/distribution/examples</developerConnection>
-        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/distribution/examples</url>
-    </scm>
-
 	<build>
 	    <plugins>
             <plugin>
