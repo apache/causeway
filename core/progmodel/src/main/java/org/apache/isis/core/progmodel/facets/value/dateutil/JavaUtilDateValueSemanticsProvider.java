@@ -32,8 +32,6 @@ import org.apache.isis.core.progmodel.facets.value.DateAndTimeValueSemanticsProv
 import org.apache.isis.core.progmodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time component.
  * 
@@ -48,7 +46,6 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaUtilDateValueSemanticsProvider() {
         this(null, null, null);
     }

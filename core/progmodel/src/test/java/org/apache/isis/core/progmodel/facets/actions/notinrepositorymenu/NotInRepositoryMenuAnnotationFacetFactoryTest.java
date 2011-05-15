@@ -50,7 +50,6 @@ public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacet
 
 
     public void testAnnotationPickedUp() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class CustomerRepository {
             @SuppressWarnings("unused")
 			@NotInServiceMenu

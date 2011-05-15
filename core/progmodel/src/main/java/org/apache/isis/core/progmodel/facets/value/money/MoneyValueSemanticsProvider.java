@@ -38,8 +38,6 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements
     MoneyValueFacet {
 
@@ -80,7 +78,6 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public MoneyValueSemanticsProvider() {
         this(null, null, null);
     }

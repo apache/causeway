@@ -36,8 +36,6 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class XmlFile {
     private static final String[] ESCAPE_STRING = { "&amp;", "&lt;", "&gt;", "&quot;", "&apos;" };
     private static final String[] SPECIAL_CHARACTERS = { "&", "<", ">", "\"", "'" };
@@ -67,7 +65,6 @@ public class XmlFile {
         this.charset = charset;
     }
 
-    @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     private void createDirectoryIfRequired() {
         if (this.directory.exists()) {
             return;
@@ -131,7 +128,6 @@ public class XmlFile {
         }
     }
 
-    @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     public void delete(final String fileName) {
         file(fileName).delete();
     }

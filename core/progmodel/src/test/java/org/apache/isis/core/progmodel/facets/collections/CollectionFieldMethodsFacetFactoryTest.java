@@ -78,7 +78,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -102,7 +101,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public List getOrders() {
@@ -126,7 +124,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Set getOrders() {
@@ -150,7 +147,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Object[] getOrders() {
@@ -176,7 +172,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Order[] getOrders() {
@@ -204,7 +199,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Collection<Order> getOrders() {
                 return null;
             }
@@ -226,7 +220,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order{}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -246,7 +239,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order{}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -270,7 +262,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -300,7 +291,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -327,7 +317,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -357,7 +346,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -383,7 +371,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -413,7 +400,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         
         @SuppressWarnings({ "hiding", "unused" })
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -437,7 +423,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -472,7 +457,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -508,7 +492,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -539,7 +522,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         @SuppressWarnings("hiding")
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -547,7 +529,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
         }
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class CustomerEx extends Customer {
             @SuppressWarnings("unused")
             public void removeFromOrders(final Order o) {};

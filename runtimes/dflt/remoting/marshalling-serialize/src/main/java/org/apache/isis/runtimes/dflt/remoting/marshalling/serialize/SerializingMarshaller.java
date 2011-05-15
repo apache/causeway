@@ -34,7 +34,6 @@ import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.log4j.Logger;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 public class SerializingMarshaller extends MarshallerAbstract {
 
@@ -92,7 +91,6 @@ public class SerializingMarshaller extends MarshallerAbstract {
         }
     }
 
-    @SuppressWarnings("BC_UNCONFIRMED_CAST")
     private Serializable asSerializable(final Request request) {
         return (Serializable) request;
     }

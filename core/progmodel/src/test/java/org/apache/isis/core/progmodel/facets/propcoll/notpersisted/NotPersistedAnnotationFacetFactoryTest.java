@@ -40,7 +40,6 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
     public void testNotPersistedAnnotationPickedUpOnProperty() {
         NotPersistedAnnotationForPropertyFacetFactory facetFactory = new NotPersistedAnnotationForPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @NotPersisted()
@@ -63,7 +62,6 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
         NotPersistedAnnotationForCollectionFacetFactory facetFactory = new NotPersistedAnnotationForCollectionFacetFactory();
 
         class Order{}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @NotPersisted()

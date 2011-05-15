@@ -83,7 +83,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -107,7 +106,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -135,7 +133,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -163,7 +160,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -188,7 +184,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertySetAndClearFacetFactory facetFactoryForSetter = new PropertySetAndClearFacetFactory();
         facetFactoryForSetter.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -220,7 +215,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
         facetFactoryForModify.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -251,7 +245,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
         facetFactoryForModify.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -286,7 +279,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -314,7 +306,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -340,7 +331,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyChoicesFacetFactory facetFactory = new PropertyChoicesFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -370,7 +360,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyDefaultFacetFactory facetFactory = new PropertyDefaultFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -400,7 +389,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyValidateFacetFactory facetFactory = new PropertyValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -430,7 +418,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -460,7 +447,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -490,7 +476,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -520,7 +505,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -550,7 +534,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -580,7 +563,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         DisabledFacetViaDisableMethodFacetFactory facetFactoryForDisable = new DisabledFacetViaDisableMethodFacetFactory();
         facetFactoryForDisable.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
@@ -590,14 +572,12 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class CustomerEx extends Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public boolean hideFirstName() {
                 return true;
             }
 
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public String disableFirstName() {
                 return "disabled";
             }

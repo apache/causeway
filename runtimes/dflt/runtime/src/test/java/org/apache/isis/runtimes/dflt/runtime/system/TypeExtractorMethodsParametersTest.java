@@ -39,7 +39,6 @@ public class TypeExtractorMethodsParametersTest {
         }
         class CustomerRepository {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void filterCustomers(final List<Customer> customerList) {
                 ;
             }

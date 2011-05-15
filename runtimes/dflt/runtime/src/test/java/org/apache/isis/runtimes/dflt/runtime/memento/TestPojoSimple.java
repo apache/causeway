@@ -21,8 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.memento;
 
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class TestPojoSimple extends TestPojo {
     private String name;
     private TestPojoSimple object;
@@ -38,7 +36,6 @@ public class TestPojoSimple extends TestPojo {
         return name;
     }
 
-    @SuppressWarnings("UWF_UNWRITTEN_FIELD")
     public TestPojoSimple getObject() {
         return object;
     }

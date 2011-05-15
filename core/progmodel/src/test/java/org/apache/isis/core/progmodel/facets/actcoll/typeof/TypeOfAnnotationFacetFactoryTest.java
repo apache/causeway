@@ -60,7 +60,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public Collection someAction() {
                 return null;
@@ -83,7 +82,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public Collection getOrders() {
                 return null;
@@ -106,7 +104,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Collection<Order> someAction() {
                 return null;
             }
@@ -127,7 +124,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Collection<Order> getOrders() {
                 return null;
             }
@@ -148,7 +144,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public List someAction() {
                 return null;
@@ -171,7 +166,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public List getOrders() {
                 return null;
@@ -194,7 +188,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public Set someAction() {
                 return null;
@@ -217,7 +210,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public Set getOrders() {
                 return null;
@@ -240,7 +232,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Order[] someAction() {
                 return null;
             }
@@ -262,7 +253,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Order[] getOrders() {
                 return null;
             }
@@ -283,7 +273,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {}
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             @TypeOf(Order.class)
             public Customer someAction() {
                 return null;

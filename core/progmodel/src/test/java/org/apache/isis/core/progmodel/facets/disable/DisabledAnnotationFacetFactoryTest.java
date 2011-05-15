@@ -52,7 +52,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
 
     public void testDisabledAnnotationPickedUpOnProperty() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Disabled
             public int getNumberOfOrders() {
@@ -71,7 +70,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testDisabledAnnotationPickedUpOnCollection() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Disabled
             public Collection getOrders() {
@@ -90,7 +88,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testDisabledAnnotationPickedUpOnAction() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Disabled
             public void someAction() {}
@@ -107,7 +104,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testDisabledWhenAlwaysAnnotationPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Disabled(When.ALWAYS)
             public void someAction() {}
@@ -123,7 +119,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testDisabledWhenNeverAnnotationPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Disabled(When.NEVER)
             public void someAction() {}
@@ -139,7 +134,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testDisabledWhenOncePersistedAnnotationPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Disabled(When.ONCE_PERSISTED)
             public void someAction() {}
@@ -155,7 +149,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @Disabled(When.UNTIL_PERSISTED)

@@ -40,7 +40,6 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testOptionalAnnotationPickedUpOnProperty() {
         OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @Optional
@@ -60,7 +59,6 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testOptionalAnnotationPickedUpOnActionParameter() {
         OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@Optional final String foo) {}
@@ -77,7 +75,6 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testOptionalAnnotationIgnoredForPrimitiveOnProperty() {
         OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @Optional
@@ -95,7 +92,6 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testOptionalAnnotationIgnoredForPrimitiveOnActionParameter() {
         OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@Optional final int foo) {}

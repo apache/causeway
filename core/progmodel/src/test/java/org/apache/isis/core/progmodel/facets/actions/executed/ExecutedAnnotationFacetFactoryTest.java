@@ -52,7 +52,6 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
 
     public void testExecutedLocallyAnnotationPickedUp() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @Executed(Where.LOCALLY)
@@ -72,7 +71,6 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testExecutedRemotelyAnnotationPickedUp() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Executed(Where.REMOTELY)
             public void someAction() {}

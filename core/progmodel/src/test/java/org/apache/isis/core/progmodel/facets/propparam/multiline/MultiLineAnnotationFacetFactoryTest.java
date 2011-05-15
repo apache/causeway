@@ -58,7 +58,6 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testMultiLineAnnotationPickedUpOnProperty() {
         MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @MultiLine(numberOfLines = 12, preventWrapping = true)
@@ -81,7 +80,6 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testMultiLineAnnotationPickedUpOnActionParameter() {
         MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@MultiLine(numberOfLines = 8, preventWrapping = false) final String foo) {}
@@ -101,7 +99,6 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testMultiLineAnnotationDefaults() {
         MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         @MultiLine
         class Customer {}
 
@@ -116,7 +113,6 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testMultiLineAnnotationIgnoredForNonStringProperties() {
         MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @MultiLine(numberOfLines = 8, preventWrapping = false)
@@ -135,7 +131,6 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testMultiLineAnnotationIgnoredForNonStringActionParameters() {
         MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@MultiLine(numberOfLines = 8, preventWrapping = false) final int foo) {}

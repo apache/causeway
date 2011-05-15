@@ -52,7 +52,6 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testDeletingLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void deleting() {};
@@ -71,7 +70,6 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDeletedLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void deleted() {};

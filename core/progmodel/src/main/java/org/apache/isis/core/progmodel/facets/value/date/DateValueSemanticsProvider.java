@@ -27,8 +27,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<org.apache.isis.applib.value.Date> {
 
     private static final boolean IMMUTABLE = false;

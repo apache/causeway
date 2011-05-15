@@ -50,7 +50,6 @@ final class RuntimeBootstrapper implements IsisBootstrapper {
 
         // sufficient just to look it up
         @SuppressWarnings("unused")
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("DLS_DEAD_LOCAL_STORE")
         final IsisSystem system = injector.getInstance(IsisSystem.class);
     }
 

@@ -212,14 +212,12 @@ public class ObjectFixtureService {
         return file;
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     private void mkdirIfRequired(final File directory) {
         if (directory != null && !directory.exists()) {
             directory.mkdirs();
         }
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     private void createFile(final File file) throws IOException {
         file.createNewFile();
     }

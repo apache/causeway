@@ -53,7 +53,6 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testMarkDirtyMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void markDirty() {};
@@ -72,7 +71,6 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testIsDirtyMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public boolean isDirty() {
@@ -93,7 +91,6 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testClearDirtyMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void clearDirty() {};

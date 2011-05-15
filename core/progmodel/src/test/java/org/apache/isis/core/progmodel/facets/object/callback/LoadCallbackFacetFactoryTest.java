@@ -51,7 +51,6 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testLoadingLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void loading() {};
@@ -70,7 +69,6 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testLoadedLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void loaded() {};

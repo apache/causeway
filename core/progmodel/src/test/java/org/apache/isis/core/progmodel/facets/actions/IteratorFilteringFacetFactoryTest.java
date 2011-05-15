@@ -47,7 +47,6 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
 
 
     public void testRequestsRemoverToRemoveIteratorMethods() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction() {}
@@ -58,7 +57,6 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
     }
 
     public void testNoIteratorMethodFiltered() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             public void someAction() {}
         }
@@ -71,7 +69,6 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
      * Not tested; this facet factory is needed, I think, but only filters out stuff when generics are in use.
      */
     public void xxxtestIterableIteratorMethodFiltered() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer implements Iterable {
             public void someAction() {}
 

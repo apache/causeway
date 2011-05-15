@@ -40,8 +40,6 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 /**
  * TODO: remove dependency on {@link TestProxySystemII} and move back to runtime.
  */

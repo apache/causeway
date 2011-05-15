@@ -57,7 +57,6 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testRegExAnnotationPickedUpOnProperty() {
         RegExFacetAnnotationForPropertyFacetFactory facetFactory = new RegExFacetAnnotationForPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @RegEx(validation = "^A.*", caseSensitive = false)
@@ -80,7 +79,6 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testRegExAnnotationPickedUpOnActionParameter() {
         RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final String foo) {}
@@ -100,7 +98,6 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testRegExAnnotationIgnoredForNonStringsProperty() {
         RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @RegEx(validation = "^A.*", caseSensitive = false)
@@ -118,7 +115,6 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testRegExAnnotationIgnoredForPrimitiveOnActionParameter() {
         RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final int foo) {}

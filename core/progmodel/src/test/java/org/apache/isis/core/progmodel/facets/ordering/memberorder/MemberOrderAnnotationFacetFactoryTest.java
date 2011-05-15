@@ -51,7 +51,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
 
     public void testMemberOrderAnnotationPickedUpOnProperty() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @MemberOrder(sequence = "1")
@@ -74,7 +73,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     public void testMemberOrderAnnotationPickedUpOnCollection() {
         class Order {}
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @MemberOrder(sequence = "2")
@@ -98,7 +96,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testMemberOrderAnnotationPickedUpOnAction() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @MemberOrder(sequence = "3")

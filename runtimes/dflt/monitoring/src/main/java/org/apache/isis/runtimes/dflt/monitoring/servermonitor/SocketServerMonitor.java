@@ -27,7 +27,6 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 public class SocketServerMonitor extends AbstractServerMonitor {
     private static final int DEFAULT_PORT = 8009;

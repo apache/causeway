@@ -34,8 +34,6 @@ import java.awt.event.ActionListener;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class AWTConsole extends Frame implements ServerConsole {
     private static final long serialVersionUID = 1L;
     private final static Logger LOG = Logger.getLogger(AWTConsole.class);
@@ -196,7 +194,6 @@ public class AWTConsole extends Frame implements ServerConsole {
         exitSystem();
     }
 
-    @SuppressWarnings(value = "DM_EXIT")
     private void exitSystem() {
         System.exit(0);
     }

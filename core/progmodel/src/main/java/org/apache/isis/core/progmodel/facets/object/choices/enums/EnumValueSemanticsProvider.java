@@ -29,8 +29,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements
     EnumFacet {
 
@@ -45,7 +43,6 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     /**
      * Required because {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public EnumValueSemanticsProvider() {
         this(null, null, null, null);
     }

@@ -35,8 +35,6 @@ import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueSeman
 
 import com.google.inject.internal.Maps;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
@@ -52,7 +50,6 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaSqlTimeStampValueSemanticsProvider() {
         this(null, null, null);
     }

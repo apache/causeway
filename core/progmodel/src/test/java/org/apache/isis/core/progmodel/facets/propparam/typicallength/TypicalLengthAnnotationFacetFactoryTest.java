@@ -39,7 +39,6 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
     public void testTypicalLengthAnnotationPickedUpOnProperty() {
         TypicalLengthAnnotationOnPropertyFacetFactory facetFactory = new TypicalLengthAnnotationOnPropertyFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @TypicalLength(30)
@@ -62,7 +61,6 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
         TypicalLengthAnnotationOnParameterFacetFactory facetFactory = new TypicalLengthAnnotationOnParameterFacetFactory();
 
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@TypicalLength(20) final int foo) {}

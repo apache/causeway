@@ -35,8 +35,6 @@ import org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProvid
 
 import com.google.inject.internal.Maps;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
  * 
@@ -51,7 +49,6 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaSqlTimeValueSemanticsProvider() {
         this(null, null, null);
     }

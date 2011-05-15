@@ -56,7 +56,6 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testSavingAndPersistingLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void saving() {};
@@ -81,7 +80,6 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void saved() {};

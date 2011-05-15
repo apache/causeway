@@ -49,7 +49,6 @@ public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testIconNameMethodPickedUpOnClassAndMethodRemoved() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String iconName() {

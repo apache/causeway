@@ -48,7 +48,6 @@ public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testCreatedLifecycleMethodPickedUpOn() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
 			public void created() {};

@@ -29,8 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.DateAndTimeValueSemanticsProviderAbstract;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsProviderAbstract<DateTime> {
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
@@ -38,7 +36,6 @@ public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsPro
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public DateTimeValueSemanticsProvider() {
         this(null, null, null);
     }

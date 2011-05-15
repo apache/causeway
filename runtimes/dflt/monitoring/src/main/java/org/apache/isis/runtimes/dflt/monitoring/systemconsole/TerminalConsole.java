@@ -25,8 +25,6 @@ import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 /**
  * Marked as final because starts a thread in the {@link #TerminalConsole() constructor}.
  */
@@ -117,7 +115,6 @@ public final class TerminalConsole implements ServerConsole, Runnable {
         exitSystem();
     }
 
-    @SuppressWarnings(value = "DM_EXIT")
     private void exitSystem() {
         System.exit(0);
     }

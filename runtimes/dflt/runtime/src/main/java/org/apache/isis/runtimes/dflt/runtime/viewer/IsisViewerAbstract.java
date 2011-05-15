@@ -109,7 +109,7 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     // ////////////////////////////////////////////////////////////////
 
     public LogonFixture getLogonFixture() {
-        // REVIEW: findBugs says this will always return null, since 'system' never written to...
+        // REVIEW: always return null? (since 'system' never written to...)
         return system != null ? system.getLogonFixture() : null;
     }
 

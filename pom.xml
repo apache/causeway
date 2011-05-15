@@ -384,18 +384,6 @@
                         section -->
                 </plugin>
 
-                <!-- Quality checks: findbugs -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>2.3.1</version>
-                    <inherited>true</inherited>
-                    <!-- goal:check binds to phase:verify (not currently 
-                        configured, can be used to break build if any violations) -->
-                    <!-- goal:findbugs is a report so is configured in the 
-                        reporting section -->
-                </plugin>
-
                 <!-- Quality checks: NCSS (cyclomatic complexity) -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -940,13 +928,6 @@
                 <version>2.0</version>
             </dependency>
 
-            <!-- FindBugs annotations (code static analysis support) -->
-            <dependency>
-                <groupId>com.google.code.findbugs</groupId>
-                <artifactId>annotations</artifactId>
-                <version>1.3.9</version>
-            </dependency>
-
             <!-- Bytecode libraries -->
             <dependency>
                 <groupId>asm</groupId>
@@ -1080,10 +1061,6 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>annotations</artifactId>
         </dependency>
 
         <!-- test dependencies -->
@@ -1223,12 +1200,6 @@
                         </configuration>
                     </plugin>
 
-
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>findbugs-maven-plugin</artifactId>
-                        <version>2.3.1</version>
-                    </plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>

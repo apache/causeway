@@ -92,7 +92,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction() {}
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
@@ -113,7 +112,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @Named("Renamed an action with a named annotation")
@@ -136,7 +134,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void debugAnActionWithDebugPrefix() {}
@@ -162,7 +159,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void explorationAnActionWithExplorationPrefix() {}
         }
         final Method method = findMethod(Customer.class, "explorationAnActionWithExplorationPrefix");
@@ -186,7 +182,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void debugExplorationAnActionWithDebugAndExplorationPrefix() {}
         }
         final Method method = findMethod(Customer.class, "debugExplorationAnActionWithDebugAndExplorationPrefix");
@@ -207,7 +202,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void explorationDebugAnActionWithExplorationAndDebugPrefix() {}
         }
         final Method method = findMethod(Customer.class, "explorationDebugAnActionWithExplorationAndDebugPrefix");
@@ -228,7 +222,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void localAnActionWithLocalPrefix() {}
         }
         final Method method = findMethod(Customer.class, "localAnActionWithLocalPrefix");
@@ -254,7 +247,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void remoteAnActionWithRemotePrefix() {}
         }
         final Method method = findMethod(Customer.class, "remoteAnActionWithRemotePrefix");
@@ -278,7 +270,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction() {}
@@ -309,11 +300,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final int y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public String validateSomeAction(final int x, final int y) {
                 return null;
             }
@@ -339,11 +328,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final Long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Object[] defaultSomeAction() {
                 return null;
             }
@@ -369,11 +356,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final Long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Object[] defaultSomeAction( final int x, final Long y ) {
                 return null;
             }
@@ -392,11 +377,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final Long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Object[] choicesSomeAction() {
                 return null;
             }
@@ -423,11 +406,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final Long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public Object[] choicesSomeAction(final int x, final Long y) {
                 return null;
             }
@@ -630,7 +611,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction() {}
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
@@ -649,7 +629,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public String someAction() {
                 return null;
             }
@@ -670,7 +649,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public String someAction() {
                 return null;
             }
@@ -691,17 +669,14 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public int default0SomeAction() {
                 return 0;
             }
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public long default1SomeAction() {
                 return 0;
             }
@@ -740,17 +715,14 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
 			public void someAction(final int x, final long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
 			public List<Integer> choices0SomeAction() {
                 return Collections.emptyList();
             }
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
 			public List<Long> choices1SomeAction() {
                 return Collections.emptyList();
             }
@@ -790,7 +762,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final long y) {}
         }
 
@@ -824,11 +795,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public void someAction(final int x, final long y) {}
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public int[] choices0SomeAction() {
                 return new int[0];
             }
@@ -841,13 +810,11 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public long[] choices1SomeAction() {
                 return new long[0];
             }
 
             @SuppressWarnings("unused")
-            @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
             public String disableSomeAction() {
                 return null;
             }
@@ -899,7 +866,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactoryForParams.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {}
@@ -942,7 +908,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactoryForParams.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {}

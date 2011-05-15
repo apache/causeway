@@ -34,8 +34,6 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 
 import com.google.inject.internal.Maps;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<TimeStamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
@@ -51,7 +49,6 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public TimeStampValueSemanticsProvider() {
         this(null, null, null);
     }

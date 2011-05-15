@@ -48,7 +48,6 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
 
 
     public void testAnnotationPickedUp() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class CustomerRepository {
             @SuppressWarnings("unused")
 			@NotContributed

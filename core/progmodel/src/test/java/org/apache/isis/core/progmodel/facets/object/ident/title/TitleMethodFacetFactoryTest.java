@@ -51,7 +51,6 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testTitleMethodPickedUpOnClassAndMethodRemoved() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public String title() {

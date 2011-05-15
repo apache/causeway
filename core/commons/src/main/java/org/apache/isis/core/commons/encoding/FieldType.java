@@ -228,7 +228,6 @@ public abstract class FieldType<T> {
 
         // rather than looping through the array,
         // we take advantage of optimization built into DataInputStream
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("RR_NOT_CHECKED")
         private void readBytes(final DataInputStream inputStream, final byte[] bytes) throws IOException {
             inputStream.read(bytes);
         }

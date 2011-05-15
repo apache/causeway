@@ -32,8 +32,6 @@ import org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvid
 import org.apache.isis.core.progmodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
  * 
@@ -49,7 +47,6 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaSqlDateValueSemanticsProvider() {
         this(null, null, null);
     }

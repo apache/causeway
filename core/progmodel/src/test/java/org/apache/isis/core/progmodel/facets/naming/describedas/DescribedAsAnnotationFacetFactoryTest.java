@@ -59,7 +59,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     public void testDescribedAsAnnotationPickedUpOnProperty() {
         DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @DescribedAs("some description")
@@ -83,7 +82,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     public void testDescribedAsAnnotationPickedUpOnCollection() {
         DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @DescribedAs("some description")
@@ -107,7 +105,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     public void testDescribedAsAnnotationPickedUpOnAction() {
         DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @DescribedAs("some description")
@@ -129,7 +126,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     public void testDescribedAsAnnotationPickedUpOnActionParameter() {
         DescribedAsAnnotationOnParameterFacetFactory facetFactory = new DescribedAsAnnotationOnParameterFacetFactory();
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@DescribedAs("some description") final int x) {}

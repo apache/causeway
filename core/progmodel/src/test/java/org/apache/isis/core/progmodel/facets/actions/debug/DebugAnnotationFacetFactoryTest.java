@@ -49,7 +49,6 @@ public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testDebugAnnotationPickedUp() {
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Debug
             public void someAction() {}

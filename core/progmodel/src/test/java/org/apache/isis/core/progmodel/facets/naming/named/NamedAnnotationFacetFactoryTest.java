@@ -62,7 +62,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             @Named("some name")
@@ -87,7 +86,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Named("some name")
             public Collection getOrders() {
@@ -111,7 +109,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @Named("some name")
             public void someAction() {}
@@ -134,7 +131,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         NamedAnnotationOnParameterFacetFactory facetFactory = new NamedAnnotationOnParameterFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
-        @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(@Named("some name") final int x) {}

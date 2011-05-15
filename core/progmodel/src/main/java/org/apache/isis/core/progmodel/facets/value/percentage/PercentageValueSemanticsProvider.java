@@ -37,8 +37,6 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatingPointValueFacet;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements
     FloatingPointValueFacet {
 
@@ -59,7 +57,6 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
-    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public PercentageValueSemanticsProvider() {
         this(null, null, null);
     }
@@ -94,7 +91,6 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
         }
     }
 
-    @SuppressWarnings("BX_BOXING_IMMEDIATELY_UNBOXED")
     private Float asFloat(final String text) throws ParseException {
         return new Float(DECIMAL_FORMAT.parse(text).floatValue());
     }
