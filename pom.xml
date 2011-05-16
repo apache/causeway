@@ -79,6 +79,7 @@
 
     <properties>
         <siteBaseDir>.</siteBaseDir>
+        <relativeUrl></relativeUrl>
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
