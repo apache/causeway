@@ -53,13 +53,21 @@
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores. Apache
-    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
-    Foundation</ulink>, and is licensed under <ulink
+    implementations, and supports various viewers and object stores.
+    <emphasis>Apache Isis</emphasis> is hosted at the <ulink
+    url="http://incubator.apache.org/isis">Apache Foundation</ulink>, and is
+    licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para>This guide breaks into two parts:</para>
+    <para>If all you are interested in is just using
+    <emphasis>Isis</emphasis>, then please refer to <ulink
+    url="http://incubator.apache.org/isis/where-to-start.html">where to start?
+    page</ulink> on the Isis site. This will explain how to get going using a
+    Maven archetype.</para>
+
+    <para>This guide though, is for those who want to go a little deeper. It
+    breaks into two parts:</para>
 
     <itemizedlist>
       <listitem>
@@ -72,13 +80,13 @@
       <listitem>
         <para>the second part is for those who are intending to contribute
         changes back. It deals with such matters as setting up the standard
-        development environment, writing documentation and site
-        documentation;</para>
+        development environment, writing documentation and site documentation;
+        and releasing <emphasis>Isis</emphasis>.</para>
       </listitem>
     </itemizedlist>
 
     <para>Note that some of this material also appears, in different form, on
-    the Apache Isis wiki:</para>
+    the <emphasis>Apache Isis</emphasis> wiki:</para>
 
     <itemizedlist>
       <listitem>
@@ -603,16 +611,22 @@
         <para>Once you've build the source code, you might want to run a smoke
         test.</para>
 
-        <para>Because the details of this are likely to change over time, for
-        now please see the SmokeTest page on the Isis wiki. This has
-        reasonably full explanation of how to get going using the application
-        in trunk/support/prototype.</para>
+        <para>The best way to do this is to use the quick start archetype. How
+        to do this is documented on the website; however we want to run the
+        archetype in a slightly different form, specifying the local catalog
+        (ie to pick up the modules just built):</para>
 
-        <note>
-          <para>The intention though is to replace this smoke test with a
-          pre-canned archetype that will build more-or-less application as
-          support/prototype.</para>
-        </note>
+        <programlisting>mvn archetype:generate \
+     -D archetypeCatalog=local \
+     -D archetypeGroupId=org.apache.isis.support \
+     -D archetypeArtifactId=quickstart-archetype \
+     -D groupId=com.mycompany.mygroup \
+     -D artifactId=myapp</programlisting>
+
+        <para>The <ulink
+        url="http://incubator.apache.org/isis/quickstart-app.html">quickstart</ulink>
+        page on the website then describes how to go about testing the
+        generated classes.</para>
       </sect1>
     </chapter>
 
@@ -995,15 +1009,15 @@
 
               <itemizedlist>
                 <listitem>
-                  <para><code>org.apache.isis.alternatives:objectstores</code>
+                  <para><code>org.apache.isis.runtimes.dflt:objectstores</code>
                   is the aggregator for the "objectstores" group.</para>
                 </listitem>
 
                 <listitem>
                   <para>Child modules within this group would include
-                  <code>org.apache.isis.alternatives.objectstores:sql</code>
+                  <code>org.apache.isis.runtimes.dflt.objectstores:sql</code>
                   and
-                  <code>org.apache.isis.alternatives.objectstores:xml</code>.</para>
+                  <code>org.apache.isis.runtimes.dflt.objectstores:xml</code>.</para>
                 </listitem>
               </itemizedlist>
             </listitem>
@@ -1574,8 +1588,8 @@ protected IsisConfiguration getConfiguration() {
       <title>Code Quality</title>
 
       <abstract>
-        <para>Using plugins such as FindBugs, Checkstyle and PMD to improve
-        code quality.</para>
+        <para>Using plugins such as Checkstyle and PMD to improve code
+        quality.</para>
       </abstract>
 
       <para>As well as using the tools to enforce code standards, there are
@@ -1614,13 +1628,21 @@ protected IsisConfiguration getConfiguration() {
         </listitem>
 
         <listitem>
-          <para>the <ulink
-          url="http://findbugs.sourceforge.net/manual/eclipse.html">findbugs
-          plugin</ulink> (for Eclipse), for <ulink
-          url="http://findbugs.sourceforge.net/">findbugs</ulink>
-          support</para>
+          <para>*** </para>
         </listitem>
       </itemizedlist>
+
+      <para></para>
+
+      <para></para>
+
+      <para>*** for IDE, not Maven...</para>
+
+      <para>findbugs has been removed from this list, because its associated
+      library (for SuppressWarnings) is published under LGPL, which is not
+      compatible with the ASF.</para>
+
+      <para></para>
 
       <para>This chapter describes the configuration of some of these
       tools.</para>
