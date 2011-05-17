@@ -346,7 +346,7 @@
       <licenses>
         <license>
             <name>BSD Modified License</name>
-            <url>20020414</url>
+            <url>http://olex.openlogic.com/licenses/msv-bsd-license</url>
             <distribution>repo</distribution>          
         </license>
       </licenses>
