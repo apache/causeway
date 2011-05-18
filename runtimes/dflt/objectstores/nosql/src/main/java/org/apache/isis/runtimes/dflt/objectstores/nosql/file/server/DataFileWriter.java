@@ -24,7 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class DataWriter {
+public class DataFileWriter {
 
     // private static final Logger LOG = Logger.getLogger(DataWriter.class);
 
@@ -32,7 +32,7 @@ public class DataWriter {
 
     private final List<FileContent> files;
 
-    public DataWriter(final List<FileContent> files) {
+    public DataFileWriter(final List<FileContent> files) {
         this.files = files;
     }
 

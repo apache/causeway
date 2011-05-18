@@ -61,7 +61,7 @@ public class LogWriterTest {
 
         items = new ArrayList<FileContent>();
         items.add(new FileContent('U', "20", "6", "7", "type", "{data}"));
-        new DataWriter(items);
+        new DataFileWriter(items);
     }
 
     @After
@@ -84,9 +84,11 @@ public class LogWriterTest {
         final BufferedReader reader = new BufferedReader(new FileReader(logFile1));
         String line = reader.readLine();
         line = reader.readLine();
+        Assert.assertEquals("Utype 20 6 ", line);
+        line = reader.readLine();
+        Assert.assertEquals("{data}", line);
         reader.close();
 
-        Assert.assertEquals("Utype 20 6 {data}", line);
     }
 
     @Test

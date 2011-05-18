@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
+import java.util.zip.CRC32;
+
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 
@@ -61,7 +63,15 @@ class FileClientCommandContext implements NoSqlCommandContext {
 
     private void write(final char command, final JsonStateWriter writer) {
         connection.request(command, writer.getRequest());
-        connection.requestData(writer.getData());
+        String data = writer.getData();
+
+        CRC32 inputChecksum = new CRC32();
+        inputChecksum.update(data.getBytes());
+        inputChecksum.update('\n');
+        long checksum = inputChecksum.getValue();
+        String code = Long.toHexString(checksum);
+        
+        connection.requestData("00000000".substring(0, 8 - code.length()) + code + data);
         connection.endRequestSection();
     }
 

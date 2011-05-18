@@ -123,10 +123,9 @@ public class FileServerProcessor {
                 for (final File file : listFiles) {
                     final String fileName = file.getName();
                     final String id = fileName.substring(0, fileName.length() - 5);
-                    final DataReader reader = findInstance(type, id, connection);
+                    final DataFileReader reader = findInstance(type, id, connection);
                     readInstance(reader, connection);
                     locks.release(id, getTransactionId());
-                    connection.endBlock();
                     if (limit-- < 0) {
                         break;
                     }
@@ -158,7 +157,7 @@ public class FileServerProcessor {
             connection.endCommand();
             type = connection.getRequest();
             id = connection.getRequest();
-            final DataReader reader = findInstance(type, id, connection);
+            final DataFileReader reader = findInstance(type, id, connection);
             if (reader == null) {
                 connection.notFound(Util.FILE_NOT_FOUND + " for " + type + "/" + id);
             } else {
@@ -173,19 +172,19 @@ public class FileServerProcessor {
 
     }
 
-    private DataReader findInstance(final String type, final String id, final ServerConnection connection)
+    private DataFileReader findInstance(final String type, final String id, final ServerConnection connection)
         throws IOException {
         LOG.debug("reading file " + id);
         locks.acquireRead(id, getTransactionId());
         try {
-            return new DataReader(type, id);
+            return new DataFileReader(type, id);
         } catch (final FileNotFoundException e) {
             LOG.error(Util.FILE_NOT_FOUND + " for " + type + "/" + id, e);
             return null;
         }
     }
 
-    private void readInstance(final DataReader reader, final ServerConnection connection) {
+    private void readInstance(final DataFileReader reader, final ServerConnection connection) {
         final String data = reader.getData();
         reader.close();
         connection.responseData(data);
@@ -198,7 +197,7 @@ public class FileServerProcessor {
             final String error = acquireLocks(files);
             if (error == null) {
                 logger.log(files);
-                final DataWriter content = new DataWriter(files);
+                final DataFileWriter content = new DataFileWriter(files);
                 content.writeData();
                 connection.ok();
             } else {
@@ -238,7 +237,7 @@ public class FileServerProcessor {
                 return item.type + " being changed by another user, please try again\n" + item.data;
             }
             if (Util.shouldFileExist(item.command)) {
-                final DataReader dataReader = new DataReader(item.type, item.id);
+                final DataFileReader dataReader = new DataFileReader(item.type, item.id);
                 final String version = dataReader.getVersion();
                 if (!version.equals(item.currentVersion)) {
                     // String data = dataReader.getData();

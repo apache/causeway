@@ -33,7 +33,7 @@ import org.junit.Test;
 
 public class DataReaderTest {
 
-    private DataReader reader;
+    private DataFileReader reader;
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -45,7 +45,7 @@ public class DataReaderTest {
     @Test
     public void noFileCausesException() throws Exception {
         try {
-            new DataReader("type", "noexistant");
+            new DataFileReader("type", "nonexistant");
             fail();
         } catch (final FileNotFoundException expected) {
         }
@@ -58,7 +58,7 @@ public class DataReaderTest {
         writer.close();
 
         try {
-            reader = new DataReader("type", "0013");
+            reader = new DataFileReader("type", "0013");
             fail();
         } catch (final FileServerException expected) {
             assertThat(expected.getMessage(), startsWith("No data in file:"));
@@ -72,13 +72,13 @@ public class DataReaderTest {
         writer.write("class.type 0012 17\n{data}");
         writer.close();
 
-        reader = new DataReader("type", "0012");
+        reader = new DataFileReader("type", "0012");
 
         assertEquals("0012", reader.getId());
         assertEquals("17", reader.getVersion());
 
         final String data = reader.getData();
-        assertEquals("{data}", data);
+        assertEquals("{data}\n", data);
         reader.close();
     }
 }

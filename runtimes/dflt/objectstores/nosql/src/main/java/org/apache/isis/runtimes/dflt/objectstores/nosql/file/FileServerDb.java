@@ -19,12 +19,17 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -47,7 +52,17 @@ public class FileServerDb implements NoSqlDataDatabase {
 
     // TODO pool connection and reuse
     private ClientConnection getConnection() {
-        return new ClientConnection(host, port, timeout);
+        try {
+            final Socket socket;
+            socket = new Socket(host, port);
+            socket.setSoTimeout(timeout);
+            return new ClientConnection(socket.getInputStream(), socket.getOutputStream());
+        } catch (final UnknownHostException e) {
+            throw new NoSqlStoreException("Unknow host " + host, e);
+        } catch (final IOException e) {
+            throw new NoSqlStoreException("Failed to connect to " + host + ":" + port, e);
+        }
+
     }
 
     // TODO pool connection and reuse
@@ -76,6 +91,7 @@ public class FileServerDb implements NoSqlDataDatabase {
             abortConnection(connection);
             throw e;
         }
+        data = checkData(data);
         final JsonStateReader reader = new JsonStateReader(data);
         returnConnection(connection);
         return reader;
@@ -91,6 +107,7 @@ public class FileServerDb implements NoSqlDataDatabase {
             connection.validateRequest();
             String data;
             while ((data = connection.getResponseData()).length() > 0) {
+                data = checkData(data);
                 final JsonStateReader reader = new JsonStateReader(data);
                 instances.add(reader);
             }
@@ -102,6 +119,23 @@ public class FileServerDb implements NoSqlDataDatabase {
         returnConnection(connection);
         return instances.iterator();
 
+    }
+
+    private String checkData(final String data) {
+        String objectData = data.substring(8);
+        
+        CRC32 inputChecksum = new CRC32();
+        inputChecksum.update(objectData.getBytes());
+        long actualChecksum = inputChecksum.getValue();
+        
+        String encodedChecksum = data.substring(0, 8);
+        long expectedChecksum = Long.valueOf(encodedChecksum, 16);
+        
+        if (actualChecksum != expectedChecksum) {
+            throw new NoSqlStoreException("Data integrity error; checksums different");
+        }
+
+        return objectData;
     }
 
     @Override

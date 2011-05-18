@@ -26,8 +26,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
@@ -39,31 +37,19 @@ public class ClientConnection {
 
     private static final Logger LOG = Logger.getLogger(ClientConnection.class);
 
-    private Socket socket;
-    private PrintWriter writer;
-    private BufferedReader reader;
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
+    private final PrintWriter writer;
+    private final BufferedReader reader;
     private String[] headers;
     private int header;
 
-    private InputStream inputStream;
-    private OutputStream outputStream;
 
-    public ClientConnection(final String host, final int port, final int timeout) {
-        try {
-            socket = new Socket(host, port);
-            socket.setSoTimeout(timeout);
-            outputStream = socket.getOutputStream();
-            outputStream = Util.trace(outputStream, true);
-            writer = new PrintWriter(new OutputStreamWriter(outputStream, Util.ENCODING));
-            inputStream = socket.getInputStream();
-            inputStream = Util.trace(inputStream, true);
-            reader = new BufferedReader(new InputStreamReader(inputStream, Util.ENCODING));
-        } catch (final UnknownHostException e) {
-            throw new NoSqlStoreException("Unknow host " + host, e);
-        } catch (final IOException e) {
-            throw new NoSqlStoreException("Failed to connect to " + host + ":" + port, e);
-        }
-
+    public ClientConnection(final InputStream input, final OutputStream output) {
+        outputStream = Util.trace(output, true);
+        writer = new PrintWriter(new OutputStreamWriter(outputStream, Util.ENCODING));
+        inputStream = Util.trace(input, true);
+        reader = new BufferedReader(new InputStreamReader(inputStream, Util.ENCODING));
     }
 
     public void close() {

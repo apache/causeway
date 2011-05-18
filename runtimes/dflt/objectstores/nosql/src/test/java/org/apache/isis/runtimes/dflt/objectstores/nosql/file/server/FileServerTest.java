@@ -223,7 +223,7 @@ public class FileServerTest {
             new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
         server.process(connection);
 
-        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));
+        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n\n"))));
     }
 
     @Test
@@ -247,7 +247,7 @@ public class FileServerTest {
             new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
         server.process(connection);
 
-        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));
+        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n\n"))));
     }
 
     @Test
@@ -261,7 +261,30 @@ public class FileServerTest {
             new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
         server.process(connection);
 
-        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));
+        assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n\n"))));
+    }
+
+    @Test
+    public void hasNoInstances() throws Exception {
+        final ServerConnection connection =
+            new ServerConnection(IoUtils.asUtf8ByteStream("Iorg.domain.None\n\n"), out);
+        server.process(connection);
+
+        assertThat(out.toString(), is(equalTo(lineSeparated("ok false\n"))));
+    }
+
+    @Test
+    public void hasInstances() throws Exception {
+        final File file1 = new File("target/test/org.domain.Class", "2025.data");
+        final FileWriter fileWriter = new FileWriter(file1);
+        fileWriter.write("type 1025 1\n{data1}");
+        fileWriter.close();
+
+        final ServerConnection connection =
+            new ServerConnection(IoUtils.asUtf8ByteStream("Iorg.domain.Class\n\n"), out);
+        server.process(connection);
+
+        assertThat(out.toString(), is(equalTo(lineSeparated("ok true\n"))));
     }
 
 }

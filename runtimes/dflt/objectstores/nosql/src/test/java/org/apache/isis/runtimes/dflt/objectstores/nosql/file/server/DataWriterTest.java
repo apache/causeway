@@ -27,6 +27,8 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,10 +38,11 @@ public class DataWriterTest {
     private static final String TARGET_DIRECTORY = "target/test/";
     private static final String FULLY_QUALIFIED_CLASSNAME = "org.domain.Class";
     private static final String FULLY_QUALIFIED_CLASSNAME_2 = "org.domain.Class2";
-    private DataWriter writer;
+    private DataFileWriter writer;
 
     @Before
     public void setUp() throws Exception {
+        Logger.getRootLogger().setLevel(Level.OFF);
         Util.setDirectory(TARGET_DIRECTORY, "services", "logs");
         Util.ensureDirectoryExists();
     }
@@ -62,7 +65,7 @@ public class DataWriterTest {
         files.add(new FileContent('I', "1023", "1", "2", FULLY_QUALIFIED_CLASSNAME, "{data1}"));
         files.add(new FileContent('U', "1024", "21", "22", FULLY_QUALIFIED_CLASSNAME, "{data2}"));
         files.add(new FileContent('D', "1030", "66", "", FULLY_QUALIFIED_CLASSNAME, ""));
-        final DataWriter writer = new DataWriter(files);
+        final DataFileWriter writer = new DataFileWriter(files);
         writer.writeData();
 
         BufferedReader reader =
@@ -85,7 +88,7 @@ public class DataWriterTest {
 
         final List<FileContent> files = new ArrayList<FileContent>();
         files.add(new FileContent('I', "1023", "1", "2", FULLY_QUALIFIED_CLASSNAME_2, "{data1}"));
-        writer = new DataWriter(files);
+        writer = new DataFileWriter(files);
         writer.writeData();
 
         Assert.assertTrue(file.exists());

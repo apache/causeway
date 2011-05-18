@@ -27,8 +27,8 @@ import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
-public class DataReader {
-    private static final Logger LOG = Logger.getLogger(DataReader.class);
+public class DataFileReader {
+    private static final Logger LOG = Logger.getLogger(DataFileReader.class);
 
     private final BufferedReader reader;
     private final String id;
@@ -38,7 +38,7 @@ public class DataReader {
      * Opens the file for the specified id. The top line contains: type id version newline The remainder contains the
      * data.
      */
-    public DataReader(final String type, final String id) throws IOException {
+    public DataFileReader(final String type, final String id) throws IOException {
         final File file = Util.dataFile(type, id);
         reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
         final String line = reader.readLine();
@@ -78,6 +78,7 @@ public class DataReader {
             String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
+                buffer.append("\n");
             }
             return buffer.toString();
         } catch (final IOException e) {

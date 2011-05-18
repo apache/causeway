@@ -55,6 +55,7 @@ public class LogWriter {
                 writer.write(' ');
                 writer.write(content.currentVersion.getBytes("utf-8"));
                 writer.write(' ');
+                writer.write('\n');
                 writer.write(content.data.getBytes("utf-8"));
                 writer.write('\n');
                 writer.write('\n');
