@@ -67,7 +67,7 @@
     Maven archetype.</para>
 
     <para>This guide though, is for those who want to go a little deeper. It
-    breaks into two parts:</para>
+    breaks into three parts:</para>
 
     <itemizedlist>
       <listitem>
@@ -82,6 +82,12 @@
         changes back. It deals with such matters as setting up the standard
         development environment, writing documentation and site documentation;
         and releasing <emphasis>Isis</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>the third part covers the release process, and is for those
+        contributors who want to be able to make Isis releases (snapshot or
+        formal Apache releases)</para>
       </listitem>
     </itemizedlist>
 
@@ -705,46 +711,30 @@
 
             <itemizedlist>
               <listitem>
+                <para><code>skin</code></para>
+
+                <para>Using <code>-D modules=skin</code> will build just the
+                skin module</para>
+              </listitem>
+
+              <listitem>
                 <para><code>standard</code></para>
 
                 <para>This is the default, so can be omitted if no other -D
                 properties are specified.</para>
 
-                <para>Using <code>-D modules=standard</code> will build the
-                <filename>applib</filename>, <filename>core</filename>,
-                <filename>defaults</filename>,
-                <filename>alternatives</filename> and
-                <filename>viewer</filename> modules</para>
-              </listitem>
-
-              <listitem>
-                <para><code>all</code></para>
-
-                <para>Using <code>-D modules=all</code> will build the
-                <filename>applib</filename>, <filename>core</filename>,
-                <filename>defaults</filename>,
-                <filename>alternatives</filename>,
-                <filename>viewer</filename>, <filename>support</filename>,
-                <filename>release</filename>, examples and
-                <filename>site-skin</filename> modules</para>
+                <para>Using <code>-D modules=standard</code> will build all
+                modules.</para>
               </listitem>
 
               <listitem>
                 <para><code>skin</code> or <code>applib</code> or
-                <code>core</code> or <code>defaults</code> or
-                <code>alternatives</code> or <code>viewer</code> or
-                <code>support</code> or <code>release</code> or
-                <code>examples</code></para>
+                <code>core</code> or <code>runtimes</code> or
+                <code>progmodels</code> or <code>security</code> or
+                <code>viewer</code> or <code>support</code>.</para>
 
                 <para>Using <code>-D modules=...</code> for any of the above
                 will build just the corresponding module</para>
-              </listitem>
-
-              <listitem>
-                <para><code>skin</code></para>
-
-                <para>Using <code>-D modules=skin</code> will build just the
-                skin module</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -1540,7 +1530,7 @@ protected IsisConfiguration getConfiguration() {
           </imageobject>
         </mediaobject>
 
-        <para>The import order can be reorgnaized using Source &gt; Organize
+        <para>The import order can be reorganized using Source &gt; Organize
         Imports. Note that this can be done recursively, from a higher level
         package if required. It can also be defined to be run automatically as
         a Save Action, see <xref linkend="sec.SaveActions" />.</para>
@@ -1626,23 +1616,15 @@ protected IsisConfiguration getConfiguration() {
           eclipse plugin</ulink>, for <ulink
           url="http://pmd.sourceforge.net">PMD</ulink> support</para>
         </listitem>
-
-        <listitem>
-          <para>*** </para>
-        </listitem>
       </itemizedlist>
 
-      <para></para>
-
-      <para></para>
-
-      <para>*** for IDE, not Maven...</para>
-
-      <para>findbugs has been removed from this list, because its associated
-      library (for SuppressWarnings) is published under LGPL, which is not
-      compatible with the ASF.</para>
-
-      <para></para>
+      <para>In addition, we recommend that <ulink
+      url="http://findbugs.sourceforge.net/manual/eclipse.html">findBugs is
+      installed into the IDE</ulink>. However, findBugs is not part of the
+      Maven build because it would flag violations that, to suppress, would
+      require introducing a dependency on its associated library which is
+      published under <acronym>LGPL</acronym> (not compatible with the
+      <acronym>ASF</acronym>).</para>
 
       <para>This chapter describes the configuration of some of these
       tools.</para>
@@ -1767,108 +1749,15 @@ protected IsisConfiguration getConfiguration() {
         codebase piecemeal.</para>
       </sect1>
 
-      <sect1 id="sec.FindBugs">
-        <title>FindBugs</title>
-
-        <para>FindBugs is the first of three powerful tool (the others being
-        CheckStyle, see <xref linkend="sec.Checkstyle" />, and PMD, see <xref
-        linkend="sec.PMD" />) for enforcing coding standards and detecting
-        certain classes of likely errors.</para>
-
-        <para>FindBugs does not (seem to) have a configuration file; it is
-        just run against a codebase and reports all errors.</para>
-
-        <para>FindBugs integrates with both Maven and with Eclipse.</para>
-
-        <sect2>
-          <title>Eclipse Plugin</title>
-
-          <para>The <ulink
-          url="http://findbugs.cs.umd.edu/eclipse/">findbugs</ulink> plugin
-          allows FindBugs to be run against a single Eclipse project at a
-          time, eg from the context menu:</para>
-
-          <screenshot>
-            <screeninfo>Running FindBugs</screeninfo>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/dev-env/findbugs-context-menu.png"
-                           scale="45" />
-              </imageobject>
-            </mediaobject>
-          </screenshot>
-
-          <para>If this finds any errors, then <screenshot>
-              <screeninfo>Bugs Found!</screeninfo>
-
-              <mediaobject>
-                <imageobject>
-                  <imagedata fileref="images/dev-env/findbugs-bugs-found-message.png"
-                             scale="50" />
-                </imageobject>
-              </mediaobject>
-            </screenshot></para>
-
-          <para>You can then switch to the findbugs perspective to review and
-          fix the potential bugs:</para>
-
-          <screenshot>
-            <screeninfo>yViewing CheckStyle violations in the Problems
-            view</screeninfo>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/dev-env/findbugs-perspective.png"
-                           scale="40" />
-              </imageobject>
-            </mediaobject>
-          </screenshot>
-
-          <para>If you want to suppress, rather than fix, the bug, you can
-          annotate using the
-          <classname>@edu.umd.cs.findbugs.annotations.SuppressWarnings</classname>
-          annotion. For example:</para>
-
-          <screenshot>
-            <screeninfo>Suppressing warnings from findbugs</screeninfo>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/dev-env/findbugs-suppress-warnings.png"
-                           scale="60" />
-              </imageobject>
-            </mediaobject>
-          </screenshot>
-        </sect2>
-
-        <sect2>
-          <title>Maven Plugin</title>
-
-          <para>The isis-parent <acronym>POM</acronym> automatically includes
-          the <ulink
-          url="http://mojo.codehaus.org/findbugs-maven-plugin/">Maven findbugs
-          plugin</ulink>:</para>
-
-          <para><screen>&lt;plugin&gt;
-    &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
-    &lt;artifactId&gt;findbugs-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;2.3.1&lt;/version&gt;
-    &lt;inherited&gt;true&lt;/inherited&gt;
-&lt;/plugin&gt;</screen>This plugin is not bound to any Maven lifecycle phase,
-          and is not intended to be run other than as a report within
-          <classname>mvn site</classname>. For more immediate feedback, use
-          the Eclipse plugin, above.</para>
-        </sect2>
-      </sect1>
-
       <sect1 id="sec.Checkstyle">
         <title>Checkstyle</title>
 
-        <para>Like FindBugs and PMD, <ulink
-        url="checkstyle.sourceforge.net">Checkstyle</ulink> is a powerful tool
-        for enforcing coding standards and detecting certain classes of likely
-        errors. The <ulink
+        <para><ulink url="checkstyle.sourceforge.net">Checkstyle</ulink> is
+        the first of three powerful tools (the others being <ulink
+        url="http://pmd.sourceforge.net">PMD</ulink> and <ulink
+        url="http://findbugs.sourceforge.net/">FindBugs) for </ulink>enforcing
+        coding standards and detecting certain classes of likely errors. The
+        <ulink
         url="http://incubator.apache.org/isis/codequality/checkstyle.xml">checkstyle
         definition config file</ulink> for <emphasis>Apache Isis</emphasis> is
         derived from Sun's standards, with a number of modifications.</para>
@@ -1966,13 +1855,12 @@ protected IsisConfiguration getConfiguration() {
       <sect1 id="sec.PMD">
         <title>PMD</title>
 
-        <para>Like FindBugs and Checkstyle, <ulink
-        url="http://pmd.sourceforge.net">PMD</ulink> is another static
-        analysis tool that checks for problematic code (possible bugs, dead
-        code, suboptimal code and so on). As for Checkstyle, <emphasis>Apache
-        Isis</emphasis> defines a <ulink
-        url="http://incubator.apache.org/isis/codequality/pmd.xml">PMD config
-        file</ulink>, this one adapted from other projects within
+        <para><ulink url="http://pmd.sourceforge.net">PMD</ulink> is another
+        static analysis tool that - like FindBugs and Checkstyle - checks for
+        problematic code (possible bugs, dead code, suboptimal code and so
+        on). As for Checkstyle, <emphasis>Apache Isis</emphasis> defines a
+        <ulink url="http://incubator.apache.org/isis/codequality/pmd.xml">PMD
+        config file</ulink>, this one adapted from other projects within
         Apache.</para>
 
         <para>PMD integrates with both Maven and with Eclipse.</para>
@@ -2095,6 +1983,89 @@ protected IsisConfiguration getConfiguration() {
           feedback, use the Eclipse plugin, above.</para>
         </sect2>
       </sect1>
+
+      <sect1 id="sec.FindBugs">
+        <title>FindBugs</title>
+
+        <para><ulink url="http://findbugs.sourceforge.net/">FindBugs</ulink>
+        is a tool that - like CheckStyle and PMD - can be used to enforce
+        coding standards and detecting certain classes of likely
+        errors.</para>
+
+        <para>FindBugs does not (seem to) have a configuration file; it is
+        just run against a codebase and reports all errors.</para>
+
+        <para>Although FindBugs integrates with both Maven and with Eclipse,
+        we do not include it in the Maven build. This is because the companion
+        library that is used to suppress certain types of warning is licensed
+        under LGPL, which the ASF views as being incompatible with the ASF v2
+        license.</para>
+
+        <para>Nevertheless, we do recommend installing FindBugs for
+        Eclipse.</para>
+
+        <sect2>
+          <title>Eclipse Plugin</title>
+
+          <para>The <ulink
+          url="http://findbugs.cs.umd.edu/eclipse/">findbugs</ulink> plugin
+          allows FindBugs to be run against a single Eclipse project at a
+          time, eg from the context menu:</para>
+
+          <screenshot>
+            <screeninfo>Running FindBugs</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/dev-env/findbugs-context-menu.png"
+                           scale="45" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>
+
+          <para>If this finds any errors, then <screenshot>
+              <screeninfo>Bugs Found!</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="images/dev-env/findbugs-bugs-found-message.png"
+                             scale="50" />
+                </imageobject>
+              </mediaobject>
+            </screenshot></para>
+
+          <para>You can then switch to the findbugs perspective to review and
+          fix the potential bugs:</para>
+
+          <screenshot>
+            <screeninfo>yViewing CheckStyle violations in the Problems
+            view</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/dev-env/findbugs-perspective.png"
+                           scale="40" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>
+
+          <para>If you want to suppress, rather than fix, the bug, you can
+          annotate using the
+          <classname>@edu.umd.cs.findbugs.annotations.SuppressWarnings</classname>
+          annotion. For example:</para>
+
+          <screenshot>
+            <screeninfo>Suppressing warnings from findbugs</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/dev-env/findbugs-suppress-warnings.png"
+                           scale="60" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>
+        </sect2>
+      </sect1>
     </chapter>
 
     <chapter id="chp.WritingDocumentation">
@@ -2152,9 +2123,9 @@ protected IsisConfiguration getConfiguration() {
         guides, and which do not:</para>
 
         <table>
-          <title>Isis Modules (1 of 2)</title>
+          <title>Isis Modules</title>
 
-          <tgroup cols="6">
+          <tgroup cols="8">
             <colspec colname="_1" colwidth="20" />
 
             <colspec colname="_2" colwidth="20" />
@@ -2163,13 +2134,17 @@ protected IsisConfiguration getConfiguration() {
 
             <colspec colname="_4" colwidth="60" />
 
+            <colspec colname="_5" />
+
+            <colspec colname="_6" />
+
             <colspec align="center" colwidth="50" />
 
             <colspec />
 
             <thead>
               <row>
-                <entry align="center" nameend="_4"
+                <entry align="center" nameend="_6"
                 namest="_1">Directory</entry>
 
                 <entry align="center">DocBk?</entry>
@@ -2180,7 +2155,7 @@ protected IsisConfiguration getConfiguration() {
 
             <tbody>
               <row>
-                <entry nameend="_4" namest="_1">./</entry>
+                <entry nameend="_6" namest="_1">./</entry>
 
                 <entry>Y</entry>
 
@@ -2190,7 +2165,7 @@ protected IsisConfiguration getConfiguration() {
               <row>
                 <entry></entry>
 
-                <entry nameend="_4" namest="_2">applib</entry>
+                <entry nameend="_6" namest="_2">applib</entry>
 
                 <entry>Y</entry>
 
@@ -2200,7 +2175,7 @@ protected IsisConfiguration getConfiguration() {
               <row>
                 <entry></entry>
 
-                <entry nameend="_4" namest="_2">core</entry>
+                <entry nameend="_6" namest="_2">core</entry>
 
                 <entry>Y</entry>
 
@@ -2212,7 +2187,7 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">testsupport</entry>
+                <entry nameend="_6" namest="_3">testsupport</entry>
 
                 <entry></entry>
 
@@ -2224,7 +2199,7 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">common</entry>
+                <entry nameend="_6" namest="_3">common</entry>
 
                 <entry></entry>
 
@@ -2236,7 +2211,7 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">metamodel</entry>
+                <entry nameend="_6" namest="_3">metamodel</entry>
 
                 <entry></entry>
 
@@ -2248,7 +2223,7 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">progmodel</entry>
+                <entry nameend="_6" namest="_3">progmodel</entry>
 
                 <entry></entry>
 
@@ -2260,11 +2235,12 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">runtime</entry>
+                <entry nameend="_6" namest="_3">runtime</entry>
 
                 <entry></entry>
 
-                <entry>Runtime &amp; cmdline bootstrapping</entry>
+                <entry>Common classes for runtime implementations
+                constructs</entry>
               </row>
 
               <row>
@@ -2272,7 +2248,7 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">webapp</entry>
+                <entry nameend="_6" namest="_3">webapp</entry>
 
                 <entry></entry>
 
@@ -2282,23 +2258,11 @@ protected IsisConfiguration getConfiguration() {
               <row>
                 <entry></entry>
 
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">webserver</entry>
-
-                <entry></entry>
-
-                <entry>Web server bootstrapping</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry nameend="_4" namest="_2">defaults</entry>
+                <entry nameend="_6" namest="_2">progmodel</entry>
 
                 <entry>Y</entry>
 
-                <entry>Parent for default implementations</entry>
+                <entry>Parent for programming model implementations</entry>
               </row>
 
               <row>
@@ -2306,19 +2270,7 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">bytecode</entry>
-
-                <entry></entry>
-
-                <entry>Default (cglib) bytecode enhancement</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">progmodel</entry>
+                <entry nameend="_6" namest="_3">dflt</entry>
 
                 <entry></entry>
 
@@ -2330,11 +2282,11 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">objectstore</entry>
+                <entry nameend="_6" namest="_3">groovy</entry>
 
                 <entry></entry>
 
-                <entry>Default (in-memory) object store</entry>
+                <entry>Groovy programming model</entry>
               </row>
 
               <row>
@@ -2342,11 +2294,22 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">profilestore</entry>
+                <entry nameend="_6" namest="_3">wrapper</entry>
 
                 <entry></entry>
 
-                <entry>Default (in-memory) profile store</entry>
+                <entry>Wrapper programming model</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry nameend="_6" namest="_2">security</entry>
+
+                <entry>Y</entry>
+
+                <entry>Parent for security (authentication and authorization)
+                implementations</entry>
               </row>
 
               <row>
@@ -2354,21 +2317,225 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry></entry>
 
-                <entry nameend="_4" namest="_3">security</entry>
+                <entry nameend="_6" namest="_3">dflt</entry>
 
                 <entry></entry>
 
-                <entry>Default (no-op) security mechanism</entry>
+                <entry>Default (no-op) implementation</entry>
               </row>
 
               <row>
                 <entry></entry>
 
-                <entry nameend="_4" namest="_2">viewer</entry>
+                <entry></entry>
+
+                <entry nameend="_6" namest="_3">file</entry>
 
                 <entry></entry>
 
-                <entry>Parent for viewers</entry>
+                <entry>Simple file-based implementation</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_6" namest="_3">ldap</entry>
+
+                <entry></entry>
+
+                <entry>LDAP implementation</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry nameend="_6" namest="_2">runtimes</entry>
+
+                <entry></entry>
+
+                <entry>Parent for runtime implementations</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_6" namest="_3">dflt</entry>
+
+                <entry>Y</entry>
+
+                <entry>Default runtime implementation, includes documentation
+                on bttecode providers, default object store and default
+                profile store</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry nameend="_6" namest="_5">remoting</entry>
+
+                <entry>Y</entry>
+
+                <entry>Default runtime's remoting support</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry nameend="_6" namest="_5">bytecode</entry>
+
+                <entry>N</entry>
+
+                <entry>Parent for default runtime's bytecode implementations;
+                documentation for child implementations included in default
+                runtime's.</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry nameend="_6" namest="_5">objectstores</entry>
+
+                <entry></entry>
+
+                <entry>Parent for default runtime's object store
+                implementations</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry></entry>
+
+                <entry>dflt</entry>
+
+                <entry></entry>
+
+                <entry>Default (in-memory) object store; documentation
+                included in default runtime's, see above</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry></entry>
+
+                <entry>xml</entry>
+
+                <entry>Y</entry>
+
+                <entry>XML Object Store</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry></entry>
+
+                <entry>sql</entry>
+
+                <entry>Y</entry>
+
+                <entry>SQL Object Store</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry></entry>
+
+                <entry>nosql</entry>
+
+                <entry>Y</entry>
+
+                <entry>NoSQL Object Store</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry nameend="_6" namest="_5">profilestores</entry>
+
+                <entry></entry>
+
+                <entry>Parent for default runtime's profilte store
+                implementations</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry nameend="_4" namest="_2"></entry>
+
+                <entry></entry>
+
+                <entry>dflt</entry>
+
+                <entry></entry>
+
+                <entry>Default (in-memory) profile store; documentation
+                included in default runtime's, see above</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry></entry>
+
+                <entry>xml</entry>
+
+                <entry></entry>
+
+                <entry>XML Profile Store</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry nameend="_6" namest="_2">viewer</entry>
+
+                <entry></entry>
+
+                <entry>Parent for viewer implementations</entry>
               </row>
 
               <row>
@@ -2378,17 +2545,23 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry nameend="_4" namest="_3">bdd</entry>
 
+                <entry></entry>
+
+                <entry></entry>
+
                 <entry>Y</entry>
 
-                <entry>BDD (Concordion) viewer</entry>
+                <entry>BDD viewer (<ulink
+                url="http://concordion.org">Concordion</ulink> test framework
+                integration)</entry>
               </row>
 
               <row>
-                <entry></entry>
-
-                <entry></entry>
-
                 <entry nameend="_4" namest="_3">dnd</entry>
+
+                <entry></entry>
+
+                <entry></entry>
 
                 <entry>Y</entry>
 
@@ -2402,6 +2575,10 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry nameend="_4" namest="_3">html</entry>
 
+                <entry></entry>
+
+                <entry></entry>
+
                 <entry>Y</entry>
 
                 <entry>HTML viewer</entry>
@@ -2414,9 +2591,15 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry nameend="_4" namest="_3">junit</entry>
 
+                <entry></entry>
+
+                <entry></entry>
+
                 <entry>Y</entry>
 
-                <entry>JUnit viewer</entry>
+                <entry>JUnit viewer (<ulink
+                url="http://junit.org">JUnit</ulink> test framework
+                integration)</entry>
               </row>
 
               <row>
@@ -2425,6 +2608,10 @@ protected IsisConfiguration getConfiguration() {
                 <entry></entry>
 
                 <entry nameend="_4" namest="_3">restful</entry>
+
+                <entry></entry>
+
+                <entry></entry>
 
                 <entry>Y</entry>
 
@@ -2438,6 +2625,10 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry nameend="_4" namest="_3">scimpi</entry>
 
+                <entry></entry>
+
+                <entry></entry>
+
                 <entry>Y</entry>
 
                 <entry>Scimpi (customizable web UI) viewer</entry>
@@ -2450,373 +2641,14 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry nameend="_4" namest="_3">wicket</entry>
 
+                <entry></entry>
+
+                <entry></entry>
+
                 <entry>Y</entry>
 
                 <entry><ulink url="http://wicket.apache.org">Apache
                 Wicket</ulink>-based viewer</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
-
-        <table>
-          <title>Isis Modules (2 of 2)</title>
-
-          <tgroup cols="6">
-            <colspec colname="_1" colwidth="20" />
-
-            <colspec colname="_2" colwidth="20" />
-
-            <colspec colname="_3" colwidth="20" />
-
-            <colspec colname="_4" colwidth="60" />
-
-            <colspec align="center" colwidth="50" />
-
-            <colspec />
-
-            <thead>
-              <row>
-                <entry align="center" nameend="_4"
-                namest="_1">Directory</entry>
-
-                <entry align="center">DocBk?</entry>
-
-                <entry align="center">Description</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry></entry>
-
-                <entry nameend="_4" namest="_2">alternatives</entry>
-
-                <entry></entry>
-
-                <entry>Default for alternative implementations</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">bytecode</entry>
-
-                <entry>Y</entry>
-
-                <entry>Parent for alternative bytecode impl's</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>javassist</entry>
-
-                <entry></entry>
-
-                <entry>Javasisst bytecode enhancement</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>basic</entry>
-
-                <entry></entry>
-
-                <entry>Basic (no-op) bytecode enhancement</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">progmodel</entry>
-
-                <entry></entry>
-
-                <entry>Parent for alternative programming models</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>wrapper</entry>
-
-                <entry>Y</entry>
-
-                <entry>Wrapper progmodel</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>groovy</entry>
-
-                <entry>Y</entry>
-
-                <entry>Groovy progmodel</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">objectstore</entry>
-
-                <entry></entry>
-
-                <entry>Parent for alternative objectstores</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>nosql</entry>
-
-                <entry>Y</entry>
-
-                <entry>NOSQL object store</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>sql</entry>
-
-                <entry>Y</entry>
-
-                <entry>SQL object store</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>xml</entry>
-
-                <entry>Y</entry>
-
-                <entry>XML object store</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>jpa</entry>
-
-                <entry>Y</entry>
-
-                <entry>JPA object store</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">profilestore</entry>
-
-                <entry></entry>
-
-                <entry>Parent for alternative profile stores</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>xml</entry>
-
-                <entry>Y</entry>
-
-                <entry>XML profile store</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">security</entry>
-
-                <entry></entry>
-
-                <entry>Parent for alternative security mechanisms</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>file</entry>
-
-                <entry>Y</entry>
-
-                <entry>File-based security</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>ldap</entry>
-
-                <entry>Y</entry>
-
-                <entry>LDAP-based security</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">embedded</entry>
-
-                <entry>Y</entry>
-
-                <entry>Embedded metamodel support</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">remoting</entry>
-
-                <entry>Y</entry>
-
-                <entry>Remoting support</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>common</entry>
-
-                <entry></entry>
-
-                <entry>Common remoting libraries</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>transport- sockets</entry>
-
-                <entry></entry>
-
-                <entry>Sockets transport</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>transport- http</entry>
-
-                <entry></entry>
-
-                <entry>HTTP transport</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>marshalling- encode</entry>
-
-                <entry></entry>
-
-                <entry>Encode marshalling</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>marshalling- serialize</entry>
-
-                <entry></entry>
-
-                <entry>Serialize marshalling</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>marshalling- xstream</entry>
-
-                <entry></entry>
-
-                <entry>XStream marshalling</entry>
               </row>
             </tbody>
           </tgroup>
@@ -3459,6 +3291,883 @@ public class FooBar {
         bear in mind that XmlMind won’t let you paste in content where it
         would be invalid. If necessary, adjust the selection until they become
         enabled.</para>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Release Process</title>
+
+    <partintro>
+      <para>This part of the guide describes the release process for
+      <emphasis>Apache Isis</emphasis>, in particular as it applies to the
+      requirements of the Apache Software Foundation. It consists of:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>an overview of the release process (see <xref
+          linkend="chp.ReleaseOverview" />)</para>
+        </listitem>
+
+        <listitem>
+          <para>the detailed steps for performing a snapshot release (see
+          <xref linkend="chp.SnapshotReleases" />)</para>
+        </listitem>
+
+        <listitem>
+          <para>the detailed steps for performing a formal release (see <xref
+          linkend="chp.FormalRelease" />)</para>
+        </listitem>
+      </itemizedlist>
+    </partintro>
+
+    <chapter id="chp.ReleaseOverview">
+      <title>Overview</title>
+
+      <para>The following diagram summarizes the various stages involved in
+      building and releasing <emphasis>Apache Isis</emphasis>.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/release/release-process.png" scale="55" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The steps are:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>check out code using svn checkout (see <xref
+          linkend="chp.BuildingIsisFromSource" />).</para>
+        </listitem>
+
+        <listitem>
+          <para>make changes, implements features, fixes bugs. These are
+          installed, in the normal way, to local repo using <code>mvn
+          install</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>when the codebase is ready for a snapshot release, manually
+          deploy the snapshot into the Apache snapshot repo. This is discussed
+          further in <xref linkend="sec.ManuallyDeploySnapshot" />.</para>
+
+          <para>In addition, the snapshot version of the site may be deployed
+          to the website. This is discussed further in <xref
+          linkend="sec.ManuallyDeploySite" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>when the codebase is ready for a formal release (-RCn), the
+          contributor uses <code>mvn release:prepare</code> to produce the
+          release artifacts. This goal:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>update the <acronym>POM</acronym>s from
+              <filename>x.x.x-SNAPSHOT-incubating</filename> to
+              <filename>x.x.x-RCn-incubating</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>builds and verifies the codebase</para>
+            </listitem>
+
+            <listitem>
+              <para>commits the changes</para>
+            </listitem>
+
+            <listitem>
+              <para>creates a tag copy</para>
+            </listitem>
+
+            <listitem>
+              <para>updates the POMs for the next iteration, ie from
+              <filename>x.x.x-RCn-incubating</filename> to
+              <filename>x.x.y-incubating-SNAPSHOT</filename></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>On the local computer the local repo
+          (<filename>~/.m2/repository</filename>) will have signed versions of
+          release (x.x.x) versions of all modules, and in trunk there will
+          also be a signed zip of the source. See <xref
+          linkend="sec.MavenReleasePrepare" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>the signed version of the source is uploaded to the
+          contributors home directory ready for voting. See <xref
+          linkend="sec.UploadReleaseForVoting" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>the signed versions of the Maven binaries are deployed to the
+          Apache staging directory ready for voting. Again, see <xref
+          linkend="sec.UploadReleaseForVoting" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>the release is voted on by the community.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>If the vote is rejected, then fixes are made and then the
+              above steps (2 through 7) are performed again with the next
+              release candidate.</para>
+            </listitem>
+
+            <listitem>
+              <para>If the vote is accepted, then the above steps (2 through
+              7) are performed again, but without the -RCn suffix</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>While in the incubator a vote must also be performed by the
+          Incubator PMC (ie on mailto:incubator@apache.org). It is permissible
+          to perform these in parallel if required. See <xref
+          linkend="sec.Voting" /></para>
+        </listitem>
+
+        <listitem>
+          <para>once the vote is passed, the source release should be
+          copied/moved to the "dist" folder, where it will be mirrored. It can
+          also be referenced as a download at this point. See <xref
+          linkend="sec.PromotingReleaseToDistribution" /></para>
+        </listitem>
+
+        <listitem>
+          <para>once the vote is passed, the binary release should be promoted
+          from the staging repository to release repository (again, see <xref
+          linkend="sec.PromotingReleaseToDistribution" />), after
+          which...</para>
+        </listitem>
+
+        <listitem>
+          <para>... it will be automatically be replicated up to Maven central
+          repo</para>
+        </listitem>
+
+        <listitem>
+          <para>Finally, the website should be deployed manually. See <xref
+          linkend="sec.ManuallyDeployReleaseSite" />.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The following chapters provide detail on the above steps.</para>
+    </chapter>
+
+    <chapter id="chp.SnapshotReleases">
+      <title>Snapshot Release</title>
+
+      <para>This chapter describes the steps that make up deploying a snapshot
+      release.</para>
+
+      <para>As you'll see if you compare them with the steps required to make
+      a formal release (see <xref linkend="chp.FormalRelease" />), they are
+      significantly less arduous. This is because the legal status of a
+      snapshot release does NOT constitute an actual release of the ASF; it is
+      merely provided as a convenience for users.</para>
+
+      <sect1>
+        <title>Contributor Prerequisites</title>
+
+        <para>The only prerequistes for performing a release is that the
+        contributor has configured their environment. This involves updating
+        your <filename>settings.xml</filename> file:</para>
+
+        <programlisting>&lt;settings&gt;
+  &lt;servers&gt;
+    &lt;!-- To publish a snapshot of some part of Maven --&gt;
+    &lt;server&gt;
+      &lt;id&gt;apache.snapshots.https&lt;/id&gt;
+      &lt;username&gt;xxx&lt;/username&gt;
+      &lt;password&gt;yyy&lt;/password&gt;
+    &lt;/server&gt;
+    ...
+  &lt;/servers&gt;
+  ...
+&lt;/settings&gt;</programlisting>
+
+        <para>where 'xxx' and 'yyy' constitute your apache LDAP username and
+        password.</para>
+
+        <para>This information is as documented in the <ulink
+        url="http://www.apache.org/dev/publishing-maven-artifacts.html#dev-env">ASF
+        documentation</ulink>.</para>
+
+        <para><note>
+            <para>It is also possible to configure to use
+            <filename>.ssh</filename> secure keys, and thereby avoid
+            hardcoding your Apache <acronym>LDAP</acronym> password into your
+            <filename>.m2/settings.xml</filename> file. A description of how
+            to do this can be found, for example, <ulink
+            url="http://incubator.apache.org/bval/cwiki/release-setup.html">here</ulink>.</para>
+          </note></para>
+      </sect1>
+
+      <sect1 id="sec.ManuallyDeploySnapshot">
+        <title>Manually Deploy Snapshot</title>
+
+        <sect2>
+          <title>Sanity Check</title>
+
+          <para>Before deploying the snapshot, perform a quick sanity
+          check:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>builds ok (<code>mvn clean install</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>archetype runs ok (<code>-D
+              archetypeCatalog=local</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>app generated from the archetype runs ok</para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Deploy All Modules</title>
+
+          <para>Deploy all modules using:</para>
+
+          <programlisting>mvn -D deploy=snapshot deploy</programlisting>
+
+          <para>This will deploy all the modules that make up a release,
+          including the archetype.</para>
+
+          <para>To confirm that they are present, browse to the Nexus
+          repository manager <ulink
+          url="https://repository.apache.org">https://repository.apache.org</ulink>
+          and search for "isis".</para>
+
+          <para>Be warned: this is liable will take a long time.</para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.ManuallyDeploySite">
+        <title>Manually Uploading the Website</title>
+
+        <sect2>
+          <title>Update <filename>archetype-catalog.xml</filename> (if
+          required)</title>
+
+          <para>The <emphasis>Isis</emphasis> site comes with its own
+          <filename>archetype-catalog.xml</filename> so that the quickstart
+          archetype can be used from the snapshot repository by those who want
+          to use the "latest-and-greatest". This file lives in
+          <filename>.../trunk/src/main/site/resources</filename>, and looks
+          something like:</para>
+
+          <programlisting>&lt;archetype-catalog&gt;
+  &lt;archetypes&gt;
+    &lt;archetype&gt;
+       &lt;groupId&gt;org.apache.isis.support&lt;/groupId&gt;
+       &lt;artifactId&gt;quickstart-archetype&lt;/artifactId&gt;
+       &lt;version&gt;x.x.x-incubating-SNAPSHOT&lt;/version&gt;
+       &lt;repository&gt;http://repository.apache.org/content/groups/snapshots-group/&lt;/repository&gt;
+       &lt;description&gt;Isis Quickstart Archetype&lt;/description&gt;
+    &lt;/archetype&gt;
+    ...
+  &lt;/archetypes&gt;
+&lt;/archetype-catalog&gt;</programlisting>
+
+          <para>Where <code>x.x.x-incubating-SNAPSHOT</code> is the current
+          release. It may also have entries for previous SNAPSHOT
+          releases.</para>
+
+          <para>If it missing an entry for the current snapshot, then update
+          it and commit.</para>
+        </sect2>
+
+        <sect2>
+          <title>Build the site</title>
+
+          <para>Next, build the site, as per <xref
+          linkend="chp.BuildingSiteAndDocs" />.</para>
+
+          <para>This should generate the current site in
+          <filename>/tmp/m2-sites/isis</filename>.</para>
+        </sect2>
+
+        <sect2>
+          <title>Upload the site</title>
+
+          <para>Finally, upload the site (as a <acronym>ZIP</acronym>) to your
+          local account on <code>people.apache.org</code>:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>cd <filename>/tmp/m2-sites</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>zip up isis to <filename>isis.zip</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>scp the <filename>isis.zip</filename> to
+              <filename>people.apache.org/~</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>login to <code>people.apache.org</code> using ssh:</para>
+
+              <programlisting>ssh -l xxxxxxxx@people.apache.org</programlisting>
+
+              <para>where xxxxxxx is your apache user Id</para>
+            </listitem>
+
+            <listitem>
+              <para>unzip <filename>isis.zip</filename></para>
+
+              <para>This should leave you with the same directory, isis, as
+              was previously in /tmp/m2-sites.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Then, copy the exploded ZIP into
+          /www/incubator.apache.org:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Switch to the destination directory:</para>
+
+              <programlisting>cd /www/incubator.apache.org</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>Move the previous site to one side:</para>
+
+              <programlisting>mv isis isis-yyyymmdd </programlisting>
+
+              <para>where <emphasis>yyyymmdd</emphasis> is the date that the
+              previous version was uploaded</para>
+            </listitem>
+
+            <listitem>
+              <para>move the new site into the distribution location:</para>
+
+              <para>mv ~/isis isis</para>
+            </listitem>
+
+            <listitem>
+              <para>make the new site readable by all:</para>
+
+              <programlisting>chmod -R g+w isis
+chgrp -R incubator isis
+for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.FormalRelease">
+      <title>Formal Release</title>
+
+      <para>This chapter describes the steps that make up a formal release. It
+      also identifies a number of prerequisites to making a release, in terms
+      of (a) the codebase itself, (b) the community process, and (c) the
+      contributor performing the release.</para>
+
+      <para>Please use the diagram in <xref linkend="chp.ReleaseOverview" />
+      by way of an overview.</para>
+
+      <sect1>
+        <title>Code Prerequisites</title>
+
+        <para>Before making any formal release, there are a number of
+        prerequisites that should always be checked.</para>
+
+        <sect2 id="sec.SanityCheck">
+          <title>Sanity Check</title>
+
+          <para>Before deploying the snapshot, perform a quick sanity
+          check:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>builds ok (<code>mvn clean install</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>site builds ok (<code>mvn site-deploy -D deploy=local -D
+              site=full</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>archetype is up-to-date</para>
+            </listitem>
+
+            <listitem>
+              <para>archetype runs ok (<code>-D
+              archetypeCatalog=local</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>app generated from the archetype runs ok</para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Code Cleanup / Formatting</title>
+
+          <para>Make sure that all source code has been cleaned up and
+          formatted according to the Isis and ASF conventions:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>code formatting should be checked as per <xref
+              linkend="sec.CodeStyleFormatter" />;</para>
+            </listitem>
+
+            <listitem>
+              <para>imports should be organized as per <xref
+              linkend="sec.ImportOrder" />;</para>
+            </listitem>
+
+            <listitem>
+              <para>code cleanup should be performed as per <xref
+              linkend="sec.CodeStyleCleanup" />. (this performs both code
+              formatting and organizing imports)</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Optionally, you might also want to run and address warnings
+          from:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>checkstyle, as per <xref
+              linkend="sec.Checkstyle" />;</para>
+            </listitem>
+
+            <listitem>
+              <para>PMD, as per <xref linkend="sec.PMD" />;</para>
+            </listitem>
+
+            <listitem>
+              <para>findbugs, as per <xref linkend="sec.FindBugs" />.</para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2 id="sec.RatTool">
+          <title>License Notice (RAT Tool)</title>
+
+          <para>The Apache Release Audit Tool (RAT) is designed to perform a
+          number of basic checks, most signifcant being missing copyright
+          header files.</para>
+
+          <para>In theory it can be run from Maven (<code>mvn
+          rat:check</code>), with the <filename>maven-rat-plugin</filename>
+          being inherited from the Apache parent <acronym>POM</acronym>.
+          However, although the plugin is configured in the Isis parent
+          <acronym>POM</acronym> to exclude certain files (eg
+          <filename>.java.hsp</filename> project files for Structure101).
+          However, unfortunately the plugin seems to ignore any configured
+          exclusions, making this method of performing a check somewhat
+          useless.</para>
+
+          <para>Instead, the tool can be run from the command-line; a JAR
+          binary of the tool has been checked into the <emphasis>Apache
+          Isis</emphasis> codebase. </para>
+
+          <para>First, clean up any generated artifacts:</para>
+
+          <programlisting>mvn clean</programlisting>
+
+          <para>Then, run the tool using:</para>
+
+          <programlisting>java -jar apache-rat-0.8-SNAPSHOT.jar \
+  -d . --exclude \
+  resources.txt site.vm \
+  *.project *.classpath *.launch *.importorder \
+  *.java.hsp \
+  *.ucd *.ucls \
+  *-LICENSE.txt \
+  fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml *.mod usage.txt screen.css docbook.cat \
+  org.apache.isis.viewer.wicket.ui.ComponentFactory \
+  fixture-data test.data example.ldif slapd.conf \
+  .plxarc MANIFEST.MF \
+  .log \
+  &gt;/tmp/rat.txt</programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><filename>resources.txt, site.vm</filename> are resources
+              to do with site generation</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>.project, .classpath, .launch</filename> and
+              <filename>.importorder</filename> are Eclipse
+              <acronym>IDE</acronym> project files</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>.java.hsp</filename> are the Structure101
+              project files</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>.ucd</filename> and <filename>.ucls</filename>
+              are Soyatec (<acronym>UML</acronym> plugin) project files</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>-LICENSE.txt</filename> are required license
+              files for certain third party dependencies</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn
+              catalog.xml *.mod usage.txt screen.css docbook.cat</filename>
+              are files related to DocBook generation</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>org.apache.isis.viewer.wicket.ui.ComponentFactory</filename>
+              is a manifest file required for dynamic classloading</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>fixture-data test.data example.ldif
+              slapd.conf</filename> are test resource files</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>.plxarc</filename> and
+              <filename>MANIFEST.MF</filename> are artifacts generated by
+              various Maven goals</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>.log</filename> are any generated log
+              files</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Then, review any missing license notes using:</para>
+
+          <programlisting>cat /tmp/rat.txt \
+   | grep '^ !???' \
+   | grep -v "tests-common/.*\.xml" \
+   | grep -v "tests-common/.*/tests\..*" \
+   | grep -v "tests-common/.*\.xml" \
+   | grep -v "tests/.*\.xml"</programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><filename>!???</filename> is used to identify those files
+              that are missing license notes</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>tests-common/*</filename> and
+              <filename>tests/*</filename> ignores certain test files</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Investigate and fix any reported violations.</para>
+        </sect2>
+
+        <sect2>
+          <title>Missing License Check</title>
+
+          <para>Although <emphasis>Apache Isis</emphasis> has no dependencies
+          which have incompatible licenses, the <acronym>POM</acronym>s for
+          these dependencies (in the Maven central repo) do not necessarily
+          contain the required license information. This results in the
+          <filename>META-INF/DEPENDENCIES</filename> file and generated Maven
+          site listing dependencies as being "unknown".</para>
+
+          <para>Fortunately, Maven allows the missing information to be
+          provided by configuring the
+          <package>maven-remote-resources-plugin</package>. This is stored in
+          the
+          <filename>src/main/appended-resources/supplemental-models.xml</filename>
+          file in the parent <package>[oai:isis-parent]</package>
+          module.</para>
+
+          <para>To capture the missing license information, use:</para>
+
+          <programlisting>mvn license:download-licenses
+groovy checkmissinglicenses.groovy</programlisting>
+
+          <para>This Maven plugin creates a <filename>license.xml</filename>
+          file in the <filename>target/generated</filename>-resources/
+          directory of each module.</para>
+
+          <para>Then, run the <emphasis>Isis</emphasis> script:</para>
+
+          <programlisting>groovy checkmissinglicenses.groovy</programlisting>
+
+          <para>This searches for all <filename>licenses.xml</filename> files,
+          and compares them against the contents of the
+          <filename>supplemental-models.xml</filename> file. For example, the
+          output could be something like:</para>
+
+          <programlisting>licenses to add to supplemental-models.xml:
+
+[org.slf4j, slf4j-api, 1.5.7]
+[org.codehaus.groovy, groovy-all, 1.7.2]
+
+
+licenses to remove from supplemental-models.xml (are spurious):
+
+[org.slf4j, slf4j-api, 1.5.2]</programlisting>
+
+          <para>If any missing entries are listed or are spurious, then update
+          <filename>supplemental-models.xml</filename> and try again.</para>
+        </sect2>
+
+        <sect2>
+          <title>Update <filename>archetype-catalog.xml</filename> (if
+          required)</title>
+
+          <para>***</para>
+
+          <para></para>
+
+          <para>point to the next iteration snapshot.</para>
+
+          <para></para>
+
+          <para>Make sure that the archetype catalog
+          (<filename>src/main/site/resources/archetype-catalog.xml</filename>
+          in <package>[oai:isis-parent]</package>) is up-to-date</para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Process Prerequisites</title>
+
+        <sect2>
+          <title>Close all JIRA tickets for the release</title>
+
+          <para>All JIRA tickets for the release should be closed, or moved to
+          future releases if not yet addressed.</para>
+        </sect2>
+
+        <sect2>
+          <title>Generate Release Notes</title>
+
+          <para>Each release should a release note page called
+          <filename>release-x.x.x.html</filename>, in
+          <filename>src/site/resources</filename> (in
+          <package>[oai:isis-parent]</package>). This is linked to from the
+          download page (<filename>src/site/apt/downloads.apt.vm</filename>);
+          the download page should not need updating.</para>
+
+          <para>The release notes can be generated using JIRA, using the
+          procedure documented <ulink
+          url="http://confluence.atlassian.com/display/JIRA/Creating+Release+Notes">here</ulink>.
+          If any of the tickets closed are tasks/subtasks, then please edit
+          the contents of the file to associate them back together
+          again.</para>
+        </sect2>
+
+        <sect2>
+          <title>Update STATUS file</title>
+
+          <para>The trunk holds a <filename>STATUS</filename> file which is a
+          brief summary of the current status of the project. Update this file
+          prior to cutting the release.</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Contributor (Release Manager) Prerequisites</title>
+
+        <para>In order that a contributor can make a release it is necessary
+        for them to have generated a key and had that key recognized by other
+        members of the ASF.</para>
+
+        <sect2>
+          <title>Key Generation</title>
+
+          <para>*** </para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Key Signing</title>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Update Maven Settings file
+          (<filename>~/.m2/settings.xml</filename>)</title>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.MavenReleasePrepare">
+        <title>Preparing a Release (<code>mvn release:prepare</code>)</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1 id="sec.UploadReleaseForVoting">
+        <title>Upload Release for Voting</title>
+
+        <para></para>
+
+        <para></para>
+
+        <sect2>
+          <title>Upload Source Zip</title>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Deploying Binaries to Staging Repository (<classname>mvn
+          deploy</classname>)</title>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.Voting">
+        <title>Voting</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <sect2>
+          <title>Start voting thread on isis-dev@incubator.a.o</title>
+
+          <para>*** boilerplate text</para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Other contributors cast their vote</title>
+
+          <para></para>
+
+          <sect3>
+            <title>Verifying the integrity of the release artifacts</title>
+
+            <para>*** TO DOCUMENT</para>
+
+            <para></para>
+          </sect3>
+
+          <sect3>
+            <title>Sanity checking the contents</title>
+
+            <para>As per <xref linkend="sec.SanityCheck" />.</para>
+
+            <para></para>
+
+            <para></para>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Start voting thread on incubator@a.o</title>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>After the vote</title>
+
+          <para>If the vote has been unsuccessful, then address the problems
+          and go again, incrementing the -RCn suffix.</para>
+
+          <para>If the vote has been successful, then cut a new release, with
+          no -RCn suffix.</para>
+
+          <para><note>
+              <para>care should be taken to ensure that the new release is
+              based on the same version as the approved release candidate. One
+              way to do this is to ensure that the local copy from which the
+              release is taken is obtained specifying the correct SVN
+              revision.</para>
+            </note></para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.PromotingReleaseToDistribution">
+        <title>Promoting Release to Distribution</title>
+
+        <para></para>
+
+        <sect2>
+          <title>Release Source Zip</title>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Release Binaries to Maven Central Repo</title>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.ManuallyDeployReleaseSite">
+        <title>Manually Deploy the Release Website</title>
+
+        <para>The mechanics of deploying the release site is the same as
+        deploying a snapshot site, however there is the complication of
+        deploying from the relevant <filename>tags/x.x.x-incubating</filename>
+        tag (rather than <filename>trunk</filename>) as well as ensuring that
+        the released binaries are correctly referenced on the downloads
+        page.</para>
+
+        <para></para>
+
+        <para>if the release process followed differs from the process
+        documented in this guide, then update this guide to capture those
+        variations.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>Finally, confirm that the archetype-catalog.xml is correct (it
+        should have been updated previously; this is a "just-in-case").</para>
       </sect1>
     </chapter>
   </part>

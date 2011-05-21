@@ -21,7 +21,7 @@ Project info
   period of time can earn a contributor commit access to the codebase.
 
 Official releases:
- * x.x      : Released yyyy-MM-dd (none yet)
+ * 0.1.2-RC1-incubating    : Released yyyy-MM-dd (none yet)
 
 PENDING ISSUES
 ==============
@@ -62,6 +62,7 @@ Source code    SVN    /repos/asf/incubator/isis/trunk/
 JIRA           www    http://issues.apache.org/jira/browse/ISIS
 Wiki           www    http://cwiki.apache.org/confluence/display/ISIS/Index
 CI             www    http://builds.apache.org/hudson/job/isis-trunk-windows
+
 
 Team:
 
