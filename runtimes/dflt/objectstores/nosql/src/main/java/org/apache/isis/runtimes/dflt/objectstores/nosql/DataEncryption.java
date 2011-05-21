@@ -20,21 +20,16 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-
-public class NoEncryption implements DataEncryption {
-
-    public String getType() {
-        return "none";
-    }
+public interface DataEncryption {
     
-    public void init(IsisConfiguration configuration) {}
+    String getType();
+    
+    void init(IsisConfiguration configuration);
 
-    public String encrypt(String plainText) {
-        return plainText;
-    }
+    String encrypt(String plainText);
+    
+    String decrypt(String encryptedText);
 
-    public String decrypt(String encryptedText) {
-        return encryptedText;
-    }
 
 }
+

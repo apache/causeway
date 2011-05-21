@@ -19,7 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 class FileContent {
+
+    private static final String ENCODING = "utf-8";
 
     final char command;
     final String id;
@@ -36,6 +41,16 @@ class FileContent {
         this.newVersion = newVersion;
         this.type = type;
         this.data = buf;
+    }
+
+    public void write(OutputStream output) throws IOException {
+        output.write(type.getBytes(ENCODING));
+        output.write(' ');
+        output.write(id.getBytes(ENCODING));
+        output.write(' ');
+        output.write(newVersion.getBytes(ENCODING));
+        output.write('\n');
+        output.write(data.getBytes(ENCODING));
     }
 
 }

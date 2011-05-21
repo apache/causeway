@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -49,7 +50,7 @@ public class ObjectReaderTest {
     private Mockery context;
     private KeyCreator keyCreator;
     private VersionCreator versionCreator;
-    private Map<String, DataEncrypter> dataEncrypter;
+    private Map<String, DataEncryption> dataEncrypter;
 
     @Before
     public void setup() {
@@ -64,12 +65,14 @@ public class ObjectReaderTest {
         versionCreator = context.mock(VersionCreator.class);
         
         
-        dataEncrypter = new HashMap<String, DataEncrypter>();
-        DataEncrypter dataEncrypter1 = new DataEncrypter() {
+        dataEncrypter = new HashMap<String, DataEncryption>();
+        DataEncryption dataEncrypter1 = new DataEncryption() {
             public String getType() {
                 return "etc1";
             }
 
+            public void init(IsisConfiguration configuration) {}
+            
             public String encrypt(String plainText) {
                 throw new UnexpectedCallException();
             }

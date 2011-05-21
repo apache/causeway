@@ -51,8 +51,8 @@ public class NoSqlObjectStore implements ObjectStore {
     private final VersionCreator versionCreator;
     private final ObjectReader objectReader = new ObjectReader();
     private final NoSqlOidGenerator oidGenerator;
-    private final DataEncrypter wrtingDataEncrypter;
-    private final Map<String, DataEncrypter> availableDataEncrypters;
+    private final DataEncryption wrtingDataEncrypter;
+    private final Map<String, DataEncryption> availableDataEncrypters;
     private final boolean isDataLoaded;
 
     public NoSqlObjectStore(
@@ -60,8 +60,8 @@ public class NoSqlObjectStore implements ObjectStore {
             final NoSqlOidGenerator oidGenerator,
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final DataEncrypter writingDataEncrypter,
-            final Map<String, DataEncrypter> availableDataEncrypters) {
+            final DataEncryption writingDataEncrypter,
+            final Map<String, DataEncryption> availableDataEncrypters) {
         this.database = db;
         this.oidGenerator = oidGenerator;
         this.keyCreator = keyCreator;

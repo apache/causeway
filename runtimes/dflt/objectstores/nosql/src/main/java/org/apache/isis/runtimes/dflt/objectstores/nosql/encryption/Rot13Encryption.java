@@ -16,14 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.encryption;
 
-public class Rot13Encryption implements DataEncrypter {
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.DataEncryption;
+
+public class Rot13Encryption implements DataEncryption {
 
     public String getType() {
         return "rot13";
     }
 
+    public void init(IsisConfiguration configuration) {}
+    
     public String encrypt(String plainText) {
         return encode(plainText);
     }

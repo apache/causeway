@@ -26,7 +26,7 @@ final class NoSqlCreateObjectCommand extends WriteObjectCommand implements Creat
     public NoSqlCreateObjectCommand(
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final DataEncrypter dataEncrypter,
+            final DataEncryption dataEncrypter,
             final ObjectAdapter object) {
         super(false, keyCreator, versionCreator, dataEncrypter, object);
     }

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -78,12 +79,14 @@ public class NoSqlObjectStoreTest {
         keyCreator = context.mock(KeyCreator.class);
         versionCreator = context.mock(VersionCreator.class);
         
-        Map<String, DataEncrypter> dataEncrypter = new HashMap<String, DataEncrypter>();
-        DataEncrypter dataEncrypter1 = new DataEncrypter() {
+        Map<String, DataEncryption> dataEncrypter = new HashMap<String, DataEncryption>();
+        DataEncryption dataEncrypter1 = new DataEncryption() {
             public String getType() {
                 return "etc";
             }
 
+            public void init(IsisConfiguration configuration) {}
+            
             public String encrypt(String plainText) {
                 throw new UnexpectedCallException();
             }
@@ -133,7 +136,7 @@ public class NoSqlObjectStoreTest {
                 one(db).close();
             }
         });
-        store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), null, null, null, new HashMap<String, DataEncrypter>());
+        store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), null, null, null, new HashMap<String, DataEncryption>());
         assertTrue(store.isFixturesInstalled());
     }
 

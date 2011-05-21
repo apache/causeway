@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,10 @@ public class FileServerProcessor {
         acceptNewRequests = false;
         locks.waitUntilAllRealeased();
         logger.shutdown();
+    }
+    
+    LogWriter getLogger() {
+        return logger;
     }
 
     public void process(final ServerConnection connection) {
@@ -196,7 +201,7 @@ public class FileServerProcessor {
             files = getWriteRequests(connection);
             final String error = acquireLocks(files);
             if (error == null) {
-                logger.log(files);
+                logger.logWrites(files);
                 final DataFileWriter content = new DataFileWriter(files);
                 content.writeData();
                 connection.ok();
@@ -307,14 +312,20 @@ public class FileServerProcessor {
         connection.endCommand();
         final String name = connection.getRequest();
         final String key = connection.getRequest();
+        logger.logServiceEntry(key, name);
+        saveService(key, name);
+        connection.ok();
+    }
 
+    void saveService(final String key, final String name) throws FileNotFoundException, IOException,
+            UnsupportedEncodingException {
         FileOutputStream fileOut = null;
         final File file = Util.serviceFile(name);
         try {
             fileOut = new FileOutputStream(file);
-            fileOut.write(name.getBytes("utf-8"));
+            fileOut.write(name.getBytes(Util.ENCODING));
             fileOut.write(' ');
-            fileOut.write(key.getBytes("utf-8"));
+            fileOut.write(key.getBytes(Util.ENCODING));
         } finally {
             if (fileOut != null) {
                 try {
@@ -324,7 +335,6 @@ public class FileServerProcessor {
                 }
             }
         }
-        connection.ok();
     }
 
     private void nextSerialBatch(final ServerConnection connection) throws IOException {
@@ -347,14 +357,24 @@ public class FileServerProcessor {
             LOG.info("New ID batch allocated, from " + nextId);
         }
 
-        final FileOutputStream fileOutput = new FileOutputStream(file);
         final long newBatchAt = nextId + batchSize;
-        fileOutput.write(Long.toString(newBatchAt).getBytes("utf-8"));
-        fileOutput.close();
+        logger.logNextSerialBatch(name, newBatchAt);
+        
+        saveNextBatch(file, newBatchAt);
 
         // TODO remove lock
 
         connection.response(nextId);
+    }
+
+    private void saveNextBatch(final File file, final long newBatchAt) throws FileNotFoundException, IOException {
+        final FileOutputStream fileOutput = new FileOutputStream(file);
+        fileOutput.write(Long.toString(newBatchAt).getBytes(Util.ENCODING));
+        fileOutput.close();
+    }
+
+    public void saveNextBatch(String name, long nextBatch) throws IOException {
+        saveNextBatch(Util.serialNumberFile(name), nextBatch);
     }
 
     private void hasInstances(final ServerConnection connection) throws IOException {

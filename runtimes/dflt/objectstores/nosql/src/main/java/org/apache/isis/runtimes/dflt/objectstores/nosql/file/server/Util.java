@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -155,7 +156,7 @@ public class Util {
         return new File(dataDirectory, "serialnumbers" + name.trim() + ".data");
     }
 
-    static File logFile(final int id) {
+    static File logFile(final long id) {
         return new File(logDirectory, "recovery" + id + ".log");
     }
 
@@ -279,6 +280,18 @@ public class Util {
                 return "out#" + Long.toHexString(hashCode()) + " " + log;
             }
         };
+    }
+
+
+    public static void closeSafely(final FileOutputStream output) {
+        if (output != null) {
+            try {
+                output.flush();
+                output.close();
+            } catch (final IOException e) {
+                // throw new ObjectAdapterRuntimeException(e);
+            }
+        }
     }
 
 }

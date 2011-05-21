@@ -79,12 +79,12 @@ public class LogWriterTest {
 
     @Test
     public void logsData() throws Exception {
-        logger.log(items);
+        logger.logWrites(items);
 
         final BufferedReader reader = new BufferedReader(new FileReader(logFile1));
         String line = reader.readLine();
         line = reader.readLine();
-        Assert.assertEquals("Utype 20 6 ", line);
+        Assert.assertEquals("Utype 20 7", line);
         line = reader.readLine();
         Assert.assertEquals("{data}", line);
         reader.close();
@@ -93,16 +93,16 @@ public class LogWriterTest {
 
     @Test
     public void logAddedToExistingFile() throws Exception {
-        logger.log(items);
+        logger.logWrites(items);
         assertTrue(logFile1.exists() && logFile1.length() > 0);
         assertFalse(logFile2.exists());
     }
 
     @Test
     public void logAddedToNewFileWhenRotated() throws Exception {
-        logger.log(items);
+        logger.logWrites(items);
         logger.startNewFile();
-        logger.log(items);
+        logger.logWrites(items);
         assertTrue(logFile2.exists() && logFile1.length() > 0);
     }
 }

@@ -38,14 +38,14 @@ class WriteObjectCommand implements PersistenceCommand {
     private final KeyCreator keyCreator;
     private final ObjectAdapter object;
     private final VersionCreator versionCreator;
-    private final DataEncrypter dataEncrypter;
+    private final DataEncryption dataEncrypter;
     private final boolean isUpdate;
 
     WriteObjectCommand(
             final boolean isUpdate,
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final DataEncrypter dataEncrypter,
+            final DataEncryption dataEncrypter,
             final ObjectAdapter object) {
         this.isUpdate = isUpdate;
         this.keyCreator = keyCreator;

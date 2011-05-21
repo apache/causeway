@@ -44,7 +44,7 @@ class ObjectReader {
             final StateReader reader,
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final Map<String, DataEncrypter> dataEncrypters) {
+            final Map<String, DataEncryption> dataEncrypters) {
         final String className = reader.readObjectType();
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
         final String id = reader.readId();
@@ -77,7 +77,7 @@ class ObjectReader {
             final StateReader reader,
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final Map<String, DataEncrypter> dataEncrypters,
+            final Map<String, DataEncryption> dataEncrypters,
             final ObjectAdapter object) {
         loadState(reader, keyCreator, versionCreator, dataEncrypters, object);
     }
@@ -86,7 +86,7 @@ class ObjectReader {
             final StateReader reader,
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final Map<String, DataEncrypter> dataEncrypters,
+            final Map<String, DataEncryption> dataEncrypters,
             final ObjectAdapter object) {
     final ResolveState resolveState = ResolveState.RESOLVING;
         object.changeState(resolveState);
@@ -107,7 +107,7 @@ class ObjectReader {
             final StateReader reader,
             final ObjectAdapter object,
             final KeyCreator keyCreator,
-            final DataEncrypter dataEncrypter) {
+            final DataEncryption dataEncrypter) {
         final ObjectAssociationContainer specification = object.getSpecification();
         final List<ObjectAssociation> associations = specification.getAssociations();
         for (final ObjectAssociation association : associations) {
@@ -129,7 +129,7 @@ class ObjectReader {
     private void readAggregate(
             final StateReader reader,
             final KeyCreator keyCreator,
-            final DataEncrypter dataEncrypter,
+            final DataEncryption dataEncrypter,
             final OneToOneAssociation association,
             final ObjectAdapter object) {
         final String id = association.getId();
@@ -148,7 +148,7 @@ class ObjectReader {
             final StateReader aggregateReader,
             final Oid oid,
             final KeyCreator keyCreator,
-            final DataEncrypter dataEncrypter) {
+            final DataEncryption dataEncrypter) {
         final String objectType = aggregateReader.readObjectType();
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(objectType);
         final ObjectAdapter fieldObject = getAdapter(specification, oid);
@@ -163,7 +163,7 @@ class ObjectReader {
 
     private void readValue(
             final StateReader reader,
-            final DataEncrypter dataEncrypter,
+            final DataEncryption dataEncrypter,
             final OneToOneAssociation association,
             final ObjectAdapter object) {
         final String fieldData = reader.readField(association.getId());
@@ -196,7 +196,7 @@ class ObjectReader {
     private void readCollection(
             final StateReader reader,
             final KeyCreator keyCreator,
-            final DataEncrypter dataEncrypter,
+            final DataEncryption dataEncrypter,
             final OneToManyAssociation association,
             final ObjectAdapter object) {
         final ObjectAdapter collection = association.get(object);

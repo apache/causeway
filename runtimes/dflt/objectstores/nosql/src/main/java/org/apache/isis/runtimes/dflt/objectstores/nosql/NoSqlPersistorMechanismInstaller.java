@@ -22,7 +22,10 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
@@ -31,8 +34,13 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.log4j.Logger;
 
 public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
+
+    private static final Logger LOG = Logger.getLogger(NoSqlPersistorMechanismInstaller.class);
+
+    private static final String NAKEDOBJECTS_ENCRYPTION_CLASSES = ConfigurationConstants.ROOT  + "nosql.encryption";
 
     private NoSqlObjectStore objectStore;
 
@@ -64,13 +72,33 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
             final NoSqlDataDatabase db = createNoSqlDatabase(configuration);
             final NoSqlOidGenerator oidGenerator = createOidGenerator(db);
             
-            DataEncrypter writingDataEncrypter = new Rot13Encryption();
-            Map<String, DataEncrypter> availableDataEncrypters = new HashMap<String, DataEncrypter>();
-            availableDataEncrypters.put(writingDataEncrypter.getType(), writingDataEncrypter);
-            DataEncrypter passThoughEncrypter = new NoEncryption();
-            availableDataEncrypters.put(passThoughEncrypter.getType(), passThoughEncrypter);
-            
-            objectStore = new NoSqlObjectStore(db, oidGenerator, keyCreator, versionCreator, writingDataEncrypter, availableDataEncrypters);
+            Map<String, DataEncryption> availableDataEncryption = new HashMap<String, DataEncryption>();
+            try {
+                final String[] encryptionClasses = getConfiguration().getList(NAKEDOBJECTS_ENCRYPTION_CLASSES);
+                DataEncryption writeWithEncryption = null;
+                boolean encryptionSpecified = false;
+                for (final String fullyQualifiedClass : encryptionClasses) {
+                    LOG.info("  adding encryption " + fullyQualifiedClass);
+                    final DataEncryption encryption = (DataEncryption) InstanceUtil.createInstance(fullyQualifiedClass);
+                    encryption.init(configuration);
+                    availableDataEncryption.put(encryption.getType(), encryption);
+                    if (!encryptionSpecified) {
+                        writeWithEncryption = encryption;
+                    }
+                    encryptionSpecified = true;
+                }
+                if (!encryptionSpecified) {
+                    LOG.warn("No encryption specified");
+                    final DataEncryption encryption = new NoEncryption();
+                    availableDataEncryption.put(encryption.getType(), encryption);
+                    writeWithEncryption = encryption;
+                }
+                objectStore = new NoSqlObjectStore(db, oidGenerator, keyCreator, versionCreator, writeWithEncryption, availableDataEncryption);
+            } catch (final IllegalArgumentException e) {
+                throw new IsisException(e);
+            } catch (final SecurityException e) {
+                throw new IsisException(e);
+            }
         }
         return objectStore;
     }

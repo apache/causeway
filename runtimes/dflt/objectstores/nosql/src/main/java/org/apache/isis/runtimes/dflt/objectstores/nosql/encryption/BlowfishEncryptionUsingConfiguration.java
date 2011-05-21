@@ -16,15 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.nosql;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.encryption;
 
-public interface DataEncrypter {
-    
-    String getType();
-    
-    String encrypt(String plainText);
-    
-    String decrypt(String encryptedText);
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+
+
+public class BlowfishEncryptionUsingConfiguration extends BlowfishEncryptionAbstract {
+
+    private static final String ENCRYPTION_KEY = ConfigurationConstants.ROOT  + "nosql.encryption.blowfish-key";
+
+    public byte[] secretKey(IsisConfiguration configuration) {
+        String key = configuration.getString(ENCRYPTION_KEY);
+        if (key == null) {
+            throw new NoSqlStoreException("No blowfish encryption key specified in the configuration file (key: " + ENCRYPTION_KEY + ")");
+        }
+        return key.getBytes();
+    }
 
 }
-

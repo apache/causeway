@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
@@ -45,7 +46,7 @@ public class WriteObjectCommandTest {
     private KeyCreator keyCreator;
     private NoSqlCommandContext commandContext;
     private Mockery context;
-    private DataEncrypter dataEncrypter;
+    private DataEncryption dataEncrypter;
 
     @Before
     public void setup() {
@@ -97,11 +98,13 @@ public class WriteObjectCommandTest {
             }
         });
         
-        dataEncrypter = new DataEncrypter() {
+        dataEncrypter = new DataEncryption() {
             public String getType() {
                 return "etc1";
             }
-
+            
+            public void init(IsisConfiguration configuration) {}
+            
             public String encrypt(String plainText) {
                 return "ENC" + plainText;
             }

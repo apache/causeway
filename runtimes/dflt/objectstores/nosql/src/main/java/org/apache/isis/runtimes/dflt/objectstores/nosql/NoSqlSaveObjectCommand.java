@@ -26,7 +26,7 @@ final class NoSqlSaveObjectCommand extends WriteObjectCommand implements SaveObj
     public NoSqlSaveObjectCommand(
             final KeyCreator keyCreator,
             final VersionCreator versionCreator,
-            final DataEncrypter dataEncrypter,
+            final DataEncryption dataEncrypter,
             final ObjectAdapter object) {
         super(true, keyCreator, versionCreator, dataEncrypter, object);
     }

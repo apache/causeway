@@ -31,33 +31,59 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 public class LogWriter {
 
     private DataOutputStream writer;
-    private boolean startNewFile = true;
-    private int fileIndex;
+    private boolean startNewFile = false;
+    private int nextLogIdToWrite;
 
     public void startNewFile() {
-        // TODO don't start new file if old one is empty
-        startNewFile = true;
+        // don't start new file if old one is empty
+        File file = Util.logFile(nextLogIdToWrite);
+        if (file.exists() && file.length() > 0) {
+            startNewFile = true;
+        }
     }
 
-    public synchronized void log(final List<FileContent> items) {
-        if (startNewFile) {
-            close();
-            openNewFile();
-            startNewFile = false;
+    public synchronized void logNextSerialBatch(String name, long newBatchAt) {
+        startNewFileIfNeeded();
+        try {
+            writer.write(("#transaction started - " + new Date().toString() + "\n").getBytes());
+            writer.write('B');
+            writer.write(name.getBytes(Util.ENCODING));
+            writer.write(' ');
+            writer.write(Long.toString(newBatchAt).getBytes(Util.ENCODING));
+            writer.write('\n');
+            writer.write('\n');
+            writer.write("#transaction ended\n\n".getBytes());
+            writer.flush();
+        } catch (final IOException e) {
+            throw new NoSqlStoreException("Failed to write serial number data to log file", e);
         }
+
+    }
+
+    public synchronized void logServiceEntry(String key, String name) {
+        startNewFileIfNeeded();
+        try {
+            writer.write(("#transaction started - " + new Date().toString() + "\n").getBytes());
+            writer.write('S');
+            writer.write(key.getBytes(Util.ENCODING));
+            writer.write(' ');
+            writer.write(name.getBytes(Util.ENCODING));
+            writer.write('\n');
+            writer.write('\n');
+            writer.write("#transaction ended\n\n".getBytes());
+            writer.flush();
+        } catch (final IOException e) {
+            throw new NoSqlStoreException("Failed to write service entry data to log file", e);
+        }
+    }
+
+    public synchronized void logWrites(final List<FileContent> items) {
+        startNewFileIfNeeded();
         try {
             writer.write(("#transaction started - " + new Date().toString() + "\n").getBytes());
             for (final FileContent content : items) {
                 writer.write(content.command);
-                writer.write(content.type.getBytes("utf-8"));
-                writer.write(' ');
-                writer.write(content.id.getBytes("utf-8"));
-                writer.write(' ');
-                writer.write(content.currentVersion.getBytes("utf-8"));
-                writer.write(' ');
-                writer.write('\n');
-                writer.write(content.data.getBytes("utf-8"));
-                writer.write('\n');
+                content.write(writer);
                 writer.write('\n');
             }
             writer.write("#transaction ended\n\n".getBytes());
@@ -67,11 +93,20 @@ public class LogWriter {
         }
     }
 
+    private void startNewFileIfNeeded() {
+        if (startNewFile) {
+            close();
+            openNewFile();
+            startNewFile = false;
+        }
+    }
+
     private void openNewFile() {
-        File file;
-        do {
-            file = Util.logFile(fileIndex++);
-        } while (file.exists());
+        File file = findNextFile();
+        openFile(file);
+    }
+
+    private void openFile(File file) {
         try {
             writer = new DataOutputStream(new FileOutputStream(file));
             startNewFile = false;
@@ -80,9 +115,25 @@ public class LogWriter {
         }
     }
 
+    private File findNextFile() {
+        File file;
+        do {
+            nextLogIdToWrite++;
+            file = Util.logFile(nextLogIdToWrite);
+        } while (file.exists());
+        return file;
+    }
+
     public void startup() {
-        // TODO replay log.
-        openNewFile();
+        findNextFile();
+        nextLogIdToWrite--;
+        startNewFile();
+        if (!startNewFile) {
+            File file = Util.logFile(nextLogIdToWrite);
+            openFile(file);
+        } else {
+            openNewFile();
+        }
     }
 
     public void shutdown() {
@@ -95,5 +146,10 @@ public class LogWriter {
         } catch (final IOException e) {
             throw new NoSqlStoreException("Falied to close log file", e);
         }
+    }
+
+    public synchronized boolean isWritten(long logId) {
+        startNewFileIfNeeded();
+        return logId < nextLogIdToWrite;
     }
 }

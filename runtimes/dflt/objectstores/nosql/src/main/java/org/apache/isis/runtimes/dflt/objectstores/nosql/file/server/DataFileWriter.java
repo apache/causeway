@@ -28,8 +28,6 @@ public class DataFileWriter {
 
     // private static final Logger LOG = Logger.getLogger(DataWriter.class);
 
-    private static final String ENCODING = "utf-8";
-
     private final List<FileContent> files;
 
     public DataFileWriter(final List<FileContent> files) {
@@ -56,26 +54,9 @@ public class DataFileWriter {
         }
         try {
             output = new FileOutputStream(file);
-            output.write(content.type.getBytes(ENCODING));
-            output.write(' ');
-            output.write(content.id.getBytes(ENCODING));
-            output.write(' ');
-            output.write(content.newVersion.getBytes(ENCODING));
-            output.write('\n');
-            output.write(content.data.getBytes(ENCODING));
+            content.write(output);
         } finally {
-            closeSafely(output);
-        }
-    }
-
-    private static void closeSafely(final FileOutputStream output) {
-        if (output != null) {
-            try {
-                output.flush();
-                output.close();
-            } catch (final IOException e) {
-                // throw new ObjectAdapterRuntimeException(e);
-            }
+            Util.closeSafely(output);
         }
     }
 

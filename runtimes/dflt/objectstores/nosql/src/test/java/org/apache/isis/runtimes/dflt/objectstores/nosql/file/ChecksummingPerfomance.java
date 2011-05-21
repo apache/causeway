@@ -27,7 +27,7 @@ import java.util.zip.CheckedInputStream;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
 
 
-public class TestChecksumming {
+public class ChecksummingPerfomance {
 
     public static void main(String[] args) throws Exception {
 
