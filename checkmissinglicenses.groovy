@@ -29,7 +29,12 @@ import groovy.xml.XmlUtil
 import javax.xml.transform.*
 import javax.xml.transform.stream.*
 
+//
+// phase 1: find missing dependencies from each of the license.xml files
+//
+
 def currentDir=new File(".")
+def dependencies = []
 
 currentDir.eachFileRecurse { file ->
   if ( file.name == "licenses.xml" ) {
@@ -44,17 +49,32 @@ currentDir.eachFileRecurse { file ->
       def url = dependency.licenses.license.url.text()
 
       if(! url) {
-
-        if (!anyMissingLicenses) {
-          println( "----------------------------------------------------------" )
-          println( file.canonicalPath )
-          println( "----------------------------------------------------------" )
-          anyMissingLicenses = true
-        }
-
-	println( dependency.groupId.text() + " : " + dependency.artifactId.text() + " : " + dependency.version.text() )
+	def dep = [ dependency.groupId.text() , 
+                    dependency.artifactId.text() , 
+                    dependency.version.text() ]
+        dependencies.add(dep)
       }
 
     }
   }
+}
+
+
+
+//
+// phase 2: now check each dependency is in the supplemental models file
+//
+
+def supModelsFile = new File("src/main/appended-resources/supplemental-models.xml")
+def supModelsXml = new XmlSlurper().parseText(supModelsFile.text)
+
+dependencies.unique().sort().each { dep ->
+    def listed = supModelsXml.supplement.project.findAll { project ->
+        project.groupId == dep[0] &&
+        project.artifactId == dep[1] &&
+        project.version == dep[2]
+    }.size()
+    if (!listed) {
+        println(dep)
+    }
 }
