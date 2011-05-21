@@ -265,7 +265,11 @@ public class Dispatcher {
         try {
             final String directory =
                 IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
-            writer = new PrintWriter(new File(directory, "error_" + errorRef + ".html"));
+            File dir = new File(directory);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            writer = new PrintWriter(new File(dir, "error_" + errorRef + ".html"));
             final DebugWriter writer2 = new DebugWriter(writer, true);
             writer2.concat(debugHtml);
             writer2.close();
