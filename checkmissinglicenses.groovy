@@ -34,7 +34,7 @@ import javax.xml.transform.stream.*
 //
 
 def currentDir=new File(".")
-def dependencies = []
+def missing = []
 
 currentDir.eachFileRecurse { file ->
   if ( file.name == "licenses.xml" ) {
@@ -42,39 +42,81 @@ currentDir.eachFileRecurse { file ->
 
     def fileXml = new XmlSlurper().parseText(file.text)
 
-    def anyMissingLicenses = false
+    def anyMissing = false
 
     fileXml.dependencies.dependency.each { dependency ->
 
       def url = dependency.licenses.license.url.text()
 
       if(! url) {
-	def dep = [ dependency.groupId.text() , 
-                    dependency.artifactId.text() , 
-                    dependency.version.text() ]
-        dependencies.add(dep)
+	def mavenCoords = [ dependency.groupId.text() , 
+                            dependency.artifactId.text() , 
+                            dependency.version.text() ]
+        missing.add(mavenCoords)
       }
 
     }
   }
 }
-
+missing = missing.unique().sort()
 
 
 //
-// phase 2: now check each dependency is in the supplemental models file
+// phase 2: convert existing supplemental model entries into list form
 //
-
 def supModelsFile = new File("src/main/appended-resources/supplemental-models.xml")
 def supModelsXml = new XmlSlurper().parseText(supModelsFile.text)
 
-dependencies.unique().sort().each { dep ->
-    def listed = supModelsXml.supplement.project.findAll { project ->
-        project.groupId == dep[0] &&
-        project.artifactId == dep[1] &&
-        project.version == dep[2]
-    }.size()
-    if (!listed) {
-        println(dep)
+def supplements = []
+supModelsXml.supplement.project.each { project ->
+    def mavenCoords = [ project.groupId.text(), 
+                        project.artifactId.text(), 
+                        project.version.text() ]
+    supplements.add(mavenCoords)
+}
+
+supplements = supplements.unique().sort()
+
+
+
+//
+// phase 3: check each list against the other
+//
+
+def missingCopy = []
+missingCopy.addAll(missing)
+
+def supplementsCopy = []
+supplementsCopy.addAll(supplements)
+
+missing.removeAll(supplementsCopy)
+supplements.removeAll(missingCopy)
+
+
+println("")
+println("")
+println("licenses to add to supplemental-models.xml:")
+println("")
+
+if (missing.size()) {
+    missing.each { 
+        println(it)
     }
+} else {
+    println("nothing to add")
+}
+
+
+
+println("")
+println("")
+println("licenses to remove from supplemental-models.xml (are spurious):")
+println("")
+
+if (supplements.size()) {
+    supplements.each { 
+        println(it)
+    }
+} else {
+    println("nothing to remove")
 }
