@@ -77,7 +77,7 @@ public class FileServer {
 
         final Options options = new Options();
         options.addOption("h", "help", false, "Show this help");
-        options.addOption("m", "mode", true, "mode: normal | recovery | secondary");
+        options.addOption("m", "mode", true, "mode: normal | secondary | recovery | archive");
 
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse(options, args);
@@ -92,6 +92,9 @@ public class FileServer {
         if ("recovery".equals(mode)) {
             final FileServer fileServer = new FileServer();
             fileServer.startRecovery(cmd.getArgList());
+        } else if ("archive".equals(mode)) {
+            final FileServer fileServer = new FileServer();
+            fileServer.startArchive(cmd.getArgList());
         } else if ("secondary".equals(mode)) {
             final FileServer fileServer = new FileServer();
             fileServer.startSecondary();
@@ -126,8 +129,9 @@ public class FileServer {
             final String data = config.getString("fileserver.data");
             final String services = config.getString("fileserver.services");
             final String logs = config.getString("fileserver.logs");
+            final String archive = config.getString("fileserver.archive");
 
-            Util.setDirectory(data, services, logs);
+            Util.setDirectory(data, services, logs, archive);
             server = new FileServerProcessor();
         } catch (final ConfigurationException e) {
             LOG.error("configuration failure", e);
@@ -178,10 +182,13 @@ public class FileServer {
             socket.setSoTimeout(connectionTimeout);
             LOG.info("listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
             LOG.debug("listenting on " + socket);
-            long lastRecoveryFile = lastRecoveryFile();
-            File file = Util.logFile(lastRecoveryFile);
-            LOG.info("replaying last recovery file: " + file.getAbsolutePath());
-            recover(file);
+            LogRange logFileRange = Util.logFileRange();
+            if (!logFileRange.noLogFile()) {
+                long lastRecoveryFile = logFileRange.getLast();
+                File file = Util.logFile(lastRecoveryFile);
+                LOG.info("replaying last recovery file: " + file.getAbsolutePath());
+                recover(file);
+            }
             server.startup();
         } catch (final UnknownHostException e) {
             LOG.error("Unknown host " + serviceHost, e);
@@ -416,11 +423,12 @@ public class FileServer {
 
     private void startRecovery(List list) {
         LOG.info("starting recovery");
-        long lastId = lastRecoveryFile();
-        if (lastId < 0) {
+        final LogRange logFileRange = Util.logFileRange();
+        if (logFileRange.noLogFile()) {
             System.err.println("No recovery files found");
             System.exit(0);
         }
+        long lastId = logFileRange.getLast();
         LOG.info("last log file is " + Util.logFile(lastId).getName());
 
         long startId = lastId;
@@ -433,8 +441,8 @@ public class FileServer {
                 endId = Long.valueOf((String) list.get(1));
             }
         }
-        if (startId > lastId || endId > lastId) {
-            System.err.println("File IDs invalid: they must be less than or equal to " + lastId);
+        if (startId < logFileRange.getFirst() || startId > lastId || endId > lastId) {
+            System.err.println("File IDs invalid: they must be between " + logFileRange.getFirst() + " and " + lastId);
             System.exit(0);
         }
         if (startId > endId) {
@@ -448,20 +456,46 @@ public class FileServer {
             LOG.info("recovering data from " + file.getName());
             recover(file);
         }
+        LOG.info("recovery complete");
     }
 
-    private long lastRecoveryFile() {
-        long lastId = -1;
-        while (Util.logFile(lastId + 1).exists()) {
-            lastId++;
+
+    private void startArchive(List list) {
+        LOG.info("starting archiving");
+        final LogRange logFileRange = Util.logFileRange();
+        if (logFileRange.noLogFile()) {
+            System.err.println("No recovery files found");
+            System.exit(0);
         }
-        return lastId;
-    }
+        long lastId = logFileRange.getLast();
+        LOG.info("last log file is " + Util.logFile(lastId).getName());
 
+        long endId = lastId - 1;
+
+        int size = list.size();
+        if (size > 0) {
+            endId = Long.valueOf((String) list.get(0));
+        }
+        if (endId >= lastId) {
+            System.err.println("File ID invalid: they must be less that " + lastId);
+            System.exit(0);
+        }
+        long startId = logFileRange.getFirst();
+        for (long id = startId; id <= endId; id++) {
+            File file = Util.logFile(id);
+            LOG.info("moving " + file.getName());
+            File destination = Util.archiveLogFile(id);
+            file.renameTo(destination);
+        }
+        LOG.info("archive complete");
+
+    }
+    
     private void startSecondary() {
         String serviceHost = config.getString("fileserver.sync-host", DEFAULT_HOST);
         int servicePort = config.getInt("fileserver.sync-port", DEFAULT_SYNC_PORT);
 
+        Util.ensureDirectoryExists();
         ServerSocket socket = null;
         try {
             LOG.debug("setting up syncing socket on " + serviceHost + ":" + servicePort);
@@ -494,7 +528,8 @@ public class FileServer {
                 return;
             }
 
-            long lastId = lastRecoveryFile();
+            LogRange logFileRange = Util.logFileRange();
+            long lastId = logFileRange.noLogFile() ? -1 : logFileRange.getLast();
             output.writeLong(lastId);
             do {
                 if (input.readByte() != RECOVERY_LOG) {
@@ -502,7 +537,7 @@ public class FileServer {
                 }
                 crc32.reset();
                 long logId = input.readLong();
-                File file = Util.logFile(logId);
+                File file = Util.tmpLogFile(logId);
                 LOG.info("syncing recovery file: " + file.getName());
                 BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(file));
 
@@ -521,7 +556,8 @@ public class FileServer {
                 }
 
                 recover(file);
-
+                File renameTo = Util.logFile(logId);
+                file.renameTo(renameTo);
             } while (true);
         } catch (final NoSqlStoreException e) {
             LOG.error("file server failure", e);
@@ -574,7 +610,7 @@ public class FileServer {
         String header;
         while ((header = reader.readLine()) != null) {
             if (header.startsWith("#transaction ended")) {
-                LOG.info("transaction read in (ending " + reader.getLineNumber() + ")");
+                LOG.debug("transaction read in (ending " + reader.getLineNumber() + ")");
                 content.writeData();
                 reader.readLine();
                 return;

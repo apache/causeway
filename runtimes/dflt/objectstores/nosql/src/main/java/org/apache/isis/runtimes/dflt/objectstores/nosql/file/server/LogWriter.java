@@ -32,7 +32,7 @@ public class LogWriter {
 
     private DataOutputStream writer;
     private boolean startNewFile = false;
-    private int nextLogIdToWrite;
+    private long nextLogIdToWrite;
 
     public void startNewFile() {
         // don't start new file if old one is empty
@@ -102,7 +102,11 @@ public class LogWriter {
     }
 
     private void openNewFile() {
-        File file = findNextFile();
+        nextLogIdToWrite++;
+        File file = Util.logFile(nextLogIdToWrite);
+        if (file.exists()) {
+            throw new NoSqlStoreException("Log file already exists");
+        }
         openFile(file);
     }
 
@@ -115,18 +119,8 @@ public class LogWriter {
         }
     }
 
-    private File findNextFile() {
-        File file;
-        do {
-            nextLogIdToWrite++;
-            file = Util.logFile(nextLogIdToWrite);
-        } while (file.exists());
-        return file;
-    }
-
     public void startup() {
-        findNextFile();
-        nextLogIdToWrite--;
+        nextLogIdToWrite = Util.logFileRange().getLast();
         startNewFile();
         if (!startNewFile) {
             File file = Util.logFile(nextLogIdToWrite);

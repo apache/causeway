@@ -43,7 +43,7 @@ public class LogWriterTest {
 
     @BeforeClass
     public static void directory() {
-        Util.setDirectory("target/test", "services", "logs");
+        Util.setDirectory("target/test", "services", "logs", "archive");
         Util.ensureDirectoryExists();
     }
 

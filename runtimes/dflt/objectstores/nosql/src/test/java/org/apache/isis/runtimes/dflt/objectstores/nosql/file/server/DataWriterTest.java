@@ -43,7 +43,7 @@ public class DataWriterTest {
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        Util.setDirectory(TARGET_DIRECTORY, "services", "logs");
+        Util.setDirectory(TARGET_DIRECTORY, "services", "logs", "archive");
         Util.ensureDirectoryExists();
     }
 

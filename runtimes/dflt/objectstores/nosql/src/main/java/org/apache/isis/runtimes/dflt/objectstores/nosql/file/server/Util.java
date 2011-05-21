@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.log4j.Logger;
 
+
 public class Util {
 
     private static final Logger LOG = Logger.getLogger(Util.class);
@@ -37,6 +38,7 @@ public class Util {
     private static final String DEFAULT_DIRECTORY = "data";
     private static final String SERVICES_DIRECTORY = "services";
     private static final String LOGS_DIRECTORY = "logs";
+    private static final String LOGS_ARCHIVE_DIRECTORY = "archive";
     public static final String ABORT = "abort";
     public static final String OK = "ok";
     public static final String READ_ERROR = "Read error";
@@ -46,12 +48,14 @@ public class Util {
     private static File dataDirectory = new File(DEFAULT_DIRECTORY);
     private static File serviceDirectory = new File(DEFAULT_DIRECTORY, SERVICES_DIRECTORY);
     private static File logDirectory = new File(DEFAULT_DIRECTORY, LOGS_DIRECTORY);
+    private static File logArchiveDirectory = new File(DEFAULT_DIRECTORY, LOGS_ARCHIVE_DIRECTORY);
 
-    static void setDirectory(final String data, final String services, final String logs) {
+    static void setDirectory(final String data, final String services, final String logs, final String archive) {
         final String directory = data == null ? DEFAULT_DIRECTORY : data;
         Util.dataDirectory = new File(directory);
         Util.serviceDirectory = new File(directory, services == null ? SERVICES_DIRECTORY : services);
         Util.logDirectory = new File(directory, logs == null ? LOGS_DIRECTORY : logs);
+        Util.logArchiveDirectory = new File(directory, archive == null ? LOGS_ARCHIVE_DIRECTORY : archive);
     }
 
     static void ensureDirectoryExists() {
@@ -60,6 +64,9 @@ public class Util {
         }
         if (!logDirectory.exists()) {
             logDirectory.mkdirs();
+        }
+        if (!logArchiveDirectory.exists()) {
+            logArchiveDirectory.mkdirs();
         }
     }
 
@@ -158,6 +165,30 @@ public class Util {
 
     static File logFile(final long id) {
         return new File(logDirectory, "recovery" + id + ".log");
+    }
+
+    static File tmpLogFile(final long id) {
+        return new File(logDirectory, "recovery" + id + ".log.tmp");
+    }
+
+    public static File archiveLogFile(long id) {
+        return new File(logArchiveDirectory, "recovery" + id + ".log");
+    }
+
+    static LogRange logFileRange() {
+        LogRange logRange = new LogRange();
+        File[] listFiles = logDirectory.listFiles();
+        if (listFiles != null) {
+            for (File file : listFiles) {
+                String name = file.getName();
+                String substring = name.substring(8, name.length() - 4);
+                try {
+                    long sequence = Long.parseLong(substring);
+                    logRange.add(sequence);
+                } catch (NumberFormatException ignore) {}
+            }
+        }
+        return logRange;
     }
 
     static final char DELETE = 'D';
@@ -281,7 +312,6 @@ public class Util {
             }
         };
     }
-
 
     public static void closeSafely(final FileOutputStream output) {
         if (output != null) {

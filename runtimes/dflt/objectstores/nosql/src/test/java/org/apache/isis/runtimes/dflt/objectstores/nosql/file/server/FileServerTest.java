@@ -51,7 +51,7 @@ public class FileServerTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        Util.setDirectory("target/test", "services", "logs");
+        Util.setDirectory("target/test", "services", "logs", "archive");
         Util.ensureDirectoryExists();
         new File("target/test/type").mkdir();
     }
