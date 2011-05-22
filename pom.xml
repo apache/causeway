@@ -1142,7 +1142,9 @@
         <module>progmodels</module>
         <module>security</module>
         <module>viewer</module>
+<!--
         <module>support</module>
+-->
     </modules>
 
     <profiles>
