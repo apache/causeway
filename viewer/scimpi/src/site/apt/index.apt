@@ -21,7 +21,12 @@ Scimpi Viewer
   The <scimpi> module provides a webapp viewer that out-of-the-box provides a similar
   interface to that provided by the {{{../html/index.html}HTML}} viewer.
   
-  However, unlike the HTML viewer it allows the user interface to be extensively customized. 
+  However, unlike the HTML viewer it allows the user interface to be extensively customized.
+  
+  For an idea of the sorts of apps you can create with Scimpi, take a look at 
+  {{{http://planchaser.com/images/apps_screenshot.png}these}}
+  {{{http://planchaser.com/images/apps_screenshot2.png}screenshots}} taken from a 
+  commercial app. 
   
 Customization
 
