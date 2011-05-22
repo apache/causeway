@@ -32,4 +32,9 @@
     <version>1.0</version>
     <name>Isis Skin</name>
 
+    <properties>
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>applib/</relativeUrl>
+    </properties>
+
 </project>
