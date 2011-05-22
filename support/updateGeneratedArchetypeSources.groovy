@@ -29,11 +29,36 @@ def ROOT="quickstart/target/generated-sources/archetype/src/main/resources/"
 //
 /////////////////////////////////////////////////////
 
+def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+"""
+
 def metaDataFile=new File(ROOT+"META-INF/maven/archetype-metadata.xml")
 
 println "updating ${metaDataFile.path}"
 
-def metaDataXml = new XmlSlurper().parseText(metaDataFile.text)
+
+// read file, ignoring XML pragma
+def metaDataFileText = stripXmlPragma(metaDataFile)
+
+def metaDataXml = new XmlSlurper().parseText(metaDataFileText)
 metaDataXml.modules.module.fileSets.fileSet.each { fileSet ->
     if(fileSet.directory=='ide/eclipse') {
         fileSet.@filtered='true'
@@ -57,8 +82,20 @@ String indentXml(xml) {
     return result.writer.toString()
 }
 
+String stripXmlPragma(File file) {
+    def sw = new StringWriter()
+    file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
+    return sw.toString()
+}
 
-metaDataFile.text = indentXml(metaDataSmb.toString())
+def tempFile = File.createTempFile("temp",".xml")
+tempFile.text = indentXml(metaDataSmb.toString())
+def xmlText = stripXmlPragma(tempFile)
+
+
+metaDataFile.text = 
+    license_using_xml_comments + 
+    xmlText
 
 
 /////////////////////////////////////////////////////
