@@ -4150,14 +4150,6 @@ gpg&gt;</programlisting>
           <para>The Digest line should list SHA-512 first and SHA-1 last.
           </para>
 
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-
           <para>Finally, remember to take a backup of your key and the keyring
           (ie, backup the <filename>.gnupg</filename> directory and its
           contents).</para>
@@ -4274,8 +4266,7 @@ Enter an optional description; end it with an empty line:</programlisting>
 &gt;
 Reason for revocation: No reason specified
 Generic certificate to revoke key, generated at time of key creation.
-Is this okay? (y/N)
-</programlisting>
+Is this okay? (y/N)</programlisting>
 
           <para>Confirm this is ok.</para>
 
@@ -4335,8 +4326,8 @@ your machine might store the data and make it available to others!</programlisti
 
           <para>It is also necessary to publish your key. There are several
           places where this should be done. In most cases, you'll need the
-          "armored" representation of your key. This can be generated
-          using:</para>
+          "armored" " (ie ASCII) representation of your key. This can be
+          generated using:</para>
 
           <programlisting>$ gpg --armor --export nnnnnnnn &gt; nnnnnnnn.asc</programlisting>
 
@@ -4506,6 +4497,30 @@ your machine might store the data and make it available to others!</programlisti
           </sect3>
 
           <sect3>
+            <title>Save to KEYS</title>
+
+            <para>The armored representation of the public key should be saved
+            to Isis' KEYS file, <ulink
+            url="https://svn.apache.org/repo/asf/incubator/isis/KEYS">https://svn.apache.org/repo/asf/incubator/isis/KEYS</ulink>
+            (ie, parent of <filename>trunk</filename>).</para>
+
+            <para>First, in a new directory, checkout this file:</para>
+
+            <programlisting>svn -N co https://svn.apache.org/repos/asf/incubator/isis/ .</programlisting>
+
+            <para>This should bring down the <filename>KEYS</filename>
+            file.</para>
+
+            <para>Then, export your signature and armored
+            representation.</para>
+
+            <programlisting>gpg --list-sigs nnnnnnnn &gt;&gt;KEYS
+gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
+
+            <para>Then commit.</para>
+          </sect3>
+
+          <sect3>
             <title>id.apache.org</title>
 
             <para>Log onto id.apache.org and ensure that the finger print of
@@ -4520,7 +4535,9 @@ your machine might store the data and make it available to others!</programlisti
           signing party at an Apache event, in order that other Apache
           committers/members can in person verify their identity against the
           key. The process for this is described <ulink
-          url="http://www.apache.org/dev/release-signing.html#key-signing-party">here</ulink>.</para>
+          url="http://www.apache.org/dev/release-signing.html#key-signing-party">here</ulink>
+          and <ulink
+          url="http://wiki.apache.org/apachecon/PgpKeySigning">here</ulink>.</para>
         </sect2>
 
         <sect2>
@@ -4571,87 +4588,338 @@ your machine might store the data and make it available to others!</programlisti
       <sect1 id="sec.MavenReleasePrepare">
         <title>Preparing a Release (<code>mvn release:prepare</code>)</title>
 
-        <para></para>
+        <para>We recommend creating release candidates from branches, and then
+        the final release from trunk.</para>
 
-        <para></para>
+        <sect2>
+          <title>Branch (release candidates only)</title>
+
+          <para>First, create a branch:</para>
+
+          <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating \
+   -m "branching to create x.x.x-RCn-incubating"
+svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
+    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk \
+    -m "copying trunk to branches/x.x.x-RCn-incubating"</programlisting>
+
+          <para>Now create a workspace for this branch. The easiest approach
+          is to copy <filename>trunk</filename> and perform an <code>svn
+          switch</code>:</para>
+
+          <programlisting>cd .../trunk   # your local workspace for isis/trunk
+
+cd ..
+mkdir -p branches/x.x.x-RCn-incubating
+cp -R trunk branches/x.x.x-RCn-incubating/trunk
+
+cd branches/x.x.x-RCn-incubating/trunk
+svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk</programlisting>
+
+          <para>Because the release is being performed in a branch, it is then
+          necessary to edit the parent <filename>pom.xml</filename> in
+          <package>[oai:isis-parent]</package>. Change
+          <emphasis>trunk</emphasis> to
+          <emphasis>branches/x.x.x-RCn-incubating/trunk</emphasis> for each of
+          the children of the <code>&lt;scm&gt;</code> tag:</para>
+
+          <programlisting>&lt;scm&gt;
+  &lt;connection&gt;
+    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/
+  &lt;/connection&gt;
+  &lt;developerConnection&gt;
+    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/
+  &lt;/developerConnection&gt;
+  &lt;url&gt;
+    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/
+  &lt;/url&gt;
+&lt;/scm&gt;</programlisting>
+
+          <para>The commit the <filename>pom.xml</filename> file.</para>
+        </sect2>
+
+        <sect2>
+          <title>Dry run</title>
+
+          <para>The release:prepare command updates all POMs, creates a tag.
+          It's common practice to perform a dry run first:</para>
+
+          <programlisting>mvn release:clean release:prepare -P apache-release -D dryRun=true</programlisting>
+
+          <para>Specify version as
+          <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
+
+          <para></para>
+
+          <para>*** more detail required here.</para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Release Proper</title>
+
+          <para>Assuming that the dry run has succeeded, it's time to create
+          the release proper</para>
+
+          <programlisting>mvn release:clean release:prepare -P apache-release -D skipTests=true</programlisting>
+
+          <para>Specify version as
+          <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
+
+          <para><note>
+              <para>If you are in Europe the <code>mvn release:prepare</code>
+              command almost always fails at the last step, with a message
+              like:</para>
+
+              <programlisting>[ERROR]
+ BUILD FAILURE
+[INFO]
+ ------------------------------------------------------------------------
+[INFO]
+ Unable to tag SCM
+Provider message:
+The svn tag command failed.
+Command output:
+svn: No such revision 936951</programlisting>
+
+              <para>This is due to the SVN mirroring in place between Europe
+              and the master in the US. When you make a commit, it isn't
+              immediately available in Europe to svn up to. Just wait 10 secs
+              and repeat the mvn release:prepare command for it to restart
+              where it left off.</para>
+            </note><note>
+              <para>If other things go wrong, then <code>mvn
+              release:clean</code> will do most of the cleaning up in the
+              event of failures.</para>
+            </note></para>
+
+          <para></para>
+
+          <para>*** more detail required here.</para>
+
+          <para></para>
+
+          <para>*** check the archetype versions; may need manual tweaking
+          beforehand if doesn't bump versions correctly?</para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Post-build sanity check</title>
+
+          <para>You should end up with artifacts in your local repo with the
+          new version <emphasis>0.x.x-RCn-incubating</emphasis>. As a sanity
+          check, use the quickstart archetype to generate the application, and
+          make sure that the generated application runs ok.</para>
+
+          <para>If you find problems and the release was performed on trunk
+          (rather than a branch) then you may need to revert the changes. The
+          release commands make and commit changes to the project's
+          <filename>pom.xml</filename> files and they create a tag in SVN;
+          you'll need to revert the <filename>pom.xml</filename> files and
+          delete the tag from SVN.</para>
+        </sect2>
       </sect1>
 
       <sect1 id="sec.UploadReleaseForVoting">
         <title>Upload Release for Voting</title>
 
-        <para></para>
-
-        <para></para>
+        <para>Once the release has been built locally, it should be uploaded
+        for voting. This consists of two things: uploading the source release,
+        and deploying the Maven artifacts to a staging directory.</para>
 
         <sect2>
           <title>Upload Source Zip</title>
 
-          <para></para>
+          <para>The source ZIP can be found in the <filename>target</filename>
+          directory of the parent project (ie at
+          <filename>trunk/target</filename>), along with its signature. The
+          two files of interest are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><filename>isis-parent-0.x.x-RCn-incubating-incubating-source-release.zip</filename>,
+              and</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>isis-parent-0.x.x-RCn-incubating-incubating-source-release.zip.asc</filename></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Upload these to your public_html directory on
+          people.apache.org so that they can be referenced in your vote email
+          (see <xref linkend="sec.Voting" />).</para>
         </sect2>
 
         <sect2>
           <title>Deploying Binaries to Staging Repository (<classname>mvn
           release:perform</classname>)</title>
 
-          <para></para>
+          <para>The Apache staging repository lives on the Nexus repository
+          hosted at <ulink
+          url="https://repository.apache.org">https://repository.apache.org</ulink>.
+          The process of uploading will create a staging repository that is
+          associated with the host (IP address) performing the release. Once
+          the repository is staged, the newly created staging repository is
+          "closed" in order to make it available to others.</para>
 
-          <para></para>
+          <sect3>
+            <title>Perform the Release</title>
+
+            <para>The command to stage the release is:</para>
+
+            <programlisting>mvn release:perform -Papache-release</programlisting>
+
+            <para></para>
+
+            <para>*** further details required here.</para>
+
+            <para></para>
+          </sect3>
+
+          <sect3>
+            <title>Check the Repository</title>
+
+            <para>This will put release artifacts into a newly created staging
+            repository . You will need to log into repository.apache.org to
+            see it.</para>
+
+            <para>If nothing appears in a staging repo you should stop here
+            and work out why.</para>
+
+            <para>Assuming that the repo has been populated, make a note of
+            its repo id; this is needed for the voting thread (see <xref
+            linkend="sec.VotingThread" />).</para>
+
+            <para></para>
+
+            <para>*** confirm the procedure described here.</para>
+
+            <para></para>
+          </sect3>
+
+          <sect3>
+            <title>Close the Repository</title>
+
+            <para>After checking that the staging repository contains the
+            artifacts that you expect you should close the staging repository.
+            This will make it available so that people can check the
+            release.</para>
+
+            <para></para>
+
+            <para>*** further details required here.</para>
+
+            <para></para>
+          </sect3>
         </sect2>
       </sect1>
 
       <sect1 id="sec.Voting">
         <title>Voting</title>
 
-        <para></para>
+        <para>Once the artifacts have been uploaded, you can call a vote.
+        Votes last for 72 hours and require a +3 vote from members. While
+        incubating, this vote should be performed on the
+        isis-dev@incubator.apache.org mailing list, and then repeated on the
+        incubator@apache.org mailing list.</para>
 
-        <para></para>
-
-        <para></para>
-
-        <sect2>
+        <sect2 id="sec.VotingThread">
           <title>Start voting thread on isis-dev@incubator.a.o</title>
 
-          <para>*** boilerplate text</para>
+          <para>You can use the following boilerplate for the vote on
+          isis-dev.</para>
 
-          <para></para>
+          <para>Use the following subject:</para>
 
-          <para></para>
+          <programlisting>[VOTE] Apache Isis release candidate 0.x.x-RCn-incubating</programlisting>
+
+          <para>And use the following body:</para>
+
+          <programlisting>I've staged a release candidate for Apache Isis, namely 0.x.x-RCn-incubating.
+
+The signed source ZIP can be downloaded from my home directory on people.apache.org:
+* http://people.apache.org/~uuuuuuuu/isis-parent-0.x.x-RCn-incubating-source-release.zip (zip file), and
+* http://people.apache.org/~uuuuuuuu/isis-parent-0.x.x-RCn-incubating-source-release.zip.asc (signature)
+
+The code has been tagged as tags/0.x.x-RCn-incubating.
+
+In addition, the Maven artifacts have been staged to staging repository on repository.apache.org:
+* https://repository.apache.org/content/repositories/orgapacheisis-zzz/
+
+The RAT checks have passed (see contributors guide for files that are considered as being excluded).
+
+Please verify the release and cast your vote.  The vote will be open for 72 hours.
+
+[ ] +1
+[ ]  0
+[ ] -1</programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>uuuuuuuu</emphasis> is your Apache LDAP
+              username</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>zzz</emphasis> is the newly created staging
+              repository, from above.</para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
           <title>Other contributors cast their vote</title>
 
-          <para></para>
+          <para>It is the responsibility of other contributors (or any ASF
+          member) to cast their vote on the release. This section provides
+          some guidance on this process.</para>
 
           <sect3>
-            <title>Verifying the integrity of the release artifacts</title>
+            <title>Verifying the source release artifacts</title>
 
-            <para>*** TO DOCUMENT</para>
+            <para>Download both the ZIP and .ASC files from the location
+            specified in the voting email. To verify that the signature is
+            correct, use:</para>
+
+            <programlisting>gpg --verify isis-parent-x.x.x-RCn-incubating.zip.asc isis-parent-x.x.x-RCn-incubating.zip</programlisting>
+
+            <para>The ZIP file should then be unpacked.</para>
+
+            <para>Once unpacked, it is recommended that voters at a minimum
+            sanity check the contents, as per <xref
+            linkend="sec.SanityCheck" />. </para>
+
+            <para>In particular, when building locally, confirm that the
+            versions in your local repository
+            (<filename>~/.m2/repository/org/apache/isis</filename>) are
+            correct.</para>
+          </sect3>
+
+          <sect3>
+            <title>Verifying the binary release artifacts</title>
+
+            <para>Optionally, voters can verify the binary releases (in the
+            Maven staging repository).</para>
 
             <para></para>
 
-            <para></para>
-
-            <para>gpg --verify foo-1.0.tar.gz.asc foo-1.0.tar.gz</para>
+            <para>*** more detail required here.</para>
 
             <para></para>
           </sect3>
 
           <sect3>
-            <title>Sanity checking the contents</title>
+            <title>Casting a Vote</title>
 
-            <para>As per <xref linkend="sec.SanityCheck" />.</para>
-
-            <para></para>
-
-            <para></para>
+            <para>When the above checks have been made (and any other checks
+            that the voter thinks is relevant), they should cast a vote by
+            replying to the email thread above.</para>
           </sect3>
-        </sect2>
-
-        <sect2>
-          <title>Start voting thread on incubator@a.o</title>
-
-          <para></para>
         </sect2>
 
         <sect2>
@@ -4661,7 +4929,7 @@ your machine might store the data and make it available to others!</programlisti
           and go again, incrementing the -RCn suffix.</para>
 
           <para>If the vote has been successful, then cut a new release, with
-          no -RCn suffix.</para>
+          no -RCn suffix, and move onto the next step.</para>
 
           <para><note>
               <para>care should be taken to ensure that the new release is
@@ -4671,25 +4939,49 @@ your machine might store the data and make it available to others!</programlisti
               revision.</para>
             </note></para>
         </sect2>
+
+        <sect2>
+          <title>Start voting thread on incubator@a.o</title>
+
+          <para>Once the vote has been approved on isis-dev and a new non-RCn
+          release has been created, then the release process should be
+          performed again on incubator@apache.org.</para>
+        </sect2>
       </sect1>
 
       <sect1 id="sec.PromotingReleaseToDistribution">
         <title>Promoting Release to Distribution</title>
 
-        <para></para>
-
         <sect2>
           <title>Release Source Zip</title>
 
-          <para></para>
+          <para>Releasing the source ZIP is a matter of copying the ZIP into
+          the dist directory on people.apache.org.</para>
+
+          <note>
+            <para>There is an alternative and newer approach, namely to check
+            in the release to subversion. At some stage these procedures will
+            be updated to reflcet this newer approach.</para>
+          </note>
+
+          <para>Therefore, log onto people.apache.org, and copy the files
+          over:</para>
+
+          <programlisting>mkdir /www/www.apache.org/incubator/isis/
+cp ~/public_html/isis-parent-x.x.x-incubating-source-release.* /www/www.apache.org/incubator/isis/.</programlisting>
         </sect2>
 
         <sect2>
           <title>Release Binaries to Maven Central Repo</title>
 
-          <para></para>
+          <para>From the <ulink
+          url="https://repository.apache.org/index.html#stagingRepositories">Nexus
+          pages</ulink>, select the staging repository and select 'release'
+          from the top menu.</para>
 
-          <para></para>
+          <para>This moves the release artifacts into an Apache releases
+          repository, from there they will be automatically moved to the Maven
+          repository.</para>
         </sect2>
       </sect1>
 
@@ -4702,21 +4994,6 @@ your machine might store the data and make it available to others!</programlisti
         tag (rather than <filename>trunk</filename>) as well as ensuring that
         the released binaries are correctly referenced on the downloads
         page.</para>
-
-        <para></para>
-
-        <para>if the release process followed differs from the process
-        documented in this guide, then update this guide to capture those
-        variations.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>Finally, confirm that the archetype-catalog.xml is correct (it
-        should have been updated previously; this is a "just-in-case").</para>
       </sect1>
     </chapter>
   </part>
