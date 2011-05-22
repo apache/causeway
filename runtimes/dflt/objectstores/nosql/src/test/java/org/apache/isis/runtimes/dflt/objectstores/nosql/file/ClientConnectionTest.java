@@ -51,7 +51,7 @@ public class ClientConnectionTest {
         connection = new ClientConnection(input, output);
     }
     
-    @Ignore // Rob to look at
+    @Ignore
     @Test
     public void testRequest() throws Exception {
         connection.request('D', "xxx yyy");
