@@ -158,27 +158,32 @@ public class ServerConnection {
      * }
      */
     public void notFound(final String message) {
-        writer.println("not-found");
-        writer.println(message);
+        writer.print("not-found");
+        writer.print('\n');
+        writer.print(message);
+        writer.print('\n');
         writer.flush();
     }
 
     public void error(final String message) {
-        writer.println("error");
-        writer.println(message);
+        writer.print("error");
+        writer.print('\n');
+        writer.print(message);
+        writer.print('\n');
         writer.flush();
     }
 
     public void error(final String message, final Exception exception) {
         error(message);
         exception.printStackTrace(writer);
-        writer.println();
-        writer.println();
+        writer.print('\n');
+        writer.print('\n');
         writer.flush();
     }
 
     private void write(final String result) {
-        writer.println(result);
+        writer.print(result);
+        writer.print('\n');
         writer.flush();
     }
 
@@ -223,7 +228,7 @@ public class ServerConnection {
     }
 
     public void endBlock() {
-        writer.println();
+        writer.print('\n');
     }
 
 }

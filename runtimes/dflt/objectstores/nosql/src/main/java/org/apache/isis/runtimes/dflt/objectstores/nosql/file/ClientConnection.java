@@ -77,7 +77,7 @@ public class ClientConnection {
     }
 
     public void validateRequest() {
-        writer.println();
+        writer.print('\n');
         writer.flush();
         getReponseHeader();
         final String status = readNext();
@@ -107,11 +107,12 @@ public class ClientConnection {
     }
 
     public void endRequestSection() {
-        writer.println();
+        writer.print('\n');
     }
 
     private void write(final String req) {
-        writer.println(req);
+        writer.print(req);
+        writer.print('\n');
     }
 
     public void getReponseHeader() {
