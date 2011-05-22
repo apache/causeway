@@ -197,6 +197,13 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <repositories>
+        <repository>
+            <id>Maven Central Repository (UK Mirror)</id>
+            <url>http://uk.maven.org/maven2</url>
+        </repository>
+    </repositories>
+
     <build>
         <extensions>
             <!-- scp and sftp support for deployments. -->

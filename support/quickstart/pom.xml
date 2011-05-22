@@ -287,34 +287,34 @@
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>wrapper</artifactId>
-                <version>${isis.progmodel-wrapper.version}</version>
+                <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>wrapper-applib</artifactId>
-                <version>${isis.progmodel-wrapper.version}</version>
+                <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>wrapper-metamodel</artifactId>
-                <version>${isis.progmodel-wrapper.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: progmodel: groovy -->
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>groovy</artifactId>
-                <version>${isis.progmodel-groovy.version}</version>
+                <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>groovy-applib</artifactId>
-                <version>${isis.progmodel-groovy.version}</version>
+                <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>groovy-metamodel</artifactId>
-                <version>${isis.progmodel-groovy.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: security: dflt -->
@@ -328,14 +328,14 @@
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>ldap</artifactId>
-                <version>${isis.security-ldap.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: security: file -->
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>file</artifactId>
-                <version>${isis.security-file.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes: dflt -->            
@@ -386,21 +386,21 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>xml</artifactId>
-                <version>${isis.runtimes-dflt-objectstores-xml.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes-dflt: objectstores: nosql -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>nosql</artifactId>
-                <version>${isis.runtimes-dflt-objectstores-nosql.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes-dflt: objectstore: sql -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-impl</artifactId>
-                <version>${isis.runtimes-dflt-objectstores-sql.version}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes-dflt: profilestores: dflt -->
