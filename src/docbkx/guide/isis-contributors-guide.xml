@@ -3745,7 +3745,7 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
 
             <listitem>
               <para>code cleanup should be performed as per <xref
-              linkend="sec.CodeStyleCleanup" />. (this performs both code
+              linkend="sec.CodeStyleCleanup" /> (this performs both code
               formatting and organizing imports)</para>
             </listitem>
           </itemizedlist>
@@ -4048,10 +4048,12 @@ licenses to remove from supplemental-models.xml (are spurious):
         <sect2>
           <title>Branch (release candidates only)</title>
 
-          <para>First, create a branch:</para>
+          <para>First, create a branch and its own tags directory:</para>
 
           <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating \
    -m "branching to create x.x.x-RCn-incubating"
+svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/tags \
+   -m "creating tags for x.x.x-RCn-incubating"
 svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
     https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk \
     -m "copying trunk to branches/x.x.x-RCn-incubating"</programlisting>
@@ -4088,7 +4090,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
   &lt;/url&gt;
 &lt;/scm&gt;</programlisting>
 
-          <para>The commit the <filename>pom.xml</filename> file.</para>
+          <para>Then commit the <filename>pom.xml</filename> file.</para>
         </sect2>
 
         <sect2>
@@ -4099,12 +4101,50 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 
           <programlisting>mvn release:clean release:prepare -P apache-release -D dryRun=true</programlisting>
 
-          <para>Specify version as
-          <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
+          <para>This should generate the following prompt:</para>
+
+          <programlisting>...
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Apache Isis
+[INFO]    task-segment: [release:clean, release:prepare] (aggregator-style)
+[INFO] ------------------------------------------------------------------------
+[INFO] [release:clean {execution: default-cli}]
+[INFO] Cleaning up after release...
+[INFO] [release:prepare {execution: default-cli}]
+[INFO] Verifying that there are no local modifications...
+[INFO]   ignoring changes on: pom.xml.next, release.properties, pom.xml.releaseB
+ackup, pom.xml.backup, pom.xml.branch, pom.xml.tag
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive status"
+[INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk
+[INFO] Checking dependencies and plugins for snapshots ...
+What is the release version for "Apache Isis"? (org.apache.isis:isis-parent) 0.1
+.2-incubating: : </programlisting>
+
+          <para>Specify the release version as
+          <emphasis>0.x.x-RCn-incubating</emphasis>. (if not doing a release
+          candidate), or <emphasis>0.x.x-incubating</emphasis> (if performing
+          the actual release)</para>
+
+          <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis-parent) 0.1
+.2-incubating: : 0.1.2-RC1-incubating
+What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis-parent
+) isis-parent-0.1.2-RC1-incubating: :</programlisting>
+
+          <para>Accept the default for the SCM release tag.</para>
+
+          <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis-parent
+) isis-parent-0.1.2-RC1-incubating: :
+What is the new development version for "Apache Isis"? (org.apache.isis:isis-par
+ent) 0.1.2-RC2-incubating-SNAPSHOT: : </programlisting>
+
+          <para>Enter the new development version.</para>
+
+          <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis-par
+ent) 0.1.2-RC2-incubating-SNAPSHOT: : 0.2.0-incubating-SNAPSHOT</programlisting>
 
           <para></para>
 
-          <para>*** more detail required here.</para>
+          <para>*** more detail required here.... </para>
 
           <para></para>
         </sect2>
@@ -4113,39 +4153,83 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
           <title>Release Proper</title>
 
           <para>Assuming that the dry run has succeeded, it's time to create
-          the release proper</para>
+          the release proper.</para>
 
-          <programlisting>mvn release:clean release:prepare -P apache-release -D skipTests=true</programlisting>
+          <para>First up, clean up any release artifacts.</para>
+
+          <programlisting>mvn release:clean </programlisting>
+
+          <para>Then, run the prepare step (skipping tests will reduce the
+          elapsed time):</para>
+
+          <programlisting>mvn release:prepare -P apache-release -D skipTests=true</programlisting>
 
           <para>Specify version as
           <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
 
-          <para><note>
-              <para>If you are in Europe the <code>mvn release:prepare</code>
-              command almost always fails at the last step, with a message
-              like:</para>
+          <para>If you are in Europe the <code>mvn release:prepare</code>
+          command almost always fails at the last step, with a message
+          like:</para>
 
-              <programlisting>[ERROR]
- BUILD FAILURE
+          <programlisting>[INFO] Checking in modified POMs...
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive 
+       commit --file /users/uuuuuuuu/maven-scm-1762417972.commit --targets /tmp/maven-scm-5153433587636484699-targets"
+[INFO] Working directory: D:\svn\ai\branches\0.x.x-RCn-incubating\trunk
+[INFO] Tagging release with the label isis-parent-0.x.x-RCn-incubating...
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file /tmp/maven-scm-259416193.commit --revision 1126567 
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/ 
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/tags/isis-parent-0.x.x-RCn-incubating"
+[INFO] Working directory: /users/uuuuuuuu/branches/0.1.2-rc1-incubating/trunk
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
 [INFO]
  ------------------------------------------------------------------------
 [INFO]
- Unable to tag SCM
+Unable to tag SCM
 Provider message:
 The svn tag command failed.
 Command output:
-svn: No such revision 936951</programlisting>
+svn: No such revision 1126567</programlisting>
 
-              <para>This is due to the SVN mirroring in place between Europe
-              and the master in the US. When you make a commit, it isn't
-              immediately available in Europe to svn up to. Just wait 10 secs
-              and repeat the mvn release:prepare command for it to restart
-              where it left off.</para>
-            </note><note>
-              <para>If other things go wrong, then <code>mvn
-              release:clean</code> will do most of the cleaning up in the
-              event of failures.</para>
-            </note></para>
+          <para>This is due to the SVN mirroring in place between Europe and
+          the master in the US. When you make a commit, it isn't immediately
+          available in Europe to svn up to. If this is occurs, then:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>wait 10 secs ;-)</para>
+            </listitem>
+
+            <listitem>
+              <para>repeat the mvn release:prepare command, but using <code>-D
+              resume=true</code> flag so things can restart:</para>
+
+              <programlisting>mvn release:prepare -P apache-release -D skipTests=true -D resume=true</programlisting>
+
+              <note>
+                <para>Do NOT use <code>release:clean</code> goal in this
+                command, otherwise it will not be possible to perform the
+                resume!</para>
+              </note>
+            </listitem>
+          </itemizedlist>
+
+          <para>On the other hand, if things go wrong before the tagging, then
+          <code>mvn release:clean</code> will do most of the cleaning up in
+          the event of failures.</para>
+
+          <para></para>
+
+          <programlisting>[INFO] Checking in modified POMs...
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive commit --file C:\Users\DANHAY~1\AppData\Local\Temp\maven-scm-1762417972.commit --targets C:\Users\DANHAY~
+1\AppData\Local\Temp\maven-scm-5153433587636484699-targets"
+[INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk
+[INFO] Tagging release with the label isis-parent-0.1.2-RC1-incubating...
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file C:\Users\DANHAY~1\AppData\Local\Temp\maven-scm-259416193.commit --revision 1126567 https://sv
+n.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/trunk/ https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/tags/is
+is-parent-0.1.2-RC1-incubating"
+[INFO] Working directory: d:\svn\ai\branches\0.1.2-rc1-incubating\trunk
+[INFO] ------------------------------------------------------------------------</programlisting>
 
           <para></para>
 
