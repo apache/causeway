@@ -3672,8 +3672,8 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
       <title>Formal Release</title>
 
       <abstract>
-        <para>This chapter describes the steps that make up a formal release.
-        </para>
+        <para>This chapter describes the steps that make up a formal
+        release.</para>
       </abstract>
 
       <para>Before starting off the release process it is essential to gain
@@ -3788,7 +3788,7 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
 
           <para>Instead, the tool can be run from the command-line; a JAR
           binary of the tool has been checked into the <emphasis>Apache
-          Isis</emphasis> codebase. </para>
+          Isis</emphasis> codebase.</para>
 
           <para>First, clean up any generated artifacts:</para>
 
@@ -3803,7 +3803,8 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
   *.java.hsp \
   *.ucd *.ucls \
   *-LICENSE.txt \
-  fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml *.mod usage.txt screen.css docbook.cat \
+  fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml \
+  *.mod usage.txt screen.css docbook.cat \
   org.apache.isis.viewer.wicket.ui.ComponentFactory \
   fixture-data test.data example.ldif slapd.conf \
   .plxarc MANIFEST.MF \
@@ -3984,560 +3985,13 @@ licenses to remove from supplemental-models.xml (are spurious):
       <sect1>
         <title>Contributor (Release Manager) Prerequisites</title>
 
-        <para>In order that a contributor can make a release it is necessary
-        for them to have generated a key and had that key recognized by other
-        members of the ASF.</para>
-
-        <para>For background information on this topic, see the <ulink
-        url="http://www.apache.org/dev/release-signing.html">release signing
-        page</ulink> and the <ulink
-        url="http://www.apache.org/dev/openpgp.html#generate-key">openpgp
-        page</ulink> on the Apache wiki.</para>
-
-        <sect2>
-          <title>Install and Configure gpg</title>
-
-          <para>Download and install GnuPG (gpg), version 1.4.10 or
-          higher.</para>
-
-          <para>Then, edit <filename>~/.gnupg/gpg.conf</filename> (on Windows,
-          the file to edit is
-          <filename>C:\Users\xxx\AppData\Roaming\gnupg\gpg.conf</filename>) so
-          that the default is to generate a strong key:</para>
-
-          <programlisting>{code}
-personal-digest-preferences SHA512
-cert-digest-algo SHA512
-default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
-{code}</programlisting>
-        </sect2>
-
         <sect2>
           <title>Key Generation</title>
 
-          <para>The ASF requires that keys are signed with a key (or subkey)
-          based on RSA 4096 bits. To do this:</para>
-
-          <programlisting>$ gpg --gen-key
-gpg (GnuPG) 1.4.11; Copyright (C) 2010 Free Software Foundation, Inc.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-Please select what kind of key you want:
-   (1) RSA and RSA (default)
-   (2) DSA and Elgamal
-   (3) DSA (sign only)
-   (4) RSA (sign only)
-Your selection?</programlisting>
-
-          <para>Specify RSA key:</para>
-
-          <programlisting>Your selection? 1
-
-RSA keys may be between 1024 and 4096 bits long.
-What keysize do you want? (2048)</programlisting>
-
-          <para>Specify key length as 4096 bits:</para>
-
-          <programlisting>What keysize do you want? (2048) 4096
-Requested keysize is 4096 bits
-
-Please specify how long the key should be valid.
-         0 = key does not expire
-      &lt;n&gt;  = key expires in n days
-      &lt;n&gt;w = key expires in n weeks
-      &lt;n&gt;m = key expires in n months
-      &lt;n&gt;y = key expires in n years
-Key is valid for? (0)</programlisting>
-
-          <para>Specify key as non-expiring:</para>
-
-          <programlisting>Key is valid for? (0) 0
-Key does not expire at all
-Is this correct? (y/N) y
-
-You need a user ID to identify your key; the software constructs the user ID
-from the Real Name, Comment and Email Address in this form:
-    "Heinrich Heine (Der Dichter) &lt;heinrichh@duesseldorf.de&gt;"
-
-Real name: </programlisting>
-
-          <para>Enter your name, email and comment:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>use your apache.org email</para>
-            </listitem>
-
-            <listitem>
-              <para>the comment should be "CODE SIGNING KEY" </para>
-            </listitem>
-          </itemizedlist>
-
-          <programlisting>Real name: Xxx Xxxxxxxxx
-Email address: &lt;xxx@apache.org&gt;
-Comment: CODE SIGNING KEY
-You selected this USER-ID:
-    "Xxx Xxxxxxxxx (CODE SIGNING KEY) &lt;xxx@apache.org&gt;"
-
-Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
-
-You need a Passphrase to protect your secret key.
-Enter passphrase:</programlisting>
-
-          <para>Provide a passphrase to secure your key. </para>
-
-          <programlisting>Enter passphrase:
-Repeat passphrase:</programlisting>
-
-          <para>GPG will goes on to generate your key:</para>
-
-          <programlisting>We need to generate a lot of random bytes. It is a good idea to perform
-some other action (type on the keyboard, move the mouse, utilize the
-disks) during the prime generation; this gives the random number
-generator a better chance to gain enough entropy.
-...+++++
-.........................+++++
-We need to generate a lot of random bytes. It is a good idea to perform
-some other action (type on the keyboard, move the mouse, utilize the
-disks) during the prime generation; this gives the random number
-generator a better chance to gain enough entropy.
-....+++++
-...+++++
-gpg: key nnnnnnnn marked as ultimately trusted
-public and secret key created and signed.
-
-gpg: checking the trustdb
-gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
-gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
-pub   4096R/nnnnnnnn yyyy-mm-dd
-      Key fingerprint = xxxx xxxx xxxx xxxx xxxx  xxxx xxxx xxxx xxxx xxxx
-uid                  Xxx Xxxxxx &lt;xxx@apache.org&gt;
-sub   4096R/kkkkkkkk yyyy-mm-dd</programlisting>
-
-          <para>The public key with id nnnnnnnn should now be stored in
-          <filename>~/.gnupg/pubring.pgp</filename> (on Windows 7, this is in
-          c<filename>:/Users/xxx/AppData/Roaming/gnupg/pubring.pgp</filename>).
-          </para>
-
-          <para>To confirm the key has been generated, use:</para>
-
-          <programlisting>$ gpg --list-keys --fingerprint</programlisting>
-
-          <para>The key Id is the one true way to identify the key, and is
-          also the last 8 digits of the fingerprint. The corresponding secret
-          key for id nnnnnnnn is stored in
-          <filename>~/.gnupg/secring.pgp</filename> (on Windows 7, this is in
-          <filename>c:/Users/xxx/AppData/Roaming/gnupg/secring.pgp</filename>).</para>
-
-          <para>It's also worth confirming the key has the correct preference
-          of algorithms (reflecting the initial configuration we did earlier).
-          For this, enter the gpg shell for your new key:</para>
-
-          <para><programlisting>$ gpg --edit-key nnnnnnnnn
-gpg&gt;</programlisting>where nnnnnnnn is your key id. Now, use the 'showpref'
-          subcommand to list details:</para>
-
-          <programlisting>gpg&gt; showpref
-[ultimate] (1). Xxx Xxxxxxxx (CODE SIGNING KEY) &lt;xxx@apache.org&gt;
-     Cipher: AES256, AES192, AES, CAST5, 3DES
-     Digest: SHA512, SHA384, SHA256, SHA224, SHA1
-     Compression: ZLIB, BZIP2, ZIP, Uncompressed
-     Features: MDC, Keyserver no-modify
-
-gpg&gt;</programlisting>
-
-          <para>The Digest line should list SHA-512 first and SHA-1 last.
-          </para>
-
-          <para>Finally, remember to take a backup of your key and the keyring
-          (ie, backup the <filename>.gnupg</filename> directory and its
-          contents).</para>
-        </sect2>
-
-        <sect2>
-          <title>Subkey Generation</title>
-
-          <para>It's recommended to use a subkey with an expiry date to sign
-          releases, rather than your main, non-expiring subkey. If a subkey is
-          present, then gpg will use it in preference to the main key.</para>
-
-          <para>Enter the gpg shell using (the identifier of) your main
-          key:</para>
-
-          <programlisting>gpg --edit-key xxxxxxxx
-gpg&gt;</programlisting>
-
-          <para>Type 'addkey' to create a subkey, and enter your passphrase
-          for the main key:</para>
-
-          <para><programlisting>gpg&gt; addkey
-Key is protected.
-[enter your secret passphrase]
-
-You need a passphrase to unlock the secret key for
-user: "Dan Haywood (CODE SIGNING KEY) &lt;danhaywood@apache.org&gt;"
-4096-bit RSA key, ID xxxxxxxx, created 2011-02-01
-
-Please select what kind of key you want:
-   (3) DSA (sign only)
-   (4) RSA (sign only)
-   (5) Elgamal (encrypt only)
-   (6) RSA (encrypt only)
-Your selection?</programlisting></para>
-
-          <para>Select (4) to choose an RSA key for signing:</para>
-
-          <programlisting>Your selection? 4
-
-RSA keys may be between 1024 and 4096 bits long.
-What keysize do you want? (2048) 4096
-
-Requested keysize is 4096 bits
-
-Please specify how long the key should be valid.
-         0 = key does not expire
-      &lt;n&gt;  = key expires in n days
-      &lt;n&gt;w = key expires in n weeks
-      &lt;n&gt;m = key expires in n months
-      &lt;n&gt;y = key expires in n years
-Key is valid for?</programlisting>
-
-          <para>Specify that the key is valid for 1 year:</para>
-
-          <programlisting>Key is valid for? (0) 1y
-
-Key expires at yy/MM/dd hh:mm:ss
-Is this correct? (y/N) y
-Really create? (y/N) y
-We need to generate a lot of random bytes. It is a good idea to perform
-some other action (type on the keyboard, move the mouse, utilize the
-disks) during the prime generation; this gives the random number
-generator a better chance to gain enough entropy.
-...+++++
-.+++++
-
-pub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: never       usage: SC
-                     trust: ultimate      validity: ultimate
-sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: never       usage: E
-sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: yyYY-mm-dd  usage: S
-[ultimate] (1). Dan Haywood (CODE SIGNING KEY) &lt;danhaywood@apache.org&gt;
-
-gpg&gt;</programlisting>
-
-          <para>Quit the gpg shell; you now have a subkey.</para>
-        </sect2>
-
-        <sect2>
-          <title>Generate a Revocation Certificate</title>
-
-          <para>It's good practice to generate a number of revocation
-          certificates so that the key can be revoked if it happens to be
-          compromised. See <ulink
-          url="http://www.apache.org/dev/openpgp.html#revocation-certs">the
-          gpg page</ulink> on the Apache wiki for more background on this
-          topic.</para>
-
-          <para>First, generate a "no reason specified" key:</para>
-
-          <programlisting>$ gpg --output revoke-nnnnnnnn-0.asc --armor --gen-revoke nnnnnnnn
-
-sec  4096R/nnnnnnnn yyyy-mm-dd Xxx Xxxxxxx (CODE SIGNING KEY) &lt;xx@apache.org&gt;
-Create a revocation certificate for this key? (y/N) Y
-
-Please select the reason for the revocation:
-  0 = No reason specified
-  1 = Key has been compromised
-  2 = Key is superseded
-  3 = Key is no longer used
-  Q = Cancel
-(Probably you want to select 1 here)
-Your decision?</programlisting>
-
-          <para>Select 0.</para>
-
-          <programlisting>Your decision? 0
-
-Enter an optional description; end it with an empty line:</programlisting>
-
-          <para>Provide a description:</para>
-
-          <programlisting>&gt; Generic certificate to revoke key, generated at time of key creation.
-&gt;
-Reason for revocation: No reason specified
-Generic certificate to revoke key, generated at time of key creation.
-Is this okay? (y/N)</programlisting>
-
-          <para>Confirm this is ok.</para>
-
-          <programlisting>Is this okay? y
-
-You need a passphrase to unlock the secret key for
-user: "Xxx Xxxxxxx (CODE SIGNING KEY) &lt;xxx@apache.org&gt;"
-4096-bit RSA key, ID nnnnnnnn, created yyyy-mm-dd
-
-Enter passphrase:</programlisting>
-
-          <para>Enter a passphrase:</para>
-
-          <programlisting>Enter passphrase:
-Revocation certificate created.
-
-Please move it to a medium which you can hide away; if Mallory gets
-access to this certificate he can use it to make your key unusable.
-It is smart to print this certificate and store it away, just in case
-your media become unreadable.  But have some caution:  The print system of
-your machine might store the data and make it available to others!</programlisting>
-
-          <para>The file 'revoke-nnnnnnnn-0.asc' should be created: Then,
-          backup this file.</para>
-
-          <para>Now repeat the process to create two further revocation
-          certificates: </para>
-
-          <itemizedlist>
-            <listitem>
-              <para><code>gpg --output revoke-nnnnnnnn-1.asc --armor
-              --gen-revoke nnnnnnnn</code></para>
-
-              <para>Specify reason as "1 = Key has been compromised"</para>
-            </listitem>
-
-            <listitem>
-              <para><code>gpg --output revoke-nnnnnnnn-3.asc --armor
-              --gen-revoke nnnnnnnn</code></para>
-
-              <para>Specify reason as "3 = Key is no longer used"</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Backup these files also.</para>
-
-          <para><note>
-              <para>if you find that you need to revoke your certificate, this
-              <ulink
-              url="http://www.hackdiary.com/2004/01/18/revoking-a-gpg-key">blog
-              post</ulink> explains how.</para>
-            </note></para>
-        </sect2>
-
-        <sect2>
-          <title>Publish Key</title>
-
-          <para>It is also necessary to publish your key. There are several
-          places where this should be done. In most cases, you'll need the
-          "armored" " (ie ASCII) representation of your key. This can be
-          generated using:</para>
-
-          <programlisting>$ gpg --armor --export nnnnnnnn &gt; nnnnnnnn.asc</programlisting>
-
-          <para>where nnnnnnnn is the id of your public key.</para>
-
-          <para>You'll also need the fingerprint of your key. This can be
-          generated using:</para>
-
-          <programlisting>$ gpg --fingerprint nnnnnnnn</programlisting>
-
-          <para>The output from this command includes a line beginning "Key
-          fingerprint", followed by a (space delimited) 40 character
-          hexadecimal fingerprint. The last 8 characters should be the same as
-          the key id (nnnnnnnn).</para>
-
-          <sect3>
-            <title>Publish to a public key server</title>
-
-            <para>To a publish your key to a public key server (eg the MIT key
-            server hosted at <ulink
-            url="http://pgp.mit.edu">http://pgp.mit.edu</ulink>), use the
-            procedure below. Public key servers synchronize with each other,
-            so publishing to one key server should be sufficient. For
-            background reading on this, see the <ulink
-            url="http://www.apache.org/dev/release-signing.html#keyserver-upload">release
-            signing page</ulink> on the Apache wiki, and the <ulink
-            url="http://maven.apache.org/developers/release/pmc-gpg-keys.html">gpg
-            key page</ulink> on the Maven wiki.</para>
-
-            <para>To send the key up to the key server:</para>
-
-            <programlisting>$ gpg --send-keys --keyserver pgp.mit.edu nnnnnnnn</programlisting>
-
-            <para>where nnnnnnnn is the key Id.</para>
-
-            <para>Alternatively, you can browse to the <ulink
-            url="http://pgp.mit.edu">MIT key server</ulink> and paste in the
-            armored representation of your key.</para>
-
-            <para>Confirm the key has been added by browsing to submitting the
-            following URL:</para>
-
-            <programlisting>http://pgp.mit.edu:11371/pks/lookup?search=0xnnnnnnnnn&amp;op=vindex</programlisting>
-
-            <para>again, where nnnnnnnn is the key Id.</para>
-          </sect3>
-
-          <sect3>
-            <title>Publish to your Apache home directory</title>
-
-            <para>The armored representation of your public key should be
-            uploaded to your home directory on people.apache.org, and renamed
-            as <filename>.pgpkey</filename>. Make sure this is readable by
-            all.</para>
-          </sect3>
-
-          <sect3>
-            <title>Publish to your Apache HTML home directory</title>
-
-            <para>The armored representation of your public key should be
-            uploaded to your <filename>public_html</filename> home directory
-            on people.apache.org, named nnnnnnnn.asc. Make sure this is
-            readable by all.</para>
-
-            <para>Check the file is accessible by browsing to:<programlisting>http://people.apache.org/~xxxxxxxx/nnnnnnnn.asc</programlisting></para>
-
-            <para>where xxxxxxxx is your apache LDAP user name and nnnnnnnn is
-            your public key id.</para>
-          </sect3>
-
-          <sect3>
-            <title>FOAF</title>
-
-            <para>First, check out the committers/info directory:</para>
-
-            <programlisting>svn co https://svn.apache.org/repos/private/committers/info</programlisting>
-
-            <para>Go to Apache FOAF-a-matic <ulink
-            url="http://people.apache.org/foaf/foafamatic.html">web
-            page</ulink> to generate the FOAF file text (we copy this text out
-            in a minute):</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>enter ASF LDAP user name</para>
-              </listitem>
-
-              <listitem>
-                <para>enter First name, Last name</para>
-              </listitem>
-
-              <listitem>
-                <para>for PGP key fingerprints, add Key</para>
-
-                <itemizedlist>
-                  <listitem>
-                    <para>paste in the key id</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>paste in the fingerprint</para>
-                  </listitem>
-                </itemizedlist>
-              </listitem>
-
-              <listitem>
-                <para>press "Create"</para>
-              </listitem>
-            </itemizedlist>
-
-            <para>In the box below, you should have a FOAF file, something
-            like:</para>
-
-            <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;rdf:RDF
-      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-      xmlns:foaf="http://xmlns.com/foaf/0.1/"
-      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-      xmlns:pm="http://www.web-semantics.org/ns/pm#"
-      xmlns:wot="http://xmlns.com/wot/0.1/"
-      xmlns:rss="http://purl.org/rss/1.0/"
-      xmlns:dc="http://purl.org/dc/elements/1.1/"
-      xmlns:ical="http://www.w3.org/2002/12/cal/ical#"
-      xmlns:doap="http://usefulinc.com/ns/doap#"&gt;
-  &lt;foaf:Person rdf:ID="danhaywood"&gt;
-    &lt;foaf:name&gt;Xxx Xxxxxxxx&lt;/foaf:name&gt;
-    &lt;foaf:givenname&gt;Xxx&lt;/foaf:givenname&gt;
-    &lt;foaf:family_name&gt;Xxxxxxxx&lt;/foaf:family_name&gt;
-    &lt;wot:hasKey&gt;
-      &lt;wot:PubKey&gt;
-        &lt;wot:fingerprint&gt;nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn&lt;/wot:fingerprint&gt;
-        &lt;wot:hex_id&gt;nnnnnnnn&lt;/wot:hex_id&gt;
-      &lt;/wot:PubKey&gt;
-    &lt;/wot:hasKey&gt;
-  &lt;/foaf:Person&gt;
-&lt;/rdf:RDF&gt;</programlisting>
-
-            <para>(If you are creating the FOAF file for the first time, you
-            may want to add additional details).</para>
-
-            <para>From this, copy out the wot:key, and paste into your FDF
-            file in committers/info: </para>
-
-            <programlisting>    &lt;wot:hasKey&gt;
-      &lt;wot:PubKey&gt;
-        &lt;wot:fingerprint&gt;nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn&lt;/wot:fingerprint&gt;
-        &lt;wot:hex_id&gt;nnnnnnnn&lt;/wot:hex_id&gt;
-      &lt;/wot:PubKey&gt;
-    &lt;/wot:hasKey&gt;</programlisting>
-
-            <para>Then, manually add in a &lt;wot:pubkeyAddress&gt; element
-            within &lt;wot:PubKey&gt;:</para>
-
-            <programlisting>    &lt;wot:hasKey&gt;
-      &lt;wot:PubKey&gt;
-        &lt;wot:fingerprint&gt;nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn&lt;/wot:fingerprint&gt;
-        &lt;wot:hex_id&gt;nnnnnnnn&lt;/wot:hex_id&gt;
-        &lt;wot:pubkeyAddress
-          rdf:resource="http://people.apache.org/~username/nnnnnnnn.asc/&gt;
-      &lt;/wot:PubKey&gt;
-    &lt;/wot:hasKey&gt;</programlisting>
-
-            <para>ie, referencing your publically exported public key</para>
-
-            <para>Finally, commit your changes.</para>
-          </sect3>
-
-          <sect3>
-            <title>Save to KEYS</title>
-
-            <para>The armored representation of the public key should be saved
-            to Isis' KEYS file, <ulink
-            url="https://svn.apache.org/repo/asf/incubator/isis/KEYS">https://svn.apache.org/repo/asf/incubator/isis/KEYS</ulink>
-            (ie, parent of <filename>trunk</filename>).</para>
-
-            <para>First, in a new directory, checkout this file:</para>
-
-            <programlisting>svn -N co https://svn.apache.org/repos/asf/incubator/isis/ .</programlisting>
-
-            <para>This should bring down the <filename>KEYS</filename>
-            file.</para>
-
-            <para>Then, export your signature and armored
-            representation.</para>
-
-            <programlisting>gpg --list-sigs nnnnnnnn &gt;&gt;KEYS
-gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
-
-            <para>Then commit.</para>
-          </sect3>
-
-          <sect3>
-            <title>id.apache.org</title>
-
-            <para>Log onto id.apache.org and ensure that the finger print of
-            your public key is correct.</para>
-          </sect3>
-        </sect2>
-
-        <sect2>
-          <title>Attend Key Signing Party (Apache web of trust)</title>
-
-          <para>It is strongly advised that the contributor attend a key
-          signing party at an Apache event, in order that other Apache
-          committers/members can in person verify their identity against the
-          key. The process for this is described <ulink
-          url="http://www.apache.org/dev/release-signing.html#key-signing-party">here</ulink>
-          and <ulink
-          url="http://wiki.apache.org/apachecon/PgpKeySigning">here</ulink>.</para>
+          <para>In order that a contributor can make a release it is necessary
+          for them to have generated a key and had that key recognized by
+          other members of the ASF. See the key generation appendix, <xref
+          linkend="apx.KeyGeneration" />, for more details.</para>
         </sect2>
 
         <sect2>
@@ -4552,7 +4006,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
           release (as defined by <package>[org,apache:apache]</package> parent
           <acronym>POM</acronym>.</para>
 
-          <para>Therefore, make the following </para>
+          <para>Therefore, make the following</para>
 
           <programlisting>&lt;settings&gt;
   ...
@@ -4892,7 +4346,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
 
             <para>Once unpacked, it is recommended that voters at a minimum
             sanity check the contents, as per <xref
-            linkend="sec.SanityCheck" />. </para>
+            linkend="sec.SanityCheck" />.</para>
 
             <para>In particular, when building locally, confirm that the
             versions in your local repository
@@ -4996,5 +4450,566 @@ cp ~/public_html/isis-parent-x.x.x-incubating-source-release.* /www/www.apache.o
         page.</para>
       </sect1>
     </chapter>
+
+    <appendix id="apx.KeyGeneration">
+      <title>Key Generation</title>
+
+      <abstract>
+        <para>How to generate keys and subkeys in order to sign a
+        release.</para>
+      </abstract>
+
+      <para>In order that a contributor can make a release it is necessary for
+      them to have generated a key and had that key recognized by other
+      members of the Apache Software Foundation. This appendix describes the
+      steps involved. For further background information on this topic, see
+      the <ulink url="http://www.apache.org/dev/release-signing.html">release
+      signing page</ulink> and the <ulink
+      url="http://www.apache.org/dev/openpgp.html#generate-key">openpgp
+      page</ulink> on the Apache wiki.</para>
+
+      <sect1>
+        <title>Install and Configure gpg</title>
+
+        <para>Download and install GnuPG (gpg), version 1.4.10 or
+        higher.</para>
+
+        <para>Then, edit <filename>~/.gnupg/gpg.conf</filename> (on Windows,
+        the file to edit is
+        <filename>C:\Users\xxx\AppData\Roaming\gnupg\gpg.conf</filename>) so
+        that the default is to generate a strong key:</para>
+
+        <programlisting>{code}
+personal-digest-preferences SHA512
+cert-digest-algo SHA512
+default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+{code}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>Key Generation</title>
+
+        <para>The ASF requires that keys are signed with a key (or subkey)
+        based on RSA 4096 bits. To do this:</para>
+
+        <programlisting>$ gpg --gen-key
+gpg (GnuPG) 1.4.11; Copyright (C) 2010 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Please select what kind of key you want:
+   (1) RSA and RSA (default)
+   (2) DSA and Elgamal
+   (3) DSA (sign only)
+   (4) RSA (sign only)
+Your selection?</programlisting>
+
+        <para>Specify RSA key:</para>
+
+        <programlisting>Your selection? 1
+
+RSA keys may be between 1024 and 4096 bits long.
+What keysize do you want? (2048)</programlisting>
+
+        <para>Specify key length as 4096 bits:</para>
+
+        <programlisting>What keysize do you want? (2048) 4096
+Requested keysize is 4096 bits
+
+Please specify how long the key should be valid.
+         0 = key does not expire
+      &lt;n&gt;  = key expires in n days
+      &lt;n&gt;w = key expires in n weeks
+      &lt;n&gt;m = key expires in n months
+      &lt;n&gt;y = key expires in n years
+Key is valid for? (0)</programlisting>
+
+        <para>Specify key as non-expiring:</para>
+
+        <programlisting>Key is valid for? (0) 0
+Key does not expire at all
+Is this correct? (y/N) y
+
+You need a user ID to identify your key; the software constructs the user ID
+from the Real Name, Comment and Email Address in this form:
+    "Heinrich Heine (Der Dichter) &lt;heinrichh@duesseldorf.de&gt;"
+
+Real name: </programlisting>
+
+        <para>Enter your name, email and comment:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>use your apache.org email</para>
+          </listitem>
+
+          <listitem>
+            <para>the comment should be "CODE SIGNING KEY"</para>
+          </listitem>
+        </itemizedlist>
+
+        <programlisting>Real name: Xxx Xxxxxxxxx
+Email address: &lt;xxx@apache.org&gt;
+Comment: CODE SIGNING KEY
+You selected this USER-ID:
+    "Xxx Xxxxxxxxx (CODE SIGNING KEY) &lt;xxx@apache.org&gt;"
+
+Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+
+You need a Passphrase to protect your secret key.
+Enter passphrase:</programlisting>
+
+        <para>Provide a passphrase to secure your key.</para>
+
+        <programlisting>Enter passphrase:
+Repeat passphrase:</programlisting>
+
+        <para>GPG will goes on to generate your key:</para>
+
+        <programlisting>We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+...+++++
+.........................+++++
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+....+++++
+...+++++
+gpg: key nnnnnnnn marked as ultimately trusted
+public and secret key created and signed.
+
+gpg: checking the trustdb
+gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+pub   4096R/nnnnnnnn yyyy-mm-dd
+      Key fingerprint = xxxx xxxx xxxx xxxx xxxx  xxxx xxxx xxxx xxxx xxxx
+uid                  Xxx Xxxxxx &lt;xxx@apache.org&gt;
+sub   4096R/kkkkkkkk yyyy-mm-dd</programlisting>
+
+        <para>The public key with id nnnnnnnn should now be stored in
+        <filename>~/.gnupg/pubring.pgp</filename> (on Windows 7, this is in
+        c<filename>:/Users/xxx/AppData/Roaming/gnupg/pubring.pgp</filename>).</para>
+
+        <para>To confirm the key has been generated, use:</para>
+
+        <programlisting>$ gpg --list-keys --fingerprint</programlisting>
+
+        <para>The key Id is the one true way to identify the key, and is also
+        the last 8 digits of the fingerprint. The corresponding secret key for
+        id nnnnnnnn is stored in <filename>~/.gnupg/secring.pgp</filename> (on
+        Windows 7, this is in
+        <filename>c:/Users/xxx/AppData/Roaming/gnupg/secring.pgp</filename>).</para>
+
+        <para>It's also worth confirming the key has the correct preference of
+        algorithms (reflecting the initial configuration we did earlier). For
+        this, enter the gpg shell for your new key:</para>
+
+        <para><programlisting>$ gpg --edit-key nnnnnnnnn
+gpg&gt;</programlisting>where nnnnnnnn is your key id. Now, use the 'showpref'
+        subcommand to list details:</para>
+
+        <programlisting>gpg&gt; showpref
+[ultimate] (1). Xxx Xxxxxxxx (CODE SIGNING KEY) &lt;xxx@apache.org&gt;
+     Cipher: AES256, AES192, AES, CAST5, 3DES
+     Digest: SHA512, SHA384, SHA256, SHA224, SHA1
+     Compression: ZLIB, BZIP2, ZIP, Uncompressed
+     Features: MDC, Keyserver no-modify
+
+gpg&gt;</programlisting>
+
+        <para>The Digest line should list SHA-512 first and SHA-1 last.</para>
+
+        <para>Finally, remember to take a backup of your key and the keyring
+        (ie, backup the <filename>.gnupg</filename> directory and its
+        contents).</para>
+      </sect1>
+
+      <sect1>
+        <title>Subkey Generation</title>
+
+        <para>It's recommended to use a subkey with an expiry date to sign
+        releases, rather than your main, non-expiring subkey. If a subkey is
+        present, then gpg will use it in preference to the main key.</para>
+
+        <para>Enter the gpg shell using (the identifier of) your main
+        key:</para>
+
+        <programlisting>gpg --edit-key xxxxxxxx
+gpg&gt;</programlisting>
+
+        <para>Type 'addkey' to create a subkey, and enter your passphrase for
+        the main key:</para>
+
+        <para><programlisting>gpg&gt; addkey
+Key is protected.
+[enter your secret passphrase]
+
+You need a passphrase to unlock the secret key for
+user: "Dan Haywood (CODE SIGNING KEY) &lt;danhaywood@apache.org&gt;"
+4096-bit RSA key, ID xxxxxxxx, created 2011-02-01
+
+Please select what kind of key you want:
+   (3) DSA (sign only)
+   (4) RSA (sign only)
+   (5) Elgamal (encrypt only)
+   (6) RSA (encrypt only)
+Your selection?</programlisting></para>
+
+        <para>Select (4) to choose an RSA key for signing:</para>
+
+        <programlisting>Your selection? 4
+
+RSA keys may be between 1024 and 4096 bits long.
+What keysize do you want? (2048) 4096
+
+Requested keysize is 4096 bits
+
+Please specify how long the key should be valid.
+         0 = key does not expire
+      &lt;n&gt;  = key expires in n days
+      &lt;n&gt;w = key expires in n weeks
+      &lt;n&gt;m = key expires in n months
+      &lt;n&gt;y = key expires in n years
+Key is valid for?</programlisting>
+
+        <para>Specify that the key is valid for 1 year:</para>
+
+        <programlisting>Key is valid for? (0) 1y
+
+Key expires at yy/MM/dd hh:mm:ss
+Is this correct? (y/N) y
+Really create? (y/N) y
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+...+++++
+.+++++
+
+pub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: never       usage: SC
+                     trust: ultimate      validity: ultimate
+sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: never       usage: E
+sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: yyYY-mm-dd  usage: S
+[ultimate] (1). Dan Haywood (CODE SIGNING KEY) &lt;danhaywood@apache.org&gt;
+
+gpg&gt;</programlisting>
+
+        <para>Quit the gpg shell; you now have a subkey.</para>
+      </sect1>
+
+      <sect1>
+        <title>Generate a Revocation Certificate</title>
+
+        <para>It's good practice to generate a number of revocation
+        certificates so that the key can be revoked if it happens to be
+        compromised. See <ulink
+        url="http://www.apache.org/dev/openpgp.html#revocation-certs">the gpg
+        page</ulink> on the Apache wiki for more background on this
+        topic.</para>
+
+        <para>First, generate a "no reason specified" key:</para>
+
+        <programlisting>$ gpg --output revoke-nnnnnnnn-0.asc --armor --gen-revoke nnnnnnnn
+
+sec  4096R/nnnnnnnn yyyy-mm-dd Xxx Xxxxxxx (CODE SIGNING KEY) &lt;xx@apache.org&gt;
+Create a revocation certificate for this key? (y/N) Y
+
+Please select the reason for the revocation:
+  0 = No reason specified
+  1 = Key has been compromised
+  2 = Key is superseded
+  3 = Key is no longer used
+  Q = Cancel
+(Probably you want to select 1 here)
+Your decision?</programlisting>
+
+        <para>Select 0.</para>
+
+        <programlisting>Your decision? 0
+
+Enter an optional description; end it with an empty line:</programlisting>
+
+        <para>Provide a description:</para>
+
+        <programlisting>&gt; Generic certificate to revoke key, generated at time of key creation.
+&gt;
+Reason for revocation: No reason specified
+Generic certificate to revoke key, generated at time of key creation.
+Is this okay? (y/N)</programlisting>
+
+        <para>Confirm this is ok.</para>
+
+        <programlisting>Is this okay? y
+
+You need a passphrase to unlock the secret key for
+user: "Xxx Xxxxxxx (CODE SIGNING KEY) &lt;xxx@apache.org&gt;"
+4096-bit RSA key, ID nnnnnnnn, created yyyy-mm-dd
+
+Enter passphrase:</programlisting>
+
+        <para>Enter a passphrase:</para>
+
+        <programlisting>Enter passphrase:
+Revocation certificate created.
+
+Please move it to a medium which you can hide away; if Mallory gets
+access to this certificate he can use it to make your key unusable.
+It is smart to print this certificate and store it away, just in case
+your media become unreadable.  But have some caution:  The print system of
+your machine might store the data and make it available to others!</programlisting>
+
+        <para>The file 'revoke-nnnnnnnn-0.asc' should be created: Then, backup
+        this file.</para>
+
+        <para>Now repeat the process to create two further revocation
+        certificates:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>gpg --output revoke-nnnnnnnn-1.asc --armor
+            --gen-revoke nnnnnnnn</code></para>
+
+            <para>Specify reason as "1 = Key has been compromised"</para>
+          </listitem>
+
+          <listitem>
+            <para><code>gpg --output revoke-nnnnnnnn-3.asc --armor
+            --gen-revoke nnnnnnnn</code></para>
+
+            <para>Specify reason as "3 = Key is no longer used"</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Backup these files also.</para>
+
+        <para><note>
+            <para>if you find that you need to revoke your certificate, this
+            <ulink
+            url="http://www.hackdiary.com/2004/01/18/revoking-a-gpg-key">blog
+            post</ulink> explains how.</para>
+          </note></para>
+      </sect1>
+
+      <sect1>
+        <title>Publish Key</title>
+
+        <para>It is also necessary to publish your key. There are several
+        places where this should be done. In most cases, you'll need the
+        "armored" " (ie ASCII) representation of your key. This can be
+        generated using:</para>
+
+        <programlisting>$ gpg --armor --export nnnnnnnn &gt; nnnnnnnn.asc</programlisting>
+
+        <para>where nnnnnnnn is the id of your public key.</para>
+
+        <para>You'll also need the fingerprint of your key. This can be
+        generated using:</para>
+
+        <programlisting>$ gpg --fingerprint nnnnnnnn</programlisting>
+
+        <para>The output from this command includes a line beginning "Key
+        fingerprint", followed by a (space delimited) 40 character hexadecimal
+        fingerprint. The last 8 characters should be the same as the key id
+        (nnnnnnnn).</para>
+
+        <sect3>
+          <title>Publish to a public key server</title>
+
+          <para>To a publish your key to a public key server (eg the MIT key
+          server hosted at <ulink
+          url="http://pgp.mit.edu">http://pgp.mit.edu</ulink>), use the
+          procedure below. Public key servers synchronize with each other, so
+          publishing to one key server should be sufficient. For background
+          reading on this, see the <ulink
+          url="http://www.apache.org/dev/release-signing.html#keyserver-upload">release
+          signing page</ulink> on the Apache wiki, and the <ulink
+          url="http://maven.apache.org/developers/release/pmc-gpg-keys.html">gpg
+          key page</ulink> on the Maven wiki.</para>
+
+          <para>To send the key up to the key server:</para>
+
+          <programlisting>$ gpg --send-keys --keyserver pgp.mit.edu nnnnnnnn</programlisting>
+
+          <para>where nnnnnnnn is the key Id.</para>
+
+          <para>Alternatively, you can browse to the <ulink
+          url="http://pgp.mit.edu">MIT key server</ulink> and paste in the
+          armored representation of your key.</para>
+
+          <para>Confirm the key has been added by browsing to submitting the
+          following URL:</para>
+
+          <programlisting>http://pgp.mit.edu:11371/pks/lookup?search=0xnnnnnnnnn&amp;op=vindex</programlisting>
+
+          <para>again, where nnnnnnnn is the key Id.</para>
+        </sect3>
+
+        <sect3>
+          <title>Publish to your Apache home directory</title>
+
+          <para>The armored representation of your public key should be
+          uploaded to your home directory on people.apache.org, and renamed as
+          <filename>.pgpkey</filename>. Make sure this is readable by
+          all.</para>
+        </sect3>
+
+        <sect3>
+          <title>Publish to your Apache HTML home directory</title>
+
+          <para>The armored representation of your public key should be
+          uploaded to your <filename>public_html</filename> home directory on
+          people.apache.org, named nnnnnnnn.asc. Make sure this is readable by
+          all.</para>
+
+          <para>Check the file is accessible by browsing to:<programlisting>http://people.apache.org/~xxxxxxxx/nnnnnnnn.asc</programlisting></para>
+
+          <para>where xxxxxxxx is your apache LDAP user name and nnnnnnnn is
+          your public key id.</para>
+        </sect3>
+
+        <sect3>
+          <title>FOAF</title>
+
+          <para>First, check out the committers/info directory:</para>
+
+          <programlisting>svn co https://svn.apache.org/repos/private/committers/info</programlisting>
+
+          <para>Go to Apache FOAF-a-matic <ulink
+          url="http://people.apache.org/foaf/foafamatic.html">web page</ulink>
+          to generate the FOAF file text (we copy this text out in a
+          minute):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>enter ASF LDAP user name</para>
+            </listitem>
+
+            <listitem>
+              <para>enter First name, Last name</para>
+            </listitem>
+
+            <listitem>
+              <para>for PGP key fingerprints, add Key</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>paste in the key id</para>
+                </listitem>
+
+                <listitem>
+                  <para>paste in the fingerprint</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>press "Create"</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In the box below, you should have a FOAF file, something
+          like:</para>
+
+          <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;rdf:RDF
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:pm="http://www.web-semantics.org/ns/pm#"
+      xmlns:wot="http://xmlns.com/wot/0.1/"
+      xmlns:rss="http://purl.org/rss/1.0/"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:ical="http://www.w3.org/2002/12/cal/ical#"
+      xmlns:doap="http://usefulinc.com/ns/doap#"&gt;
+  &lt;foaf:Person rdf:ID="danhaywood"&gt;
+    &lt;foaf:name&gt;Xxx Xxxxxxxx&lt;/foaf:name&gt;
+    &lt;foaf:givenname&gt;Xxx&lt;/foaf:givenname&gt;
+    &lt;foaf:family_name&gt;Xxxxxxxx&lt;/foaf:family_name&gt;
+    &lt;wot:hasKey&gt;
+      &lt;wot:PubKey&gt;
+        &lt;wot:fingerprint&gt;nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn&lt;/wot:fingerprint&gt;
+        &lt;wot:hex_id&gt;nnnnnnnn&lt;/wot:hex_id&gt;
+      &lt;/wot:PubKey&gt;
+    &lt;/wot:hasKey&gt;
+  &lt;/foaf:Person&gt;
+&lt;/rdf:RDF&gt;</programlisting>
+
+          <para>(If you are creating the FOAF file for the first time, you may
+          want to add additional details).</para>
+
+          <para>From this, copy out the wot:key, and paste into your FDF file
+          in committers/info:</para>
+
+          <programlisting>    &lt;wot:hasKey&gt;
+      &lt;wot:PubKey&gt;
+        &lt;wot:fingerprint&gt;nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn&lt;/wot:fingerprint&gt;
+        &lt;wot:hex_id&gt;nnnnnnnn&lt;/wot:hex_id&gt;
+      &lt;/wot:PubKey&gt;
+    &lt;/wot:hasKey&gt;</programlisting>
+
+          <para>Then, manually add in a &lt;wot:pubkeyAddress&gt; element
+          within &lt;wot:PubKey&gt;:</para>
+
+          <programlisting>    &lt;wot:hasKey&gt;
+      &lt;wot:PubKey&gt;
+        &lt;wot:fingerprint&gt;nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn&lt;/wot:fingerprint&gt;
+        &lt;wot:hex_id&gt;nnnnnnnn&lt;/wot:hex_id&gt;
+        &lt;wot:pubkeyAddress
+          rdf:resource="http://people.apache.org/~username/nnnnnnnn.asc/&gt;
+      &lt;/wot:PubKey&gt;
+    &lt;/wot:hasKey&gt;</programlisting>
+
+          <para>ie, referencing your publically exported public key</para>
+
+          <para>Finally, commit your changes.</para>
+        </sect3>
+
+        <sect3>
+          <title>Save to KEYS</title>
+
+          <para>The armored representation of the public key should be saved
+          to Isis' KEYS file, <ulink
+          url="https://svn.apache.org/repo/asf/incubator/isis/KEYS">https://svn.apache.org/repo/asf/incubator/isis/KEYS</ulink>
+          (ie, parent of <filename>trunk</filename>).</para>
+
+          <para>First, in a new directory, checkout this file:</para>
+
+          <programlisting>svn -N co https://svn.apache.org/repos/asf/incubator/isis/ .</programlisting>
+
+          <para>This should bring down the <filename>KEYS</filename>
+          file.</para>
+
+          <para>Then, export your signature and armored representation.</para>
+
+          <programlisting>gpg --list-sigs nnnnnnnn &gt;&gt;KEYS
+gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
+
+          <para>Then commit.</para>
+        </sect3>
+
+        <sect3>
+          <title>id.apache.org</title>
+
+          <para>Log onto id.apache.org and ensure that the finger print of
+          your public key is correct.</para>
+        </sect3>
+      </sect1>
+
+      <sect1>
+        <title>Attend Key Signing Party (Apache web of trust)</title>
+
+        <para>It is strongly advised that the contributor attend a key signing
+        party at an Apache event, in order that other Apache
+        committers/members can in person verify their identity against the
+        key. The process for this is described <ulink
+        url="http://www.apache.org/dev/release-signing.html#key-signing-party">here</ulink>
+        and <ulink
+        url="http://wiki.apache.org/apachecon/PgpKeySigning">here</ulink>.d</para>
+      </sect1>
+    </appendix>
   </part>
 </book>

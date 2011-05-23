@@ -24,18 +24,18 @@
 
 Release
  
- Apache Isis is distributed in both source and binary form:
+ <Apache Isis> is distributed in both source and binary form:
  
  * the source can be downloaded from 
    {{{http://www.apache.org/dyn/closer.cgi/incubator/isis/isis-parent-${project.version}-source-release.zip}here}} 
    ({{{http://www.apache.org/dist/incubator/isis/isis-parent-${project.version}-source-release.zip.asc}asc}}, {{{http://www.apache.org/dist/incubator/isis/isis-parent-${project.version}-source-release.zip.md5}md5}}, {{{http://www.apache.org/dist/incubator/isis/isis-parent-${project.version}-source-release.zip.sha1}sha1}})
    
-   Details of building Isis from source can be found in the contributors guide ({{{./docbkx/html/guide/isis-contributors-guide.html}HTML or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}})
+   Details of building <Isis> from source can be found in the contributors guide ({{{./docbkx/html/guide/isis-contributors-guide.html}HTML}} or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}})
    for further details.
  
- * the binaries can be downloaded from {{{http://repo1.maven.org}Maven central repo}}, typically by using the Isis quickstart archetype.
+ * the binaries can be downloaded from {{{http://repo1.maven.org}Maven central repo}}, typically by using the <Isis> quickstart archetype.
  
-   See the quickstart {{{./quickstart-app.html}page}} for details on how to using the quickstart archetype.
+   See the {{{./quickstart-app.html}quickstart page}} for details on how to using the quickstart archetype.
    
  * Release notes can be found {{{./release-notes-${project.version}.html}here}}.  
  
