@@ -27,10 +27,11 @@
     <artifactId>email</artifactId>
     <version>0.1.2-incubating-SNAPSHOT</version>
     
+
     <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>release</artifactId>
-        <version>0.1.2-incubating-SNAPSHOT</version>
+      <groupId>org.apache.isis</groupId>
+      <artifactId>isis-parent</artifactId>
+      <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -65,6 +66,7 @@
         <dependency>
             <groupId>org.apache.isis</groupId>
             <artifactId>applib</artifactId>
+	    <version>0.1.2-incubating-SNAPSHOT</version>
         </dependency>
         
         <dependency>

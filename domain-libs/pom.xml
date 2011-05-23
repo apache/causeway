@@ -26,10 +26,11 @@
     <version>0.1.2-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+
     <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>release</artifactId>
-        <version>0.1.2-incubating-SNAPSHOT</version>
+      <groupId>org.apache.isis</groupId>
+      <artifactId>isis-parent</artifactId>
+      <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
 
     <properties>
