@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractDatabaseConnector;
@@ -37,13 +41,19 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlMetaData;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 
 public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
     private Connection connection;
+    private final String baseName;
+
+    public JdbcConnector() {
+        baseName = SqlObjectStore.BASE_NAME;
+    }
+
+    public JdbcConnector(String propertyBase) {
+        baseName = propertyBase;
+    }
 
     @Override
     public void close() {
@@ -51,6 +61,8 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             if (connection != null) {
                 LOG.info("close");
                 connection.close();
+                connection = null;
+
             }
         } catch (final SQLException e) {
             throw new SqlObjectStoreException("Failed to close", e);
@@ -79,7 +91,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     }
 
     public void open() {
-        final String BASE = SqlObjectStore.BASE_NAME + ".jdbc.";
+        final String BASE = baseName + ".jdbc.";
         final IsisConfiguration params = IsisContext.getConfiguration().getProperties(BASE);
 
         try {
@@ -117,7 +129,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             throw new SqlObjectStoreException("Could not find database driver", e);
         }
 
-        final String BASE_DATATYPE = SqlObjectStore.BASE_NAME + ".datatypes.";
+        final String BASE_DATATYPE = baseName + ".datatypes.";
         final IsisConfiguration dataTypes = IsisContext.getConfiguration().getProperties(BASE_DATATYPE);
         populateSqlDataTypes(dataTypes, BASE_DATATYPE);
     }
@@ -285,7 +297,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
                         try {
                             statement.setObject(i, value, java.sql.Types.DATE);
                         } catch (final SQLException e) {
-                            // This daft catch is required my MySQL, which also requires the TimeZone offset to be
+                            // TODO This daft catch is required my MySQL, which also requires the TimeZone offset to be
                             // "undone"
                             final LocalDate localDate = (LocalDate) value;
                             final int millisOffset = -DateTimeZone.getDefault().getOffset(null);
