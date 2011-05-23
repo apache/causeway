@@ -36,18 +36,8 @@ if(options.x) {
 //
 //
 def replacements = [
-//"0.1.1-incubating-SNAPSHOT": "0.1.2-incubating-SNAPSHOT"
+"isis-parent": "isis"
 
-"org.apache.isis.profilestores.xml.XmlUserProfileStoreLoaderInstaller":"org.apache.isis.runtimes.dflt.profilestores.xml.XmlUserProfileStoreInstaller",
-"org.apache.isis.profilestores.dflt.InMemoryUserProfileStoreInstaller":"org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller",
-"org.apache.isis.runtimes.dflt.webapp.StaticContentFilter":"org.apache.isis.core.webapp.content.StaticContentFilter",
-"org.apache.isis.runtimes.dflt.webapp.ResourceStreamSourceServletContext":"org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf",
-"org.apache.isis.runtimes.dflt.webapp.ConfigurationBuilderServletContext":"org.apache.isis.core.webapp.config.ConfigurationBuilderForWebapp",
-"org.apache.isis.runtimes.dflt.webapp.servlets.ForwardingServlet":"org.apache.isis.core.webapp.routing.ForwardingServlet",
-"org.apache.isis.runtimes.dflt.webapp.servlets.RedirectServlet":"org.apache.isis.core.webapp.routing.RedirectServlet",
-"org.apache.isis.runtimes.dflt.webapp.servlets.ResourceServlet":"org.apache.isis.core.webapp.content.ResourceServlet",
-"org.apache.isis.runtimes.dflt.runtime.imageloader.awt.TemplateImageLoaderAwtInstaller":"org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwtInstaller",
-"org.apache.isis.runtimes.dflt.runtime.imageloader.TemplateImageLoaderNoopInstaller":"org.apache.isis.core.runtime.imageloader.noop.TemplateImageLoaderNoopInstaller"
 ]
 
 
@@ -55,8 +45,8 @@ def replacements = [
 //
 //
 //
-def fileEndings = [".xml", ".java", ".launch", ".properties"]
-//def fileEndings = ["pom.xml"]
+//def fileEndings = [".xml", ".java", ".launch", ".properties"]
+def fileEndings = [".xml"]
 
 
 

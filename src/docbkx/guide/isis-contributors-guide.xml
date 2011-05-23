@@ -1715,7 +1715,7 @@ protected IsisConfiguration getConfiguration() {
         <sect2>
           <title>Maven Plugin (Cobertura)</title>
 
-          <para>The isis-parent <acronym>POM</acronym> automatically includes
+          <para>The isis <acronym>POM</acronym> automatically includes
           the Maven <ulink
           url="http://mojo.codehaus.org/cobertura-maven-plugin">Cobertura
           plugin</ulink>:</para>
@@ -1821,7 +1821,7 @@ protected IsisConfiguration getConfiguration() {
         <sect2>
           <title>Maven Plugin</title>
 
-          <para>The isis-parent <acronym>POM</acronym> automatically includes
+          <para>The isis <acronym>POM</acronym> automatically includes
           the <ulink
           url="http://maven.apache.org/plugins/maven-checkstyle-plugin/">Maven
           checkstyle plugin</ulink>:</para>
@@ -1937,7 +1937,7 @@ protected IsisConfiguration getConfiguration() {
         <sect2>
           <title>Maven Plugin</title>
 
-          <para>The isis-parent <acronym>POM</acronym> automatically includes
+          <para>The isis <acronym>POM</acronym> automatically includes
           the Maven <ulink
           url="http://maven.apache.org/plugins/maven-pmd-plugin/">PMD
           plugin</ulink>:</para>
@@ -2096,7 +2096,7 @@ protected IsisConfiguration getConfiguration() {
         test results and code coverage. At least as far as <emphasis>Apache
         Isis</emphasis> is concerned, the site created reflects the module
         hierarchy, with at least one single index.html page to introduce each
-        module. The main site (corresponding to isis-parent) has rather more
+        module. The main site (corresponding to isis) has rather more
         content, eg discussing the naked objects pattern.</para>
 
         <para>This additional site content can be written in a number of
@@ -3909,7 +3909,7 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
           <package>maven-remote-resources-plugin</package>. This is stored in
           the
           <filename>src/main/appended-resources/supplemental-models.xml</filename>
-          file in the parent <package>[oai:isis-parent]</package>
+          file in the parent <package>[oai:isis]</package>
           module.</para>
 
           <para>To capture the missing license information, use:</para>
@@ -3961,7 +3961,7 @@ licenses to remove from supplemental-models.xml (are spurious):
           <para>Each release should a release note page called
           <filename>release-x.x.x.html</filename>, in
           <filename>src/site/resources</filename> (in
-          <package>[oai:isis-parent]</package>). This is linked to from the
+          <package>[oai:isis]</package>). This is linked to from the
           download page (<filename>src/site/apt/downloads.apt.vm</filename>);
           the download page should not need updating.</para>
 
@@ -4073,7 +4073,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 
           <para>Because the release is being performed in a branch, it is then
           necessary to edit the parent <filename>pom.xml</filename> in
-          <package>[oai:isis-parent]</package>. Change
+          <package>[oai:isis]</package>. Change
           <emphasis>trunk</emphasis> to
           <emphasis>branches/x.x.x-RCn-incubating/trunk</emphasis> for each of
           the children of the <code>&lt;scm&gt;</code> tag:</para>
@@ -4117,7 +4117,7 @@ ackup, pom.xml.backup, pom.xml.branch, pom.xml.tag
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive status"
 [INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk
 [INFO] Checking dependencies and plugins for snapshots ...
-What is the release version for "Apache Isis"? (org.apache.isis:isis-parent) 0.1
+What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.1
 .2-incubating: : </programlisting>
 
           <para>Specify the release version as
@@ -4125,15 +4125,15 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis-parent) 0.1
           candidate), or <emphasis>0.x.x-incubating</emphasis> (if performing
           the actual release)</para>
 
-          <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis-parent) 0.1
+          <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.1
 .2-incubating: : 0.1.2-RC1-incubating
-What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis-parent
-) isis-parent-0.1.2-RC1-incubating: :</programlisting>
+What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis
+) isis-0.1.2-RC1-incubating: :</programlisting>
 
           <para>Accept the default for the SCM release tag.</para>
 
-          <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis-parent
-) isis-parent-0.1.2-RC1-incubating: :
+          <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis
+) isis-0.1.2-RC1-incubating: :
 What is the new development version for "Apache Isis"? (org.apache.isis:isis-par
 ent) 0.1.2-RC2-incubating-SNAPSHOT: : </programlisting>
 
@@ -4175,10 +4175,10 @@ ent) 0.1.2-RC2-incubating-SNAPSHOT: : 0.2.0-incubating-SNAPSHOT</programlisting>
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive 
        commit --file /users/uuuuuuuu/maven-scm-1762417972.commit --targets /tmp/maven-scm-5153433587636484699-targets"
 [INFO] Working directory: D:\svn\ai\branches\0.x.x-RCn-incubating\trunk
-[INFO] Tagging release with the label isis-parent-0.x.x-RCn-incubating...
+[INFO] Tagging release with the label isis-0.x.x-RCn-incubating...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file /tmp/maven-scm-259416193.commit --revision 1126567 
        https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/ 
-       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/tags/isis-parent-0.x.x-RCn-incubating"
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/tags/isis-0.x.x-RCn-incubating"
 [INFO] Working directory: /users/uuuuuuuu/branches/0.1.2-rc1-incubating/trunk
 [INFO] ------------------------------------------------------------------------
 [ERROR] BUILD FAILURE
@@ -4224,16 +4224,12 @@ svn: No such revision 1126567</programlisting>
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive commit --file C:\Users\DANHAY~1\AppData\Local\Temp\maven-scm-1762417972.commit --targets C:\Users\DANHAY~
 1\AppData\Local\Temp\maven-scm-5153433587636484699-targets"
 [INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk
-[INFO] Tagging release with the label isis-parent-0.1.2-RC1-incubating...
+[INFO] Tagging release with the label isis-0.1.2-RC1-incubating...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file C:\Users\DANHAY~1\AppData\Local\Temp\maven-scm-259416193.commit --revision 1126567 https://sv
 n.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/trunk/ https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/tags/is
 is-parent-0.1.2-RC1-incubating"
 [INFO] Working directory: d:\svn\ai\branches\0.1.2-rc1-incubating\trunk
 [INFO] ------------------------------------------------------------------------</programlisting>
-
-          <para></para>
-
-          <para>*** more detail required here.</para>
 
           <para></para>
 
@@ -4277,12 +4273,12 @@ is-parent-0.1.2-RC1-incubating"
 
           <itemizedlist>
             <listitem>
-              <para><filename>isis-parent-0.x.x-RCn-incubating-incubating-source-release.zip</filename>,
+              <para><filename>isis-0.x.x-RCn-incubating-incubating-source-release.zip</filename>,
               and</para>
             </listitem>
 
             <listitem>
-              <para><filename>isis-parent-0.x.x-RCn-incubating-incubating-source-release.zip.asc</filename></para>
+              <para><filename>isis-0.x.x-RCn-incubating-incubating-source-release.zip.asc</filename></para>
             </listitem>
           </itemizedlist>
 
@@ -4379,8 +4375,8 @@ is-parent-0.1.2-RC1-incubating"
           <programlisting>I've staged a release candidate for Apache Isis, namely 0.x.x-RCn-incubating.
 
 The signed source ZIP can be downloaded from my home directory on people.apache.org:
-* http://people.apache.org/~uuuuuuuu/isis-parent-0.x.x-RCn-incubating-source-release.zip (zip file), and
-* http://people.apache.org/~uuuuuuuu/isis-parent-0.x.x-RCn-incubating-source-release.zip.asc (signature)
+* http://people.apache.org/~uuuuuuuu/isis-0.x.x-RCn-incubating-source-release.zip (zip file), and
+* http://people.apache.org/~uuuuuuuu/isis-0.x.x-RCn-incubating-source-release.zip.asc (signature)
 
 The code has been tagged as tags/0.x.x-RCn-incubating.
 
@@ -4424,7 +4420,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
             specified in the voting email. To verify that the signature is
             correct, use:</para>
 
-            <programlisting>gpg --verify isis-parent-x.x.x-RCn-incubating.zip.asc isis-parent-x.x.x-RCn-incubating.zip</programlisting>
+            <programlisting>gpg --verify isis-x.x.x-RCn-incubating.zip.asc isis-x.x.x-RCn-incubating.zip</programlisting>
 
             <para>The ZIP file should then be unpacked.</para>
 
@@ -4506,7 +4502,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           over:</para>
 
           <programlisting>mkdir /www/www.apache.org/incubator/isis/
-cp ~/public_html/isis-parent-x.x.x-incubating-source-release.* /www/www.apache.org/incubator/isis/.</programlisting>
+cp ~/public_html/isis-x.x.x-incubating-source-release.* /www/www.apache.org/incubator/isis/.</programlisting>
         </sect2>
 
         <sect2>

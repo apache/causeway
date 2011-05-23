@@ -452,7 +452,7 @@
       </itemizedlist>
 
       <para>There is also a top-level "parent" module,
-      <package>(oai:isis-parent)</package>. This is used to define common
+      <package>(oai:isis)</package>. This is used to define common
       build/plugin dependencies, as well as a number of Maven profiles that
       can be used to build subsets of the modules, and to build the Maven
       website.</para>
