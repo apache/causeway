@@ -4125,20 +4125,21 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
           <para>Therefore, open up the
           <filename>src/main/resources/archetype-resources/pom.xml</filename>
           in the <package>[oai.support:quickstart-archetype]</package> module,
-          and update the isis.version property:</para>
+          and update the <code>&lt;isis.version&gt;</code> property:</para>
 
           <programlisting>&lt;properties&gt;
-    &lt;isis.version&gt;0.1.2-incubating-SNAPSHOT&lt;/isis.version&gt;
+    &lt;isis.version&gt;0.x.x-RCn-incubating-SNAPSHOT&lt;/isis.version&gt;
 &lt;/properties&gt;</programlisting>
         </sect2>
 
         <sect2>
           <title>Dry run</title>
 
-          <para>The release:prepare command updates all POMs, creates a tag.
-          It's common practice to perform a dry run first:</para>
+          <para>The <code>release:prepare</code> command updates all
+          <acronym>POM</acronym>s, creates a tag. It's common practice to
+          perform a dry run first:</para>
 
-          <programlisting>mvn release:clean release:prepare -P apache-release -D dryRun=true</programlisting>
+          <programlisting>mvn release:prepare -P apache-release -D dryRun=true</programlisting>
 
           <para>This should generate the following prompt:</para>
 
@@ -4158,24 +4159,33 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 [INFO] Checking dependencies and plugins for snapshots ...
 What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incubating: : </programlisting>
 
-          <para>Specify the release version as
-          <emphasis>0.x.x-RCn-incubating</emphasis> (if performing a release
-          candidate), or <emphasis>0.x.x-incubating</emphasis> (if performing
-          the actual release)</para>
+          <para>Enter:</para>
 
-          <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x-RCn-incubating</programlisting>
+          <itemizedlist>
+            <listitem>
+              <para>the release version as
+              <emphasis>0.x.x-RCn-incubating</emphasis> (if performing a
+              release candidate), or <emphasis>0.x.x-incubating</emphasis> (if
+              performing the actual release):</para>
 
-          <para>You'll then be prompted for the SCM release tag. Accept the
-          default:</para>
+              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x-RCn-incubating</programlisting>
+            </listitem>
 
-          <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-RCn-incubating: </programlisting>
+            <listitem>
+              <para>the SCM release tag as the default:</para>
 
-          <para>Finally, you'll be prompted for the new development version.
-          This is only really important if performing the actual release, not
-          a release candidate. Even so, specify the -SNAPSHOT of the next
-          version expected for development.</para>
+              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-RCn-incubating: </programlisting>
+            </listitem>
 
-          <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-RCm-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+            <listitem>
+              <para>the new development version. This is only really important
+              if performing the actual release, not a release candidate. Even
+              so, specify the <literal>-SNAPSHOT</literal> of the next version
+              expected for development.</para>
+
+              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-RCm-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
@@ -4193,8 +4203,33 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
 
           <programlisting>mvn release:prepare -P apache-release -D skipTests=true</programlisting>
 
-          <para>Specify version as
-          <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
+          <para>Enter:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the release version as
+              <emphasis>0.x.x-RCn-incubating</emphasis> (if performing a
+              release candidate), or <emphasis>0.x.x-incubating</emphasis> (if
+              performing the actual release):</para>
+
+              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x-RCn-incubating</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>the SCM release tag as the default:</para>
+
+              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-RCn-incubating: </programlisting>
+            </listitem>
+
+            <listitem>
+              <para>the new development version. This is only really important
+              if performing the actual release, not a release candidate. Even
+              so, specify the <literal>-SNAPSHOT</literal> of the next version
+              expected for development.</para>
+
+              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-RCm-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+            </listitem>
+          </itemizedlist>
 
           <para>If you are in Europe the <code>mvn release:prepare</code>
           command almost always fails at the last step, with a message
