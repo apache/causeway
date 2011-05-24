@@ -1715,8 +1715,8 @@ protected IsisConfiguration getConfiguration() {
         <sect2>
           <title>Maven Plugin (Cobertura)</title>
 
-          <para>The isis <acronym>POM</acronym> automatically includes
-          the Maven <ulink
+          <para>The isis <acronym>POM</acronym> automatically includes the
+          Maven <ulink
           url="http://mojo.codehaus.org/cobertura-maven-plugin">Cobertura
           plugin</ulink>:</para>
 
@@ -1821,7 +1821,7 @@ protected IsisConfiguration getConfiguration() {
         <sect2>
           <title>Maven Plugin</title>
 
-          <para>The isis <acronym>POM</acronym> automatically includes
+          <para>The isis parent <acronym>POM</acronym> automatically includes
           the <ulink
           url="http://maven.apache.org/plugins/maven-checkstyle-plugin/">Maven
           checkstyle plugin</ulink>:</para>
@@ -1937,7 +1937,7 @@ protected IsisConfiguration getConfiguration() {
         <sect2>
           <title>Maven Plugin</title>
 
-          <para>The isis <acronym>POM</acronym> automatically includes
+          <para>The isis parent <acronym>POM</acronym> automatically includes
           the Maven <ulink
           url="http://maven.apache.org/plugins/maven-pmd-plugin/">PMD
           plugin</ulink>:</para>
@@ -2096,8 +2096,8 @@ protected IsisConfiguration getConfiguration() {
         test results and code coverage. At least as far as <emphasis>Apache
         Isis</emphasis> is concerned, the site created reflects the module
         hierarchy, with at least one single index.html page to introduce each
-        module. The main site (corresponding to isis) has rather more
-        content, eg discussing the naked objects pattern.</para>
+        module. The main site (corresponding to isis paremt POM) has rather
+        more content, eg discussing the naked objects pattern.</para>
 
         <para>This additional site content can be written in a number of
         formats, but the most straightforward is to use Maven's own APT
@@ -3909,8 +3909,7 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
           <package>maven-remote-resources-plugin</package>. This is stored in
           the
           <filename>src/main/appended-resources/supplemental-models.xml</filename>
-          file in the parent <package>[oai:isis]</package>
-          module.</para>
+          file in the parent <package>[oai:isis]</package> module.</para>
 
           <para>To capture the missing license information, use:</para>
 
@@ -3961,9 +3960,10 @@ licenses to remove from supplemental-models.xml (are spurious):
           <para>Each release should a release note page called
           <filename>release-x.x.x.html</filename>, in
           <filename>src/site/resources</filename> (in
-          <package>[oai:isis]</package>). This is linked to from the
-          download page (<filename>src/site/apt/downloads.apt.vm</filename>);
-          the download page should not need updating.</para>
+          <package>[oai:isis]</package> parent module). This is linked to from
+          the download page
+          (<filename>src/site/apt/downloads.apt.vm</filename>); the download
+          page should not need updating.</para>
 
           <para>The release notes can be generated using JIRA, using the
           procedure documented <ulink
@@ -4073,7 +4073,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 
           <para>Because the release is being performed in a branch, it is then
           necessary to edit the parent <filename>pom.xml</filename> in
-          <package>[oai:isis]</package>. Change
+          <package>[oai:isis]</package> parent module. Change
           <emphasis>trunk</emphasis> to
           <emphasis>branches/x.x.x-RCn-incubating/trunk</emphasis> for each of
           the children of the <code>&lt;scm&gt;</code> tag:</para>
@@ -4091,6 +4091,29 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 &lt;/scm&gt;</programlisting>
 
           <para>Then commit the <filename>pom.xml</filename> file.</para>
+        </sect2>
+
+        <sect2>
+          <title>Update <code>&lt;version&gt;</code> in archetype
+          resources</title>
+
+          <para>The release plugin (used in the sections that follow) will
+          automatically bump up the <code>&lt;version&gt;</code> of all of the
+          <acronym>POM</acronym>s (first to remove the
+          <literal>-SNAPSHOT</literal> prefix while the release is being cut,
+          and then update to the next iterations <literal>-SNAPSHOT</literal>
+          after that). However, what it doesn't do, unfortunately, is to
+          update the <varname>&lt;isis.version&gt;</varname> property in the
+          archetype resources for the quickstart archetype.</para>
+
+          <para>Therefore, open up the
+          <filename>src/main/resources/archetype-resources/pom.xml</filename>
+          in the <package>[oai.support:quickstart-archetype]</package> module,
+          and update the isis.version property:</para>
+
+          <programlisting>&lt;properties&gt;
+    &lt;isis.version&gt;0.1.2-incubating-SNAPSHOT&lt;/isis.version&gt;
+&lt;/properties&gt;</programlisting>
         </sect2>
 
         <sect2>
@@ -4112,41 +4135,31 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 [INFO] Cleaning up after release...
 [INFO] [release:prepare {execution: default-cli}]
 [INFO] Verifying that there are no local modifications...
-[INFO]   ignoring changes on: pom.xml.next, release.properties, pom.xml.releaseB
-ackup, pom.xml.backup, pom.xml.branch, pom.xml.tag
+[INFO]   ignoring changes on: pom.xml.next, release.properties, pom.xml.releaseBackup, 
+         pom.xml.backup, pom.xml.branch, pom.xml.tag
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive status"
-[INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-RCn-incubating\trunk
 [INFO] Checking dependencies and plugins for snapshots ...
-What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.1
-.2-incubating: : </programlisting>
+What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incubating: : </programlisting>
 
           <para>Specify the release version as
-          <emphasis>0.x.x-RCn-incubating</emphasis>. (if not doing a release
+          <emphasis>0.x.x-RCn-incubating</emphasis> (if performing a release
           candidate), or <emphasis>0.x.x-incubating</emphasis> (if performing
           the actual release)</para>
 
-          <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.1
-.2-incubating: : 0.1.2-RC1-incubating
-What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis
-) isis-0.1.2-RC1-incubating: :</programlisting>
+          <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x-RCn-incubating</programlisting>
 
-          <para>Accept the default for the SCM release tag.</para>
+          <para>You'll then be prompted for the SCM release tag. Accept the
+          default:</para>
 
-          <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis
-) isis-0.1.2-RC1-incubating: :
-What is the new development version for "Apache Isis"? (org.apache.isis:isis-par
-ent) 0.1.2-RC2-incubating-SNAPSHOT: : </programlisting>
+          <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-RCn-incubating: </programlisting>
 
-          <para>Enter the new development version.</para>
+          <para>Finally, you'll be prompted for the new development version.
+          This is only really important if performing the actual release, not
+          a release candidate. Even so, specify the -SNAPSHOT of the next
+          version expected for development.</para>
 
-          <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis-par
-ent) 0.1.2-RC2-incubating-SNAPSHOT: : 0.2.0-incubating-SNAPSHOT</programlisting>
-
-          <para></para>
-
-          <para>*** more detail required here.... </para>
-
-          <para></para>
+          <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-RCm-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
         </sect2>
 
         <sect2>
@@ -4217,42 +4230,40 @@ svn: No such revision 1126567</programlisting>
           <para>On the other hand, if things go wrong before the tagging, then
           <code>mvn release:clean</code> will do most of the cleaning up in
           the event of failures.</para>
-
-          <para></para>
-
-          <programlisting>[INFO] Checking in modified POMs...
-[INFO] Executing: cmd.exe /X /C "svn --non-interactive commit --file C:\Users\DANHAY~1\AppData\Local\Temp\maven-scm-1762417972.commit --targets C:\Users\DANHAY~
-1\AppData\Local\Temp\maven-scm-5153433587636484699-targets"
-[INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk
-[INFO] Tagging release with the label isis-0.1.2-RC1-incubating...
-[INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file C:\Users\DANHAY~1\AppData\Local\Temp\maven-scm-259416193.commit --revision 1126567 https://sv
-n.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/trunk/ https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/tags/is
-is-parent-0.1.2-RC1-incubating"
-[INFO] Working directory: d:\svn\ai\branches\0.1.2-rc1-incubating\trunk
-[INFO] ------------------------------------------------------------------------</programlisting>
-
-          <para></para>
-
-          <para>*** check the archetype versions; may need manual tweaking
-          beforehand if doesn't bump versions correctly?</para>
-
-          <para></para>
         </sect2>
 
         <sect2>
           <title>Post-build sanity check</title>
 
           <para>You should end up with artifacts in your local repo with the
-          new version <emphasis>0.x.x-RCn-incubating</emphasis>. As a sanity
-          check, use the quickstart archetype to generate the application, and
-          make sure that the generated application runs ok.</para>
+          new version <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
+
+          <para>As a sanity check, use the locally built quickstart archetype
+          to generate the application, and make sure that the generated
+          application runs ok.</para>
+
+          <programlisting>mvn archetype:generate  \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D archetypeCatalog=local \
+    -D archetypeGroupId=org.apache.isis.support \
+    -D archetypeArtifactId=quickstart-archetype \
+    -D archetypeVersion=0.x.x-RCn-incubating</programlisting>
+
+          <para>Check that the generated app's artifacts point to the correct
+          version of <emphasis>Isis</emphasis> (specifically: without a
+          <literal>-SNAPSHOT</literal> suffix), and runs as expected.</para>
+
+          <para>If you find problems and the release was performed on a branch
+          (for a release candidate), then just delete the branch and start
+          over.</para>
 
           <para>If you find problems and the release was performed on trunk
-          (rather than a branch) then you may need to revert the changes. The
-          release commands make and commit changes to the project's
-          <filename>pom.xml</filename> files and they create a tag in SVN;
-          you'll need to revert the <filename>pom.xml</filename> files and
-          delete the tag from SVN.</para>
+          then you may need to revert the changes. The release commands make
+          and commit changes to the project's <filename>pom.xml</filename>
+          files and they create a tag in SVN; you'll need to revert the
+          <filename>pom.xml</filename> files and delete the tag from
+          SVN.</para>
         </sect2>
       </sect1>
 
