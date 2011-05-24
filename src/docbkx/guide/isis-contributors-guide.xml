@@ -4373,6 +4373,15 @@ svn: No such revision 1126567</programlisting>
             <para>*** further details required here.</para>
 
             <para></para>
+
+            <programlisting>[INFO] [release:perform {execution: default-cli}]
+[INFO] Checking out the project to perform the release ...
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/tags/isis-0.1.2-RC1-incubating D:\svn\ai\branches\0.1.2-RC1-incubating\trunk\target\checkout"
+[INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk\target</programlisting>
+
+            <para></para>
+
+            <para></para>
           </sect3>
 
           <sect3>
@@ -4800,9 +4809,18 @@ Please select what kind of key you want:
    (6) RSA (encrypt only)
 Your selection?</programlisting></para>
 
-        <para>Select (4) to choose an RSA key for signing:</para>
+        <para>Select (6) to choose an RSA key for encryption:</para>
 
-        <programlisting>Your selection? 4
+        <note>
+          <para>It would seem that Nexus repository manager does not recognize
+          RSA subkeys with an 'S'ign usage; see <ulink
+          url="http://permalink.gmane.org/gmane.comp.java.tynamo.devel/203">this
+          discussion</ulink> on a mailing list and <ulink
+          url="https://issues.sonatype.org/browse/OSSRH-1525">this
+          issue</ulink> on Sonatype's JIRA</para>
+        </note>
+
+        <programlisting>Your selection? 6
 
 RSA keys may be between 1024 and 4096 bits long.
 What keysize do you want? (2048) 4096
@@ -4833,8 +4851,7 @@ generator a better chance to gain enough entropy.
 
 pub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: never       usage: SC
                      trust: ultimate      validity: ultimate
-sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: never       usage: E
-sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: yyYY-mm-dd  usage: S
+sub  4096R/xxxxxxxx  created: yyyy-mm-dd  expires: yyYY-mm-dd  usage: E
 [ultimate] (1). Dan Haywood (CODE SIGNING KEY) &lt;danhaywood@apache.org&gt;
 
 gpg&gt;</programlisting>
