@@ -3769,6 +3769,22 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
           </itemizedlist>
         </sect2>
 
+        <sect2>
+          <title>UNIX line file endings (for pom.xml files)</title>
+
+          <para>We prefer to use UNIX line endings, at least for
+          <filename>pom.xml</filename> files. However, running some of the
+          utility groovy scripts in a Windows cmd shell can cause the files to
+          be written out using Windows line endings. </para>
+
+          <para>Therefore, on a UNIX machine (or Cygwin on Windows),
+          run:</para>
+
+          <programlisting>/usr/bin/find . -name pom.xml -print | xargs dos2unix</programlisting>
+
+          <para>And then commit.</para>
+        </sect2>
+
         <sect2 id="sec.RatTool">
           <title>License Notice (RAT Tool)</title>
 
