@@ -4136,8 +4136,18 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
           <title>Dry run</title>
 
           <para>The <code>release:prepare</code> command updates all
-          <acronym>POM</acronym>s, creates a tag. It's common practice to
-          perform a dry run first:</para>
+          <acronym>POM</acronym>s, creates a tag.</para>
+
+          <para><note>
+              <para>This command appears to fail if the (snapshot) artifacts
+              have not been built with a regular <code>maven clean
+              install</code>. In particular, you shouldn't manually delete
+              <filename>~/.m2/repository/org/apache/isis</filename> directory
+              beforehand (a practice sometimes done in order to "start from
+              scratch").</para>
+            </note></para>
+
+          <para>It's common practice to perform a dry run first:</para>
 
           <programlisting>mvn release:prepare -P apache-release -D dryRun=true</programlisting>
 
@@ -4196,7 +4206,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
 
           <para>First up, clean up any release artifacts.</para>
 
-          <programlisting>mvn release:clean </programlisting>
+          <programlisting>mvn release:clean</programlisting>
 
           <para>Then, run the prepare step (skipping tests will reduce the
           elapsed time):</para>
@@ -4284,16 +4294,19 @@ svn: No such revision 1126567</programlisting>
         </sect2>
 
         <sect2>
-          <title>Post-build sanity check</title>
+          <title>Post-prepare sanity check</title>
 
           <para>You should end up with artifacts in your local repo with the
-          new version <emphasis>0.x.x-RCn-incubating</emphasis>.</para>
+          new version <emphasis>0.x.x-RCn-incubating</emphasis>. There are
+          then a couple of sanity checks that you can perform:</para>
 
-          <para>As a sanity check, use the locally built quickstart archetype
-          to generate the application, and make sure that the generated
-          application runs ok.</para>
+          <itemizedlist>
+            <listitem>
+              <para>Use the locally built quickstart archetype to generate the
+              application, and make sure that the generated application runs
+              ok.</para>
 
-          <programlisting>mvn archetype:generate  \
+              <programlisting>mvn archetype:generate  \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D archetypeCatalog=local \
@@ -4301,9 +4314,23 @@ svn: No such revision 1126567</programlisting>
     -D archetypeArtifactId=quickstart-archetype \
     -D archetypeVersion=0.x.x-RCn-incubating</programlisting>
 
-          <para>Check that the generated app's artifacts point to the correct
-          version of <emphasis>Isis</emphasis> (specifically: without a
-          <literal>-SNAPSHOT</literal> suffix), and runs as expected.</para>
+              <para>Check that the generated app's artifacts point to the
+              correct version of <emphasis>Isis</emphasis> (specifically:
+              without a <literal>-SNAPSHOT</literal> suffix), and runs as
+              expected.</para>
+            </listitem>
+
+            <listitem>
+              <para>unzip the source-release ZIP and check it compiles</para>
+
+              <para>The ZIP file resides in
+              <filename>isis-0.x.x-RCn-incubating-incubating-source-release.zip</filename>
+              in <filename>target</filename> directory of the parent
+              <package>[oai:isis]</package> module. Unzip in a new directory,
+              and build using <code>mvn clean install</code> (and <code>mvn
+              site-deploy -D deploy=local</code> if you have the time).</para>
+            </listitem>
+          </itemizedlist>
 
           <para>If you find problems and the release was performed on a branch
           (for a release candidate), then just delete the branch and start
@@ -4368,16 +4395,37 @@ svn: No such revision 1126567</programlisting>
 
             <programlisting>mvn release:perform -Papache-release</programlisting>
 
-            <para></para>
-
-            <para>*** further details required here.</para>
-
-            <para></para>
+            <para>The command starts off by checking out the codebase from the
+            tag:</para>
 
             <programlisting>[INFO] [release:perform {execution: default-cli}]
 [INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC1-incubating/tags/isis-0.1.2-RC1-incubating D:\svn\ai\branches\0.1.2-RC1-incubating\trunk\target\checkout"
-[INFO] Working directory: D:\svn\ai\branches\0.1.2-RC1-incubating\trunk\target</programlisting>
+[INFO] Executing: cmd.exe /X /C 
+       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-RCn-incubating/tags/isis-0.x.x-RCn-incubating 
+        /users/uuuuuuuu/ai/branches/0.x.x-RCn-incubating/trunk/target/checkout"
+[INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-RCn-incubating/trunk/target/
+...</programlisting>
+
+            <para>All being well this command will complete
+            successfully:</para>
+
+            <programlisting>...
+[INFO] [INFO] BUILD SUCCESSFUL
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] [INFO] Total time: 17 minutes 19 seconds
+[INFO] [INFO] Finished at: Wed May 25 07:42:05 BST 2011
+[INFO] [INFO] Final Memory: 431M/811M
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] Cleaning up after release...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 20 minutes 25 seconds
+[INFO] Finished at: Wed May 25 07:42:07 BST 2011
+[INFO] Final Memory: 45M/991M
+[INFO] ------------------------------------------------------------------------</programlisting>
+
+            <para></para>
 
             <para></para>
 
@@ -4387,22 +4435,29 @@ svn: No such revision 1126567</programlisting>
           <sect3>
             <title>Check the Repository</title>
 
-            <para>This will put release artifacts into a newly created staging
-            repository . You will need to log into repository.apache.org to
-            see it.</para>
+            <para>If the <code>mvn release:perform</code> has worked then it
+            will have put release artifacts into a newly created staging
+            repository . </para>
+
+            <para>Log onto <ulink
+            url="http://repository.apache.org">http://repository.apache.org</ulink>
+            (using your ASF LDAP account) and check that the release has been
+            staged:</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/release/nexus-staging-1.png"
+                           scale="55" />
+              </imageobject>
+            </mediaobject>
 
             <para>If nothing appears in a staging repo you should stop here
             and work out why.</para>
 
             <para>Assuming that the repo has been populated, make a note of
             its repo id; this is needed for the voting thread (see <xref
-            linkend="sec.VotingThread" />).</para>
-
-            <para></para>
-
-            <para>*** confirm the procedure described here.</para>
-
-            <para></para>
+            linkend="sec.VotingThread" />). In the screenshot above the id is
+            <emphasis>org.apache.isis-008</emphasis>.</para>
           </sect3>
 
           <sect3>
@@ -4413,11 +4468,46 @@ svn: No such revision 1126567</programlisting>
             This will make it available so that people can check the
             release.</para>
 
-            <para></para>
+            <para>Press the Close button and complete the dialog:</para>
 
-            <para>*** further details required here.</para>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/release/nexus-staging-2.png"
+                           scale="55" />
+              </imageobject>
+            </mediaobject>
 
-            <para></para>
+            <para>All being well, the close shold complete
+            successfully:</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/release/nexus-staging-3.png"
+                           scale="55" />
+              </imageobject>
+            </mediaobject>
+
+            <para>The Nexus repository manager will also email you with
+            confirmation of a successful close.</para>
+
+            <para>If Nexus has problems with the key signature, however, then
+            the close will be aborted:</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/release/nexus-staging-4.png"
+                           scale="55" />
+              </imageobject>
+            </mediaobject>
+
+            <para>Use <code>gpg --keyserver hkp://pgp.mit.edu --recv-keys
+            nnnnnnnn</code> to confirm that the key is available.</para>
+
+            <note>
+              <para>Unfortunately, Nexus does not seem to allow subkeys to be
+              used for signing. See <xref linkend="apx.KeyGeneration" /> for
+              more details.</para>
+            </note>
           </sect3>
         </sect2>
       </sect1>
@@ -4782,11 +4872,20 @@ gpg&gt;</programlisting>
         <title>Subkey Generation</title>
 
         <para>It's recommended to use a subkey with an expiry date to sign
-        releases, rather than your main, non-expiring subkey. If a subkey is
-        present, then gpg will use it in preference to the main key.</para>
+        releases, rather than your main, non-expiring key. If a subkey is
+        present, then gpg will use it for signing in preference to the main
+        key.</para>
 
-        <para>Enter the gpg shell using (the identifier of) your main
-        key:</para>
+        <note>
+          <para>After (binary) release artifacts are created, they are
+          deployed to the ASF's Nexus staging repository. However, Nexus seems
+          unable to retrieve a subkey from the public key server. Until we
+          find a fix/workaround for this, all releases should be signed just
+          with a regular non-expiring main key.</para>
+        </note>
+
+        <para>To create a subkey Enter the gpg shell using (the identifier of)
+        your main key:</para>
 
         <programlisting>gpg --edit-key xxxxxxxx
 gpg&gt;</programlisting>
