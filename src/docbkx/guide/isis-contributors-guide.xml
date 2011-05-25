@@ -4149,7 +4149,13 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 
           <para>It's common practice to perform a dry run first:</para>
 
-          <programlisting>mvn release:prepare -P apache-release -D dryRun=true</programlisting>
+          <programlisting>mvn release:prepare -P apache-release,integration-tests -D dryRun=true</programlisting>
+
+          <note>
+            <para>The <code>-P integration-tests</code> flag is required in
+            order to include the
+            <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+          </note>
 
           <para>This should generate the following prompt:</para>
 
@@ -4211,7 +4217,13 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <para>Then, run the prepare step (skipping tests will reduce the
           elapsed time):</para>
 
-          <programlisting>mvn release:prepare -P apache-release -D skipTests=true</programlisting>
+          <programlisting>mvn release:prepare -P apache-release,integration-tests -D skipTests=true</programlisting>
+
+          <note>
+            <para>The <code>-P integration-tests</code> flag is required in
+            order to include the
+            <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+          </note>
 
           <para>Enter:</para>
 
@@ -4278,7 +4290,7 @@ svn: No such revision 1126567</programlisting>
               <para>repeat the mvn release:prepare command, but using <code>-D
               resume=true</code> flag so things can restart:</para>
 
-              <programlisting>mvn release:prepare -P apache-release -D skipTests=true -D resume=true</programlisting>
+              <programlisting>mvn release:prepare -P apache-release,integration-tests -D skipTests=true -D resume=true</programlisting>
 
               <note>
                 <para>Do NOT use <code>release:clean</code> goal in this
@@ -4424,12 +4436,6 @@ svn: No such revision 1126567</programlisting>
 [INFO] Finished at: Wed May 25 07:42:07 BST 2011
 [INFO] Final Memory: 45M/991M
 [INFO] ------------------------------------------------------------------------</programlisting>
-
-            <para></para>
-
-            <para></para>
-
-            <para></para>
           </sect3>
 
           <sect3>
@@ -4599,13 +4605,10 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
             <title>Verifying the binary release artifacts</title>
 
             <para>Optionally, voters can verify the binary releases (in the
-            Maven staging repository).</para>
-
-            <para></para>
-
-            <para>*** more detail required here.</para>
-
-            <para></para>
+            Maven staging repository). For this it is necessary to download
+            each artifact from Nexus and its corresponding .ASC file. Since
+            there are many such artifacts, we suggest you just choose one or
+            two at random.</para>
           </sect3>
 
           <sect3>
@@ -4618,13 +4621,29 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
         </sect2>
 
         <sect2>
-          <title>After the vote</title>
+          <title>After the isis-dev vote</title>
 
           <para>If the vote has been unsuccessful, then address the problems
           and go again, incrementing the -RCn suffix.</para>
 
-          <para>If the vote has been successful, then cut a new release, with
-          no -RCn suffix, and move onto the next step.</para>
+          <para>If the vote has been successful, then send a mail to the
+          isis-dev mailing list.</para>
+
+          <para>Use the following subject:</para>
+
+          <programlisting>[RESULT] [VOTE] Apache Isis release candidate 0.x.x-RCn-incubating</programlisting>
+
+          <para>And use the following body:</para>
+
+          <programlisting>The vote has passed on isis-dev@incubator.a.o with the following result :
+
+  +1 (binding): &lt;&lt;list of names&gt;&gt;
+  +1 (non binding): &lt;&lt;list of names&gt;&gt;
+
+I will now recreate this release (with no -RCn suffix) from the same revision of trunk, and submit for voting on the incubator.</programlisting>
+
+          <para>Then, cut a new release, this time with no -RCn suffix, and
+          move onto the next step.</para>
 
           <para><note>
               <para>care should be taken to ensure that the new release is
@@ -4641,6 +4660,69 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           <para>Once the vote has been approved on isis-dev and a new non-RCn
           release has been created, then the release process should be
           performed again on incubator@apache.org.</para>
+
+          <para>Use the following subject:</para>
+
+          <programlisting>[VOTE] Apache Isis release 0.x.x-incubating</programlisting>
+
+          <para>And use the following body:</para>
+
+          <programlisting>I've staged a release for Apache Isis, namely 0.x.x-incubating.  This has been voted through on the isis-dev mailing list, and
+now requires a vote on incubator@a.o
+
+The signed source ZIP can be downloaded from my home directory on people.apache.org:
+* http://people.apache.org/~uuuuuuuu/isis-0.x.x-incubating-source-release.zip (zip file), and
+* http://people.apache.org/~uuuuuuuu/isis-0.x.x-incubating-source-release.zip.asc (signature)
+
+The code has been tagged as tags/0.x.x-incubating.
+
+In addition, the Maven artifacts have been staged to staging repository on repository.apache.org:
+* https://repository.apache.org/content/repositories/orgapacheisis-zzz/
+
+The RAT checks have passed (see Isis' contributors guide for files that are considered as being excluded).
+
+Please verify the release and cast your vote.  The vote will be open for 72 hours.
+
+[ ] +1
+[ ]  0
+[ ] -1</programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>uuuuuuuu</emphasis> is your Apache LDAP
+              username</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>zzz</emphasis> is the newly created staging
+              repository, from above.</para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Post the result to the isis-dev list</title>
+
+          <para>Once the incubator vote has been approved, send a mail to the
+          incubator@a.o mailing list. </para>
+
+          <para>Use the following subject:</para>
+
+          <programlisting>[RESULT] [VOTE] Apache Isis release 0.x.x-incubating</programlisting>
+
+          <para>And use the following body:</para>
+
+          <programlisting>The vote has passed on incubator@a.o with the following result :
+
+  +1 (binding): &lt;&lt;list of names&gt;&gt;
+  +1 (non binding): &lt;&lt;list of names&gt;&gt;
+
+I will copy now promote this release to Isis' dist directory and promote the artifacts to the central Maven repository.</programlisting>
+
+          <para>At this stage the release can be promoted for
+          distribution.</para>
         </sect2>
       </sect1>
 

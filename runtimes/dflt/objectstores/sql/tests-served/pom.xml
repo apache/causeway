@@ -117,6 +117,7 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
     </dependencyManagement>
 
     <dependencies>
+
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
         <dependency>
@@ -129,14 +130,6 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-<!-- 
-        <dependency>
-        	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-        	<artifactId>dflt</artifactId>
-        	<version>0.1.2-incubating-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
- -->
 
         <!--  todo: remove this dependency -->
         <dependency>

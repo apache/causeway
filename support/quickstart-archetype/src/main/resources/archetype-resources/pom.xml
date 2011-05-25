@@ -490,6 +490,23 @@
                 <version>${isis.version}</version>
             </dependency>
 
+            <!-- isis: viewer: bdd -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>bdd</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>bdd-common</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>bdd-concordion</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
             <!-- isis: viewer: wicket -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
