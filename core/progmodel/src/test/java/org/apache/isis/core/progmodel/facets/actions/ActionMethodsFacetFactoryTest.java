@@ -104,7 +104,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionInvocationFacetViaMethod actionInvocationFacetViaMethod = (ActionInvocationFacetViaMethod) facet;
         assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(actionMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
     }
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
@@ -290,7 +290,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionValidationFacetViaMethod actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
         assertEquals(validateMethod, actionValidationFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(validateMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
     }
 
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
@@ -318,7 +318,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionValidationFacetViaMethod actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
         assertEquals(validateMethod, actionValidationFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(validateMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
     }
 
     public void testInstallsParameterDefaultsMethodNoArgsFacetAndRemovesMethod() {
@@ -346,7 +346,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionDefaultsFacetViaMethod actionDefaultFacetViaMethod = (ActionDefaultsFacetViaMethod) facet;
         assertEquals(defaultMethod, actionDefaultFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(defaultMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(defaultMethod));
     }
 
     public void testInstallsParameterDefaultsMethodSomeArgsIsIgnored() {
@@ -396,7 +396,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionChoicesFacetViaMethod actionChoicesFacetViaMethod = (ActionChoicesFacetViaMethod) facet;
         assertEquals(choicesMethod, actionChoicesFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(choicesMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choicesMethod));
     }
 
     public void testInstallsParameterChoicesMethodSomeArgsIsIgnored() {
@@ -475,7 +475,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
         assertEquals("Another Name", namedFacetAbstract.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(nameMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(nameMethod));
     }
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
@@ -494,7 +494,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;
         assertEquals("Some old description", describedAsFacetAbstract.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(descriptionMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(descriptionMethod));
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
@@ -513,7 +513,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
         assertEquals(When.ALWAYS, hiddenFacetAbstract.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(alwaysHideMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
@@ -528,7 +528,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertNull(facetedMethod.getFacet(HiddenFacet.class));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(alwaysHideMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
@@ -547,7 +547,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
         assertEquals(When.ALWAYS, disabledFacetAbstract.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(protectMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
@@ -562,7 +562,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertNull(facetedMethod.getFacet(DisabledFacet.class));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(protectMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
@@ -582,7 +582,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final HideForSessionFacetViaMethod hideForSessionFacetViaMethod = (HideForSessionFacetViaMethod) facet;
         assertEquals(hideMethod, hideForSessionFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(hideMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hideMethod));
     }
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
@@ -601,7 +601,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final DisableForSessionFacetViaMethod disableForSessionFacetViaMethod = (DisableForSessionFacetViaMethod) facet;
         assertEquals(disableMethod, disableForSessionFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(disableMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disableMethod));
     }
 
     public void testActionReturnTypeWhenVoid() {
@@ -696,7 +696,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod0 = (ActionParameterDefaultsFacetViaMethod) facet0;
         assertEquals(default0Method, actionDefaultFacetViaMethod0.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(default0Method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default0Method));
 
         final Facet facet1 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet1);
@@ -704,7 +704,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod1 = (ActionParameterDefaultsFacetViaMethod) facet1;
         assertEquals(default1Method, actionDefaultFacetViaMethod1.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(default1Method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default1Method));
 
     }
 
@@ -742,7 +742,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
         assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(choices0Method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices0Method));
 
         final Facet facet1 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet1);
@@ -750,7 +750,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
         assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(choices1Method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices1Method));
 
     }
 

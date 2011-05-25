@@ -65,7 +65,7 @@ public class PluralMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         final PluralFacetViaMethod pluralFacet = (PluralFacetViaMethod) facet;
         assertEquals("Some plural name", pluralFacet.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(pluralNameMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(pluralNameMethod));
     }
 
 }

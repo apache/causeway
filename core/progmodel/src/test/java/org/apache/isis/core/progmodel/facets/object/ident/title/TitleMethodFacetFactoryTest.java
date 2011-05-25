@@ -67,7 +67,7 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         final TitleFacetViaTitleMethod titleFacetViaTitleMethod = (TitleFacetViaTitleMethod) facet;
         assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(titleMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(titleMethod));
     }
 
     public void testToStringMethodPickedUpOnClassAndMethodRemoved() {
@@ -87,7 +87,7 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         final TitleFacetViaToStringMethod titleFacetViaTitleMethod = (TitleFacetViaToStringMethod) facet;
         assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(toStringMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }
 
     /**

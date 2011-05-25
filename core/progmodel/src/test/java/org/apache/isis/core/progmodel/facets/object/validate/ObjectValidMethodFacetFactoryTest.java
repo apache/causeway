@@ -63,7 +63,7 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
         assertNotNull(facet);
         assertTrue(facet instanceof ValidateObjectFacetViaValidateMethod);
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(validateMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
     }
 
 }

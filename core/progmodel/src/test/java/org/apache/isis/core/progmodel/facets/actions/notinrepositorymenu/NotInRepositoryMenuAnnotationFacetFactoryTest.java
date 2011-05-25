@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu;
 
 import java.lang.reflect.Method;

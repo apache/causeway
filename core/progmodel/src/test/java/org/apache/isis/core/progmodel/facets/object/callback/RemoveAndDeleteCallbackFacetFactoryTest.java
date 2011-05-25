@@ -76,7 +76,7 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
 		assertTrue(methods.contains(deleteMethod));
 		assertTrue(methods.contains(removeMethod));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(deleteMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(deleteMethod));
     }
 
     public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
@@ -100,7 +100,7 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
 		assertTrue(methods.contains(removeMethod));
 		assertTrue(methods.contains(deleteMethod));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(removeMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(removeMethod));
     }
 
 }

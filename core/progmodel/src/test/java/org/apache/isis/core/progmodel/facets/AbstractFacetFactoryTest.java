@@ -93,7 +93,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected void assertNoMethodsRemoved() {
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().isEmpty());
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 

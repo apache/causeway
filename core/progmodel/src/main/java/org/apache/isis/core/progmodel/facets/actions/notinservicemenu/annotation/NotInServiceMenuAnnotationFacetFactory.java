@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAnnotation;
 
 public class NotInServiceMenuAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 

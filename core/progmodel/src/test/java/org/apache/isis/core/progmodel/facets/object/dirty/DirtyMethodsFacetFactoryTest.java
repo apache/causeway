@@ -67,7 +67,7 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final MarkDirtyObjectFacetViaMethod markDirtyFacet = (MarkDirtyObjectFacetViaMethod) facet;
         assertEquals(method, markDirtyFacet.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
     public void testIsDirtyMethodPickedUpOn() {
@@ -87,7 +87,7 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final IsDirtyObjectFacetViaMethod isDirtyFacet = (IsDirtyObjectFacetViaMethod) facet;
         assertEquals(method, isDirtyFacet.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
     public void testClearDirtyMethodPickedUpOn() {
@@ -105,7 +105,7 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ClearDirtyObjectFacetViaMethod clearDirtyFacet = (ClearDirtyObjectFacetViaMethod) facet;
         assertEquals(method, clearDirtyFacet.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
 }

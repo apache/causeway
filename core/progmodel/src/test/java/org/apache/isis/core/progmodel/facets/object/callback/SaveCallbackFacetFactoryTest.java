@@ -65,7 +65,7 @@ public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         final PersistingCallbackFacetViaMethod savingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
         assertEquals(method, savingCallbackFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
     public void testSavedLifecycleMethodPickedUpOn() {
@@ -83,7 +83,7 @@ public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         final PersistedCallbackFacetViaMethod savedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;
         assertEquals(method, savedCallbackFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
@@ -27,7 +26,6 @@ import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
-
 public class ProgrammableMethodRemover implements MethodRemover {
 
     // ////////////////////////////////////////////////////////////
@@ -35,16 +33,14 @@ public class ProgrammableMethodRemover implements MethodRemover {
     // ////////////////////////////////////////////////////////////
 
     static class RemoveMethodArgs {
-        public RemoveMethodArgs(
-                final MethodScope methodScope,
-                final String methodName,
-                final Class<?> returnType,
-                final Class<?>[] parameterTypes) {
+        public RemoveMethodArgs(final MethodScope methodScope, final String methodName, final Class<?> returnType,
+            final Class<?>[] parameterTypes) {
             this.methodScope = methodScope;
             this.methodName = methodName;
             this.returnType = returnType;
             this.parameterTypes = parameterTypes;
         }
+
         public MethodScope methodScope;
         public String methodName;
         public Class<?> returnType;
@@ -53,11 +49,9 @@ public class ProgrammableMethodRemover implements MethodRemover {
 
     private final List<RemoveMethodArgs> removeMethodArgsCalls = new ArrayList<RemoveMethodArgs>();
 
-    public void removeMethod(
-            final MethodScope methodScope,
-            final String methodName,
-            final Class<?> returnType,
-            final Class<?>[] parameterTypes) {
+    @Override
+    public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
+        final Class<?>[] parameterTypes) {
         removeMethodArgsCalls.add(new RemoveMethodArgs(methodScope, methodName, returnType, parameterTypes));
     }
 
@@ -71,11 +65,12 @@ public class ProgrammableMethodRemover implements MethodRemover {
 
     private final List<Method> removeMethodMethodCalls = new ArrayList<Method>();
 
+    @Override
     public void removeMethod(final Method method) {
         removeMethodMethodCalls.add(method);
     }
 
-    public List<Method> getRemoveMethodMethodCalls() {
+    public List<Method> getRemovedMethodMethodCalls() {
         return removeMethodMethodCalls;
     }
 
@@ -90,32 +85,27 @@ public class ProgrammableMethodRemover implements MethodRemover {
     }
 
     static class RemoveMethodsArgs {
-        public RemoveMethodsArgs(
-                final MethodScope methodScope,
-                final String prefix,
-                final Class<?> returnType,
-                final boolean canBeVoid,
-                final int paramCount) {
+        public RemoveMethodsArgs(final MethodScope methodScope, final String prefix, final Class<?> returnType,
+            final boolean canBeVoid, final int paramCount) {
             this.methodScope = methodScope;
             this.prefix = prefix;
             this.returnType = returnType;
             this.canBeVoid = canBeVoid;
             this.paramCount = paramCount;
         }
+
         public MethodScope methodScope;
         public String prefix;
         public Class<?> returnType;
         public boolean canBeVoid;
         public int paramCount;
     }
+
     private final List<RemoveMethodsArgs> removeMethodsArgs = new ArrayList<RemoveMethodsArgs>();
 
-    public List<Method> removeMethods(
-            final MethodScope methodScope,
-            final String prefix,
-            final Class<?> returnType,
-            final boolean canBeVoid,
-            final int paramCount) {
+    @Override
+    public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType,
+        final boolean canBeVoid, final int paramCount) {
         removeMethodsArgs.add(new RemoveMethodsArgs(methodScope, prefix, returnType, canBeVoid, paramCount));
         return removeMethodsReturn;
     }
@@ -124,11 +114,11 @@ public class ProgrammableMethodRemover implements MethodRemover {
     // removeMethods(List):void
     // ////////////////////////////////////////////////////////////
 
+    @Override
     public void removeMethods(final List<Method> methods) {
-        for (Method method: methods) {
+        for (Method method : methods) {
             removeMethod(method);
         }
     }
 
 }
-

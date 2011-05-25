@@ -65,7 +65,7 @@ public class RemoveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         final RemovingCallbackFacetViaMethod removingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
         assertEquals(method, removingCallbackFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
     public void testRemovedLifecycleMethodPickedUpOn() {
@@ -83,7 +83,7 @@ public class RemoveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         final RemovedCallbackFacetViaMethod removedCallbackFacetViaMethod = (RemovedCallbackFacetViaMethod) facet;
         assertEquals(method, removedCallbackFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
 }

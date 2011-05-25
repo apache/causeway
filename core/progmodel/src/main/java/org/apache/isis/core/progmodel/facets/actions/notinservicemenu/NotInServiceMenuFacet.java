@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.actions.notinservicemenu;
 
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 /**
  * Indicates that the (repository) action should not be contributed to any objects.
@@ -29,5 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <tt>@NotContributed</tt>.
  */
 public interface NotInServiceMenuFacet extends Facet {
+
+    String hides(VisibilityContext<? extends VisibilityEvent> ic);
 
 }

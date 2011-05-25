@@ -65,7 +65,7 @@ public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         final NamedFacetViaSingularNameStaticMethod namedFacetViaSingularNameStaticMethod = (NamedFacetViaSingularNameStaticMethod) facet;
         assertEquals("Some name", namedFacetViaSingularNameStaticMethod.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(singularNameMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(singularNameMethod));
     }
 
 }

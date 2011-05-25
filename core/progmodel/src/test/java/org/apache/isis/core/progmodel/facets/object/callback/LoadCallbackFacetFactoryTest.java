@@ -65,7 +65,7 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         final LoadingCallbackFacetViaMethod loadingCallbackFacetViaMethod = (LoadingCallbackFacetViaMethod) facet;
         assertEquals(method, loadingCallbackFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
     public void testLoadedLifecycleMethodPickedUpOn() {
@@ -83,7 +83,7 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         final LoadedCallbackFacetViaMethod loadedCallbackFacetViaMethod = (LoadedCallbackFacetViaMethod) facet;
         assertEquals(method, loadedCallbackFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
 

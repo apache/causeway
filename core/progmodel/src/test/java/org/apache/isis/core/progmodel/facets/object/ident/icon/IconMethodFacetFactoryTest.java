@@ -63,7 +63,7 @@ public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof IconFacetViaMethod);
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(iconNameMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(iconNameMethod));
     }
 
 }

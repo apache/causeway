@@ -76,7 +76,7 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
 		assertTrue(methods.contains(saveMethod));
 		assertTrue(methods.contains(persistMethod));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(saveMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(saveMethod));
     }
 
     public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
@@ -100,7 +100,7 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
 		assertTrue(methods.contains(saveMethod));
 		assertTrue(methods.contains(persistMethod));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(saveMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(saveMethod));
     }
 
 }

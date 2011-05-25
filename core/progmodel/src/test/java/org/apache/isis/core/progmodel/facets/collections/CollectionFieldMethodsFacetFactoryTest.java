@@ -94,7 +94,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
         assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
@@ -117,7 +117,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
         assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
@@ -140,7 +140,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
         assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
@@ -163,7 +163,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
         assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
@@ -188,7 +188,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
         assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testAddToFacetIsInstalledViaAccessorIfNoExplicitAddToMethodExists() {
@@ -282,7 +282,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToFacetViaMethod collectionAddToFacetViaMethod = (CollectionAddToFacetViaMethod) facet;
         assertEquals(addToMethod, collectionAddToFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(addToMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(addToMethod));
     }
 
     public void testCanInferTypeOfFacetFromExplicitAddToMethod() {
@@ -337,7 +337,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionRemoveFromFacetViaMethod collectionRemoveFromFacetViaMethod = (CollectionRemoveFromFacetViaMethod) facet;
         assertEquals(removeFromMethod, collectionRemoveFromFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(removeFromMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(removeFromMethod));
     }
 
     public void testCanInferTypeOfFacetFromExplicitRemoveFromMethod() {
@@ -391,7 +391,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionClearFacetViaMethod collectionClearFacetViaMethod = (CollectionClearFacetViaMethod) facet;
         assertEquals(clearMethod, collectionClearFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(clearMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(clearMethod));
     }
 
     public void testClearFacetIsInstalledViaAccessorIfNoExplicitClearMethod() {
@@ -448,7 +448,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionValidateAddToFacetViaMethod collectionValidateAddToFacetViaMethod = (CollectionValidateAddToFacetViaMethod) facet;
         assertEquals(validateAddToMethod, collectionValidateAddToFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(validateAddToMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateAddToMethod));
     }
 
     public void testValidateRemoveFromFacetIsInstalledAndMethodRemoved() {
@@ -483,7 +483,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionValidateRemoveFromFacetViaMethod collectionValidateRemoveFromFacetViaMethod = (CollectionValidateRemoveFromFacetViaMethod) facet;
         assertEquals(validateRemoveFromMethod, collectionValidateRemoveFromFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(validateRemoveFromMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateRemoveFromMethod));
     }
 
     public void testMethodFoundInSuperclass() {
@@ -555,7 +555,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionRemoveFromFacetViaMethod collectionRemoveFromFacetViaMethod = (CollectionRemoveFromFacetViaMethod) facet;
         assertEquals(removeFromMethod, collectionRemoveFromFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(removeFromMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(removeFromMethod));
 
         final Facet facet1 = facetedMethod.getFacet(CollectionValidateRemoveFromFacet.class);
         assertNotNull(facet1);
@@ -563,7 +563,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionValidateRemoveFromFacetViaMethod collectionValidateRemoveFromFacetViaMethod = (CollectionValidateRemoveFromFacetViaMethod) facet1;
         assertEquals(validateRemoveFromMethod, collectionValidateRemoveFromFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(validateRemoveFromMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateRemoveFromMethod));
     }
 
     static class Order {}
@@ -623,7 +623,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final NamedFacetViaMethod namedFacet = (NamedFacetViaMethod) facet;
         assertEquals("Most Recent Orders", namedFacet.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(nameMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(nameMethod));
     }
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
@@ -641,7 +641,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DescribedAsFacetViaMethod describedAsFacet = (DescribedAsFacetViaMethod) facet;
         assertEquals("Some old description", describedAsFacet.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(descriptionMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(descriptionMethod));
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
@@ -659,7 +659,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final HiddenFacetAbstract hiddenFacetAlways = (HiddenFacetAlways) facet;
         assertEquals(When.ALWAYS, hiddenFacetAlways.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(alwaysHideMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
@@ -673,7 +673,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         assertNull(facetedMethod.getFacet(HiddenFacet.class));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(alwaysHideMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
@@ -691,7 +691,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DisabledFacetAlways disabledFacetAlways = (DisabledFacetAlways) facet;
         assertEquals(When.ALWAYS, disabledFacetAlways.value());
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(protectMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
@@ -705,7 +705,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         assertNull(facetedMethod.getFacet(DisabledFacet.class));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(protectMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
@@ -723,7 +723,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final HideForSessionFacetViaMethod hideForSessionFacetViaMethod = (HideForSessionFacetViaMethod) facet;
         assertEquals(hideMethod, hideForSessionFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(hideMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hideMethod));
     }
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
@@ -741,7 +741,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DisableForSessionFacetViaMethod disableForSessionFacetViaMethod = (DisableForSessionFacetViaMethod) facet;
         assertEquals(disableMethod, disableForSessionFacetViaMethod.getMethods().get(0));
 
-        assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(disableMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disableMethod));
     }
 
 }
