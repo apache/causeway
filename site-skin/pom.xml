@@ -29,12 +29,12 @@
 
     <groupId>org.apache.isis.skins</groupId>
     <artifactId>classic-skin</artifactId>
-    <version>1.0</version>
+
     <name>Isis Skin</name>
 
     <properties>
         <siteBaseDir>..</siteBaseDir>
-        <relativeUrl>applib/</relativeUrl>
+        <relativeUrl>site-skin/</relativeUrl>
     </properties>
 
 </project>
