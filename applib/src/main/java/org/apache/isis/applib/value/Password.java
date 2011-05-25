@@ -70,6 +70,9 @@ public class Password implements Serializable {
 
     @Override
     public String toString() {
+        if (password == null) {
+            return "";
+        }
         return STARS.substring(0, Math.min(STARS.length(), password.length()));
     }
 }
