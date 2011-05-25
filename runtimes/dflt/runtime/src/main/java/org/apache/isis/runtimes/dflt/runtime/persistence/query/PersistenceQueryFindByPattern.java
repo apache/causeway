@@ -72,6 +72,10 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
                     final ObjectAdapter reqd = fld.get(pattern);
                     final ObjectAdapter search = fld.get(object);
 
+                    if (search == null) {
+                        return false;
+                    }
+
                     // compare the titles
                     final String r = reqd.titleString().toLowerCase();
                     final String s = search.titleString().toLowerCase();
