@@ -107,19 +107,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- applib -->
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>applib</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>applib</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
-				<type>test-jar</type>
-			</dependency>
-
             <!-- testsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>

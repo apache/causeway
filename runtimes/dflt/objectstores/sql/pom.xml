@@ -125,7 +125,7 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.alternatives.objectstore</groupId>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-tests-served</artifactId>
                 <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>

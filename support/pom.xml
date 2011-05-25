@@ -72,12 +72,12 @@
             <!-- archetypes -->
             <dependency>
                 <groupId>org.apache.isis.support</groupId>
-                <artifactId>archetypes</artifactId>
+                <artifactId>quickstart-archetype</artifactId>
                 <version>0.1.2-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.support</groupId>
-                <artifactId>archetypes</artifactId>
+                <artifactId>quickstart-archetype</artifactId>
                 <version>0.1.2-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
