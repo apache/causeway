@@ -5351,5 +5351,217 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
         url="http://wiki.apache.org/apachecon/PgpKeySigning">here</ulink>.d</para>
       </sect1>
     </appendix>
+
+    <appendix>
+      <title>Recreating the Quick Start Archetype</title>
+
+      <abstract>
+        <para>Procedure for recreating the quickstart archetype.</para>
+      </abstract>
+
+      <para>Based on notes in the <ulink
+      url="https://cwiki.apache.org/confluence/display/ISIS/RecreatingMavenArchetypeFromProject">Isis
+      wiki</ulink>.</para>
+
+      <sect1>
+        <title>Confirm that the quickstart prototype application works
+        correctly</title>
+
+        <para>The quickstart archetype is created by "reverse-engineering" the
+        quickstart prototype application
+        <package>[oai.support:quickstart]</package>. Therefore a prerequisite
+        is to ensure that this application works correctly.</para>
+
+        <para>See the <ulink
+        url="https://cwiki.apache.org/confluence/display/ISIS/RecreatingMavenArchetypeFromProject">wiki</ulink>
+        for further details.</para>
+      </sect1>
+
+      <sect1>
+        <title>Generate the archetype source</title>
+
+        <para>When you are happy that the quickstart prototype app is working
+        correctly, it's time to generate the archetype.</para>
+
+        <para>Firstly, export the quickstart prototype into a new
+        directory:</para>
+
+        <programlisting>mkdir /tmp/archetype
+cd support
+svn export quickstart /tmp/archetype</programlisting>
+
+        <para>This will export all versioned files into
+        <filename>/tmp/archetype/quickstart</filename>. Change into this
+        directory:</para>
+
+        <programlisting>cd /tmp/archetype/quickstart</programlisting>
+
+        <para>Then, regenerate the archetype:</para>
+
+        <programlisting>mvn eclipse:clean clean archetype:create-from-project</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>Perform automated edits to the generated archetype
+        source</title>
+
+        <para>The archetype source is generated in target (under
+        <filename>target/generated-sources/archetype</filename>). Before it
+        can be used to create the archetype, some of the generated files must
+        be edited. Specifically:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>each of the <filename>.launch</filename> files should be
+            edited so that the <literal>PROJECT_ATTR</literal> key uses the
+            <varname>${rootArtifactId}</varname> rather than hard-coded
+            reference to the quickstart prototype; they also require Maven
+            macro definitions at the top of each file.</para>
+          </listitem>
+
+          <listitem>
+            <para>the
+            <filename>META-INF/maven/archetype-metadata.xml</filename> file
+            needs modifying so that: </para>
+
+            <itemizedlist>
+              <listitem>
+                <para>filtering is applied to these
+                <filename>.launch</filename> files.</para>
+              </listitem>
+
+              <listitem>
+                <para>an Apache license is applied to this
+                <acronym>XML</acronym> file</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>Since doing this manually would be rather laborious, this has
+        been scripted using Groovy. To make the change, just use:</para>
+
+        <programlisting>cd ..
+groovy updateGeneratedArchetypeSource.groovy
+cd quickstart</programlisting>
+
+        <para>If you want to check this has worked, cd into
+        <filename>target/generated-sources/archetype/src/main/resources/archetype-resources</filename>
+        and search for .launch files.</para>
+
+        <note>
+          <para>This script is NOT rerunnable (because it results in the
+          <filename>.launch</filename> files not being valid XML)</para>
+        </note>
+      </sect1>
+
+      <sect1>
+        <title>Manually edit the generated archetype source</title>
+
+        <sect2>
+          <title>pom.xml</title>
+
+          <para>Most of the manual edits required are to the
+          <filename>pom.xml</filename> file.</para>
+
+          <sect3>
+            <title>Apache License</title>
+
+            <para>The first edit is to add in the ASL license:</para>
+
+            <programlisting>&lt;!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+--&gt;</programlisting>
+          </sect3>
+
+          <sect3>
+            <title>Parent</title>
+
+            <para>The archetype will ultimately be released and distributed
+            along with the rest of Isis. Its POM should therefore reference
+            the Isis parent:</para>
+
+            <para>*** The second edit is so that its parent is the
+            org.apache:apache. This provides the deployment
+            configuration:</para>
+
+            <programlisting>&lt;parent&gt;
+    &lt;groupId&gt;org.apache&lt;/groupId&gt;
+    &lt;artifactId&gt;apache&lt;/artifactId&gt;
+    &lt;version&gt;9&lt;/version&gt;
+&lt;/parent&gt;</programlisting>
+          </sect3>
+
+          <sect3>
+            <title>Name</title>
+
+            <para>By default the name of the archetype is derived from the
+            quickstart prototype application. Although not mandatory, we
+            should edit it to make it a little more descriptive:</para>
+
+            <programlisting>&lt;name&gt;Apache Isis Quickstart Archetype&lt;/name</programlisting>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Archetype Metadata
+          (<filename>src/main/resources/META-INF/maven/archetype-metadata.xml</filename>)</title>
+
+          <para>The <filename>archetype-metadata.xml</filename> file lists
+          each of the files that constitute the archetype, using a wildcard
+          syntax). Given that the archetype is generated by exporting out of
+          the subversion/Eclipse workspace, all files should be relevant. Even
+          then, it is probably worth reviewing to ensure that no files have
+          been accidentally included:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>there should be no .log files lists;</para>
+            </listitem>
+
+            <listitem>
+              <para>there should be no .settings directories;</para>
+            </listitem>
+
+            <listitem>
+              <para>there should be no .project or ,classpath files</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Update the file if necessary.</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Verify that the archetype works</title>
+
+        <para>See the <ulink
+        url="https://cwiki.apache.org/confluence/display/ISIS/RecreatingMavenArchetypeFromProject">wiki</ulink>
+        for further details.</para>
+      </sect1>
+
+      <sect1>
+        <title>Commit the archetype</title>
+
+        <para>See the <ulink
+        url="https://cwiki.apache.org/confluence/display/ISIS/RecreatingMavenArchetypeFromProject">wiki</ulink>
+        for further details.</para>
+      </sect1>
+    </appendix>
   </part>
 </book>
