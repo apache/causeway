@@ -21,11 +21,11 @@
 # 
 #
 
-alias mcia="mvn clean install -D modules=all -o"
-alias mci="mvn clean install -D modules=standard -o"
+alias mcia="mvn clean install -D modules=all"
+alias mci="mvn clean install -D modules=standard"
 
-alias msdf="mvn site-deploy -D modules=standard -D site=full -D deploy=local -o"
-alias msd="mvn site-deploy -D modules=standard -D deploy=local -o"
+alias msdf="mvn site-deploy -D modules=standard -D site=full -D deploy=local"
+alias msd="mvn site-deploy -D modules=standard -D deploy=local"
 
 alias svnst="svn status --ignore-externals | grep -v ^X"
 alias svnup="svn update --ignore-externals | grep -v ^X"
