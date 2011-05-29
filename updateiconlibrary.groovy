@@ -95,7 +95,7 @@ def appendImgRef(buf, fileName) {
   buf
 }
 
-def colsPerRow = [ haywood: 8, nogl: 16, tango: 8]
+def colsPerRow = [ haywood: 8, nogl: 12, tango: 8]
 
 iconsByCategoryByPage.each { pageName, iconsByCategory ->
   def pageFile = new File(iconPageDir, pageName + ".html")
@@ -104,18 +104,23 @@ iconsByCategoryByPage.each { pageName, iconsByCategory ->
   def numCols = colsPerRow[pageName]
   def buf = new StringBuilder()
 
-  buf.append("<html><head><title>${pageName}</title></head><body>")
-  buf.append("<p style='padding:20pt'>Download <a href='../images/icons/${pageName}.zip'>zip</a></p>")
-  buf.append("<table style='padding:10pt'>\n")
+  buf.append("<html><head><title>${pageName}</title></head><body>\n")
+  buf.append("<!-- START SNIPPET: icon-table -->\n")
 
-  def numIcons = 0
-  def rowStarted = false
+  //def numIcons = 0
+  //buf.append("<table>\n")
 
   iconsByCategory.each { categoryName, iconsByName ->
 
+    def numIcons = 0
+    def rowStarted = false
+
+    def categoryNameCapitalized = 
+        categoryName[0].toUpperCase() + categoryName[1..-1]
     if (!categoryName.equals("all")) {
-      buf.append("<p style='padding:20pt'>${categoryName}</p>")
+      buf.append("<p>${categoryNameCapitalized}</p>")
     }
+    buf.append("<table>\n")
 
     iconsByName.each { iconName, iconList ->
 
@@ -124,9 +129,9 @@ iconsByCategoryByPage.each { pageName, iconsByCategory ->
         rowStarted = true
       }
       
-      buf.append("<td style='padding:10pt'>")
+      buf.append("<td>")
       iconList.each {
-        appendImgRef(buf, "../" + it)
+        appendImgRef(buf, it)
       }
       buf.append("</td>")
 
@@ -136,17 +141,25 @@ iconsByCategoryByPage.each { pageName, iconsByCategory ->
         rowStarted = false
       }
     }
+    if (rowStarted) {
+      def numCellsToCompleteRow = numIcons%numCols
+      numCellsToCompleteRow.each {
+        buf.append("<td/>")
+      }
+      buf.append("</tr>\n")
+      //numIcons=0
+    }
+    //buf.append("<tr>\n")
+    //numCols.each {
+      //buf.append("<td/>")
+    //}
+    //buf.append("</tr>\n")
+    buf.append("</table>\n")
   }
 
-  if (rowStarted) {
-    def numCellsToCompleteRow = numIcons%4
-    numCellsToCompleteRow.each {
-      buf.append("<td/>")
-    }
-    buf.append("</tr>\n")
-  }
-  buf.append("</table>\n")
-  buf.append("</body></html>")
+  //buf.append("</table>\n")
+  buf.append("<!-- END SNIPPET: icon-table -->\n")
+  buf.append("</body></html>\n")
 
   def pageFileText = buf.toString()
   pageFile.text = pageFileText

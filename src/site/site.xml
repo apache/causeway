@@ -22,7 +22,7 @@
 	<skin>
 		<groupId>org.apache.isis.skins</groupId>
 		<artifactId>classic-skin</artifactId>
-		<version>0.1.2-RC1-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating-SNAPSHOT</version>
 	</skin>
 
 	<version position="right" />
@@ -43,6 +43,7 @@
 			<item name="Downloads" href="downloads.html" />
             <item name="Documentation" href="documentation.html" />
             <item name="Screencasts" href="screencasts.html"/>
+            <item name="Icons" href="icons.html" />
             <item name="IDE Support" href="ide-support.html"/>
             <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
 		</menu>

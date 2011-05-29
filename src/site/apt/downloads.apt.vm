@@ -43,8 +43,6 @@ Release
  
  In both cases, you can use the {{{http://www.apache.org/incubator/dist/isis/KEYS}KEYS}} to verify the archives.
  
-  
- 
 Snapshot Releases
 
   We occasionally release snapshots of the current codebase through the 
@@ -74,4 +72,9 @@ mvn clean install
   Again, see the contributors guide (({{{./docbkx/html/guide/isis-contributors-guide.html}HTML or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}}) 
   for more details.
    
+
+Icons
   
+ In addition to the source and binary releases, there are also a number of {{{./icons.html}icon sets}} you can use in your own applicatoins.
+ 
+   

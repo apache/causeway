@@ -1,0 +1,10 @@
+These icons have been donated by Naked Objects Group Ltd, as part
+of their contribution of Naked Objects Framework to the
+Apache Software Foundation.
+
+They may be used freely and without restriction.
+
+created by:
+
+Ian Head
+Richard Pawson

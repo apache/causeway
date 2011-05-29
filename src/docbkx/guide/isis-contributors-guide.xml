@@ -711,20 +711,26 @@
 
             <itemizedlist>
               <listitem>
-                <para><code>skin</code></para>
-
-                <para>Using <code>-D modules=skin</code> will build just the
-                skin module</para>
-              </listitem>
-
-              <listitem>
-                <para><code>standard</code></para>
+                <para><code>all</code></para>
 
                 <para>This is the default, so can be omitted if no other -D
                 properties are specified.</para>
 
-                <para>Using <code>-D modules=standard</code> will build all
+                <para>Using <code>-D modules=</code>all will build all
                 modules.</para>
+              </listitem>
+
+              <listitem>
+                <para><code>site</code></para>
+
+                <para>Using <code>-D modules=site</code> will build just the
+                modules that constitute the site. This excludes the site-skin
+                module (which doesn't reply apply) and the quickstart
+                archetype (which is reverse engineered from a 'prototype'
+                application and doesn't have the usual site "trimmings". Note
+                that the usage of the quickstart archetype is documented in
+                the main site (in pages of
+                <package>[oai:isis]</package>).</para>
               </listitem>
 
               <listitem>
@@ -788,21 +794,16 @@
 
                 <para>Using <code>-D deploy=local</code> will deploy the site
                 to <filename>/tmp/m2-sites/isis</filename>, where you can
-                check it</para>
+                check it. This can then be zipped up and scp'ed for remote
+                deployment.</para>
               </listitem>
             </itemizedlist>
 
-            <para>At the time of writing the profile for remote deployment to
-            Apache's staging server (<code>-D deploy=remote</code>) had not
-            been finalized.</para>
+            <para>We do not deploy the site remotely to Apache's staging
+            server because the time to upload the site artifacts is
+            prohibitive.</para>
           </listitem>
         </itemizedlist>
-
-        <para>The <code>-D modules=xxx</code> and <code>-D site=yyy</code>
-        profiles are pretty much orthogonal; any set of modules can be built
-        with either build profile. The one exception minor exception is that
-        the <filename>release</filename> module (and hence any profile that
-        references it) cannot be built using <code>-D site=full</code>.</para>
       </sect1>
 
       <sect1>
@@ -824,25 +825,19 @@
           <listitem>
             <para>Quick build of site and documentation</para>
 
-            <programlisting>mvn site-deploy -D modules=standard -D deploy=local -o</programlisting>
+            <programlisting>mvn site-deploy -D deploy=local -o</programlisting>
+          </listitem>
+
+          <listitem>
+            <para>Quick build of site and documentation</para>
+
+            <programlisting>mvn site-deploy -D modules=site -D deploy=local -o</programlisting>
           </listitem>
 
           <listitem>
             <para>Full build of site and documentation</para>
 
-            <programlisting>mvn site-deploy -D modules=standard -D site=full -D deploy=local -o</programlisting>
-          </listitem>
-
-          <listitem>
-            <para>Quick build all code and documentation</para>
-
-            <programlisting>mvn clean install site-deploy -D modules=standard -D deploy=local -o</programlisting>
-          </listitem>
-
-          <listitem>
-            <para>Full build of all code and documentation</para>
-
-            <programlisting>mvn clean install site-deploy -D modules=standard -D build=full -D site=full -D deploy=local -o</programlisting>
+            <programlisting>mvn site-deploy -D modules=site -D deploy=local -D site=full -o</programlisting>
           </listitem>
         </itemizedlist>
       </sect1>
@@ -3642,18 +3637,13 @@ public class FooBar {
             </listitem>
 
             <listitem>
-              <para>Move the previous site to one side:</para>
-
-              <programlisting>mv isis isis-yyyymmdd </programlisting>
-
-              <para>where <emphasis>yyyymmdd</emphasis> is the date that the
-              previous version was uploaded</para>
-            </listitem>
-
-            <listitem>
               <para>move the new site into the distribution location:</para>
 
-              <para>mv ~/isis isis</para>
+              <programlisting>mv ~/isis isis-0.x.x-incubating</programlisting>
+
+              <para>where <emphasis>0.x.x</emphasis> should be replaced with
+              the appropriate version number, eg 0.2.0 or 0.3.0-RC1,
+              etc.</para>
             </listitem>
 
             <listitem>
@@ -3664,6 +3654,50 @@ chgrp -R incubator isis
 for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
             </listitem>
           </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Promote the site</title>
+
+          <para>When the new site is ready to be made current:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>If necessary, switch to the destination directory:</para>
+
+              <programlisting>cd /www/incubator.apache.org</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>Either:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>move the previous site to one side:</para>
+
+                  <programlisting>mv isis isis-0.x.w-incubating</programlisting>
+
+                  <para>where <emphasis>0.x.w</emphasis> is the previous
+                  version was uploaded</para>
+                </listitem>
+
+                <listitem>
+                  <para>or simply delete the site:</para>
+
+                  <programlisting>rm -rf isis</programlisting>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>Move the new site into place:</para>
+
+              <programlisting>mv isis-0.x.x-incubating isis</programlisting>
+            </listitem>
+          </itemizedlist>
+
+          <para>The new site should become available within a couple of
+          hours.</para>
         </sect2>
       </sect1>
     </chapter>
@@ -3842,13 +3876,15 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
             </listitem>
 
             <listitem>
-              <para><filename>.java.hsp</filename> are the Structure101
+              <para><filename>.java.hsp</filename> are the <ulink
+              url="http://www.headwaysoftware.com/products/?code=Structure101">Structure101</ulink>
               project files</para>
             </listitem>
 
             <listitem>
               <para><filename>.ucd</filename> and <filename>.ucls</filename>
-              are Soyatec (<acronym>UML</acronym> plugin) project files</para>
+              are <ulink url="http://www.soyatec.com/euml2/">Soyatec
+              (<acronym>UML</acronym> plugin)</ulink> project files</para>
             </listitem>
 
             <listitem>
@@ -4058,21 +4094,33 @@ licenses to remove from supplemental-models.xml (are spurious):
       <sect1 id="sec.MavenReleasePrepare">
         <title>Preparing a Release (<code>mvn release:prepare</code>)</title>
 
-        <para>We recommend creating release candidates from branches, and then
-        the final release from trunk.</para>
+        <para>We recommend creating all releases from branches (including the
+        final release). This allows development to continue on trunk
+        uninterrupted. However, the <filename>mvn-release-plugin</filename> is
+        configured to specify the <code>&lt;tagBase&gt;</code> in the usual
+        location, so tags for both release candidates and final releases all
+        appear in the "usual" location.</para>
 
-        <sect2>
-          <title>Branch (release candidates only)</title>
+        <para>Once a successful final release has been deployed, we do a merge
+        of the updated <acronym>POM</acronym>s from the release branch back
+        into trunk.</para>
+
+        <para>In the sections that follow, we use
+        <emphasis>0.x.x[-RCn]-incubating</emphasis> to represent the version
+        number either for a release candidate or for a final release.</para>
+
+        <sect2 id="sec.ReleaseBranch">
+          <title>Branch</title>
 
           <para>First, create a branch and its own tags directory:</para>
 
-          <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating \
-   -m "branching to create x.x.x-RCn-incubating"
-svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/tags \
-   -m "creating tags for x.x.x-RCn-incubating"
+          <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating \
+   -m "branching to create x.x.x[-RCn]-incubating"
+svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/tags \
+   -m "creating tags for x.x.x[-RCn]-incubating"
 svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
-    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk \
-    -m "copying trunk to branches/x.x.x-RCn-incubating"</programlisting>
+    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk \
+    -m "copying trunk to branches/x.x.x[-RCn]-incubating"</programlisting>
 
           <para>Now create a workspace for this branch. The easiest approach
           is to copy <filename>trunk</filename> and perform an <code>svn
@@ -4081,35 +4129,35 @@ svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
           <programlisting>cd .../trunk   # your local workspace for isis/trunk
 
 cd ..
-mkdir -p branches/x.x.x-RCn-incubating
-cp -R trunk branches/x.x.x-RCn-incubating/trunk
+mkdir -p branches/x.x.x[-RCn]-incubating
+cp -R trunk branches/x.x.x[-RCn]-incubating/trunk
 
-cd branches/x.x.x-RCn-incubating/trunk
-svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk</programlisting>
+cd branches/x.x.x[-RCn]-incubating/trunk
+svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk</programlisting>
 
           <para>Because the release is being performed in a branch, it is then
           necessary to edit the parent <filename>pom.xml</filename> in
           <package>[oai:isis]</package> parent module. Change
           <emphasis>trunk</emphasis> to
-          <emphasis>branches/x.x.x-RCn-incubating/trunk</emphasis> for each of
-          the children of the <code>&lt;scm&gt;</code> tag:</para>
+          <emphasis>branches/x.x.x[-RCn]-incubating/trunk</emphasis> for each
+          of the children of the <code>&lt;scm&gt;</code> element:</para>
 
           <programlisting>&lt;scm&gt;
   &lt;connection&gt;
-    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/
+    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/
   &lt;/connection&gt;
   &lt;developerConnection&gt;
-    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/
+    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/
   &lt;/developerConnection&gt;
   &lt;url&gt;
-    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/
+    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/
   &lt;/url&gt;
 &lt;/scm&gt;</programlisting>
 
           <para>Then commit the <filename>pom.xml</filename> file.</para>
         </sect2>
 
-        <sect2>
+        <sect2 id="sec.ReleaseUpdateArchetypeResources">
           <title>Update <code>&lt;version&gt;</code> in archetype
           resources</title>
 
@@ -4128,7 +4176,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
           and update the <code>&lt;isis.version&gt;</code> property:</para>
 
           <programlisting>&lt;properties&gt;
-    &lt;isis.version&gt;0.x.x-RCn-incubating-SNAPSHOT&lt;/isis.version&gt;
+    &lt;isis.version&gt;0.x.x[-RCn]-incubating-SNAPSHOT&lt;/isis.version&gt;
 &lt;/properties&gt;</programlisting>
         </sect2>
 
@@ -4171,7 +4219,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-in
 [INFO]   ignoring changes on: pom.xml.next, release.properties, pom.xml.releaseBackup, 
          pom.xml.backup, pom.xml.branch, pom.xml.tag
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive status"
-[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-RCn-incubating\trunk
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x[-RCn]-incubating\trunk
 [INFO] Checking dependencies and plugins for snapshots ...
 What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incubating: : </programlisting>
 
@@ -4184,13 +4232,13 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
               release candidate), or <emphasis>0.x.x-incubating</emphasis> (if
               performing the actual release):</para>
 
-              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x-RCn-incubating</programlisting>
+              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x[-RCn]-incubating</programlisting>
             </listitem>
 
             <listitem>
               <para>the SCM release tag as the default:</para>
 
-              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-RCn-incubating: </programlisting>
+              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x[-RCn]-incubating: </programlisting>
             </listitem>
 
             <listitem>
@@ -4199,12 +4247,12 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
               so, specify the <literal>-SNAPSHOT</literal> of the next version
               expected for development.</para>
 
-              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-RCm-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x[-RCm]-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
             </listitem>
           </itemizedlist>
         </sect2>
 
-        <sect2>
+        <sect2 id="sec.ReleaseProper">
           <title>Release Proper</title>
 
           <para>Assuming that the dry run has succeeded, it's time to create
@@ -4234,13 +4282,13 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
               release candidate), or <emphasis>0.x.x-incubating</emphasis> (if
               performing the actual release):</para>
 
-              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x-RCn-incubating</programlisting>
+              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x[-RCn]-incubating</programlisting>
             </listitem>
 
             <listitem>
               <para>the SCM release tag as the default:</para>
 
-              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-RCn-incubating: </programlisting>
+              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x[-RCn]-incubating: </programlisting>
             </listitem>
 
             <listitem>
@@ -4249,7 +4297,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
               so, specify the <literal>-SNAPSHOT</literal> of the next version
               expected for development.</para>
 
-              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-RCm-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x[-RCm]-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
             </listitem>
           </itemizedlist>
 
@@ -4260,11 +4308,11 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <programlisting>[INFO] Checking in modified POMs...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive 
        commit --file /users/uuuuuuuu/maven-scm-1762417972.commit --targets /tmp/maven-scm-5153433587636484699-targets"
-[INFO] Working directory: D:\svn\ai\branches\0.x.x-RCn-incubating\trunk
-[INFO] Tagging release with the label isis-0.x.x-RCn-incubating...
+[INFO] Working directory: D:\svn\ai\branches\0.x.x[-RCn]-incubating\trunk
+[INFO] Tagging release with the label isis-0.x.x[-RCn]-incubating...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file /tmp/maven-scm-259416193.commit --revision 1126567 
-       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/trunk/ 
-       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RCn-incubating/tags/isis-0.x.x-RCn-incubating"
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/ 
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/tags/isis-0.x.x-RCn-incubating"
 [INFO] Working directory: /users/uuuuuuuu/branches/0.1.2-rc1-incubating/trunk
 [INFO] ------------------------------------------------------------------------
 [ERROR] BUILD FAILURE
@@ -4277,9 +4325,10 @@ The svn tag command failed.
 Command output:
 svn: No such revision 1126567</programlisting>
 
-          <para>This is due to the SVN mirroring in place between Europe and
-          the master in the US. When you make a commit, it isn't immediately
-          available in Europe to svn up to. If this is occurs, then:</para>
+          <para>This is due to the <acronym>SVN</acronym> mirroring in place
+          between Europe and the master in the US. When you make a commit, it
+          isn't immediately available in Europe to svn up to. If this is
+          occurs, then:</para>
 
           <itemizedlist>
             <listitem>
@@ -4305,7 +4354,7 @@ svn: No such revision 1126567</programlisting>
           the event of failures.</para>
         </sect2>
 
-        <sect2>
+        <sect2 id="sec.ReleasePostPrepareSanityCheck">
           <title>Post-prepare sanity check</title>
 
           <para>You should end up with artifacts in your local repo with the
@@ -4324,7 +4373,7 @@ svn: No such revision 1126567</programlisting>
     -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.support \
     -D archetypeArtifactId=quickstart-archetype \
-    -D archetypeVersion=0.x.x-RCn-incubating</programlisting>
+    -D archetypeVersion=0.x.x[-RCn]-incubating</programlisting>
 
               <para>Check that the generated app's artifacts point to the
               correct version of <emphasis>Isis</emphasis> (specifically:
@@ -4333,10 +4382,11 @@ svn: No such revision 1126567</programlisting>
             </listitem>
 
             <listitem>
-              <para>unzip the source-release ZIP and check it compiles</para>
+              <para>unzip the source-release <acronym>ZIP</acronym> and check
+              it compiles</para>
 
-              <para>The ZIP file resides in
-              <filename>isis-0.x.x-RCn-incubating-incubating-source-release.zip</filename>
+              <para>The <acronym>ZIP</acronym> file resides in
+              <filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>
               in <filename>target</filename> directory of the parent
               <package>[oai:isis]</package> module. Unzip in a new directory,
               and build using <code>mvn clean install</code> (and <code>mvn
@@ -4351,9 +4401,9 @@ svn: No such revision 1126567</programlisting>
           <para>If you find problems and the release was performed on trunk
           then you may need to revert the changes. The release commands make
           and commit changes to the project's <filename>pom.xml</filename>
-          files and they create a tag in SVN; you'll need to revert the
-          <filename>pom.xml</filename> files and delete the tag from
-          SVN.</para>
+          files and they create a tag in <acronym>SVN</acronym>; you'll need
+          to revert the <filename>pom.xml</filename> files and delete the tag
+          from <acronym>SVN</acronym>.</para>
         </sect2>
       </sect1>
 
@@ -4374,18 +4424,18 @@ svn: No such revision 1126567</programlisting>
 
           <itemizedlist>
             <listitem>
-              <para><filename>isis-0.x.x-RCn-incubating-incubating-source-release.zip</filename>,
+              <para><filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>,
               and</para>
             </listitem>
 
             <listitem>
-              <para><filename>isis-0.x.x-RCn-incubating-incubating-source-release.zip.asc</filename></para>
+              <para><filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip.asc</filename></para>
             </listitem>
           </itemizedlist>
 
-          <para>Upload these to your public_html directory on
-          people.apache.org so that they can be referenced in your vote email
-          (see <xref linkend="sec.Voting" />).</para>
+          <para>Upload these to your <filename>public_html</filename>
+          directory on people.apache.org so that they can be referenced in
+          your vote email (see <xref linkend="sec.Voting" />).</para>
         </sect2>
 
         <sect2>
@@ -4413,8 +4463,8 @@ svn: No such revision 1126567</programlisting>
             <programlisting>[INFO] [release:perform {execution: default-cli}]
 [INFO] Checking out the project to perform the release ...
 [INFO] Executing: cmd.exe /X /C 
-       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-RCn-incubating/tags/isis-0.x.x-RCn-incubating 
-        /users/uuuuuuuu/ai/branches/0.x.x-RCn-incubating/trunk/target/checkout"
+       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x[-RCn]-incubating 
+        /users/uuuuuuuu/ai/branches/0.x.x[-RCn]-incubating/trunk/target/checkout"
 [INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-RCn-incubating/trunk/target/
 ...</programlisting>
 
@@ -4521,11 +4571,18 @@ svn: No such revision 1126567</programlisting>
       <sect1 id="sec.Voting">
         <title>Voting</title>
 
-        <para>Once the artifacts have been uploaded, you can call a vote.
-        Votes last for 72 hours and require a +3 vote from members. While
-        incubating, this vote should be performed on the
+        <para>Once the artifacts have been uploaded, you can call a
+        vote.</para>
+
+        <para>While incubating, this vote should be performed on the
         isis-dev@incubator.apache.org mailing list, and then repeated on the
-        incubator@apache.org mailing list.</para>
+        incubator@apache.org mailing list. We use isis-dev@incubator.a.o to
+        vote on release candidates; after a release candidate has been
+        approved there, we re-cut a final release using the same revision of
+        trunk and then ask incubator@a.o to vote on that final release.</para>
+
+        <para>In all cases, votes last for 72 hours and require a +3 vote from
+        members.</para>
 
         <sect2 id="sec.VotingThread">
           <title>Start voting thread on isis-dev@incubator.a.o</title>
@@ -4550,7 +4607,9 @@ The code has been tagged as tags/0.x.x-RCn-incubating.
 In addition, the Maven artifacts have been staged to staging repository on repository.apache.org:
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/
 
-The RAT checks have passed (see contributors guide for files that are considered as being excluded).
+I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-RCn-incubating.  
+The contributors guide on the site contains some suggestions of how to verify the release, see
+http://incubator.apache.org/isis-0.x.x-RCn-incubating/docbkx/html/guide/ch13s06.html#d0e4034
 
 Please verify the release and cast your vote.  The vote will be open for 72 hours.
 
@@ -4641,17 +4700,88 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
   +1 (non binding): &lt;&lt;list of names&gt;&gt;
 
 I will now recreate this release (with no -RCn suffix) from the same revision of trunk, and submit for voting on the incubator.</programlisting>
+        </sect2>
 
-          <para>Then, cut a new release, this time with no -RCn suffix, and
-          move onto the next step.</para>
+        <sect2>
+          <title>Cutting the Final Release</title>
 
-          <para><note>
-              <para>care should be taken to ensure that the new release is
-              based on the same version as the approved release candidate. One
-              way to do this is to ensure that the local copy from which the
-              release is taken is obtained specifying the correct SVN
-              revision.</para>
-            </note></para>
+          <para>Once isis-dev has approved a release candidate, a new final
+          release should be cut from trunk so that it can be voted on by
+          incubator@a.o. Care should be taken to ensure that the new release
+          is based on the same version as the approved release
+          candidate:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>create a new branch to cut the release:</para>
+
+              <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-incubating/ \
+      -m "creating new branches/0.x.x-incubating in order to cut release"</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>identify the revision of trunk to use.</para>
+
+              <para>Go back over previous commit messages and look for the
+              copy of trunk taken to the release candidate branch, eg:</para>
+
+              <programlisting>Author: danhaywood
+Date: Wed May 25 12:21:39 2011
+New Revision: 1127492
+
+URL: http://svn.apache.org/viewvc?rev=1127492&amp;view=rev
+Log:
+copying latest trunk to a new branches/0.1.2-RC1-incubating/trunk
+
+Added:
+    incubator/isis/branches/0.1.2-RC1-incubating/trunk/
+      - copied from r1127491, incubator/isis/trunk/</programlisting>
+
+              <para>Whichever revision was copied from (in the above,
+              r1127491) is the one to use.</para>
+            </listitem>
+
+            <listitem>
+              <para>copy over the appropriate revision from trunk to the
+              branch:</para>
+
+              <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk@nnnnnnn \
+    https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-incubating/ \
+    -m "copying trunk to a new branches/0.x.x-incubating/trunk"</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>perform the required manual updates to the copied
+              code:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>update SCM tags (see <xref
+                  linkend="sec.ReleaseBranch" />)</para>
+                </listitem>
+
+                <listitem>
+                  <para>update archetype resources (see <xref
+                  linkend="sec.ReleaseUpdateArchetypeResources" />)</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>prepare the release (see <xref
+              linkend="sec.ReleaseProper" />)</para>
+            </listitem>
+
+            <listitem>
+              <para>sanity check the release (see <xref
+              linkend="sec.ReleasePostPrepareSanityCheck" />)</para>
+            </listitem>
+
+            <listitem>
+              <para>upload the release artifacts (see <xref
+              linkend="sec.UploadReleaseForVoting" />)</para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
