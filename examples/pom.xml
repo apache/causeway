@@ -56,6 +56,7 @@
      -->
 
     <modules>
+        <module>quickstart</module>
         <module>orders</module>
         <module>library</module>
         <module>ecs</module>

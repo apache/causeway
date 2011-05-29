@@ -25,8 +25,7 @@ Where to Start?
 
 +------------------------------------------------------------
 mvn archetype:generate  \
-    -D archetypeCatalog=http://incubator.apache.org/isis \
-    -D archetypeGroupId=org.apache.isis.support \
+    -D archetypeGroupId=org.apache.isis \
     -D archetypeArtifactId=quickstart-archetype \
     -D groupId=com.mycompany \
     -D artifactId=myapp

@@ -1425,7 +1425,7 @@
                 <module>progmodels</module>
                 <module>security</module>
                 <module>viewer</module>
-                <module>support</module>
+                <module>quickstart-archetype</module>
             </modules>
         </profile>
 
@@ -1548,15 +1548,15 @@
             </modules>
         </profile>
         <profile>
-            <id>modules-support</id>
+            <id>modules-quickstart-archetype</id>
             <activation>
                 <property>
                     <name>modules</name>
-                    <value>support</value>
+                    <value>quickstart-archetype</value>
                 </property>
             </activation>
             <modules>
-                <module>support</module>
+                <module>quickstart-archetype</module>
             </modules>
         </profile>
 
