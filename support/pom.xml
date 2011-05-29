@@ -35,8 +35,8 @@
         <!-- REVIEW -->
         <current40xVersion>4.0</current40xVersion>
 
-		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>support/</relativeUrl>
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>support/</relativeUrl>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -51,7 +51,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
+                <version>${maven-project-info-reports-plugin}</version>
                 <inherited>true</inherited>
                 <reportSets>
                     <reportSet>
