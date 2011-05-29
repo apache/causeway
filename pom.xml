@@ -700,6 +700,7 @@
                         <!-- overriddes the default ('clean verify') as workaround -->
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <tagBase>https://svn.apache.org/repos/asf/incubator/isis/tags/</tagBase>
                     </configuration>
                     <!-- goal:clean (for aggregator modules) has no bindings; 
                         cleans up release.properties and any backup POM files -->
@@ -1183,17 +1184,6 @@
         </site>
     </distributionManagement>
 
-    <modules>
-        <module>site-skin</module>
-        <module>applib</module>
-        <module>core</module>
-        <module>runtimes</module>
-        <module>progmodels</module>
-        <module>security</module>
-        <module>viewer</module>
-        <module>support</module>
-    </modules>
-
     <profiles>
         <profile>
             <id>build-full</id>
@@ -1419,6 +1409,43 @@
             <properties>
                 <distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
             </properties>
+        </profile>
+
+
+        <profile>
+            <id>modules-all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>site-skin</module>
+                <module>applib</module>
+                <module>core</module>
+                <module>runtimes</module>
+                <module>progmodels</module>
+                <module>security</module>
+                <module>viewer</module>
+                <module>support</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-site</id>
+            <!-- modules that make up the site -->
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>site</value>
+                </property>
+            </activation>
+            <modules>
+                <module>applib</module>
+                <module>core</module>
+                <module>runtimes</module>
+                <module>progmodels</module>
+                <module>security</module>
+                <module>viewer</module>
+            </modules>
         </profile>
 
         <profile>
