@@ -21,9 +21,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-      <groupId>org.apache</groupId>
-      <artifactId>apache</artifactId>
-      <version>9</version>
+      <groupId>org.apache.isis</groupId>
+      <artifactId>isis</artifactId>
+      <version>0.1.2-incubating-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.isis.support</groupId>
@@ -51,4 +51,6 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  
 </project>
