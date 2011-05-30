@@ -5626,14 +5626,10 @@ cd quickstart</programlisting>
             along with the rest of Isis. Its POM should therefore reference
             the Isis parent:</para>
 
-            <para>*** The second edit is so that its parent is the
-            org.apache:apache. This provides the deployment
-            configuration:</para>
-
             <programlisting>&lt;parent&gt;
-    &lt;groupId&gt;org.apache&lt;/groupId&gt;
-    &lt;artifactId&gt;apache&lt;/artifactId&gt;
-    &lt;version&gt;9&lt;/version&gt;
+    &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
+    &lt;artifactId&gt;isis&lt;/artifactId&gt;
+    &lt;version&gt;0.x.x-incubating-SNAPSHOT&lt;/version&gt;
 &lt;/parent&gt;</programlisting>
           </sect3>
 
@@ -5649,7 +5645,7 @@ cd quickstart</programlisting>
         </sect2>
 
         <sect2>
-          <title>Archetype Metadata
+          <title>Archetype metadata
           (<filename>src/main/resources/META-INF/maven/archetype-metadata.xml</filename>)</title>
 
           <para>The <filename>archetype-metadata.xml</filename> file lists
@@ -5661,19 +5657,44 @@ cd quickstart</programlisting>
 
           <itemizedlist>
             <listitem>
-              <para>there should be no .log files lists;</para>
+              <para>there should be no <filename>.log</filename> files
+              lists;</para>
             </listitem>
 
             <listitem>
-              <para>there should be no .settings directories;</para>
+              <para>there should be no <filename>.settings</filename>
+              directories;</para>
             </listitem>
 
             <listitem>
-              <para>there should be no .project or ,classpath files</para>
+              <para>there should be no <filename>.project</filename> or
+              <filename>.classpath</filename> files</para>
             </listitem>
           </itemizedlist>
 
           <para>Update the file if necessary.</para>
+        </sect2>
+
+        <sect2>
+          <title>Remote resource plugin
+          (<filename>src/main/appended-resources/supplemental-models.xml</filename>)</title>
+
+          <para>An empty copy of
+          <filename>src/main/appended-resources/supplemental-models.xml</filename>
+          is also required:</para>
+
+          <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;supplementalDataModels 
+  xmlns="http://maven.apache.org/supplemental-model/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/supplemental-model/1.0.0 
+            http://maven.apache.org/xsd/supplemental-model-1.0.0.xsd"&gt;
+
+&lt;/supplementalDataModels&gt;</programlisting>
+
+          <para>This is as the result of the
+          <filename>maven-remote-resource-plugin</filename> plugin inherited
+          from the parent <acronym>POM</acronym>.</para>
         </sect2>
       </sect1>
 
