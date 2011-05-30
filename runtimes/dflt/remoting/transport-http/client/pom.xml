@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 		<artifactId>transport-http</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.1.2-RC2-incubating</version>
 	</parent>
 
 	<artifactId>transport-http-client</artifactId>

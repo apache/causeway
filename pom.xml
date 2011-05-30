@@ -17,8 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -29,7 +28,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>isis</artifactId>
-    <version>0.1.2-incubating-SNAPSHOT</version>
+    <version>0.1.2-RC2-incubating</version>
 
     <packaging>pom</packaging>
 
@@ -71,7 +70,7 @@
 
     <properties>
         <siteBaseDir>.</siteBaseDir>
-        <relativeUrl></relativeUrl>
+        <relativeUrl />
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -97,9 +96,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC2-incubating/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC2-incubating/trunk/</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC2-incubating/trunk/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.1.2-RC2-incubating</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.1.2-RC2-incubating</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.1.2-RC2-incubating</url>
     </scm>
 
     <!-- used in Site generation for relative references. -->
@@ -565,8 +564,7 @@
                                 <highlightSource>1</highlightSource>
 
                                 <postProcess>
-                                    <copy todir="target/docbkx/html/guide"
-                                        failonerror="false">
+                                    <copy todir="target/docbkx/html/guide" failonerror="false">
                                         <fileset dir="src/docbkx/guide">
                                             <include name="images/**/*" />
                                         </fileset>
@@ -574,8 +572,7 @@
                                             <include name="*.css" />
                                         </fileset>
                                     </copy>
-                                    <copy todir="target/site/docbkx/html"
-                                        failonerror="false">
+                                    <copy todir="target/site/docbkx/html" failonerror="false">
                                         <fileset dir="target/docbkx/html">
                                             <include name="**/*" />
                                         </fileset>
@@ -606,17 +603,14 @@
                                         </fileset>
                                     </copy>
 
-                                    <copy todir="${basedir}/target/docbkx/pdf"
-                                        failonerror="false">
-                                        <fileset
-                                            dir="${basedir}/src/docbkx/guide">
+                                    <copy todir="${basedir}/target/docbkx/pdf" failonerror="false">
+                                        <fileset dir="${basedir}/src/docbkx/guide">
                                             <include name="images/**/*" />
                                         </fileset>
                                     </copy>
                                 </preProcess>
                                 <postProcess>
-                                    <copy todir="target/site/docbkx/pdf"
-                                        failonerror="false">
+                                    <copy todir="target/site/docbkx/pdf" failonerror="false">
                                         <fileset dir="target/docbkx/pdf">
                                             <include name="**/*" />
                                         </fileset>
@@ -915,12 +909,12 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -928,35 +922,35 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>core</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
 
             <!-- isis: progmodels -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
 
             <!-- isis: security -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>security</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
 
             <!-- isis: runtime -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>runtimes</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
 
             <!-- isis: viewer -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>viewer</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
 
 

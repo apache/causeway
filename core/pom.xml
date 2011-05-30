@@ -17,19 +17,18 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.1.2-RC2-incubating</version>
 	</parent>
 
 	<groupId>org.apache.isis</groupId>
 	<artifactId>core</artifactId>
-    <version>0.1.2-incubating-SNAPSHOT</version>
+    <version>0.1.2-RC2-incubating</version>
 	
 	<name>Isis Core</name>
 	
@@ -111,12 +110,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>testsupport</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>testsupport</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -124,12 +123,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>commons</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>commons</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 				<type>test-jar</type>
 			</dependency>
 
@@ -137,12 +136,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>metamodel</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>metamodel</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 				<type>test-jar</type>
 			</dependency>
 
@@ -150,12 +149,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>progmodel</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>progmodel</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -163,12 +162,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>runtime</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>runtime</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 				<type>test-jar</type>
 			</dependency>
 
@@ -176,12 +175,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>webapp</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>webapp</artifactId>
-				<version>0.1.2-incubating-SNAPSHOT</version>
+				<version>0.1.2-RC2-incubating</version>
 				<type>test-jar</type>
 			</dependency>
 

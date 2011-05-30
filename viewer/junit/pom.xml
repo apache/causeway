@@ -17,14 +17,13 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis</groupId>
         <artifactId>viewer</artifactId>
-        <version>0.1.2-incubating-SNAPSHOT</version>
+        <version>0.1.2-RC2-incubating</version>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
@@ -36,8 +35,8 @@
         <siteBaseDir>../..</siteBaseDir>
         <relativeUrl>viewer/junit/</relativeUrl>
 
-        <wrapper-progmodel.version>0.1.2-incubating-SNAPSHOT</wrapper-progmodel.version>
-        <identity-bytecode.version>0.1.2-incubating-SNAPSHOT</identity-bytecode.version>
+        <wrapper-progmodel.version>0.1.2-RC2-incubating</wrapper-progmodel.version>
+        <identity-bytecode.version>0.1.2-RC2-incubating</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
@@ -88,7 +87,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC2-incubating</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -23,12 +23,12 @@
     <parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>objectstores</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.1.2-RC2-incubating</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 	<artifactId>xml</artifactId>
-	<version>0.1.2-incubating-SNAPSHOT</version>
+	<version>0.1.2-RC2-incubating</version>
 
 	<name>Default Runtime XML ObjectStore</name>
 
