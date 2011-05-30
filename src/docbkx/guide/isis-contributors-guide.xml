@@ -3562,7 +3562,7 @@ public class FooBar {
           <programlisting>&lt;archetype-catalog&gt;
   &lt;archetypes&gt;
     &lt;archetype&gt;
-       &lt;groupId&gt;org.apache.isis.support&lt;/groupId&gt;
+       &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
        &lt;artifactId&gt;quickstart-archetype&lt;/artifactId&gt;
        &lt;version&gt;x.x.x-incubating-SNAPSHOT&lt;/version&gt;
        &lt;repository&gt;http://repository.apache.org/content/groups/snapshots-group/&lt;/repository&gt;
@@ -4172,8 +4172,8 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-
 
           <para>Therefore, open up the
           <filename>src/main/resources/archetype-resources/pom.xml</filename>
-          in the <package>[oai.support:quickstart-archetype]</package> module,
-          and update the <code>&lt;isis.version&gt;</code> property:</para>
+          in the <package>[oai:quickstart-archetype]</package> module, and
+          update the <code>&lt;isis.version&gt;</code> property:</para>
 
           <programlisting>&lt;properties&gt;
     &lt;isis.version&gt;0.x.x[-RCn]-incubating-SNAPSHOT&lt;/isis.version&gt;
@@ -4265,12 +4265,20 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <para>Then, run the prepare step (skipping tests will reduce the
           elapsed time):</para>
 
-          <programlisting>mvn release:prepare -P apache-release,integration-tests -D skipTests=true</programlisting>
+          <programlisting>mvn release:prepare -P apache-release,integration-tests -D resume=false -D skipTests=true</programlisting>
 
           <note>
             <para>The <code>-P integration-tests</code> flag is required in
             order to include the
             <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+          </note>
+
+          <note>
+            <para>The <code>-D resume=false</code> flag is required because
+            (at least once) the plugin seemed to consider the prepare goal to
+            already have been performed even though only a <code>dryRun</code>
+            was performed. It's possible that the -P integration-tests profile
+            caused this.</para>
           </note>
 
           <para>Enter:</para>
@@ -4371,7 +4379,7 @@ svn: No such revision 1126567</programlisting>
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D archetypeCatalog=local \
-    -D archetypeGroupId=org.apache.isis.support \
+    -D archetypeGroupId=org.apache.isis \
     -D archetypeArtifactId=quickstart-archetype \
     -D archetypeVersion=0.x.x[-RCn]-incubating</programlisting>
 
@@ -4455,7 +4463,7 @@ svn: No such revision 1126567</programlisting>
 
             <para>The command to stage the release is:</para>
 
-            <programlisting>mvn release:perform -Papache-release</programlisting>
+            <programlisting>mvn release:perform -P apache-release</programlisting>
 
             <para>The command starts off by checking out the codebase from the
             tag:</para>
