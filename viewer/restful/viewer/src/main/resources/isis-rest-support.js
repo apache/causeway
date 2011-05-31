@@ -75,24 +75,27 @@ function reasonInvalidDomIdOnFailure(memberType, memberId) {
  */
 function invokeUri(verb, uri, uriOnSuccess, reasonInvalidDomIdOnFailure) {
 	//debugger;
-	var xhr = new XMLHttpRequest;
-	xhr.open(verb, uri, false);
-	xhr.setRequestHeader("Accept", "text/html");
-	xhr.send(null);
-	if (xhr.status >= 200 && xhr.status < 300) {
-		window.location = uriOnSuccess;
-	} else if (xhr.status >= 400 && xhr.status < 500) {
-		// client error
-		reason = xhr.getResponseHeader("nof-reason");
-		if (!reason) {
-			reason = "invalid (unable to determine reason)";
-		}
-		reasonInvalidPara = document.getElementById(reasonInvalidDomIdOnFailure);
-		if (reasonInvalidPara) {
-			reasonInvalidPara.innerHTML = reason;
-		}
-	} else {
-		alert(xhr.status)
+	var xhr = jQuery.ajax( {
+	    url: uri,
+	    type: verb,
+	    dataType: 'xml',
+	    success: function(data, textStatus, jqXHR) {
+	        window.location = uriOnSuccess;
+	    },
+	    error: function(jqXHR, textStatus, errorThrown) {
+	        if (jqXHR.status >= 400 && jqXHR.status < 500) {
+                reason = jqXHR.getResponseHeader("isis-reason");
+                if (!reason) {
+                    reason = "invalid (unable to determine reason)";
+                }
+                reasonInvalidPara = document.getElementById(reasonInvalidDomIdOnFailure);
+                if (reasonInvalidPara) {
+                    reasonInvalidPara.innerHTML = reason;
+                }
+	        } else {
+                alert(jqXHR.status)
+	        }
+	    }
 	}
-	http_request = null;
+	);
 }

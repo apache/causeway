@@ -26,8 +26,8 @@ public final class Constants {
     public static final String JAVASCRIPT_DEBUG_KEY = VIEWER_PREFIX_KEY + ".javascript-debug";
 
     public static final String ISIS_REST_SUPPORT_JS = "isis-rest-support.js";
-    public static final String XMLHTTP_REQUEST_SRC_JS = "XMLHttpRequest.src.js";
-    public static final String XMLHTTP_REQUEST_JS = "XMLHttpRequest.js";
+    public static final String JQUERY_SRC_JS = "jquery-1.6.1.js";
+    public static final String JQUERY_MIN_JS = "jquery-1.6.1.min.js";
     public static final String URL_ENCODING_CHAR_SET =
         org.apache.isis.viewer.restful.applib.Constants.URL_ENCODING_CHAR_SET;
 

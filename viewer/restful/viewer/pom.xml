@@ -48,10 +48,16 @@
 			<groupId>org.apache.isis</groupId>
 			<artifactId>applib</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
+			<groupId>org.apache.isis.core</groupId>
 			<artifactId>webapp</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webapp</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

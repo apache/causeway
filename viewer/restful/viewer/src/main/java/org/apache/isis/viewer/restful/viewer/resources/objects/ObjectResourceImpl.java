@@ -31,6 +31,7 @@ import javax.ws.rs.WebApplicationException;
 import nu.xom.Element;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
@@ -86,16 +87,16 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         init();
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
 
-        final ObjectAdapter nakedObject = getNakedObject(oidStr);
-        if (nakedObject == null) {
+        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
         final String javascriptFile =
-            isJavascriptDebug() ? Constants.XMLHTTP_REQUEST_SRC_JS : Constants.XMLHTTP_REQUEST_JS;
+            isJavascriptDebug() ? Constants.JQUERY_SRC_JS : Constants.JQUERY_MIN_JS;
         // html template
         final XhtmlTemplate xhtml =
-            new XhtmlTemplate(nakedObject.titleString(), getServletRequest(), javascriptFile,
+            new XhtmlTemplate(objectAdapter.titleString(), getServletRequest(), javascriptFile,
                 Constants.ISIS_REST_SUPPORT_JS);
 
         xhtml.appendToBody(asDivIsisSession());
@@ -106,22 +107,22 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         xhtml.appendToBody(objectDiv);
 
         // title & Oid
-        final Element objectSpecsDiv = asDivTableObjectDetails(nakedObject);
+        final Element objectSpecsDiv = asDivTableObjectDetails(objectAdapter);
         xhtml.appendToDiv(objectDiv, objectSpecsDiv);
         // xhtml.appendToBody(div);
 
         // properties (in line table)
-        final Element propertiesTableEl = asDivTableProperties(getSession(), nakedObject);
+        final Element propertiesTableEl = asDivTableProperties(getSession(), objectAdapter);
         xhtml.appendToDiv(objectDiv, propertiesTableEl);
         // xhtml.appendToBody(propertiesTableEl);
 
         // collections
-        final Element collectionsDivEl = asDivTableCollections(getSession(), nakedObject);
+        final Element collectionsDivEl = asDivTableCollections(getSession(), objectAdapter);
         xhtml.appendToDiv(objectDiv, collectionsDivEl);
         // xhtml.appendToBody(collectionsDivEl);
 
         // actions
-        final Element actionsDivEl = asDivTableActions(getSession(), nakedObject);
+        final Element actionsDivEl = asDivTableActions(getSession(), objectAdapter);
         xhtml.appendToDiv(objectDiv, actionsDivEl);
         // xhtml.appendToBody(actionsDivEl);
 
@@ -592,7 +593,11 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     }
 
     private boolean isJavascriptDebug() {
-        return IsisContext.getConfiguration().getBoolean(Constants.JAVASCRIPT_DEBUG_KEY, true);
+        return getConfiguration().getBoolean(Constants.JAVASCRIPT_DEBUG_KEY, true);
+    }
+
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
 }
