@@ -3544,162 +3544,6 @@ public class FooBar {
           <para>Be warned: this is liable will take a long time.</para>
         </sect2>
       </sect1>
-
-      <sect1 id="sec.ManuallyDeploySite">
-        <title>Manually Uploading the Website</title>
-
-        <sect2>
-          <title>Update <filename>archetype-catalog.xml</filename> (if
-          required)</title>
-
-          <para>The <emphasis>Isis</emphasis> site comes with its own
-          <filename>archetype-catalog.xml</filename> so that the quickstart
-          archetype can be used from the snapshot repository by those who want
-          to use the "latest-and-greatest". This file lives in
-          <filename>.../trunk/src/main/site/resources</filename>, and looks
-          something like:</para>
-
-          <programlisting>&lt;archetype-catalog&gt;
-  &lt;archetypes&gt;
-    &lt;archetype&gt;
-       &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
-       &lt;artifactId&gt;quickstart-archetype&lt;/artifactId&gt;
-       &lt;version&gt;x.x.x-incubating-SNAPSHOT&lt;/version&gt;
-       &lt;repository&gt;http://repository.apache.org/content/groups/snapshots-group/&lt;/repository&gt;
-       &lt;description&gt;Isis Quickstart Archetype&lt;/description&gt;
-    &lt;/archetype&gt;
-    ...
-  &lt;/archetypes&gt;
-&lt;/archetype-catalog&gt;</programlisting>
-
-          <para>Where <code>x.x.x-incubating-SNAPSHOT</code> is the current
-          release. It may also have entries for previous SNAPSHOT
-          releases.</para>
-
-          <para>If it missing an entry for the current snapshot, then update
-          it and commit.</para>
-        </sect2>
-
-        <sect2>
-          <title>Build the site</title>
-
-          <para>Next, build the site, as per <xref
-          linkend="chp.BuildingSiteAndDocs" />.</para>
-
-          <para>This should generate the current site in
-          <filename>/tmp/m2-sites/isis</filename>.</para>
-        </sect2>
-
-        <sect2>
-          <title>Upload the site</title>
-
-          <para>Finally, upload the site (as a <acronym>ZIP</acronym>) to your
-          local account on <code>people.apache.org</code>:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>cd <filename>/tmp/m2-sites</filename></para>
-            </listitem>
-
-            <listitem>
-              <para>zip up isis to <filename>isis.zip</filename></para>
-            </listitem>
-
-            <listitem>
-              <para>scp the <filename>isis.zip</filename> to
-              <filename>people.apache.org/~</filename></para>
-            </listitem>
-
-            <listitem>
-              <para>login to <code>people.apache.org</code> using ssh:</para>
-
-              <programlisting>ssh -l xxxxxxxx@people.apache.org</programlisting>
-
-              <para>where xxxxxxx is your apache user Id</para>
-            </listitem>
-
-            <listitem>
-              <para>unzip <filename>isis.zip</filename></para>
-
-              <para>This should leave you with the same directory, isis, as
-              was previously in /tmp/m2-sites.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Then, copy the exploded ZIP into
-          /www/incubator.apache.org:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>Switch to the destination directory:</para>
-
-              <programlisting>cd /www/incubator.apache.org</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>move the new site into the distribution location:</para>
-
-              <programlisting>mv ~/isis isis-0.x.x-incubating</programlisting>
-
-              <para>where <emphasis>0.x.x</emphasis> should be replaced with
-              the appropriate version number, eg 0.2.0 or 0.3.0-RC1,
-              etc.</para>
-            </listitem>
-
-            <listitem>
-              <para>make the new site readable by all:</para>
-
-              <programlisting>chmod -R g+w isis
-chgrp -R incubator isis
-for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>Promote the site</title>
-
-          <para>When the new site is ready to be made current:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>If necessary, switch to the destination directory:</para>
-
-              <programlisting>cd /www/incubator.apache.org</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>Either:</para>
-
-              <itemizedlist>
-                <listitem>
-                  <para>move the previous site to one side:</para>
-
-                  <programlisting>mv isis isis-0.x.w-incubating</programlisting>
-
-                  <para>where <emphasis>0.x.w</emphasis> is the previous
-                  version was uploaded</para>
-                </listitem>
-
-                <listitem>
-                  <para>or simply delete the site:</para>
-
-                  <programlisting>rm -rf isis</programlisting>
-                </listitem>
-              </itemizedlist>
-            </listitem>
-
-            <listitem>
-              <para>Move the new site into place:</para>
-
-              <programlisting>mv isis-0.x.x-incubating isis</programlisting>
-            </listitem>
-          </itemizedlist>
-
-          <para>The new site should become available within a couple of
-          hours.</para>
-        </sect2>
-      </sect1>
     </chapter>
 
     <chapter id="chp.FormalRelease">
@@ -3809,7 +3653,7 @@ for a in `find isis -type d -print` ; do chmod g+s $a ; done</programlisting>
           <para>We prefer to use UNIX line endings, at least for
           <filename>pom.xml</filename> files. However, running some of the
           utility groovy scripts in a Windows cmd shell can cause the files to
-          be written out using Windows line endings. </para>
+          be written out using Windows line endings.</para>
 
           <para>Therefore, on a UNIX machine (or Cygwin on Windows),
           run:</para>
@@ -4157,27 +4001,59 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-
           <para>Then commit the <filename>pom.xml</filename> file.</para>
         </sect2>
 
-        <sect2 id="sec.ReleaseUpdateArchetypeResources">
-          <title>Update <code>&lt;version&gt;</code> in archetype
-          resources</title>
+        <sect2>
+          <title>Manually update versions to release versions</title>
 
-          <para>The release plugin (used in the sections that follow) will
-          automatically bump up the <code>&lt;version&gt;</code> of all of the
-          <acronym>POM</acronym>s (first to remove the
-          <literal>-SNAPSHOT</literal> prefix while the release is being cut,
-          and then update to the next iterations <literal>-SNAPSHOT</literal>
-          after that). However, what it doesn't do, unfortunately, is to
-          update the <varname>&lt;isis.version&gt;</varname> property in the
-          archetype resources for the quickstart archetype.</para>
+          <para>There are a couple of locations where the version must be
+          bumped up manually.</para>
 
-          <para>Therefore, open up the
-          <filename>src/main/resources/archetype-resources/pom.xml</filename>
-          in the <package>[oai:quickstart-archetype]</package> module, and
-          update the <code>&lt;isis.version&gt;</code> property:</para>
+          <sect3>
+            <title>Update <code>&lt;version&gt;</code> in archetype
+            resources</title>
 
-          <programlisting>&lt;properties&gt;
-    &lt;isis.version&gt;0.x.x[-RCn]-incubating-SNAPSHOT&lt;/isis.version&gt;
+            <para>The release plugin (used in the sections that follow) will
+            automatically bump up the <code>&lt;version&gt;</code> of all of
+            the <acronym>POM</acronym>s (first to remove the
+            <literal>-SNAPSHOT</literal> prefix while the release is being
+            cut, and then update to the next iterations
+            <literal>-SNAPSHOT</literal> after that). However, what it doesn't
+            do, unfortunately, is to update the
+            <varname>&lt;isis.version&gt;</varname> property in the archetype
+            resources for the quickstart archetype.</para>
+
+            <para>Therefore, open up the
+            <filename>src/main/resources/archetype-resources/pom.xml</filename>
+            in the <package>[oai:quickstart-archetype]</package> module, and
+            update the <code>&lt;isis.version&gt;</code> property:</para>
+
+            <programlisting>&lt;properties&gt;
+    &lt;isis.version&gt;0.x.x[-RCn]-incubating&lt;/isis.version&gt;
 &lt;/properties&gt;</programlisting>
+
+            <para>Then commit the <filename>pom.xml</filename> file.</para>
+          </sect3>
+
+          <sect3>
+            <title>Update skin <code>&lt;version&gt;</code></title>
+
+            <para>The parent module's <filename>site.xml</filename> file
+            defines the skin that is used by the parent module and every
+            inheriting child module. Since the Maven release process does not
+            automatically increment this version, it must be updated manually
+            first.</para>
+
+            <para>Therefore, open up the
+            <filename>src/site/site.xml</filename> in the
+            <package>[oai:isis]</package> parent module, and update the
+            <code>&lt;version&gt;</code>:</para>
+
+            <programlisting>&lt;skin&gt;
+    ...
+    &lt;version&gt;0.x.x[-RCn]-incubating&lt;/version&gt;
+&lt;/skin&gt;</programlisting>
+
+            <para>Then commit the <filename>site.xml</filename> file.</para>
+          </sect3>
         </sect2>
 
         <sect2>
@@ -4413,6 +4289,45 @@ svn: No such revision 1126567</programlisting>
           to revert the <filename>pom.xml</filename> files and delete the tag
           from <acronym>SVN</acronym>.</para>
         </sect2>
+
+        <sect2>
+          <title>Manually update versions to snapshot versions</title>
+
+          <para>After the release there are a couple of locations where the
+          version must be bumped up manually to the next SNAPSHOT
+          version.</para>
+
+          <sect3>
+            <title>Update <code>&lt;version&gt;</code> in archetype
+            resources</title>
+
+            <para>Open up the
+            <filename>src/main/resources/archetype-resources/pom.xml</filename>
+            in the <package>[oai:quickstart-archetype]</package> module, and
+            update the <code>&lt;isis.version&gt;</code> property:</para>
+
+            <programlisting>&lt;properties&gt;
+    &lt;isis.version&gt;0.x.y-incubating-SNAPSHOT&lt;/isis.version&gt;
+&lt;/properties&gt;</programlisting>
+
+            <para>Then commit the <filename>pom.xml</filename> file.</para>
+          </sect3>
+
+          <sect3>
+            <title>Update skin <code>&lt;version&gt;</code></title>
+
+            <para>Open up the <filename>src/site/site.xml</filename> in the
+            <package>[oai:isis]</package> parent module, and update the
+            <code>&lt;version&gt;</code>:</para>
+
+            <programlisting>&lt;skin&gt;
+    ...
+    &lt;version&gt;0.x.x-incubating-SNAPSHOT&lt;/version&gt;
+&lt;/skin&gt;</programlisting>
+
+            <para>Then commit the <filename>site.xml</filename> file.</para>
+          </sect3>
+        </sect2>
       </sect1>
 
       <sect1 id="sec.UploadReleaseForVoting">
@@ -4501,7 +4416,7 @@ svn: No such revision 1126567</programlisting>
 
             <para>If the <code>mvn release:perform</code> has worked then it
             will have put release artifacts into a newly created staging
-            repository . </para>
+            repository .</para>
 
             <para>Log onto <ulink
             url="http://repository.apache.org">http://repository.apache.org</ulink>
@@ -4844,7 +4759,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           <title>Post the result to the isis-dev list</title>
 
           <para>Once the incubator vote has been approved, send a mail to the
-          incubator@a.o mailing list. </para>
+          incubator@a.o mailing list.</para>
 
           <para>Use the following subject:</para>
 
@@ -4909,6 +4824,171 @@ cp ~/public_html/isis-x.x.x-incubating-source-release.* /www/www.apache.org/incu
         tag (rather than <filename>trunk</filename>) as well as ensuring that
         the released binaries are correctly referenced on the downloads
         page.</para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Deploying the Site</title>
+
+      <abstract>
+        <para>This chapter describes the steps that for uploading a new
+        version of the website.</para>
+      </abstract>
+
+      <sect1 id="sec.ManuallyDeploySite">
+        <title>Manually Uploading the Website</title>
+
+        <sect2>
+          <title>Update <filename>archetype-catalog.xml</filename> (if
+          required)</title>
+
+          <para>The <emphasis>Isis</emphasis> site comes with its own
+          <filename>archetype-catalog.xml</filename> so that the quickstart
+          archetype can be used from the snapshot repository by those who want
+          to use the "latest-and-greatest". This file lives in
+          <filename>.../trunk/src/main/site/resources</filename>, and looks
+          something like:</para>
+
+          <programlisting>&lt;archetype-catalog&gt;
+  &lt;archetypes&gt;
+    &lt;archetype&gt;
+       &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
+       &lt;artifactId&gt;quickstart-archetype&lt;/artifactId&gt;
+       &lt;version&gt;x.x.x-incubating-SNAPSHOT&lt;/version&gt;
+       &lt;repository&gt;http://repository.apache.org/content/groups/snapshots-group/&lt;/repository&gt;
+       &lt;description&gt;Isis Quickstart Archetype&lt;/description&gt;
+    &lt;/archetype&gt;
+    ...
+  &lt;/archetypes&gt;
+&lt;/archetype-catalog&gt;</programlisting>
+
+          <para>Where <code>x.x.x-incubating-SNAPSHOT</code> is the current
+          release. It may also have entries for previous SNAPSHOT
+          releases.</para>
+
+          <para>If it missing an entry for the current snapshot, then update
+          it and commit.</para>
+        </sect2>
+
+        <sect2>
+          <title>Build the site</title>
+
+          <para>Next, build the site, as per <xref
+          linkend="chp.BuildingSiteAndDocs" />.</para>
+
+          <para>This should generate the current site in
+          <filename>/tmp/m2-sites/isis</filename>.</para>
+        </sect2>
+
+        <sect2>
+          <title>Upload the site</title>
+
+          <para>Finally, upload the site (as a <acronym>ZIP</acronym>) to your
+          local account on <code>people.apache.org</code>:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>cd <filename>/tmp/m2-sites</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>zip up isis to <filename>isis.zip</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>scp the <filename>isis.zip</filename> to
+              <filename>people.apache.org/~</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>login to <code>people.apache.org</code> using ssh:</para>
+
+              <programlisting>ssh -l xxxxxxxx@people.apache.org</programlisting>
+
+              <para>where xxxxxxx is your apache user Id</para>
+            </listitem>
+
+            <listitem>
+              <para>unzip <filename>isis.zip</filename></para>
+
+              <para>This should leave you with the same directory, isis, as
+              was previously in /tmp/m2-sites.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Then, copy the exploded ZIP into
+          /www/incubator.apache.org:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Switch to the destination directory:</para>
+
+              <programlisting>cd /www/incubator.apache.org</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>move the new site into the distribution location:</para>
+
+              <programlisting>mv ~/isis isis-0.x.x-incubating</programlisting>
+
+              <para>where <emphasis>0.x.x</emphasis> should be replaced with
+              the appropriate version number, eg 0.2.0 or 0.3.0-RC1,
+              etc.</para>
+            </listitem>
+
+            <listitem>
+              <para>make the new site readable by all:</para>
+
+              <programlisting>chmod -R g+w isis-0.x.x-incubating
+chgrp -R incubator isis-0.x.x-incubating
+for a in `find isis-0.x.x-incubating -type d -print` ; do chmod g+s $a ; done</programlisting>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Promote the site</title>
+
+          <para>When the new site is ready to be made current:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>If necessary, switch to the destination directory:</para>
+
+              <programlisting>cd /www/incubator.apache.org</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>Either:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>move the previous site to one side:</para>
+
+                  <programlisting>mv isis isis-0.x.w-incubating</programlisting>
+
+                  <para>where <emphasis>0.x.w</emphasis> is the previous
+                  version was uploaded</para>
+                </listitem>
+
+                <listitem>
+                  <para>or simply delete the site:</para>
+
+                  <programlisting>rm -rf isis</programlisting>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>Move the new site into place:</para>
+
+              <programlisting>mv isis-0.x.x-incubating isis</programlisting>
+            </listitem>
+          </itemizedlist>
+
+          <para>The new site should become available within a couple of
+          hours.</para>
+        </sect2>
       </sect1>
     </chapter>
 
@@ -5560,7 +5640,7 @@ svn export quickstart /tmp/archetype</programlisting>
           <listitem>
             <para>the
             <filename>META-INF/maven/archetype-metadata.xml</filename> file
-            needs modifying so that: </para>
+            needs modifying so that:</para>
 
             <itemizedlist>
               <listitem>
