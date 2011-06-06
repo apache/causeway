@@ -30,7 +30,7 @@
 	
 	<servlet >
 		<servlet-name>dispatcher</servlet-name>
-		<servlet-class>org.apache.isis.runtimes.dflt.webapp.servlet.DispatcherServlet</servlet-class>
+		<servlet-class>org.apache.isis.viewer.scimpi.servlet.DispatcherServlet</servlet-class>
        <init-param>
             <param-name>username</param-name>
             <param-value>shopper</param-value>

@@ -30,7 +30,7 @@
 	
 	<servlet >
 		<servlet-name>dispatcher</servlet-name>
-		<servlet-class>org.apache.isis.runtimes.dflt.webapp.servlet.DispatcherServlet</servlet-class>
+        <servlet-class>org.apache.isis.viewer.scimpi.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 		

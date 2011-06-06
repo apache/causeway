@@ -47,21 +47,48 @@
 
         <dependency>
         	<groupId>org.apache.isis.viewer</groupId>
-        	<artifactId>scimpi</artifactId>
+        	<artifactId>scimpi-servlet</artifactId>
             <version>${isis.version}</version>
-        	<type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>file</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webapp</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>dflt</artifactId>
+            <version>${isis.version}</version>
         </dependency>
         <dependency>
         	<groupId>org.apache.isis.runtimes.dflt</groupId>
         	<artifactId>webserver</artifactId>
             <version>${isis.version}</version>
         </dependency>
-        <dependency>
-        	<groupId>org.apache.isis.runtimes.dflt</groupId>
-        	<artifactId>webapp</artifactId>
-            <version>${isis.version}</version>
-        	<type>pom</type>
-        </dependency>
+
+
     </dependencies>
 
 

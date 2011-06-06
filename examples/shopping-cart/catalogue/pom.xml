@@ -34,6 +34,13 @@
     <packaging>war</packaging>
 
     <dependencies>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>shoppingcart-dom</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>scimpi-servlet</artifactId>
@@ -43,7 +50,49 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>shoppingcart-dom</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>scimpi-servlet</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>file</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webapp</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>dflt</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webserver</artifactId>
+            <version>${isis.version}</version>
         </dependency>
     </dependencies>
 
