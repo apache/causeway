@@ -63,5 +63,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!--  direct dependency required because is LGPL licensed -->
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
 	</dependencies>
 </project>
