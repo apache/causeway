@@ -49,7 +49,6 @@
 				<artifactId>concordion</artifactId>
 		        <version>${concordion.version}</version>
 			</dependency>
-
          </dependencies>
     </dependencyManagement>
 
@@ -62,6 +61,13 @@
         <dependency>
             <groupId>org.concordion</groupId>
 	        <artifactId>concordion</artifactId>
+	        <exclusions>
+	           <exclusion>
+	               <!--  excluded because of LGPL; end-developer must include in POM file directly -->
+		           <groupId>xom</groupId>
+		           <artifactId>xom</artifactId>
+	           </exclusion>
+	        </exclusions>
         </dependency>
 
 		<dependency>
