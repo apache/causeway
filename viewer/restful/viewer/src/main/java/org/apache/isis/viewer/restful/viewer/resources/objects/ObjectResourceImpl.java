@@ -28,8 +28,6 @@ import java.util.List;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 
-import nu.xom.Element;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -69,6 +67,7 @@ import org.apache.isis.viewer.restful.viewer.resources.objects.properties.TableC
 import org.apache.isis.viewer.restful.viewer.resources.objects.properties.TableColumnOneToOneAssociationModify;
 import org.apache.isis.viewer.restful.viewer.resources.objects.properties.TableColumnOneToOneAssociationName;
 import org.apache.isis.viewer.restful.viewer.resources.objects.properties.TableColumnOneToOneAssociationParseable;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.util.ActionUtils;
 import org.apache.isis.viewer.restful.viewer.util.InputStreamUtil;
 import org.apache.isis.viewer.restful.viewer.util.ListUtils;
@@ -265,33 +264,33 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
 
-        final ObjectAdapter nakedObject = getNakedObject(oidStr);
-        if (nakedObject == null) {
+        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
-        final ObjectSpecification noSpec = nakedObject.getSpecification();
+        final ObjectSpecification noSpec = objectAdapter.getSpecification();
 
         final OneToOneAssociation property = (OneToOneAssociation) noSpec.getAssociation(propertyId);
 
         // validate
-        final Consent consent = property.isAssociationValid(nakedObject, null);
+        final Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
             throw new WebApplicationException(responseOfBadRequest(consent));
         }
 
         // html template
         final XhtmlTemplate xhtml =
-            new XhtmlTemplate(nakedObject.titleString() + "." + propertyId, getServletRequest());
+            new XhtmlTemplate(objectAdapter.titleString() + "." + propertyId, getServletRequest());
         xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
-        final Element div = asDivTableObjectDetails(nakedObject);
+        final Element div = asDivTableObjectDetails(objectAdapter);
         xhtml.appendToBody(div);
 
         // if valid, then clear
-        property.clearAssociation(nakedObject);
+        property.clearAssociation(objectAdapter);
 
         return xhtml.toXML();
     }
@@ -310,12 +309,12 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
 
-        final ObjectAdapter nakedObject = getNakedObject(oidStr);
-        if (nakedObject == null) {
+        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
-        final ObjectSpecification noSpec = nakedObject.getSpecification();
+        final ObjectSpecification noSpec = objectAdapter.getSpecification();
         final ObjectAssociation association = noSpec.getAssociation(collectionId);
         if (!association.isOneToManyAssociation()) {
             throw new WebApplicationException(responseOfBadRequest("Not a collection"));
@@ -323,12 +322,12 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         // html template
         final XhtmlTemplate xhtml =
-            new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
+            new XhtmlTemplate(objectAdapter.titleString() + "." + collectionId, getServletRequest());
         xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
-        Element div = asDivTableObjectDetails(nakedObject);
+        Element div = asDivTableObjectDetails(objectAdapter);
         xhtml.appendToBody(div);
 
         // collection name & contents
@@ -339,7 +338,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final Element ul = xhtmlRenderer.ul(HtmlClass.COLLECTION);
         div.appendChild(ul);
 
-        final ObjectAdapter collectionObj = collection.get(nakedObject);
+        final ObjectAdapter collectionObj = collection.get(objectAdapter);
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionObj);
         for (final Iterator<ObjectAdapter> iter = facet.iterator(collectionObj); iter.hasNext();) {
@@ -372,12 +371,12 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
         final String proposedValueOidStr = UrlDecoderUtils.urlDecode(proposedValueEncodedOidStr);
 
-        final ObjectAdapter nakedObject = getNakedObject(oidStr);
-        if (nakedObject == null) {
+        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
-        final ObjectSpecification noSpec = nakedObject.getSpecification();
+        final ObjectSpecification noSpec = objectAdapter.getSpecification();
 
         final OneToManyAssociation collection = (OneToManyAssociation) noSpec.getAssociation(collectionId);
 
@@ -390,27 +389,27 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         // validate
         final Consent consent =
-            modification == CollectionModificationType.ADD_TO ? collection.isValidToAdd(nakedObject, proposedValueNO)
-                : collection.isValidToRemove(nakedObject, proposedValueNO);
+            modification == CollectionModificationType.ADD_TO ? collection.isValidToAdd(objectAdapter, proposedValueNO)
+                : collection.isValidToRemove(objectAdapter, proposedValueNO);
         if (consent.isVetoed()) {
             throw new WebApplicationException(responseOfBadRequest(consent));
         }
 
         // html template
         final XhtmlTemplate xhtml =
-            new XhtmlTemplate(nakedObject.titleString() + "." + collectionId, getServletRequest());
+            new XhtmlTemplate(objectAdapter.titleString() + "." + collectionId, getServletRequest());
         xhtml.appendToBody(asDivIsisSession());
         xhtml.appendToBody(resourcesDiv());
 
         // title & Oid
-        final Element div = asDivTableObjectDetails(nakedObject);
+        final Element div = asDivTableObjectDetails(objectAdapter);
         xhtml.appendToBody(div);
 
         // if valid, then set
         if (modification == CollectionModificationType.ADD_TO) {
-            collection.addElement(nakedObject, proposedValueNO);
+            collection.addElement(objectAdapter, proposedValueNO);
         } else {
-            collection.removeElement(nakedObject, proposedValueNO);
+            collection.removeElement(objectAdapter, proposedValueNO);
         }
 
         return xhtml.toXML();

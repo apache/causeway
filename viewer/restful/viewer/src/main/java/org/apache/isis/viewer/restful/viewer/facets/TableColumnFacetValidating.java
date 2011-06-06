@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.restful.viewer.facets;
 
-import nu.xom.Element;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
 public final class TableColumnFacetValidating extends TableColumnFacet {

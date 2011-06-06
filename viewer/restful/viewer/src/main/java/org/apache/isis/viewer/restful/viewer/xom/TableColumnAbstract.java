@@ -18,29 +18,29 @@
  */
 package org.apache.isis.viewer.restful.viewer.xom;
 
-import nu.xom.Element;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.util.OidUtils;
 
 public abstract class TableColumnAbstract<T> implements TableColumn<T> {
     private final String headerText;
 
     protected final ResourceContext resourceContext;
-    protected final XhtmlRendererXom xhtmlRenderer;
+    protected final XhtmlRenderer xhtmlRenderer;
 
     protected TableColumnAbstract(final String headerText, final ResourceContext resourceContext) {
         this.headerText = headerText;
         this.resourceContext = resourceContext;
-        this.xhtmlRenderer = new XhtmlRendererXom();
+        this.xhtmlRenderer = new XhtmlRenderer();
     }
 
-    protected ElementBuilderXom builder() {
-        return new ElementBuilderXom();
+    protected ElementBuilder builder() {
+        return new ElementBuilder();
     }
 
     protected String getContextPath() {

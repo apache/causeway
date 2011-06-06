@@ -18,19 +18,16 @@
  */
 package org.apache.isis.viewer.restful.viewer.html;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.WebApplicationException;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Serializer;
+import org.apache.isis.viewer.restful.viewer.tree.Attribute;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
+import org.jdom.output.XMLOutputter;
 
-import org.apache.isis.viewer.restful.viewer.Constants;
 
 /**
  * TODO: add in support for base URI in generated XML docs?
@@ -80,10 +77,6 @@ public class XhtmlTemplate {
         html.appendChild(body);
     }
 
-    public Element getBody() {
-        return body;
-    }
-
     public XhtmlTemplate appendToBody(final Element... elements) {
         for (final Element element : elements) {
             body.appendChild(element);
@@ -91,53 +84,25 @@ public class XhtmlTemplate {
         return this;
     }
 
-    public Element appendToDiv(final Element div, final Element... elements) {
+    public void appendToDiv(final Element div, final Element... elements) {
         for (final Element element : elements) {
             div.appendChild(element);
         }
-        return div;
     }
 
-    public Document getDocument() {
-        final Document document = new Document(html);
-        return document;
-    }
-
-    /**
-     * 
-     * TODO: would rather be using the serializer, to ensure charset encoding is correct?
-     * 
-     * @return
-     */
     public String toXML() {
-        // return xmlUsingSerializer();
         return xmlUsingToXmlMethod();
     }
 
     private String xmlUsingToXmlMethod() {
-        return getDocument().toXML();
-    }
-
-    /**
-     * Not playing ball...
-     */
-    @SuppressWarnings("unused")
-    private String xmlUsingSerializer() {
+        org.jdom.Document document = new org.jdom.Document(html.xmlElement);
+        StringWriter sw = new StringWriter();
+        XMLOutputter xmlOutputter = new XMLOutputter();
         try {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final Serializer serializer = new Serializer(baos, Constants.URL_ENCODING_CHAR_SET);
-
-            serializer.setPreserveBaseURI(true);
-
-            // no need for pretty printing
-            // serializer.setIndent(4);
-            // serializer.setMaxLength(64);
-
-            serializer.write(getDocument());
-            serializer.flush();
-            return new String(baos.toByteArray(), Constants.URL_ENCODING_CHAR_SET);
-        } catch (final IOException e) {
-            throw new WebApplicationException(e);
+            xmlOutputter.output(document, sw);
+            return sw.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

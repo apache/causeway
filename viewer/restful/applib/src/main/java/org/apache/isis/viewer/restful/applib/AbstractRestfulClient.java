@@ -26,15 +26,15 @@ import static org.apache.isis.viewer.restful.applib.UrlConnectionUtils.writeMapT
 import static org.apache.isis.viewer.restful.applib.UrlEncodeUtils.urlEncode;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.util.Map;
 
-import nu.xom.Document;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
-
 import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.output.XMLOutputter;
 
 public abstract class AbstractRestfulClient {
 
@@ -58,25 +58,25 @@ public abstract class AbstractRestfulClient {
             final HttpURLConnection connection = createGetConnection(uri);
             final Document document = readDocFromConnectionInputStream(connection);
             if (LOG.isTraceEnabled()) {
-                LOG.trace(document.toXML());
+                StringWriter sw = new StringWriter();
+                new XMLOutputter().output(document, sw);
+                LOG.trace(sw.toString());
             }
             return document;
         } catch (final ProtocolException e) {
             throw new RestfulClientException(e);
         } catch (final IOException e) {
             throw new RestfulClientException(e);
-        } catch (final ValidityException e) {
-            throw new RestfulClientException(e);
-        } catch (final ParsingException e) {
+        } catch (JDOMException e) {
             throw new RestfulClientException(e);
         }
     }
 
-    public Document post(final String uri, final String... paramArgs) {
+    public org.jdom.Document post(final String uri, final String... paramArgs) {
         return post(uri, StringUtils.asMap(paramArgs));
     }
 
-    private Document post(final String uri, final Map<String, String> formArgumentsByParameter) {
+    private org.jdom.Document post(final String uri, final Map<String, String> formArgumentsByParameter) {
         if (LOG.isInfoEnabled()) {
             LOG.info("posting form arguments to '" + uri + "'");
             LOG.info(asString(formArgumentsByParameter));
@@ -91,11 +91,8 @@ public abstract class AbstractRestfulClient {
             return readDocFromConnectionInputStream(connection);
         } catch (final IOException e) {
             throw new RestfulClientException(e);
-        } catch (final ValidityException e) {
-            throw new RestfulClientException(e);
-        } catch (final ParsingException e) {
-            throw new RestfulClientException(e);
-        }
+        } catch (JDOMException e) {
+            throw new RestfulClientException(e);        }
     }
 
     // //////////////////////////////////////////////////////////////////////

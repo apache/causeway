@@ -21,15 +21,14 @@ package org.apache.isis.viewer.restful.viewer.resources.objects.actions;
 import java.text.MessageFormat;
 import java.util.List;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
+import org.apache.isis.viewer.restful.viewer.tree.Attribute;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
 public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedObjectAction {

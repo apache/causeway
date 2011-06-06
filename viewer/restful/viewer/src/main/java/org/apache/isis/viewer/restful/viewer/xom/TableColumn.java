@@ -21,7 +21,7 @@
  */
 package org.apache.isis.viewer.restful.viewer.xom;
 
-import nu.xom.Element;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 
 public interface TableColumn<T> {
 

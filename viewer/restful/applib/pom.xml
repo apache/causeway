@@ -44,10 +44,10 @@
 			<artifactId>resteasy-jaxrs</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>xom</groupId>
-			<artifactId>xom</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>log4j</groupId>

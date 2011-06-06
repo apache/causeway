@@ -29,10 +29,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 
 /**
  * Not API, so intentionally not visible outside this package.
@@ -51,10 +50,10 @@ final class UrlConnectionUtils {
         StringUtils.writeMap(formArgumentsByParameter, writer);
     }
 
-    static Document readDocFromConnectionInputStream(final HttpURLConnection connection) throws ParsingException,
-        ValidityException, IOException {
+    static Document readDocFromConnectionInputStream(final HttpURLConnection connection) throws JDOMException, IOException {
         final InputStream stream = connection.getInputStream();
-        return new Builder().build(stream);
+        SAXBuilder saxBuilder = new SAXBuilder();
+        return saxBuilder.build(stream);
     }
 
     static HttpURLConnection createConnection(final String uri) throws MalformedURLException, IOException {

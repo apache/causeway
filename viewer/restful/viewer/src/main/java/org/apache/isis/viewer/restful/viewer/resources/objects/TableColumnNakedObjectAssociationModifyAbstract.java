@@ -20,12 +20,11 @@ package org.apache.isis.viewer.restful.viewer.resources.objects;
 
 import java.text.MessageFormat;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.viewer.restful.viewer.tree.Attribute;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
 public abstract class TableColumnNakedObjectAssociationModifyAbstract<T extends ObjectAssociation> extends

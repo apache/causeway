@@ -64,10 +64,5 @@
 			<artifactId>resteasy-jaxrs</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>xom</groupId>
-			<artifactId>xom</artifactId>
-		</dependency>
-
 	</dependencies>
 </project>

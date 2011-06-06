@@ -23,13 +23,12 @@ import java.util.List;
 
 import javax.ws.rs.Path;
 
-import nu.xom.Element;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restful.applib.resources.ServicesResource;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.html.XhtmlTemplate;
 import org.apache.isis.viewer.restful.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the

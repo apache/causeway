@@ -20,10 +20,10 @@ package org.apache.isis.viewer.restful.viewer.xom;
 
 import java.util.List;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
+import org.apache.isis.viewer.restful.viewer.tree.Attribute;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 
-public class XhtmlRendererXom {
+public class XhtmlRenderer {
 
     public Element div_p(final String paragraphText, final String htmlClassAttribute) {
         final Element div = div(htmlClassAttribute);
@@ -137,8 +137,8 @@ public class XhtmlRendererXom {
         el.addAttribute(new Attribute("class", htmlClassAttribute));
     }
 
-    private ElementBuilderXom builder(final String elementName) {
-        return new ElementBuilderXom(elementName);
+    private ElementBuilder builder(final String elementName) {
+        return new ElementBuilder(elementName);
     }
 
 }

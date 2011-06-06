@@ -20,10 +20,9 @@ package org.apache.isis.viewer.restful.viewer.facets;
 
 import java.text.MessageFormat;
 
-import nu.xom.Element;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
 public final class TableColumnFacetFacetType extends TableColumnFacet {

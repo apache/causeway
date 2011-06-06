@@ -37,9 +37,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -61,12 +58,14 @@ import org.apache.isis.viewer.restful.viewer.facets.TableColumnFacetHiding;
 import org.apache.isis.viewer.restful.viewer.facets.TableColumnFacetImplementation;
 import org.apache.isis.viewer.restful.viewer.facets.TableColumnFacetValidating;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
+import org.apache.isis.viewer.restful.viewer.tree.Attribute;
+import org.apache.isis.viewer.restful.viewer.tree.Element;
 import org.apache.isis.viewer.restful.viewer.util.OidUtils;
 import org.apache.isis.viewer.restful.viewer.xom.DtDd;
-import org.apache.isis.viewer.restful.viewer.xom.ElementBuilderXom;
+import org.apache.isis.viewer.restful.viewer.xom.ElementBuilder;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 import org.apache.isis.viewer.restful.viewer.xom.TableColumn;
-import org.apache.isis.viewer.restful.viewer.xom.XhtmlRendererXom;
+import org.apache.isis.viewer.restful.viewer.xom.XhtmlRenderer;
 
 public abstract class ResourceAbstract {
 
@@ -74,8 +73,8 @@ public abstract class ResourceAbstract {
     // SET is excluded; we simply flatten contributed actions.
         };
 
-    protected final XhtmlRendererXom xhtmlRenderer;
-    protected final ElementBuilderXom elementBuilder;
+    protected final XhtmlRenderer xhtmlRenderer;
+    protected final ElementBuilder elementBuilder;
 
     @Context
     HttpHeaders httpHeaders;
@@ -98,8 +97,8 @@ public abstract class ResourceAbstract {
     private ResourceContext resourceContext;
 
     protected ResourceAbstract() {
-        this.xhtmlRenderer = new XhtmlRendererXom();
-        this.elementBuilder = new ElementBuilderXom();
+        this.xhtmlRenderer = new XhtmlRenderer();
+        this.elementBuilder = new ElementBuilder();
     }
 
     protected void init() {
