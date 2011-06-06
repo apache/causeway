@@ -20,7 +20,9 @@
 QuickStart App
 
   We recommend that you use the quickstart app to get up and running quickly.
-  You can generate this just by running the quickstart archetype:
+  You can generate this just by running the quickstart archetype.  To use it, 
+  first create a new directory, and 'cd' into that directory.   Then run the 
+  following command:
 
 +------------------------------------------------------------
 mvn archetype:generate  \
@@ -323,7 +325,7 @@ Exploring the App
   consisting for a task manager app, consisting of a single domain object,
   ToDoItem, and a single repository, <<<ToDoItemRepository>>>.
   
-  * open up <<<ToDoItem>>> and <<<ToDoItemRepository>>> (in the dom module)
+  * open up <<<ToDoItem>>> and <<<ToDoItemRepository>>> (in the dom module, under src/main/java)
   
   * open up <<<ToDoItemsFixture>>> (in the fixture module)
   

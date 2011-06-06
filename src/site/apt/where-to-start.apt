@@ -21,7 +21,9 @@ Where to Start?
 
   There's quite a lot to <Apache Isis>, with lots of optional components.  
   But you can get up and working quickly just by running our quickstart
-  archetype:
+  archetype.  To use it, first create a new directory, and 'cd' into 
+  that directory.   Then run the following command:
+  
 
 +------------------------------------------------------------
 mvn archetype:generate  \
