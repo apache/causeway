@@ -64,5 +64,25 @@
 			<artifactId>resteasy-jaxrs</artifactId>
 		</dependency>
 
+        <!-- the javax:* equivalents of these are excluded in 
+             dependencyManagement of resteasy-jaxrs, so  
+             are required here -->           
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-annotation_1.0_spec</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-activation_1.1_spec</artifactId>
+            <version>1.1</version>
+        </dependency>
+
 	</dependencies>
 </project>

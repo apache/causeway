@@ -102,11 +102,6 @@
 	            <version>0.1.2-incubating-SNAPSHOT</version>
 	        </dependency>
 
-	        <dependency>
-	            <groupId>org.htmlparser</groupId>
-	            <artifactId>htmlparser</artifactId>
-	            <version>1.6</version>
-	        </dependency>
 		</dependencies>
 	</dependencyManagement>
 

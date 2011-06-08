@@ -62,6 +62,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- NB: XOM is licensed under LGPL. -->
         <dependency>
             <groupId>xom</groupId>
             <artifactId>xom</artifactId>

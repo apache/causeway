@@ -111,24 +111,6 @@
 				<version>0.1.2-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
 			</dependency>
-	
-
-            <!-- 3rd party dependencies -->
-
-			<!-- RestEasy -->
-            <dependency>
-			    <groupId>org.jboss.resteasy</groupId>
-			    <artifactId>resteasy-jaxrs</artifactId>
-			    <version>1.0.2.GA</version>
-		    </dependency>
-
-			<!-- XOM (XML library) -->
-			<dependency>
-				<groupId>xom</groupId>
-				<artifactId>xom</artifactId>
-				<version>1.2.5</version>
-			</dependency>
-	
 
 		</dependencies>
 	</dependencyManagement>
