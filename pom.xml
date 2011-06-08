@@ -775,6 +775,7 @@
                       <goal>process</goal>
                     </goals>
                     <configuration>
+                        <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                         <appendedResourcesDirectory>${basedir}/${siteBaseDir}/src/main/appended-resources</appendedResourcesDirectory>
                       <supplementalModels>
                         <supplementalModel>supplemental-models.xml</supplementalModel>
@@ -786,9 +787,28 @@
                       </resourceBundles>
                       <properties>
                         <projectTimespan>2010~2011</projectTimespan>
+                        <postDepListText>
+The above (auto-generated) list relates to dependencies of this parent module
+only.  In addition, child submodules of this parent module have their own 
+additional dependencies.  You can use mvn dependency:list or 
+mvn dependency:tree (from this top-level module) to view all dependencies.
+
+Apache Isis has a number of dependencies on 'category-B' licenses [1].  The 
+licenses for these dependencies are included in a number of *-LICENSE.txt files.
+
+In addition, the BDD-Viewer module [org.apache.isis.viewer:bdd-concordion] has
+an optional dependency on Concordion [2], which in turn depends upon XOM [3].
+XOM is licensed under LGPL, which is a non-eligible 'category-X' license [4].
+This transitive dependency to XOM has therefore been excluded, requiring 
+end-users to explicitly add in the XOM dependency in order to use the 
+BDD-Viewer module.
+
+[1] http://www.apache.org/legal/resolved.html#category-b
+[2] http://concordion.org
+[3] http://www.xom.nu/
+[4] http://www.apache.org/legal/resolved.html#category-x
                       </properties>
                      </configuration>
-                     
                   </execution>
                 </executions>
               </plugin>
@@ -1076,6 +1096,11 @@
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty</artifactId>
                 <version>6.1.24</version>
+            </dependency>
+            <dependency>
+                <groupId>org.htmlparser</groupId>
+                <artifactId>htmlparser</artifactId>
+                <version>1.6</version>
             </dependency>
 
             <!-- Testing libraries (not scope=test because used by viewer/junit) -->
