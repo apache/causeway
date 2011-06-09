@@ -147,6 +147,25 @@ mvn clean install
   while for the first time as modules are brought down from the remote
   repo.  
 
+Running the app
+
+  Now that you've built the application, it's time to run it.  This can be done
+  in one of several ways, dependent upon the viewer.
+  
+  Security (authentication) is configurable within Isis, or can be turned on or 
+  off completely.  For some of the viewers you may find it necessary to provide 
+  a username and password; if you are prompted then enter:
+  
+  * username: <sven>
+  
+  * password: <pass>
+  
+  []
+  
+  This corresponds to one of the user/password combinations held in the <passwords> 
+  file (its location varies by viewer; it'll either be in src/main/resources or in
+  WEB-INF directory).
+
 Running the app using the DnD viewer
 
   It's possible to run the application from the command line in a number of ways,
