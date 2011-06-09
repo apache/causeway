@@ -788,25 +788,20 @@
                       <properties>
                         <projectTimespan>2010~2011</projectTimespan>
                         <postDepListText>
-The above (auto-generated) list relates to dependencies of this parent module
-only.  In addition, child submodules of this parent module have their own 
-additional dependencies.  You can use mvn dependency:list or 
-mvn dependency:tree (from this top-level module) to view all dependencies.
+The above (auto-generated) list aggregates the dependencies (either direct
+or transitively) of all the modules that make up Apache Isis.  You can use 
+mvn dependency:list or mvn dependency:tree to view dependencies by submodule.
 
-Apache Isis has a number of dependencies on 'category-B' licenses [1].  The 
-licenses for these dependencies are included in a number of *-LICENSE.txt files.
-
-In addition, the BDD-Viewer module [org.apache.isis.viewer:bdd-concordion] has
-an optional dependency on Concordion [2], which in turn depends upon XOM [3].
-XOM is licensed under LGPL, which is a non-eligible 'category-X' license [4].
+Note also that the BDD-Viewer module [org.apache.isis.viewer:bdd-concordion] 
+has an optional dependency on Concordion [1], which in turn depends upon XOM [2].
+XOM is licensed under LGPL, which is a non-eligible 'category-X' license [3].
 This transitive dependency to XOM has therefore been excluded, requiring 
 end-users to explicitly add in the XOM dependency in order to use the 
 BDD-Viewer module.
 
-[1] http://www.apache.org/legal/resolved.html#category-b
-[2] http://concordion.org
-[3] http://www.xom.nu/
-[4] http://www.apache.org/legal/resolved.html#category-x
+[1] http://concordion.org
+[2] http://www.xom.nu/
+[3] http://www.apache.org/legal/resolved.html#category-x
                         </postDepListText>
                       </properties>
                      </configuration>
@@ -1085,7 +1080,7 @@ BDD-Viewer module.
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-jaxrs</artifactId>
-                <version>1.0.2.GA</version>
+                <version>2.2.0.GA</version>
                 <exclusions>
                     <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
                     <exclusion>
