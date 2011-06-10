@@ -118,8 +118,6 @@
                         <version>2.8</version>
                         <inherited>false</inherited>
                         <configuration>
-                            <!-- does not seem to work, more's the pity -->
-                            <aggregate>true</aggregate>
                             <quiet>true</quiet>
                             <doctitle>${project.name} ${project.version}</doctitle>
                             <windowtitle>${project.name}${project.version}</windowtitle>
