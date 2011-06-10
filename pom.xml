@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-  
-         http://www.apache.org/licenses/LICENSE-2.0
-         
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    you under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -82,8 +74,8 @@
         <!-- used by docbkx-maven-plugin for DocBook guide; override as required -->
         <docbkxGuideTitle>Apache Isis</docbkxGuideTitle>
         <docbkxGuideSubTitle>Contributors' Guide</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-contributors-guide</docbkxGuideName>    
-        
+        <docbkxGuideName>isis-contributors-guide</docbkxGuideName>
+
 
         <!-- should not need to be modified -->
         <trunkBaseDir>${project.build.directory}/${siteBaseDir}/..</trunkBaseDir>
@@ -264,22 +256,14 @@
                     </executions>
                 </plugin>
 
-				<!-- Apache Release Audit Tool -->
-				<plugin>
-					<groupId>org.apache.rat</groupId>
-					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.7</version>
-					<!-- 
-					<executions>
-						<execution>
-							<phase>verify</phase>
-							<goals>
-								<goal>check</goal>
-							</goals>
-						</execution>
-					</executions>					
-					 -->
-				</plugin>
+                <!-- Apache Release Audit Tool -->
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.7</version>
+                    <!-- <executions> <execution> <phase>verify</phase> <goals> 
+                        <goal>check</goal> </goals> </execution> </executions> -->
+                </plugin>
 
 
                 <!-- IDE support for Eclipse. (NetBeans 6.7+ and IDEA 7.0 
@@ -420,7 +404,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.7</version>
                     <inherited>true</inherited>
                     <configuration>
                         <quiet>true</quiet>
@@ -763,80 +746,74 @@
                 <!-- required while Isis is in the incubator -->
                 <dependencies>
                     <dependency>
-					    <groupId>org.apache</groupId>
-					    <artifactId>apache-incubator-disclaimer-resource-bundle</artifactId>
-					    <version>1.1</version>
+                        <groupId>org.apache</groupId>
+                        <artifactId>apache-incubator-disclaimer-resource-bundle</artifactId>
+                        <version>1.1</version>
                     </dependency>
                 </dependencies>
                 <executions>
-                  <execution>
-                    <id>process-remote-resources</id>
-                    <goals>
-                      <goal>process</goal>
-                    </goals>
-                    <configuration>
-                        <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                        <appendedResourcesDirectory>${basedir}/${siteBaseDir}/src/main/appended-resources</appendedResourcesDirectory>
-                      <supplementalModels>
-                        <supplementalModel>supplemental-models.xml</supplementalModel>
-                      </supplementalModels>
-                      <resourceBundles>
-                          <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-                          <!-- required while Isis is in the incubator -->
-                          <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.1</resourceBundle>
-                      </resourceBundles>
-                      <properties>
-                        <projectTimespan>2010~2011</projectTimespan>
-                        <postDepListText>
-The above (auto-generated) list aggregates the dependencies (either direct
-or transitively) of all the modules that make up Apache Isis.  You can use 
+                    <execution>
+                        <id>process-remote-resources</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                            <appendedResourcesDirectory>${basedir}/${siteBaseDir}/src/main/appended-resources</appendedResourcesDirectory>
+                            <supplementalModels>
+                                <supplementalModel>supplemental-models.xml</supplementalModel>
+                            </supplementalModels>
+                            <resourceBundles>
+                                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+                                <!-- required while Isis is in the incubator -->
+                                <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.1</resourceBundle>
+                            </resourceBundles>
+                            <properties>
+                                <projectTimespan>2010~2011</projectTimespan>
+                                <postDepListText>
+The above (auto-generated) list aggregates the dependencies (either directly
+or transitively) of all the modules that make up Apache Isis. You can use 
 mvn dependency:list or mvn dependency:tree to view dependencies by submodule.
 
-Note also that the BDD-Viewer module [org.apache.isis.viewer:bdd-concordion] 
-has an optional dependency on Concordion [1], which in turn depends upon XOM [2].
-XOM is licensed under LGPL, which is a non-eligible 'category-X' license [3].
-This transitive dependency to XOM has therefore been excluded, requiring 
-end-users to explicitly add in the XOM dependency in order to use the 
-BDD-Viewer module.
+Note also that the BDD Viewer module [org.apache.isis.viewer:bdd-concordion]
+has an optional dependency on Concordion [1], which in turn depends upon
+XOM [2]. XOM is licensed under LGPL, which is a non-eligible 'category-X'
+license [3]. This transitive dependency to XOM has therefore been excluded.
+
+To use Isis' BDD Viewer, end-users must explicitly add in the XOM dependency
+in their own POMs.  The application generated by the Isis quickstart
+archetype includes this explicit dependency.
 
 [1] http://concordion.org
 [2] http://www.xom.nu/
 [3] http://www.apache.org/legal/resolved.html#category-x
                         </postDepListText>
-                      </properties>
-                     </configuration>
-                  </execution>
+                            </properties>
+                        </configuration>
+                    </execution>
                 </executions>
-              </plugin>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-				<!-- 
-				<executions> 
-                    <execution> 
-                        <phase>verify</phase> 
-                        <goals> 
-                            <goal>check</goal> 
-                        </goals> 
-                    </execution> 
-                </executions> 
-				-->
-				<configuration>
-					<excludeSubProjects>false</excludeSubProjects>
-					<numUnapprovedLicenses>0</numUnapprovedLicenses>
-					<!-- these don't seem to work, unfortunately -->
-					<excludes>
-						<exclude>*.hsp</exclude>
-						<exclude>.project</exclude>
-						<exclude>*.svg</exclude>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <!-- <executions> <execution> <phase>verify</phase> <goals> 
+                    <goal>check</goal> </goals> </execution> </executions> -->
+                <configuration>
+                    <excludeSubProjects>false</excludeSubProjects>
+                    <numUnapprovedLicenses>0</numUnapprovedLicenses>
+                    <!-- these don't seem to work, unfortunately -->
+                    <excludes>
+                        <exclude>*.hsp</exclude>
+                        <exclude>.project</exclude>
+                        <exclude>*.svg</exclude>
                         <exclude>*.classpath</exclude>
                         <exclude>*.project</exclude>
                         <exclude>*.ucd</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-      
+                    </excludes>
+                </configuration>
+            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1069,11 +1046,11 @@ BDD-Viewer module.
             </dependency>
 
             <!-- Scimpi dependencies -->
-	        <dependency>
-	            <groupId>org.json</groupId>
-	            <artifactId>json</artifactId>
-	            <version>20090211</version>
-	        </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20090211</version>
+            </dependency>
 
 
             <!-- RestEasy -->
@@ -1143,11 +1120,11 @@ BDD-Viewer module.
                 <artifactId>jmock-junit4</artifactId>
                 <version>2.5.1</version>
                 <exclusions>
-					<exclusion>
-						<groupId>junit</groupId>
-						<artifactId>junit-dep</artifactId>
-					</exclusion>            	
-	            </exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit-dep</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- transitively includes cglib:cglib-nodep:2.1_3 and org.objenesis:objenesis:1.0 -->
@@ -1167,9 +1144,9 @@ BDD-Viewer module.
 
             <!-- JodaTime -->
             <dependency>
-	    		<groupId>joda-time</groupId>
-	    		<artifactId>joda-time</artifactId>
-	            <version>1.6.2</version>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>1.6.2</version>
             </dependency>
 
             <!-- Specs -->
@@ -1194,9 +1171,9 @@ BDD-Viewer module.
                 <version>1.1</version>
             </dependency>
             <dependency>
-				<groupId>org.apache.geronimo.specs</groupId>
-				<artifactId>geronimo-javamail_1.4_spec</artifactId>
-				<version>1.7.1</version>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-javamail_1.4_spec</artifactId>
+                <version>1.7.1</version>
             </dependency>
 
         </dependencies>
@@ -1415,7 +1392,7 @@ BDD-Viewer module.
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
+                        <version>2.8</version>
                         <configuration>
                             <quiet>true</quiet>
                             <doctitle>${project.name} ${project.version}</doctitle>
@@ -1444,7 +1421,11 @@ BDD-Viewer module.
                             <reportSet>
                                 <reports>
                                     <report>javadoc</report>
+                                    <!--
+                                    removed because hitting bug 
+                                    (http://jira.codehaus.org/browse/MJAVADOC-298) 
                                     <report>test-javadoc</report>
+                                    -->
                                 </reports>
                             </reportSet>
                         </reportSets>
@@ -1629,15 +1610,10 @@ BDD-Viewer module.
             </modules>
         </profile>
 
-        <!--
-        overrides inherited configuration to allow regular
-        deploy plugin to work to snapshot repo.
-
-        Use:
-        -D deploy=snapshot -D modules=standard -D distMgmtSnapshotsUrl=... 
-
-        where the last property is the repo URL to deploy to
-        -->
+        <!-- overrides inherited configuration to allow regular deploy plugin 
+            to work to snapshot repo. Use: -D deploy=snapshot -D modules=standard -D 
+            distMgmtSnapshotsUrl=... where the last property is the repo URL to deploy 
+            to -->
         <profile>
             <id>deploy-snapshot</id>
             <activation>
@@ -1648,14 +1624,14 @@ BDD-Viewer module.
             </activation>
             <build>
                 <plugins>
-                  <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <inherited>true</inherited>
-                    <configuration>
-                      <skip>false</skip>
-                    </configuration>
-                  </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
