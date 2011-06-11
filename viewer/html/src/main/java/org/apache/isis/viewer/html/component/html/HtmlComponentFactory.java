@@ -48,9 +48,9 @@ import org.apache.isis.viewer.html.component.Table;
 
 public class HtmlComponentFactory implements ComponentFactory {
 
-    private final String footer;
-    private final String header;
-    private final String styleSheet;
+    protected final String footer;
+    protected final String header;
+    protected final String styleSheet;
 
     public HtmlComponentFactory() {
         final IsisConfiguration configuration = IsisContext.getConfiguration();
