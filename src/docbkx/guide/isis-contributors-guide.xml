@@ -3680,9 +3680,9 @@ public class FooBar {
           exclusions, making this method of performing a check somewhat
           useless.</para>
 
-          <para>Instead, the tool can be run from the command-line; a JAR
-          binary of the tool has been checked into the <emphasis>Apache
-          Isis</emphasis> codebase.</para>
+          <para>Instead, the tool can be run from the command-line (though
+          you'll need to build the binary <acronym>JAR</acronym> of the tool
+          yourself).</para>
 
           <para>First, clean up any generated artifacts:</para>
 
@@ -3956,12 +3956,11 @@ licenses to remove from supplemental-models.xml (are spurious):
         <sect2 id="sec.ReleaseBranch">
           <title>Branch</title>
 
-          <para>First, create a branch and its own tags directory:</para>
+          <para>First, create a branch in the <acronym>SVN</acronym>
+          repo:</para>
 
           <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating \
    -m "branching to create x.x.x[-RCn]-incubating"
-svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/tags \
-   -m "creating tags for x.x.x[-RCn]-incubating"
 svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
     https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk \
     -m "copying trunk to branches/x.x.x[-RCn]-incubating"</programlisting>
@@ -4247,6 +4246,27 @@ svn: No such revision 1126567</programlisting>
 
           <itemizedlist>
             <listitem>
+              <para>unzip the source-release <acronym>ZIP</acronym> and check
+              it compiles</para>
+
+              <para>The <acronym>ZIP</acronym> file resides in
+              <filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>
+              in <filename>target</filename> directory of the parent
+              <package>[oai:isis]</package> module. Unzip in a new directory,
+              and build using <code>mvn clean install</code> (and <code>mvn
+              site-deploy -D deploy=local</code> if you have the time).</para>
+            </listitem>
+
+            <listitem>
+              <para>Inspect the <filename>DEPENDENCIES</filename> file.</para>
+
+              <para>This should be in the root of the extracted ZIP. In
+              particular, check that there are no <ulink
+              url="www.apache.org/legal/resolved.html#category-x">category-x</ulink>
+              dependencies.</para>
+            </listitem>
+
+            <listitem>
               <para>Use the locally built quickstart archetype to generate the
               application, and make sure that the generated application runs
               ok.</para>
@@ -4263,18 +4283,6 @@ svn: No such revision 1126567</programlisting>
               correct version of <emphasis>Isis</emphasis> (specifically:
               without a <literal>-SNAPSHOT</literal> suffix), and runs as
               expected.</para>
-            </listitem>
-
-            <listitem>
-              <para>unzip the source-release <acronym>ZIP</acronym> and check
-              it compiles</para>
-
-              <para>The <acronym>ZIP</acronym> file resides in
-              <filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>
-              in <filename>target</filename> directory of the parent
-              <package>[oai:isis]</package> module. Unzip in a new directory,
-              and build using <code>mvn clean install</code> (and <code>mvn
-              site-deploy -D deploy=local</code> if you have the time).</para>
             </listitem>
           </itemizedlist>
 
