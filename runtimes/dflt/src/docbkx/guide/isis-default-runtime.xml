@@ -61,11 +61,20 @@
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para>The role of a runtime is to bootstrap the application and
-    components, and to manage the lifecycle of domain object entities.
-    Typically, this means managing their persistence and identity. In the case
-    of the default runtime, it also means providing support for client/server
-    remoting.</para>
+    <para>The role of the runtime component within <emphasis>Isis</emphasis>
+    is to bootstrap the application and components, and to manage the
+    lifecycle of domain object entities. Typically, this means managing their
+    persistence and identity.</para>
+
+    <para>The runtime component within Isis is also pluggable. This guide
+    describes the <emphasis>default runtime</emphasis> implementation, which
+    consists of a number of a parent module
+    <package>[oai.runtimes:dflt]</package> and a number of child submodules.
+    These submodules allow the behaviour of the default runtime to be
+    customized, most notably to to support different objectstores. The
+    <emphasis>default runtime</emphasis> also supports a number of other
+    capabilities, such as client/server remoting and the concept of
+    profilestores.</para>
 
     <sect1>
       <title>Who this Guide is For</title>
@@ -116,19 +125,220 @@
   <part id="prt.CoreConcepts">
     <title>Core Concepts</title>
 
+    <partintro>
+      <para></para>
+    </partintro>
+
     <chapter>
       <title>Core Concepts</title>
 
-      <para></para>
+      <abstract>
+        <para>The core concepts that make up the default runtime
+        implementation.</para>
+      </abstract>
+
+      <para>The role of the runtime component within <emphasis>Isis</emphasis>
+      is to bootstrap the application and components, and to manage the
+      lifecycle of domain object entities. Typically, this means managing
+      their persistence and identity. The default runtime implementation
+      <package>[oai.runtimes:dflt]</package> provides support for this, and
+      additionally provides support for client/server remoting and also the
+      concept of a profilestore.</para>
+
+      <para>Because the scope of the <emphasis>default runtime</emphasis>
+      includes remoting, it necessarily adds a degree of abstraction that,
+      perhaps, might not otherwise be required. This chapter explains the main
+      concepts defined or implemented by the <emphasis>default
+      runtime</emphasis>.</para>
+
+      <sect1>
+        <title>Components of the Default Runtime</title>
+
+        <para>As will be clear if you've explored the codebase, the
+        <emphasis>default runtime</emphasis> implementation consists of a
+        fairly large number of submodules. These are organized around the
+        major <acronym>API</acronym>s that the default runtime exposes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>object store</para>
+
+            <para>The object store <acronym>API</acronym> defines a
+            persistence mechanism for storing domain objects. Examples include
+            a simple in-memory object store (useful only for prototyping), an
+            XML objectstore, a simple SQL objectstore, and a "NoSQL"
+            (JSON-based) objectstore.</para>
+          </listitem>
+
+          <listitem>
+            <para>bytecode providers</para>
+
+            <para>Bytecode providers provide the ability to support lazy
+            loading while walking a graph from one domain object to another.
+            This is a similar technique to that employed by
+            <acronym>ORM</acronym>s, but is available even if the object store
+            involved does not support lazy loading.<footnote>
+                <para>Indeed, ORM-based object stores (are likely to) require
+                the bytecode providers to be disabled.</para>
+              </footnote></para>
+          </listitem>
+
+          <listitem>
+            <para>profile store</para>
+
+            <para>The profile store is responsible for holding user profile
+            information, by which we mean their preferences and any other
+            information, for example bookmarks.</para>
+          </listitem>
+
+          <listitem>
+            <para>client/server remoting support</para>
+
+            <para>The default runtime also provides support for client/server
+            remoting. For example, the DnD viewer can be configured to act as
+            a client, holding a cache of domain objects client-side.
+            Interactions with these domain objects are sent transparently
+            across to a server running the same application domain classes;
+            the changes are performed server-side and the results sent back
+            down to the client where the results are merged.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title><classname>ObjectAdapter</classname>s and
+        <classname>Oid</classname>s</title>
+
+        <para><emphasis>Apache Isis</emphasis> components do not deal directly
+        with domain object pojos; instead they are always wrapped by an
+        adapter, call <classname>ObjectAdapter</classname>. This has two main
+        responsibilities:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>it provides reference to the
+            <classname>ObjectSpecification</classname>, which describes the
+            structure (properties, collections, actions) of the object's
+            type</para>
+          </listitem>
+
+          <listitem>
+            <para>it provides reference to an <classname>Oid</classname>,
+            which is an opaque value that uniquely identifies the object
+            instance.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>You can think of <classname>ObjectAdapter</classname> as
+        equivalent to <classname>java.lang.Object</classname>, while
+        <classname>ObjectSpecification</classname> is in some sense equivalent
+        to <classname>java.lang.Class</classname>. The
+        <classname>Oid</classname> interface meanwhile is something akin to a
+        primary key identifier for an row in a relational database, but it is
+        slightly more abstract than that because it can also represent a
+        non-persisted object.</para>
+
+        <para>It is the <emphasis>metamodel</emphasis> module of
+        <emphasis>Isis</emphasis> <package>[oai.core:metamodel]</package>
+        defines these interfaces (<classname>ObjectAdapter,
+        ObjectSpecifation</classname> and <classname>Oid</classname>), the
+        object itself (<classname>ObjectAdapter</classname>), and the object's
+        identity (<classname>Oid</classname>). The metamodel itself also
+        provides an implementation of
+        <classname>ObjectSpecification</classname>.</para>
+
+        <para>The <emphasis>default runtime</emphasis> module
+        <package>[oai.runtimes:dflt]</package> provides an implementations of
+        the <classname>ObjectAdapter</classname> interface
+        (<classname>oai.runtimes.dflt.persistence.adapterfactory.pojo.PojoAdapter</classname>)
+        as well as an implementation of the <classname>Oid</classname>
+        interface. The actual implementation of <classname>Oid</classname>
+        will depend on the object store (persistence) mechanism that the
+        runtime has been configured to use.</para>
+      </sect1>
+
+      <sect1>
+        <title>AdapterManager</title>
+
+        <para>As already mentioned, the <classname>ObjectAdapter</classname>
+        maintains a reference to an <classname>Oid</classname> and the
+        underlying pojo domain object. To traverse in the other direction -
+        that is, from <classname>Oid</classname> to
+        <classname>ObjectAdapter</classname> or from pojo to
+        <classname>ObjectAdapter</classname> - the default runtime uses its
+        internal <classname>AdapterManager</classname> component, which
+        maintains two sets of maps. This is shown below:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/adapter-manager.png" scale="45" />
+          </imageobject>
+        </mediaobject>
+
+        <para>The <classname>AdapterManager</classname> is an example of the
+        <ulink
+        url="http://martinfowler.com/eaaCatalog/identityMap.html">object-identity
+        map pattern</ulink> (as documented more fully in Martin Fowler's
+        Patterns of Enterprise Application Architecture). Whenever a domain
+        object pojo is handled by the system, and before an adapter for it has
+        been created, the runtime checks the
+        <classname>AdapterManager</classname> for the instance first, and only
+        creates an adapter if the pojo is not mapped. Similarly, if the
+        adapter has only an <classname>Oid</classname> value then the
+        <classname>AdapterManager</classname> is determine if the object's
+        adapter exists.</para>
+      </sect1>
+
+      <sect1>
+        <title>Lazy Loading</title>
+
+        <para></para>
+
+        <para>(eg as the result of receiving an object during a client/server
+        interaction, or from a memento, see ), then</para>
+
+        <para>This is one of the main mechanisms by which the
+        <emphasis>default runtime</emphasis> is able to support lazy loading,
+        even if the underlying object store itself does not. So, for example,
+        if an object</para>
+
+        <para></para>
+
+        <para>One of the</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Oid subtypes</title>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title></title>
+
+        <para></para>
+      </sect1>
 
       <sect1>
         <title>IsisContext</title>
 
         <para><emphasis>Context</emphasis></para>
 
-        <para>The ObjectAdapterContext provide access to the main components
-        of the NOF. If the system is started in a multi-user mode then the
-        context will hold specific components for specific execution contexts,
+        <para>The <classname>IsisContext</classname> class responsibility
+        provide access to the main components of the framework.</para>
+
+        <para>If the system is started in a multi-user mode then the context
+        will hold specific components for specific execution contexts,
         allowing the same process to access the same components and different
         processes to access unique instances.</para>
 
@@ -147,19 +357,6 @@
         service and persist that with the ID of the service. This allows
         references to be held persistently to service objects despite the fact
         that they are singletons.</para>
-
-        <para></para>
-
-        <para><emphasis>Identity map</emphasis></para>
-
-        <para>Any object that has identity (whether it is persisted or not)
-        must be registered with the identity map. This maps two relationships:
-        domain objects to proxies and OIDs to proxies.</para>
-
-        <para>Whenever a domain object is handled by the system, and before a
-        proxy is created, it must be checked against the identity map and if
-        it exists the proxy already in the identity map must be used instead
-        of creating a new proxy.</para>
 
         <para></para>
 
@@ -184,7 +381,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/architecture.gif" scale="30" />
+            <imagedata fileref="images/architecture.gif" scale="40" />
           </imageobject>
         </mediaobject>
 
@@ -216,21 +413,6 @@
 
         <para>The notifier itself can be got from system context using
         <methodname>IsisContext.getUpdateNotifer()</methodname>.</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>IdentityMap</title>
-
-        <para></para>
-
-        <para>A persistor should utilise an object-identity map (see Martin
-        Fowler's Patterns of Enterprise Application Architecture) to manage
-        the mapping of domain objects and adapters, and OIDs and adapters. For
-        each domain object the map should store a single adapter, and an OID
-        to that same adapter. The persitor can then guarantee that the same
-        adapter is always provided for a specific domain object or OID</para>
 
         <para></para>
       </sect1>
