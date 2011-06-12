@@ -329,7 +329,8 @@
             <para>In addition, if you are also a contributor to
             <emphasis>Isis</emphasis>, then there are some additional plugins
             (FindBugs, CheckStyle, PMD) that should be installed for enforcing
-            coding standards; see <xref linkend="chp.CodingQuality" />.</para>
+            coding standards; see <xref
+            linkend="chp.CodingStandardsEnforcement" />.</para>
           </sect3>
 
           <sect3>
@@ -465,15 +466,16 @@
       <title>Building Isis from Source</title>
 
       <abstract>
-        <para>How to build <emphasis>Isis</emphasis>' code modules (not site
-        and docs) from source.</para>
+        <para>How to build <emphasis>Isis</emphasis>' code modules, including
+        the website site and docs, from source.</para>
       </abstract>
 
       <para><emphasis>Isis</emphasis> is built using
       <emphasis>Maven</emphasis>, so you should then be able to get going
       using a simple <code>mvn clean install</code>. However, there is a
       little more to it than that, because we do have a number of profiles
-      which allow the build to be tailored in various ways.</para>
+      which allow the build to be tailored in various ways. These profiles are
+      also used to build the site and documentation.</para>
 
       <sect1>
         <title>Maven Profiles</title>
@@ -488,265 +490,60 @@
 
             <itemizedlist>
               <listitem>
-                <para><code>standard</code></para>
+                <para><code>all</code></para>
 
-                <para>This is the default, so can be omitted if no other -D
-                properties are specified.</para>
+                <para>This profile is intended for use when building the Isis
+                modules (see <xref linkend="sec.BuildingBinaries" />).</para>
 
                 <para>Using <code>-D modules=standard</code> will build the
-                <filename>applib</filename>, <filename>core</filename>,
-                <filename>defaults</filename>,
-                <filename>alternatives</filename> and
-                <filename>viewer</filename> modules</para>
-              </listitem>
+                <filename>site-skin</filename>, <filename>applib</filename>,
+                <filename>core</filename>, <filename>runtimes</filename>,
+                <filename>progmodels</filename>,
+                <filename>security</filename>, <filename>viewer</filename> and
+                <filename>quickstart-archetype</filename> modules</para>
 
-              <listitem>
-                <para><code>all</code></para>
-
-                <para>Using <code>-D modules=all</code> will build the
-                <filename>applib</filename>, <filename>core</filename>,
-                <filename>defaults</filename>,
-                <filename>alternatives</filename>,
-                <filename>viewer</filename>, <filename>support</filename>,
-                <filename>release</filename>, examples and
-                <filename>site-skin</filename> modules</para>
-              </listitem>
-
-              <listitem>
-                <para><code>skin</code> or <code>applib</code> or
-                <code>core</code> or <code>defaults</code> or
-                <code>alternatives</code> or <code>viewer</code> or
-                <code>support</code> or <code>release</code> or
-                <code>examples</code></para>
-
-                <para>Using <code>-D modules=...</code> for any of the above
-                will build just the corresponding module</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-
-          <listitem>
-            <para><code>-D build=</code><itemizedlist>
-                <listitem>
-                  <para><code>standard</code></para>
-
-                  <para>This is the default, so can be omitted if no other -D
-                  properties are specified.</para>
-
-                  <para>Using <code>-D build=standard</code> when run under
-                  <code>mvn clean install</code> will perform the standard
-                  plugins for the Maven 'default' lifecycle, and will also run
-                  the <filename>enforcer</filename>,
-                  <filename>eclipse</filename>, <filename>source</filename>,
-                  <filename>jar</filename> and <filename>pdf</filename>
-                  plugins. See <literal>/project/build/plugins</literal> in
-                  the parent <filename>pom.xml </filename>for an up-to-date
-                  list.</para>
-                </listitem>
-
-                <listitem>
-                  <para><code>full</code></para>
-
-                  <para>This will perform a full build, which basically means
-                  to also run a number of additional plugins.</para>
-
-                  <para>Using -<code>D build=full</code> runs all the plugins
-                  for standard, along with the <classname>javadoc</classname>
-                  plugin (is 'jar' goal). See
-                  <literal>/project/profiles/profile[id='build-full']/build/plugins</literal>
-                  in the parent <filename>pom.xml</filename> for an up-to-date
-                  list.</para>
-                </listitem>
-              </itemizedlist></para>
-          </listitem>
-        </itemizedlist>
-
-        <para>The <code>-D modules=xxx</code> and <code>-D build=yyy</code>
-        profiles are pretty much orthogonal; any set of modules can be built
-        with either build profile. The one exception minor exception is that
-        the <filename>release</filename> module (and hence any profile that
-        references it) cannot be built using <code>-D
-        build=full</code>.</para>
-      </sect1>
-
-      <sect1>
-        <title>Typical Use Cases</title>
-
-        <para>Although the above set of profiles might seem complex, most of
-        the time you'll find yourself running just one of a small number of
-        commands. This section lists the typical use cases.</para>
-
-        <warning>
-          <para>The first time you run these, you'll need to omit the -o
-          (offline) flag in order to download plugins and dependencies.
-          Thereafter though the -o flag is strongly recommended!</para>
-        </warning>
-
-        <para>The most typical use cases are</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Quick build</para>
-
-            <programlisting>mvn clean install -o</programlisting>
-          </listitem>
-
-          <listitem>
-            <para>Build 'release' module (prereq for the examples)</para>
-
-            <programlisting>mvn clean install -D modules=release -o</programlisting>
-          </listitem>
-
-          <listitem>
-            <para>Build everything</para>
-
-            <programlisting>mvn clean install -D modules=all -o</programlisting>
-          </listitem>
-
-          <listitem>
-            <para>Build in readiness for a release</para>
-
-            <programlisting>mvn clean install -D modules=standard -D build=full -o</programlisting>
-          </listitem>
-        </itemizedlist>
-      </sect1>
-
-      <sect1>
-        <title>Smoke Test</title>
-
-        <para>Once you've build the source code, you might want to run a smoke
-        test.</para>
-
-        <para>The best way to do this is to use the quick start archetype. How
-        to do this is documented on the website; however we want to run the
-        archetype in a slightly different form, specifying the local catalog
-        (ie to pick up the modules just built):</para>
-
-        <programlisting>mvn archetype:generate \
-     -D archetypeCatalog=local \
-     -D archetypeGroupId=org.apache.isis.support \
-     -D archetypeArtifactId=quickstart-archetype \
-     -D groupId=com.mycompany.mygroup \
-     -D artifactId=myapp</programlisting>
-
-        <para>The <ulink
-        url="http://incubator.apache.org/isis/quickstart-app.html">quickstart</ulink>
-        page on the website then describes how to go about testing the
-        generated classes.</para>
-      </sect1>
-    </chapter>
-
-    <chapter id="chp.BuildingSiteAndDocs">
-      <title>Building Site and Documentation</title>
-
-      <abstract>
-        <para>How to build <emphasis>Isis</emphasis>' site and documentation
-        from source.</para>
-      </abstract>
-
-      <para>In the same way that Isis code modules are built using <code>mvn
-      clean install</code> (see <xref
-      linkend="chp.BuildingIsisFromSource" />), so too can its site and
-      documentation be built using <code>mvn site-deploy</code>. Again though,
-      there is a little more to it than that, because we do have a number of
-      profiles which allow the build to be tailored in various ways. There is
-      also some prerequisite software that must be installed.</para>
-
-      <sect1>
-        <title>Prerequisites (JIMI Jar File)</title>
-
-        <para>Generally speaking all Maven artifacts are automatically
-        downloads from the Maven <ulink
-        url="http://repo1.maven.org/maven2/">central repo</ulink>. However,
-        some artifacts must be manually installed or built, either because
-        they haven't been formally released or because there are licensing
-        restrictions preventing them from being hosted in the repository.
-        These must therefore be downloaded and manually installed into your
-        local repository (<filename>~/.m2/repository</filename>) .</para>
-
-        <para><emphasis>Apache Isis</emphasis> currently use the
-        <acronym>JIMI</acronym> jar to generate documentation.
-        Therefore:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>From the <ulink
-            url="http://java.sun.com/products/jimi/">Jimi page</ulink>,
-            download the <filename>jimi1_0.zip</filename> file, and
-            unzip.</para>
-          </listitem>
-
-          <listitem>
-            <para>Within the unzipped files, you'll find the
-            <filename>JimiProClasses.zip</filename> file. This is the
-            <acronym>JAR</acronym> that needs to be installed. Make a note of
-            its location.</para>
-          </listitem>
-
-          <listitem>
-            <para>Install into your local Maven repository using:</para>
-
-            <screen>mvn install:install-file       \
-    -D groupId=com.java        \
-    -D artifactId=jimi         \
-    -D version=1.0             \
-    -D packaging=jar           \
-    -D file=/path/to/JimiProClasses.zip</screen>
-          </listitem>
-        </itemizedlist>
-      </sect1>
-
-      <sect1>
-        <title>Maven Profiles</title>
-
-        <para>The Maven profiles customize the build are activated by setting
-        properties, where the property name determines the means by which the
-        build is customized.</para>
-
-        <para>They are:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><code>-D modules=</code></para>
-
-            <itemizedlist>
-              <listitem>
-                <para><code>all</code></para>
-
-                <para>This is the default, so can be omitted if no other -D
-                properties are specified.</para>
-
-                <para>Using <code>-D modules=</code>all will build all
-                modules.</para>
+                <para>Since this profile is active by default, it can be
+                omitted if no other -D properties are specified.</para>
               </listitem>
 
               <listitem>
                 <para><code>site</code></para>
 
+                <para>This profile is intended for use when building the Isis
+                site and documentation (see <xref
+                linkend="sec.BuildingSiteAndDocs" />).</para>
+
                 <para>Using <code>-D modules=site</code> will build just the
-                modules that constitute the site. This excludes the site-skin
-                module (which doesn't reply apply) and the quickstart
-                archetype (which is reverse engineered from a 'prototype'
-                application and doesn't have the usual site "trimmings". Note
-                that the usage of the quickstart archetype is documented in
-                the main site (in pages of
-                <package>[oai:isis]</package>).</para>
+                modules that constitute the site. This is similar to 'all'
+                (above), but excludes <filename>site-skin</filename> and
+                <filename>quickstart-archetype</filename>. Note that the usage
+                of the quickstart archetype is documented in the main site (in
+                pages of <package>[oai:isis]</package>).</para>
               </listitem>
 
               <listitem>
                 <para><code>skin</code> or <code>applib</code> or
                 <code>core</code> or <code>runtimes</code> or
-                <code>progmodels</code> or <code>security</code> or
-                <code>viewer</code> or <code>support</code>.</para>
+                <code>progmodel</code> or <filename>security</filename> or
+                <code>viewer</code> or <code>quickstart-archetype</code> or
+                <code>examples</code></para>
 
                 <para>Using <code>-D modules=...</code> for any of the above
-                will build just the corresponding module</para>
+                will build just the corresponding module set. It is intended
+                primarily for quick-and-dirty builds of subsets of the
+                build.</para>
               </listitem>
             </itemizedlist>
           </listitem>
 
           <listitem>
-            <para><code>-D site=</code><itemizedlist>
+            <para><code>-D site=</code></para>
+
+            <para>This profile is intended only when building the site
+            documentation (see <xref
+            linkend="sec.BuildingSiteAndDocs" />).</para>
+
+            <para><itemizedlist>
                 <listitem>
                   <para><code>standard</code></para>
 
@@ -754,35 +551,53 @@
                   <code>mvn site-deploy</code> will perform the standard
                   plugins for the Maven 'site' lifecycle, and will also run
                   the <filename>docbkx</filename> plugin (where relevant) in
-                  order to build the DocBook documentation. See
-                  <literal>/project/build/plugins</literal> in the parent
-                  <filename>pom.xml</filename>for an up-to-date list (note the
-                  binding to the 'site' phase).</para>
+                  order to build the DocBook documentation.</para>
+
+                  <para>See <literal>/project/build/plugins</literal> in the
+                  parent <filename>pom.xml</filename> for an up-to-date list
+                  (note the binding to the 'site' phase).</para>
                 </listitem>
 
                 <listitem>
                   <para><code>full</code></para>
 
-                  <para>This will perform a full build, which basically means
-                  to also run a number of additional reporting plugins.</para>
-
-                  <para>Using -<code>D site=full</code> in addition runs all
-                  the reporting plugins runs all the plugins for standard,
-                  along with the <filename>surefire-report</filename>,
-                  <filename>project-info-reports</filename>,
-                  <filename>cobertura</filename>,
-                  <filename>checkstyle</filename>, <filename>pmd</filename>,
-                  <filename>findbugs</filename>,
-                  <filename>javancss</filename>, <filename>jdepend</filename>,
-                  <filename>jxr</filename>, <filename>taglist</filename>,
-                  <filename>javadoc</filename>.</para>
-
-                  <para>See
-                  <literal>/project/profiles/profile[id='site-full']/reporting/plugins</literal>
-                  in the parent <filename>pom.xml</filename> for an up-to-date
-                  list.</para>
+                  <para>This will perform a "full" build, which basically
+                  means to running (at least) those reporting plugins for the
+                  first-pass multi-module site. See <xref
+                  linkend="sec.BuildingSiteAndDocs" /> for more
+                  details.</para>
                 </listitem>
               </itemizedlist></para>
+          </listitem>
+
+          <listitem>
+            <para><code>-D patch=</code></para>
+
+            <para>This profile is intended only when building the site
+            documentation (see <xref
+            linkend="sec.BuildingSiteAndDocs" />).</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><code>leaf</code></para>
+
+                <para>This profile is used to "patch" leaf-level modules with
+                reporting plugins. Specifically, these are the
+                <filename>surefire-report</filename>,
+                <filename>project-info-reports</filename>,
+                <filename>cobertura</filename>,
+                <filename>checkstyle</filename>, <filename>pmd</filename>,
+                <filename>findbugs</filename>, <filename>javancss</filename>,
+                <filename>jdepend</filename>, <filename>jxr</filename>,
+                <filename>taglist</filename>, <filename>javadoc</filename>
+                plugins.</para>
+
+                <para>See
+                <literal>/project/profiles/profile[id='patch-leaf']/reporting/plugins</literal>
+                in the parent <filename>pom.xml</filename> for an up-to-date
+                list of the reports.</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
 
           <listitem>
@@ -806,40 +621,176 @@
         </itemizedlist>
       </sect1>
 
-      <sect1>
-        <title>Typical Use Cases</title>
+      <sect1 id="sec.BuildingBinaries">
+        <title>Building the binaries</title>
 
-        <para>Most of the time you'll find yourself running just one of a
-        small number of commands. This section lists the typical use
-        cases.</para>
+        <sect2>
+          <title><code>mvn clean install</code></title>
 
-        <warning>
-          <para>The first time you run these, you'll need to omit the -o
-          (offline) flag in order to download plugins and dependencies.
-          Thereafter though the -os flag is strongly recommended!</para>
-        </warning>
+          <para>The module binaries are built in the regular way using:</para>
 
-        <para>The most typical use cases are</para>
+          <programlisting>mvn clean install</programlisting>
 
-        <itemizedlist>
-          <listitem>
-            <para>Quick build of site and documentation</para>
+          <para>The perform the standard plugins for the Maven 'default'
+          lifecycle, and will also run the <filename>enforcer</filename>,
+          <filename>eclipse</filename>, <filename>source</filename> and
+          <filename>jar</filename> plugins. See
+          <literal>/project/build/plugins</literal> in the parent
+          <filename>pom.xml</filename>for an up-to-date list.</para>
 
-            <programlisting>mvn site-deploy -D deploy=local -o</programlisting>
-          </listitem>
+          <para>Once you have built this once, we recommend that in subsequent
+          builds you include the -o (offline) flag in order to speed up
+          builds:</para>
 
-          <listitem>
-            <para>Quick build of site and documentation</para>
+          <programlisting>mvn clean install -o</programlisting>
 
-            <programlisting>mvn site-deploy -D modules=site -D deploy=local -o</programlisting>
-          </listitem>
+          <para>If using *nix, you might want to consider adding aliases for
+          these two commands (eg mci and mcio).</para>
+        </sect2>
 
-          <listitem>
-            <para>Full build of site and documentation</para>
+        <sect2>
+          <title>Smoke Test</title>
 
-            <programlisting>mvn site-deploy -D modules=site -D deploy=local -D site=full -o</programlisting>
-          </listitem>
-        </itemizedlist>
+          <para>Once you've build the source code, you might want to run a
+          smoke test.</para>
+
+          <para>The best way to do this is to use the quick start archetype.
+          How to do this is documented on the website; however we want to run
+          the archetype in a slightly different form, specifying the local
+          catalog (ie to pick up the modules just built):</para>
+
+          <programlisting>mvn archetype:generate \
+     -D archetypeCatalog=local \
+     -D archetypeGroupId=org.apache.isis \
+     -D archetypeArtifactId=quickstart-archetype \
+     -D groupId=com.mycompany.mygroup \
+     -D artifactId=myapp</programlisting>
+
+          <para>The <ulink
+          url="http://incubator.apache.org/isis/quickstart-app.html">quickstart</ulink>
+          page on the website then describes how to go about testing the
+          generated classes.</para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.BuildingSiteAndDocs">
+        <title>Building the site and documentation</title>
+
+        <para></para>
+
+        <sect2>
+          <title>Prerequisites</title>
+
+          <para>Generally speaking all Maven artifacts are automatically
+          downloads from the Maven <ulink
+          url="http://repo1.maven.org/maven2/">central repo</ulink>. However,
+          some artifacts must be manually installed or built, either because
+          they haven't been formally released or because there are licensing
+          restrictions preventing them from being hosted in the repository.
+          These must therefore be downloaded and manually installed into your
+          local repository (<filename>~/.m2/repository</filename>) .</para>
+
+          <para><emphasis>Apache Isis</emphasis> currently use the
+          <acronym>JIMI</acronym> jar to generate documentation.
+          Therefore:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>From the <ulink
+              url="http://java.sun.com/products/jimi/">Jimi page</ulink>,
+              download the <filename>jimi1_0.zip</filename> file, and
+              unzip.</para>
+            </listitem>
+
+            <listitem>
+              <para>Within the unzipped files, you'll find the
+              <filename>JimiProClasses.zip</filename> file. This is the
+              <acronym>JAR</acronym> that needs to be installed. Make a note
+              of its location.</para>
+            </listitem>
+
+            <listitem>
+              <para>Install into your local Maven repository using:</para>
+
+              <screen>mvn install:install-file       \
+    -D groupId=com.java        \
+    -D artifactId=jimi         \
+    -D version=1.0             \
+    -D packaging=jar           \
+    -D file=/path/to/JimiProClasses.zip</screen>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Quick Build</title>
+
+          <para>To quickly build of site and documentation:</para>
+
+          <programlisting>mvn site-deploy -D modules=site -D deploy=local</programlisting>
+
+          <para>This is suitable for verifying the generated web pages (ie the
+          <filename>.html</filename> files generated from
+          <filename>src/site/apt/*.apt</filename> files) as well as any
+          DocBook guides sources
+          (<filename>src/docbkx/guide/*.xml</filename>).</para>
+
+          <para>As with the binaries build, after an initial build we suggest
+          using the -o (offline) flag:</para>
+
+          <programlisting>mvn site-deploy -D modules=site -D deploy=local -o</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Full Build</title>
+
+          <para>The difference between the quick build and the full build is
+          that the latter includes all reporting plugins (such as
+          <code>maven-project-info-reports-plugin</code>,
+          <code>maven-javadoc-plugin</code>,
+          <code>maven-checkstyle-plugin</code> and so on).</para>
+
+          <para>Unfortunately, attempting to build the entire site as a
+          multi-module site will fail, due to classpath problems with the
+          javadoc plugin. As a workaround we have developed a script,
+          <code>msdf.sh</code>, that builds most of the website in one pass
+          (using the <code>-D site=full</code> profile), and then "patches" by
+          building the leaf-level modules with a different profile (<code>-D
+          patch=leaf</code>):</para>
+
+          <programlisting>mvn site-deploy -D modules=site -D deploy=local -D site=full $*
+root=`pwd`
+for a in `cat modules`
+do
+  echo $a | grep ^# &gt;/dev/null
+  if [ $? -ne 0 ]; then
+    d=`echo $a | cut -d: -f1`
+    n=`echo $a | cut -d: -f2`
+    cd $d
+    pwd
+    if [ "$n" ]; then
+      mvn site-deploy -D modules=site -D deploy=local -D patch=$n $*
+      fi
+  fi
+  cd $root
+done</programlisting>
+
+          <para>This takes a little longer to run, but is at least
+          repeatable.</para>
+
+          <para>The file is run from a flat file,
+          <filename>modules</filename>, which is used to switch into each of
+          the leaf-level modules to run the patching.</para>
+        </sect2>
+
+        <sect2>
+          <title>Smoke Test</title>
+
+          <para>Both the quick build and the full build generate sites in
+          <filename>/tmp/m2-sites/isis</filename>. Navigate to
+          <filename>/tmp/m2-sites/isis/index.html</filename> and inspect the
+          site.</para>
+        </sect2>
       </sect1>
     </chapter>
   </part>
@@ -2076,11 +2027,11 @@ protected IsisConfiguration getConfiguration() {
       each of these types, as well as the mechanics of actually writing these
       types of documents.</para>
 
-      <para>See <xref linkend="chp.BuildingSiteAndDocs" /> for details on how
+      <para>See <xref linkend="sec.BuildingSiteAndDocs" /> for details on how
       to build the site documentation.</para>
 
-      <para>See <xref linkend="chp.AptQuickStart" /> and <xref
-      linkend="chp.DocBookQuickStart" /> for details on how to write APT or
+      <para>See <xref linkend="chp.WritingSiteDocs" /> and <xref
+      linkend="chp.WritingDocBookDocs" /> for details on how to write APT or
       DocBook documentation.</para>
 
       <sect1>
@@ -2091,7 +2042,7 @@ protected IsisConfiguration getConfiguration() {
         test results and code coverage. At least as far as <emphasis>Apache
         Isis</emphasis> is concerned, the site created reflects the module
         hierarchy, with at least one single index.html page to introduce each
-        module. The main site (corresponding to isis paremt POM) has rather
+        module. The main site (corresponding to isis parent POM) has rather
         more content, eg discussing the naked objects pattern.</para>
 
         <para>This additional site content can be written in a number of
@@ -2552,6 +2503,10 @@ protected IsisConfiguration getConfiguration() {
               </row>
 
               <row>
+                <entry></entry>
+
+                <entry></entry>
+
                 <entry nameend="_4" namest="_3">dnd</entry>
 
                 <entry></entry>
@@ -4000,8 +3955,8 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-
           <para>Then commit the <filename>pom.xml</filename> file.</para>
         </sect2>
 
-        <sect2>
-          <title>Manually update versions to release versions</title>
+        <sect2 id="sec.ManuallyUpdateVersionsToReleaseVersion">
+          <title>Manually update versions to the release version</title>
 
           <para>There are a couple of locations where the version must be
           bumped up manually.</para>
@@ -4692,8 +4647,8 @@ Added:
                 </listitem>
 
                 <listitem>
-                  <para>update archetype resources (see <xref
-                  linkend="sec.ReleaseUpdateArchetypeResources" />)</para>
+                  <para>update versions (see <xref
+                  linkend="sec.ManuallyUpdateVersionsToReleaseVersion" />)</para>
                 </listitem>
               </itemizedlist>
             </listitem>
@@ -4882,7 +4837,7 @@ cp ~/public_html/isis-x.x.x-incubating-source-release.* /www/www.apache.org/incu
           <title>Build the site</title>
 
           <para>Next, build the site, as per <xref
-          linkend="chp.BuildingSiteAndDocs" />.</para>
+          linkend="sec.BuildingSiteAndDocs" />.</para>
 
           <para>This should generate the current site in
           <filename>/tmp/m2-sites/isis</filename>.</para>
@@ -5381,7 +5336,7 @@ your machine might store the data and make it available to others!</programlisti
         fingerprint. The last 8 characters should be the same as the key id
         (nnnnnnnn).</para>
 
-        <sect3>
+        <sect2>
           <title>Publish to a public key server</title>
 
           <para>To a publish your key to a public key server (eg the MIT key
@@ -5411,18 +5366,18 @@ your machine might store the data and make it available to others!</programlisti
           <programlisting>http://pgp.mit.edu:11371/pks/lookup?search=0xnnnnnnnnn&amp;op=vindex</programlisting>
 
           <para>again, where nnnnnnnn is the key Id.</para>
-        </sect3>
+        </sect2>
 
-        <sect3>
+        <sect2>
           <title>Publish to your Apache home directory</title>
 
           <para>The armored representation of your public key should be
           uploaded to your home directory on people.apache.org, and renamed as
           <filename>.pgpkey</filename>. Make sure this is readable by
           all.</para>
-        </sect3>
+        </sect2>
 
-        <sect3>
+        <sect2>
           <title>Publish to your Apache HTML home directory</title>
 
           <para>The armored representation of your public key should be
@@ -5434,9 +5389,9 @@ your machine might store the data and make it available to others!</programlisti
 
           <para>where xxxxxxxx is your apache LDAP user name and nnnnnnnn is
           your public key id.</para>
-        </sect3>
+        </sect2>
 
-        <sect3>
+        <sect2>
           <title>FOAF</title>
 
           <para>First, check out the committers/info directory:</para>
@@ -5532,9 +5487,9 @@ your machine might store the data and make it available to others!</programlisti
           <para>ie, referencing your publically exported public key</para>
 
           <para>Finally, commit your changes.</para>
-        </sect3>
+        </sect2>
 
-        <sect3>
+        <sect2>
           <title>Save to KEYS</title>
 
           <para>The armored representation of the public key should be saved
@@ -5555,14 +5510,14 @@ your machine might store the data and make it available to others!</programlisti
 gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
 
           <para>Then commit.</para>
-        </sect3>
+        </sect2>
 
-        <sect3>
+        <sect2>
           <title>id.apache.org</title>
 
           <para>Log onto id.apache.org and ensure that the finger print of
           your public key is correct.</para>
-        </sect3>
+        </sect2>
       </sect1>
 
       <sect1>
