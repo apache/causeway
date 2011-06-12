@@ -676,8 +676,6 @@
       <sect1 id="sec.BuildingSiteAndDocs">
         <title>Building the site and documentation</title>
 
-        <para></para>
-
         <sect2>
           <title>Prerequisites</title>
 
@@ -775,12 +773,16 @@ do
   cd $root
 done</programlisting>
 
-          <para>This takes a little longer to run, but is at least
-          repeatable.</para>
-
           <para>The file is run from a flat file,
           <filename>modules</filename>, which is used to switch into each of
           the leaf-level modules to run the patching.</para>
+
+          <para>To fully build the site, therefore just use:</para>
+
+          <programlisting>sh msdf.sh -o</programlisting>
+
+          <para>This takes a little longer to run, but is at least
+          repeatable.</para>
         </sect2>
 
         <sect2>
@@ -3540,8 +3542,7 @@ public class FooBar {
             </listitem>
 
             <listitem>
-              <para>site builds ok (<code>mvn site-deploy -D deploy=local -D
-              site=full</code>)</para>
+              <para>site builds ok (<code>sh msdf.sh -o</code>)</para>
             </listitem>
 
             <listitem>
@@ -3600,22 +3601,6 @@ public class FooBar {
               <para>findbugs, as per <xref linkend="sec.FindBugs" />.</para>
             </listitem>
           </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>UNIX line file endings (for pom.xml files)</title>
-
-          <para>We prefer to use UNIX line endings, at least for
-          <filename>pom.xml</filename> files. However, running some of the
-          utility groovy scripts in a Windows cmd shell can cause the files to
-          be written out using Windows line endings.</para>
-
-          <para>Therefore, on a UNIX machine (or Cygwin on Windows),
-          run:</para>
-
-          <programlisting>/usr/bin/find . -name pom.xml -print | xargs dos2unix</programlisting>
-
-          <para>And then commit.</para>
         </sect2>
 
         <sect2 id="sec.RatTool">
@@ -4202,21 +4187,22 @@ svn: No such revision 1126567</programlisting>
           <itemizedlist>
             <listitem>
               <para>unzip the source-release <acronym>ZIP</acronym> and check
-              it compiles</para>
+              it builds</para>
 
               <para>The <acronym>ZIP</acronym> file resides in
               <filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>
               in <filename>target</filename> directory of the parent
               <package>[oai:isis]</package> module. Unzip in a new directory,
-              and build using <code>mvn clean install</code> (and <code>mvn
-              site-deploy -D deploy=local</code> if you have the time).</para>
+              and build (see <xref
+              linkend="chp.BuildingIsisFromSource" />).</para>
             </listitem>
 
             <listitem>
               <para>Inspect the <filename>DEPENDENCIES</filename> file.</para>
 
-              <para>This should be in the root of the extracted ZIP. In
-              particular, check that there are no <ulink
+              <para>This should be in the root of the extracted
+              <acronym>ZIP</acronym>. In particular, check that there are no
+              <ulink
               url="www.apache.org/legal/resolved.html#category-x">category-x</ulink>
               dependencies.</para>
             </listitem>
@@ -4776,17 +4762,38 @@ cp ~/public_html/isis-x.x.x-incubating-source-release.* /www/www.apache.org/incu
           repository, from there they will be automatically moved to the Maven
           repository.</para>
         </sect2>
+
+        <sect2>
+          <title>Manually Deploy the Release Website</title>
+
+          <para>The mechanics of deploying the release site is the same as
+          deploying a snapshot site, however there is the complication of
+          deploying from the relevant
+          <filename>tags/x.x.x-incubating</filename> tag (rather than
+          <filename>trunk</filename>) as well as ensuring that the released
+          binaries are correctly referenced on the downloads page.</para>
+        </sect2>
       </sect1>
 
       <sect1 id="sec.ManuallyDeployReleaseSite">
-        <title>Manually Deploy the Release Website</title>
+        <title>Merge changes from branch back into trunk</title>
 
-        <para>The mechanics of deploying the release site is the same as
-        deploying a snapshot site, however there is the complication of
-        deploying from the relevant <filename>tags/x.x.x-incubating</filename>
-        tag (rather than <filename>trunk</filename>) as well as ensuring that
-        the released binaries are correctly referenced on the downloads
-        page.</para>
+        <para>Because we release from a branch, the changes made in the branch
+        (changes to <filename>pom.xml</filename> made automatically by the
+        release-plugin, or any manual edits) should be merged back from the
+        release branch back into trunk.</para>
+
+        <para>You can if you wish use <acronym>SVN</acronym>'s
+        <code>merge</code> command for this (using the "reintegrate" flag).
+        However, you may well find it easy just to use a directory comparison
+        tool such as <emphasis>Beyond Compare</emphasis> or
+        <emphasis>WinMerge</emphasis>.</para>
+
+        <para>Finally, remember that the version in the
+        <filename>pom.xml</filename> for any modules that are not part of the
+        release (in particular, the <filename>examples</filename> and
+        <filename>domain-libs</filename> modules) should be manually updated
+        also.</para>
       </sect1>
     </chapter>
 
