@@ -89,9 +89,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk/</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC4-incubating/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC4-incubating/trunk/</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-RC4-incubating/trunk/</url>
     </scm>
 
     <!-- used in Site generation for relative references. -->

@@ -22,7 +22,7 @@
 	<skin>
 		<groupId>org.apache.isis.skins</groupId>
 		<artifactId>classic-skin</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.1.2-RC4-incubating</version>
 	</skin>
 
 	<version position="right" />
