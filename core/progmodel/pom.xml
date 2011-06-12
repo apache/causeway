@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-  
-         http://www.apache.org/licenses/LICENSE-2.0
-         
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    you under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>core</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis</groupId>
+        <artifactId>core</artifactId>
+        <version>0.1.2-incubating-SNAPSHOT</version>
+    </parent>
 
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>progmodel</artifactId>
-	<name>Core ProgModel</name>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>progmodel</artifactId>
+    <name>Core ProgModel</name>
 
-	<properties>
+    <properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>core/progmodel/</relativeUrl>
+        <relativeUrl>core/progmodel/</relativeUrl>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -43,10 +36,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
+                <version>${maven-project-info-reports-plugin}</version>
                 <inherited>false</inherited>
                 <configuration>
-                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -63,27 +56,27 @@
         </plugins>
     </reporting>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis</groupId>
+            <artifactId>applib</artifactId>
         </dependency>
-		<dependency>
-		    <groupId>org.apache.isis</groupId>
-		    <artifactId>applib</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
+        <dependency>
+            <groupId>org.apache.isis</groupId>
+            <artifactId>applib</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>commons</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>commons</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>metamodel</artifactId>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>metamodel</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -92,62 +85,11 @@
             <scope>test</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>testsupport</artifactId>
-		    <scope>test</scope>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
         </dependency>
-	</dependencies>
-
-    <!-- workaround for http://jira.codehaus.org/browse/MJAVADOC-298;
-    disabled at core, and re-enabled in all submodules except for testsupport -->
-    <profiles>
-        <profile>
-            <id>site-full</id>
-            <activation>
-                <property>
-                    <name>site</name>
-                    <value>full</value>
-                </property>
-            </activation>
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.8</version>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <quiet>true</quiet>
-                            <doctitle>${project.name} ${project.version}</doctitle>
-                            <windowtitle>${project.name}${project.version}</windowtitle>
-                            <splitindex>true</splitindex>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                            <links>
-                                <link>http://java.sun.com/j2se/1.6.0/docs/api</link>
-                                <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
-                                <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
-                                <link>http://java.sun.com/j2ee/1.4/docs/api</link>
-                            </links>
-                            <linksource>true</linksource>
-                            <!-- http://jira.codehaus.org/browse/MJAVADOC-268 
-                                and http://jira.codehaus.org/browse/MJAVADOC-284 -->
-                            <detectOfflineLinks>false</detectOfflineLinks>
-                            <!-- default value is as given; referenced by 
-                                other plugins so specified explicitly -->
-                            <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
-                        </configuration>
-                        <reportSets>
-                            <reportSet>
-                                <reports>
-                                    <report>javadoc</report>
-                                </reports>
-                            </reportSet>
-                        </reportSets>
-                    </plugin>
-                </plugins>
-            </reporting>
-        </profile>
-    </profiles>
+    </dependencies>
 
 </project>
