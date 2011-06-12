@@ -3538,7 +3538,7 @@ public class FooBar {
 
           <itemizedlist>
             <listitem>
-              <para>builds ok (<code>mvn clean install</code>)</para>
+              <para>builds ok (<code>mvn clean install -o</code>)</para>
             </listitem>
 
             <listitem>
@@ -3564,7 +3564,8 @@ public class FooBar {
           <title>Code Cleanup / Formatting</title>
 
           <para>Make sure that all source code has been cleaned up and
-          formatted according to the Isis and ASF conventions:</para>
+          formatted according to the <emphasis>Apache Isis</emphasis> and
+          <acronym>ASF</acronym> conventions:</para>
 
           <itemizedlist>
             <listitem>
@@ -3606,9 +3607,9 @@ public class FooBar {
         <sect2 id="sec.RatTool">
           <title>License Notice (RAT Tool)</title>
 
-          <para>The Apache Release Audit Tool (RAT) is designed to perform a
-          number of basic checks, most signifcant being missing copyright
-          header files.</para>
+          <para>The Apache Release Audit Tool (<acronym>RAT</acronym>) is
+          designed to perform a number of basic checks, most signifcant being
+          missing copyright header files.</para>
 
           <para>In theory it can be run from Maven (<code>mvn
           rat:check</code>), with the <filename>maven-rat-plugin</filename>
@@ -3620,9 +3621,10 @@ public class FooBar {
           exclusions, making this method of performing a check somewhat
           useless.</para>
 
-          <para>Instead, the tool can be run from the command-line (though
-          you'll need to build the binary <acronym>JAR</acronym> of the tool
-          yourself).</para>
+          <para>Instead, the tool can be run from the command-line (you'll
+          find a snapshot copy of the <acronym>JAR</acronym> is in the root of
+          the Isis <acronym>SVN</acronym> repository; or you can build the
+          binary yourself).</para>
 
           <para>First, clean up any generated artifacts:</para>
 
@@ -3630,13 +3632,12 @@ public class FooBar {
 
           <para>Then, run the tool using:</para>
 
-          <programlisting>java -jar apache-rat-0.8-SNAPSHOT.jar \
+          <programlisting>java -jar ../apache-rat-0.8-SNAPSHOT.jar \
   -d . --exclude \
   resources.txt site.vm \
   *.project *.classpath *.launch *.importorder \
   *.java.hsp \
   *.ucd *.ucls \
-  *-LICENSE.txt \
   fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml \
   *.mod usage.txt screen.css docbook.cat \
   org.apache.isis.viewer.wicket.ui.ComponentFactory \
@@ -3672,11 +3673,6 @@ public class FooBar {
             </listitem>
 
             <listitem>
-              <para><filename>-LICENSE.txt</filename> are required license
-              files for certain third party dependencies</para>
-            </listitem>
-
-            <listitem>
               <para><filename>fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn
               catalog.xml *.mod usage.txt screen.css docbook.cat</filename>
               are files related to DocBook generation</para>
@@ -3708,6 +3704,7 @@ public class FooBar {
 
           <programlisting>cat /tmp/rat.txt \
    | grep '^ !???' \
+   | grep -v "jquery*.js" \
    | grep -v "tests-common/.*\.xml" \
    | grep -v "tests-common/.*/tests\..*" \
    | grep -v "tests-common/.*\.xml" \
@@ -3736,9 +3733,10 @@ public class FooBar {
           <para>Although <emphasis>Apache Isis</emphasis> has no dependencies
           which have incompatible licenses, the <acronym>POM</acronym>s for
           these dependencies (in the Maven central repo) do not necessarily
-          contain the required license information. This results in the
-          <filename>META-INF/DEPENDENCIES</filename> file and generated Maven
-          site listing dependencies as being "unknown".</para>
+          contain the required license information. When the release process
+          is run this results in the generated
+          <filename>DEPENDENCIES</filename> file and generated Maven site
+          listing dependencies as having "unknown" licenses.</para>
 
           <para>Fortunately, Maven allows the missing information to be
           provided by configuring the
@@ -3749,8 +3747,7 @@ public class FooBar {
 
           <para>To capture the missing license information, use:</para>
 
-          <programlisting>mvn license:download-licenses
-groovy checkmissinglicenses.groovy</programlisting>
+          <programlisting>mvn license:download-licenses</programlisting>
 
           <para>This Maven plugin creates a <filename>license.xml</filename>
           file in the <filename>target/generated</filename>-resources/
