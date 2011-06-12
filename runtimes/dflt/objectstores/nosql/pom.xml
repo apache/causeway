@@ -17,19 +17,18 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis.runtimes.dflt</groupId>
         <artifactId>objectstores</artifactId>
-        <version>0.1.2-incubating-SNAPSHOT</version>
+        <version>0.1.2-RC4-incubating</version>
     </parent>
 
     <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
     <artifactId>nosql</artifactId>
-    <version>0.1.2-incubating-SNAPSHOT</version>
+    <version>0.1.2-RC4-incubating</version>
 
     <name>Default Runtime NOSQL ObjectStore</name>
 
@@ -94,13 +93,11 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <copy todir="target/config"
-                                    preservelastmodified="true">
+                                <copy todir="target/config" preservelastmodified="true">
                                     <fileset dir="config" />
                                 </copy>
                                 <copy file="server.sh" todir="target" />
-                                <chmod file="target/server.sh"
-                                    perm="ugo+rx" />
+                                <chmod file="target/server.sh" perm="ugo+rx" />
                             </tasks>
                         </configuration>
                     </execution>
@@ -206,7 +203,7 @@
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
-            <version>0.1.2-incubating-SNAPSHOT</version>
+            <version>0.1.2-RC4-incubating</version>
             <scope>test</scope>
         </dependency>
 

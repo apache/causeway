@@ -23,12 +23,12 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>security</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.1.2-RC4-incubating</version>
 	</parent>
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>file</artifactId>
-	<version>0.1.2-incubating-SNAPSHOT</version>
+	<version>0.1.2-RC4-incubating</version>
 
 	<name>File Security Implementation</name>
 
@@ -71,7 +71,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.2-incubating-SNAPSHOT</version>
+                <version>0.1.2-RC4-incubating</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
