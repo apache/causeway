@@ -18,18 +18,15 @@
 echo mvn site-deploy -D modules=site -D deploy=local -D site=full $*
      mvn site-deploy -D modules=site -D deploy=local -D site=full $*
 root=`pwd`
-for a in `cat modules`
+for a in `cat modules | grep -v ^# | grep ^.*[:].*$`
 do
-  echo $a | grep ^# >/dev/null
-  if [ $? -ne 0 ]; then
-    d=`echo $a | cut -d: -f1`
-    n=`echo $a | cut -d: -f2`
+  d=`echo $a | cut -d: -f1`
+  n=`echo $a | cut -d: -f2`
+  if [ "$n" ]; then
     cd $d
     pwd
-    if [ "$n" ]; then
-      echo mvn site-deploy -D modules=site -D deploy=local -D patch=$n $*
-           mvn site-deploy -D modules=site -D deploy=local -D patch=$n $*
-      fi
+    echo mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+         mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+    cd $root
   fi
-  cd $root
 done

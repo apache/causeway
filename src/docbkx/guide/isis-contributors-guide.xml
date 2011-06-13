@@ -4402,7 +4402,7 @@ svn: No such revision 1126567</programlisting>
               </imageobject>
             </mediaobject>
 
-            <para>All being well, the close shold complete
+            <para>All being well, the close should complete
             successfully:</para>
 
             <mediaobject>
@@ -4478,7 +4478,7 @@ In addition, the Maven artifacts have been staged to staging repository on repos
 
 I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-RCn-incubating.  
 The contributors guide on the site contains some suggestions of how to verify the release, see
-http://incubator.apache.org/isis-0.x.x-RCn-incubating/docbkx/html/guide/ch13s06.html#d0e4034
+http://incubator.apache.org/isis-0.x.x-RCn-incubating/docbkx/html/guide/ch12s06.html
 
 Please verify the release and cast your vote.  The vote will be open for 72 hours.
 
