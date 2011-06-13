@@ -155,9 +155,84 @@
         <title>Components of the Default Runtime</title>
 
         <para>As will be clear if you've explored the codebase, the
-        <emphasis>default runtime</emphasis> implementation consists of a
-        fairly large number of submodules. These are organized around the
-        major <acronym>API</acronym>s that the default runtime exposes:</para>
+        <emphasis>default runtime</emphasis> implementation consists of a main
+        <emphasis>runtime</emphasis>
+        module<package>[oai.runtimes.dflt:runtime]</package> along with a
+        fairly large number of submodules.</para>
+
+        <para>The main <emphasis>runtime</emphasis> module provides the
+        following functionality:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>classes to bootstrap the default runtime</para>
+          </listitem>
+
+          <listitem>
+            <para>the "installer" registry; a repository of components that
+            can be bootstrapped</para>
+          </listitem>
+
+          <listitem>
+            <para>implementations of the
+            <classname>AuthenticationManager</classname> and
+            <classname>AuthorizationFacetFactory</classname> interfaces for
+            the default runtime</para>
+          </listitem>
+
+          <listitem>
+            <para>an abstract <classname>PersistenceSession</classname>
+            <acronym>API</acronym> that provides a very generalized means for
+            managing the lifecycle of domain objects</para>
+
+            <para>This includes an <classname>ObjectFactory</classname> API
+            which (in conjunction with the
+            <classname>ClassSubstitor</classname> interface defined in the
+            <package>[oai.core:metamodel]</package> module) provides hook-in
+            points for bytecode enhancement libraries (discussed further
+            below);</para>
+          </listitem>
+
+          <listitem>
+            <para>an implementation of the
+            <classname>PersistenceSession</classname> <acronym>API</acronym>
+            which does some of the common work for persistence management and
+            defines its own object store <acronym>API</acronym></para>
+          </listitem>
+
+          <listitem>
+            <para>a mechanism to define the set of application domain services
+            to make available to the domain objects</para>
+          </listitem>
+
+          <listitem>
+            <para>a mechanism to define the set of fixtures to automatically
+            install into the object store (for use when testing or
+            prototyping)</para>
+          </listitem>
+
+          <listitem>
+            <para>a mechanism (<classname>Memento</classname>) for capturing
+            the state of domain objects over time</para>
+          </listitem>
+
+          <listitem>
+            <para>support for more easily building <acronym>XML</acronym>
+            snapshots (using the
+            <classname>oai.applib.snapshot.Snapshottable</classname>
+            interface)</para>
+          </listitem>
+
+          <listitem>
+            <para>a means of storing user preference / profile information
+            (including, for example, bookmarks to objects).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The rest of the <emphasis>default runtime</emphasis>
+        (sub)modules provide implementations of the major
+        <acronym>API</acronym>s that the <emphasis>default runtime</emphasis>
+        exposes:</para>
 
         <itemizedlist>
           <listitem>
@@ -166,37 +241,58 @@
             <para>The object store <acronym>API</acronym> defines a
             persistence mechanism for storing domain objects. Examples include
             a simple in-memory object store (useful only for prototyping), an
-            XML objectstore, a simple SQL objectstore, and a "NoSQL"
-            (JSON-based) objectstore.</para>
+            <acronym>XML</acronym> objectstore, a simple
+            <acronym>SQL</acronym> objectstore, and a "NoSQL" (JSON-based)
+            objectstore.</para>
           </listitem>
 
           <listitem>
-            <para>bytecode providers</para>
+            <para>bytecode enhancement</para>
 
-            <para>Bytecode providers provide the ability to support lazy
-            loading while walking a graph from one domain object to another.
-            This is a similar technique to that employed by
-            <acronym>ORM</acronym>s, but is available even if the object store
-            involved does not support lazy loading.<footnote>
+            <para>Bytecode enhancement classes provide the ability to support
+            lazy loading while walking a graph from one domain object to
+            another, using tools such as <ulink
+            url="http://cglib.sourceforge.net">cglib</ulink> or <ulink
+            url="http://www.javassist.org">javassist</ulink>. This is a
+            similar technique to that employed by <acronym>ORM</acronym>s, but
+            is available even if the object store involved does not support
+            lazy loading.<footnote>
                 <para>Indeed, ORM-based object stores (are likely to) require
                 the bytecode providers to be disabled.</para>
               </footnote></para>
+
+            <para>The bytecode enhancement is also used for automatic tracking
+            of dirty objects (so that Isis knows to flush them to the object
+            store at the end of the transaction). The primary
+            <acronym>API</acronym> that supports bytecode enhancement is
+            <classname>ObjectFactory</classname>, discussed in <xref
+            linkend="sec.SessionLevelScope" />.</para>
           </listitem>
 
           <listitem>
             <para>profile store</para>
 
-            <para>The profile store is responsible for holding user profile
-            information, by which we mean their preferences and any other
-            information, for example bookmarks.</para>
+            <para>The profile store <acronym>API</acronym> defines a
+            persistence mechanism for storing user profile information.
+            Examples include a simple in-memory profile store (useful only for
+            prototyping and testing), and an <acronym>XML</acronym>
+            profilestore.</para>
           </listitem>
 
           <listitem>
             <para>client/server remoting support</para>
 
-            <para>The default runtime also provides support for client/server
-            remoting. For example, the DnD viewer can be configured to act as
-            a client, holding a cache of domain objects client-side.
+            <para>The <emphasis>default runtime</emphasis> also provides
+            support for client/server remoting, through an alternative
+            implementation of the <classname>PersistenceSession</classname>
+            <acronym>API</acronym><footnote>
+                <para>Alternative, that is, to the
+                <classname>PersistenceSession</classname> implementation for
+                object stores.</para>
+              </footnote>.</para>
+
+            <para>For example, the DnD viewer can be configured to act as a
+            client, holding a cache of domain objects client-side.
             Interactions with these domain objects are sent transparently
             across to a server running the same application domain classes;
             the changes are performed server-side and the results sent back
@@ -204,229 +300,610 @@
           </listitem>
         </itemizedlist>
 
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title><classname>ObjectAdapter</classname>s and
-        <classname>Oid</classname>s</title>
-
-        <para><emphasis>Apache Isis</emphasis> components do not deal directly
-        with domain object pojos; instead they are always wrapped by an
-        adapter, call <classname>ObjectAdapter</classname>. This has two main
-        responsibilities:</para>
+        <para>In addition, because many of the <emphasis>Isis</emphasis>
+        viewers are webapps, the <emphasis>default runtime</emphasis> also
+        has:</para>
 
         <itemizedlist>
           <listitem>
-            <para>it provides reference to the
-            <classname>ObjectSpecification</classname>, which describes the
-            structure (properties, collections, actions) of the object's
-            type</para>
+            <para>a module <package>[oai.runtimes.dflt:webapp]</package> with
+            <classname>ServletContextListener</classname> and
+            <classname>javax.servlet.Filter</classname> implementations to
+            allow <emphasis>Isis</emphasis> to be bootstrapped from a
+            webapp</para>
           </listitem>
 
           <listitem>
-            <para>it provides reference to an <classname>Oid</classname>,
-            which is an opaque value that uniquely identifies the object
-            instance.</para>
+            <para>provides a convenience module
+            <package>[oai.runtimes.dflt:webserver]</package> that provides a
+            command-line utility to allow any Maven webapp-structured project
+            to be hosted within Jetty.</para>
+          </listitem>
+        </itemizedlist>
+      </sect1>
+
+      <sect1 id="sec.InstallerLookup">
+        <title><classname>InstallerLookup</classname> and
+        <filename>installer-registry.properties</filename></title>
+
+        <para>The <emphasis>Isis</emphasis> core modules
+        <package>[oai:core]</package> already provide the
+        <classname>oai.core.commons.components.Installer</classname> interface
+        which defines a factory interface for any component within
+        <emphasis>Isis</emphasis>.</para>
+
+        <para>The <emphasis>default runtime</emphasis> builds upon this
+        infrastructure by providing the <classname>InstallerLookup</classname>
+        interface (in
+        <package>oai.runtimes.dflt.runtime.installerregistry</package>) to act
+        as a registry of all available <classname>Installer</classname>s that
+        have been bootstrapped. It also provides an implementation,
+        <classname>InstallerLookupDefault</classname>, which looks up the
+        implementations from the
+        <filename>installer-registry.properties</filename> file. This registry
+        file can be found in <package>oai.runtimes.dflt.runtime</package>
+        package. If no implementation is specified, then a default (defined in
+        <package>oai.runtimes.dflt.runtime.system.SystemConstants</package>)
+        is used. For some components the specified
+        <classname>DeploymentType</classname> will cause the default to vary;
+        for example, the default persistence mechanism when running in
+        exploration mode is to use the in-memory object store; otherwise
+        though the XML object store is defaulted.</para>
+
+        <para>In addition to loading components, the
+        <classname>InstallerLookupDefault</classname> also updates the
+        (mutable) <classname>IsisConfigurationBuilder</classname>, from which
+        an <classname>IsisConfiguration</classname> is snapshotted. It does
+        this by asking each <classname>Installer</classname> for its
+        configuration files
+        (<methodname>Installer#getConfigurationResources()</methodname>). For
+        those installers that inherit from
+        <classname>oai.core.commons.config.InstallerAbstract</classname> (ie
+        most if not all of them), this returns a collection of two file names
+        that follow the convention:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><filename>type.properties</filename></para>
+          </listitem>
+
+          <listitem>
+            <para><filename>type_name.properties</filename></para>
           </listitem>
         </itemizedlist>
 
-        <para>You can think of <classname>ObjectAdapter</classname> as
-        equivalent to <classname>java.lang.Object</classname>, while
-        <classname>ObjectSpecification</classname> is in some sense equivalent
-        to <classname>java.lang.Class</classname>. The
-        <classname>Oid</classname> interface meanwhile is something akin to a
-        primary key identifier for an row in a relational database, but it is
-        slightly more abstract than that because it can also represent a
-        non-persisted object.</para>
+        <para>For example, if loading the XML persistence mechanism/object
+        store this will search for <filename>persistor.properties</filename>
+        and then <filename>persistor_xml.properties</filename>.</para>
 
-        <para>It is the <emphasis>metamodel</emphasis> module of
-        <emphasis>Isis</emphasis> <package>[oai.core:metamodel]</package>
-        defines these interfaces (<classname>ObjectAdapter,
-        ObjectSpecifation</classname> and <classname>Oid</classname>), the
-        object itself (<classname>ObjectAdapter</classname>), and the object's
-        identity (<classname>Oid</classname>). The metamodel itself also
-        provides an implementation of
-        <classname>ObjectSpecification</classname>.</para>
-
-        <para>The <emphasis>default runtime</emphasis> module
-        <package>[oai.runtimes:dflt]</package> provides an implementations of
-        the <classname>ObjectAdapter</classname> interface
-        (<classname>oai.runtimes.dflt.persistence.adapterfactory.pojo.PojoAdapter</classname>)
-        as well as an implementation of the <classname>Oid</classname>
-        interface. The actual implementation of <classname>Oid</classname>
-        will depend on the object store (persistence) mechanism that the
-        runtime has been configured to use.</para>
+        <para>It's worth pointing out that
+        <classname>InstallerLookupDefault</classname> is, in turn, defaulted
+        from <classname>IsisModule</classname>. This is an implementation if a
+        <classname>com.google.inject.Module</classname>, meaning that
+        <emphasis>Isis</emphasis> is, in fact, ultimately bootstrapped by
+        <ulink url="http://code.google.com/p/google-guice/">Google
+        Guice</ulink><footnote>
+            <para>At least, when the <emphasis>default runtime</emphasis> is
+            used.</para>
+          </footnote>.</para>
       </sect1>
 
       <sect1>
-        <title>AdapterManager</title>
+        <title>Component Scopes</title>
 
-        <para>As already mentioned, the <classname>ObjectAdapter</classname>
-        maintains a reference to an <classname>Oid</classname> and the
-        underlying pojo domain object. To traverse in the other direction -
-        that is, from <classname>Oid</classname> to
-        <classname>ObjectAdapter</classname> or from pojo to
-        <classname>ObjectAdapter</classname> - the default runtime uses its
-        internal <classname>AdapterManager</classname> component, which
-        maintains two sets of maps. This is shown below:</para>
+        <para>The components loaded by <classname>InstallerLookup</classname>
+        are thread-safe singletons with application (global) scope. From them
+        the <emphasis>Isis</emphasis> runtime instantiates further components
+        at session, and within that transaction-level scope. This is shown
+        below:</para>
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/adapter-manager.png" scale="45" />
+            <imagedata fileref="images/architecture.png" scale="45" />
           </imageobject>
         </mediaobject>
 
-        <para>The <classname>AdapterManager</classname> is an example of the
-        <ulink
-        url="http://martinfowler.com/eaaCatalog/identityMap.html">object-identity
-        map pattern</ulink> (as documented more fully in Martin Fowler's
-        Patterns of Enterprise Application Architecture). Whenever a domain
-        object pojo is handled by the system, and before an adapter for it has
-        been created, the runtime checks the
-        <classname>AdapterManager</classname> for the instance first, and only
-        creates an adapter if the pojo is not mapped. Similarly, if the
-        adapter has only an <classname>Oid</classname> value then the
-        <classname>AdapterManager</classname> is determine if the object's
-        adapter exists.</para>
+        <para>For webapp-based viewers, an <classname>IsisSession</classname>
+        is instantiated at the beginning of the HTTP request, and is
+        automatically closed at the end of the request. In this regard it is
+        very similar to the concept of a <acronym>JPA
+        </acronym><classname>javax.persistence.PersistenceContext</classname>
+        or <ulink url="http://hibernate.org">Hibernate</ulink>
+        <classname>org.hibernate.Session</classname>.</para>
+
+        <para>For client/server deployments, an
+        <classname>IsisSession</classname> is similar for the server, but for
+        the client an <classname>IsisSession</classname> is started when the
+        user starts the client, and is only closed when the user quits
+        out.<footnote>
+            <para>There are, arguably, some issues with this design. In the
+            future we may deprecate this design in favour of a design of
+            client that is wholly stateless.</para>
+          </footnote></para>
+
+        <para>As the diagram illustrates, an
+        <classname>IsisSession</classname> can give rise to one or multiple
+        <classname>IsisTransaction</classname>s. If running within a webapp or
+        the server-side of a client/server remoting, each
+        <classname>IsisSession</classname> will instantiate precisely one
+        <classname>IsisTransaction</classname>, automatically begun at the
+        beginning of the session and committed at the end. On the client-side
+        of a client/server deployment, an
+        <classname>IsisTransaction</classname> is created for each
+        client/server interaction.</para>
+
+        <para>The following look at the role of each of the components shown,
+        in each scope.</para>
+
+        <sect2>
+          <title>Application-level scope</title>
+
+          <para>The <classname>IsisSystem</classname> is the top-level object
+          that represents the running <emphasis>Isis</emphasis> instance.
+          Within this top-level object are a number of subsidiary
+          objects:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the <classname>DeploymentType</classname> is used to
+              categorise the "mode" in which <emphasis>Isis</emphasis> is
+              being used. This combines two different dimensions: whether
+              <emphasis>Isis</emphasis> is running in a server (multiuser) or
+              client context, and whether it is running in
+              exploration/prototyping/production. The
+              <classname>DeploymentType</classname> in effect can influence
+              which implementation of components are created (see <xref
+              linkend="sec.InstallerLookup" />).</para>
+            </listitem>
+
+            <listitem>
+              <para>the <classname>IsisConfiguration</classname> is the final
+              configuration after all components have been
+              loaded;eLoade</para>
+            </listitem>
+
+            <listitem>
+              <para>the <classname>IsisSessionFactory</classname> is used to
+              create <classname>IsisSession</classname>s as required (more on
+              this below)</para>
+            </listitem>
+
+            <listitem>
+              <para>the <classname>LogonFixture</classname> allows automatic
+              logon if running with a test/exploration mode
+              (<classname>DeploymentType</classname>)</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Of the above top-level objects, the
+          <classname>IsisSessionFactory</classname> is by far the most
+          important, because it is responsible for creating
+          <classname>IsisSession</classname>s as and when required. There are
+          several elements to an <classname>IsisSession</classname>, and so
+          <classname>IsisSessionFactory</classname> delegates the
+          instantiation of these elements to its own subsidiary
+          objects:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The <classname>AuthenticationManager</classname> is used
+              for authenticated users into the system, and is used to
+              instantiate an <classname>AuthenticationSession</classname>.
+              This is discussed further in <xref
+              linkend="sec.SessionLevelScope" />.</para>
+            </listitem>
+
+            <listitem>
+              <para>The <classname>PersistenceSessionFactory</classname> is
+              used to instantiate the corresponding
+              <classname>PersistenceSession</classname>. This is discussed
+              further in <xref linkend="sec.SessionLevelScope" />.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In addition, the <classname>IsisSessionFactory</classname>
+          holds references to a number of other top-evel components, namely
+          <classname>AuthorizationManager</classname>, the
+          <classname>SpecificationLoader</classname> (ie the Isis metamodel),
+          the <classname>TemplateImageLoader</classname> (for loading
+          images/icons) and the <classname>UserProfileLoader</classname>
+          (responsible for interacting with the profile store
+          component).</para>
+        </sect2>
+
+        <sect2 id="sec.SessionLevelScope">
+          <title>Session-level scope</title>
+
+          <para>The <classname>AuthenticationSession</classname> holds the
+          credentials (basically: username and roles) of the user that is
+          currently (ie with respect to the current
+          <classname>IsisContext</classname>) interacting with
+          <emphasis>Isis</emphasis>. In principal this information could
+          change over time; for example a user might be added or removed from
+          roles.</para>
+
+          <para>The <classname>PersistenceSession</classname>, on the other
+          hand, is a somewhat more complex beast, consisting in turn
+          of:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><classname>IsisTransactionManager</classname>, which is
+              responsible for managing <classname>IsisTransaction</classname>s
+              within the persistence session.</para>
+
+              <para>As mentioned above, when running as a webapp there is
+              precisely one <classname>IsisTransaction</classname> per
+              session, however when running as a client in client/server mode
+              there may be many transactions per session.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>ServicesInjector</classname>, which is
+              responsible for injecting domain services into each domain
+              object as it is instantiated.</para>
+
+              <para>Services are discussed further in <xref
+              linkend="sec.RegisteringServices" />.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>PojoAdapterFactory</classname>, which is an
+              implementation of the
+              <classname>oai.core.metamodel.adapter.ObjectAdapterFactory</classname>
+              <acronym>API</acronym>. </para>
+
+              <para>The default implementation instantiates
+              <classname>PojoAdapter</classname> as the corresponding
+              implementation of
+              <classname>oai.core.metamodel.adapter.ObjectAdapter</classname>.
+              There is further coverage of
+              <classname>ObjectAdapter</classname>s in <xref
+              linkend="sec.ObjectLifecycleManagement" />.</para>
+
+              <para>In principle this is an extension point; the
+              <emphasis>default runtime</emphasis> could be extended to
+              provide different implementations of
+              <classname>ObjectAdapterFactory</classname>. for example to
+              provide more extensive binding support for certain viewers, or
+              to provide a fine-grained notifications of changes to underlying
+              objects.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>ObjectFactory</classname>, which provides
+              different implementations for instantiating domain object
+              pojos.</para>
+
+              <para>This is the primary <acronym>API</acronym> that enables
+              lazy-loading and automatic tracking of dirty objects.
+              Specifically, the <classname>ObjectFactory</classname>
+              <acronym>API</acronym> is implemented to allow the bytecode
+              implementation to instantiate objects (they provide custom
+              subclasses which act as wrappers around the underlying
+              object).</para>
+
+              <para>In addition, the <classname>ClassSubstitutor</classname>
+              <acronym>API</acronym> should also be implemented; this allows
+              the metamodel to walk the graph ignoring the custom
+              subclasses.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>OidGenerator</classname>, which provides an
+              <acronym>API</acronym> to generate unique
+              <classname>Oid</classname>s (object identifiers) for each
+              persistent instance.</para>
+
+              <para>You can think of the <classname>OidGenerator</classname>
+              as a generalization of the automatic generation of primary keys
+              for entities (using a SQL Server <code>identity</code> keyword
+              or Oracle SEQUENCE). However, whereas a primary key id only
+              relates to persisted objects, <emphasis>Isis</emphasis>'
+              <emphasis>default runtime</emphasis> also allows
+              <classname>Oid</classname>s to be created for still-transient
+              objects. Because such objects may later be persisted, this
+              meanst that the value of the <classname>Oid</classname> can
+              change at this point. <emphasis>Isis</emphasis> automatically
+              manages this transition.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>AdapterManager</classname>, which is
+              responsible for tracking the associations between domain object
+              pojos, <classname>ObjectAdapter</classname>s and
+              <classname>Oid</classname>s.</para>
+
+              <para>This, too, is discussed fruther in <xref
+              linkend="sec.ObjectLifecycleManagement" />.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The final scope is for transactions that are created within an
+          session.</para>
+        </sect2>
+
+        <sect2 id="sec.TransactionLevelScope">
+          <title>Transaction-level scope</title>
+
+          <para>The <classname>IsisTransactionManager</classname> (referenced
+          by <classname>PersistenceSession</classname>) is responsible for
+          creating an <classname>IsisTransaction</classname>. The
+          implementation used depends on the
+          <classname>PersistenceSession</classname>, but for the more common
+          case, object stores, the implementation that is used is
+          <classname>ObjectStoreTransaction</classname>. This in turn holds a
+          collection of <classname>PersistenceCommand</classname>s which
+          represent instructions to add, update or delete objects as required.
+          When the transaction is committed, each of these
+          <classname>PersistenceCommand</classname>s is executed by the
+          configured object store.</para>
+
+          <para>In addition to the commands, the IsisTransaction also holds
+          two further sub-components:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the <classname>UpdateNotifier</classname> is used to
+              capture the list of objects that have been added, updated or
+              deleted (disposed of). This can be queried by other components
+              (such as viewers) as necessary (for example, to know which
+              objects to repaint).</para>
+
+              <para>Once changes are retrieved by client the notifier resets
+              its collection so that changes are only available once.</para>
+            </listitem>
+
+            <listitem>
+              <para>the <classname>MessageBroker</classname> is used to
+              capture any messages, warnings, or errors that either the system
+              or the domain objects themselves have raised.</para>
+
+              <para>Domain objects can raise messages using the
+              <classname>oai.applib.DomainObjectContainer</classname>,
+              automatically injected into all domain objects. The system may
+              raise messages if, for example, a concurrency exception
+              occurs.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In general it is invalid to access an object from any scope
+          once it has been closed. So, for example, the behaviour of the
+          <classname>AdapterManager</classname> of a
+          <classname>PersistenceSession</classname> is undefined once its
+          owning <classname>PersistenceSession</classname> is closed. The
+          exception to this rule is the <classname>UpdateNotifier</classname>
+          and <classname>MessageBroker</classname>. Other components in the
+          framework are free to access these even after the transaction has
+          completed, for example in order to repaint the view. See <xref
+          linkend="sec.IsisContext" /> for details on how to obtain these
+          components and any others.</para>
+        </sect2>
       </sect1>
 
-      <sect1>
-        <title>Lazy Loading</title>
+      <sect1 id="sec.IsisContext">
+        <title>Service Locator (<classname>IsisContext</classname>)</title>
 
-        <para></para>
+        <para>The <emphasis>default runtime</emphasis> uses the service
+        locator pattern to make components (of different scopes) available.
+        This is implemented through the <classname>IsisContext</classname>
+        class.</para>
 
-        <para>(eg as the result of receiving an object during a client/server
-        interaction, or from a memento, see ), then</para>
+        <para><classname>IsisContext</classname> itself is abstract; concrete
+        subclasses take responsibility for binding the services as
+        appropriate. For example, the default implementation for server-side
+        deployments is to use the
+        <classname>IsisContextThreadLocal</classname>, which (as might be
+        expected) binds the <classname>IsisContext</classname> singleton to
+        thread-local storage. This is, however, pluggable; the Wicket viewer
+        <package>[oai.viewer:wicket]</package> for example provides its own
+        implementation <classname>IsisContextForWicket</classname>, which
+        binds the IsisContext to an <ulink
+        url="http://wicket.apache.org">Apache Wicket</ulink>
+        <classname>org.apache.wicket.Session</classname>.</para>
 
-        <para>This is one of the main mechanisms by which the
-        <emphasis>default runtime</emphasis> is able to support lazy loading,
-        even if the underlying object store itself does not. So, for example,
-        if an object</para>
-
-        <para></para>
-
-        <para>One of the</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
+        <para>As noted above, in general it is invalid to access an object
+        from any scope once it has been closed; an
+        <classname>IllegalStateException</classname> will be thrown
+        otherwise.</para>
       </sect1>
 
-      <sect1>
-        <title>Oid subtypes</title>
+      <sect1 id="sec.ObjectLifecycleManagement">
+        <title>Object Lifecycle Management</title>
 
-        <para></para>
-      </sect1>
+        <para>Managing the lifecycle of domain objects is one of the major
+        responsibilities of the <emphasis>default runtime</emphasis>. Most of
+        the work goes on in the <classname>PersistenceSession</classname>
+        component, discussed earlier in <xref
+        linkend="sec.SessionLevelScope" />. In this section we dig a little
+        deeper into some of the internals of this component.</para>
 
-      <sect1>
-        <title></title>
+        <sect2>
+          <title><classname>ObjectAdapter</classname>s and
+          <classname>Oid</classname>s</title>
 
-        <para></para>
-      </sect1>
+          <para><emphasis>Apache Isis</emphasis> components do not deal
+          directly with domain object pojos; instead they are always wrapped
+          by an adapter, call <classname>ObjectAdapter</classname>. This has
+          two main responsibilities:</para>
 
-      <sect1>
-        <title>IsisContext</title>
+          <itemizedlist>
+            <listitem>
+              <para>it provides reference to the
+              <classname>ObjectSpecification</classname>, which describes the
+              structure (properties, collections, actions) of the object's
+              type</para>
+            </listitem>
 
-        <para><emphasis>Context</emphasis></para>
+            <listitem>
+              <para>it provides reference to an <classname>Oid</classname>,
+              which is an opaque value that uniquely identifies the object
+              instance.</para>
+            </listitem>
+          </itemizedlist>
 
-        <para>The <classname>IsisContext</classname> class responsibility
-        provide access to the main components of the framework.</para>
+          <para>You can think of <classname>ObjectAdapter</classname> as
+          equivalent to <classname>java.lang.Object</classname>, while
+          <classname>ObjectSpecification</classname> is in some sense
+          equivalent to <classname>java.lang.Class</classname>. The
+          <classname>Oid</classname> interface meanwhile is something akin to
+          a primary key identifier for an row in a relational database, but it
+          is slightly more abstract than that because it can also represent a
+          non-persisted object.</para>
 
-        <para>If the system is started in a multi-user mode then the context
-        will hold specific components for specific execution contexts,
-        allowing the same process to access the same components and different
-        processes to access unique instances.</para>
+          <para>It is the <emphasis>metamodel</emphasis> module of
+          <emphasis>Isis</emphasis> <package>[oai.core:metamodel]</package>
+          defines these interfaces (<classname>ObjectAdapter,
+          ObjectSpecifation</classname> and <classname>Oid</classname>), the
+          object itself (<classname>ObjectAdapter</classname>), and the
+          object's identity (<classname>Oid</classname>). The metamodel itself
+          also provides an implementation of
+          <classname>ObjectSpecification</classname>.</para>
 
-        <para>Each execution context will have its own Persistor, Message
-        Broker and Update Notifier.</para>
+          <para>The <emphasis>default runtime</emphasis> module
+          <package>[oai.runtimes:dflt]</package> provides an implementations
+          of the <classname>ObjectAdapter</classname> interface
+          (<classname>oai.runtimes.dflt.persistence.adapterfactory.pojo.PojoAdapter</classname>)
+          as well as an implementation of the <classname>Oid</classname>
+          interface. The actual implementation of <classname>Oid</classname>
+          will depend on the object store (persistence) mechanism that the
+          runtime has been configured to use.</para>
+        </sect2>
 
-        <para>The Reflector and Configuration are shared among all execution
-        contexts.</para>
+        <sect2>
+          <title><classname>AdapterManager</classname></title>
 
-        <para><emphasis>Persistor</emphasis></para>
+          <para>As already mentioned, the <classname>ObjectAdapter</classname>
+          maintains a reference to an <classname>Oid</classname> and the
+          underlying pojo domain object. To traverse in the other direction -
+          that is, from <classname>Oid</classname> to
+          <classname>ObjectAdapter</classname> or from pojo to
+          <classname>ObjectAdapter</classname> - the default runtime uses its
+          internal <classname>AdapterManager</classname> component, which
+          maintains two sets of maps. This is shown below:</para>
 
-        <para>During startup the persistor is given a set of service objects.
-        During intialisation the persistor must determine the OIDs for these
-        service objects. If the persistor does not know about a service (by
-        its ID) from a previous run then it must generate an OID for the
-        service and persist that with the ID of the service. This allows
-        references to be held persistently to service objects despite the fact
-        that they are singletons.</para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/adapter-manager.png" scale="45" />
+            </imageobject>
+          </mediaobject>
 
-        <para></para>
+          <para>The <classname>AdapterManager</classname> is an example of the
+          <ulink
+          url="http://martinfowler.com/eaaCatalog/identityMap.html">object-identity
+          map pattern</ulink> (as documented more fully in Martin Fowler's
+          Patterns of Enterprise Application Architecture). Whenever a domain
+          object pojo is handled by the system, and before an adapter for it
+          has been created, the runtime checks the
+          <classname>AdapterManager</classname> for the instance first, and
+          only creates an adapter if the pojo is not mapped. Similarly, if the
+          adapter has only an <classname>Oid</classname> value then the
+          <classname>AdapterManager</classname> is determine if the object's
+          adapter exists.</para>
 
-        <para></para>
-      </sect1>
+          <para>For value types (such as <classname>String</classname> or
+          <classname>java.math.BigDecimal</classname>), things are a little
+          different. All values <emphasis>do</emphasis> still have an
+          associated <classname>ObjectAdapter</classname>, however the
+          <classname>Oid</classname> of these is null, and these objects are
+          not stored within the <classname>AdapterManager</classname> maps. A
+          value is any object whose <classname>ObjectSpecification</classname>
+          has a <classname>ValueFacet</classname> associated with it.
+          Typically this is as a result of it have the
+          <classname>@Value</classname> annotation; or it might be one of the
+          built-in types supported by <emphasis>Isis</emphasis> (such as
+          <classname>String</classname>).</para>
+        </sect2>
 
-      <sect1>
-        <title>Installers and
-        <filename>installer-registry.properties</filename></title>
+        <sect2>
+          <title>Aggregate roots and <classname>Oid</classname>
+          subtypes</title>
 
-        <para></para>
+          <para>Whereas value types have no <classname>Oid</classname>, all
+          other domain objects do:</para>
 
-        <para></para>
-      </sect1>
+          <itemizedlist>
+            <listitem>
+              <para>Most domain objects that have an
+              <classname>Oid</classname> will be domain entities that,
+              moreover, are aggregate roots. That is, these are entities that
+              are intended to be directly referenced from other entities, and
+              have their own, independent identity.</para>
 
-      <sect1>
-        <title>Scopes</title>
+              <para>For example, a <classname>Customer</classname>,
+              <classname>Product</classname> and <classname>Order</classname>
+              are all likely to be aggregate root entities.</para>
+            </listitem>
 
-        <para></para>
+            <listitem>
+              <para>Lists or sets also have an
+              <classname>Oid</classname>.</para>
 
-        <para></para>
+              <para>For example, the <classname>List&lt;Order&gt;</classname>
+              held internally by a <classname>Customer</classname> to
+              represent its list of <classname>Order</classname>s will be
+              wrapped in an <classname>ObjectAdapter</classname> and have its
+              own <classname>Oid</classname>. Moreover, this
+              <classname>ObjectAdapter</classname> will be able to track
+              whether the list has been populated from the persistence
+              mechanism (so that the collection can be lazily loaded if
+              required).</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/architecture.gif" scale="40" />
-          </imageobject>
-        </mediaobject>
+              <para>However, such internal lists do not exist outside of their
+              owning entity, so these are considered "aggregated" by that
+              owning entity. The <classname>Oid</classname> of such objects is
+              an instance of type <classname>AggregatedOid</classname>, which
+              is basically the <classname>Oid</classname> of its owning entity
+              along with an Id for the collection of the object member in
+              question (eg "orders").</para>
+            </listitem>
 
-        <para></para>
-      </sect1>
+            <listitem>
+              <para>Entities can also be aggregated.</para>
 
-      <sect1>
-        <title>Update Notifier (Change Listener)</title>
+              <para>If an entity type is annotated with
+              <classname>@Aggregated</classname>, then it means that all
+              instances of that type are considered as non-root aggregated
+              entities, and will also be identified using an
+              <classname>AggregatedOid</classname>.</para>
 
-        <para></para>
+              <para>For example, <classname>OrderItem</classname> might be
+              considered an aggregate type (within its aggregate root,
+              <classname>Order</classname>).</para>
+            </listitem>
+          </itemizedlist>
 
-        <para>Changes to objects are collected by the
-        <classname>UpdateNotifier</classname> object once they have been
-        persisted. These changes can then be asynchronously accessed by a
-        client to keep it in sync with the underlying model. Once changes are
-        retrieved by client the notifier resets its collection so that changes
-        are only available once.</para>
+          <para>Marking an entity as aggregated may or may not impact how it
+          is persisted. For example, an XML or No-SQL (JSON-based) object
+          store might conceivably inline the persisted representation of the
+          aggregated entity within the document representing the aggregate
+          root. An RDBMS-based object store, on the other hand, might choose
+          to simply persist every entity in its own table (meaning that the
+          distinction between aggregate root entities vs aggregated entities
+          is less obvious).</para>
+        </sect2>
 
-        <para>Within the framework, specifically the persistor, when objects
-        changes and deletions are persisted the notifier should be informed
-        via its <methodname>addChangedObject(ObjectAdapter)</methodname> and
-        <methodname>addDisposedObject(ObjectAdapter)</methodname>
-        methods.</para>
+        <sect2 id="sec.RegisteringServices">
+          <title>Services</title>
 
-        <para>Clients should use the
-        <methodname>allChangedObjects()</methodname> and
-        <methodname>allDisposedObjects()</methodname> to get an
-        <classname>Enumeration</classname> of the changes.</para>
+          <para>***</para>
 
-        <para>The notifier itself can be got from system context using
-        <methodname>IsisContext.getUpdateNotifer()</methodname>.</para>
+          <para>During startup the persistor is given a set of service
+          objects. During intialisation the persistor must determine the OIDs
+          for these service objects. If the persistor does not know about a
+          service (by its ID) from a previous run then it must generate an OID
+          for the service and persist that with the ID of the service. This
+          allows references to be held persistently to service objects despite
+          the fact that they are singletons.</para>
 
-        <para></para>
+          <para></para>
+
+          <para></para>
+        </sect2>
       </sect1>
 
       <sect1>
         <title>Profile Stores</title>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Exploration vs Prototype Modes</title>
 
         <para></para>
 
