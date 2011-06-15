@@ -81,29 +81,29 @@
 
       <para>This guide is written for deployers looking to configure
       <emphasis>Isis</emphasis> to run using the default runtime, in any of
-      the supported configurations. It is divided into the following
-      parts:<itemizedlist>
+      the supported configurations. It is divided into two parts:<itemizedlist>
           <listitem>
-            <para>Core Concepts</para>
+            <para>Users' Guide</para>
 
-            <para>The chapters in this part of the guide <xref
-            linkend="prt.CoreConcepts" /> describe the core concepts
-            underpinning the design of the <emphasis>default
-            runtime</emphasis>.</para>
+            <para>The chapters in this part of the guide are written for the
+            developer who wants to just use the <emphasis>default
+            runtime</emphasis> in their own domain applications. It describe
+            how to run applications that use the <emphasis>default
+            runtime</emphasis> in the development environment, how to
+            configure the <emphasis>default runtime</emphasis>, and how to
+            deploy applications in the various different ways using the
+            <emphasis>default runtime</emphasis>.</para>
           </listitem>
 
           <listitem>
-            <para>Runtime Modules</para>
+            <para>Contributors' Guide</para>
 
-            <para>This part of the guide has chapters for each of the modules
-            that make up the <emphasis>default runtime</emphasis>.</para>
-          </listitem>
-
-          <listitem>
-            <para>Deployment</para>
-
-            <para>The chapters in this part of the guide describe different
-            ways to deploy an Isis application using the <emphasis>default
+            <para>The chapters in this part of the guide are written for those
+            Isis contributors who want to enhance, improve or otherwise change
+            the <emphasis>default runtime</emphasis> itself They describe the
+            core concepts underpinning the design of the <emphasis>default
+            runtime</emphasis>, and provide a walk through of each of the
+            modules that make up the <emphasis>default
             runtime</emphasis>.</para>
           </listitem>
         </itemizedlist></para>
@@ -115,16 +115,1005 @@
       <para>The <emphasis>core</emphasis> documentation
       <package>[oai:core]</package> describes common modules, including
       reusable classes that make up the <emphasis>core runtime</emphasis>
-      <package>[oai.core:runtime]</package>. This module, the default runtime,
-      makes use of these classes, as well as other components. It also defines
-      a number of its own <acronym>sub-API</acronym>s.</para>
+      <package>[oai.core:runtime]</package>. This module, the
+      <emphasis>default runtime</emphasis>, makes use of these classes, as
+      well as other components. It also defines a number of its own
+      <acronym>sub-API</acronym>s.</para>
     </sect1>
   </preface>
 
-  <part id="prt.CoreConcepts">
-    <title>Core Concepts</title>
+  <part>
+    <title>Users Guide</title>
 
     <partintro>
+      <para>This part of the guide is written for developers who wish to run
+      their own Isis domain applications using the <emphasis>default
+      runtime</emphasis>, and wish to configure the default runtime for their
+      own particular application.</para>
+
+      <para>The chapters are organized as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>getting started (in the development environment)</para>
+
+          <para>how to run an <emphasis>Isis</emphasis> application using the
+          default runtime within the development environment</para>
+        </listitem>
+
+        <listitem>
+          <para>deploying as a webapp</para>
+
+          <para>How to take an <emphasis>Isis</emphasis> application and
+          deploy it as a web application (using one of the
+          <emphasis>Isis</emphasis> web viewers)</para>
+        </listitem>
+
+        <listitem>
+          <para>deploying in standalone mode</para>
+
+          <para>How to take an <emphasis>Isis</emphasis> application and
+          deploy it as a standalone application (using the DnD viewer or
+          similar)</para>
+        </listitem>
+
+        <listitem>
+          <para>deploying in client/server mode</para>
+
+          <para>How to take an <emphasis>Isis</emphasis> application and
+          deploy it as a client/server application (using the DnD viewer or
+          similar for the client, and another instance of the application
+          running as the server)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
+    </partintro>
+
+    <chapter>
+      <title>Getting Started</title>
+
+      <para>This chapter assumes that you have an application that has been
+      generated using the Maven quickstart archetype. This archetype generates
+      an application that is preconfigured to run using the <emphasis>default
+      runtime</emphasis>, so some of what is documented here will already have
+      been set up.</para>
+
+      <sect1 id="sec.RuntimeLauncher">
+        <title>Launching <classname>Isis</classname></title>
+
+        <para>The <emphasis>default runtime</emphasis> provides several
+        different mechanisms by which to launch an <emphasis>Apache
+        Isis</emphasis> application.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the first is the <classname>org.apache.isis.Isis</classname>
+            command line runner.</para>
+
+            <para>This allows Isis to be run from the command line, with the
+            <acronym>UI</acronym> to use being specified by the
+            <code>--viewer</code> flag.</para>
+          </listitem>
+
+          <listitem>
+            <para>the second is the
+            <classname>org.apache.isis.WebServer</classname> webapp
+            runner.</para>
+
+            <para>This is intended to be used only with Maven modules that are
+            structured as a webapp; specifically, with a
+            <filename>src/main/webapp/WEB-INF/web.xml</filename> file.</para>
+
+            <para>The <classname>WebServer</classname> class is completely
+            generic, so in principle this <filename>web.xml</filename> could
+            contain any servlets etc. To use <emphasis>Isis</emphasis>,
+            though, it will typically contain the
+            <classname>oai.runtimes.dflt.webapp.IsisWebAppBootstrapper</classname>
+            (a <classname>javax.servlet.ServletContextListener</classname>),
+            along with the
+            <classname>oai.runtimes.dflt.webapp.IsisSessionFilter</classname>
+            (<classname>a javax.servlet.Filter</classname>)<footnote>
+                <para>We say "typically"; however some of the web-based
+                viewers have their own, equivalent, mechanisms. For example,
+                the <emphasis>Wicket viewer</emphasis>
+                <package>[oai.viewer:wicket]</package> provides a custom
+                subclass of the org.apache.wicket.Application for
+                bootstrapping, while the <emphasis>Restful viewer</emphasis>
+                is bootstrapped using the
+                <classname>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</classname>,
+                providing a custom subclass of
+                <classname>javax.ws.rs.core.Application</classname> to
+                register with Resteasy.</para>
+              </footnote>.</para>
+          </listitem>
+
+          <listitem>
+            <para>the third option also applies only for webapps, and is
+            simply to run using your IDE's built-in support for hosting
+            webapps. For example, if using Eclipse then this is the <ulink
+            url="http://eclipse.org/webtools">Eclipse WTP</ulink>
+            support.</para>
+          </listitem>
+
+          <listitem>
+            <para>and the final option is similar, and also applies only to
+            webapps, namely to run the webapp from Maven using <code>mvn
+            jetty:run</code> plugin.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Both <classname>org.apache.isis.Isis</classname> and
+        <classname>org.apache.isis.WebServer</classname> classes have main()
+        methods meaning that they are run from the command line. If you have
+        run the archetype then you'll find that there are Eclipse IDE launch
+        configurations for both <classname>oai.Isis</classname> and
+        <classname>oai.WebRunner</classname> (in the
+        <filename>ide/eclipse/launch</filename> directories).</para>
+
+        <para>These two runners act as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>start up the logging so that log messages are never
+            lost;</para>
+          </listitem>
+
+          <listitem>
+            <para>load up all the installers (component factories) that can be
+            found on the classpath from the
+            <filename>installer-registry.properties</filename> file.
+            (Physically this is packaged within the
+            [oai.runtimes.dflt:runtime] module's
+            <acronym>JAR</acronym>).</para>
+
+            <para>This allow the runner class to be aware of all the
+            components that are available;</para>
+          </listitem>
+
+          <listitem>
+            <para>parse the command line flags;</para>
+
+            <para>If there is problem with these then a help text is displayed
+            list all the options and the program exits</para>
+          </listitem>
+
+          <listitem>
+            <para>with the command line flags processed, initialize the
+            installers and bootstraps the system.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The next section lists the command line flags supported by these
+        two runners.</para>
+      </sect1>
+
+      <sect1>
+        <title>Command Line Flags</title>
+
+        <para>The following table summarises the command line-flags common to
+        both <classname>org.apache.isis.Isis</classname> commandline runner as
+        well as the <classname>org.apache.isis.WebServer</classname> webapp
+        runner utility.</para>
+
+        <note>
+          <para>Internally, all options are handled by subclasses of the
+          <classname>oai.core.runtime.optionhandler.OptionHandler</classname>
+          interface.</para>
+        </note>
+
+        <para><table>
+            <title>Common command line flags</title>
+
+            <tgroup cols="6">
+              <colspec align="center" />
+
+              <colspec colwidth="10%" />
+
+              <colspec />
+
+              <colspec />
+
+              <colspec />
+
+              <colspec />
+
+              <thead>
+                <row>
+                  <entry align="center">Flag</entry>
+
+                  <entry align="center">Long form</entry>
+
+                  <entry align="center">Purpose</entry>
+
+                  <entry align="center">Typical values</entry>
+
+                  <entry align="center">Default value</entry>
+
+                  <entry align="center">Notes</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>-t <emphasis>deploymenttype</emphasis></entry>
+
+                  <entry>--type</entry>
+
+                  <entry>The deployment mode; influences other settings and
+                  defaults.</entry>
+
+                  <entry><emphasis>exploration</emphasis>,
+                  <emphasis>prototype</emphasis>, <emphasis>client,
+                  singleuser, server_exploration, server_prototype, server,
+                  utilty</emphasis></entry>
+
+                  <entry><emphasis>prototype</emphasis></entry>
+
+                  <entry>Value corresponds to lower case form of
+                  <classname>DeploymentType</classname> class. If running
+                  under <classname>WebServer</classname>, should only use
+                  <emphasis>server_xxx</emphasis> values. Some viewers (eg the
+                  wicket viewer) may define additional deployment types.
+                  </entry>
+                </row>
+
+                <row>
+                  <entry>-v <emphasis>viewername</emphasis></entry>
+
+                  <entry>--viewer</entry>
+
+                  <entry>Specifies the user interface (viewer
+                  implementation).</entry>
+
+                  <entry><emphasis>dnd</emphasis>, <emphasis>html</emphasis>,
+                  <emphasis>restful</emphasis>, or FQCN that implements
+                  <classname>ViewerInstaller</classname>. can also specify
+                  <emphasis>encoding-http, encoding-sockets,
+                  serializing-sockets, xstream-sockets</emphasis></entry>
+
+                  <entry><emphasis>dnd</emphasis></entry>
+
+                  <entry><para>Values are taken from
+                  <filename>installer-registry.properties</filename>. See also
+                  <xref
+                  linkend="sec.ClientConnectorVsViewer" /></para></entry>
+                </row>
+
+                <row>
+                  <entry>-r <emphasis>persistorname</emphasis></entry>
+
+                  <entry>--persistor</entry>
+
+                  <entry>The persistence mechanism (ie object store
+                  implementation) to use for persisting domain objects between
+                  runs.</entry>
+
+                  <entry><emphasis>in-memory, xml, sql, nosql, fileserver,
+                  mongodb</emphasis>, or FQCN that implements
+                  <classname>PersistenceMechanismInstaller</classname>.</entry>
+
+                  <entry>depends upon the deployment type, eg is
+                  <emphasis>in-memory</emphasis> for
+                  <emphasis>exploration</emphasis>, or
+                  <emphasis>xml</emphasis> if
+                  <emphasis>server</emphasis>.</entry>
+
+                  <entry>Ignored if deployment type is
+                  <emphasis>client</emphasis>. Values are taken from
+                  <filename>installer-registry.properties</filename> </entry>
+                </row>
+
+                <row>
+                  <entry>-e <emphasis>profilestorename</emphasis></entry>
+
+                  <entry>--user-profile-store</entry>
+
+                  <entry>The profile store implementation to use for
+                  persisting user profile data between runs.</entry>
+
+                  <entry><emphasis>in-memory, xml</emphasis>, or FQCN that
+                  implements
+                  <classname>UserProfileStoreInstaller</classname>.</entry>
+
+                  <entry>depends upon the deployment type, eg is
+                  <emphasis>in-memory</emphasis> for
+                  <emphasis>exploration</emphasis>, or
+                  <emphasis>xml</emphasis> if
+                  <emphasis>server</emphasis>.</entry>
+
+                  <entry>Values are taken from
+                  <filename>installer-registry.properties</filename></entry>
+                </row>
+
+                <row>
+                  <entry>-x <emphasis>connectorname</emphasis></entry>
+
+                  <entry>--connector</entry>
+
+                  <entry>The protocol to use for a client when deploying
+                  client/server.</entry>
+
+                  <entry><emphasis>encoding-http, encoding-sockets,
+                  serializing-sockets, xstream-sockets</emphasis>, or FQCN
+                  that implements
+                  <classname>ClientConnectionInstaller</classname>.</entry>
+
+                  <entry></entry>
+
+                  <entry>Ignored if deployment type is not
+                  <emphasis>client</emphasis>. Values are taken from
+                  <filename>installer-registry.properties</filename>. See also
+                  <xref linkend="sec.ClientConnectorVsViewer" /></entry>
+                </row>
+
+                <row>
+                  <entry>-f <emphasis>fixturename</emphasis></entry>
+
+                  <entry>--fixture</entry>
+
+                  <entry>Specify fixtures to load (rather than read from
+                  configuration file)</entry>
+
+                  <entry>FQCN that implements
+                  <classname>InstallableFixture</classname>.</entry>
+
+                  <entry></entry>
+
+                  <entry>Ignored if deployment type is not
+                  <emphasis>exploration, prototype,
+                  server_exploration</emphasis> or
+                  <emphasis>server_prototype</emphasis>. If has been
+                  specified, any fixtures in the configuration file is
+                  ignored.</entry>
+                </row>
+
+                <row>
+                  <entry>-c <emphasis>filename</emphasis></entry>
+
+                  <entry>--config</entry>
+
+                  <entry>Loads in the specified configuration file.</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry>The file is loaded in addition to <filename
+                  class="directory" moreinfo="none">isis.properties</filename>
+                  and the properties files relating to the installed
+                  component.</entry>
+                </row>
+
+                <row>
+                  <entry>-D <emphasis>property=value</emphasis></entry>
+
+                  <entry></entry>
+
+                  <entry>Specify additional configuration properties.</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry>Multiple -D flags can be specified.</entry>
+                </row>
+
+                <row>
+                  <entry>-s</entry>
+
+                  <entry>--nosplash</entry>
+
+                  <entry>Do not show the splash screen</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+                </row>
+
+                <row>
+                  <entry>-quiet</entry>
+
+                  <entry></entry>
+
+                  <entry>Configure logging to log ERRORs only</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry>logging is performed internally using log4j.</entry>
+                </row>
+
+                <row>
+                  <entry>-verbose</entry>
+
+                  <entry></entry>
+
+                  <entry>Configure logging to log INFO, WARN and
+                  ERRORs.</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry>logging is performed internally using log4j.</entry>
+                </row>
+
+                <row>
+                  <entry>-debug</entry>
+
+                  <entry></entry>
+
+                  <entry>Configure logging to log DEBUG, INFO, WARN and
+                  ERRORs.</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry>logging is performed internally using log4j.</entry>
+                </row>
+
+                <row>
+                  <entry>-diagnostics</entry>
+
+                  <entry></entry>
+
+                  <entry>print information that can be used to report or
+                  diagnose problems</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+                </row>
+
+                <row>
+                  <entry>-version</entry>
+
+                  <entry></entry>
+
+                  <entry>Print the version of the framework.</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+                </row>
+
+                <row>
+                  <entry>-h</entry>
+
+                  <entry>--help</entry>
+
+                  <entry>Print out usage</entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry>Only the components that can be used are
+                  listed.</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+
+        <para>The --type (deployment type) is discussed in more detail in
+        <xref linkend="sec.DeploymentType" />.</para>
+
+        <para>In addition, the <classname>org.apache.isis.Isis</classname>
+        commandline runner has a couple command flags specific to it:</para>
+
+        <table>
+          <title><classname>org.apache.isis.Isis</classname> additional
+          command line flags</title>
+
+          <tgroup cols="6">
+            <colspec align="center" />
+
+            <colspec colwidth="10%" />
+
+            <colspec />
+
+            <colspec />
+
+            <colspec />
+
+            <colspec />
+
+            <thead>
+              <row>
+                <entry align="center">Flag</entry>
+
+                <entry align="center">Long form</entry>
+
+                <entry align="center">Purpose</entry>
+
+                <entry align="center">Typical values</entry>
+
+                <entry align="center">Default value</entry>
+
+                <entry align="center">Notes</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>-u <emphasis>username</emphasis></entry>
+
+                <entry>--user</entry>
+
+                <entry>Uses the specified name when logging the user in
+                (provided that --password also specified).</entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry>Ignored if deployment type is not
+                <emphasis>exploration</emphasis>,
+                <emphasis>prototype</emphasis>,
+                <emphasis>server_exploration</emphasis> or
+                <emphasis>server_prototype</emphasis>.</entry>
+              </row>
+
+              <row>
+                <entry>-p <emphasis>password</emphasis></entry>
+
+                <entry>--password</entry>
+
+                <entry>Specifies password for --username.</entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The username/password should be valid as per the configured
+        authentication mechanism. For example, if using the file
+        authentication mechanism, then the user/password should reside in the
+        <filename>security_file.password</filename> configuration file.</para>
+
+        <para>The <classname>org.apache.isis.WebServer</classname> webapp
+        runner also has a couple command flags specific to it:</para>
+
+        <table>
+          <title><classname>org.apache.isis.WebRunner</classname> additional
+          command line flags</title>
+
+          <tgroup cols="6">
+            <colspec align="center" />
+
+            <colspec colwidth="10%" />
+
+            <colspec />
+
+            <colspec />
+
+            <colspec />
+
+            <colspec />
+
+            <thead>
+              <row>
+                <entry align="center">Flag</entry>
+
+                <entry align="center">Long form</entry>
+
+                <entry align="center">Purpose</entry>
+
+                <entry align="center">Typical values</entry>
+
+                <entry align="center">Default value</entry>
+
+                <entry align="center">Notes</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>-a <emphasis>address</emphasis></entry>
+
+                <entry>--address</entry>
+
+                <entry>Address to listen on</entry>
+
+                <entry></entry>
+
+                <entry>localhost</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>-p <emphasis>portnumber</emphasis></entry>
+
+                <entry>--port</entry>
+
+                <entry>Specifies password for --username.</entry>
+
+                <entry></entry>
+
+                <entry>8080</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>-w <emphasis>resourseBase</emphasis></entry>
+
+                <entry>--webapp</entry>
+
+                <entry>The location of the webapp relative to
+                <filename>src/main/webapp</filename>.</entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry>Usually left at its default, "".</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The --type (deployment type) option influences the defaults for
+        other options, so warrants a little more detail.</para>
+
+        <sect2 id="sec.DeploymentType">
+          <title>Deployment Type</title>
+
+          <para>The deployment type defines the "mode" in which Isis is
+          running. The values correspond to the instances of DeploymentType,
+          and so will always include:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>exploration</emphasis></para>
+
+              <para>Exploration mode is for developers to explore and test
+              their code. The framework always uses an in-memory persistor and
+              runs the fixtures at startup to ensure a known state every time
+              the system is started. The user is not prompted to log in, but
+              is automatically logged in as user 'exploration'. The logged in
+              user can be changed on the fly using an option with the user
+              interface; this simply changes the user and does not require an
+              explicit login action. Also, exploration methods defined in the
+              DOM are also available to the user to do things that a user
+              would not normally be allowed to do. These are used expressly
+              for testing the system. Please note it is an error to specify a
+              persistor type in exploration mode.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>prototype</emphasis></para>
+
+              <para>Prototype mode is for demonstrating the system in
+              realistic fashion. The user is always prompted to log in at
+              start up, and can log out and log in again without losing the
+              state of the objects. This allows a user to demonstrate exactly
+              how a system would work.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>single-user</emphasis></para>
+
+              <para>Single user mode runs the system for a single user with
+              object persistence.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>client</emphasis></para>
+
+              <para>Client mode provides multiple users access to a server.
+              With this mode selected the <emphasis>connection</emphasis>
+              option must also be specified.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>server-exploration</emphasis></para>
+
+              <para>Server mode, but all clients will automatically be logged
+              in as the 'exploration' user (or using the
+              <classname>LoginFixture</classname> is present, see <xref
+              linkend="sec.LoginFixture" />).</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>server-prototype</emphasis></para>
+
+              <para>Server mode, but if a <classname>LoginFixture</classname>
+              is present then all clients will automatically be logged in as
+              this user.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>server</emphasis></para>
+
+              <para>Server mode runs Isis as a server for multiple clients.
+              With this mode selected the <emphasis>connection</emphasis>
+              option must also be specified.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>If no mode is specified, the framework will start up in
+          <emphasis>prototype</emphasis> mode.</para>
+        </sect2>
+
+        <sect2 id="sec.ClientConnectorVsViewer">
+          <title>Relationship between Client Connectors and Viewers</title>
+
+          <para>You may have noticed that some of the same values can be
+          specified for --viewer and for --connector. Specifically, these
+          common values are: <emphasis>encoding-sockets, encoding-http,
+          serializing-sockets</emphasis>, and
+          <emphasis>xstream-sockets</emphasis>.</para>
+
+          <para>When specified as a client connector using --connector (and
+          provided that the deployment type is client), then Isis is
+          configured to run as a client in a client/server remoting
+          deployment. In this deployment mode there is no persistor/object
+          store configured, instead all requests are sent across the wire to
+          be invoked on a server. The values are used to select an
+          implementation of <classname>ClientConnectionInstaller</classname>
+          which is configured in
+          <filename>installer-registry.properties</filename><footnote>
+              <para>If you look at the source code, you'll see that
+              <classname>ClientConnectionInstaller</classname> is actually a
+              subclass of
+              <classname>PersistenceMechanismInstaller</classname>. So, in
+              fact, there <emphasis>is</emphasis> a persistence mechanism, it
+              just happens to be one that is a proxy to a network connection
+              with a server.</para>
+            </footnote>.</para>
+
+          <para>When these values are specified as a viewer using --viewer
+          (and provided that the deployment type is server), then Isis is
+          configured to run as the corresponding server. The "viewer" in this
+          case is a network listener that receives the requests from the
+          client, unmarshals them, and invokes them on the same domain objects
+          within the server.</para>
+
+          <para>The name of these client connectors/viewers xxx-yyy is a
+          concatenation both the marshalling mechanism (xxx) and underlying
+          transport (yyy):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>encoding-sockets</emphasis> - Uses the encoding
+              mechanism (of value types) to serialize/deserialize objects,
+              over TCP/IP sockets.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>encoding-http</emphasis> - Uses the encoding
+              mechanism (of value types) to serialize/deserialize objects,
+              over HTTP.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>serializing-sockets</emphasis> - Uses Java
+              serialization (of value types) to serialize/deserialize objects,
+              over TCP/IP sockets.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>xstream-sockets</emphasis> - Uses the Xstream
+              library to serialize/deserialize objects to/from XML for simple
+              stream communications, over TCP/IP sockets.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>One final remark: the <emphasis>encoding-http</emphasis>
+          viewer can only be run as a webapp; see <xref
+          linkend="sec.WebAppDeployment" /> for more details on how deploying
+          this option.</para>
+        </sect2>
+
+        <sect2 id="sec.LoginFixture">
+          <title>Login Fixtures</title>
+
+          <para></para>
+
+          <para>*** todo</para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Configuration Files</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>During start-up Isis loads in a number of configuration files.
+        The main file, <filename class="directory"
+        moreinfo="none">isis.properties</filename>, is always loaded and must
+        be present for the framework to start up. For each of the various
+        types of persistor and viewer, there is a separate configuration file.
+        For example, for the following command line parameters</para>
+
+        <screen format="linespecific">-v dnd -r xml</screen>
+
+        <para>specifies that the viewer is to be the drag and drop (<literal
+        moreinfo="none">dnd</literal>) interface, and the persistor is to be
+        the 'xml object store'. As well as loading those components, the
+        framework will look for configuration files named
+        <filename>viewer.properties</filename>, <filename class="directory"
+        moreinfo="none">viewer_dnd.properties</filename>,
+        <filename>persistor.xml</filename> and <filename class="directory"
+        moreinfo="none">persistor_xml.properties</filename> and will load them
+        if found.</para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Standalone Deployment</title>
+
+      <para></para>
+
+      <note>
+        <para>TODO: discuss sealed/signed JARs to prevent tampering?</para>
+      </note>
+
+      <para></para>
+
+      <sect1>
+        <title>Setting up Security</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Client/Server Deployment</title>
+
+      <para></para>
+
+      <para>*** defer encoding-http to next chapter.</para>
+
+      <para></para>
+
+      <section>
+        <title></title>
+
+        <para></para>
+
+        <para></para>
+      </section>
+    </chapter>
+
+    <chapter id="sec.WebAppDeployment">
+      <title>Web App Deployment</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect1>
+        <title>Setting up Security</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Running as a WebApp</title>
+
+        <para>Isis provides three different ways to run as a webapp:</para>
+
+        <sect2>
+          <title>Using isis.sh</title>
+
+          <screen format="linespecific">$ isis.sh --type server --viewer html --persistor xml
+2007-08-09 12:37:13.671::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
+2007-08-09 12:37:13.801::INFO:  jetty-6.0.2
+2007-08-09 12:37:13.954::INFO:  Started SocketConnector @ 0.0.0.0:8080
+</screen>
+
+          <para>This command runs the Isis with the HTML viewer, allowing
+          multiple clients to access it via a browser. As for the standalone
+          version the users need to access the URL
+          http://<emphasis>server/logon.app</emphasis> to access the log on
+          page.</para>
+        </sect2>
+
+        <sect2>
+          <title>Using WebServer bootstrap</title>
+
+          <para>The next mechanism uses the
+          <classname>org.apache.isis.webserver.WebServer</classname> bootstrap
+          to run Isis. This loads up whatever is in the webapp project's
+          <filename>web.xml</filename> file.</para>
+
+          <para><remark>TODO: we don't have a webserver.sh script to show this
+          in action; we probably should.</remark></para>
+
+          <para>Ordinarily the web.xml will be configured to run the same HTML
+          viewer, so the end result will be the same. However, if necessary
+          the remoting servlet can also be configured</para>
+        </sect2>
+
+        <sect2>
+          <title>Deploying as a WAR</title>
+
+          <para>The final mechanism is to use Maven to package up the webapp
+          project as a WAR file, packaging up whatever is in the web.xml file.
+          As above, ordinarily the web.xml will be configured to run the same
+          HTML viewer, so the end result will be the same. However, if
+          necessary the remoting servlet can also be configured</para>
+
+          <para>Packaging up is done using:</para>
+
+          <screen format="linespecific">$ cd webapp
+$ mvn clean package</screen>
+
+          <para>This should result in a WAR file in
+          <filename>target</filename> directory. This can be deployed to an
+          existing servlet containerd</para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Deploying encoding-http Server</title>
+
+          <para></para>
+        </sect2>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Contributors Guide</title>
+
+    <partintro>
+      <para>The part of the guide is written for <emphasis>Isis</emphasis>
+      contributors who wish to understand the implementation of the default
+      runtime in order to enhance/improve/fix it.</para>
+
+      <para>The chapters in this part of the guide:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>outlines the core concepts within the <emphasis>default
+          runtime</emphasis>.</para>
+        </listitem>
+
+        <listitem>
+          <para>describe the purpose and major classes of each of the default
+          runtime modules.</para>
+        </listitem>
+      </itemizedlist>
+
       <para></para>
     </partintro>
 
@@ -149,6 +1138,9 @@
       perhaps, might not otherwise be required. This chapter explains the main
       concepts defined or implemented by the <emphasis>default
       runtime</emphasis>.</para>
+
+      <para>This chapter should help you understand better how the default
+      runtime works. If you just want to use the</para>
 
       <sect1>
         <title>Components of the Default Runtime</title>
@@ -550,7 +1542,7 @@
               <para><classname>PojoAdapterFactory</classname>, which is an
               implementation of the
               <classname>oai.core.metamodel.adapter.ObjectAdapterFactory</classname>
-              <acronym>API</acronym>. </para>
+              <acronym>API</acronym>.</para>
 
               <para>The default implementation instantiates
               <classname>PojoAdapter</classname> as the corresponding
@@ -697,7 +1689,8 @@
       </sect1>
 
       <sect1 id="sec.IsisContext">
-        <title>Service Locator (<classname>IsisContext</classname>)</title>
+        <title>Service Locator (<classname>IsisContext</classname>) and
+        <classname>DeploymentType</classname>s</title>
 
         <para>The <emphasis>default runtime</emphasis> uses the service
         locator pattern to make components (of different scopes) available.
@@ -721,6 +1714,14 @@
         from any scope once it has been closed; an
         <classname>IllegalStateException</classname> will be thrown
         otherwise.</para>
+
+        <para></para>
+
+        <para>*** TODO: discuss DeploymentType and ContextCategory</para>
+
+        <para></para>
+
+        <para></para>
       </sect1>
 
       <sect1 id="sec.ObjectLifecycleManagement">
@@ -952,84 +1953,83 @@ isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault
         </sect2>
       </sect1>
     </chapter>
-  </part>
-
-  <part>
-    <title>Modules</title>
-
-    <partintro>
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-    </partintro>
 
     <chapter>
       <title>Runtime Module</title>
 
-      <para></para>
+      <abstract>
+        <para>A run through of the main packages and classes that make up the
+        runtime module.</para>
+      </abstract>
 
-      <para></para>
+      <para>The runtime module <package>[oai.runtimes.dflt:runtime]</package>
+      is the "engine-room" of the default runtime, taking responsibility to
+      manage domain object (pojo) instances at runtime:</para>
 
-      <para>The runtime module is the "engine-room" of the framework, taking
-      responsibility to manage domain object (pojo) instances at
-      runtime.</para>
+      <itemizedlist>
+        <listitem>
+          <para>Each pojo is wrapped in an
+          <classname>ObjectAdapter</classname> (cf
+          <classname>java.lang.Object</classname>) from which the
+          <classname>ObjectSpecification</classname> (cf
+          <classname>java.lang.Class</classname>) can be obtained.</para>
+        </listitem>
 
-      <para>Each pojo is wrapped in an <classname>ObjectAdapter</classname>
-      (cf <classname>java.lang.Object</classname>) from which the
-      <classname>ObjectSpecification</classname> (cf
-      <classname>java.lang.Class</classname>) can be obtained.</para>
+        <listitem>
+          <para>Associated with each <classname>ObjectAdapter</classname> is
+          an <classname>Oid</classname>: an opaque serializable identifier to
+          the object. The <emphasis>runtime</emphasis> module maintains a
+          3-way identity map between these, allowing forward and reverse
+          lookups (<classname>AdapterManager</classname>).</para>
+        </listitem>
+      </itemizedlist>
 
-      <para>Associated with each <classname>ObjectAdapter</classname> is an
-      <classname>Oid</classname>: an opaque serializable identifier to the
-      object. The runtime module maintains a 3-way identity map between these,
-      allowing forward and reverse lookups.</para>
+      <para>The runtime module also defines a number of APIs:</para>
 
-      <para>The runtime module defines a number of APIs the most important of
-      which is the <classname>ObjectStore</classname> API. The runtime module
-      manages persistence and transaction demarcation, with the actual storage
-      of objects being delegated to an object store implementation.</para>
+      <itemizedlist>
+        <listitem>
+          <para>the most important such API is the
+          <classname>ObjectStore</classname> API. The
+          <emphasis>runtime</emphasis> module manages persistence and
+          transaction demarcation, with the actual storage of objects being
+          delegated to an object store implementation.</para>
+        </listitem>
 
-      <para>The other major API defined by the runtime module security API,
-      dealing with authentication and authorization.</para>
+        <listitem>
+          <para>the other major API defined by the runtime module security
+          API, dealing with authentication and authorization.</para>
+        </listitem>
+      </itemizedlist>
 
-      <para>In addition to all the above, the runtime module defines a
-      command-line bootstrapper, making it easy to bootstrap Apache Isis from
-      a main() or a JUnit test case.</para>
-
-      <para></para>
+      <para>In addition to all the above, the <emphasis>runtime</emphasis>
+      module defines a command-line bootstrapper, making it easy to bootstrap
+      Apache Isis from a main() or a JUnit test case.</para>
 
       <sect1>
         <title>Package Layering / Dependencies</title>
 
-        <para></para>
-
-        <para></para>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/runtime/package-dependencies.png"
-                       scale="60" />
-          </imageobject>
-        </mediaobject>
-
-        <para></para>
-
-        <para></para>
+        <para>The packages that reside within the <emphasis>runtime</emphasis>
+        have break into the following layers (top layer packages depending on
+        lower layers):</para>
 
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/runtime/architectural-layers.png"
-                       scale="80" />
+                       scale="70" />
           </imageobject>
         </mediaobject>
 
-        <para></para>
+        <para>Alternatively, we can see the actual dependencies:</para>
 
-        <para></para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/runtime/package-dependencies.png"
+                       scale="50" />
+          </imageobject>
+        </mediaobject>
 
-        <para></para>
+        <para>With one minor exception, there are no cycles between
+        packages.</para>
       </sect1>
 
       <sect1>
@@ -1042,7 +2042,7 @@ isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/runtime/architectural-layers-1.png"
-                       scale="80" />
+                       scale="70" />
           </imageobject>
         </mediaobject>
 
@@ -1731,502 +2731,6 @@ isis.setObjectPersistor(persistor);</programlisting>
       <para></para>
 
       <para></para>
-    </chapter>
-  </part>
-
-  <part>
-    <title>Deployment</title>
-
-    <chapter>
-      <title>Running in Development</title>
-
-      <para>*** ie, not deployed, just running immediately.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <sect1 id="sec.RuntimeLauncher">
-        <title>Bootstrapping (Isis launcher)</title>
-
-        <para></para>
-
-        <para></para>
-
-        <para>The command line container runs Isis within its own container
-        and is best suited to running from the command line where parameters
-        are used to determine what components are used and how it all
-        runs.</para>
-
-        <para>In essense we are running Java with the Isis class like
-        this:</para>
-
-        <para>$ java -cp &lt;classpath&gt;
-        org.apache.isis.runtimes.dflt.runtime.Isis
-        &lt;parameters...&gt;</para>
-
-        <para>however we typically use a script like the one created by the
-        archetype so we can run more easily, eg</para>
-
-        <para>$ ./isis.sh &lt;parameters...&gt;</para>
-
-        <para>The Isis class immediately starts up the logging so that log
-        messages are never lost. Next the
-        <classname>InstallerLookup</classname> object is instantiated. This
-        loads up all the installers that can be found on the classpath, which
-        are listed in <filename>installer-registry.properties</filename> . (In
-        the source tree, this file physically resides in
-        <filename>core/runtime/src/main/resources/</filename>). This allows
-        Isis to be aware of all the components that are available, allowing
-        names such as xml, file, dnd and html to be used to refer to
-        components instead of their fully qualified class names. We maintain
-        this list with the framework and public available components will be
-        added to the registry list when we know about them.</para>
-
-        <para>With these details loaded Isis then parses the command line
-        parameters. If there is problem with these then a help text is
-        displayed list all the options and the program exits. With the command
-        line arguments processed Isis initializes the installers and
-        bootstraps the system.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>If you are asked from diagnostic information then run Apache
-        Isis as follows to capture details about your machine, configuration
-        and Isis.</para>
-
-        <programlisting>$ isis.sh --diagnostics &gt; diagnostics.txt</programlisting>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>A bootstrapper takes care of loading up the Isis framework and
-        application, initialising it, and running it. When it starts up it
-        reads in a list of components and attempts to load in each one. Any
-        component that can be loaded is then available to be used and can then
-        be specified on the command line if required. Requesting a component
-        that cannot be loaded will result in an error. To resolve such an
-        error simply ensure that the component's Jar file is available on the
-        class path. All the components supplied with the framework are listed
-        in the file <filename class="directory"
-        moreinfo="none">installer-registry.properties</filename> which is part
-        of the JAR file for <package>[oai.runtimes.dflt:runtime]</package>
-        module.</para>
-
-        <para>During start-up Isis loads in a number of configuration files.
-        The main file, <filename class="directory"
-        moreinfo="none">isis.properties</filename>, is always loaded and must
-        be present for the framework to start up. For each of the various
-        types of persistor and viewer, there is a separate configuration file.
-        For example, for the following command line parameters</para>
-
-        <screen format="linespecific">-v dnd -r xml</screen>
-
-        <para>specifies that the viewer is to be the drag and drop (<literal
-        moreinfo="none">dnd</literal>) interface, and the persistor is to be
-        the 'xml object store'. As well as loading those components, the
-        framework will look for configuration files named
-        <filename>viewer.properties</filename>, <filename class="directory"
-        moreinfo="none">viewer_dnd.properties</filename>,
-        <filename>persistor.xml</filename> and <filename class="directory"
-        moreinfo="none">persistor_xml.properties</filename> and will load them
-        if found.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <sect2>
-          <title>Class</title>
-
-          <para>The bootstrapper is the class
-          <classname>org.apache.isis.runtime.Isis</classname> and takes the
-          following options on the command line. (Note that in each case there
-          is an abbreviated, and a full, version of the option).</para>
-
-          <para></para>
-
-          <para></para>
-
-          <para>*** can also use org.apache.Isis - just delegates to
-          org.apache.isis.runtime.Isis.</para>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>Configuration</title>
-
-          <screen format="linespecific">-c &lt;config file&gt;
---config &lt;config file&gt;</screen>
-
-          <para>Loads in the specified configuration file, in addition to
-          <filename class="directory"
-          moreinfo="none">isis.properties</filename> and the properties files
-          relating to the installed component.</para>
-        </sect2>
-
-        <sect2>
-          <title>Disable splash</title>
-
-          <screen format="linespecific">-s
---nosplash</screen>
-
-          <para>Prevents the splash screen from being displayed during start
-          up.</para>
-        </sect2>
-
-        <sect2>
-          <title>Help</title>
-
-          <screen format="linespecific">-h
---help</screen>
-
-          <para>Prints out the options that are available. This is dynamic so
-          that only the components that can be used are listed.</para>
-        </sect2>
-
-        <sect2>
-          <title>Logging</title>
-
-          <para>The amount of logging detail can be controlled from the
-          command line. If no flag is specified only warnings and errors are
-          output. All logging level relate to the Log4J levels, which is the
-          logging mechanism used by Isis.</para>
-
-          <screen format="linespecific">-quiet</screen>
-
-          <para>Quiet reduces logging to show errors only.</para>
-
-          <screen format="linespecific">-verbose</screen>
-
-          <para>Increases logging to show information about the system as it
-          runs.</para>
-
-          <screen format="linespecific">-debug</screen>
-
-          <para>Increases logging to show all logged entries. At this level so
-          much is logged that it will likely slow down the system if used when
-          outputting log details to the console or other slow devices.</para>
-        </sect2>
-
-        <sect2>
-          <title>Deployment Type (or Mode)</title>
-
-          <screen format="linespecific">-t &lt;mode&gt;
---type &lt;mode&gt;</screen>
-
-          <para>The framework is started up in one of several different
-          deployment modes, as listed below:</para>
-
-          <para><emphasis>exploration</emphasis> - Exploration mode is for
-          developers to explore and test their code. The framework always uses
-          an in-memory persistor and runs the fixtures at startup to ensure a
-          known state every time the system is started. The user is not
-          prompted to log in, but is automatically logged in as user
-          'exploration'. The logged in user can be changed on the fly using an
-          option with the user interface; this simply changes the user and
-          does not require an explicit login action. Also, exploration methods
-          defined in the DOM are also available to the user to do things that
-          a user would not normally be allowed to do. These are used expressly
-          for testing the system. Please note it is an error to specify a
-          persistor type in exploration mode.</para>
-
-          <para><emphasis>prototype</emphasis> - Prototype mode is for
-          demonstrating the system in realistic fashion. The user is always
-          prompted to log in at start up, and can log out and log in again
-          without losing the state of the objects. This allows a user to
-          demonstrate exactly how a system would work.</para>
-
-          <para><emphasis>single-user</emphasis> - Single user mode runs the
-          system for a single user with object persistence.</para>
-
-          <para><emphasis>client</emphasis> - Client mode provides multiple
-          users access to a server. With this mode selected the
-          <emphasis>connection</emphasis> option must also be
-          specified.</para>
-
-          <para><emphasis>server-exploration</emphasis> - Server mode, but all
-          clients will automatically be logged in as the 'exploration' user
-          (or as <classname>LoginFixture</classname> is present).</para>
-
-          <para><emphasis>server-prototype</emphasis> - Server mode, but if a
-          <classname>LoginFixture</classname> is present then all clients will
-          automatically be logged in as this user.</para>
-
-          <para><emphasis>server</emphasis> - Server mode runs Isis as a
-          server for multiple clients. With this mode selected the
-          <emphasis>connection</emphasis> option must also be
-          specified.</para>
-
-          <para>If no mode is specified, the framework will start up in
-          <emphasis>prototype</emphasis> mode.</para>
-        </sect2>
-
-        <sect2>
-          <title>Overridden properties</title>
-
-          <screen format="linespecific">-D property=value</screen>
-
-          <para>Using this flag we can pass in properties from the command
-          line that would otherwise need to specified in a configuration file.
-          This is normally used to override a property, or to temporarily
-          specify one.</para>
-        </sect2>
-
-        <sect2>
-          <title>Password</title>
-
-          <screen format="linespecific">-p &lt;password&gt;
---password &lt;password&gt;</screen>
-
-          <para>Ignored if type is prototype or not used with the user option
-          below.</para>
-
-          <para>Uses the specified password when logging the user in with the
-          username specified with <methodname>--user</methodname>.</para>
-        </sect2>
-
-        <sect2>
-          <title>Persistor</title>
-
-          <screen format="linespecific">-r &lt;persistor&gt;
---persistor &lt;persistor&gt;</screen>
-
-          <para>Ignored if type is client.</para>
-
-          <para>The persistor option allows you to choose how the objects
-          created by the system will be persisted so they are still available
-          the next time you run the system. The following options are
-          available with the current distribution, and if none is specified
-          then the in-memory persistor will be used for exploration mode and
-          xml persistor will be used for other non-client modes by
-          default.</para>
-
-          <para><emphasis>in-memory</emphasis> - A simple non-persisting
-          mechanism that will only hold the persisted object while the virtual
-          machine is running. This is used for testing and
-          demonstrating.</para>
-
-          <para><emphasis>xml</emphasis> - A simple file based mechanism that
-          encodes each object's data in an XML file. Alongside the data files
-          for the objects are instance lists listing all the files for each
-          type of object.<emphasis></emphasis></para>
-
-          <para><emphasis>&lt;class name&gt;</emphasis> - By specifying a
-          class name the boot loader will load up that class as the
-          persistor.</para>
-        </sect2>
-
-        <sect2>
-          <title>Remote connector</title>
-
-          <screen format="linespecific">-x &lt;connector&gt;
---connector &lt;connector&gt;</screen>
-
-          <para>Ignored if mode is not a client. If the type is a client then
-          a connection mechanism can be specified. Connector mechanisms
-          available are:-</para>
-
-          <para><emphasis>encoding-sockets</emphasis> - Uses the encoding
-          mechanism (of value types) to serialize/deserialize objects, over
-          TCP/IP sockets.</para>
-
-          <para><emphasis>encoding-http</emphasis> - Uses the encoding
-          mechanism (of value types) to serialize/deserialize objects, over
-          HTTP.</para>
-
-          <para><emphasis>serializing-sockets</emphasis> - Uses Java
-          serialization (of value types) to serialize/deserialize objects,
-          over TCP/IP sockets.</para>
-
-          <para><emphasis>xstream-sockets</emphasis> - Uses the Xstream
-          library to serialize/deserialize objects to/from XML for simple
-          stream communications, over TCP/IP sockets.</para>
-        </sect2>
-
-        <sect2>
-          <title>User</title>
-
-          <screen format="linespecific">-u &lt;user name&gt;
---user &lt;user name&gt;</screen>
-
-          <para>Ignored if type is prototype.</para>
-
-          <para>Uses the specified name when logging the user in. If the
-          password is also specified (see above) then an attempt to log in
-          using the supplied user name and password is made; authentication
-          failure at this point will exit the program.</para>
-        </sect2>
-
-        <sect2>
-          <title>Viewer</title>
-
-          <screen format="linespecific">-v &lt;viewer&gt;
---viewer &lt;viewer&gt;</screen>
-
-          <para>The viewer option allows you to choose the user interface that
-          is used to access your Isis application. The following options are
-          available with the current distribution, and if none is specified
-          then the drag and drop view will be used by default.</para>
-
-          <para><emphasis>dnd</emphasis> - Drag and Drop viewer</para>
-
-          <para><emphasis>html</emphasis> - Web browser viewer - accessed via
-          standard web browser such as FireFox, Internet Explorer or
-          Opera</para>
-
-          <para><emphasis>encoding-sockets</emphasis> - Uses the encoding
-          mechanism (of value types) to serialize/deserialize objects, over
-          TCP/IP sockets.</para>
-
-          <para><emphasis>encoding-http</emphasis> - Uses the encoding
-          mechanism (of value types) to serialize/deserialize objects, over
-          HTTP.</para>
-
-          <para><emphasis>serializing-sockets</emphasis> - Uses Java
-          serialization (of value types) to serialize/deserialize objects,
-          over TCP/IP sockets.</para>
-
-          <para><emphasis>xstream-sockets</emphasis> - Uses the Xstream
-          library to serialize/deserialize objects to/from XML for simple
-          stream communications, over TCP/IP sockets.</para>
-
-          <para><emphasis>&lt;class name&gt;</emphasis> - By specifying a
-          class name the boot loader will load up that class as the
-          viewer</para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-        </sect2>
-      </sect1>
-    </chapter>
-
-    <chapter>
-      <title>Standalone Deployment</title>
-
-      <para></para>
-
-      <para></para>
-
-      <note>
-        <para>TODO: discuss sealed/signed JARs to prevent tampering?</para>
-      </note>
-
-      <para></para>
-
-      <sect1>
-        <title>Setting up Security</title>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-    </chapter>
-
-    <chapter>
-      <title>Client/Server Deployment</title>
-
-      <section>
-        <title></title>
-
-        <para></para>
-      </section>
-    </chapter>
-
-    <chapter>
-      <title>Web App Deployment</title>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <sect1>
-        <title>Setting up Security</title>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Running as a WebApp</title>
-
-        <para>Isis provides three different ways to run as a webapp:</para>
-
-        <sect2>
-          <title>Using isis.sh</title>
-
-          <screen format="linespecific">$ isis.sh --type server --viewer html --persistor xml
-2007-08-09 12:37:13.671::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
-2007-08-09 12:37:13.801::INFO:  jetty-6.0.2
-2007-08-09 12:37:13.954::INFO:  Started SocketConnector @ 0.0.0.0:8080
-</screen>
-
-          <para>This command runs the Isis with the HTML viewer, allowing
-          multiple clients to access it via a browser. As for the standalone
-          version the users need to access the URL
-          http://<emphasis>server/logon.app</emphasis> to access the log on
-          page.</para>
-        </sect2>
-
-        <sect2>
-          <title>Using WebServer bootstrap</title>
-
-          <para>The next mechanism uses the
-          <classname>org.apache.isis.webserver.WebServer</classname> bootstrap
-          to run Isis. This loads up whatever is in the webapp project's
-          <filename>web.xml</filename> file.</para>
-
-          <para><remark>TODO: we don't have a webserver.sh script to show this
-          in action; we probably should.</remark></para>
-
-          <para>Ordinarily the web.xml will be configured to run the same HTML
-          viewer, so the end result will be the same. However, if necessary
-          the remoting servlet can also be configured</para>
-        </sect2>
-
-        <sect2>
-          <title>Deploying as a WAR</title>
-
-          <para>The final mechanism is to use Maven to package up the webapp
-          project as a WAR file, packaging up whatever is in the web.xml file.
-          As above, ordinarily the web.xml will be configured to run the same
-          HTML viewer, so the end result will be the same. However, if
-          necessary the remoting servlet can also be configured</para>
-
-          <para>Packaging up is done using:</para>
-
-          <screen format="linespecific">$ cd webapp
-$ mvn clean package</screen>
-
-          <para>This should result in a WAR file in
-          <filename>target</filename> directory. This can be deployed to an
-          existing servlet containerd</para>
-
-          <para></para>
-        </sect2>
-      </sect1>
     </chapter>
   </part>
 </book>
