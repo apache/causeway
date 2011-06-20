@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.1.2-incubating</version>
+		<version>0.2.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>viewer</artifactId>
@@ -76,7 +76,7 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>core</artifactId>
-				<version>0.1.2-incubating</version>
+				<version>0.2.0-incubating-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -84,7 +84,7 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>security</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

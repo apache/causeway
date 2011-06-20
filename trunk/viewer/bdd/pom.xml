@@ -23,12 +23,12 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>viewer</artifactId>
-		<version>0.1.2-incubating</version>
+		<version>0.2.0-incubating-SNAPSHOT</version>
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
     <artifactId>bdd</artifactId>
-    <version>0.1.2-incubating</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
     
     <name>BDD Viewers</name>
 
@@ -63,12 +63,12 @@
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-common</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-common</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -76,12 +76,12 @@
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-concordion</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-concordion</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>org.apache.isis</groupId>
             <artifactId>progmodels</artifactId>
-            <version>0.1.2-incubating</version>
+            <version>0.2.0-incubating-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

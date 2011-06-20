@@ -23,12 +23,12 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>bytecode</artifactId>
-		<version>0.1.2-incubating</version>
+		<version>0.2.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
 	<artifactId>identity</artifactId>
-	<version>0.1.2-incubating</version>
+	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime Identity Bytecode Implementation</name>
 

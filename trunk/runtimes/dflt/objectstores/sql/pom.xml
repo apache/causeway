@@ -15,12 +15,12 @@
     <parent>
         <groupId>org.apache.isis.runtimes.dflt</groupId>
         <artifactId>objectstores</artifactId>
-        <version>0.1.2-incubating</version>
+        <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
     <artifactId>sql</artifactId>
-    <version>0.1.2-incubating</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <name>Default Runtime SQL ObjectStore</name>
 
@@ -102,24 +102,24 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-impl</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-tests-common</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-tests-common</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-tests-served</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -23,13 +23,13 @@
     <parent>
 		<groupId>org.apache.isis</groupId>
         <artifactId>runtimes</artifactId>
-        <version>0.1.2-incubating</version>
+        <version>0.2.0-incubating-SNAPSHOT</version>
 	</parent>
     
 
 	<groupId>org.apache.isis.runtimes</groupId>
 	<artifactId>embedded</artifactId>
-    <version>0.1.2-incubating</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Embedded Runtime</name>
 
@@ -86,18 +86,18 @@
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
                 <artifactId>identity</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.progmodels</groupId>
 				<artifactId>wrapper-metamodel</artifactId>
-				<version>0.1.2-incubating</version>
+				<version>0.2.0-incubating-SNAPSHOT</version>
 	        </dependency>
 		</dependencies>
 	</dependencyManagement>

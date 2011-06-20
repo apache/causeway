@@ -15,12 +15,12 @@
     <parent>
         <groupId>org.apache.isis</groupId>
         <artifactId>isis</artifactId>
-        <version>0.1.2-incubating</version>
+        <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.isis</groupId>
     <artifactId>core</artifactId>
-    <version>0.1.2-incubating</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <name>Isis Core</name>
 
@@ -100,12 +100,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>testsupport</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>testsupport</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -113,12 +113,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>commons</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>commons</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -126,12 +126,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>metamodel</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>metamodel</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -139,12 +139,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>progmodel</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>progmodel</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -152,12 +152,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>runtime</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>runtime</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -165,12 +165,12 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>webapp</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>webapp</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
