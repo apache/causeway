@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.1.2-incubating</version>
 	</parent>
 
 	<groupId>org.apache.isis.core</groupId>
