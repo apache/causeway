@@ -23,12 +23,12 @@
   <parent>
       <groupId>org.apache.isis</groupId>
       <artifactId>isis</artifactId>
-      <version>0.1.2-incubating-SNAPSHOT</version>
+      <version>0.1.2-incubating</version>
   </parent>
 
   <groupId>org.apache.isis</groupId>
   <artifactId>quickstart-archetype</artifactId>
-  <version>0.1.2-incubating-SNAPSHOT</version>
+  <version>0.1.2-incubating</version>
   <packaging>maven-archetype</packaging>
 
   <name>Apache Isis Quickstart Archetype</name>
