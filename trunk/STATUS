@@ -1,0 +1,80 @@
+Web site: http://incubator.apache.org/isis/
+
+Project Status
+
+  Description
+
+  Isis is an ASL 2.0 licensed implementation of the Naked Objects pattern. It 
+  is based on contributions of the original Naked Objects Framework along with 
+  a number of sister projects that were developed for the book "Domain Driven 
+  Design using Naked Objects " (pragprog 2009).
+
+  Isis was accepted into the Incubator in 2010, September 7th.
+
+  To participate in Isis, you should join the mailing list. Just 
+  send an empty message to isis-dev-subscribe@incubator.apache.org.
+
+Project info
+
+  As a subproject of the Apache Incubator project, Isis follows the direction 
+  of the Apache Incubator PMC. Significant contributions over a sustained 
+  period of time can earn a contributor commit access to the codebase.
+
+Official releases:
+ * 0.1.2-RC1-incubating    : Released yyyy-MM-dd (none yet)
+
+PENDING ISSUES
+==============
+
+None.
+
+RESOLVED ISSUES SINCE LAST STATUS
+=================================
+
+None.
+
+RECENT VOTES
+=================================
+
+None
+
+OTHER NEWS
+==========
+
+RELEASE STATUS
+==============
+
+Snapshot releases have been informally released to repository.apache.org.
+The community is working towards a formal v0.1 release.
+
+
+
+
+Resources:
+ 
+item           type   URL
+-------------  -----  -----------------------------------------------------
+Status file    www    http://svn.apache.org/repos/asf/incubator/isis/trunk/STATUS
+Website        www    http://incubator.apache.org/isis/
+Mailing list   dev    isis-dev@incubator.apache.org
+Mailing list   users  isis-dev@incubator.apache.org  (nb: same as dev)
+Source code    SVN    /repos/asf/incubator/isis/trunk/
+JIRA           www    http://issues.apache.org/jira/browse/ISIS
+Wiki           www    http://cwiki.apache.org/confluence/display/ISIS/Index
+CI             www    http://builds.apache.org/hudson/job/isis-trunk-windows
+
+
+Team:
+
+role(s)            user id      name
+-----------------  -----        ------------------------------
+Mentor, Committer  struberg     Mark Struberg
+Mentor, Committer  mnour        Mohammad Nour El-Din (CLA on file)
+Mentor, Committer  bimargulies  Benson Margulies
+Mentor, Committer  sgoeschl     Siegfried Goeschl
+Committer  	       danhaywood   Daniel Keir Haywood (CLA on file)
+Committer  	       rmatthews    Robert Charles Matthews (CLA on file)
+Committer          kevin        Kevin Meyer (CLA on file)
+Committer  	       dslaughter   David Slaughter (CLA on file)
+Committer  	       themalkolm   Alexander Krasnukhin (CLA on file)
+Committer  	       uli          Ulrich Stärk (CLA on file)

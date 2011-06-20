@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<faqs id="FAQ">
+  <part id="General">
+
+<faq id="prototyping">
+      <question>Can I use [[NAME]] to prototype an
+application that will be deployed on a different architecture?</question>
+      <answer>
+        <p>Absolutely - in fact most people start to use [[NAME]] initial for
+prototyping only and only later consider using it as a full deployment
+platform. The domain objects that you create for [[NAME]] are Plain
+Old Java Objects (POJOs) - they aren't tied to [[NAME]] in any way.
+So if you want to develop a hand-crafted user interface to invoke the
+objects' functionality, you can.</p>
+      </answer>
+    </faq>
+
+<faq id="what_applications">
+      <question>To what type of applications is [[NAME]]
+best (and worst!) suited?</question>
+      <answer>
+        <p>The auto-created user interfaces give the
+user a great deal of flexibility and control, but the corollary is that
+it does take a short while to get to know that user interface. So [[NAME]]
+Objects is best suited to the kind of in-house application that people
+use intensively; it is not at all suited to applications intended to be
+used by people with no training (for example a public web-site).
+However, per the previous question, there is nothing to stop you from
+developing a [[NAME]] application for internal users, then building
+a more conventional tightly-scripted interface to the same domain
+objects, for use by external parties.</p>
+      </answer>
+    </faq>
+
+<!--
+<faq id="what_pedigree">
+      <question>What's the history of [[NAME]]?</question>
+      <answer>
+        <p>... x-ref the DSFA case study here ....; history</p>
+      </answer>
+    </faq>
+-->
+
+
+    <faq id="security">
+      <question>How is security handled?</question>
+      <answer>
+        <p>[[NAME]] provides
+full support both for user authentication and authorisation. The user's
+role(s) may determine which classes of domain objects they may access,
+which properties, and which actions within those objects. This
+information may be administered via a simple file, LDAP, or relational
+database.</p>
+      </answer>
+    </faq>
+
+  </part>
+</faqs>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>Screen Shots</title>
+
+    <author email="dev@isis.apache.org">The [[NAME]] Team</author>
+  </properties>
+
+  <body>
+    <section name="Screen shots"><p>[[NAME]] generates an Object Oriented
+    User Interface for the user automatically. This can either be graphical
+    user interface (GUI) or a series of web based forms.</p><subsection
+    name="The Drag and Drop GUI"></subsection> <img alt="Open screen" width="100%" src="images/screenshot/opening-screen.png" /> <img
+    alt="Open views" src="images/screenshot/open-views.png" /> <img
+    alt="Running an action on an object"
+    src="images/screenshot/action-on-object.png" /> <img
+    alt="Dialog used to collect parameters"
+    src="images/screenshot/action-dialog.png" /> <subsection
+    name="The HTML forms"></subsection> <img alt="Opening view"
+    src="images/screenshot/html-intro.png" /> <img alt="List of instances"
+    src="images/screenshot/html-list.png" /> <img alt="An open object"
+    src="images/screenshot/single-object.png" /> <img
+    alt="An action via a form"
+    src="images/screenshot/place-order.png" /></section>
+  </body>
+</document>

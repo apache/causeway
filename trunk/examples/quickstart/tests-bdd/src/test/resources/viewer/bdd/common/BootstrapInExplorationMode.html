@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html xmlns:concordion="http://www.concordion.org/2007/concordion"
+	xmlns:isis="http://isis.apache.org/2010/concordion">
+<link href="../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+<p>
+The system:
+</p>
+<ul>
+<li>
+<p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)">
+<span concordion:assertTrue="#result">bootstrapped</span> from
+config directory <span concordion:set="#configDir">../quickrun/src/main/resources</span>
+and running in <span concordion:set="#deploymentType">exploration</span>
+mode,
+</p>
+</li>
+<li>
+<p>with services: </p>
+<table concordion:execute="#result=aliasService(#aliasAs, #className)">
+	<tr>
+		<th concordion:set="#className">Class Name</th>
+		<th concordion:set="#aliasAs">aliasAs</th>
+		<th concordion:assertTrue="#result"/>
+	</tr>
+	<tr>
+		<td>objstore.dflt.todo.ToDoItemRepositoryDefault</td>
+		<td>toDoItems</td>
+		<td>ok</td>
+	</tr>
+</table>
+</li>
+</ul>
+
+</body>
+
+</html>

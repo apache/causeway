@@ -1,0 +1,43 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Jottings
+ 
+  This page is to capture any random jottings relating to this module prior 
+  to being moved into formal documentation. 
+ 
+
+ Color Scheme
+
+  The color scheme for the <Wicket> viewer can be customized using CSS, but if you 
+  want to use it as is in your own custom components, then here are the values: 
+  
+  * <<<#C4D9EA>>>   - light blue, ties in with banner
+  * <<<#D7E7F5>>>   - even lighter blue, also in banner
+  * <<<#407098>>>   - darker blue, font in banner
+  * <<<#A66144>>>   - brown, accent color
+  
+  Other compatible colors:
+  * <<<#fff4d3>>>   - yellow
+  * <<<#fff9e7>>>   - pale yellow
+  * <<<#ffe0d3>>>   - pink(ish)
+  * <<<#ffeee7>>>   - pale pink(ish)
+  * <<<#bfaea6>>>   - grey/pink (to tone with brown accent)
+  
+  {{{http://colorschemedesigner.com/#3y31T5AT.w0w0}ColorSchemeDesigner}}

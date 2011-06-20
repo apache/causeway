@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://www.apache.org/dtds/xdoc_1_0.dtd">
+<document>
+	<properties>
+		<title>Case Study</title>
+		<author email="isis-dev@incubator.apache.org">Apache Isis Contributors</author>
+	</properties>
+
+	<body>
+		<section
+			name="Case Study: How the Irish Government uses Naked Objects to administer social benefits worth over &amp;euro;5bn a year">
+
+			<p>
+				The
+				<a href="http://www.welfare.ie">Department of Social Protection</a>
+				(DSP) is the part of the Irish Government responsible for
+				administering more than 40 social benefit schemes, including state
+				pensions, child benefit, and unemployment benefit.
+			</p>
+			<p>As part of a far-reaching Service Delivery Modernisation (SDM)
+				programme, aimed at improving customer service, productivity and
+				enabling e-government initiatives, the DSP recognised that it needed
+				a new generation of enterprise business systems. Each of new
+				applications had to deliver specific business benefits. But there
+				was
+				also an over-arching requirement: improved agility. This was
+				articulated in three forms:</p>
+			<ul>
+				<li>Technical agility: the ease with which the architecture could
+					accommodate future changes in technology.</li>
+
+				<li>Strategic business agility: the ease with which the system could
+					accommodate unforeseen future changes in business requirements.</li>
+
+				<li>Operational business aglity: empowering users to act as
+					problem-solvers, not merely process-followers.</li>
+			</ul>
+			<p>
+				Achieving these objectives would require a combination of a new
+				enterprise architecture and the adoption of agile development
+				techniques. The DSP were persuaded that the single most important
+				factor in achieving this agility was a commitment to build a
+				business object model or BOM, that encapsulated all business
+				behaviour on the business entity objects. They also became aware of
+				the
+				<a href="http://en.wikipedia.org/wiki/Naked_objects">Naked Objects
+					pattern</a>
+				(little more than a research idea at that stage) and
+				recognised that
+				this could help them achieve a higher-quality object model, as well
+				as delivering a more empowering style of user interface.
+			</p>
+			<p>
+				A period of experimentation and exploration culminated in
+				the first
+				pilot project going live in 2002,
+				based on their own proprietary
+				implementation of the Naked Objects pattern
+				(developed under contract
+				by
+				<a href="http://www.fujitsu.com/ie/casestudies/dsaf.html">Fujitsu</a>
+				).
+				The project was hugely successful from a business perspective. In
+				the meantime the Naked Objects framework had become available;
+				recognising that the latter offered a more powerful capability and
+				was open source, the DSP subsequently made the decision to switch all
+				future application development onto Naked Objects.
+			</p>
+			<p>
+				In June 2004 the DSP awarded a contract to Naked Objects Group, in
+				partnership with
+				<a href="http://www.bearingpoint.ie">BearingPoint</a>
+				, to revise the architecture and develop a series of large-scale
+				applications, including the administration of all state pensions
+				benefits, child benefit, and the central debt management function.
+				These applications all went live during the course of 2006. The
+				scope of the SDM platform continues to grow, with new functionality
+				released each month and major new projects progressing every year
+				since. The applications running on the new architecture are in
+				continuous use by more than 700 users. Those applications are
+				responsible for administering more than &euro;5bn
+				in benefit payments annually.
+			</p>
+			<p>
+				(You can view a
+				<a href="./movies/DSFA_CB_Demo.htm">screen movie</a>
+				of the DSFA's Child
+				Benefit administration running on Naked Objects.)
+			</p>
+			<subsection name="Benefits"></subsection>
+			<p>The primary intended benefit of agility
+				(as articulated above) has
+				already been clearly achieved. During the
+				course of the programme so
+				far, the DSP has been faced with
+				substantial
+				new business
+				requirements
+				(resulting from changes in legislation,
+				government
+				re-organisation,
+				and various e-government initiatives)
+				and the
+				new
+				architecture and
+				applications have proven easy to modify and
+				extend.</p>
+			<p>Two further benefits are now perceived, across the
+				organisation.
+				The first is the capability to build rapid prototypes of new
+				applications, which help business units not only to articulate their
+				requirements, but also to explore alternative business models.</p>
+			<p>The
+				second is an extremely high level of re-use. At the DSP, the
+				primary
+				objective was always agility rather than re-use per se. But
+				the hope
+				was
+				that they would establish a 'Common BOM' that would
+				provide the core
+				capabilities of any new application. In fact this
+				has proven to be
+				far
+				more successful than they dared to hope for, and
+				Naked Objects has is
+				key
+				to this. When the Child Benefit system was
+				re-written for the new
+				architecture in 2006, it replaced a system
+				that had more than 50,000
+				lines
+				of bespoke business code. The new
+				implementation has less than 1000
+				lines
+				of bespoke business code (in
+				the same language): everything else was
+				inherited, without
+				modification, from the Common BOM written as part
+				of
+				the Pensions
+				project.</p>
+			<p>In May 2007, the DSP's Director of
+				Information Systems, Niall
+				Barry, stated publicly that he was delighted
+				with the new systems,
+				adding that 'in 30 years of managing IT projects,
+				I have never been
+				more satisfied'.</p>
+		</section>
+	</body>
+</document>
