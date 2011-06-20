@@ -28,7 +28,7 @@
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.1.2-RC4-incubating</isis.version>
+        <isis.version>0.1.2-incubating</isis.version>
     </properties>
 
     <repositories>
