@@ -522,7 +522,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful-viewer</artifactId>
+                <artifactId>restful-viewer2</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 

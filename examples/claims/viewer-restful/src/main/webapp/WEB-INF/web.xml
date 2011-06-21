@@ -26,7 +26,7 @@
 
 	<context-param>
 		<param-name>javax.ws.rs.Application</param-name>
-		<param-value>org.apache.isis.viewer.restful.viewer.RestfulApplication</param-value>
+		<param-value>org.apache.isis.viewer.restful.viewer2.RestfulApplication</param-value>
 	</context-param>
 
 	<filter>
@@ -35,7 +35,7 @@
         <init-param>
             <!-- trusted client, so no authentication required -->
             <param-name>authenticationSessionLookupStrategy</param-name>
-            <param-value>org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
+            <param-value>org.apache.isis.viewer.restful.viewer2.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
         </init-param>
 	</filter>
 
