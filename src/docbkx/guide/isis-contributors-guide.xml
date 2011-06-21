@@ -3878,9 +3878,9 @@ licenses to remove from supplemental-models.xml (are spurious):
         <para>We recommend creating all releases from branches (including the
         final release). This allows development to continue on trunk
         uninterrupted. However, the <filename>mvn-release-plugin</filename> is
-        configured to specify the <code>&lt;tagBase&gt;</code> in the usual
-        location, so tags for both release candidates and final releases all
-        appear in the "usual" location.</para>
+        configured with <code>&lt;tagBase&gt;</code> so that tags for both
+        release candidates and final releases all appear in the "usual"
+        location.</para>
 
         <para>Once a successful final release has been deployed, we do a merge
         of the updated <acronym>POM</acronym>s from the release branch back
@@ -3893,26 +3893,50 @@ licenses to remove from supplemental-models.xml (are spurious):
         <sect2 id="sec.ReleaseBranch">
           <title>Branch</title>
 
-          <para>First, create a branch in the <acronym>SVN</acronym>
-          repo:</para>
+          <para>First, create a branch in the <acronym>SVN</acronym> repo and
+          a corresponding local direcory:</para>
 
           <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating \
    -m "branching to create x.x.x[-RCn]-incubating"
-svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
-    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk \
-    -m "copying trunk to branches/x.x.x[-RCn]-incubating"</programlisting>
 
-          <para>Now create a workspace for this branch. The easiest approach
-          is to copy <filename>trunk</filename> and perform an <code>svn
-          switch</code>:</para>
-
-          <programlisting>cd .../trunk   # your local workspace for isis/trunk
-
+cd .../trunk   # your local workspace for isis/trunk
 cd ..
-mkdir -p branches/x.x.x[-RCn]-incubating
-cp -R trunk branches/x.x.x[-RCn]-incubating/trunk
+mkdir -p branches/x.x.x[-RCn]-incubating</programlisting>
 
-cd branches/x.x.x[-RCn]-incubating/trunk
+          <para>Then, perform an <code>svn copy</code>:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>if performing a release candidate, copy over from
+              trunk:</para>
+
+              <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
+    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk \
+    -m "copying trunk to branches/x.x.x-RC<emphasis>n</emphasis>-incubating"
+
+cp -R trunk branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>if performing a final release, then copy over from the
+              previous release candidate</para>
+
+              <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk@xxxxxxxx \
+    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk \
+    -m "copying previous RC branch to branches/x.x.x-incubating"
+
+cp -R branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk branches/x.x.x-incubating/trunk</programlisting>
+
+              <para>where <emphasis>xxxxxxx</emphasis> is the revision prior
+              to mvn release:prepare having been performed on that
+              branch.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Finally, use <code>svn switch</code> to update your local
+          directory:</para>
+
+          <programlisting>cd branches/x.x.x[-RCn]-incubating/trunk
 svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk</programlisting>
 
           <para>Because the release is being performed in a branch, it is then
@@ -4072,12 +4096,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
 
           <para>First up, clean up any release artifacts.</para>
 
-          <programlisting>mvn release:clean</programlisting>
-
-          <para>Then, run the prepare step (skipping tests will reduce the
-          elapsed time):</para>
-
-          <programlisting>mvn release:prepare -P apache-release,integration-tests -D resume=false -D skipTests=true</programlisting>
+          <programlisting>mvn release:clean -P integration-tests</programlisting>
 
           <note>
             <para>The <code>-P integration-tests</code> flag is required in
@@ -4085,12 +4104,23 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
             <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
           </note>
 
+          <para>Then, run the prepare step (skipping tests will reduce the
+          elapsed time):</para>
+
+          <programlisting>mvn release:prepare -P apache-release,integration-tests -D resume=false -D skipTests=true</programlisting>
+
+          <note>
+            <para>Again, the <code>-P integration-tests</code> flag is
+            required in order to include the
+            <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+          </note>
+
           <note>
             <para>The <code>-D resume=false</code> flag is required because
-            (at least once) the plugin seemed to consider the prepare goal to
-            already have been performed even though only a <code>dryRun</code>
-            was performed. It's possible that the -P integration-tests profile
-            caused this.</para>
+            (at least on one occasion) the plugin seemed to consider the
+            prepare goal to already have been performed even though only a
+            <code>dryRun</code> was performed. It's possible that the <code>-P
+            integration-tests</code> profile caused this.</para>
           </note>
 
           <para>Enter:</para>
