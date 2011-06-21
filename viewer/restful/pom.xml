@@ -120,6 +120,7 @@
     <modules>
 	    <module>applib</module>
 	    <module>viewer</module>
+	    <module>viewer2</module>
     </modules>
 
 </project>
