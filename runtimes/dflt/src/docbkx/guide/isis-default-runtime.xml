@@ -83,7 +83,7 @@
       <emphasis>Isis</emphasis> to run using the default runtime, in any of
       the supported configurations. It is divided into two parts:<itemizedlist>
           <listitem>
-            <para>Users' Guide</para>
+            <para>Users' Guide (<xref linkend="prt.UsersGuide" />)</para>
 
             <para>The chapters in this part of the guide are written for the
             developer who wants to just use the <emphasis>default
@@ -96,7 +96,8 @@
           </listitem>
 
           <listitem>
-            <para>Contributors' Guide</para>
+            <para>Contributors' Guide (<xref
+            linkend="prt.ContributorsGuide" />)</para>
 
             <para>The chapters in this part of the guide are written for those
             Isis contributors who want to enhance, improve or otherwise change
@@ -122,7 +123,7 @@
     </sect1>
   </preface>
 
-  <part>
+  <part id="prt.UsersGuide">
     <title>Users Guide</title>
 
     <partintro>
@@ -783,67 +784,70 @@
               <para><emphasis>exploration</emphasis></para>
 
               <para>Exploration mode is for developers to explore and test
-              their code. The framework always uses an in-memory persistor and
-              runs the fixtures at startup to ensure a known state every time
-              the system is started. The user is not prompted to log in, but
-              is automatically logged in as user 'exploration'. The logged in
-              user can be changed on the fly using an option with the user
-              interface; this simply changes the user and does not require an
-              explicit login action. Also, exploration methods defined in the
-              DOM are also available to the user to do things that a user
-              would not normally be allowed to do. These are used expressly
-              for testing the system. Please note it is an error to specify a
-              persistor type in exploration mode.</para>
+              their code, with a number of features all designed to reduce the
+              length of the feedback loop. This is covered in more detail in
+              <xref linkend="sec.ExplorationAndPrototypeModes" />.</para>
             </listitem>
 
             <listitem>
               <para><emphasis>prototype</emphasis></para>
 
-              <para>Prototype mode is for demonstrating the system in
-              realistic fashion. The user is always prompted to log in at
-              start up, and can log out and log in again without losing the
-              state of the objects. This allows a user to demonstrate exactly
-              how a system would work.</para>
+              <para>The intention of prototype mode is to make the system easy
+              to demonstrate in realistic fashion, without necessarily having
+              to go through the rigamarole of building and deploying the
+              system . It has some similarities to exploration mode, so is
+              also covered in more detail in <xref
+              linkend="sec.ExplorationAndPrototypeModes" />.</para>
             </listitem>
 
             <listitem>
               <para><emphasis>single-user</emphasis></para>
 
-              <para>Single user mode runs the system for a single user with
-              object persistence.</para>
+              <para>The single user mode is for an application that is
+              intended to run a single user, with the DnD viewer (or
+              equivalent), and with the application performing its own object
+              persistence. An example might be a mail application, or a ToDo
+              manager.</para>
             </listitem>
 
             <listitem>
               <para><emphasis>client</emphasis></para>
 
-              <para>Client mode provides multiple users access to a server.
-              With this mode selected the <emphasis>connection</emphasis>
-              option must also be specified.</para>
-            </listitem>
-
-            <listitem>
-              <para><emphasis>server-exploration</emphasis></para>
-
-              <para>Server mode, but all clients will automatically be logged
-              in as the 'exploration' user (or using the
-              <classname>LoginFixture</classname> is present, see <xref
-              linkend="sec.LoginFixture" />).</para>
-            </listitem>
-
-            <listitem>
-              <para><emphasis>server-prototype</emphasis></para>
-
-              <para>Server mode, but if a <classname>LoginFixture</classname>
-              is present then all clients will automatically be logged in as
-              this user.</para>
+              <para>Client mode is intended for client/server deployments,
+              where each user runs the application locally (with the DnD
+              viewer or equivalent), connecting to another instance of Isis
+              running as a server somewhere else on the network. With this
+              mode selected the (<emphasis>-x connectorname</emphasis> flag)
+              must also be specified.</para>
             </listitem>
 
             <listitem>
               <para><emphasis>server</emphasis></para>
 
-              <para>Server mode runs Isis as a server for multiple clients.
-              With this mode selected the <emphasis>connection</emphasis>
-              option must also be specified.</para>
+              <para>Server mode is intended for Isis running in multi-threaded
+              mode, concurrently servicing multiple clients. Usually this
+              means Isis being deployed as a webapp using one of the web
+              viewers (HTML viewer, Scimpi, Restful, Wicket etc), but it could
+              also be running as a server for a client/server remoting
+              application.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>server-exploration</emphasis></para>
+
+              <para>The server-exploration mode is similar to server mode, but
+              with exploration features enabled. See <xref
+              linkend="sec.ExplorationAndPrototypeModes" /> for more detail on
+              exploration mode.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>server-prototype</emphasis></para>
+
+              <para>The server-prototype mode is similar to server mode, but
+              with prototyping features enabled. See <xref
+              linkend="sec.ExplorationAndPrototypeModes" /> for more detail on
+              prototype mode.</para>
             </listitem>
           </itemizedlist>
 
@@ -920,45 +924,150 @@
           linkend="sec.WebAppDeployment" /> for more details on how deploying
           this option.</para>
         </sect2>
-
-        <sect2 id="sec.LoginFixture">
-          <title>Login Fixtures</title>
-
-          <para></para>
-
-          <para>*** todo</para>
-
-          <para></para>
-        </sect2>
       </sect1>
 
       <sect1>
         <title>Configuration Files</title>
 
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>During start-up Isis loads in a number of configuration files.
-        The main file, <filename class="directory"
+        <para>During start-up <emphasis>Isis</emphasis> loads in a number of
+        configuration files. The main file, <filename class="directory"
         moreinfo="none">isis.properties</filename>, is always loaded and must
-        be present for the framework to start up. For each of the various
-        types of persistor and viewer, there is a separate configuration file.
-        For example, for the following command line parameters</para>
+        be present for the framework to start up. Then, dependent upon the
+        components that are specified, it will also search for other
+        configuration files. (These files do not need to be present for the
+        framework to start up).</para>
+
+        <para>For example, for the following command line parameters</para>
 
         <screen format="linespecific">-v dnd -r xml</screen>
 
         <para>specifies that the viewer is to be the drag and drop (<literal
         moreinfo="none">dnd</literal>) interface, and the persistor is to be
-        the 'xml object store'. As well as loading those components, the
+        the 'xml object store'. So as well as loading those components, the
         framework will look for configuration files named
         <filename>viewer.properties</filename>, <filename class="directory"
         moreinfo="none">viewer_dnd.properties</filename>,
         <filename>persistor.xml</filename> and <filename class="directory"
         moreinfo="none">persistor_xml.properties</filename> and will load them
         if found.</para>
+
+        <para>The location of the configuration files depends on the runner.
+        All runners will load from the classpath (eg in
+        <filename>src/main/resources</filename>). Webapp viewers will also
+        load from <filename>WEB-INF</filename> directory
+        (<filename>src/main/webapp/WEB-INF</filename>).</para>
+
+        <para>Usually the <filename>isis.properties</filename> file will be
+        quite small, because most of the component-specific configuration will
+        be in their own config files. However, two important keys will almost
+        always be present: services, and fixtures.</para>
+
+        <sect2>
+          <title>Services</title>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+
+        <sect2 id="sec.LoginFixture">
+          <title>Fixtures</title>
+
+          <para>Depending upon the</para>
+
+          <para>*** todo</para>
+
+          <para></para>
+
+          <para>*** discuss login fixtures.</para>
+
+          <para></para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.ExplorationAndPrototypeModes">
+        <title>Exploration and Prototype Modes</title>
+
+        <para></para>
+
+        <para>The intention of exploration mode is for developers to explore
+        and test their code, with a number of features all designed to reduce
+        the length of the feedback loop. </para>
+
+        <para></para>
+
+        <para>It enables a number of options and removes the requirement to
+        login</para>
+
+        <para>The framework always uses an in-memory persistor and runs the
+        fixtures at startup to ensure a known state every time the system is
+        started. The user is not prompted to log in, but is automatically
+        logged in as user 'exploration'.</para>
+
+        <para>The logged in user can be changed on the fly using an option
+        with the user interface; this simply changes the user and does not
+        require an explicit login action.</para>
+
+        <para>Also, exploration methods defined in the DOM are also available
+        to the user to do things that a user would not normally be allowed to
+        do. These are used expressly for testing the system.</para>
+
+        <para>It is an error to specify a persistor type in exploration
+        mode.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para> <classname>LoginFixture</classname> is present, see <xref
+        linkend="sec.LoginFixture" />).</para>
+
+        <para></para>
+
+        <para>Server mode, but if a <classname>LoginFixture</classname> is
+        present then all clients will automatically be logged in as this
+        user.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>The intention of prototype mode is to make the system easy to
+        demonstrate in realistic fashion, without necessarily having to go
+        through the rigamarole of building and deploying the system . There
+        has some similarities to exploration mode, so is covered also in <xref
+        linkend="sec.ExplorationAndPrototypeModes" /></para>
+
+        <para>similar to exploration mode</para>
+
+        <para>The user is always prompted to log in at start up, and can log
+        out and log in again without losing the state of the objects. This
+        allows a user to demonstrate exactly how a system would work.</para>
+
+        <para></para>
+
+        <para>*** discuss the shaded JARs from the Maven plugin.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>The list of users that can be switched between during
+        exploration can be listed, separated by commas, with the following
+        property. If no users are specified the default user "exploration"
+        will be used and switching between users will not be possible.</para>
+
+        <programlisting format="linespecific">isis.exploration.users=sven, dick, bob</programlisting>
+
+        <para>To disable the showing of exploration menu items set the
+        following property to false (by default exploration options are
+        shown).</para>
+
+        <programlisting format="linespecific">isis.exploration.show=false</programlisting>
 
         <para></para>
       </sect1>
@@ -1026,73 +1135,49 @@
       </sect1>
 
       <sect1>
-        <title>Running as a WebApp</title>
+        <title>Building a Regular Webapp</title>
 
-        <para>Isis provides three different ways to run as a webapp:</para>
+        <para></para>
 
-        <sect2>
-          <title>Using isis.sh</title>
+        <para>The final mechanism is to use Maven to package up the webapp
+        project as a WAR file, packaging up whatever is in the web.xml file.
+        As above, ordinarily the web.xml will be configured to run the same
+        HTML viewer, so the end result will be the same. However, if necessary
+        the remoting servlet can also be configured</para>
 
-          <screen format="linespecific">$ isis.sh --type server --viewer html --persistor xml
-2007-08-09 12:37:13.671::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
-2007-08-09 12:37:13.801::INFO:  jetty-6.0.2
-2007-08-09 12:37:13.954::INFO:  Started SocketConnector @ 0.0.0.0:8080
-</screen>
+        <para>Packaging up is done using:</para>
 
-          <para>This command runs the Isis with the HTML viewer, allowing
-          multiple clients to access it via a browser. As for the standalone
-          version the users need to access the URL
-          http://<emphasis>server/logon.app</emphasis> to access the log on
-          page.</para>
-        </sect2>
-
-        <sect2>
-          <title>Using WebServer bootstrap</title>
-
-          <para>The next mechanism uses the
-          <classname>org.apache.isis.webserver.WebServer</classname> bootstrap
-          to run Isis. This loads up whatever is in the webapp project's
-          <filename>web.xml</filename> file.</para>
-
-          <para><remark>TODO: we don't have a webserver.sh script to show this
-          in action; we probably should.</remark></para>
-
-          <para>Ordinarily the web.xml will be configured to run the same HTML
-          viewer, so the end result will be the same. However, if necessary
-          the remoting servlet can also be configured</para>
-        </sect2>
-
-        <sect2>
-          <title>Deploying as a WAR</title>
-
-          <para>The final mechanism is to use Maven to package up the webapp
-          project as a WAR file, packaging up whatever is in the web.xml file.
-          As above, ordinarily the web.xml will be configured to run the same
-          HTML viewer, so the end result will be the same. However, if
-          necessary the remoting servlet can also be configured</para>
-
-          <para>Packaging up is done using:</para>
-
-          <screen format="linespecific">$ cd webapp
+        <screen format="linespecific">$ cd viewer-xxx
 $ mvn clean package</screen>
 
-          <para>This should result in a WAR file in
-          <filename>target</filename> directory. This can be deployed to an
-          existing servlet containerd</para>
+        <para>where viewer-xxx is the module containing the WEB-INF.</para>
 
-          <para></para>
-        </sect2>
+        <para></para>
 
-        <sect2>
-          <title>Deploying encoding-http Server</title>
+        <para>This should result in a WAR file in <filename>target</filename>
+        directory. This can be deployed to an existing servlet
+        containerd</para>
 
-          <para></para>
-        </sect2>
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Deploying Client/Server (with encoding-http)</title>
+
+        <para></para>
+
+        <para></para>
       </sect1>
     </chapter>
   </part>
 
-  <part>
+  <part id="prt.ContributorsGuide">
     <title>Contributors Guide</title>
 
     <partintro>
@@ -2050,50 +2135,6 @@ isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault
 
         <para></para>
 
-        <para>The configuration file (<filename class="directory"
-        moreinfo="none">isis.properties</filename>) needs to specify what
-        resources are used by the application and what fixtures to load. These
-        details are common to all the modes that the NOF can be run in.
-        Additional properties can be also specified for use in specific modes,
-        such as database connection details when using the SQL object
-        store.</para>
-
-        <para>The configuration file <filename class="directory"
-        moreinfo="none">isis.properties</filename> is always picked up. In
-        addition other properties files will be picked up, if present, based
-        on the type, viewer, persistor and connection command line switches
-        with the filename matching the option. E.g.</para>
-
-        <para>-r (or --persistor) hibernate will cause
-        <filename>persistor.properties</filename> and <filename
-        class="directory"
-        moreinfo="none">persistor_hibernate.properties</filename> to be
-        used</para>
-
-        <para>-t (or --type) client will cause <filename class="directory"
-        moreinfo="none">client.properties</filename> to be used</para>
-
-        <para>-v (or --viewer) dnd will cause
-        <filename>viewer.properties</filename> and <filename class="directory"
-        moreinfo="none">viewer_dnd.properties</filename> to be used</para>
-
-        <para>-x (or -- connector) xstream-sockets will cause
-        <filename>transport.properties</filename>,
-        <filename>transport_sockets.properties</filename>,
-        <filename>protocol.properties</filename> and
-        <filename>protocol_xstream.properties</filename> to be loaded; because
-        of the way that connector is implemented it will also load
-        <classname>persistor.properties</classname> and <filename
-        class="directory"
-        moreinfo="none">persistor_xstream-sockets.properties</filename>
-        too.</para>
-
-        <para>In addition a particular file can be selected with the -c
-        switch. For example</para>
-
-        <para>-c <filename class="directory"
-        moreinfo="none">mysettings.properties</filename></para>
-
         <para></para>
       </sect1>
 
@@ -2150,32 +2191,6 @@ isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault
         <para></para>
 
         <para></para>
-
-        <sect2>
-          <title>Exploration</title>
-
-          <para>*** this is also mentioned in isis-security.file...</para>
-
-          <para></para>
-
-          <para>The list of users that can be switched between during
-          exploration can be listed, separated by commas, with the following
-          property. If no users are specified the default user "exploration"
-          will be used and switching between users will not be
-          possible.</para>
-
-          <programlisting format="linespecific">isis.exploration.users=sven, dick, bob</programlisting>
-
-          <para>To disable the showing of exploration menu items set the
-          following property to false (by default exploration options are
-          shown).</para>
-
-          <programlisting format="linespecific">isis.exploration.show=false</programlisting>
-
-          <para></para>
-
-          <para></para>
-        </sect2>
       </sect1>
 
       <sect1>
