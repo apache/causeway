@@ -52,8 +52,8 @@ public interface PersistenceSessionFactory extends ApplicationScopedComponent, S
     // Services
     // //////////////////////////////////////////////////////
 
-    void setServices(List<Object> servicesList);
+    public void setServices(List<Object> servicesList);
 
-    List<Object> getServices();
+    public List<Object> getServices();
 
 }

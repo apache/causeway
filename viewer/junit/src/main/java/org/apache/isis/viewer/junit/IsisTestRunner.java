@@ -85,7 +85,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault(configDirIfAny);
         isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true); // switch off splash
 
-        final InstallerLookupDefault installerLookup = new InstallerLookupDefault(getClass());
+        final InstallerLookupDefault installerLookup = new InstallerLookupDefault();
         isisConfigurationBuilder.injectInto(installerLookup);
         installerLookup.init();
 

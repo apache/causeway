@@ -28,28 +28,25 @@ import org.apache.isis.runtimes.dflt.runtime.system.Splash;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
 public class XmlPersistenceMechanismInstallerTest extends ProxyJunit4TestCase {
 
-    private final Mockery context = new JUnit4Mockery();
-    private DeploymentType mockDeploymentType;
-    XmlPersistenceMechanismInstaller mockInstaller;
+    private DeploymentType deploymentType;
+    XmlPersistenceMechanismInstaller installer;
 
     @Before
     public void setUp() throws Exception {
-        mockDeploymentType =
+        deploymentType =
             new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC,
                 SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
-        mockInstaller = new XmlPersistenceMechanismInstaller();
+        installer = new XmlPersistenceMechanismInstaller();
     }
 
     @Test
     public void testCreatePersistenceSessionFactory() throws Exception {
-        final PersistenceSessionFactory factory = mockInstaller.createPersistenceSessionFactory(mockDeploymentType);
+        final PersistenceSessionFactory factory = installer.createPersistenceSessionFactory(deploymentType);
         assertTrue(factory != null);
     }
 

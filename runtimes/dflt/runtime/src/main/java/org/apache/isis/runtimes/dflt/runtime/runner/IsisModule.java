@@ -50,7 +50,7 @@ public class IsisModule extends AbstractModule {
     private final List<String> viewerNames = Lists.newArrayList();
 
     private static InstallerLookupDefault defaultInstallerLookup() {
-        return new InstallerLookupDefault(IsisModule.class);
+        return new InstallerLookupDefault();
     }
 
     private static IsisConfigurationBuilderDefault defaultConfigurationBuider() {

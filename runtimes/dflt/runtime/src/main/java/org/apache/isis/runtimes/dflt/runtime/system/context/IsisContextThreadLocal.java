@@ -169,10 +169,6 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     public IsisSession getSessionInstance() {
         final Thread thread = Thread.currentThread();
         final IsisSession session = sessionsByThread.get(thread);
-        /*
-         * REVIEW this has been moved to IsisContext.getSession() if (session == null) { throw new
-         * IllegalStateException("No Session opened for this thread"); }
-         */
         return session;
     }
 

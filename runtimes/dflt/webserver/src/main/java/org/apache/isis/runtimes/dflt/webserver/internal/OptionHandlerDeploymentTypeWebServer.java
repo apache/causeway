@@ -28,8 +28,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class OptionHandlerDeploymentTypeWebServer extends OptionHandlerDeploymentType {
 
+    private static final String TYPES = 
+        TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + " (default); " + TYPE_SERVER;
+
     public OptionHandlerDeploymentTypeWebServer() {
-        super(DeploymentType.SERVER_PROTOTYPE, TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + " (default); "
-            + TYPE_SERVER);
+        super(DeploymentType.SERVER_PROTOTYPE, TYPES);
     }
 }

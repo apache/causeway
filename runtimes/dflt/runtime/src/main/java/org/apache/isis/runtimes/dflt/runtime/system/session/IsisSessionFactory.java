@@ -84,6 +84,6 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
 
     public UserProfileLoader getUserProfileLoader();
 
-    List<Object> getServices();
+    public List<Object> getServices();
 
 }

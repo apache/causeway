@@ -263,19 +263,23 @@ public class DndViewer extends IsisViewerAbstract {
     }
 
     private AuthenticationRequest determineRequestIfPossible() {
-        AuthenticationRequest request;
+        
         // command line args
-        request = getAuthenticationRequestViaArgs();
+        AuthenticationRequest request = getAuthenticationRequestViaArgs();;
 
-        // exploration
-        if (request == null && getDeploymentType().isExploring()) {
-            request = new AuthenticationRequestExploration(getLogonFixture());
+        // exploration & (optionally) logon fixture provided
+        if (request == null) {
+            if (getDeploymentType().isExploring()) {
+                request = new AuthenticationRequestExploration(getLogonFixture());
+            }
         }
 
         // logon fixture provided
-        if (request == null && getLogonFixture() != null && !loggedInUsingLogonFixture) {
-            loggedInUsingLogonFixture = true;
-            request = new AuthenticationRequestLogonFixture(getLogonFixture());
+        if (request == null) {
+            if (getLogonFixture() != null && !loggedInUsingLogonFixture) {
+                loggedInUsingLogonFixture = true;
+                request = new AuthenticationRequestLogonFixture(getLogonFixture());
+            }
         }
         return request;
     }

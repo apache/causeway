@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-public class OidConformant extends DirectlyStringableOidAbstract {
+class OidConformant extends DirectlyStringableOidAbstract {
 
     public static Oid deString(final String oidStr) {
         return new OidConformant();

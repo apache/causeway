@@ -48,7 +48,6 @@ public abstract class IsisViewerAbstract implements IsisViewer {
 
     private SystemDependencyInjector systemDependencyInjector;
     private IsisConfigurationBuilder isisConfigurationBuilder;
-    private IsisSystem system; // never written to!!!
 
     /**
      * Optionally set, see {@link #setAuthenticationRequestViaArgs(AuthenticationRequest)}
@@ -109,8 +108,7 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     // ////////////////////////////////////////////////////////////////
 
     public LogonFixture getLogonFixture() {
-        // REVIEW: always return null? (since 'system' never written to...)
-        return system != null ? system.getLogonFixture() : null;
+        return null;
     }
 
     // ////////////////////////////////////////////////////////////////

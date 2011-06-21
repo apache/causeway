@@ -92,7 +92,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
-            final InstallerLookup installerLookup = new InstallerLookupDefault(getClass());
+            final InstallerLookup installerLookup = new InstallerLookupDefault();
 
             injector = createGuiceInjector(isisConfigurationBuilder, deploymentType, installerLookup);
 

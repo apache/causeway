@@ -137,7 +137,7 @@ public class Scenario implements AliasRegistryHolder {
 
     private IsisSystem createSystem(final DeploymentType deploymentType,
         final IsisConfigurationBuilder isisConfigurationBuilder) {
-        this.installerLookup = new InstallerLookupDefault(this.getClass());
+        this.installerLookup = new InstallerLookupDefault();
         isisConfigurationBuilder.injectInto(installerLookup);
 
         final Injector injector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup);

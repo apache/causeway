@@ -213,6 +213,17 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return getOid() instanceof AggregatedOid;
     }
 
+    @Override
+    public ObjectAdapter getAggregateRoot() {
+        if (getSpecification().isAggregated()) {
+            final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
+            return getAdapterManager().getAdapterFor(parentOid);
+        } else {
+            return this;
+        }
+    }
+
+
     // ///////////////////////////////////////////////////////////////////
     // Version
     // ///////////////////////////////////////////////////////////////////
@@ -272,7 +283,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 return (String) getObject();
             }
             final ObjectSpecification specification = getSpecification();
-            final Localization localization = IsisContext.getLocalization();
+            final Localization localization = getLocalization();
             String title = specification.getTitle(this, localization);
             if (title == null) {
                 if (resolveState.isGhost()) {
@@ -409,8 +420,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from singleton)
+    // Dependencies (from context)
     // ///////////////////////////////////////////////////////////////////
+
+    protected Localization getLocalization() {
+        return IsisContext.getLocalization();
+    }
 
     private SpecificationLoader getReflector() {
         return IsisContext.getSpecificationLoader();
@@ -419,20 +434,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private PersistenceSession getObjectPersistor() {
         return IsisContext.getPersistenceSession();
     }
-
-    @Override
-    public ObjectAdapter getAggregateRoot() {
-        if (getSpecification().isAggregated()) {
-            final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
-            return getAdapterManager().getAdapterFor(parentOid);
-        } else {
-            return this;
-        }
-    }
-
-    // ////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ////////////////////////////////////////////////////////////////
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();

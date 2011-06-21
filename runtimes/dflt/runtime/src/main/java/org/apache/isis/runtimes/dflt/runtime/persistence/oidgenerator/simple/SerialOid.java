@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
 
-public final class SerialOid implements Oid, Encodable, Serializable, DirectlyStringableOid {
+public final class SerialOid implements Encodable, Serializable, DirectlyStringableOid {
 
     private static final long serialVersionUID = 1L;
 

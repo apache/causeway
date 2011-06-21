@@ -103,7 +103,7 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
-    private static AuthenticationManager getAuthenticationManager() {
+    protected AuthenticationManager getAuthenticationManager() {
         return IsisContext.getAuthenticationManager();
     }
 

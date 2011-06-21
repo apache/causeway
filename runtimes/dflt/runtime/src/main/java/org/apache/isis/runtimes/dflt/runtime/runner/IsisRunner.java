@@ -91,7 +91,7 @@ public class IsisRunner {
         // setup logging immediately
         loggingConfigurer.configureLogging(determineConfigDirectory(), args);
 
-        this.installerLookup = new InstallerLookupDefault(IsisRunner.class);
+        this.installerLookup = new InstallerLookupDefault();
 
         addOptionHandler(optionHandlerDeploymentType);
         this.optionHandlerViewer = addStandardOptionHandlersAndValidators(this.installerLookup);

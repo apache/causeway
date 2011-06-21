@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-public abstract class DirectlyStringableOidAbstract implements DirectlyStringableOid {
+abstract class DirectlyStringableOidAbstract implements DirectlyStringableOid {
 
     @Override
     public void clearPrevious() {

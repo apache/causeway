@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 /**
  * Used as the {@link Oid} for collections, values and <tt>@Aggregated</tt> types.
  */
-public class AggregatedOid implements Oid, Serializable {
+public final class AggregatedOid implements Oid, Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -86,8 +86,6 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     private final List<Installer> installerList = new ArrayList<Installer>();
 
-    @SuppressWarnings("unused")
-    private final Class<?> cls;
 
     /**
      * A mutable representation of the {@link IsisConfiguration configuration}, injected prior to {@link #init()}.
@@ -102,8 +100,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Constructor
     // ////////////////////////////////////////////////////////
 
-    public InstallerLookupDefault(final Class<?> cls) {
-        this.cls = cls;
+    public InstallerLookupDefault() {
         loadInstallers();
     }
 
