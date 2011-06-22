@@ -26,8 +26,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.restful.applib.resources.BootstrapResource;
-import org.apache.isis.viewer.restful.applib.resources.HomePageResource;
+import org.apache.isis.viewer.restful.applib2.resources.BootstrapResource;
+import org.apache.isis.viewer.restful.applib2.resources.HomePageResource;
 import org.apache.isis.viewer.restful.viewer2.resources.ResourceAbstract;
 
 import com.google.common.io.ByteStreams;

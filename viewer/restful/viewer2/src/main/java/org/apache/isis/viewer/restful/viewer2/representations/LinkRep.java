@@ -16,14 +16,16 @@
  */
 package org.apache.isis.viewer.restful.viewer2.representations;
 
-import org.apache.isis.viewer.restful.viewer2.RepresentationContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.restful.viewer2.RepContext;
 import org.apache.isis.viewer.restful.viewer2.ResourceContext;
+import org.apache.isis.viewer.restful.viewer2.representations.LinkRep.TypeBuilder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 
 @JsonSerialize(include=Inclusion.NON_NULL)
-public class LinkRepresentation {
+public class LinkRep {
 
     private String rel;
     private String url;
@@ -70,13 +72,16 @@ public class LinkRepresentation {
         this.value = value;
     }
 
-    public static Builder newBuilder(RepresentationContext representationContext, String relSuffix, String url) {
-        return new Builder(representationContext, relSuffix, url);
+    public static LinkRep.TypeBuilder newTypeBuilder(RepContext repContext, String relSuffix, ObjectSpecification objectSpec) {
+        return new LinkRep.TypeBuilder(repContext, relSuffix, objectSpec);
+    }
+    public static Builder newBuilder(RepContext repContext, String relSuffix, String url) {
+        return new Builder(repContext, relSuffix, url);
     }
     
     public static class Builder {
         
-        private final RepresentationContext representationContext;
+        private final RepContext representationContext;
         private final String relSuffix;
         private final String url;
         
@@ -84,31 +89,54 @@ public class LinkRepresentation {
         private String title;
         private String body;
         
-        public Builder(RepresentationContext representationContext, String relSuffix, String url) {
+        public Builder(RepContext representationContext, String relSuffix, String url) {
             this.representationContext = representationContext;
             this.relSuffix = relSuffix;
             this.url = url;
         }
-        public LinkRepresentation.Builder withMethod(HttpMethod method) {
+        public LinkRep.Builder withMethod(HttpMethod method) {
             this.method = method;
             return this;
         }
-        public LinkRepresentation.Builder withTitle(String title) {
+        public LinkRep.Builder withTitle(String title) {
             this.title = title;
             return this;
         }
-        public LinkRepresentation.Builder withBody(String body) {
+        public LinkRep.Builder withBody(String body) {
             this.body = body;
             return this;
         }
-        public LinkRepresentation build() {
-            LinkRepresentation linkRepresentation = new LinkRepresentation();
+        public LinkRep build() {
+            LinkRep linkRepresentation = new LinkRep();
             linkRepresentation.setMethod(method);
             linkRepresentation.setTitle(title);
             linkRepresentation.setRel(representationContext.relFor(relSuffix));
             linkRepresentation.setUrl(representationContext.urlFor(url));
             linkRepresentation.setBody(body);
             return linkRepresentation;
+        }
+    }
+
+    public static class TypeBuilder {
+        
+        private final RepContext representationContext;
+        private final String relSuffix;
+        private final ObjectSpecification objectSpec;
+        
+        public TypeBuilder(RepContext representationContext, String relSuffix, ObjectSpecification objectSpec) {
+            this.representationContext = representationContext;
+            this.relSuffix = relSuffix;
+            this.objectSpec = objectSpec;
+        }
+        
+        public LinkRep build() {
+            Builder typeBuilder = newBuilder(representationContext, relSuffix, urlFor(objectSpec));
+            LinkRep linkRep = typeBuilder.build();
+            return linkRep;
+        }
+    
+        private static String urlFor(ObjectSpecification objectSpec) {
+            return "types/application/vnd+" + objectSpec.getFullIdentifier();
         }
     }
 }

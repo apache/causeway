@@ -86,7 +86,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         init();
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
 
-        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
@@ -220,7 +220,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
         final String proposedValue = UrlDecoderUtils.urlDecode(proposedEncodedValue);
 
-        final ObjectAdapter nakedObject = getNakedObject(oidStr);
+        final ObjectAdapter nakedObject = getObjectAdapter(oidStr);
         if (nakedObject == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
@@ -264,7 +264,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final String propertyId = UrlDecoderUtils.urlDecode(propertyEncodedId);
 
-        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
@@ -309,7 +309,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
 
-        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
@@ -371,7 +371,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String collectionId = UrlDecoderUtils.urlDecode(collectionEncodedId);
         final String proposedValueOidStr = UrlDecoderUtils.urlDecode(proposedValueEncodedOidStr);
 
-        final ObjectAdapter objectAdapter = getNakedObject(oidStr);
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         if (objectAdapter == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
@@ -381,7 +381,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final OneToManyAssociation collection = (OneToManyAssociation) noSpec.getAssociation(collectionId);
 
         ObjectAdapter proposedValueNO = null;
-        proposedValueNO = getNakedObject(proposedValueOidStr);
+        proposedValueNO = getObjectAdapter(proposedValueOidStr);
 
         if (proposedValueNO == null) {
             throw new WebApplicationException(responseOfGone("could not determine proposed value"));
@@ -429,7 +429,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final String[] argsEncoded = argsEncodedArray.toArray(new String[] {});
         final String[] args = urlDecode(argsEncoded);
 
-        final ObjectAdapter nakedObject = getNakedObject(oidStr);
+        final ObjectAdapter nakedObject = getObjectAdapter(oidStr);
         if (nakedObject == null) {
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
@@ -586,7 +586,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
             proposedValueNO = parseable.parseTextEntry(nakedObject, proposedValue);
         } else {
             final String proposedValueOidStr = proposedValue;
-            proposedValueNO = getNakedObject(proposedValueOidStr);
+            proposedValueNO = getObjectAdapter(proposedValueOidStr);
         }
         return proposedValueNO;
     }

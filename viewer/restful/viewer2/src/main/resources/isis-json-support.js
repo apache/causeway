@@ -1,28 +1,28 @@
+function add_links(ul, linkable) {
+    var el = $("<a>", {
+         href: linkable.link.url,
+         text: linkable.title
+    });
+	ul.append(
+            $("<li/>").append(el)
+        );
+    $.data(el, "isis", linkable);
+}
 
-function bootstrapApp() {
+function bootstrap_app() {
     $.getJSON('/index', 
         undefined,
-		function(data) {
-        // load services
-        $('#app').html("<div id='services'><p>Services</p><ul/></div>");
-        $.getJSON(data.services.url,
-            undefined,
-            function(data) {
-                for(var i=0; i<data.length; i++) {
-                    var service = data[i]._self;
-                    var el = $("<a>", {
-                         href: service.link.url,
-                         text: service.title
-                    });
-                    $("#services ul").append(
-                            $("<li/>").append(el)
-                        );
-                    $.data(el, "isis", service);
-                    //var x = $.data(el, "isis");
-                    //var jsonString= JSON.stringify(x, null, "  ");
-                    //alert(jsonString);
-                }
-            });
+		function load_services (data) {
+	        $.getJSON(data.services.url,
+	            undefined,
+	            function(data) {
+	                for(var i=0; i<data.length; i++) {
+	                    add_links($("#services > ul"), data[i]);
+	                    //var x = $.data(el, "isis");
+	                    //var jsonString= JSON.stringify(x, null, "  ");
+	                    //alert(jsonString);
+	                }
+	            });
     });
 }   
 

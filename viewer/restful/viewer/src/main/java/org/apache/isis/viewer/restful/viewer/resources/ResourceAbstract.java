@@ -118,7 +118,7 @@ public abstract class ResourceAbstract {
         return getSpecificationLoader().loadSpecification(specFullName);
     }
 
-    protected ObjectAdapter getNakedObject(final String oidEncodedStr) {
+    protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
         return OidUtils.getNakedObject(oidEncodedStr, getOidStringifier());
     }
 

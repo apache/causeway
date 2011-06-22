@@ -22,8 +22,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.restful.applib.resources.HomePageResource;
-import org.apache.isis.viewer.restful.viewer2.representations.LinkRepresentation;
+import org.apache.isis.viewer.restful.applib2.resources.HomePageResource;
+import org.apache.isis.viewer.restful.viewer2.representations.LinkRep;
 import org.apache.isis.viewer.restful.viewer2.resources.ResourceAbstract;
 
 /**
@@ -39,15 +39,15 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
     public String resources() {
         init();
         
-        HomePageRepresentation homePageRepresentation = new HomePageRepresentation();
+        HomePageRep homePageRepresentation = new HomePageRep();
         homePageRepresentation.setUser(linkTo("user"));
 
         homePageRepresentation.setServices(linkTo("services"));
         return asJson(homePageRepresentation);
     }
 
-    protected LinkRepresentation linkTo(String url) {
-        return LinkRepresentation.newBuilder(getResourceContext().representationSelfLinkTo(url), null, url).build();
+    protected LinkRep linkTo(String url) {
+        return LinkRep.newBuilder(getResourceContext().repContext(url), null, url).build();
     }
 
 

@@ -21,13 +21,17 @@ package org.apache.isis.viewer.restful.viewer2.resources.services;
 import java.util.List;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.restful.applib.resources.ServicesResource;
-import org.apache.isis.viewer.restful.viewer2.RepresentationContext;
+import org.apache.isis.viewer.restful.applib2.resources.ServicesResource;
+import org.apache.isis.viewer.restful.viewer2.RepContext;
 import org.apache.isis.viewer.restful.viewer2.resources.ResourceAbstract;
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep;
+import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep.SelfRep;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
@@ -39,16 +43,23 @@ import com.google.common.collect.Lists;
 public class ServicesResourceImpl extends ResourceAbstract implements ServicesResource {
 
     @Override
+    @Produces({ "application/json" })
     public String services() {
         init();
 
-        return asJsonList(serviceRepresentations());
+        return asJsonList(serviceSelfRepresentations());
     }
 
-    protected List<DomainObjectRepresentation> serviceRepresentations() {
+    protected List<DomainObjectRep.SelfRep> serviceSelfRepresentations() {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        RepresentationContext representationContext = getResourceContext().representationSelfLinkTo("_self");
-        return Lists.newArrayList(Collections2.transform(serviceAdapters, DomainObjectRepresentation.fromAdapter(representationContext)));
+        RepContext representationContext = getResourceContext().repContext();
+        
+        Function<ObjectAdapter, SelfRep> objectSelfRepresentation = 
+            Functions.compose(
+                DomainObjectRep.selfOf(), 
+                DomainObjectRep.fromAdapter(representationContext));
+        return Lists.newArrayList(
+            Collections2.transform(serviceAdapters, objectSelfRepresentation));
     }
 
 }

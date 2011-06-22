@@ -43,7 +43,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restful.viewer2.ResourceContext;
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep;
 import org.apache.isis.viewer.restful.viewer2.util.OidUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -106,7 +106,7 @@ public abstract class ResourceAbstract {
         }
     }
 
-    protected String asJsonList(List<DomainObjectRepresentation> services) {
+    protected String asJsonList(List<?> services) {
         return asJson(services);
     }
 
@@ -118,7 +118,7 @@ public abstract class ResourceAbstract {
         return getSpecificationLoader().loadSpecification(specFullName);
     }
 
-    protected ObjectAdapter getNakedObject(final String oidEncodedStr) {
+    protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
         return OidUtils.getNakedObject(oidEncodedStr, getOidStringifier());
     }
 

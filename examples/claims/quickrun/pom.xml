@@ -83,12 +83,10 @@
         </dependency>
         
         <!-- isis viewers -->
-        <!-- 
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>dnd</artifactId>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>html</artifactId>

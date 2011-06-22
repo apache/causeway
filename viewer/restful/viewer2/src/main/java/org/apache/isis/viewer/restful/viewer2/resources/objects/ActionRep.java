@@ -20,6 +20,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 @JsonSerialize(include=Inclusion.NON_NULL)
-public class CollectionRepresentation extends MemberRepresentation {
+public class ActionRep extends MemberRep {
 
 }

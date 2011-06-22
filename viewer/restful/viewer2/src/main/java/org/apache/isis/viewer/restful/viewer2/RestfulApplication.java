@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restful.viewer2;
 
 import org.apache.isis.viewer.restful.viewer2.resources.bootstrap.BootstrapResourceImpl;
 import org.apache.isis.viewer.restful.viewer2.resources.home.HomePageResourceImpl;
+import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectResourceImpl;
 import org.apache.isis.viewer.restful.viewer2.resources.services.ServicesResourceImpl;
 
 public class RestfulApplication extends AbstractJaxRsApplication {
@@ -28,6 +29,7 @@ public class RestfulApplication extends AbstractJaxRsApplication {
         addSingleton(new BootstrapResourceImpl());
         addSingleton(new HomePageResourceImpl());
         addSingleton(new ServicesResourceImpl());
+        addSingleton(new DomainObjectResourceImpl());
     }
 
 }

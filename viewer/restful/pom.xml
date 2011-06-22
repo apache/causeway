@@ -112,6 +112,30 @@
                 <type>test-jar</type>
 			</dependency>
 
+
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>restful-applib2</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>restful-applib2</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>restful-viewer2</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>restful-viewer2</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -119,6 +143,7 @@
     <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
 	    <module>applib</module>
+	    <module>applib2</module>
 	    <module>viewer</module>
 	    <module>viewer2</module>
     </modules>

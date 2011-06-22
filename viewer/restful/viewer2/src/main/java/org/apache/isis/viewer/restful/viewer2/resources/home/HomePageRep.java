@@ -16,34 +16,34 @@
  */
 package org.apache.isis.viewer.restful.viewer2.resources.home;
 
-import org.apache.isis.viewer.restful.viewer2.representations.LinkRepresentation;
+import org.apache.isis.viewer.restful.viewer2.representations.LinkRep;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 @JsonSerialize(include=Inclusion.NON_NULL)
-public class HomePageRepresentation {
+public class HomePageRep {
     
     @JsonSerialize(include=Inclusion.NON_NULL)
     public static class SelfRepresentation {
-        private LinkRepresentation link;
+        private LinkRep link;
 
-        public SelfRepresentation(LinkRepresentation link) {
+        public SelfRepresentation(LinkRep link) {
             this.link = link;
         }
 
-        public LinkRepresentation getLink() {
+        public LinkRep getLink() {
             return link;
         }
 
-        public void setLink(LinkRepresentation link) {
+        public void setLink(LinkRep link) {
             this.link = link;
         }
     }
     
     private SelfRepresentation _self;
     
-    private LinkRepresentation services;
-    private LinkRepresentation user;
+    private LinkRep services;
+    private LinkRep user;
 
     public SelfRepresentation get_self() {
         return _self;
@@ -53,19 +53,19 @@ public class HomePageRepresentation {
         this._self = self;
     }
     
-    public LinkRepresentation getServices() {
+    public LinkRep getServices() {
         return services;
     }
 
-    public void setServices(LinkRepresentation services) {
+    public void setServices(LinkRep services) {
         this.services = services;
     }
 
-    public LinkRepresentation getUser() {
+    public LinkRep getUser() {
         return user;
     }
 
-    public void setUser(LinkRepresentation user) {
+    public void setUser(LinkRep user) {
         this.user = user;
     }
     

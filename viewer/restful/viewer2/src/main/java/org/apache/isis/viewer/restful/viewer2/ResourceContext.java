@@ -27,8 +27,11 @@ import javax.ws.rs.core.UriInfo;
 
 public class ResourceContext {
 
-    public RepresentationContext representationSelfLinkTo(String attribute) {
-        return new RepresentationContext(this, attribute);
+    public RepContext repContext() {
+        return repContext(null);
+    }
+    public RepContext repContext(String attribute) {
+        return new RepContext(this, attribute);
     }
 
 
