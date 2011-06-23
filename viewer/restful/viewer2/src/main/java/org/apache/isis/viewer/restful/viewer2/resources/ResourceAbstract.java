@@ -43,7 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restful.viewer2.ResourceContext;
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep;
 import org.apache.isis.viewer.restful.viewer2.util.OidUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;

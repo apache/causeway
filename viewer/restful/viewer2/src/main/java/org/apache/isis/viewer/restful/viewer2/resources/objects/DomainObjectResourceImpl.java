@@ -32,15 +32,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restful.applib2.resources.ObjectResource;
-import org.apache.isis.viewer.restful.viewer2.RepContext;
+import org.apache.isis.viewer.restful.viewer2.representations.Representation;
 import org.apache.isis.viewer.restful.viewer2.resources.ResourceAbstract;
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep.Builder;
 import org.apache.isis.viewer.restful.viewer2.util.UrlDecoderUtils;
 
 @Path("/objects")
@@ -58,19 +55,19 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Object
             throw new WebApplicationException(responseOfGone("could not determine object"));
         }
 
-        Builder builder = DomainObjectRep.newBuilder(getResourceContext().repContext(), objectAdapter);
+        DomainObjectRepBuilder builder = DomainObjectRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter);
         
         List<ObjectAssociation> properties = objectAdapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES);
         for (ObjectAssociation otoa : properties) {
             Consent visibility = otoa.isVisible(getSession(), objectAdapter);
             if(visibility.isAllowed()) {
                 String id = otoa.getId();
-                PropertyRep propertyRep = PropertyRep.newBuilder(getResourceContext().repContext(id), objectAdapter, (OneToOneAssociation)otoa).build();
+                Representation propertyRep = PropertyRepBuilder.newBuilder(getResourceContext().repContext(id), objectAdapter, (OneToOneAssociation)otoa).build();
                 builder.withProperty(id, propertyRep);
             }
         }
         
-        DomainObjectRep representation = builder.build();
+        Representation representation = builder.build();
         return asJson(representation);
     }
 

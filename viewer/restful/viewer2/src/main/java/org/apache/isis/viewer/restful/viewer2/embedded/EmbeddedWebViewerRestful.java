@@ -19,8 +19,8 @@
 package org.apache.isis.viewer.restful.viewer2.embedded;
 
 import org.apache.isis.core.commons.lang.MapUtils;
-import org.apache.isis.core.webapp.content.ResourceServlet;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
+import org.apache.isis.core.webapp.content.ResourceServlet;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;

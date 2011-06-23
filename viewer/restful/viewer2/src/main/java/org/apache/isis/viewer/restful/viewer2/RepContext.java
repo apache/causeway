@@ -20,14 +20,11 @@ package org.apache.isis.viewer.restful.viewer2;
 
 import java.util.Arrays;
 
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep;
+import org.apache.isis.viewer.restful.viewer2.representations.Representation;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * The context within which this representation is being requested.
@@ -41,7 +38,7 @@ import com.google.common.collect.Lists;
  * representation will be keyed under.  This is required in order that
  * 'rel' links for attributes correctly concatenate.  It is also used to
  * infer whether member representations (which appear in summary form in
- * the {@link DomainObjectRep} and in more detail in their own resources)
+ * the {@link Representation} and in more detail in their own resources)
  * should include a _self attribute or not.
  */
 public class RepContext {
@@ -74,5 +71,12 @@ public class RepContext {
 
     public boolean hasAttribute() {
         return attribute != null;
+    }
+
+    /**
+     * Returns a new {@link RepContext} with a different attribute.
+     */
+    public RepContext underAttribute(String attribute) {
+        return resourceContext.repContext(attribute);
     }
 }

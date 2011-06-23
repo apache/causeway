@@ -14,12 +14,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.restful.viewer2.resources.objects;
+package org.apache.isis.viewer.restful.viewer2.representations;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-@JsonSerialize(include=Inclusion.NON_NULL)
-public class ActionRep extends MemberRep {
+public class Representation extends LinkedHashMap<String, Object> {
+    private static final long serialVersionUID = 1L;
 
+    @Override
+    public Object put(String key, Object value) {
+        if(value ==null) {
+            return null;
+        }
+        return super.put(key, value);
+    }
+
+    
 }

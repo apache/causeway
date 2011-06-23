@@ -26,9 +26,9 @@ import javax.ws.rs.Produces;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restful.applib2.resources.ServicesResource;
 import org.apache.isis.viewer.restful.viewer2.RepContext;
+import org.apache.isis.viewer.restful.viewer2.representations.Representation;
 import org.apache.isis.viewer.restful.viewer2.resources.ResourceAbstract;
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep;
-import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRep.SelfRep;
+import org.apache.isis.viewer.restful.viewer2.resources.objects.DomainObjectRepBuilder;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -50,14 +50,14 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
         return asJsonList(serviceSelfRepresentations());
     }
 
-    protected List<DomainObjectRep.SelfRep> serviceSelfRepresentations() {
+    protected List<Representation> serviceSelfRepresentations() {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         RepContext representationContext = getResourceContext().repContext();
         
-        Function<ObjectAdapter, SelfRep> objectSelfRepresentation = 
+        Function<ObjectAdapter, Representation> objectSelfRepresentation = 
             Functions.compose(
-                DomainObjectRep.selfOf(), 
-                DomainObjectRep.fromAdapter(representationContext));
+                DomainObjectRepBuilder.selfOf(), 
+                DomainObjectRepBuilder.fromAdapter(representationContext));
         return Lists.newArrayList(
             Collections2.transform(serviceAdapters, objectSelfRepresentation));
     }
