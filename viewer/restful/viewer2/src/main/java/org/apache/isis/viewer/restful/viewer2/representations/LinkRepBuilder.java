@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.restful.viewer2.representations;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restful.viewer2.RepContext;
 
@@ -33,14 +35,14 @@ public class LinkRepBuilder extends RepresentationBuilder {
     
     private HttpMethod method = HttpMethod.GET;
     private String title;
-    private String body;
+    private List<String> body;
     
     public LinkRepBuilder(RepContext repContext, String relSuffix, String url) {
         super(repContext);
         this.relSuffix = relSuffix;
         this.url = url;
     }
-    public LinkRepBuilder withMethod(HttpMethod method) {
+    public LinkRepBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
@@ -48,7 +50,7 @@ public class LinkRepBuilder extends RepresentationBuilder {
         this.title = title;
         return this;
     }
-    public LinkRepBuilder withBody(String body) {
+    public LinkRepBuilder withBody(List<String> body) {
         this.body = body;
         return this;
     }

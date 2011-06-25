@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Request;
@@ -43,7 +44,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restful.viewer2.ResourceContext;
+import org.apache.isis.viewer.restful.viewer2.representations.Representation;
+import org.apache.isis.viewer.restful.viewer2.representations.RepresentationBuilder;
 import org.apache.isis.viewer.restful.viewer2.util.OidUtils;
+import org.apache.isis.viewer.restful.viewer2.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -91,6 +95,11 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
+    protected String jsonRepresentionFrom(RepresentationBuilder builder) {
+        Representation representation = builder.build();
+        return asJson(representation);
+    }
+
     protected String asJson(final Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
@@ -105,9 +114,6 @@ public abstract class ResourceAbstract {
         }
     }
 
-    protected String asJsonList(List<?> services) {
-        return asJson(services);
-    }
 
     // //////////////////////////////////////////////////////////////
     // Isis integration
@@ -118,11 +124,17 @@ public abstract class ResourceAbstract {
     }
 
     protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
-        return OidUtils.getNakedObject(oidEncodedStr, getOidStringifier());
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidEncodedStr, getOidStringifier());
+        
+        if (objectAdapter == null) {
+            final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+            throw new WebApplicationException(responseOfNotFound("could not determine adapter for OID: '" + oidStr + "'"));
+        }
+        return objectAdapter;
     }
 
-    protected String getOidStr(final ObjectAdapter nakedObject) {
-        return OidUtils.getOidStr(nakedObject, getOidStringifier());
+    protected String getOidStr(final ObjectAdapter objectAdapter) {
+        return OidUtils.getOidStr(objectAdapter, getOidStringifier());
     }
 
 

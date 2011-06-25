@@ -33,6 +33,8 @@ public abstract class RepresentationBuilder {
         this.repContext = repContext;
     }
 
+    public abstract Representation build();
+    
     protected OidStringifier getOidStringifier() {
         return getOidGenerator().getOidStringifier();
     }

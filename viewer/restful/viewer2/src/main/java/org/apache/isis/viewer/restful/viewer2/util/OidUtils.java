@@ -30,14 +30,14 @@ public final class OidUtils {
     private OidUtils() {
     }
 
-    public static ObjectAdapter getNakedObject(final String oidEncodedStr, final OidStringifier oidStringifier) {
+    public static ObjectAdapter getObjectAdapter(final String oidEncodedStr, final OidStringifier oidStringifier) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final Oid oid = oidStringifier.deString(oidStr);
         return getAdapterManager().getAdapterFor(oid);
     }
 
-    public static String getOidStr(final ObjectAdapter nakedObject, final OidStringifier oidStringifier) {
-        final Oid oid = nakedObject.getOid();
+    public static String getOidStr(final ObjectAdapter objectAdapter, final OidStringifier oidStringifier) {
+        final Oid oid = objectAdapter.getOid();
         return oid != null ? oidStringifier.enString(oid) : null;
     }
 

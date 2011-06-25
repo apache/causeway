@@ -658,14 +658,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final ObjectActionSet actionSet = (ObjectActionSet) action;
                 final List<ObjectAction> subActions = actionSet.getActions();
                 for (final ObjectAction subAction : subActions) {
-                    if (sameActionTypeOrNotSpecified(type, subAction)) {
+                    if (type.matchesTypeOf(subAction)) {
                         actions.add(subAction);
                         // REVIEW: why was there a break here?
                         // break;
                     }
                 }
             } else {
-                if (sameActionTypeOrNotSpecified(type, action)) {
+                if (type.matchesTypeOf(action)) {
                     actions.add(action);
                 }
             }
@@ -673,14 +673,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         return actions;
     }
-
-    protected boolean sameActionTypeOrNotSpecified(final ActionType type, final ObjectAction action) {
-        return type == null || action.getType().equals(type);
-    }
-
-    // //////////////////////////////////////////////////////////////////////
-    // service actions
-    // //////////////////////////////////////////////////////////////////////
 
     @Override
     public List<ObjectAction> getServiceActionsReturning(final ActionType... types) {
@@ -762,7 +754,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return contributedActionSets;
     }
-
+    
     private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType,
         final List<ObjectAction> contributedActionSetsToAppendTo) {
         final ObjectSpecification specification = serviceAdapter.getSpecification();

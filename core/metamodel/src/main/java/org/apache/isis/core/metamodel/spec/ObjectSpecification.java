@@ -344,4 +344,5 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     public boolean isIntrospected();
 
+
 }

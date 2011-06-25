@@ -27,9 +27,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectActionContainer {
 
-    /**
-     * TODO: convert to relatedResourceActions
-     */
     List<ObjectAction> getServiceActionsReturning(ActionType... type);
 
     /**
@@ -41,9 +38,25 @@ public interface ObjectActionContainer {
      * Get the action object represented by the specified identity string.
      * 
      * <p>
-     * The identity string should be {@link Identifier#toNameParmsIdentityString()}</tt>.
+     * The identity string can be either fully specified with parameters
+     * (as per {@link Identifier#toNameParmsIdentityString()} or in 
+     * abbreviated form ({@link Identifier#toNameIdentityString()}).
+     * 
+     * @see #getObjectAction(String)
      */
-    ObjectAction getObjectAction(ActionType type, String nameAndParmsIdentityString);
+    ObjectAction getObjectAction(ActionType type, String id);
+
+    /**
+     * Get the action object represented by the specified identity string, irrespective of {@link ActionType}.
+     * 
+     * <p>
+     * The identity string can be either fully specified with parameters
+     * (as per {@link Identifier#toNameParmsIdentityString()} or in 
+     * abbreviated form ({@link Identifier#toNameIdentityString()}).
+     * 
+     * @see #getObjectAction(ActionType, String)
+     */
+    ObjectAction getObjectAction(String id);
 
     /**
      * Returns an array of actions of the specified type(s), including any contributed actions.

@@ -154,6 +154,15 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
         return null;
     }
 
+    /**
+     * Review: is it necessary to override for this subclass?
+     */
+    @Override
+    public ObjectAction getObjectAction(final String nameParmsIdentityString) {
+        return null;
+    }
+
+
     // /////////////////////////////////////////////////////
     // Service Actions
     // /////////////////////////////////////////////////////

@@ -347,10 +347,21 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String nameParmsIdentityString) {
+    public ObjectAction getObjectAction(final ActionType type, final String id) {
         final List<ObjectAction> availableActions =
-            ListUtils.combine(getObjectActionsAll(), getContributedActions(type));
-        return getAction(availableActions, type, nameParmsIdentityString);
+            ListUtils.combine(getObjectActions(type), getContributedActions(type));
+        return getAction(availableActions, type, id);
+    }
+
+    @Override
+    public ObjectAction getObjectAction(final String id) {
+        for(ActionType type: ActionType.values()) {
+            ObjectAction action = getObjectAction(type, id);
+            if(action != null) {
+                return action;
+            }
+        }
+        return null;
     }
 
     private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type,
@@ -386,27 +397,30 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type,
-        final String nameParmsIdentityString) {
-        if (nameParmsIdentityString == null) {
+        final String id) {
+        if (id == null) {
             return null;
         }
         outer: for (int i = 0; i < availableActions.size(); i++) {
             final ObjectAction action = availableActions.get(i);
             if (action.getActions().size() > 0) {
                 // deal with action set
-                final ObjectAction a = getAction(action.getActions(), type, nameParmsIdentityString);
+                final ObjectAction a = getAction(action.getActions(), type, id);
                 if (a != null) {
                     return a;
                 }
             } else {
                 // regular action
-                if (!sameActionTypeOrNotSpecified(type, action)) {
+                if (!type.matchesTypeOf(action)) {
                     continue outer;
                 }
-                if (!nameParmsIdentityString.equals(action.getIdentifier().toNameParmsIdentityString())) {
-                    continue outer;
-                }
-                return action;
+                if (id.equals(action.getIdentifier().toNameParmsIdentityString())) {
+                    return action;
+                } 
+                if (id.equals(action.getIdentifier().toNameIdentityString())) {
+                    return action;
+                } 
+                continue outer;
             }
         }
         return null;

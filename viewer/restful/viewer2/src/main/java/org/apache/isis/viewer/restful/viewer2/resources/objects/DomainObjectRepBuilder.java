@@ -16,10 +16,16 @@
  */
 package org.apache.isis.viewer.restful.viewer2.resources.objects;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restful.viewer2.RepContext;
 import org.apache.isis.viewer.restful.viewer2.representations.LinkRepBuilder;
 import org.apache.isis.viewer.restful.viewer2.representations.Representation;
@@ -28,7 +34,7 @@ import org.apache.isis.viewer.restful.viewer2.representations.RepresentationBuil
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-public class DomainObjectRepBuilder extends RepresentationBuilder{
+public class DomainObjectRepBuilder extends RepresentationBuilder {
 
     public static DomainObjectRepBuilder newBuilder(RepContext representationContext, ObjectAdapter objectAdapter) {
         return new DomainObjectRepBuilder(representationContext, objectAdapter);
@@ -44,16 +50,17 @@ public class DomainObjectRepBuilder extends RepresentationBuilder{
     
     public Representation build() {
         RepContext repContext = this.repContext.underAttribute("_self");
-        Representation selfLink = LinkRepBuilder.newBuilder(repContext, "link", urlFor(objectAdapter)).build();
+        Representation selfLink = LinkRepBuilder.newBuilder(repContext, "link", url()).build();
         Representation selfType = LinkRepBuilder.newTypeBuilder(repContext, "type", objectAdapter.getSpecification()).build();
         String title = objectAdapter.titleString();
-        Representation iconLink = LinkRepBuilder.newBuilder(repContext, "icon", iconFor(objectAdapter)).build();
+        Representation iconLink = LinkRepBuilder.newBuilder(repContext, "icon", icon()).build();
         Representation self = new Representation();
         self.put("link", selfLink);
         self.put("type", selfType);
         self.put("title", title);
         self.put("icon", iconLink);
         representation.put("_self", self);
+        withAllMembers(objectAdapter);
         if(!members.isEmpty()) {
             for(Map.Entry<String, Representation> entry: members.entrySet()) {
                 String memberId = entry.getKey();
@@ -64,24 +71,66 @@ public class DomainObjectRepBuilder extends RepresentationBuilder{
         return representation;
     }
 
-    public void withProperty(String id, Representation propertyRep) {
-        members.put(id, propertyRep);
-    }
-
-    private String iconFor(ObjectAdapter objectAdapter) {
+    private String icon() {
         String iconName = objectAdapter.getIconName();
         return "images/" + iconName + ".png";
     }
 
-    private String urlFor(ObjectAdapter objectAdapter) {
+    private String url() {
         OidStringifier oidStringifier = getOidStringifier();
         return urlFor(objectAdapter, oidStringifier);
     }
 
+    private void withAllMembers(final ObjectAdapter objectAdapter) {
+        List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
+        for (ObjectAssociation assoc : associations) {
+            Consent visibility = assoc.isVisible(getSession(), objectAdapter);
+            if(!visibility.isAllowed()) {
+                continue;
+            } 
+            String id = assoc.getId();
+            if(assoc instanceof OneToOneAssociation) {
+                OneToOneAssociation property = (OneToOneAssociation)assoc;
+                Representation propertyRep = PropertyRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, property).build();
+                withMember(id, propertyRep);
+            }
+            if(assoc instanceof OneToManyAssociation) {
+                OneToManyAssociation collection = (OneToManyAssociation) assoc;
+                Representation collectionRep = CollectionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, collection).build();
+                withMember(id, collectionRep);
+            }
+        }
+        
+        List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActionsAll();
+        for (ObjectAction action : actions) {
+            Consent visibility = action.isVisible(getSession(), objectAdapter);
+            if(!visibility.isAllowed()) {
+                continue;
+            } 
+            String id = action.getId();
+            Representation actionRep = ActionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, action).build();
+            withMember(id, actionRep);
+        }
+    }
+
+    private void withMember(String id, Representation propertyRep) {
+        members.put(id, propertyRep);
+    }
+    
+
+    /////////////////////////////////////////////////////////////////////
+    //
+    /////////////////////////////////////////////////////////////////////
+    
     public static String urlFor(ObjectAdapter objectAdapter, OidStringifier oidStringifier) {
         String oidStr = oidStringifier.enString(objectAdapter.getOid());
         return "objects/" + oidStr;
     }
+
+    
+    /////////////////////////////////////////////////////////////////////
+    //
+    /////////////////////////////////////////////////////////////////////
 
     public static Function<ObjectAdapter, Representation> fromAdapter(final RepContext repContext) {
         return new Function<ObjectAdapter, Representation>() {

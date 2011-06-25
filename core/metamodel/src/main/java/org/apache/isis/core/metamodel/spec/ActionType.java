@@ -19,10 +19,16 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+
 public enum ActionType {
     DEBUG, SET, EXPLORATION, PROTOTYPE, USER;
 
     public String getName() {
         return name();
+    }
+
+    public boolean matchesTypeOf(ObjectAction action) {
+        return this == null || action.getType().equals(this);
     }
 }

@@ -180,6 +180,11 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
+    public ObjectAction getObjectAction(final String name) {
+        return null;
+    }
+
+    @Override
     public List<ObjectAction> getObjectActions(final ActionType... type) {
         return null;
     }

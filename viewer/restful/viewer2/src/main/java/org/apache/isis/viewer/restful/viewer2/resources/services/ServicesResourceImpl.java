@@ -47,7 +47,7 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
     public String services() {
         init();
 
-        return asJsonList(serviceSelfRepresentations());
+        return asJson(serviceSelfRepresentations());
     }
 
     protected List<Representation> serviceSelfRepresentations() {

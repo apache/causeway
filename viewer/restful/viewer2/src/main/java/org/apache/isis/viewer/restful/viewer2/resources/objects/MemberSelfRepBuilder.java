@@ -19,10 +19,6 @@ package org.apache.isis.viewer.restful.viewer2.resources.objects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restful.viewer2.RepContext;
 import org.apache.isis.viewer.restful.viewer2.representations.LinkRepBuilder;
 import org.apache.isis.viewer.restful.viewer2.representations.Representation;
@@ -30,21 +26,35 @@ import org.apache.isis.viewer.restful.viewer2.representations.RepresentationBuil
 
 public class MemberSelfRepBuilder extends RepresentationBuilder {
 
-    public static MemberSelfRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        return new MemberSelfRepBuilder(repContext, objectAdapter, otoa);
+    public static MemberSelfRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
+        return new MemberSelfRepBuilder(repContext, objectAdapter, memberType, objectMember);
     }
 
     private final ObjectAdapter objectAdapter;
+    private final MemberType memberType;
     private final ObjectMember objectMember;
 
-    public MemberSelfRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, ObjectMember objectMember) {
+    public MemberSelfRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
         super(repContext);
         this.objectAdapter = objectAdapter;
+        this.memberType = memberType;
         this.objectMember = objectMember;
     }
     
     public Representation build() {
-        representation.put("link", LinkRepBuilder.newBuilder(repContext, "link", DomainObjectRepBuilder.urlFor(objectAdapter, getOidStringifier())).build());
+        representation.put("link", memberLinkRep());
+        representation.put("object", domainObjectLinkRep());
         return representation;
     }
+
+    private Representation memberLinkRep() {
+        String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
+        return LinkRepBuilder.newBuilder(repContext, "link", url).build();
+    }
+    
+    private Representation domainObjectLinkRep() {
+        String url = DomainObjectRepBuilder.urlFor(objectAdapter, getOidStringifier());
+        return LinkRepBuilder.newBuilder(repContext, "object", url).build();
+    }
+
 }

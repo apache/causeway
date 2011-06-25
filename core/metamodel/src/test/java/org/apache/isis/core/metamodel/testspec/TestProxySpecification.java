@@ -209,6 +209,17 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
+    public ObjectAction getObjectAction(final String nameParmsIdentityString) {
+        for(ActionType type: ActionType.values()) {
+            ObjectAction action = getObjectAction(type, nameParmsIdentityString);
+            if(action != null) {
+                return action;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public String getPluralName() {
         return null;
     }
