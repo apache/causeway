@@ -3290,12 +3290,13 @@ public class FooBar {
       <orderedlist>
         <listitem>
           <para>check out code using svn checkout (see <xref
-          linkend="chp.BuildingIsisFromSource" />).</para>
+          linkend="chp.BuildingIsisFromSource" />), update and commit
+          changes.</para>
         </listitem>
 
         <listitem>
           <para>make changes, implements features, fixes bugs. These are
-          installed, in the normal way, to local repo using <code>mvn
+          installed, in the normal way, to your local repo using <code>mvn
           install</code>.</para>
         </listitem>
 
@@ -3310,15 +3311,21 @@ public class FooBar {
         </listitem>
 
         <listitem>
-          <para>when the codebase is ready for a formal release (-RCn), the
-          contributor uses <code>mvn release:prepare</code> to produce the
-          release artifacts. This goal:</para>
+          <para>when the codebase is ready for a formal release, the release
+          manager creates a branch in svn in preparation for the following
+          steps</para>
+        </listitem>
+
+        <listitem>
+          <para>using the branch, the release manager uses <code>mvn
+          release:prepare</code> to produce the release artifacts. This
+          goal:</para>
 
           <itemizedlist>
             <listitem>
               <para>update the <acronym>POM</acronym>s from
               <filename>x.x.x-SNAPSHOT-incubating</filename> to
-              <filename>x.x.x-RCn-incubating</filename></para>
+              <filename>x.x.x-incubating</filename></para>
             </listitem>
 
             <listitem>
@@ -3334,64 +3341,42 @@ public class FooBar {
             </listitem>
 
             <listitem>
-              <para>updates the POMs for the next iteration, ie from
-              <filename>x.x.x-RCn-incubating</filename> to
-              <filename>x.x.y-incubating-SNAPSHOT</filename></para>
+              <para>updates the <acronym>POM</acronym>s for the next
+              iteration, ie from <filename>x.x.x-incubating</filename> to
+              <filename>x.y.0-incubating-SNAPSHOT</filename></para>
             </listitem>
           </itemizedlist>
-
-          <para>On the local computer the local repo
-          (<filename>~/.m2/repository</filename>) will have signed versions of
-          release (x.x.x) versions of all modules, and in trunk there will
-          also be a signed zip of the source. See <xref
-          linkend="sec.MavenReleasePrepare" />.</para>
         </listitem>
 
         <listitem>
-          <para>the signed version of the source is uploaded to the
-          contributors home directory ready for voting. See <xref
+          <para>next, , the <code>mvn release:prepare</code> command is used
+          to upload the signed versions of the artifacts (which includes the
+          source release ZIP) to the Apache staging repository. See <xref
           linkend="sec.UploadReleaseForVoting" />.</para>
         </listitem>
 
         <listitem>
-          <para>the signed versions of the Maven binaries are deployed to the
-          Apache staging directory ready for voting. Again, see <xref
-          linkend="sec.UploadReleaseForVoting" />.</para>
+          <para>the release is voted on by the community. While in the
+          incubator a vote must also be performed by the Incubator PMC (ie on
+          mailto:incubator@apache.org). It is permissible to perform these in
+          parallel if required. See <xref linkend="sec.Voting" /></para>
+
+          <para>If the vote is rejected, then the branch, tag and staging repo
+          are deleted/dropped, the necessary fixes are made and then the above
+          steps are performed again.</para>
         </listitem>
 
         <listitem>
-          <para>the release is voted on by the community.</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>If the vote is rejected, then fixes are made and then the
-              above steps (2 through 7) are performed again with the next
-              release candidate.</para>
-            </listitem>
-
-            <listitem>
-              <para>If the vote is accepted, then the above steps (2 through
-              7) are performed again, but without the -RCn suffix</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>While in the incubator a vote must also be performed by the
-          Incubator PMC (ie on mailto:incubator@apache.org). It is permissible
-          to perform these in parallel if required. See <xref
-          linkend="sec.Voting" /></para>
+          <para>once the vote is passed, the source release should be copied
+          from the staging repo to the "dist" folder, where it will be
+          mirrored. It can also be referenced as a download at this point. See
+          <xref linkend="sec.PromotingReleaseToDistribution" /></para>
         </listitem>
 
         <listitem>
-          <para>once the vote is passed, the source release should be
-          copied/moved to the "dist" folder, where it will be mirrored. It can
-          also be referenced as a download at this point. See <xref
-          linkend="sec.PromotingReleaseToDistribution" /></para>
-        </listitem>
-
-        <listitem>
-          <para>once the vote is passed, the binary release should be promoted
-          from the staging repository to release repository (again, see <xref
-          linkend="sec.PromotingReleaseToDistribution" />), after
+          <para>once the vote is passed, the Maven artifacts should be
+          promoted from the staging repository to release repository (again,
+          see <xref linkend="sec.PromotingReleaseToDistribution" />), after
           which...</para>
         </listitem>
 
@@ -3516,13 +3501,69 @@ public class FooBar {
       release and to agree its content. Allow at least a week for this
       discussion.</para>
 
-      <para>Once agreed, the formal release can begin. There are a number of
-      prerequisites to the release, in terms of (a) the codebase itself, (b)
-      the community process, and (c) the contributor acting as release manager
-      and performing the release. There are then the actual steps required to
-      perform the release (as per the diagram in <xref
-      linkend="chp.ReleaseOverview" />). This chapter discusses all of these
-      things.</para>
+      <para>Once agreed, the formal release can begin. The actual steps
+      required to perform the release are outlined in the diagram in <xref
+      linkend="chp.ReleaseOverview" />). This chapter corresponds to steps 4
+      through 11; that is:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>create a branch to prepare the release</para>
+        </listitem>
+
+        <listitem>
+          <para>use <code>mvn release:prepare</code> to generate the signed
+          artifacts and create an <acronym>SVN</acronym> tag</para>
+        </listitem>
+
+        <listitem>
+          <para>use <code>mvn release:perform</code> to upload the signed
+          artifacts to the Apache staging repository</para>
+        </listitem>
+
+        <listitem>
+          <para>vote on the staged artifacts (in particular, the signed source
+          release ZIP from which the remaining artifacts are derivable)</para>
+        </listitem>
+
+        <listitem>
+          <para>on successful vote:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>promote the staged artifacts</para>
+            </listitem>
+
+            <listitem>
+              <para>merge in the branch back to into trunk</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>on failed vote:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>drop the staging repository</para>
+            </listitem>
+
+            <listitem>
+              <para>delete the branch and tag</para>
+            </listitem>
+
+            <listitem>
+              <para>fix problems and go round round the loop again.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Before any of this can happen, there are a number of
+      prerequisites, in terms of (a) the codebase itself, (b) the community
+      process, and (c) the contributor acting as release manager and
+      performing the release. This chapter starts by discussing these
+      prerequisites, then moves onto the detailed release process.</para>
 
       <sect1>
         <title>Code Prerequisites</title>
@@ -3823,8 +3864,9 @@ licenses to remove from supplemental-models.xml (are spurious):
 
           <para>In order that a contributor can make a release it is necessary
           for them to have generated a key and had that key recognized by
-          other members of the ASF. See the key generation appendix, <xref
-          linkend="apx.KeyGeneration" />, for more details.</para>
+          other members of the <acronym>ASF</acronym>. See the key generation
+          appendix, <xref linkend="apx.KeyGeneration" />, for more
+          details.</para>
         </sect2>
 
         <sect2>
@@ -3833,10 +3875,11 @@ licenses to remove from supplemental-models.xml (are spurious):
 
           <para>The Maven release plugin will automatically sign the release,
           however it is necessary to update the
-          <filename>~/.m2/settings.xml</filename> file with your GPG
-          passphrase in order that it can use your secret key. This is defined
-          under a profile so that it is activated only when we perform a
-          release (as defined by <package>[org,apache:apache]</package> parent
+          <filename>~/.m2/settings.xml</filename> file with your
+          <acronym>GPG</acronym> passphrase in order that it can use your
+          secret key. This is defined under a profile so that it is activated
+          only when we perform a release (as defined by
+          <package>[org,apache:apache]</package> parent
           <acronym>POM</acronym>.</para>
 
           <para>Therefore, make the following</para>
@@ -3875,20 +3918,34 @@ licenses to remove from supplemental-models.xml (are spurious):
       <sect1 id="sec.MavenReleasePrepare">
         <title>Preparing a Release (<code>mvn release:prepare</code>)</title>
 
-        <para>We recommend creating all releases from branches (including the
-        final release). This allows development to continue on trunk
-        uninterrupted. However, the <filename>mvn-release-plugin</filename> is
-        configured with <code>&lt;tagBase&gt;</code> so that tags for both
-        release candidates and final releases all appear in the "usual"
+        <para>We use <acronym>SVN</acronym> branches to create releases,
+        allowing development to continue on trunk uninterrupted. The
+        <filename>mvn-release-plugin</filename> is configured with
+        <code>&lt;tagBase&gt;</code> so that the tag appears in the "usual"
         location.</para>
 
         <para>Once a successful final release has been deployed, we do a merge
-        of the updated <acronym>POM</acronym>s from the release branch back
-        into trunk.</para>
+        of the updated <acronym>POM</acronym>s (and any fixes made) from the
+        release branch back into trunk.</para>
+
+        <para>The process of getting to the voting stage will result in an
+        <acronym>SVN</acronym> branch, an <acronym>SVN</acronym> tag, and a
+        staging repository being created. It is possible (more than possible!)
+        that when the vote is cast that problems will be found with the
+        release artifacts. In this case the branch, tags and staging
+        repository should be deleted/dropped prior to performing the next
+        release.</para>
+
+        <note>
+          <para>"Release candidate" version numbers (RCx) should NOT be used
+          for releases, because once a release has been voted on it must not
+          be altered. The corollary of this is that it IS allowed to use the
+          same version number for multiple releases.</para>
+        </note>
 
         <para>In the sections that follow, we use
-        <emphasis>0.x.x[-RCn]-incubating</emphasis> to represent the version
-        number either for a release candidate or for a final release.</para>
+        <emphasis>0.x.x-incubating</emphasis> to represent the version
+        number..</para>
 
         <sect2 id="sec.ReleaseBranch">
           <title>Branch</title>
@@ -3896,65 +3953,43 @@ licenses to remove from supplemental-models.xml (are spurious):
           <para>First, create a branch in the <acronym>SVN</acronym> repo and
           a corresponding local direcory:</para>
 
-          <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating \
-   -m "branching to create x.x.x[-RCn]-incubating"
+          <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating \
+   -m "branching to create x.x.x-incubating"
 
 cd .../trunk   # your local workspace for isis/trunk
 cd ..
-mkdir -p branches/x.x.x[-RCn]-incubating</programlisting>
+mkdir -p branches/x.x.x-incubating</programlisting>
 
-          <para>Then, perform an <code>svn copy</code>:</para>
+          <para>Then, perform an <code>svn copy</code> from trunk:</para>
 
-          <itemizedlist>
-            <listitem>
-              <para>if performing a release candidate, copy over from
-              trunk:</para>
-
-              <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
+          <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
     https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk \
     -m "copying trunk to branches/x.x.x-RC<emphasis>n</emphasis>-incubating"
 
 cp -R trunk branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>if performing a final release, then copy over from the
-              previous release candidate</para>
-
-              <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk@xxxxxxxx \
-    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk \
-    -m "copying previous RC branch to branches/x.x.x-incubating"
-
-cp -R branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk branches/x.x.x-incubating/trunk</programlisting>
-
-              <para>where <emphasis>xxxxxxx</emphasis> is the revision prior
-              to mvn release:prepare having been performed on that
-              branch.</para>
-            </listitem>
-          </itemizedlist>
 
           <para>Finally, use <code>svn switch</code> to update your local
           directory:</para>
 
-          <programlisting>cd branches/x.x.x[-RCn]-incubating/trunk
-svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk</programlisting>
+          <programlisting>cd branches/x.x.x-incubating/trunk
+svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk</programlisting>
 
           <para>Because the release is being performed in a branch, it is then
           necessary to edit the parent <filename>pom.xml</filename> in
           <package>[oai:isis]</package> parent module. Change
           <emphasis>trunk</emphasis> to
-          <emphasis>branches/x.x.x[-RCn]-incubating/trunk</emphasis> for each
-          of the children of the <code>&lt;scm&gt;</code> element:</para>
+          <emphasis>branches/x.x.x-incubating/trunk</emphasis> for each of the
+          children of the <code>&lt;scm&gt;</code> element:</para>
 
           <programlisting>&lt;scm&gt;
   &lt;connection&gt;
-    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/
+    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/
   &lt;/connection&gt;
   &lt;developerConnection&gt;
-    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/
+    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/
   &lt;/developerConnection&gt;
   &lt;url&gt;
-    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/
+    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/
   &lt;/url&gt;
 &lt;/scm&gt;</programlisting>
 
@@ -3987,7 +4022,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-
             update the <code>&lt;isis.version&gt;</code> property:</para>
 
             <programlisting>&lt;properties&gt;
-    &lt;isis.version&gt;0.x.x[-RCn]-incubating&lt;/isis.version&gt;
+    &lt;isis.version&gt;0.x.x-incubating&lt;/isis.version&gt;
 &lt;/properties&gt;</programlisting>
 
             <para>Then commit the <filename>pom.xml</filename> file.</para>
@@ -4009,7 +4044,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-
 
             <programlisting>&lt;skin&gt;
     ...
-    &lt;version&gt;0.x.x[-RCn]-incubating&lt;/version&gt;
+    &lt;version&gt;0.x.x-incubating&lt;/version&gt;
 &lt;/skin&gt;</programlisting>
 
             <para>Then commit the <filename>site.xml</filename> file.</para>
@@ -4063,33 +4098,38 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
 
           <itemizedlist>
             <listitem>
-              <para>the release version as
-              <emphasis>0.x.x-RCn-incubating</emphasis> (if performing a
-              release candidate), or <emphasis>0.x.x-incubating</emphasis> (if
-              performing the actual release):</para>
+              <para>leave the release version as its default
+              <emphasis>0.x.x-incubating</emphasis>:</para>
 
-              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x[-RCn]-incubating</programlisting>
+              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: </programlisting>
             </listitem>
 
             <listitem>
-              <para>the SCM release tag as the default:</para>
+              <para>leave the <acronym>SCM</acronym> release tag as its
+              default:</para>
 
-              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x[-RCn]-incubating: </programlisting>
+              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-incubating: </programlisting>
             </listitem>
 
             <listitem>
-              <para>the new development version. This is only really important
-              if performing the actual release, not a release candidate. Even
-              so, specify the <literal>-SNAPSHOT</literal> of the next version
-              expected for development.</para>
+              <para>enter the new development version. This is only really
+              important if performing the actual release, not a release
+              candidate. Even so, specify the <literal>-SNAPSHOT</literal> of
+              the next version expected for development.</para>
 
-              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x[-RCm]-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
             </listitem>
           </itemizedlist>
         </sect2>
 
         <sect2 id="sec.ReleaseProper">
           <title>Release Proper</title>
+
+          <para>*** up to here...</para>
+
+          <para></para>
+
+          <para></para>
 
           <para>Assuming that the dry run has succeeded, it's time to create
           the release proper.</para>
