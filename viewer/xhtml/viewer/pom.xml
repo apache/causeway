@@ -23,16 +23,16 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>restful</artifactId>
+		<artifactId>xhtml</artifactId>
 		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>restful-viewer</artifactId>
-	<name>Restful Viewer Implementation</name>
+	<artifactId>xhtml-viewer</artifactId>
+	<name>XHTML Viewer Implementation</name>
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>viewer/restful/viewer/</relativeUrl>
+		<relativeUrl>viewer/xhtml/viewer/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
@@ -41,7 +41,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>restful-applib</artifactId>
+			<artifactId>xhtml-applib</artifactId>
 		</dependency>
 
 		<dependency>

@@ -30,17 +30,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restful.applib2.resources.DomainObjectResource;
-import org.apache.isis.viewer.restful.viewer2.representations.Representation;
-import org.apache.isis.viewer.restful.viewer2.representations.RepresentationBuilder;
 import org.apache.isis.viewer.restful.viewer2.resources.ResourceAbstract;
 import org.apache.isis.viewer.restful.viewer2.util.UrlDecoderUtils;
 

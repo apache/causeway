@@ -19,28 +19,23 @@ package org.apache.isis.viewer.restful.viewer2.resources.objects;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restful.viewer2.RepContext;
 import org.apache.isis.viewer.restful.viewer2.representations.LinkRepBuilder;
 import org.apache.isis.viewer.restful.viewer2.representations.Representation;
 
-import com.google.common.collect.BiMap;
 import com.google.common.collect.Lists;
 
-public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssociation> {
+public class CollectionRepBuilder extends AbstractMemberRepBuilder<OneToManyAssociation> {
 
-    public static PropertyRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        return new PropertyRepBuilder(repContext, objectAdapter, otoa);
+    public static CollectionRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        return new CollectionRepBuilder(repContext, objectAdapter, otma);
     }
 
-    public PropertyRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        super(repContext, objectAdapter, MemberType.PROPERTY, otoa);
+    public CollectionRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        super(repContext, objectAdapter, MemberType.COLLECTION, otma);
     }
 
     public Representation build() {
@@ -54,21 +49,26 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssocia
         return representation;
     }
 
+    protected List<String> mutatorArgValues(MutatorSpec mutatorSpec) {
+        List<String> values = Lists.newArrayList();
+        values.add(null);
+        return values;
+    }
 
     @Override
     protected Object valueRep() {
         ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
         if(valueAdapter == null) {
             return null;
-        } 
-        ValueFacet valueFacet = getMemberSpecFacet(ValueFacet.class);
-        if(valueFacet != null) {
-            EncodableFacet encodableFacet = getMemberSpecFacet(EncodableFacet.class);
-            return encodableFacet.toEncodedString(valueAdapter);
-        } 
-        TitleFacet titleFacet = getMemberSpecFacet(TitleFacet.class);
-        String title = titleFacet.title(valueAdapter, getLocalization());
-        return LinkRepBuilder.newBuilder(repContext, "value", urlForObject()).withTitle(title).build();
+        }
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
+        List<Representation> list = Lists.newArrayList();
+        for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
+            String url = DomainObjectRepBuilder.urlFor(elementAdapter, getOidStringifier());
+            list.add(LinkRepBuilder.newBuilder(repContext, "value", url).build());
+        }
+        
+        return list;
     }
 
 }

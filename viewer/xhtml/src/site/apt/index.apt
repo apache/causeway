@@ -16,10 +16,10 @@
 ~~  under the License.
 
 
-Restful Viewer
+XHTML Viewer
 
- The <restful> viewer provides a RESTful interface to the domain object model,
- running over the HTTP protocol, and implemented as a webapp (servlet).
+ The <xhtml> viewer provides an XHTML RESTful interface to the domain object 
+ model, running over the HTTP protocol, and implemented as a webapp (servlet).
  
  Each domain object (or part of object) is exposed as a RESTful resource, as
  defined by the following table:
@@ -42,12 +42,17 @@ Restful Viewer
 
 Representation
 
-  The viewer currently represents all domain object as XHTML, meaning that it can be rendered by
-  browers.  This XHTML also serves up a small amount of JavaScript which enables the HTTP PUT
-  and HTTP DELETE methods.  This allows the developer to interact with the system through
-  the browser.   
+  The viewer currently represents all domain object as XHTML, meaning that it 
+  can be rendered by browers.  This XHTML also serves up a small amount of 
+  Javascript which enables the HTTP PUT and HTTP DELETE methods.  This allows 
+  the developer to interact with the system through the browser.   
     
 Further Info
   
-  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{./docbkx/html/guide/isis-restful-viewer.html}user guide}} for more information.
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{./docbkx/html/guide/isis-xhtml-viewer.html}user guide}} for more information.
  
+See also
+
+  The {{{../json/index.html}JSON viewer}}, which is similar but serves up 
+  JSON representations.
+

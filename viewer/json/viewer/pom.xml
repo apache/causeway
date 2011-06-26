@@ -23,16 +23,16 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>restful</artifactId>
+		<artifactId>json</artifactId>
 		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>restful-viewer2</artifactId>
-	<name>Restful Viewer2 Implementation</name>
+	<artifactId>json-viewer</artifactId>
+	<name>JSON Viewer Implementation</name>
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>viewer/restful/viewer/</relativeUrl>
+		<relativeUrl>viewer/json/viewer/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
@@ -41,7 +41,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>restful-applib2</artifactId>
+			<artifactId>json-applib</artifactId>
 		</dependency>
 
 		<dependency>

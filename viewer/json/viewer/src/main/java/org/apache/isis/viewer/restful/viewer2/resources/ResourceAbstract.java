@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restful.viewer2.resources;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

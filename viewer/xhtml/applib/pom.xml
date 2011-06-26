@@ -23,16 +23,16 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>restful</artifactId>
+		<artifactId>xhtml</artifactId>
 		<version>0.1.2-incubating-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>restful-applib</artifactId>
-	<name>Restful Viewer AppLib</name>
+	<artifactId>xhtml-applib</artifactId>
+	<name>XHTML Viewer AppLib</name>
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>viewer/restful/applib/</relativeUrl>
+		<relativeUrl>viewer/xhtml/applib/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->

@@ -17,7 +17,6 @@
 package org.apache.isis.viewer.restful.viewer2.resources.objects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restful.viewer2.RepContext;
 import org.apache.isis.viewer.restful.viewer2.representations.LinkRepBuilder;

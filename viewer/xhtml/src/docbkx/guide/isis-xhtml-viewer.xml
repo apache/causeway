@@ -43,9 +43,8 @@
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para><emphasis>Isis</emphasis>' <emphasis>restful</emphasis> viewer
-    <package>[oai.viewer:restful]</package> renders each domain objects as
-    <ulink
+    <para><emphasis>Isis</emphasis>' <emphasis>xhtml</emphasis> viewer
+    <package>[oai.viewer:xhtl]</package> renders each domain objects as <ulink
     url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
     resources. Each domain object is exposed as an (<acronym>XHTML</acronym>)
     resource through <acronym>HTTP GET</acronym> and can be used to access
@@ -57,36 +56,34 @@
     <sect1>
       <title>Who this Guide is For</title>
 
-      <para>This guide describes how to use the <emphasis>restful viewer
+      <para>This guide describes how to use the <emphasis>xhtml viewer
       </emphasis>both in prototype mode and how to deploy it into production
-      as a webapp. It also describes how to use the <emphasis>restful
+      as a webapp. It also describes how to use the <emphasis>xhtml
       viewer</emphasis>'s application library
-      <package>[oai.viewer.restful:applib]</package> to write client-side
+      <package>[oai.viewer.xhtml:applib]</package> to write client-side
       applications. It is divided into the following chapters:<itemizedlist>
           <listitem>
             <para>Introduction</para>
 
             <para>This chapter briefly introduces the concept of
             <acronym>REST</acronym> and how it is mapped to the Isis domain
-            model. </para>
+            model.</para>
           </listitem>
 
           <listitem>
-            <para>The Restful Viewer Modules</para>
-
-            <para>This ....</para>
+            <para>Using the QuickStart Archetype and the XHTML Viewer</para>
           </listitem>
 
           <listitem>
-            <para>Xxx</para>
+            <para>Resources</para>
           </listitem>
 
           <listitem>
-            <para>Xxx</para>
+            <para>Writing Client-side Applications</para>
           </listitem>
 
           <listitem>
-            <para>Xxx</para>
+            <para>Deploying XHTML Viewer Webapps</para>
           </listitem>
         </itemizedlist></para>
     </sect1>
@@ -112,8 +109,8 @@
 
       <para>As a further convenience, we use "oai" as an abbreviation for
       <package>org.apache.isis</package>. Hence
-      <package>(oai.viewer:restful)</package> refers to the parent module for
-      Restful viewer. We also use the "oai" abbreviation within package
+      <package>(oai.viewer:xhtml)</package> refers to the parent module for
+      XHTML viewer. We also use the "oai" abbreviation within package
       names.</para>
     </sect1>
   </preface>
@@ -129,9 +126,9 @@
     </abstract>
 
     <para>This chapter briefly explains what <acronym>REST</acronym> is, and
-    why you might want to use it. It then explains how the <emphasis>restful
-    viewer</emphasis> exposes your domain model using <acronym>REST</acronym>.
-    </para>
+    why you might want to use it. It then explains how the <emphasis>xhtml
+    viewer</emphasis> exposes your domain model using
+    <acronym>REST</acronym>.</para>
 
     <sect1>
       <title>Introducing REST</title>
@@ -193,11 +190,11 @@
     <sect1 id="sec.IntroducingRestfulObjects">
       <title>Introducing the Restful Viewer</title>
 
-      <para>As already stated, the <emphasis>Isis</emphasis>'
-      <emphasis>restful viewer</emphasis> automatically exposes a domain model
-      using <acronym>REST</acronym>. That is, the resources are the actual
-      domain objects, or - in some cases - a class member of one of those
-      objects. The following table shows the resources exposed:</para>
+      <para>As already stated, the <emphasis>Isis</emphasis>' <emphasis>xhtml
+      viewer</emphasis> automatically exposes a domain model using
+      <acronym>REST</acronym>. That is, the resources are the actual domain
+      objects, or - in some cases - a class member of one of those objects.
+      The following table shows the resources exposed:</para>
 
       <table>
         <title>Verbs by Resources</title>
@@ -271,7 +268,7 @@
         </tgroup>
       </table>
 
-      <para>The <emphasis>restful viewer</emphasis> exposes a
+      <para>The <emphasis>xhtml viewer</emphasis> exposes a
       <acronym>URL</acronym> for each of the columns. So, for example:</para>
 
       <itemizedlist>
@@ -296,7 +293,7 @@
 
       <para>So much for interacting with the resources, but what of their
       representation? Well, (following the suggestion in Richardson &amp;
-      Ruby's book) the <emphasis>restful viewer </emphasis>renders the domain
+      Ruby's book) the <emphasis>xhtml viewer </emphasis>renders the domain
       objects using <acronym>XHTML</acronym>. This gives us a natural way to
       express links between resources: we just use hyperlinks using the
       <sgmltag>&lt;a href="..."/&gt;</sgmltag> tag. It also means that we can
@@ -316,7 +313,7 @@
         </mediaobject>
       </screenshot>
 
-      <para>In fact, the <emphasis>restful viewer </emphasis>also serves up a
+      <para>In fact, the <emphasis>xhtml viewer </emphasis>also serves up a
       smidgeon of Javascript as well, to allow the web browser to perform
       <acronym>PUT</acronym> and <acronym>DELETE</acronym> as well as the
       usual <acronym>GET</acronym> and <acronym>POST</acronym>. This won't be
@@ -324,7 +321,7 @@
       needed once <acronym>XHTML</acronym> 5 - with its support for these
       additional <acronym>HTTP</acronym> verbs - becomes mainstream).</para>
 
-      <para>In case you're interested, behind the scenes the <emphasis>restful
+      <para>In case you're interested, behind the scenes the <emphasis>xhtml
       viewer</emphasis> is implemented using <ulink
       url="http://jboss.org/resteasy">JBoss RestEasy</ulink> (licensed under
       Apache License v2, the same as <emphasis>Isis</emphasis> itself).</para>
@@ -339,18 +336,18 @@
       <acronym>WS-*</acronym> specifications deal with such things as security
       credentials and transaction propagation. At the time of writing
       <acronym>REST</acronym> is yet to gain these sorts of additional
-      support. That said, the <emphasis>restful viewer</emphasis> provides
-      some basic support for security. This is discussed in the chapters that
+      support. That said, the <emphasis>xhtml viewer</emphasis> provides some
+      basic support for security. This is discussed in the chapters that
       follow.</para>
     </sect1>
   </chapter>
 
   <chapter>
-    <title id="chp.Prototyping">Using the QuickStart Archetype and the Restful
+    <title id="chp.Prototyping">Using the QuickStart Archetype and the XHTML
     Viewer</title>
 
     <abstract>
-      <para>How to get started prototyping with <emphasis>restful
+      <para>How to get started prototyping with <emphasis>xhtml
       viewer.</emphasis></para>
     </abstract>
 
@@ -358,7 +355,7 @@
     <emphasis>Isis</emphasis> quickstart archetype (eg as documented on
     <emphasis>Isis</emphasis>' website). Once you've done this, you'll end up
     with an set of modules that allow the application to be booted using the
-    <emphasis>restful viewer</emphasis>. It includes the following
+    <emphasis>xhtml viewer</emphasis>. It includes the following
     modules:</para>
 
     <programlisting>myapp/pom.xml
@@ -366,13 +363,13 @@
     myapp-fixture/pom.xml         # fixtures for seeding object store
     myapp-objstore-dflt/pom.xml   # repository implementations for the default object store
     myapp-quickrun/pom.xml        # run the application during development/prototyping
-    myapp-viewer-restful/pom.xml  # run the application as a webapp using the restful viewer</programlisting>
+    myapp-viewer-restful/pom.xml  # run the application as a webapp using the xhtml viewer</programlisting>
 
     <para>where 'myapp' is the artifactId specified when you ran the <code>mvn
     archetype:generate</code> goal.</para>
 
     <para>This chapter describes in more detail the contents of these modules,
-    and then describes how to get started with running the <emphasis>restful
+    and then describes how to get started with running the <emphasis>xhtml
     viewer</emphasis> for prototyping purposes.</para>
 
     <sect1 id="sec.ParentModule">
@@ -420,15 +417,15 @@
     ....
 &lt;/properties&gt;</programlisting>
 
-        <para>where y.y.y is the corresponding version of the restful
+        <para>where y.y.y is the corresponding version of the xhtml
         viewer.</para>
 
         <note>
           <para>At the time of writing the version of Isis
-          <emphasis>core</emphasis> (x.x.x) and the version of
-          <emphasis>restful viewer</emphasis> (y.y.y) have been the same. This
-          may not always remain the case (just as Maven's plugins are
-          versioned separately from Maven itself).</para>
+          <emphasis>core</emphasis> (x.x.x) and the version of <emphasis>xhtml
+          viewer</emphasis> (y.y.y) have been the same. This may not always
+          remain the case (just as Maven's plugins are versioned separately
+          from Maven itself).</para>
         </note>
 
         <para>In the <emphasis>release</emphasis> artifact's
@@ -459,9 +456,9 @@
 &lt;/dependencyManagement&gt;</programlisting>
 
         <para>The <package>[oai.viewer:restful]</package> module is the parent
-        for <emphasis>restful viewer</emphasis>
+        for <emphasis>xhtml viewer</emphasis>
         (<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>). That means that
-        it doesn't provide any Java classesper se. The <emphasis>restful
+        it doesn't provide any Java classesper se. The <emphasis>xhtml
         viewer</emphasis> module
         <package>[oai.viewer.restful:viewer]</package> on the other hand does
         provide a <acronym>JAR</acronym> artifact, being the main
@@ -480,7 +477,7 @@
         the parent <acronym>POM</acronym> are inherited. Delving further, If
         you look at the <classname>&lt;dependencies&gt;</classname> for the
         generated quickrun module, then you'll see a dependency on the
-        <emphasis>restful viewer</emphasis>'s <emphasis>viewer</emphasis>
+        <emphasis>xhtml viewer</emphasis>'s <emphasis>viewer</emphasis>
         module:</para>
 
         <programlisting>&lt;dependencies&gt;
@@ -517,7 +514,7 @@
         <para>This profile defines a goal for the antrun plugin to execute the
         generated <acronym>JAR</acronym><footnote>
             <para>The generated JAR uses the maven-shade-plugin to package up
-            all dependencies. </para>
+            all dependencies.</para>
           </footnote> from the command line using:</para>
 
         <para><programlisting>java -jar xxx.jar -type exploration -viewer org.apache.isis.viewer.restful.viewer.embedded.RestfulViewerInstaller</programlisting></para>
@@ -606,7 +603,7 @@
           Runtime</emphasis>)</title>
 
           <para>An <emphasis>Isis</emphasis> session is required in order for
-          the <emphasis>restful viewer</emphasis> to interact with the
+          the <emphasis>xhtml viewer</emphasis> to interact with the
           <emphasis>Isis</emphasis> runtime and interrogate the
           metamodel/retrieve domain objects.</para>
 
@@ -823,7 +820,7 @@ mvn jetty:run</programlisting>
     <sect1>
       <title>Testing the Viewer</title>
 
-      <para>The point of restful viewer is to allow the domain objects to be
+      <para>The point of xhtml viewer is to allow the domain objects to be
       interacted with programmatically through <acronym>HTTP</acronym>, which
       implies writing a custom client that submits the relevant
       <acronym>HTTP</acronym> requests. Indeed, this is the topic of <xref
@@ -855,7 +852,7 @@ mvn jetty:run</programlisting>
     <title>Resources</title>
 
     <abstract>
-      <para>A walk-through of the resources exposed by the restful viewer, and
+      <para>A walk-through of the resources exposed by the xhtml viewer, and
       how they are linked together.</para>
     </abstract>
 
@@ -863,7 +860,7 @@ mvn jetty:run</programlisting>
     their representations is central to the <acronym>REST</acronym>ful
     approach. This chapter describes in detail the resources that are
     available; in effect, the <acronym>API</acronym> for using domain objects
-    exposed using the <emphasis>restful viewer</emphasis>.</para>
+    exposed using the <emphasis>xhtml viewer</emphasis>.</para>
 
     <para>In order to invoke a <acronym>HTTP</acronym> method on a resource,
     the <acronym>URL</acronym> must be constructed correctly. After that, the
@@ -877,10 +874,10 @@ mvn jetty:run</programlisting>
     or <ulink url="https://jersey.dev.java.net/">Jersey</ulink> (the latter is
     the reference implementation). These libraries expose the resources as
     endpoints and route requests through to server-side methods (implemented
-    by the <emphasis>restful viewer</emphasis>).</para>
+    by the <emphasis>xhtml viewer</emphasis>).</para>
 
     <para>As such, we can use these interfaces as a way of describing the
-    resources provided by the <emphasis>restful viewer</emphasis>. Let's go
+    resources provided by the <emphasis>xhtml viewer</emphasis>. Let's go
     through each in turn.</para>
 
     <sect1 id="sec.HomePageResource">
@@ -989,7 +986,7 @@ public interface ServicesResource {
   public String services();
 }</programlisting>
 
-      <para>The implementation of this interface in the <emphasis>restful
+      <para>The implementation of this interface in the <emphasis>xhtml
       viewer</emphasis> (<classname>ServicesResourceImpl</classname>) also
       defines a <code>@Path("/services")</code> for the class as a whole. This
       therefore defines a <acronym>URL</acronym> in the form
@@ -1001,7 +998,7 @@ public interface ServicesResource {
         <code>@Path("/services")</code> annotation should reside on the
         interface, not the implementation. This does not seem to be the way
         that <emphasis>RestEasy</emphasis>, the underlying library used by the
-        <emphasis>restful viewer</emphasis>, works, however.</para>
+        <emphasis>xhtml viewer</emphasis>, works, however.</para>
       </note>
 
       <para>Here's the resource that's returned, as shown in a browser:</para>
@@ -1079,7 +1076,7 @@ public interface ObjectResource {
   ...
 }</programlisting>
 
-      <para>The implementation of this interface in the <emphasis>restful
+      <para>The implementation of this interface in the <emphasis>xhtml
       viewer</emphasis> (<classname>ObjectResourceImpl</classname>) also
       defines a <code>@Path("/object")</code> for the class as a whole. All
       <acronym>URL</acronym> paths are therefore prefixed
@@ -1889,7 +1886,7 @@ public interface SpecsResource {
   ...
 }</programlisting>
 
-      <para>The implementation of this interface in <emphasis>restful
+      <para>The implementation of this interface in <emphasis>xhtml
       viewer</emphasis> (<classname>SpecsResourceImpl</classname>) also
       defines a <code>@Path("/specs")</code> for the class as a whole. This
       therefore defines a <acronym>URL</acronym> in the form
@@ -1899,7 +1896,7 @@ public interface SpecsResource {
         <para>As elsewhere, it would be preferable that the <code>@Path</code>
         annotation should reside on the interface, not the implementation.
         This seems to be a limitation with <emphasis>RestEasy</emphasis>, the
-        underlying library used by the <emphasis>restful
+        underlying library used by the <emphasis>xhtml
         viewer</emphasis>.</para>
       </note>
 
@@ -2092,7 +2089,7 @@ public interface SpecsResource {
 
         <note>
           <para>Actually, this isn't quite true; there is currently no way in
-          the <emphasis>restful viewer</emphasis> to evaluate a facet for a
+          the <emphasis>xhtml viewer</emphasis> to evaluate a facet for a
           particular domain object instance.</para>
         </note>
 
@@ -2425,13 +2422,13 @@ public interface SpecsResource {
         </itemizedlist>
 
         <note>
-          <para>The <emphasis>restful viewer</emphasis> currently does not
+          <para>The <emphasis>xhtml viewer</emphasis> currently does not
           provide a resource to allow the facets of an actions parameter to be
           queried.</para>
         </note>
 
         <note>
-          <para>(Mentioned elsewhere), the <emphasis>restful viewer</emphasis>
+          <para>(Mentioned elsewhere), the <emphasis>xhtml viewer</emphasis>
           currently does not provide the ability to evaluate facets per
           instance. Although many facets are per class, some (such as
           <classname>TitleFacet</classname>) will vary by instance. This will
@@ -2553,7 +2550,7 @@ public interface UserResource {
         <code>@Path("/user")</code> annotation resided on the interface, not
         the implementation. This seems to be a limitation with
         <emphasis>RestEasy</emphasis>, the underlying library used by the
-        <emphasis>restful viewer</emphasis>.</para>
+        <emphasis>xhtml viewer</emphasis>.</para>
       </note>
 
       <para>Here's the resource that's returned, as shown in a browser:</para>
@@ -2618,12 +2615,12 @@ public interface UserResource {
       RESTful resources.</para>
     </abstract>
 
-    <para>The point of the <emphasis>restful viewer</emphasis> is to provide
-    our domain objects as <acronym>REST</acronym>ful resources so that they
-    can be used by any other client application. These applications can be
-    written in any language; so long as they can submit <acronym>HTTP
-    </acronym>requests and can parse <acronym>XHTML</acronym>, they can
-    interact with the resources provided by the viewer.</para>
+    <para>The point of the <emphasis>xhtml viewer</emphasis> is to provide our
+    domain objects as <acronym>REST</acronym>ful resources so that they can be
+    used by any other client application. These applications can be written in
+    any language; so long as they can submit <acronym>HTTP </acronym>requests
+    and can parse <acronym>XHTML</acronym>, they can interact with the
+    resources provided by the viewer.</para>
 
     <para>That said, if you are writing Java applications, then
     <emphasis>restful Objects</emphasis> provides an application library
@@ -2646,7 +2643,7 @@ public interface UserResource {
   ...
 &lt;/dependencies&gt;</programlisting>
 
-    <para>where y.y.y is the version of <emphasis>restful viewer</emphasis>
+    <para>where y.y.y is the version of <emphasis>xhtml viewer</emphasis>
     module of <emphasis>Isis</emphasis> that you are using.</para>
 
     <para>You then have a choice of approaches.</para>
@@ -2656,7 +2653,7 @@ public interface UserResource {
 
       <para>To get you started you might want to use the adapter,
       <classname>AbstractRestfulClient</classname>, available in the
-      <emphasis>restful viewer</emphasis>' applib. This exposes some of the
+      <emphasis>xhtml viewer</emphasis>' applib. This exposes some of the
       <acronym>HTTP</acronym> methods, including <acronym>GET</acronym> and
       <acronym>POST</acronym>, and serves up resources as
       <acronym>XML</acronym> documents (using Elliot Rusty Harold's <ulink
@@ -2696,22 +2693,22 @@ public interface UserResource {
   </chapter>
 
   <chapter id="chp.DeployingRestfulObjectsWebapps">
-    <title>Deploying Restful Viewer Webapps</title>
+    <title>Deploying XHTML Viewer Webapps</title>
 
     <abstract>
-      <para>Guidance on how to deploy Isis using the <emphasis>restful
+      <para>Guidance on how to deploy Isis using the <emphasis>xhtml
       viewer</emphasis>.</para>
     </abstract>
 
     <para>At some point you'll presumably want to deploy your domain object
-    using <emphasis>restful viewer</emphasis> as a webapp. The quickstart
+    using <emphasis>xhtml viewer</emphasis> as a webapp. The quickstart
     archetype already sets up the <package>viewer-restful</package> module
     that will generate a <acronym>WAR</acronym> file; however, you may want to
     adjust its configuration in terms of two areas: authentication, and
     persistence. This chapter discusses these points.</para>
 
     <para><note>
-        <para>These instructions assume that the restful viewer is being
+        <para>These instructions assume that the xhtml viewer is being
         deployed using the <emphasis>default runtime</emphasis>
         <package>(oai.runtimes:dflt)</package>. At the time of writing this is
         the only runtime available; in the future there may be other runtimes
@@ -2749,7 +2746,7 @@ public interface UserResource {
       because <acronym>HTTP</acronym> is stateless we don't even get the
       notion of a session or a connection.</para>
 
-      <para>The <emphasis>restful viewer</emphasis> therefore uses
+      <para>The <emphasis>xhtml viewer</emphasis> therefore uses
       <emphasis>Isis</emphasis>' own authentication mechanism, with
       authentication performed for each RESTful call. What this means depends
       on the deployment type (see <xref
@@ -2820,8 +2817,8 @@ public interface UserResource {
           them against the <emphasis>Apache Isis</emphasis> authentication
           manager.</para>
 
-          <para>The <emphasis>restful viewer</emphasis> provides two
-          additional implementations of this that you can use:</para>
+          <para>The <emphasis>xhtml viewer</emphasis> provides two additional
+          implementations of this that you can use:</para>
 
           <itemizedlist>
             <listitem>
@@ -2843,11 +2840,11 @@ public interface UserResource {
             </listitem>
           </itemizedlist>
 
-          <para> -
+          <para>-
           <classname>AuthenticationSessionLookupStrategyParams</classname> in
           the package
           <classname>org.starobjects.restful.viewer.authentication</classname>
-          - </para>
+          -</para>
 
           <para>In both cases these can be configured using:</para>
 

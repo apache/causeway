@@ -17,10 +17,6 @@
 package org.apache.isis.viewer.restful.viewer2.representations;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 public class Representation extends LinkedHashMap<String, Object> {
     private static final long serialVersionUID = 1L;

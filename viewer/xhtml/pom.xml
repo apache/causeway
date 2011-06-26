@@ -120,9 +120,7 @@
     <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
 	    <module>applib</module>
-	    <module>applib2</module>
 	    <module>viewer</module>
-	    <module>viewer2</module>
     </modules>
 
 </project>
