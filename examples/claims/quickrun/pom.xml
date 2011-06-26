@@ -93,7 +93,11 @@
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>restful-viewer2</artifactId>
+            <artifactId>json-viewer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>xhtml-viewer</artifactId>
         </dependency>
 
         <!-- JUnit Viewer dependencies -->

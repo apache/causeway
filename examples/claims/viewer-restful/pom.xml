@@ -59,7 +59,7 @@
 		<!-- Isis -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>restful-viewer2</artifactId>
+			<artifactId>json-viewer</artifactId>
 		</dependency>
 
         <!-- isis runtime -->

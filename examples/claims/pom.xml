@@ -191,9 +191,15 @@
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>viewer-restful</artifactId>
+				<artifactId>viewer-json</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>viewer-xhtml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
@@ -509,20 +515,37 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: viewer: restful -->
+            <!-- isis: viewer: json -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful</artifactId>
+                <artifactId>json</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful-applib</artifactId>
+                <artifactId>json-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful-viewer2</artifactId>
+                <artifactId>json-viewer</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
+            <!-- isis: viewer: xhtml -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>xhtml</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>xhtml-applib</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>xhtml-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
