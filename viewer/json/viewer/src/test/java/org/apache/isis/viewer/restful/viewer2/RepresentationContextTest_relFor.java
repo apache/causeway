@@ -19,6 +19,7 @@ package org.apache.isis.viewer.restful.viewer2;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.viewer.json.viewer.RepContext;
 import org.junit.Test;
 
 
