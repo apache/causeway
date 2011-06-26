@@ -73,9 +73,9 @@ viewer/bdd/concordion/:leaf
 viewer/dnd/:leaf
 viewer/html/:leaf
 viewer/junit/:leaf
-viewer/restful/:
-viewer/restful/applib/:leaf
-viewer/restful/viewer/:leaf
+viewer/json/:
+viewer/json/applib/:leaf
+viewer/json/viewer/:leaf
 viewer/scimpi/:
 viewer/scimpi/dispatcher/:leaf
 viewer/scimpi/servlet/:leaf
@@ -85,3 +85,6 @@ viewer/wicket/metamodel/:leaf
 viewer/wicket/model/:leaf
 viewer/wicket/ui/:leaf
 viewer/wicket/viewer/:leaf
+viewer/xhtml/:
+viewer/xhtml/applib/:leaf
+viewer/xhtml/viewer/:leaf
