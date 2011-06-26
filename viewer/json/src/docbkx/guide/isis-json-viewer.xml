@@ -120,8 +120,16 @@
   <!-- main content -->
 
   <chapter>
-    <title>Xxx</title>
+    <title>JSON Viewer</title>
 
-    <para>Xxx</para>
+    <para>TODO.</para>
+
+    <para></para>
+
+    <para>for now, see the <ulink
+    url="https://cwiki.apache.org/confluence/display/ISIS/Restful+Json+Protocol">specification
+    on the Isis wiki</ulink>.</para>
+
+    <para></para>
   </chapter>
 </book>
