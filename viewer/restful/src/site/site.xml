@@ -22,10 +22,10 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Restful" href="index.html"/>
+			<item name="XHTML" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Restful Viewer">
+		<menu name="XHTML Viewer">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
@@ -35,12 +35,13 @@
             <item name="HTML" href="../html/index.html" />
             <item name="Scimpi" href="../scimpi/index.html" />
             <item name="Wicket" href="../wicket/index.html" />
-            <item name="Restful" href="../restful/index.html" />
+            <item name="XHTML" href="../xhtml/index.html" />
+            <item name="JSON" href="../json/index.html" />
             <item name="JUnit Support" href="../junit/index.html" />
             <item name="BDD Integration" href="../bdd/index.html" />
         </menu>
 
-        <menu name="Restful Modules">
+        <menu name="XHTML Modules">
             <item name="Applib" href="./applib/index.html" />
             <item name="Viewer" href="./viewer/index.html" />
         </menu>

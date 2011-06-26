@@ -27,12 +27,13 @@
 <area shape="polygon" coords="260,120,410,120,480,240,410,375,260,375,190,240" alt="Core" href="./core/index.html" />
 
 <area shape="rect" coords="20,175,119,197" alt="DnD" href="./viewer/dnd/index.html" />
-<area shape="rect" coords="20,215,120,235" alt="HTML" href="./viewer/html/index.html" />
-<area shape="rect" coords="20,240,120,263" alt="Scimpi" href="./viewer/scimpi/index.html" />
-<area shape="rect" coords="19,266,120,288" alt="Wicket" href="./viewer/wicket/index.html" />
-<area shape="rect" coords="20,292,121,315" alt="RESTful" href="./viewer/restful/index.html" />
-<area shape="rect" coords="20,332,121,353" alt="BDD" href="./viewer/bdd/index.html" />
-<area shape="rect" coords="19,358,120,379" alt="JUnit" href="./viewer/junit/index.html" />
+<area shape="rect" coords="20,210,120,221" alt="HTML" href="./viewer/html/index.html" />
+<area shape="rect" coords="20,235,120,256" alt="Scimpi" href="./viewer/scimpi/index.html" />
+<area shape="rect" coords="20,261,120,283" alt="Wicket" href="./viewer/wicket/index.html" />
+<area shape="rect" coords="20,287,120,309" alt="XHTML" href="./viewer/xhtml/index.html" />
+<area shape="rect" coords="20,312,120,333" alt="JSON" href="./viewer/json/index.html" />
+<area shape="rect" coords="20,345,120,366" alt="BDD" href="./viewer/bdd/index.html" />
+<area shape="rect" coords="20,370,120,391" alt="JUnit" href="./viewer/junit/index.html" />
 
 <area shape="rect" coords="20,460,103,482" alt="Applib" href="./applib/index.html" />
 <area shape="rect" coords="186,478,287,501" alt="Dflt (Java5)" href="./progmodels/dflt/index.html" />
