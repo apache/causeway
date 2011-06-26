@@ -26,8 +26,8 @@
         <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-viewer-restful</artifactId>
-	<name>Quickstart Restful Viewer</name>
+	<artifactId>quickstart-viewer-xhtml</artifactId>
+	<name>Quickstart XHTML Viewer</name>
 	
 	<packaging>war</packaging>
 
@@ -57,7 +57,7 @@
         <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>restful-viewer</artifactId>
+			<artifactId>xhtml-viewer</artifactId>
 		</dependency>
 
         <!-- isis runtime -->

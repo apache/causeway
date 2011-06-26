@@ -21,7 +21,7 @@
 	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>Restful Claims</display-name>
+	<display-name>XHTML Claims</display-name>
 
 	<listener>
 		<listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
@@ -29,12 +29,12 @@
 
 	<context-param>
 		<param-name>isis.viewers</param-name>
-		<param-value>restful</param-value>
+		<param-value>xhtml</param-value>
 	</context-param>
 
 	<context-param>
 		<param-name>javax.ws.rs.Application</param-name>
-		<param-value>org.apache.isis.viewer.restful.viewer.RestfulApplication</param-value>
+		<param-value>org.apache.isis.viewer.xhtml.viewer.XhtmlApplication</param-value>
 	</context-param>
 
 	<filter>
@@ -43,7 +43,7 @@
 		<init-param>
 			<!-- trusted client, so no authentication required -->
 			<param-name>authenticationSessionLookupStrategy</param-name>
-			<param-value>org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
+			<param-value>org.apache.isis.viewer.xhtml.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
 		</init-param>
 	</filter>
 

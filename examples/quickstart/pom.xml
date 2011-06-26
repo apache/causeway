@@ -145,9 +145,10 @@
         <module>objstore-default</module>
         <module>quickrun</module>
         <module>viewer-html</module>
-        <module>viewer-wicket</module>
-        <module>viewer-restful</module>
+        <module>viewer-json</module>
         <module>viewer-scimpi</module>
+        <module>viewer-wicket</module>
+        <module>viewer-xhtml</module>
         <module>tests-junit</module>
         <module>tests-bdd</module>
     </modules>
@@ -212,7 +213,13 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-restful</artifactId>
+                <artifactId>quickstart-viewer-json</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>quickstart-viewer-xhtml</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -555,20 +562,38 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: viewer: restful -->
+            <!-- isis: viewer: xhtml -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful</artifactId>
+                <artifactId>xhtml</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful-applib</artifactId>
+                <artifactId>xhtml-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restful-viewer</artifactId>
+                <artifactId>xhtml-viewer</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
+        </dependencies>
+            <!-- isis: viewer: json -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>json</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>json-applib</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>json-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
