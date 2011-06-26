@@ -3963,10 +3963,10 @@ mkdir -p branches/x.x.x-incubating</programlisting>
           <para>Then, perform an <code>svn copy</code> from trunk:</para>
 
           <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
-    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk \
-    -m "copying trunk to branches/x.x.x-RC<emphasis>n</emphasis>-incubating"
+    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk \
+    -m "copying trunk to branches/x.x.x-incubating"
 
-cp -R trunk branches/x.x.x-RC<emphasis>n</emphasis>-incubating/trunk</programlisting>
+cp -R trunk branches/x.x.x-incubating/trunk</programlisting>
 
           <para>Finally, use <code>svn switch</code> to update your local
           directory:</para>
@@ -4090,7 +4090,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incuba
 [INFO]   ignoring changes on: pom.xml.next, release.properties, pom.xml.releaseBackup, 
          pom.xml.backup, pom.xml.branch, pom.xml.tag
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive status"
-[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x[-RCn]-incubating\trunk
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating\trunk
 [INFO] Checking dependencies and plugins for snapshots ...
 What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incubating: : </programlisting>
 
@@ -4285,9 +4285,8 @@ svn: No such revision 1126567</programlisting>
             </listitem>
           </itemizedlist>
 
-          <para>If you find problems and the release was performed on a branch
-          (for a release candidate), then just delete the branch and start
-          over.</para>
+          <para>If you find problems and the release was performed on a
+          branch, then just delete the branch and start over.</para>
 
           <para>If you find problems and the release was performed on trunk
           then you may need to revert the changes. The release commands make
@@ -4314,8 +4313,6 @@ svn: No such revision 1126567</programlisting>
         repository is staged, the newly created staging repository is "closed"
         in order to make it available to others.</para>
 
-        <para></para>
-
         <sect2>
           <title>Perform the Release</title>
 
@@ -4329,9 +4326,9 @@ svn: No such revision 1126567</programlisting>
           <programlisting>[INFO] [release:perform {execution: default-cli}]
 [INFO] Checking out the project to perform the release ...
 [INFO] Executing: cmd.exe /X /C 
-       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x[-RCn]-incubating 
+       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x-incubating 
         /users/uuuuuuuu/ai/branches/0.x.x-incubating/trunk/target/checkout"
-[INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-RCn-incubating/trunk/target/
+[INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-incubating/trunk/target/
 ...</programlisting>
 
           <para>All being well this command will complete successfully:</para>
@@ -4439,8 +4436,7 @@ svn: No such revision 1126567</programlisting>
 
         <para>While incubating, this vote should be performed on the
         isis-dev@incubator.apache.org mailing list, and then repeated on the
-        incubator@apache.org mailing list. We use isis-dev@incubator.a.o to
-        vote on release candidates.</para>
+        incubator@apache.org mailing list.</para>
 
         <para>In all cases, votes last for 72 hours and require a +3 vote from
         members.</para>
@@ -4499,7 +4495,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
             <acronym>.ASC</acronym> files from the location specified in the
             voting email. To verify that the signature is correct, use:</para>
 
-            <programlisting>gpg --verify isis-x.x.x-RCn-incubating.zip.asc isis-x.x.x-RCn-incubating.zip</programlisting>
+            <programlisting>gpg --verify isis-x.x.x-incubating.zip.asc isis-x.x.x-incubating.zip</programlisting>
 
             <para>The <acronym>ZIP</acronym> file should then be
             unpacked.</para>
