@@ -121,7 +121,11 @@
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>restful-viewer</artifactId>
+            <artifactId>xhtml-viewer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>json-viewer</artifactId>
         </dependency>
 
 
@@ -216,12 +220,12 @@
 		</profile>
 		<profile>
 			<!-- prereqs: mvn package -->
-			<!-- mvn antrun:run -D exec=restful -->
-			<id>exec-restful</id>
+			<!-- mvn antrun:run -D exec=xhtml -->
+			<id>exec-xhtml</id>
 			<activation>
 				<property>
 					<name>exec</name>
-					<value>restful</value>
+					<value>xhtml</value>
 				</property>
 			</activation>
 			<build>
@@ -237,7 +241,7 @@
 									<arg value="-type"/>
 									<arg value="exploration"/>
 									<arg value="-viewer"/>
-									<arg value="org.apache.isis.viewer.restful.viewer.embedded.RestfulViewerInstaller"/>
+									<arg value="xhtml"/>
 								</exec>
 							</tasks>
 						</configuration>
@@ -245,6 +249,38 @@
 				</plugins>
 			</build>
 		</profile>
+        <profile>
+            <!-- prereqs: mvn package -->
+            <!-- mvn antrun:run -D exec=json -->
+            <id>exec-json</id>
+            <activation>
+                <property>
+                    <name>exec</name>
+                    <value>json</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <configuration>
+                            <tasks>
+                                <exec executable="java" failonerror="true">
+                                    <arg value="-jar"/>
+                                    <arg value="${project.build.directory}/${project.build.finalName}.jar"/>
+                                    <arg value="-type"/>
+                                    <arg value="exploration"/>
+                                    <arg value="-viewer"/>
+                                    <arg value="json"/>
+                                </exec>
+                            </tasks>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
 	</profiles>
 
 </project>

@@ -36,17 +36,17 @@ final class EmbeddedWebViewerRestful extends EmbeddedWebViewer {
 
         webAppSpec.addContextParams("isis.viewers", "restful");
 
-        webAppSpec.addContextParams(RestfulViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulApplication.class.getName());
+        webAppSpec.addContextParams(XhtmlViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulApplication.class.getName());
 
         webAppSpec.addServletContextListener(ResteasyBootstrap.class);
 
         webAppSpec.addFilterSpecification(IsisSessionFilter.class, MapUtils.asMap(
             IsisSessionFilter.AUTHENTICATION_SESSION_LOOKUP_STRATEGY_KEY,
-            AuthenticationSessionLookupStrategyTrusted.class.getName()), RestfulViewerInstaller.EVERYTHING);
-        webAppSpec.addServletSpecification(HttpServletDispatcher.class, RestfulViewerInstaller.ROOT);
+            AuthenticationSessionLookupStrategyTrusted.class.getName()), XhtmlViewerInstaller.EVERYTHING);
+        webAppSpec.addServletSpecification(HttpServletDispatcher.class, XhtmlViewerInstaller.ROOT);
 
-        webAppSpec.addFilterSpecification(ResourceCachingFilter.class, RestfulViewerInstaller.STATIC_CONTENT);
-        webAppSpec.addServletSpecification(ResourceServlet.class, RestfulViewerInstaller.STATIC_CONTENT);
+        webAppSpec.addFilterSpecification(ResourceCachingFilter.class, XhtmlViewerInstaller.STATIC_CONTENT);
+        webAppSpec.addServletSpecification(ResourceServlet.class, XhtmlViewerInstaller.STATIC_CONTENT);
 
         return webAppSpec;
     }

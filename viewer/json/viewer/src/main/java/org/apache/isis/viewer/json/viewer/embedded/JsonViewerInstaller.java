@@ -31,7 +31,7 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
  * In a production deployment the configuration represented by the {@link WebAppSpecification} would be specified in the
  * <tt>web.xml<tt> file.
  */
-public class RestfulViewerInstaller extends IsisViewerInstallerAbstract {
+public class JsonViewerInstaller extends IsisViewerInstallerAbstract {
 
     static final String JAVAX_WS_RS_APPLICATION = "javax.ws.rs.Application";
 
@@ -39,7 +39,7 @@ public class RestfulViewerInstaller extends IsisViewerInstallerAbstract {
     protected static final String ROOT = "/";
     protected static final String[] STATIC_CONTENT = new String[] { "*.js", "*.gif", "*.png" };
 
-    public RestfulViewerInstaller() {
+    public JsonViewerInstaller() {
         super("restful");
     }
 

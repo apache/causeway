@@ -579,7 +579,6 @@
                 <version>${isis.version}</version>
             </dependency>
 
-        </dependencies>
             <!-- isis: viewer: json -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
