@@ -4094,7 +4094,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incuba
 [INFO] Checking dependencies and plugins for snapshots ...
 What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incubating: : </programlisting>
 
-          <para>Enter:</para>
+          <para>Then:</para>
 
           <itemizedlist>
             <listitem>
@@ -4112,10 +4112,9 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
             </listitem>
 
             <listitem>
-              <para>enter the new development version. This is only really
-              important if performing the actual release, not a release
-              candidate. Even so, specify the <literal>-SNAPSHOT</literal> of
-              the next version expected for development.</para>
+              <para>enter the new development version, specifying the
+              <literal>-SNAPSHOT</literal> of the next version expected for
+              development.</para>
 
               <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
             </listitem>
@@ -4124,12 +4123,6 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
 
         <sect2 id="sec.ReleaseProper">
           <title>Release Proper</title>
-
-          <para>*** up to here...</para>
-
-          <para></para>
-
-          <para></para>
 
           <para>Assuming that the dry run has succeeded, it's time to create
           the release proper.</para>
@@ -4163,31 +4156,29 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
             integration-tests</code> profile caused this.</para>
           </note>
 
-          <para>Enter:</para>
+          <para>Then:</para>
 
           <itemizedlist>
             <listitem>
-              <para>the release version as
-              <emphasis>0.x.x-RCn-incubating</emphasis> (if performing a
-              release candidate), or <emphasis>0.x.x-incubating</emphasis> (if
-              performing the actual release):</para>
+              <para>leave the release version as its default,
+              <emphasis>0.x.x-incubating</emphasis>:</para>
 
-              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating: : 0.x.x[-RCn]-incubating</programlisting>
+              <programlisting>What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating:</programlisting>
             </listitem>
 
             <listitem>
-              <para>the SCM release tag as the default:</para>
+              <para>leave the <acronym>SCM</acronym> release tag as the
+              default:</para>
 
-              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x[-RCn]-incubating: </programlisting>
+              <programlisting>What is SCM release tag or label for "Apache Isis"? (org.apache.isis:isis) isis-0.x.x-incubating: </programlisting>
             </listitem>
 
             <listitem>
-              <para>the new development version. This is only really important
-              if performing the actual release, not a release candidate. Even
-              so, specify the <literal>-SNAPSHOT</literal> of the next version
-              expected for development.</para>
+              <para>the new development version, specifying the
+              <literal>-SNAPSHOT</literal> of the next version expected for
+              development.</para>
 
-              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x[-RCm]-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
+              <programlisting>What is the new development version for "Apache Isis"? (org.apache.isis:isis) 0.x.x-incubating-SNAPSHOT: : 0.y.0-incubating-SNAPSHOT</programlisting>
             </listitem>
           </itemizedlist>
 
@@ -4198,12 +4189,12 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <programlisting>[INFO] Checking in modified POMs...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive 
        commit --file /users/uuuuuuuu/maven-scm-1762417972.commit --targets /tmp/maven-scm-5153433587636484699-targets"
-[INFO] Working directory: D:\svn\ai\branches\0.x.x[-RCn]-incubating\trunk
-[INFO] Tagging release with the label isis-0.x.x[-RCn]-incubating...
-[INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file /tmp/maven-scm-259416193.commit --revision 1126567 
-       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/trunk/ 
-       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x[-RCn]-incubating/tags/isis-0.x.x-RCn-incubating"
-[INFO] Working directory: /users/uuuuuuuu/branches/0.1.2-rc1-incubating/trunk
+[INFO] Working directory: D:\svn\ai\branches\0.x.x-incubating\trunk
+[INFO] Tagging release with the label isis-0.x.x-incubating...
+[INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file /tmp/maven-scm-259416193.commit --revision 1234567 
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/ 
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/tags/isis-0.x.x-incubating"
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating/trunk
 [INFO] ------------------------------------------------------------------------
 [ERROR] BUILD FAILURE
 [INFO]
@@ -4248,19 +4239,19 @@ svn: No such revision 1126567</programlisting>
           <title>Post-prepare sanity check</title>
 
           <para>You should end up with artifacts in your local repo with the
-          new version <emphasis>0.x.x-RCn-incubating</emphasis>. There are
-          then a couple of sanity checks that you can perform:</para>
+          new version <emphasis>0.x.x-incubating</emphasis>. There are then a
+          couple of sanity checks that you can perform:</para>
 
           <itemizedlist>
             <listitem>
               <para>unzip the source-release <acronym>ZIP</acronym> and check
               it builds</para>
 
-              <para>The <acronym>ZIP</acronym> file resides in
-              <filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>
-              in <filename>target</filename> directory of the parent
-              <package>[oai:isis]</package> module. Unzip in a new directory,
-              and build (see <xref
+              <para>The <acronym>ZIP</acronym> file is called
+              <filename>isis-0.x.x-incubating-source-release.zip</filename>
+              and should reside in
+              <filename>~/.m2/repository/org/apache/isis/isis/0.x.x-incubating</filename>
+              directory. Unzip in a new directory, and build (see <xref
               linkend="chp.BuildingIsisFromSource" />).</para>
             </listitem>
 
@@ -4285,7 +4276,7 @@ svn: No such revision 1126567</programlisting>
     -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis \
     -D archetypeArtifactId=quickstart-archetype \
-    -D archetypeVersion=0.x.x[-RCn]-incubating</programlisting>
+    -D archetypeVersion=0.x.x-incubating</programlisting>
 
               <para>Check that the generated app's artifacts point to the
               correct version of <emphasis>Isis</emphasis> (specifically:
@@ -4305,112 +4296,47 @@ svn: No such revision 1126567</programlisting>
           to revert the <filename>pom.xml</filename> files and delete the tag
           from <acronym>SVN</acronym>.</para>
         </sect2>
-
-        <sect2>
-          <title>Manually update versions to snapshot versions</title>
-
-          <para>After the release there are a couple of locations where the
-          version must be bumped up manually to the next SNAPSHOT
-          version.</para>
-
-          <sect3>
-            <title>Update <code>&lt;version&gt;</code> in archetype
-            resources</title>
-
-            <para>Open up the
-            <filename>src/main/resources/archetype-resources/pom.xml</filename>
-            in the <package>[oai:quickstart-archetype]</package> module, and
-            update the <code>&lt;isis.version&gt;</code> property:</para>
-
-            <programlisting>&lt;properties&gt;
-    &lt;isis.version&gt;0.x.y-incubating-SNAPSHOT&lt;/isis.version&gt;
-&lt;/properties&gt;</programlisting>
-
-            <para>Then commit the <filename>pom.xml</filename> file.</para>
-          </sect3>
-
-          <sect3>
-            <title>Update skin <code>&lt;version&gt;</code></title>
-
-            <para>Open up the <filename>src/site/site.xml</filename> in the
-            <package>[oai:isis]</package> parent module, and update the
-            <code>&lt;version&gt;</code>:</para>
-
-            <programlisting>&lt;skin&gt;
-    ...
-    &lt;version&gt;0.x.x-incubating-SNAPSHOT&lt;/version&gt;
-&lt;/skin&gt;</programlisting>
-
-            <para>Then commit the <filename>site.xml</filename> file.</para>
-          </sect3>
-        </sect2>
       </sect1>
 
       <sect1 id="sec.UploadReleaseForVoting">
         <title>Upload Release for Voting</title>
 
         <para>Once the release has been built locally, it should be uploaded
-        for voting. This consists of two things: uploading the source release,
-        and deploying the Maven artifacts to a staging directory.</para>
+        for voting. This is done by deploying the Maven artifacts to a staging
+        directory (this includes the source release <acronym>ZIP</acronym>
+        file which will be voted upon).</para>
+
+        <para>The Apache staging repository lives on the Nexus repository
+        hosted at <ulink
+        url="https://repository.apache.org">https://repository.apache.org</ulink>.
+        The process of uploading will create a staging repository that is
+        associated with the host (IP address) performing the release. Once the
+        repository is staged, the newly created staging repository is "closed"
+        in order to make it available to others.</para>
+
+        <para></para>
 
         <sect2>
-          <title>Upload Source Zip</title>
+          <title>Perform the Release</title>
 
-          <para>The source ZIP can be found in the <filename>target</filename>
-          directory of the parent project (ie at
-          <filename>trunk/target</filename>), along with its signature. The
-          two files of interest are:</para>
+          <para>The command to stage the release is:</para>
 
-          <itemizedlist>
-            <listitem>
-              <para><filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip</filename>,
-              and</para>
-            </listitem>
+          <programlisting>mvn release:perform -P apache-release</programlisting>
 
-            <listitem>
-              <para><filename>isis-0.x.x[-RCn]-incubating-incubating-source-release.zip.asc</filename></para>
-            </listitem>
-          </itemizedlist>
+          <para>The command starts off by checking out the codebase from the
+          tag:</para>
 
-          <para>Upload these to your <filename>public_html</filename>
-          directory on people.apache.org so that they can be referenced in
-          your vote email (see <xref linkend="sec.Voting" />).</para>
-        </sect2>
-
-        <sect2>
-          <title>Deploying Binaries to Staging Repository (<classname>mvn
-          release:perform</classname>)</title>
-
-          <para>The Apache staging repository lives on the Nexus repository
-          hosted at <ulink
-          url="https://repository.apache.org">https://repository.apache.org</ulink>.
-          The process of uploading will create a staging repository that is
-          associated with the host (IP address) performing the release. Once
-          the repository is staged, the newly created staging repository is
-          "closed" in order to make it available to others.</para>
-
-          <sect3>
-            <title>Perform the Release</title>
-
-            <para>The command to stage the release is:</para>
-
-            <programlisting>mvn release:perform -P apache-release</programlisting>
-
-            <para>The command starts off by checking out the codebase from the
-            tag:</para>
-
-            <programlisting>[INFO] [release:perform {execution: default-cli}]
+          <programlisting>[INFO] [release:perform {execution: default-cli}]
 [INFO] Checking out the project to perform the release ...
 [INFO] Executing: cmd.exe /X /C 
        "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x[-RCn]-incubating 
-        /users/uuuuuuuu/ai/branches/0.x.x[-RCn]-incubating/trunk/target/checkout"
+        /users/uuuuuuuu/ai/branches/0.x.x-incubating/trunk/target/checkout"
 [INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-RCn-incubating/trunk/target/
 ...</programlisting>
 
-            <para>All being well this command will complete
-            successfully:</para>
+          <para>All being well this command will complete successfully:</para>
 
-            <programlisting>...
+          <programlisting>...
 [INFO] [INFO] BUILD SUCCESSFUL
 [INFO] [INFO] ------------------------------------------------------------------------
 [INFO] [INFO] Total time: 17 minutes 19 seconds
@@ -4425,85 +4351,83 @@ svn: No such revision 1126567</programlisting>
 [INFO] Finished at: Wed May 25 07:42:07 BST 2011
 [INFO] Final Memory: 45M/991M
 [INFO] ------------------------------------------------------------------------</programlisting>
-          </sect3>
+        </sect2>
 
-          <sect3>
-            <title>Check the Repository</title>
+        <sect2>
+          <title>Check the Repository</title>
 
-            <para>If the <code>mvn release:perform</code> has worked then it
-            will have put release artifacts into a newly created staging
-            repository .</para>
+          <para>If the <code>mvn release:perform</code> has worked then it
+          will have put release artifacts into a newly created staging
+          repository .</para>
 
-            <para>Log onto <ulink
-            url="http://repository.apache.org">http://repository.apache.org</ulink>
-            (using your ASF LDAP account) and check that the release has been
-            staged:</para>
+          <para>Log onto <ulink
+          url="http://repository.apache.org">http://repository.apache.org</ulink>
+          (using your ASF LDAP account) and check that the release has been
+          staged:</para>
 
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/release/nexus-staging-1.png"
-                           scale="55" />
-              </imageobject>
-            </mediaobject>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/release/nexus-staging-1.png"
+                         scale="55" />
+            </imageobject>
+          </mediaobject>
 
-            <para>If nothing appears in a staging repo you should stop here
-            and work out why.</para>
+          <para>If nothing appears in a staging repo you should stop here and
+          work out why.</para>
 
-            <para>Assuming that the repo has been populated, make a note of
-            its repo id; this is needed for the voting thread (see <xref
-            linkend="sec.VotingThread" />). In the screenshot above the id is
-            <emphasis>org.apache.isis-008</emphasis>.</para>
-          </sect3>
+          <para>Assuming that the repo has been populated, make a note of its
+          repo id; this is needed for the voting thread (see <xref
+          linkend="sec.VotingThread" />). In the screenshot above the id is
+          <emphasis>org.apache.isis-008</emphasis>.</para>
+        </sect2>
 
-          <sect3>
-            <title>Close the Repository</title>
+        <sect2>
+          <title>Close the Repository</title>
 
-            <para>After checking that the staging repository contains the
-            artifacts that you expect you should close the staging repository.
-            This will make it available so that people can check the
-            release.</para>
+          <para>After checking that the staging repository contains the
+          artifacts that you expect you should close the staging repository.
+          This will make it available so that people can check the
+          release.</para>
 
-            <para>Press the Close button and complete the dialog:</para>
+          <para>Press the Close button and complete the dialog:</para>
 
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/release/nexus-staging-2.png"
-                           scale="55" />
-              </imageobject>
-            </mediaobject>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/release/nexus-staging-2.png"
+                         scale="55" />
+            </imageobject>
+          </mediaobject>
 
-            <para>All being well, the close should complete
-            successfully:</para>
+          <para>All being well, the close should complete successfully:</para>
 
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/release/nexus-staging-3.png"
-                           scale="55" />
-              </imageobject>
-            </mediaobject>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/release/nexus-staging-3.png"
+                         scale="55" />
+            </imageobject>
+          </mediaobject>
 
-            <para>The Nexus repository manager will also email you with
-            confirmation of a successful close.</para>
+          <para>The Nexus repository manager will also email you with
+          confirmation of a successful close.</para>
 
-            <para>If Nexus has problems with the key signature, however, then
-            the close will be aborted:</para>
+          <para>If Nexus has problems with the key signature, however, then
+          the close will be aborted:</para>
 
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/release/nexus-staging-4.png"
-                           scale="55" />
-              </imageobject>
-            </mediaobject>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/release/nexus-staging-4.png"
+                         scale="55" />
+            </imageobject>
+          </mediaobject>
 
-            <para>Use <code>gpg --keyserver hkp://pgp.mit.edu --recv-keys
-            nnnnnnnn</code> to confirm that the key is available.</para>
+          <para>Use <code>gpg --keyserver hkp://pgp.mit.edu --recv-keys
+          nnnnnnnn</code> to confirm that the key is available.</para>
 
-            <note>
-              <para>Unfortunately, Nexus does not seem to allow subkeys to be
-              used for signing. See <xref linkend="apx.KeyGeneration" /> for
-              more details.</para>
-            </note>
-          </sect3>
+          <note>
+            <para>Unfortunately, Nexus does not seem to allow subkeys to be
+            used for signing. See <xref linkend="apx.KeyGeneration" /> for
+            more details.</para>
+          </note>
         </sect2>
       </sect1>
 
@@ -4516,9 +4440,7 @@ svn: No such revision 1126567</programlisting>
         <para>While incubating, this vote should be performed on the
         isis-dev@incubator.apache.org mailing list, and then repeated on the
         incubator@apache.org mailing list. We use isis-dev@incubator.a.o to
-        vote on release candidates; after a release candidate has been
-        approved there, we re-cut a final release using the same revision of
-        trunk and then ask incubator@a.o to vote on that final release.</para>
+        vote on release candidates.</para>
 
         <para>In all cases, votes last for 72 hours and require a +3 vote from
         members.</para>
@@ -4531,24 +4453,21 @@ svn: No such revision 1126567</programlisting>
 
           <para>Use the following subject:</para>
 
-          <programlisting>[VOTE] Apache Isis release candidate 0.x.x-RCn-incubating</programlisting>
+          <programlisting>[VOTE] Apache Isis release 0.x.x-incubating</programlisting>
 
           <para>And use the following body:</para>
 
-          <programlisting>I've staged a release candidate for Apache Isis, namely 0.x.x-RCn-incubating.
+          <programlisting>I've staged a release for Apache Isis, namely 0.x.x-incubating.
 
-The signed source ZIP can be downloaded from my home directory on people.apache.org:
-* http://people.apache.org/~uuuuuuuu/isis-0.x.x-RCn-incubating-source-release.zip (zip file), and
-* http://people.apache.org/~uuuuuuuu/isis-0.x.x-RCn-incubating-source-release.zip.asc (signature)
+The artifacts have been staged to staging repository on repository.apache.org:
+* https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip (zip file)
+* https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip.asc (signature)
 
-The code has been tagged as tags/0.x.x-RCn-incubating.
+In Subversion the code has been tagged as tags/framework/0.x.x-incubating.
 
-In addition, the Maven artifacts have been staged to staging repository on repository.apache.org:
-* https://repository.apache.org/content/repositories/orgapacheisis-zzz/
-
-I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-RCn-incubating.  
+I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-incubating.  
 The contributors guide on the site contains some suggestions of how to verify the release, see
-http://incubator.apache.org/isis-0.x.x-RCn-incubating/docbkx/html/guide/ch12s06.html
+http://incubator.apache.org/isis-0.x.x-incubating/docbkx/html/guide/ch12.html
 
 Please verify the release and cast your vote.  The vote will be open for 72 hours.
 
@@ -4560,11 +4479,6 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
 
           <itemizedlist>
             <listitem>
-              <para><emphasis>uuuuuuuu</emphasis> is your Apache LDAP
-              username</para>
-            </listitem>
-
-            <listitem>
               <para><emphasis>zzz</emphasis> is the newly created staging
               repository, from above.</para>
             </listitem>
@@ -4574,20 +4488,21 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
         <sect2>
           <title>Other contributors cast their vote</title>
 
-          <para>It is the responsibility of other contributors (or any ASF
-          member) to cast their vote on the release. This section provides
-          some guidance on this process.</para>
+          <para>It is the responsibility of other contributors (or any
+          <acronym>ASF</acronym> member) to cast their vote on the release.
+          This section provides some guidance on this process.</para>
 
           <sect3>
             <title>Verifying the source release artifacts</title>
 
-            <para>Download both the ZIP and .ASC files from the location
-            specified in the voting email. To verify that the signature is
-            correct, use:</para>
+            <para>Download both the <acronym>ZIP</acronym> and
+            <acronym>.ASC</acronym> files from the location specified in the
+            voting email. To verify that the signature is correct, use:</para>
 
             <programlisting>gpg --verify isis-x.x.x-RCn-incubating.zip.asc isis-x.x.x-RCn-incubating.zip</programlisting>
 
-            <para>The ZIP file should then be unpacked.</para>
+            <para>The <acronym>ZIP</acronym> file should then be
+            unpacked.</para>
 
             <para>Once unpacked, it is recommended that voters at a minimum
             sanity check the contents, as per <xref
@@ -4621,114 +4536,36 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
         <sect2>
           <title>After the isis-dev vote</title>
 
-          <para>If the vote has been unsuccessful, then address the problems
-          and go again, incrementing the -RCn suffix.</para>
-
-          <para>If the vote has been successful, then send a mail to the
-          isis-dev mailing list.</para>
+          <para>Once the vote has completed, post the results to the isis-dev
+          mailing list.</para>
 
           <para>Use the following subject:</para>
 
-          <programlisting>[RESULT] [VOTE] Apache Isis release candidate 0.x.x-RCn-incubating</programlisting>
+          <programlisting>[RESULT] [VOTE] Apache Isis release 0.x.x-incubating</programlisting>
 
-          <para>And use the following body:</para>
+          <para>with the body:</para>
 
-          <programlisting>The vote has passed on isis-dev@incubator.a.o with the following result :
+          <programlisting>The vote has completed with the following result :
 
   +1 (binding): &lt;&lt;list of names&gt;&gt;
-  +1 (non binding): &lt;&lt;list of names&gt;&gt;
+  +1 (non binding): &lt;&lt;list of names&gt;&gt;</programlisting>
 
-I will now recreate this release (with no -RCn suffix) from the same revision of trunk, and submit for voting on the incubator.</programlisting>
+          <para>Optionally, include a paragraph at the end to describe the
+          next steps, for example:</para>
+
+          <programlisting>I will now submit the release for voting on the general@incubator.a.o.</programlisting>
+
+          <para>If the vote has been unsuccessful, then delete the branches
+          and <acronym>SVN</acronym> tag, drop the staging repository, address
+          the problems in trunk, and go again.</para>
         </sect2>
 
         <sect2>
-          <title>Cutting the Final Release</title>
+          <title>Start voting thread on general@incubator.a.o</title>
 
-          <para>Once isis-dev has approved a release candidate, a new final
-          release should be cut from trunk so that it can be voted on by
-          incubator@a.o. Care should be taken to ensure that the new release
-          is based on the same version as the approved release
-          candidate:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>create a new branch to cut the release:</para>
-
-              <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-incubating/ \
-      -m "creating new branches/0.x.x-incubating in order to cut release"</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>identify the revision of trunk to use.</para>
-
-              <para>Go back over previous commit messages and look for the
-              copy of trunk taken to the release candidate branch, eg:</para>
-
-              <programlisting>Author: danhaywood
-Date: Wed May 25 12:21:39 2011
-New Revision: 1127492
-
-URL: http://svn.apache.org/viewvc?rev=1127492&amp;view=rev
-Log:
-copying latest trunk to a new branches/0.1.2-RC1-incubating/trunk
-
-Added:
-    incubator/isis/branches/0.1.2-RC1-incubating/trunk/
-      - copied from r1127491, incubator/isis/trunk/</programlisting>
-
-              <para>Whichever revision was copied from (in the above,
-              r1127491) is the one to use.</para>
-            </listitem>
-
-            <listitem>
-              <para>copy over the appropriate revision from trunk to the
-              branch:</para>
-
-              <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk@nnnnnnn \
-    https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-incubating/ \
-    -m "copying trunk to a new branches/0.x.x-incubating/trunk"</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>perform the required manual updates to the copied
-              code:</para>
-
-              <itemizedlist>
-                <listitem>
-                  <para>update SCM tags (see <xref
-                  linkend="sec.ReleaseBranch" />)</para>
-                </listitem>
-
-                <listitem>
-                  <para>update versions (see <xref
-                  linkend="sec.ManuallyUpdateVersionsToReleaseVersion" />)</para>
-                </listitem>
-              </itemizedlist>
-            </listitem>
-
-            <listitem>
-              <para>prepare the release (see <xref
-              linkend="sec.ReleaseProper" />)</para>
-            </listitem>
-
-            <listitem>
-              <para>sanity check the release (see <xref
-              linkend="sec.ReleasePostPrepareSanityCheck" />)</para>
-            </listitem>
-
-            <listitem>
-              <para>upload the release artifacts (see <xref
-              linkend="sec.UploadReleaseForVoting" />)</para>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>Start voting thread on incubator@a.o</title>
-
-          <para>Once the vote has been approved on isis-dev and a new non-RCn
-          release has been created, then the release process should be
-          performed again on incubator@apache.org.</para>
+          <para>Once the vote has been approved on isis-dev, then the release
+          process should be performed again on
+          general@incubator.apache.org.</para>
 
           <para>Use the following subject:</para>
 
@@ -4736,19 +4573,22 @@ Added:
 
           <para>And use the following body:</para>
 
-          <programlisting>I've staged a release for Apache Isis, namely 0.x.x-incubating.  This has been voted through on the isis-dev mailing list, and
-now requires a vote on incubator@a.o
+          <programlisting>I've staged a release for Apache Isis, namely 0.x.x-incubating.  This has been voted through on the isis-dev@incubator.a.o mailing list, and
+now requires a vote on general@incubator.a.o
 
-The signed source ZIP can be downloaded from my home directory on people.apache.org:
-* http://people.apache.org/~uuuuuuuu/isis-0.x.x-incubating-source-release.zip (zip file), and
-* http://people.apache.org/~uuuuuuuu/isis-0.x.x-incubating-source-release.zip.asc (signature)
+Votes already cast (on isis-dev):
 
-The code has been tagged as tags/0.x.x-incubating.
+  +1 (binding): &lt;&lt;list of names&gt;&gt;
+  +1 (non binding): &lt;&lt;list of names&gt;&gt;
 
-In addition, the Maven artifacts have been staged to staging repository on repository.apache.org:
-* https://repository.apache.org/content/repositories/orgapacheisis-zzz/
+The artifacts have been staged to staging repository on repository.apache.org:
+* https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip (zip file)
+* https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip.asc (signature)
 
-The RAT checks have passed (see Isis' contributors guide for files that are considered as being excluded).
+In Subversion the code has been tagged as tags/framework/0.x.x-incubating.
+
+I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-incubating.  The contributors guide on the site contains some suggestions of how to verify the release, see
+http://incubator.apache.org/isis-0.x.x-incubating/docbkx/html/guide/ch12.html
 
 Please verify the release and cast your vote.  The vote will be open for 72 hours.
 
@@ -4760,11 +4600,6 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
 
           <itemizedlist>
             <listitem>
-              <para><emphasis>uuuuuuuu</emphasis> is your Apache LDAP
-              username</para>
-            </listitem>
-
-            <listitem>
               <para><emphasis>zzz</emphasis> is the newly created staging
               repository, from above.</para>
             </listitem>
@@ -4772,26 +4607,33 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
         </sect2>
 
         <sect2>
-          <title>Post the result to the isis-dev list</title>
+          <title>Post the result to the general@incubator.a.o list</title>
 
-          <para>Once the incubator vote has been approved, send a mail to the
-          incubator@a.o mailing list.</para>
+          <para>Once the incubator vote has completed, post the results to the
+          general@incubator.a.o mailing list.</para>
 
           <para>Use the following subject:</para>
 
           <programlisting>[RESULT] [VOTE] Apache Isis release 0.x.x-incubating</programlisting>
 
-          <para>And use the following body:</para>
+          <para>with the body:</para>
 
-          <programlisting>The vote has passed on incubator@a.o with the following result :
+          <programlisting>The vote has completed with the following result :
 
   +1 (binding): &lt;&lt;list of names&gt;&gt;
-  +1 (non binding): &lt;&lt;list of names&gt;&gt;
+  +1 (non binding): &lt;&lt;list of names&gt;&gt;</programlisting>
 
-I will copy now promote this release to Isis' dist directory and promote the artifacts to the central Maven repository.</programlisting>
+          <para>If the vote has been successful, include a paragraph at the
+          end to describe the next steps, for example:</para>
 
-          <para>At this stage the release can be promoted for
-          distribution.</para>
+          <programlisting>I will now copy this release to Isis' dist directory and promote the artifacts to the central Maven repository.</programlisting>
+
+          <para>At this stage the release can be promoted for distribution
+          (see next section).</para>
+
+          <para>If the vote has been unsuccessful, then delete the branches
+          and <acronym>SVN</acronym> tag, drop the staging repository, address
+          the problems in trunk, and go again.</para>
         </sect2>
       </sect1>
 
@@ -4801,8 +4643,10 @@ I will copy now promote this release to Isis' dist directory and promote the art
         <sect2>
           <title>Release Source Zip</title>
 
-          <para>Releasing the source ZIP is a matter of copying the ZIP into
-          the dist directory on people.apache.org.</para>
+          <para>Releasing the source <acronym>ZIP</acronym> is a matter of
+          copying the <acronym>ZIP</acronym> into the
+          <filename>/www/www.apache.org/dist/incubator/isis</filename>
+          directory on people.apache.org.</para>
 
           <note>
             <para>There is an alternative and newer approach, namely to check
@@ -4810,11 +4654,11 @@ I will copy now promote this release to Isis' dist directory and promote the art
             be updated to reflcet this newer approach.</para>
           </note>
 
-          <para>Therefore, log onto people.apache.org, and copy the files
-          over:</para>
+          <para>Assuming you've downloaded the <acronym>ZIP</acronym> file and
+          signature file from the staging repo, and the dist directory already
+          exists, use scp to copy the files up: </para>
 
-          <programlisting>mkdir /www/www.apache.org/incubator/isis/
-cp ~/public_html/isis-x.x.x-incubating-source-release.* /www/www.apache.org/incubator/isis/.</programlisting>
+          <programlisting>scp isis-x.x.x-incubating-source-release.* people.apache.org:/www/www.apache.org/dist/incubator/isis/.</programlisting>
         </sect2>
 
         <sect2>
@@ -4843,24 +4687,67 @@ cp ~/public_html/isis-x.x.x-incubating-source-release.* /www/www.apache.org/incu
       </sect1>
 
       <sect1 id="sec.ManuallyDeployReleaseSite">
-        <title>Merge changes from branch back into trunk</title>
+        <title>Prepare for next iteration</title>
 
-        <para>Because we release from a branch, the changes made in the branch
-        (changes to <filename>pom.xml</filename> made automatically by the
-        release-plugin, or any manual edits) should be merged back from the
-        release branch back into trunk.</para>
+        <sect2>
+          <title>Manually update versions to snapshot versions</title>
 
-        <para>You can if you wish use <acronym>SVN</acronym>'s
-        <code>merge</code> command for this (using the "reintegrate" flag).
-        However, you may well find it easy just to use a directory comparison
-        tool such as <emphasis>Beyond Compare</emphasis> or
-        <emphasis>WinMerge</emphasis>.</para>
+          <para>After the release there are a couple of locations where the
+          version must be bumped up manually to the next
+          <acronym>SNAPSHOT</acronym> version.</para>
 
-        <para>Finally, remember that the version in the
-        <filename>pom.xml</filename> for any modules that are not part of the
-        release (in particular, the <filename>examples</filename> and
-        <filename>domain-libs</filename> modules) should be manually updated
-        also.</para>
+          <sect3>
+            <title>Update <code>&lt;version&gt;</code> in archetype
+            resources</title>
+
+            <para>Open up the
+            <filename>src/main/resources/archetype-resources/pom.xml</filename>
+            in the <package>[oai:quickstart-archetype]</package> module, and
+            update the <code>&lt;isis.version&gt;</code> property:</para>
+
+            <programlisting>&lt;properties&gt;
+    &lt;isis.version&gt;0.x.y-incubating-SNAPSHOT&lt;/isis.version&gt;
+&lt;/properties&gt;</programlisting>
+
+            <para>Then commit the <filename>pom.xml</filename> file.</para>
+          </sect3>
+
+          <sect3>
+            <title>Update skin <code>&lt;version&gt;</code></title>
+
+            <para>Open up the <filename>src/site/site.xml</filename> in the
+            <package>[oai:isis]</package> parent module, and update the
+            <code>&lt;version&gt;</code>:</para>
+
+            <programlisting>&lt;skin&gt;
+    ...
+    &lt;version&gt;0.x.x-incubating-SNAPSHOT&lt;/version&gt;
+&lt;/skin&gt;</programlisting>
+
+            <para>Then commit the <filename>site.xml</filename> file.</para>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Merge changes from branch back into trunk</title>
+
+          <para>Because we release from a branch, the changes made in the
+          branch (changes to <filename>pom.xml</filename> made automatically
+          by the release-plugin, or any manual edits) should be merged back
+          from the release branch back into trunk.</para>
+
+          <para>You can if you wish use <acronym>SVN</acronym>'s
+          <code>merge</code> command for this (using the "reintegrate" flag).
+          However, you may well find it easy just to use a directory
+          comparison tool such as <emphasis>Beyond Compare</emphasis> or
+          <emphasis>WinMerge</emphasis>.</para>
+
+          <para>Finally, remember that the version in the
+          <filename>pom.xml</filename> for any modules that are not part of
+          the release (in particular, the <filename>examples</filename> and
+          <filename>domain-libs</filename> modules) should be manually updated
+          also.</para>
+        </sect2>
       </sect1>
     </chapter>
 
