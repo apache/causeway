@@ -443,10 +443,6 @@
         the Isis source code for read-only using:</para>
 
         <programlisting>svn co http://svn.apache.org/repos/asf/incubator/isis/trunk .</programlisting>
-
-        <para>hecking out the code Anonymous read-only access: * Committer
-        read-write access: * svn co
-        https://svn.apache.org/repos/asf/incubator/isis/trunk .</para>
       </sect1>
 
       <sect1>
@@ -459,6 +455,44 @@
 
         <para>Note that this uses the 'https' scheme rather than the 'http'
         scheme.</para>
+      </sect1>
+
+      <sect1>
+        <title>Directories (trunk, tags and branches)</title>
+
+        <para>Once you have downloaded the <filename>trunk</filename>, you
+        should have the following directories:</para>
+
+        <programlisting>trunk/
+    framework/
+    examples/
+    domain-libs/</programlisting>
+
+        <para>The <emphasis>Isis</emphasis> framework itself resides in the
+        <filename>framework</filename> subdirectory. At the time of writing
+        the other directories (<filename>examples</filename>,
+        <filename>domain-libs</filename>, <filename>sandbox</filename> etc)
+        are not formally released but are under <filename>trunk</filename>
+        because they are related to the particular version of
+        <emphasis>Isis</emphasis>.</para>
+
+        <para>This guide does not discuss the code in these other directories,
+        and deals only with the framework code (that is, the code within the
+        <code>framework</code> directory). The root should therefore be
+        considered <filename>trunk/framework</filename>.</para>
+
+        <para>The <filename>tags</filename> directory is however flat:</para>
+
+        <programlisting>tags/
+    ...</programlisting>
+
+        <para>This is because the immediate subdirectories under here will be
+        the versions of each release, and we can't say anything in general
+        about the structure or artifacts of future releases.</para>
+
+        <para>The <filename>branches</filename> directory meanwhile is
+        pretty-much adhoc; it should only hold the branches that are currently
+        in use.</para>
       </sect1>
     </chapter>
 
@@ -1723,7 +1757,7 @@ protected IsisConfiguration getConfiguration() {
           Windows &gt; Preferences, and specify the config file as <ulink
           url="???">http://incubator.apache.org/isis/codequality/checkstyle.xml</ulink>.
           Alternatively, the file is available locally in
-          <filename>trunk/src/site/resources/codequality/checkstyle.xml</filename>.</para>
+          <filename>trunk/framework/src/site/resources/codequality/checkstyle.xml</filename>.</para>
 
           <para><remark>TODO: the screenshot is out of date</remark></para>
 
@@ -1838,7 +1872,7 @@ protected IsisConfiguration getConfiguration() {
           use "Import rule set" and specify the pmd.xml file. Unlike the
           Checkstyle plugin, this must be a local file so must be referenced
           locally, from
-          <filename>trunk/src/site/resources/codequality/pmd.xml</filename>.</para>
+          <filename>trunk/framework/src/site/resources/codequality/pmd.xml</filename>.</para>
 
           <para>Also unlike the Checkstyle plugin, PMD violations are not
           continually updated against the code (it is not implemented as an
@@ -2908,7 +2942,7 @@ public class FooBar {
         <literal>DOCTYPE</literal> entry to reference <acronym>DTD</acronym>s
         stored locally. We use the <literal>svn:externals</literal> property
         to "symbolically link" 3 directories under
-        <filename>trunk/src/docbkx/guide</filename>
+        <filename>trunk/framework/src/docbkx/guide</filename>
         (<filename>dtd-4.5</filename>, <filename>images</filename> and
         <filename>style</filename>); these can therefore be referenced
         locally.</para>
@@ -3956,40 +3990,40 @@ licenses to remove from supplemental-models.xml (are spurious):
           <programlisting>svn mkdir https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating \
    -m "branching to create x.x.x-incubating"
 
-cd .../trunk   # your local workspace for isis/trunk
+cd .../trunk/framework   # your local workspace for isis/trunk/framework
 cd ..
 mkdir -p branches/x.x.x-incubating</programlisting>
 
           <para>Then, perform an <code>svn copy</code> from trunk:</para>
 
-          <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk \
-    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk \
-    -m "copying trunk to branches/x.x.x-incubating"
+          <programlisting>svn copy https://svn.apache.org/repos/asf/incubator/isis/trunk/framework \
+    https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework \
+    -m "copying trunk to branches/x.x.x-incubating/framework"
 
-cp -R trunk branches/x.x.x-incubating/trunk</programlisting>
+cp -R framework branches/x.x.x-incubating/framework</programlisting>
 
           <para>Finally, use <code>svn switch</code> to update your local
           directory:</para>
 
-          <programlisting>cd branches/x.x.x-incubating/trunk
-svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk</programlisting>
+          <programlisting>cd branches/x.x.x-incubating/framework
+svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework</programlisting>
 
           <para>Because the release is being performed in a branch, it is then
           necessary to edit the parent <filename>pom.xml</filename> in
           <package>[oai:isis]</package> parent module. Change
           <emphasis>trunk</emphasis> to
-          <emphasis>branches/x.x.x-incubating/trunk</emphasis> for each of the
-          children of the <code>&lt;scm&gt;</code> element:</para>
+          <emphasis>branches/x.x.x-incubating/framework</emphasis> for each of
+          the children of the <code>&lt;scm&gt;</code> element:</para>
 
           <programlisting>&lt;scm&gt;
   &lt;connection&gt;
-    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/
+    scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework/
   &lt;/connection&gt;
   &lt;developerConnection&gt;
-    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/
+    scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework/
   &lt;/developerConnection&gt;
   &lt;url&gt;
-    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/
+    http://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework/
   &lt;/url&gt;
 &lt;/scm&gt;</programlisting>
 
@@ -4090,7 +4124,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incuba
 [INFO]   ignoring changes on: pom.xml.next, release.properties, pom.xml.releaseBackup, 
          pom.xml.backup, pom.xml.branch, pom.xml.tag
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive status"
-[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating\trunk
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating/framework
 [INFO] Checking dependencies and plugins for snapshots ...
 What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incubating: : </programlisting>
 
@@ -4189,12 +4223,12 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <programlisting>[INFO] Checking in modified POMs...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive 
        commit --file /users/uuuuuuuu/maven-scm-1762417972.commit --targets /tmp/maven-scm-5153433587636484699-targets"
-[INFO] Working directory: D:\svn\ai\branches\0.x.x-incubating\trunk
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating/framework
 [INFO] Tagging release with the label isis-0.x.x-incubating...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive copy --file /tmp/maven-scm-259416193.commit --revision 1234567 
-       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/trunk/ 
+       https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework/ 
        https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/tags/isis-0.x.x-incubating"
-[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating/trunk
+[INFO] Working directory: /users/uuuuuuuu/branches/0.x.x-incubating/framework
 [INFO] ------------------------------------------------------------------------
 [ERROR] BUILD FAILURE
 [INFO]
@@ -4327,8 +4361,8 @@ svn: No such revision 1126567</programlisting>
 [INFO] Checking out the project to perform the release ...
 [INFO] Executing: cmd.exe /X /C 
        "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x-incubating 
-        /users/uuuuuuuu/ai/branches/0.x.x-incubating/trunk/target/checkout"
-[INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-incubating/trunk/target/
+        /users/uuuuuuuu/ai/branches/0.x.x-incubating/framework/target/checkout"
+[INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-incubating/framework/target/
 ...</programlisting>
 
           <para>All being well this command will complete successfully:</para>
@@ -4459,7 +4493,7 @@ The artifacts have been staged to staging repository on repository.apache.org:
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip (zip file)
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip.asc (signature)
 
-In Subversion the code has been tagged as tags/framework/0.x.x-incubating.
+In Subversion the code has been tagged as tags/0.x.x-incubating.
 
 I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-incubating.  
 The contributors guide on the site contains some suggestions of how to verify the release, see
@@ -4581,7 +4615,7 @@ The artifacts have been staged to staging repository on repository.apache.org:
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip (zip file)
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip.asc (signature)
 
-In Subversion the code has been tagged as tags/framework/0.x.x-incubating.
+In Subversion the code has been tagged as tags/0.x.x-incubating.
 
 I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-incubating.  The contributors guide on the site contains some suggestions of how to verify the release, see
 http://incubator.apache.org/isis-0.x.x-incubating/docbkx/html/guide/ch12.html
@@ -4652,7 +4686,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
 
           <para>Assuming you've downloaded the <acronym>ZIP</acronym> file and
           signature file from the staging repo, and the dist directory already
-          exists, use scp to copy the files up: </para>
+          exists, use scp to copy the files up:</para>
 
           <programlisting>scp isis-x.x.x-incubating-source-release.* people.apache.org:/www/www.apache.org/dist/incubator/isis/.</programlisting>
         </sect2>
@@ -4766,8 +4800,8 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           <filename>archetype-catalog.xml</filename> so that the quickstart
           archetype can be used from the snapshot repository by those who want
           to use the "latest-and-greatest". This file lives in
-          <filename>.../trunk/src/main/site/resources</filename>, and looks
-          something like:</para>
+          <filename>.../trunk/framework/src/main/site/resources</filename>,
+          and looks something like:</para>
 
           <programlisting>&lt;archetype-catalog&gt;
   &lt;archetypes&gt;
