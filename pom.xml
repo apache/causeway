@@ -1571,18 +1571,6 @@ archetype includes this explicit dependency.
             </modules>
         </profile>
         <profile>
-            <id>modules-examples</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>examples</value>
-                </property>
-            </activation>
-            <modules>
-                <module>examples</module>
-            </modules>
-        </profile>
-        <profile>
             <id>modules-quickstart-archetype</id>
             <activation>
                 <property>

@@ -38,9 +38,15 @@ Viewers
 
   The <wicket> viewer is a customizable webapp viewer for an Isis domain model, implemented using the {{{http://wicket.apache.org}Apache Wicket}} web framework.
 
- * {{{./restful/index.html}Restful viewer}}
+ * {{{./xhtml/index.html}XHTML (Restful) viewer}}
 
-  The <restful> viewer provides a RESTful interface to the domain object model, running over the HTTP protocol, and implemented as a webapp.
+  The <xhtml> viewer provides a RESTful interface to the domain object model, 
+  providing XHTML representations of domain objects.  It is implemented as a webapp.
+
+ * {{{./json/index.html}JSON (Restful) viewer}}
+
+  The <json> viewer provides a RESTful interface to the domain object model, 
+  providing JSON representations of domain objects.  It is implemented as a webapp.
 
  * {{{./bdd/index.html}BDD Framework Integration}}
 

@@ -441,8 +441,9 @@
             <para><filename>app/quickrun</filename></para>
 
             <para>Bootstrap for running from the command line (the
-            <acronym>DnD</acronym> viewer, the <acronym>HTML</acronym> viewer
-            or the Restful viewer)</para>
+            <acronym>DnD</acronym> viewer, the <acronym>HTML</acronym> viewer,
+            the <acronym>JSON</acronym> viewer or the <acronym>XHTML</acronym>
+            viewer)</para>
           </listitem>
 
           <listitem>

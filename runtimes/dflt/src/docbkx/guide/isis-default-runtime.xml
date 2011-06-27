@@ -220,8 +220,9 @@
                 the <emphasis>Wicket viewer</emphasis>
                 <package>[oai.viewer:wicket]</package> provides a custom
                 subclass of the org.apache.wicket.Application for
-                bootstrapping, while the <emphasis>Restful viewer</emphasis>
-                is bootstrapped using the
+                bootstrapping, while the two RESTful viewers (<emphasis>JSON
+                viewer</emphasis> and <emphasis>XHTML viewer</emphasis>) are
+                bootstrapped using the
                 <classname>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</classname>,
                 providing a custom subclass of
                 <classname>javax.ws.rs.core.Application</classname> to
@@ -355,8 +356,8 @@
                   <classname>DeploymentType</classname> class. If running
                   under <classname>WebServer</classname>, should only use
                   <emphasis>server_xxx</emphasis> values. Some viewers (eg the
-                  wicket viewer) may define additional deployment types.
-                  </entry>
+                  wicket viewer) may define additional deployment
+                  types.</entry>
                 </row>
 
                 <row>
@@ -402,7 +403,7 @@
 
                   <entry>Ignored if deployment type is
                   <emphasis>client</emphasis>. Values are taken from
-                  <filename>installer-registry.properties</filename> </entry>
+                  <filename>installer-registry.properties</filename></entry>
                 </row>
 
                 <row>
@@ -996,7 +997,7 @@
 
         <para>The intention of exploration mode is for developers to explore
         and test their code, with a number of features all designed to reduce
-        the length of the feedback loop. </para>
+        the length of the feedback loop.</para>
 
         <para></para>
 
@@ -1023,7 +1024,7 @@
 
         <para></para>
 
-        <para> <classname>LoginFixture</classname> is present, see <xref
+        <para><classname>LoginFixture</classname> is present, see <xref
         linkend="sec.LoginFixture" />).</para>
 
         <para></para>

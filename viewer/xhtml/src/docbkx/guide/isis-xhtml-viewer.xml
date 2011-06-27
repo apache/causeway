@@ -188,7 +188,7 @@
     </sect1>
 
     <sect1 id="sec.IntroducingRestfulObjects">
-      <title>Introducing the Restful Viewer</title>
+      <title>Introducing the XHTML Viewer</title>
 
       <para>As already stated, the <emphasis>Isis</emphasis>' <emphasis>xhtml
       viewer</emphasis> automatically exposes a domain model using

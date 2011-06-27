@@ -110,7 +110,8 @@
       <para>This guide assumes that you have at least the outline of a running
       <emphasis>Apache Isis</emphasis> application, for example having run the
       quickstart archetype. Details of how to run the quickstart archetype can
-      be found in <xref linkend="apx.Archetype" />.</para>
+      be found on the <emphasis>Isis</emphasis> <ulink
+      url="http://incubator.apache.org/isis">website</ulink>.</para>
 
       <para>This guide has two main objectives:</para>
 
@@ -557,16 +558,19 @@
         up by some other component out there on your enterprise service
         bus.</para>
 
-        <para>As to providing <acronym>SOA</acronym> services, Isis' RESTful
-        viewer exposes the domain objects as a set of RESTful resources. We
-        map objects and object members to the standard <acronym>HTTP</acronym>
+        <para>As to providing <acronym>SOA</acronym> services, Isis'
+        <acronym>XHTML</acronym> and <acronym>JSON</acronym> viewers both
+        exposes the domain objects as a set of RESTful resources. We map
+        objects and object members to the standard <acronym>HTTP</acronym>
         verbs, eg so that a GET on an object returns an object representation,
         a PUT on an object's property will modify the state, or a POST on an
-        object's actions will invoke the action. Right now the representation
-        is in terms of <acronym>XHTML</acronym>, which has the nice side
-        effect that the representation can actually be viewed directly from a
-        web browser. We do intend to also provide a <acronym>JSON</acronym>
-        representation, but that's still on the roadmap for now.</para>
+        object's actions will invoke the action. As its name suggests, the
+        <acronym>XHTML</acronym> viewer provides a representation is in terms
+        of <acronym>XHTML</acronym>, which has the nice side effect that the
+        representation can actually be viewed directly from a web browser. The
+        <acronym>JSON</acronym> viewer produces a <acronym>JSON</acronym>
+        representation, making it easy to consume in Javascript
+        applications.</para>
       </sect1>
 
       <sect1>
@@ -602,11 +606,13 @@
 
         <para>Viewers are channels by which the domain model is accessed.
         <emphasis>Apache Isis</emphasis> has viewers that expose the domain
-        model as either a desktop app or as a webapp, and also has its RESTful
-        viewer which allows the view model objects/domain objects to be
-        surfaced as RESTful resources. In <acronym>DDD</acronym> terms the
-        RESTful viewer is an "open host service" context mapping from some
-        client bounded context up to our model's context.</para>
+        model as either a desktop app or as a webapp, and also has two RESTful
+        viewers (producing either <acronym>XHTML</acronym> or
+        <acronym>JSON</acronym>) which allow the view model objects/domain
+        objects to be surfaced as RESTful resources. In <acronym>DDD</acronym>
+        terms the RESTful viewers are examples of an "open host service"
+        context mapping from some client bounded context up to our model's
+        context.</para>
 
         <para>With respect to domain services, these are not reusable per se,
         rather they allow the domain objects to be the client of some other
@@ -644,12 +650,13 @@
         <title>What is the future road map of the project?</title>
 
         <para>Our proposal to join the incubator is online, and that captured
-        the thoughts we had at that point in time [***1]. A general theme is
-        in the ongoing development of the various viewers, such as the Wicket
-        viewer, JSON support for the RESTful viewer, and ongoing development
-        of the taglib-based viewer, Scimpi. Contributors who have expressed
-        interest in developing similar viewers using JSF/Facelets, Tapestry,
-        on Android and in JavaFX/Visage.</para>
+        the thoughts we had at that point in time <ulink
+        url="http://wiki.apache.org/incubator/IsisProposal">[1]</ulink>. A
+        general theme is in the ongoing development of the various viewers,
+        such as the Wicket viewer, improving JSON support within the RESTful
+        viewers, and ongoing development of the taglib-based viewer, Scimpi.
+        Contributors who have expressed interest in developing similar viewers
+        using JSF/Facelets, Tapestry, on Android and in JavaFX/Visage.</para>
 
         <para>Isis has a pluggable architecture with about five major APIs
         (and numerous more fine-grained APIs) that can be developed. Probably
@@ -697,12 +704,13 @@
 
         <para>We tend to organize <emphasis>Isis</emphasis> applications to
         follow a standard structure, and you can use the
-        <emphasis>quickstart</emphasis> Maven archetype (see <xref
-        linkend="apx.Archetype" />) to set this up for you. This sets up a
-        simple application that can be run out-of-the-box using the default
-        runtime and in-memory object store, and supporting all of the main
-        viewers, either run from the command lineor as webapps served by
-        Jetty.</para>
+        <emphasis>quickstart</emphasis> Maven archetype (see the
+        <emphasis>Isis</emphasis> <ulink
+        url="http://incubator.apache.org/isis">website</ulink>) to set this up
+        for you. This sets up a simple application that can be run
+        out-of-the-box using the default runtime and in-memory object store,
+        and supporting all of the main viewers, either run from the command
+        lineor as webapps served by Jetty.</para>
       </sect1>
 
       <sect1>
@@ -793,15 +801,19 @@
           </listitem>
 
           <listitem>
-            <para>The RESTful viewer (in <filename>viewers/restful</filename>)
-            is designed to expose your domain objects through a <ulink
+            <para>The two RESTful viewers (in
+            <filename>viewers/xhtml</filename> and
+            <filename>viewers/json</filename>) are designed to expose your
+            domain objects through a <ulink
             url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
             interface.</para>
 
-            <para>The intention of this viewer is to allow programmatic access
-            to your domain objects from other (perhaps non-Java) clients. The
-            viewer does also render as <acronym>XHTML</acronym> for debugging
-            purposes.</para>
+            <para>The intention of these viewers is to allow programmatic
+            access to your domain objects from other (perhaps non-Java)
+            clients. The <acronym>XHTML</acronym> viewer produces
+            <acronym>XHTML</acronym> representations, the
+            <acronym>JSON</acronym> viewer produces <acronym>JSON</acronym>
+            representations.</para>
           </listitem>
         </itemizedlist>
 
@@ -5062,7 +5074,7 @@ plan.getOwner().modifyLeader(peterPlanner);
               between runs. It is similar to, but independent of, an object
               store (which stores the domain objects themselves).</para>
             </footnote> with user profiles (the concept of which is described
-          in <xref linkend="chp.UserProfiles" />). </para>
+          in <xref linkend="chp.UserProfiles" />).</para>
 
           <para>To create a user profile for a specific user, inherit from
           <classname>UserProfileFixture</classname>, use the inherited
@@ -7548,469 +7560,6 @@ public class ComplexNumber {
           <imagedata fileref="images/architecture-perspective.png" scale="70" />
         </imageobject>
       </mediaobject>
-    </appendix>
-
-    <appendix id="apx.Archetype">
-      <title>Running the Quickstart Archetype</title>
-
-      <para>*** talk through using the "quickstart" archetype, which generates
-      a read-to-run app.</para>
-
-      <sect1>
-        <title>Run Archetype</title>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>Using Maven archetype plugin we can generate a new Isis
-        application very quickly. These are multi-moduled projects with
-        separate sections for the domain code, fixtures, web interfaces and so
-        on.</para>
-
-        <para>One option is to create the archetype from the commandline. Note
-        that if you are using Eclipse and have installed the m2eclipse plugin
-        then it provides a dialog to create the project from an archetype;
-        this is discussed below.</para>
-
-        <remark>TODO: update the listing below, it is out of date. The
-        archetype to use is called
-        'org.apache.isis.support.archetype:quickstart</remark>
-
-        <screen>[rcm@localhost ~]$ <emphasis role="bold">mvn archetype:generate -DarchetypeCatalog=http://isis.apache.org</emphasis>
-[INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetype'.
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Default Project
-[INFO]    task-segment: [archetype:generate] (aggregator-style)
-[INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:generate
-[INFO] No goals needed for project - skipping
-[INFO] Setting property: classpath.resource.loader.class =&gt; 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
-[INFO] Setting property: velocimacro.messages.on =&gt; 'false'.
-[INFO] Setting property: resource.loader =&gt; 'classpath'.
-[INFO] Setting property: resource.manager.logwhenfound =&gt; 'false'.
-[INFO] [archetype:generate]
-[INFO] Generating project in Interactive mode
-[INFO] No archetype defined. Using maven-archetype-quickstart (org.apache.maven.archetypes:maven-archetype-quickstart:1.0)
-Choose archetype:
-1: local -&gt; isis-application (Isis Application (Archetype))
-2: local -&gt; isis-icons (Isis Icons (Archetype))
-3: local -&gt; htmlviewer-war (Isis WAR (Archetype))
-4: local -&gt; hibernate-support (Hibernate Support (Archetype))
-5: local -&gt; remoting-support (Isis Remoting Support (Archetype))
-Choose a number:  (1/2/3/4/5): <emphasis role="bold">1</emphasis></screen>
-
-        <para>To create a project from an archetype you must specify a
-        <emphasis>groupId</emphasis> and <emphasis>artifactId</emphasis>, a
-        <emphasis>version</emphasis> and a <emphasis>Java
-        package</emphasis>.</para>
-
-        <para>After choosing the archetype number and pressing enter you are
-        prompted for the project's details. The <emphasis>groupId</emphasis>
-        is an identifier representing your company/group; ours would typically
-        be "org.apache.isis" for the domain followed by a name for the group
-        of products. The <emphasis>artifactId</emphasis> identifies the
-        projects that we are creating. The <emphasis>version</emphasis>
-        indicates how mature the project is, and should be left as the
-        default, e.g. 1.0-SNAPSHOT. Finally, the <emphasis>package</emphasis>
-        is the base package name used for all Java files. After these have
-        been entered you are prompted to confirm by entering Y, as shown
-        below.</para>
-
-        <para>Be wary of using invalid names. The <emphasis>groupId</emphasis>
-        should be alphanumeric with dots to separate the words. The
-        <emphasis>artifactId</emphasis> should also be alphanumeric, with '-'
-        (hyphens) to separate the words. The <emphasis>package</emphasis> name
-        should be a valid Java package name, i.e. should have no spaces or
-        dashes. Maven does little to check these things.</para>
-
-        <screen>Define value for groupId: : <emphasis role="bold">org.example</emphasis>
-Define value for artifactId: : <emphasis role="bold">expenses</emphasis>
-Define value for version:  1.0-SNAPSHOT: : 
-Define value for package: : <emphasis role="bold">org.example.expenses</emphasis>
-Confirm properties configuration:
-groupId: org.example
-artifactId: expenses
-version: 1.0-SNAPSHOT
-package: org.example.expenses
- Y: : <emphasis role="bold">y</emphasis>
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 1 minute 13 seconds
-[INFO] Finished at: Thu Oct 02 20:42:50 BST 2008
-[INFO] Final Memory: 13M/247M
-[INFO] ------------------------------------------------------------------------
-</screen>
-
-        <para>This will create a new directory with the name of the
-        <emphasis>artifactId</emphasis>. So in this example this is
-        <filename>expenses</filename> as shown below.<screen>expenses
-|-- pom.xml
-|-- dom
-|   |-- pom.xml
-|   `-- src
-|-- commandline
-|   |-- config
-|   |-- ide
-|   |-- pom.xml
-|   `-- src
-|-- fixture
-|   |-- pom.xml
-|   `-- src
-|-- service
-|   |-- pom.xml
-|   `-- src
-`-- webapp
-    |-- pom.xml
-    `-- src</screen></para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Building the application</title>
-
-        <para>Once an archetype is created it can be built using Maven and
-        run. Build using the <emphasis>install</emphasis> goal as shown
-        here.</para>
-
-        <screen>[rcm@localhost expenses]$ <emphasis role="bold">mvn clean install</emphasis>
-[INFO] Scanning for projects...
-[INFO] Reactor build order: 
-[INFO]   Isis Application
-[INFO]   Domain Model
-[INFO]   Services
-[INFO]   Fixtures
-[INFO]   Exploration
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Isis Application
-[INFO]    task-segment: [clean, install]
-[INFO] ------------------------------------------------------------------------
-[INFO] [clean:clean]
-[INFO] [site:attach-descriptor]
-[INFO] [install:install]
-[INFO] Installing /home/rcm/tmp/bearingpoint/expenses/pom.xml to /home/rcm/.m2/repository/org/example/expenses/1.0-SNAPSHOT/expenses-1.0-SNAPSHOT.pom
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Domain Model
-[INFO]    task-segment: [clean, install]
-[INFO] ------------------------------------------------------------------------
-[INFO] [clean:clean]
-[INFO] Deleting directory /home/rcm/tmp/bearingpoint/expenses/dom/target
-[INFO] [resources:resources]
-[INFO] Using default encoding to copy filtered resources.
-[INFO] [compiler:compile]
-[INFO] Compiling 7 source files to /home/rcm/tmp/bearingpoint/expenses/dom/target/classes
-[INFO] [resources:testResources]
-[INFO] Using default encoding to copy filtered resources.
-:
-:
-[INFO] [resources:testResources]
-[INFO] Using default encoding to copy filtered resources.
-[INFO] [compiler:testCompile]
-[INFO] No sources to compile
-[INFO] [surefire:test]
-[INFO] No tests to run.
-[INFO] [jar:jar]
-[INFO] Building jar: /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses.jar
-[INFO] [assembly:attached {execution: default}]
-[INFO] Reading assembly descriptor: src/main/assembly/descriptor.xml
-[INFO] Processing DependencySet (output=lib)
-[INFO] Copying files to /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses-exploration-1.0-SNAPSHOT-prototype.dir
-[WARNING] Assembly file: /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses-exploration-1.0-SNAPSHOT-prototype.dir is not a regular file (it may be a directory). It cannot be attached to the project build for installation or deployment.
-[INFO] [install:install]
-[INFO] Installing /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses.jar to /home/rcm/.m2/repository/org/example/expenses-exploration/1.0-SNAPSHOT/expenses-exploration-1.0-SNAPSHOT.jar
-[INFO] 
-[INFO] 
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary:
-[INFO] ------------------------------------------------------------------------
-[INFO] Isis Application .............................. SUCCESS [6.087s]
-[INFO] Domain Model .......................................... SUCCESS [8.711s]
-[INFO] Services .............................................. SUCCESS [2.432s]
-[INFO] Fixtures .............................................. SUCCESS [2.283s]
-[INFO] Commandline ........................................... SUCCESS [10.774s]
-[INFO] ------------------------------------------------------------------------
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 31 seconds
-[INFO] Finished at: Tue Mar 03 11:59:50 GMT 2009
-[INFO] Final Memory: 40M/495M
-[INFO] ------------------------------------------------------------------------
-[rcm@localhost expenses]$ </screen>
-
-        <para>Once the project is built the results can be found in the
-        <filename>exploration/target</filename> directory, which contains both
-        a zipped distribution (in this example
-        <filename>expenses-exploration-1.0-SNAPSHOT-prototype.zip</filename>)
-        and an expanded distribution (again for this example,
-        <filename>expenses-exploration-1.0-SNAPSHOT</filename>). Using the
-        contained script files the application can be run from the command
-        line.<screen>exploration
-|-- config
-|-- ide
-|-- pom.xml
-|-- src
-`-- target
-    |-- archive-tmp
-    |-- classes
-    |-- expenses-exploration-1.0-SNAPSHOT-prototype.dir
-    |   `-- expenses-exploration-1.0-SNAPSHOT
-    |       |-- config
-    |       |-- images
-    |       |-- expenses.jar
-    |       |-- isis.bat
-    |       |-- isis.sh
-    |       |-- lib
-    |-- expenses-exploration-1.0-SNAPSHOT-prototype.zip
-    |-- expenses.jar
-    `-- maven-archiver</screen></para>
-      </sect1>
-
-      <sect1>
-        <title>Running with the DnD Viewer</title>
-
-        <para>*** below was taken from the tutorial on running the old
-        expenses demo</para>
-
-        <para></para>
-
-        <para>The executable version of the Expenses demo application exists
-        within the <filename class="directory"
-        moreinfo="none">demos</filename> directory of the Isis
-        distribution.</para>
-
-        <para>Run the batch file <filename class="directory"
-        moreinfo="none">ExpensesDND.bat</filename> file either by
-        double-clicking on the icon (in Windows) or using the following
-        commands on the command line. In Windows the commands are</para>
-
-        <programlisting>&gt; cd demos\expenses 
-&gt; ExpensesDND.bat</programlisting>
-
-        <para>while on the Mac or when using Unix/Linux they are:</para>
-
-        <programlisting>&gt; cd demos/expenses 
-&gt; ./ExpensesDND.sh</programlisting>
-
-        <para>After seeing the Isis splash screen, you'll be presented with a
-        Login screen:</para>
-
-        <screenshot>
-          <mediaobject>
-            <imageobject>
-              <imagedata contentwidth="40%" fileref="images/log-on-dnd.png"
-                         format="PNG" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>Log in as 'sven' and a password of 'pass'. The application will
-        then open like this:</para>
-
-        <screenshot>
-          <mediaobject>
-            <imageobject>
-              <imagedata contentwidth="40%" fileref="images/home-dnd.png"
-                         format="PNG" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>When an application is started an application window is opened
-        and the user's services are displayed on the left hand side. These
-        icons typically give the user access to the domain objects held and
-        used by the system, and provide a way for to create new instances. Any
-        other object that subsequently appears on the screen represents one of
-        those objects.</para>
-
-        <remark>TODO replace with up-to-date shot using current
-        example</remark>
-
-        <screenshot>
-          <screeninfo></screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata contentwidth="40%" fileref="images/dnd-example.png" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>The service and objects can be manipulated as follows:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Object actions can be invoked by
-            <emphasis>right-clicking</emphasis> on an icon and selecting one
-            of the options from the menu.</para>
-          </listitem>
-
-          <listitem>
-            <para>Resource actions can be invoked by
-            <emphasis>right-clicking</emphasis> on a resource icon.To inspect
-            an object (when only an icon is shown)
-            <emphasis>double-click</emphasis> it - this normally opens up the
-            object in a new window.</para>
-          </listitem>
-
-          <listitem>
-            <para>Objects can be dragged by
-            <emphasis>click-dragging</emphasis> on the icons and dropped by
-            releasing the mouse button.</para>
-          </listitem>
-
-          <listitem>
-            <para>Dragged objects can be dropped on an empty object field
-            (identified by the grey hole; the label to the right of the hole
-            specifies what type of object can be dropped). If the object can
-            be dropped into that field then it will flash green. If the object
-            cannot be dropped - either because it is the wrong type or that
-            specific object is disallowed for some other reason - then the
-            field will flash red. Dropping an object into a field sets up that
-            field, effectively associating the two objects.</para>
-          </listitem>
-
-          <listitem>
-            <para>Dragged objects can be dropped on to other object icons. If
-            the object that you attempting to drop onto accepts that type of
-            object then if will flash green. If that object does not accept
-            that kind of object, or disallows that specific object, then it
-            will flash red. Dropping one object on to another invokes a
-            specific object action, for example: add this product to that
-            order.</para>
-          </listitem>
-
-          <listitem>
-            <para>To quit the application, or access other application related
-            options right-click on the desktop to bring up the system
-            menu.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Running with the HTML Viewer</title>
-
-        <para>*** below was taken from the tutorial on running the old
-        expenses demo</para>
-
-        <para></para>
-
-        <para>2</para>
-
-        <para>To run the expenses demo with the HTML user interface, run the
-        batch file <filename class="directory"
-        moreinfo="none">ExpensesHTML.bat</filename> either by double-clicking
-        on the icon (in Windows) or using the following commands on the
-        command line. In Windows the commands are.</para>
-
-        <programlisting>&gt; cd demos\expenses 
-&gt; ExpensesHTML.bat</programlisting>
-
-        <para>while on the Mac or when using Unix/Linux they are:</para>
-
-        <programlisting>&gt; cd demos/expenses 
-&gt; ./ExpensesHTML.sh</programlisting>
-
-        <para>Allowing a few seconds for the application to start up, you then
-        need to launch a browser and point it to <filename class="directory"
-        moreinfo="none">http://localhost:8080/logon.app</filename> and you'll
-        be presented with a Login screen.</para>
-
-        <screenshot>
-          <mediaobject>
-            <imageobject>
-              <imagedata contentwidth="40%" fileref="images/html-login.png"
-                         format="PNG" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>Log in as 'sven' and a password of 'pass'. This will direct you
-        to the start page of the application, a welcome page is displayed and
-        links to the application resources are shown across the top. In the
-        same ways as for dnd these links give the user access to the objects
-        held and used by the system and provide a way for to create new
-        objects. Any other object that subsequently appears on the screen
-        represents one of those objects.</para>
-
-        <screenshot>
-          <mediaobject>
-            <imageobject>
-              <imagedata contentdepth="40%" fileref="images/html-start.png"
-                         format="PNG" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>For example if the claims link is clicked on within the expenses
-        demo the claims service page is shown with the resource actions
-        available in a menu on the left hand side of the screen.</para>
-
-        <screenshot>
-          <screeninfo></screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata contentwidth="40%"
-                         fileref="images/html-exampl-claims.png" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <itemizedlist>
-          <listitem>
-            <para>Object actions can be invoked by clicking on one of the of
-            the options from the left hand menu.</para>
-          </listitem>
-
-          <listitem>
-            <para>Resource actions can be invoked clicking on a resource icon
-            link in the resource bar and then clicking on a menu item.</para>
-          </listitem>
-
-          <listitem>
-            <para>As objects are created or opened they are shown in an object
-            history beneath the resource bar.</para>
-          </listitem>
-
-          <listitem>
-            <para>Similarly the current context, i.e. the current nesting of
-            actions is shown beneath the object history.</para>
-          </listitem>
-        </itemizedlist>
-      </sect1>
-
-      <sect1>
-        <title>Running with the Scimpi Viewer</title>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Running with the Restful Viewer</title>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Running with the Wicket Viewer</title>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Running the BDD (Concordion) Tests</title>
-
-        <para></para>
-      </sect1>
     </appendix>
   </part>
 </book>
