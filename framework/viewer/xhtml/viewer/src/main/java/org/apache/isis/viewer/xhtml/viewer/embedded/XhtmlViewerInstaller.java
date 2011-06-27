@@ -24,7 +24,7 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 
 /**
- * Convenience implementation of a {@link IsisViewer} providing the ability to configured for the Restful viewer from
+ * Convenience implementation of a {@link IsisViewer} providing the ability to configured for the XHTML viewer from
  * the {@link Isis command line} using <tt>--viewer restful</tt> command line option.
  * 
  * <p>
