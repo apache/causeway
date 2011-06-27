@@ -1,0 +1,394 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+BODY {
+	font-family: Arial, Sans-Serif;
+	margin: 0 0 10px 0;
+	color: black;
+	background-color: #f0f0f0;
+}
+
+/*
+* Banner
+*/
+div#banner {
+	background-image: url(../images/banner-bg.png);
+	background-repeat: repeat-x; 
+	width: 100%;
+	height: 120px;
+}
+
+/*
+* Content below banner
+*/
+div#content {
+	display: block;
+}
+
+div#content div#side {
+	display: inline;
+	float: left;
+	width: 150px;
+	padding: 25px 10px;
+}
+
+div#side ul {
+	margin: 0;
+	padding: 0;
+}
+
+div#side li {
+	display: block;
+	font-size: 80%;
+	padding: 4px 0;
+}
+
+div#content div#main{
+	padding: 1em;
+	float:left;
+	width:70%;
+}
+
+/*
+* Feedback area
+*/
+.feedback {
+	border: 2px solid red;
+	background-color: #ffccff;
+	padding: 20px 10px;
+}
+
+.warning {
+	color: red;
+	font-style:  italic;
+}
+
+.message {
+	color: blue;
+}
+
+.error {
+	color: red;
+	font-size: 80%;
+	padding-left:  6px;	
+}
+
+/*
+* Debug
+*/
+
+div.debug {
+	display: block;
+	padding: 10px;
+	border: 1px solid gray;
+	background-color: #ddd;
+}
+
+/*
+* Headings
+*/
+h1, h2, h3, h4 {
+	color: blue;
+}
+
+
+/*
+* Hyper links
+*/
+a {
+	color: blue;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:visted {
+	color: blue;
+	text-decoration: none;
+}
+
+/*
+* Icons
+*/
+img.title-icon {
+	height: 32px;
+	padding-right: 6px;
+}
+
+img.small-icon {
+	height: 16px;
+	padding-right: 6px;
+	vertical-align: text-bottom;
+}
+
+
+/*
+* Actions
+*/
+div.actions {
+	
+}
+
+div.actions div.actions {
+	border: 0px;
+	padding: 0px;
+}
+
+div.actions h2 {
+	font-size: 90%;
+}
+
+div.actions h3 {
+	font-size: 80%;
+}
+
+div.actions div.action,
+a.action
+{
+	padding 2px;
+	margin: 4px 0;
+	height: 1.6em;
+}
+
+div.action INPUT,
+div.action a,
+a.action,
+div.action span.disabled
+{
+	font-size: 80%;
+	background-color: silver;
+	border: 1px solid #333399;
+	background: url(../images/bg-button.gif);
+	background-repeat: repeat-x;
+}
+
+div.action INPUT[type="hidden"]
+{
+	background: none;
+	border: none;
+}
+
+div.action a,
+a.action,
+div.action span.disabled {
+	padding: 1px 10px;
+}
+
+.action INPUT, 
+a.action,
+.action a:link {
+	color: #000000;
+}
+
+.action INPUT, 
+a.action,
+.action a:visited {
+	color: #000000;
+}
+
+.action INPUT, 
+a.action,
+.action a:hover {
+	color: #000000;
+	text-decoration: none;
+}
+
+div.action span.disabled {
+	color: #555;
+}
+
+/*
+* Edit forms
+*/
+fieldset {
+	padding: 5px 10px;
+}
+
+fieldset div.field {
+	padding: 4px 0px;
+	min-height: 1.3em;
+}
+
+fieldset label {
+	float: left;
+	width:140px;
+	font-weight: bold;
+}
+
+fieldset input {
+	padding: 0px 0;
+}
+
+fieldset textarea {
+	font-family: Arial, Sans-Serif;
+}
+
+form input.button {
+	font-size: 80%;
+	background-color: silver;
+	border: 1px solid #333399;
+	background: url(../images/bg-button.gif);
+	background-repeat: repeat-x;
+	padding: 1px 0;
+}
+
+/*
+* Display forms
+*/
+div.form {
+	padding: 5px 0;
+}
+
+XXdiv.form * {
+	border: 1px solid red;
+}
+
+div.form div.field {
+	padding: 4px 6px;
+	min-height: 1.3em;
+}
+
+div.form div.odd-row {
+	background-color: #e7e7e7;
+}
+
+div.form div.even-row {
+	background-color:  #eee;
+}
+
+div.form span.label {
+	float: left;
+	font-weight: bold;
+}
+
+div.form span.value {
+	display: block;
+	padding-left: 12em;
+	max-width: 45em;
+}
+
+
+
+/*
+* collections
+*/
+
+#store .entry {
+	border-bottom: 1px dotted #7745FF;
+	padding: 10px 0;
+}
+	
+table {
+	border: 0px;
+	padding-bottom: 10px;
+}
+	
+th {
+	background-color: #bbb;
+}
+
+tr.odd-row {
+	background-color: #eee;
+}
+
+tr.even-row {
+	background-color: #e7e7e7;
+}
+
+td {
+	vertical-align: top;
+	padding: 4px 10px;
+}
+
+tr:hover {
+	border: 1px solid black; 
+	background-color: #eea;
+}
+
+
+
+
+
+/*
+* Application specific
+*/
+div.book {
+	padding-bottom: 10px;
+	border-bottom: 2px dashed;
+}
+
+div.cover {
+	float: left;
+	padding-right: 30px;
+	padding-bottom: 8px;
+}
+
+
+.title {
+	color: white;
+	font-size: 120%;
+	font-weight: bold;
+	margin-left: 5px;
+}
+	
+.description {}
+
+.price {
+	display: inline;
+	font-weight: bold;
+	text-align: left;
+	margin-right: 20px;
+}
+
+form, input {
+	display: inline;
+}
+
+
+div#cart {
+	float: 	right;
+	width: 160px;
+	font-size: 70%;
+	border: 1px solid gray;
+	margin: 10px;
+	padding: 10px;
+}
+
+div#cart ul {
+	padding: 0;
+	
+}
+
+div#cart li {
+	display: block;
+	padding-bottom: 4px;
+}
+
+
+
+form.selector fieldset {
+	margin-left: 45px;	
+	font-size: 80%;
+}
+
+form.selector legend {
+	font-style: italic;
+}
+

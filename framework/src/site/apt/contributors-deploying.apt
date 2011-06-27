@@ -1,0 +1,76 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Deploying Apache Isis
+
+  These notes are for Isis contributors with responsibility for 
+  deploying Isis (either the code artifact via <<<mvn deploy>>> or the site via <<<mvn site-deploy>>>).
+  
+  NOTE: plan is to move this content into the DocBook "contributors' guide"
+
+Prereqs
+
+  The instructions given here assume you are running on a UNIX type machine.
+  If you instead use Windows, then we recommend that you install
+  {{{http://cygwin.com}Cygwin}}, to access a UNIX shell and the required 
+  UNIX commands.
+  
+  When installing Cygwin, we also recommend that you select a couple of 
+  additional utilities over and above the defaults:
+  
+  * shells group > chere utility
+  
+    This can be used to set up a "Bash prompt here" menu item from the 
+    Windows Explorer context menu 
+    
+  * net group > openssh utility
+  
+    This provides the ssh client program, used for remoting into hosts securely
+    (needed when uploading generated documentation)
+
+  * net group > rsync utility
+  
+    This is used to actually upload generated documentation
+
+  []
+
+  When cygwin has installed, start a Cygwin Bash Shell as administrator 
+  (press ctrl+shift), and then run:
+  
++-------------------------------------------------------+
+chere -i
++-------------------------------------------------------+
+
+  Switch back to Windows Explorer and you'll find that you should be able to 
+  start a bash shell in a new terminal window from any folder. 
+   
+Process
+
+  For now, we'll just refer to the wiki documentation:
+  
+  * {{{https://cwiki.apache.org/confluence/display/ISIS/ManualDeployProcessForSnapshots}Manual deploy process for snapshots}}
+  
+  * {{{https://cwiki.apache.org/confluence/display/ISIS/ManualDeployProcessForSite}Manual deploy process for sites}}
+  
+  []
+  
+  The {{{https://cwiki.apache.org/confluence/display/ISIS/Index}Isis wiki}} 
+  also documents a number of other processes.  These will be formalized 
+  into documentation when they are proven and stable.
+  

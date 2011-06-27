@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework that supports supports variouys
+    viewers, along with <acronym>API</acronym>s and implementations relating
+    to security, the programming model, the runtime (persistence) and profile
+    stores (user preferences). <emphasis>Apache Isis</emphasis> is hosted at
+    the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para><emphasis>Isis</emphasis>' <emphasis>json</emphasis> viewer
+    <package>[oai.viewer:json]</package> renders each domain objects as <ulink
+    url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
+    resources. Each domain object is exposed as an (<acronym>JSON</acronym>)
+    resource through <acronym>HTTP GET</acronym> and can be used to access
+    other related objects by following links that represent the associations
+    of the domain object. The domain object can be interacted with by
+    modifying its state (through <acronym>HTTP PUT</acronym>) or by invoking
+    its actions (through <acronym>HTTP POST</acronym>).</para>
+
+    <sect1>
+      <title>Who this Guide is For</title>
+
+      <para>This guide describes how to use the <emphasis>jsonl viewer
+      </emphasis>both in prototype mode and how to deploy it into production
+      as a webapp. It also describes how to use the <emphasis>json
+      viewer</emphasis>'s application library
+      <package>[oai.viewer.json:applib]</package> to write client-side
+      applications. It is divided into the following chapters:<itemizedlist>
+          <listitem>
+            <para>Introduction</para>
+
+            <para>This chapter briefly introduces the concept of
+            <acronym>REST</acronym> and how it is mapped to the Isis domain
+            model.</para>
+          </listitem>
+
+          <listitem>
+            <para>The JSON Viewer Modules</para>
+
+            <para>This ....</para>
+          </listitem>
+
+          <listitem>
+            <para>Xxx</para>
+          </listitem>
+
+          <listitem>
+            <para>Xxx</para>
+          </listitem>
+
+          <listitem>
+            <para>Xxx</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect1>
+
+    <sect1>
+      <title>Abbreviations used in this Guide</title>
+
+      <para><emphasis>Apache Isis</emphasis> is built using Maven, which
+      identifies every module with a <emphasis>groupId</emphasis>, an
+      <emphasis>artifactId</emphasis>, a <emphasis>version</emphasis>, and a
+      <emphasis>type</emphasis>. These are called the Maven
+      <emphasis>co-ordinates</emphasis>. In this guide we identify each module
+      using notation <package>(groupId:artifactId)</package>; you should
+      assume that the <emphasis>version</emphasis> is the latest version, and
+      the <emphasis>type</emphasis> is the default JAR artifact<footnote>
+          <para>Maven modules can create other artifacts too, such as a test
+          JAR artifact. This would be indicated with a type of test-jar. But
+          the default artifact is a regular JAR.</para>
+        </footnote>. Hence <package>(org.apache.isis:core)</package> is the
+      Maven module with a <emphasis>groupId</emphasis> of
+      <package>org.apache.isis</package> and an
+      <emphasis>artifactId</emphasis> of <package>core</package>.</para>
+
+      <para>As a further convenience, we use "oai" as an abbreviation for
+      <package>org.apache.isis</package>. Hence
+      <package>(oai.viewer:json)</package> refers to the parent module for
+      JSON viewer. We also use the "oai" abbreviation within package
+      names.</para>
+    </sect1>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter>
+    <title>JSON Viewer</title>
+
+    <para>TODO.</para>
+
+    <para></para>
+
+    <para>for now, see the <ulink
+    url="https://cwiki.apache.org/confluence/display/ISIS/Restful+Json+Protocol">specification
+    on the Isis wiki</ulink>.</para>
+
+    <para></para>
+  </chapter>
+</book>

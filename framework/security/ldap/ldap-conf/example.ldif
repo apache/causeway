@@ -1,0 +1,46 @@
+dn: dc=isis,dc=org
+objectClass: top
+objectclass: dcObject
+objectclass: organization
+o: [[NAME]] Group
+dc: isis
+
+dn: cn=Manager,dc=isis,dc=org
+objectclass: organizationalRole
+cn: Manager
+
+
+dn: ou=people,dc=isis,dc=org
+objectClass: top
+objectClass: organizationalUnit
+ou: people
+
+dn: uid=joe,ou=people,dc=isis,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+cn: Joe Bloggs
+displayName: Joe Bloggs
+givenName: Joe
+sn: Bloggs
+uid: joe
+userPassword: pass
+
+dn: uid=john,ou=people,dc=isis,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+cn: John Bloggs
+displayName: John
+givenName: John
+sn: Bloggs
+uid: john
+userPassword: pass
+
+dn: uid=jack,ou=people,dc=isis,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+cn: Jack Bloggs
+displayName: Jack Bloggs
+givenName: Jack
+sn: Bloggs
+uid: jack
+userPassword: pass

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>viewer</artifactId>
+		<version>0.1.2-incubating-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.viewer</groupId>
+	<artifactId>wicket</artifactId>
+	<version>0.1.2-incubating-SNAPSHOT</version>
+
+	<name>Wicket Viewer</name>
+
+	<packaging>pom</packaging>
+
+    <properties>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/</relativeUrl>
+
+		<wicket.version>1.4.12</wicket.version>
+		<wicketstuff.version>1.4.12</wicketstuff.version>
+
+        <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-wicket-viewer</docbkxGuideName>
+    </properties>
+
+    <!-- used in Site generation for relative references. -->
+    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+	<modules>
+		<module>applib</module>
+		<module>model</module>
+		<module>metamodel</module>
+		<module>ui</module>
+		<module>viewer</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+			</plugin>
+		</plugins>
+	</build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.1.2-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+			<!-- Apache Isis Wicket Viewer -->
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-applib</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-applib</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-metamodel</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-metamodel</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-model</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-model</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-ui</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-ui</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-viewer</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-viewer</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- Apache Isis -->
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>metamodel</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>commons</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>commons</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+
+            <!-- TODO: remove this dependency -->            
+			<dependency>
+				<groupId>org.apache.isis.runtimes.dflt</groupId>
+				<artifactId>runtime</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+            <!-- TODO: remove this dependency -->            
+			<dependency>
+				<groupId>org.apache.isis.runtimes.dflt</groupId>
+				<artifactId>webapp</artifactId>
+				<version>0.1.2-incubating-SNAPSHOT</version>
+			</dependency>
+
+
+			<!-- Wicket -->
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-extensions</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-datetime</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-auth-roles</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-guice</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+            <!-- Wicket & WicketStuff -->
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>scriptaculous</artifactId>
+				<version>${wicketstuff.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>calendarviews</artifactId>
+				<version>${wicketstuff.version}</version>
+			</dependency>
+
+
+			<!-- Other -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.5.8</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-legacy</artifactId>
+				<version>2.5.1</version>
+				<scope>test</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>

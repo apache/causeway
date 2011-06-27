@@ -1,0 +1,2897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework that supports supports variouys
+    viewers, along with <acronym>API</acronym>s and implementations relating
+    to security, the programming model, the runtime (persistence) and profile
+    stores (user preferences). <emphasis>Apache Isis</emphasis> is hosted at
+    the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para><emphasis>Isis</emphasis>' <emphasis>xhtml</emphasis> viewer
+    <package>[oai.viewer:xhtl]</package> renders each domain objects as <ulink
+    url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
+    resources. Each domain object is exposed as an (<acronym>XHTML</acronym>)
+    resource through <acronym>HTTP GET</acronym> and can be used to access
+    other related objects by following links that represent the associations
+    of the domain object. The domain object can be interacted with by
+    modifying its state (through <acronym>HTTP PUT</acronym>) or by invoking
+    its actions (through <acronym>HTTP POST</acronym>).</para>
+
+    <sect1>
+      <title>Who this Guide is For</title>
+
+      <para>This guide describes how to use the <emphasis>xhtml viewer
+      </emphasis>both in prototype mode and how to deploy it into production
+      as a webapp. It also describes how to use the <emphasis>xhtml
+      viewer</emphasis>'s application library
+      <package>[oai.viewer.xhtml:applib]</package> to write client-side
+      applications. It is divided into the following chapters:<itemizedlist>
+          <listitem>
+            <para>Introduction</para>
+
+            <para>This chapter briefly introduces the concept of
+            <acronym>REST</acronym> and how it is mapped to the Isis domain
+            model.</para>
+          </listitem>
+
+          <listitem>
+            <para>Using the QuickStart Archetype and the XHTML Viewer</para>
+          </listitem>
+
+          <listitem>
+            <para>Resources</para>
+          </listitem>
+
+          <listitem>
+            <para>Writing Client-side Applications</para>
+          </listitem>
+
+          <listitem>
+            <para>Deploying XHTML Viewer Webapps</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect1>
+
+    <sect1>
+      <title>Abbreviations used in this Guide</title>
+
+      <para><emphasis>Apache Isis</emphasis> is built using Maven, which
+      identifies every module with a <emphasis>groupId</emphasis>, an
+      <emphasis>artifactId</emphasis>, a <emphasis>version</emphasis>, and a
+      <emphasis>type</emphasis>. These are called the Maven
+      <emphasis>co-ordinates</emphasis>. In this guide we identify each module
+      using notation <package>(groupId:artifactId)</package>; you should
+      assume that the <emphasis>version</emphasis> is the latest version, and
+      the <emphasis>type</emphasis> is the default JAR artifact<footnote>
+          <para>Maven modules can create other artifacts too, such as a test
+          JAR artifact. This would be indicated with a type of test-jar. But
+          the default artifact is a regular JAR.</para>
+        </footnote>. Hence <package>(org.apache.isis:core)</package> is the
+      Maven module with a <emphasis>groupId</emphasis> of
+      <package>org.apache.isis</package> and an
+      <emphasis>artifactId</emphasis> of <package>core</package>.</para>
+
+      <para>As a further convenience, we use "oai" as an abbreviation for
+      <package>org.apache.isis</package>. Hence
+      <package>(oai.viewer:xhtml)</package> refers to the parent module for
+      XHTML viewer. We also use the "oai" abbreviation within package
+      names.</para>
+    </sect1>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter id="chp.Introduction">
+    <title>Introduction</title>
+
+    <abstract>
+      <para>An introduction to <acronym>REST</acronym> and how it maps onto an
+      <emphasis>Apache Isis</emphasis> domain model.</para>
+    </abstract>
+
+    <para>This chapter briefly explains what <acronym>REST</acronym> is, and
+    why you might want to use it. It then explains how the <emphasis>xhtml
+    viewer</emphasis> exposes your domain model using
+    <acronym>REST</acronym>.</para>
+
+    <sect1>
+      <title>Introducing REST</title>
+
+      <para>Web services were introduced as a means for different computer
+      systems to interact by network even though they may be implemented in
+      different technologies and with different implied domain models.
+      <acronym>SOAP</acronym> is probably the best well-known protocol for
+      doing this, though there have been others. These days there is a whole
+      bunch of specifications over and above those for SOAP; together these
+      are typically called <acronym>WS-*</acronym>.</para>
+
+      <para>Whatever; what characterizes the <acronym>WS-*</acronym>
+      implementations is that they expose only a single endpoint to be
+      invoked; in effect just another way of doing a remote procedure call.
+      Put another way, <acronym>WS-*</acronym> -style web services provide an
+      for a verb - "do this for me". In fact, this <acronym>RPC</acronym>
+      endpoint usually accepts many different message types, and uses some
+      sort of dispatcher to route the message so it can be processed
+      correctly.</para>
+
+      <para><acronym>REST</acronym> (standing for <ulink
+      url="http://en.wikipedia.org/wiki/Representational_State_Transfer"><emphasis>REpresentational
+      State Transfer</emphasis></ulink>) in contrast is a style of designing
+      web services that is modelled on the human web sites. Rather than expose
+      a single endpoint, it exposes multiple endpoints. And these endpoints
+      don't represent verbs, they represent things (or nouns). But
+      <acronym>REST</acronym> goes further than this, because it also
+      restricts what we can do with those resources to the standard
+      <acronym>HTTP</acronym> verbs: <acronym>GET</acronym> (read),
+      <acronym>PUT</acronym> (update), <acronym>DELETE</acronym> (er, delete)
+      and <acronym>POST</acronym> (invoke, or change in some way). The first
+      three of these are idempotent (can be invoked multiple times with no
+      side effects). This is an important characteristic for building scalable
+      systems, and is not one that the <acronym>RPC</acronym> approach towards
+      web services supports at all well.</para>
+
+      <para>What happens if we perform an <acronym>HTTP</acronym>
+      <acronym>GET</acronym> on a resource? Well, we get a representation of
+      that resource. <acronym>REST</acronym> doesn't mandate what that
+      representation is, but typical choices are <acronym>JSON</acronym>,
+      <acronym>XHTML</acronym> or a custom <acronym>XML</acronym> dialect.
+      However, what <acronym>REST</acronym> does emphasise is that these
+      resources should be linked together, again analogous to the way that the
+      human web works with hyperlinks.</para>
+
+      <para>So <acronym>REST</acronym> is much more closely associated with
+      the web - and <acronym>HTTP</acronym> in particular - than
+      <acronym>WS-*</acronym> -style web services ever were. But - so the
+      thinking goes - the vast majority of web services are deployed over the
+      web, so why disregard the web's semantics?</para>
+
+      <para>For much more on the design principles and philosophy behind
+      <acronym>REST</acronym>, you might want to read Richardson &amp; Ruby's
+      <ulink url="http://oreilly.com/catalog/9780596529260">RESTful Web
+      Services</ulink>.</para>
+    </sect1>
+
+    <sect1 id="sec.IntroducingRestfulObjects">
+      <title>Introducing the Restful Viewer</title>
+
+      <para>As already stated, the <emphasis>Isis</emphasis>' <emphasis>xhtml
+      viewer</emphasis> automatically exposes a domain model using
+      <acronym>REST</acronym>. That is, the resources are the actual domain
+      objects, or - in some cases - a class member of one of those objects.
+      The following table shows the resources exposed:</para>
+
+      <table>
+        <title>Verbs by Resources</title>
+
+        <tgroup cols="5">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="center">Verb \ Resource</entry>
+
+              <entry align="center">Object</entry>
+
+              <entry align="center">Property</entry>
+
+              <entry align="center">Collection</entry>
+
+              <entry align="center">Action</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>GET</entry>
+
+              <entry>current state of all properties</entry>
+
+              <entry>n/a</entry>
+
+              <entry>current contents</entry>
+
+              <entry>n/a</entry>
+            </row>
+
+            <row>
+              <entry>PUT</entry>
+
+              <entry>create</entry>
+
+              <entry>set</entry>
+
+              <entry>add to</entry>
+
+              <entry>n/a</entry>
+            </row>
+
+            <row>
+              <entry>DELETE</entry>
+
+              <entry>remove</entry>
+
+              <entry>clear</entry>
+
+              <entry>remove from</entry>
+
+              <entry>n/a</entry>
+            </row>
+
+            <row>
+              <entry>POST</entry>
+
+              <entry>n/a</entry>
+
+              <entry>n/a</entry>
+
+              <entry>n/a</entry>
+
+              <entry>invoke</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The <emphasis>xhtml viewer</emphasis> exposes a
+      <acronym>URL</acronym> for each of the columns. So, for example:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>a <classname>Customer</classname> instance id=12345 might be
+          exposed as <uri>http://localhost:8080/object/CUS|12345</uri>, where
+          "CUS|12345" is the (string representation of) the internal Naked
+          Objects object identifier (or <acronym>Oid</acronym>) that uniquely
+          identifies the domain object. Performing a <acronym>GET</acronym> on
+          this would list all of the properties of the
+          <classname>Customer</classname>.</para>
+        </listitem>
+
+        <listitem>
+          <para>the <varname>orders</varname> collection for this same
+          <classname>Customer</classname> would be exposed as
+          <uri>http://localhost:8080/object/CUS|12345/collection/orders</uri>.
+          Performing a <acronym>GET</acronym> on this would list (links to)
+          the contents of the collection.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>So much for interacting with the resources, but what of their
+      representation? Well, (following the suggestion in Richardson &amp;
+      Ruby's book) the <emphasis>xhtml viewer </emphasis>renders the domain
+      objects using <acronym>XHTML</acronym>. This gives us a natural way to
+      express links between resources: we just use hyperlinks using the
+      <sgmltag>&lt;a href="..."/&gt;</sgmltag> tag. It also means that we can
+      inspect the domain objects from an web browser. For example, here's
+      Firefox displaying the resource representing an
+      <classname>EmployeeRepository</classname> (part of of the example claims
+      application, in trunk/examples/claims):</para>
+
+      <screenshot>
+        <screeninfo>OID / Naked Object / pojo relationship and
+        maps</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/resource-example.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>In fact, the <emphasis>xhtml viewer </emphasis>also serves up a
+      smidgeon of Javascript as well, to allow the web browser to perform
+      <acronym>PUT</acronym> and <acronym>DELETE</acronym> as well as the
+      usual <acronym>GET</acronym> and <acronym>POST</acronym>. This won't be
+      needed by your own custom written web apps, of course. (It also won't be
+      needed once <acronym>XHTML</acronym> 5 - with its support for these
+      additional <acronym>HTTP</acronym> verbs - becomes mainstream).</para>
+
+      <para>In case you're interested, behind the scenes the <emphasis>xhtml
+      viewer</emphasis> is implemented using <ulink
+      url="http://jboss.org/resteasy">JBoss RestEasy</ulink> (licensed under
+      Apache License v2, the same as <emphasis>Isis</emphasis> itself).</para>
+    </sect1>
+
+    <sect1>
+      <title>Limitations of REST</title>
+
+      <para>Because <acronym>REST</acronym> is newer than the original
+      <acronym>WS-*</acronym>-style services, it currently lacks some
+      supporting features. For example, some of the supporting
+      <acronym>WS-*</acronym> specifications deal with such things as security
+      credentials and transaction propagation. At the time of writing
+      <acronym>REST</acronym> is yet to gain these sorts of additional
+      support. That said, the <emphasis>xhtml viewer</emphasis> provides some
+      basic support for security. This is discussed in the chapters that
+      follow.</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title id="chp.Prototyping">Using the QuickStart Archetype and the XHTML
+    Viewer</title>
+
+    <abstract>
+      <para>How to get started prototyping with <emphasis>xhtml
+      viewer.</emphasis></para>
+    </abstract>
+
+    <para>The easiest way to get started is to run the
+    <emphasis>Isis</emphasis> quickstart archetype (eg as documented on
+    <emphasis>Isis</emphasis>' website). Once you've done this, you'll end up
+    with an set of modules that allow the application to be booted using the
+    <emphasis>xhtml viewer</emphasis>. It includes the following
+    modules:</para>
+
+    <programlisting>myapp/pom.xml
+    myapp-dom/pom.xml             # domain object model
+    myapp-fixture/pom.xml         # fixtures for seeding object store
+    myapp-objstore-dflt/pom.xml   # repository implementations for the default object store
+    myapp-quickrun/pom.xml        # run the application during development/prototyping
+    myapp-viewer-restful/pom.xml  # run the application as a webapp using the xhtml viewer</programlisting>
+
+    <para>where 'myapp' is the artifactId specified when you ran the <code>mvn
+    archetype:generate</code> goal.</para>
+
+    <para>This chapter describes in more detail the contents of these modules,
+    and then describes how to get started with running the <emphasis>xhtml
+    viewer</emphasis> for prototyping purposes.</para>
+
+    <sect1 id="sec.ParentModule">
+      <title>Understanding the Generated Modules</title>
+
+      <para>Before we run the application, let's look at the modules generated
+      for us by the archetype.</para>
+
+      <sect2>
+        <title>The Parent Module</title>
+
+        <para>The parent module includes as an import a reference to the
+        Apache Isis <emphasis>release</emphasis> artifact
+        <package>[oai:release]</package>:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
+  &lt;dependencies&gt;
+
+    &lt;!-- Apache Isis --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
+      &lt;artifactId&gt;release&lt;/artifactId&gt;
+      &lt;version&gt;x.x.x&lt;/version&gt;
+      &lt;type&gt;pom&lt;/type&gt;
+      &lt;scope&gt;import&lt;/scope&gt;
+    &lt;/dependency&gt;
+    ...
+
+  &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</programlisting>
+
+        <para>where <emphasis>x.x.x</emphasis> is the version of
+        <emphasis>Isis</emphasis> that you are using. The <code>scope</code>
+        of <emphasis>import</emphasis> means that all
+        <code>&lt;properties&gt;</code> of this artifact are imported, and any
+        <code>&lt;dependencyManagement&gt;/&lt;dependencies&gt;</code> are
+        imported also.</para>
+
+        <para>If you locate the <acronym>POM</acronym> for this artifact (eg
+        by looking in <filename>~/.m2/repository</filename>) then you'll see
+        that it defines:</para>
+
+        <programlisting>&lt;properties&gt;
+    &lt;isis.viewer-restful.version&gt;y.y.y&lt;/isis.viewer-restful.version&gt;
+    ....
+&lt;/properties&gt;</programlisting>
+
+        <para>where y.y.y is the corresponding version of the xhtml
+        viewer.</para>
+
+        <note>
+          <para>At the time of writing the version of Isis
+          <emphasis>core</emphasis> (x.x.x) and the version of <emphasis>xhtml
+          viewer</emphasis> (y.y.y) have been the same. This may not always
+          remain the case (just as Maven's plugins are versioned separately
+          from Maven itself).</para>
+        </note>
+
+        <para>In the <emphasis>release</emphasis> artifact's
+        <code>&lt;dependencyManagement&gt;</code> section you'll also find the
+        following:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
+  &lt;dependencies&gt;
+    ...
+    &lt;!-- viewer: restful --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+      &lt;artifactId&gt;restful&lt;/artifactId&gt;
+      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+      &lt;artifactId&gt;restful-applib&lt;/artifactId&gt;
+      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+      &lt;artifactId&gt;restful-viewer&lt;/artifactId&gt;
+      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    ...
+  &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</programlisting>
+
+        <para>The <package>[oai.viewer:restful]</package> module is the parent
+        for <emphasis>xhtml viewer</emphasis>
+        (<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>). That means that
+        it doesn't provide any Java classesper se. The <emphasis>xhtml
+        viewer</emphasis> module
+        <package>[oai.viewer.restful:viewer]</package> on the other hand does
+        provide a <acronym>JAR</acronym> artifact, being the main
+        implementation of the viewer. The <emphasis>restful applib</emphasis>
+        module <package>[oai.viewer.restful:applib]</package> meanwhile is
+        used for writing client-side applications that use an exposed Isis
+        module, the topic of <xref
+        linkend="chp.WritingClientSideApps" />.</para>
+      </sect2>
+
+      <sect2 id="sec.TheQuickRunModule">
+        <title>The QuickRun Module</title>
+
+        <para>First, the <emphasis>quickrun</emphasis> module's parent is the
+        parent module of the previous section, so all of the definitions in
+        the parent <acronym>POM</acronym> are inherited. Delving further, If
+        you look at the <classname>&lt;dependencies&gt;</classname> for the
+        generated quickrun module, then you'll see a dependency on the
+        <emphasis>xhtml viewer</emphasis>'s <emphasis>viewer</emphasis>
+        module:</para>
+
+        <programlisting>&lt;dependencies&gt;
+  ...
+  &lt;!-- viewer: restful --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
+    &lt;artifactId&gt;restful-viewer&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+    ...
+&lt;/dependencyManagement&gt;</programlisting>
+
+        <para>It also includes a <classname>&lt;profile&gt;</classname> to
+        allow the application to be run as a standalone JAR, with an embedded
+        Jetty viewer.</para>
+
+        <programlisting>&lt;profiles&gt;
+  ...
+  &lt;profile&gt;
+    &lt;!-- prereqs: mvn package --&gt;
+    &lt;!-- mvn antrun:run -D exec=restful --&gt;
+    &lt;id&gt;exec-restful&lt;/id&gt;
+    &lt;activation&gt;
+      &lt;property&gt;
+        &lt;name&gt;exec&lt;/name&gt;
+        &lt;value&gt;restful&lt;/value&gt;
+      &lt;/property&gt;
+    &lt;/activation&gt;
+    ...
+  &lt;/profile&gt;
+  ...
+&lt;/profiles&gt;</programlisting>
+
+        <para>This profile defines a goal for the antrun plugin to execute the
+        generated <acronym>JAR</acronym><footnote>
+            <para>The generated JAR uses the maven-shade-plugin to package up
+            all dependencies.</para>
+          </footnote> from the command line using:</para>
+
+        <para><programlisting>java -jar xxx.jar -type exploration -viewer org.apache.isis.viewer.restful.viewer.embedded.RestfulViewerInstaller</programlisting></para>
+
+        <para>The installer specified by the <code>-viewer</code> flag acts as
+        a bridge to the embedded Jetty viewer.</para>
+
+        <para>Taking all the above together, it allows us to run the
+        application from the command line if we wish (discussed further in
+        <xref linkend="sec.RunningFromTheQuickRunModule" />). Moreover, the
+        generated <acronym>JAR</acronym> is built using the <ulink
+        url="http://maven.apache.org/plugins/maven-shade-plugin/">Maven shade
+        plugin</ulink>, so that it also packages up all dependencies. This
+        means that you can distribute this <acronym>JAR</acronym> - eg to your
+        project's stakeholders for review - as a self-contained entity.</para>
+
+        <para>Finally, the <emphasis>quickrun</emphasis> module also includes
+        a <filename>.launch</filename> configuration (in
+        <filename>ide/eclipse/launch</filename>) which lets us run the
+        application from within the Eclipse <acronym>IDE</acronym>. This is
+        equivalent to the <acronym>POM</acronym> profile described
+        above.</para>
+      </sect2>
+
+      <sect2 id="sec.TheViewerRestfulModule">
+        <title>The Viewer-Restful Module</title>
+
+        <para>Although the <emphasis>quickrun</emphasis> module is convenient
+        for prototyping, it isn't intended for runtime deployment. Instead,
+        you'll want a module that follows the webapp conventions and generates
+        a <acronym>WAR</acronym> file. This is the point of the generated
+        <emphasis>viewer-restful</emphasis> module.</para>
+
+        <para>Like the <emphasis>quickrun</emphasis> module, the
+        <emphasis>viewer-restful</emphasis> module inherits from the parent
+        module and so inherits the various definitions of the parent module.
+        And, not surprisingly, its <code>&lt;dependencies&gt;</code> section
+        includes a reference to the
+        <package>[oai.viewer.restful:viewer]</package> module.</para>
+
+        <para>More significantly, the <emphasis>viewer-restful</emphasis> has
+        the standard directory structure for a webapp, with
+        <filename>src/main/webapp/WEB-INF</filename> holding the
+        <filename>web.xml</filename> along with <emphasis>Isis</emphasis>' own
+        configuration files (<filename>isis.properties</filename> and
+        others).</para>
+
+        <para>The following sections look at the <filename>web.xml</filename>
+        in more detail</para>
+
+        <sect3>
+          <title>JAX-RS Configuration</title>
+
+          <para>The <filename>web.xml</filename> defines the following context
+          parameter:</para>
+
+          <programlisting>&lt;context-param&gt;
+  &lt;param-name&gt;javax.ws.rs.Application&lt;/param-name&gt;
+  &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.RestfulApplication&lt;/param-value&gt;
+&lt;/context-param&gt;</programlisting>
+
+          <para>This is used by <emphasis>RestEasy</emphasis> (the underlying
+          <acronym>JAX-RS</acronym> reference implementation) to define the
+          resources to be exposed. (These resources are discussed further in
+          <xref linkend="chp.Resources" />). <emphasis>RestEasy</emphasis>
+          itself is loaded through a context listener:</para>
+
+          <programlisting>&lt;listener&gt;
+  &lt;listener-class&gt;org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap&lt;/listener-class&gt;
+&lt;/listener&gt;</programlisting>
+
+          <para><emphasis>RestEasy</emphasis> also requires that its servlet
+          is registered:<programlisting>&lt;servlet&gt;
+  &lt;servlet-name&gt;RestEasy&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+...
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;RestEasy&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</programlisting></para>
+        </sect3>
+
+        <sect3>
+          <title>Isis Session handling (using the <emphasis>Default
+          Runtime</emphasis>)</title>
+
+          <para>An <emphasis>Isis</emphasis> session is required in order for
+          the <emphasis>xhtml viewer</emphasis> to interact with the
+          <emphasis>Isis</emphasis> runtime and interrogate the
+          metamodel/retrieve domain objects.</para>
+
+          <para>The first part of the required configuration is to set up an
+          <emphasis>Isis</emphasis> "context"; basically a set of factories
+          that are used to create a session for each subsequent request. This
+          is done using a context listener (defined in the <emphasis>default
+          runtime</emphasis>,
+          <package>[oai.runtimes.dflt:webapp]</package>):</para>
+
+          <programlisting>&lt;listener&gt;
+  &lt;listener-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper&lt;/listener-class&gt;
+&lt;/listener&gt;</programlisting>
+
+          <para>The session is created for each request using the
+          <classname>IsisSessionFilter</classname>:</para>
+
+          <programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
+    &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;
+...
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;</programlisting>
+
+          <para>Note the <code>&lt;init-param&gt;</code> for the filter, which
+          defines a strategy for obtaining the authenticationSession (that is,
+          the user's credentials). In the architect specifies a strategy
+          whereby the caller is effectively trusted. However, other strategies
+          can be plugged in as required. This is discussed further in <xref
+          linkend="chp.DeployingRestfulObjectsWebapps" />.</para>
+        </sect3>
+
+        <sect3>
+          <title>Resources</title>
+
+          <para>Finally, the <filename>web.xml</filename> also declares a
+          servlet and a filter which are used for serving up and caching
+          certain supporting resources, most notably Javascript. The
+          Javascript is referenced by the generated <acronym>XHTML</acronym>
+          resources, and allow the web browser to submit RESTful requests
+          using HTTP PUT and HTTP DELETE (as well as the usual HTTP GET and
+          HTTP POST).</para>
+
+          <para>The <classname>ResourceServlet</classname> (defined by
+          <package>[oai.core:webapp]</package>) is used serve up static
+          content from either the classpath or file:</para>
+
+          <programlisting>&lt;servlet&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.apache.isis.core.webapp.content.ResourceServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+...
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;*.gif&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Resource&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;*.png&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</programlisting>
+
+          <para>The <classname>ResourceCachingFilter</classname> (also defined
+          by <package>[oai.core:webapp]</package>) is used to decorate any
+          static resources (Javascript, CSS or images) so that they are cached
+          client-side:</para>
+
+          <programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.apache.isis.core.webapp.content.ResourceCachingFilter&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;CacheTime&lt;/param-name&gt;
+    &lt;param-value&gt;86400&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;
+...
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.css&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.jpg&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.png&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;ResourceCachingFilter&lt;/filter-name&gt;
+  &lt;url-pattern&gt;*.gif&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;</programlisting>
+        </sect3>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Running the Viewer</title>
+
+      <para>The viewer can be run in a number of ways.</para>
+
+      <sect2 id="sec.RunningFromTheQuickRunModule">
+        <title>Running from the QuickRun Module</title>
+
+        <para>To run the viewer in a prototyping mode (that is, using the
+        standalone <acronym>JAR</acronym> and embedded Jetty webserver), you
+        can either:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>run from the command-line using Maven:</para>
+
+            <programlisting>cd viewer-restful
+mvn antrun:run -D exec=restful</programlisting>
+          </listitem>
+
+          <listitem>
+            <para>import into your <acronym>IDE</acronym> and use its in-built
+            support for running Maven goals, and run the above-mentioned
+            goal</para>
+
+            <para>In the case of Eclipse, this support is provided through the
+            <emphasis>m2eclipse</emphasis> plugin.</para>
+          </listitem>
+
+          <listitem>
+            <para>import into the Eclipse <acronym>IDE</acronym> and run using
+            the <filename>.launch</filename> configuration</para>
+
+            <para>Navigate to the <emphasis>quickrun</emphasis> module's
+            <filename>ide/eclipse/launch</filename> directory, select the
+            <filename>quickstart-quickrun-restful.launch</filename>
+            configuration, and use Run &gt; Run As &gt;
+            quickstart-quickrun-restful to launch in regular mode (or Debug
+            &gt; Debug As &gt; quickstart-quickrun-restful to launch in debug
+            mode).</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2>
+        <title>Running from the Viewer-Restful Module</title>
+
+        <para>To run the viewer as a webapp (that is, by hosting the
+        <acronym>WAR</acronym> in an separate instance of a Jetty web server),
+        you can either:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>run from the command-line using Maven:</para>
+
+            <programlisting>cd viewer-restful
+mvn jetty:run</programlisting>
+          </listitem>
+
+          <listitem>
+            <para>import into your <acronym>IDE</acronym> and use its in-built
+            support for running Maven goals, and run the above-mentioned
+            goal</para>
+
+            <para>In the case of Eclipse, this support is provided through the
+            <emphasis>m2eclipse</emphasis> plugin.</para>
+          </listitem>
+
+          <listitem>
+            <para>import into the Eclipse <acronym>IDE</acronym> and run using
+            the <filename>.launch</filename> configuration</para>
+
+            <para>Navigate to the <emphasis>viewer-restful</emphasis> module's
+            <filename>ide/eclipse/launch</filename> directory, select the
+            <filename>quickstart-viewer-restful.launch</filename>
+            configuration, and use Run &gt; Run As &gt;
+            quickstart-viewer-restful to launch in regular mode (or Debug &gt;
+            Debug As &gt; quickstart-viewer-restful to launch in debug
+            mode).</para>
+
+            <note>
+              <para>It's confusing perhaps, but this isn't quite the same as
+              running from the quickrun module: this launch configuration runs
+              the <classname>oai.WebServer</classname> utility class provided
+              by <emphasis>Isis</emphasis> which simply runs up the webapp
+              defined by <filename>web.xml</filename>. The quickrun module, on
+              the other hand, uses the special bridge class discussed in <xref
+              linkend="sec.TheQuickRunModule" />.</para>
+            </note>
+          </listitem>
+
+          <listitem>
+            <para>import into your <acronym>IDE</acronym> and use your
+            <acronym>IDE</acronym>'s native support for running
+            webapps.</para>
+
+            <para>In the case of Eclipse, this is its <acronym>WTP</acronym>
+            support (in the enterprise editions).</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Testing the Viewer</title>
+
+      <para>The point of xhtml viewer is to allow the domain objects to be
+      interacted with programmatically through <acronym>HTTP</acronym>, which
+      implies writing a custom client that submits the relevant
+      <acronym>HTTP</acronym> requests. Indeed, this is the topic of <xref
+      linkend="chp.WritingClientSideApps" />.</para>
+
+      <para>However, it is also useful to be able to browse the resources
+      directly, and because they are exposed using XHTML, this is possible to
+      do using a web browser. Therefore, boot up Firefox and browse to <ulink
+      url="http://localhost:8080">http://localhost:8080</ulink>. You should
+      either immediately be connected to the site, or see a link to the
+      context where the site is hosted.</para>
+
+      <note>
+        <para>Firefox is currently the only supported web browser for testing
+        in this way.</para>
+      </note>
+
+      <para>From the site, you should see links to access the services; these
+      are (representations of) the registered services (typically
+      repositories) in <filename>isis.properties</filename> configuration
+      file.</para>
+
+      <para>These structure of the resources is discussed further in <xref
+      linkend="chp.Resources" />.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.Resources">
+    <title>Resources</title>
+
+    <abstract>
+      <para>A walk-through of the resources exposed by the xhtml viewer, and
+      how they are linked together.</para>
+    </abstract>
+
+    <para>Understanding how to interact with resources and how to interpret
+    their representations is central to the <acronym>REST</acronym>ful
+    approach. This chapter describes in detail the resources that are
+    available; in effect, the <acronym>API</acronym> for using domain objects
+    exposed using the <emphasis>xhtml viewer</emphasis>.</para>
+
+    <para>In order to invoke a <acronym>HTTP</acronym> method on a resource,
+    the <acronym>URL</acronym> must be constructed correctly. After that, the
+    client code then needs to handle the response.</para>
+
+    <para>Each of the resources is defined as interfaces annotated using
+    <classname>javax.ws.rs</classname> (<acronym>JAX-RS</acronym>)
+    annotations. <acronym>JAX-RS</acronym> is the Java <acronym>API</acronym>
+    for Restful Web Services, part of Java EE 6. Its annotations are used by
+    <acronym>JAX-RS</acronym> libraries such as <emphasis>RestEasy</emphasis>,
+    or <ulink url="https://jersey.dev.java.net/">Jersey</ulink> (the latter is
+    the reference implementation). These libraries expose the resources as
+    endpoints and route requests through to server-side methods (implemented
+    by the <emphasis>xhtml viewer</emphasis>).</para>
+
+    <para>As such, we can use these interfaces as a way of describing the
+    resources provided by the <emphasis>xhtml viewer</emphasis>. Let's go
+    through each in turn.</para>
+
+    <sect1 id="sec.HomePageResource">
+      <title>HomePageResource</title>
+
+      <para>To start with, we have
+      <classname>HomePageResource</classname>:</para>
+
+      <programlisting>import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+
+public interface HomePageResource {
+
+    @GET
+    @Produces( {"application/xhtml+xml", "text/html"} )
+    public String resources();
+}</programlisting>
+
+      <para>Because there is no <classname>@javax.ws.rs.Path</classname>
+      annotation, this in effect says that the root URL "/" (eg <ulink
+      url="http://localhost:8080/">http://localhost:8080/</ulink>) is a valid
+      resource. What you'll get back is an <acronym>XHTML</acronym> page that
+      identifies the current user (in exploration mode this is always
+      hard-coded), and then lists the resources available: the services (ie
+      repositories), the specifications (metamodel), and details on the
+      current user.</para>
+
+      <screenshot>
+        <screeninfo>Home Page Resource</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/home-page-resource.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>These blocks are always present on every page.</para>
+
+      <para>Meanwhile the raw <acronym>XHTML</acronym> - what your client code
+      must parse - looks something like:</para>
+
+      <programlisting>&lt;?xml version="1.0"?&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Home Page&lt;/title&gt;&lt;/head&gt;
+  &lt;body id="body"&gt;
+    &lt;div&gt;
+      &lt;p&gt;Logged in as&lt;/p&gt;
+      &lt;ul class="isis-session"&gt;
+        &lt;li&gt;&lt;a href="/user" rel="user" rev="resource" class="isis-user"&gt;sven&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class="isis-section"&gt;
+      &lt;p class="isis-section"&gt;Resources&lt;/p&gt;
+      &lt;ul class="isis-resources"&gt;
+        &lt;li&gt;
+          &lt;a href="/services" rel="services" rev="resources" class="isis-resource"&gt;
+            Services
+          &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;a href="/specs" rel="specs" rev="resources" class="isis-resource"&gt;
+            Specifications (MetaModel)
+          &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;a href="/user" rel="user" rev="resources" class="isis-resource"&gt;
+            User (Security)
+          &lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+      <para>Note the use of <varname>class</varname> attributes to distinguish
+      the different types of properties. For example, the XPath expression
+      <emphasis>//a[@class='isis-resource']/@href</emphasis> will return the
+      links to all resources available. One of these -
+      <emphasis>/services</emphasis> - is the list of services, so lets look
+      at that next.</para>
+
+      <para><note>
+          <para>Depending on feedback, the format of the
+          <acronym>XHTML</acronym> may evolve in the future, eg to add in
+          further class attributes.</para>
+        </note></para>
+    </sect1>
+
+    <sect1>
+      <title>Services Resource</title>
+
+      <para>The <emphasis>/services</emphasis> link indicated in <xref
+      linkend="sec.HomePageResource" /> corresponds to the
+      <classname>ServicesResource</classname>:</para>
+
+      <programlisting>import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+public interface ServicesResource {
+
+  @GET
+  @Produces( {"application/xhtml+xml", "text/html"} )
+  @Path("/")
+  public String services();
+}</programlisting>
+
+      <para>The implementation of this interface in the <emphasis>xhtml
+      viewer</emphasis> (<classname>ServicesResourceImpl</classname>) also
+      defines a <code>@Path("/services")</code> for the class as a whole. This
+      therefore defines a <acronym>URL</acronym> in the form
+      <emphasis>/services</emphasis> supporting the <acronym>GET</acronym>
+      method.</para>
+
+      <note>
+        <para>It would be preferable, perhaps, for the
+        <code>@Path("/services")</code> annotation should reside on the
+        interface, not the implementation. This does not seem to be the way
+        that <emphasis>RestEasy</emphasis>, the underlying library used by the
+        <emphasis>xhtml viewer</emphasis>, works, however.</para>
+      </note>
+
+      <para>Here's the resource that's returned, as shown in a browser:</para>
+
+      <para><screenshot>
+          <screeninfo>Services Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/services-resource.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>The first two sections are the same; what's new is the
+      list of services, corresponding to the registered services in
+      <filename>isis.properties</filename>. The <acronym>XHTML</acronym> for
+      this is:</para>
+
+      <programlisting>&lt;?xml version="1.0"?&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Services&lt;/title&gt;&lt;/head&gt;
+  &lt;body id="body"&gt;
+    ...
+    &lt;div class="isis-section"&gt;
+      &lt;p class="isis-section"&gt;Services&lt;/p&gt;
+      &lt;ul class="isis-services"&gt;
+        &lt;li&gt;
+          &lt;a href="/object/OID:1" rel="service" rev="services" class="isis-service"&gt;
+            Employees
+          &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;a href="/object/OID:2" rel="service" rev="services" class="isis-service"&gt;
+            Claims
+          &lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+      <para>Again, we can use XPath to pull back the resources:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>//a[@class='isis-service']/@href</emphasis> will
+          return the hyperlinks to the object resources representing these
+          services, in the form <emphasis>/object/OID</emphasis>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>And let's look at object resources next.</para>
+    </sect1>
+
+    <sect1>
+      <title>Object Resource</title>
+
+      <para>The <emphasis>/object</emphasis> link indicated above corresponds
+      to the <classname>ObjectResource</classname> interface. This defines the
+      set of interactions described in <xref
+      linkend="sec.IntroducingRestfulObjects" />:</para>
+
+      <programlisting>import java.io.InputStream;
+
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
+public interface ObjectResource {
+
+  ...
+}</programlisting>
+
+      <para>The implementation of this interface in the <emphasis>xhtml
+      viewer</emphasis> (<classname>ObjectResourceImpl</classname>) also
+      defines a <code>@Path("/object")</code> for the class as a whole. All
+      <acronym>URL</acronym> paths are therefore prefixed
+      <emphasis>/object/{oid}</emphasis>.</para>
+
+      <note>
+        <para>Again, it would be preferable if the <code>@Path</code>
+        annotation resided on the interface, not the implementation. This does
+        not seem to be the way that <emphasis>RestEasy</emphasis> works,
+        however.</para>
+      </note>
+
+      <para>Let's break it down into sections, starting with the
+      object.</para>
+
+      <sect2>
+        <title>Objects</title>
+
+        <para>The <emphasis>/objects/OID</emphasis> resource corresponds to
+        the <classname>ObjectResource</classname> interface:</para>
+
+        <programlisting>...
+
+public interface ObjectResource {
+
+  @GET
+  @Path("/{oid}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String object(
+    @PathParam("oid") final String oidStr);
+
+  ...
+}</programlisting>
+
+        <para>This defines <emphasis>/object/{oid}</emphasis> as a
+        <acronym>URL</acronym> supporting <acronym>GET</acronym>. Here's what
+        calling this method gives for a repository object:</para>
+
+        <para><screenshot>
+            <screeninfo>ClaimRepository Resource</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/object-claims-resource.png"
+                           scale="40" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>As ever, we get the initial "logged in" and "resources"
+        sections. The remaining sections are details about this object,
+        providing its title, the properties, the list of collections and then
+        the actions. For repositories, the only items of significance here are
+        the actions.</para>
+
+        <para>Let's also look at a typical domain object:</para>
+
+        <screenshot>
+          <screeninfo>Claim Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/object-claim-resource.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The structure is the same, but here there are properties and
+        collections, as well as actions. Let's look at the
+        <acronym>XHTML</acronym> that represents this domain object, starting
+        with the title:</para>
+
+        <screenshot>
+          <screeninfo>Object Resource's Title section</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/object-claim-title-section.png"
+                         scale="70" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <emphasis>XHTML</emphasis> looks like:</para>
+
+        <programlisting>&lt;div&gt;
+  &lt;table border="1"&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Object title&lt;/td&gt;
+      &lt;td class="isis-title"&gt;
+        &lt;p&gt;New - 2009-11-28&lt;/p&gt;
+     &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OID&lt;/td&gt;
+      &lt;td class="isis-oid"&gt;
+        &lt;a href="/object/OID:C" rel="object" rev="object" class="isis-oid"&gt;
+          OID:C
+        &lt;/a&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Specification&lt;/td&gt;
+      &lt;td class="isis-specification"&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" 
+           rel="spec" rev="object" class="isis-specification"&gt;
+          org.apache.isis.examples.claims.dom.claim.Claim
+        &lt;/a&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Some useful XPath expressions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//td[@class='isis-title']/p/text()</emphasis> will
+            return the title</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//td[@class='isis-oid']/a/text()</emphasis> is the
+            OID (as a string)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//td[@class='isis-specification']/a/@href</emphasis>
+            is a link the (resource repreenting the) specification of this
+            object, in the form
+            <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Next up is the properties section:</para>
+
+        <screenshot>
+          <screeninfo>Object Resource's Properties section</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/object-claim-properties-section.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> (abbreviated; just the first
+        property is listed) is:</para>
+
+        <programlisting>&lt;div class="isis-properties"&gt;
+  &lt;p class="isis-properties"&gt;Properties&lt;/p&gt;
+  &lt;table border="1"&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Type&lt;/th&gt;
+      &lt;th&gt;Hidden&lt;/th&gt;
+      &lt;th&gt;Access&lt;/th&gt;
+      &lt;th&gt;Disabled&lt;/th&gt;
+      &lt;th&gt;Disabled Reason&lt;/th&gt;
+      &lt;th&gt;Parseable&lt;/th&gt;
+      &lt;th&gt;Modify&lt;/th&gt;
+      &lt;th&gt;Clear&lt;/th&gt;
+      &lt;th&gt;Invalid Reason&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/description" 
+           rel="propertySpec" rev="property" class="isis-property"&gt;Description&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;a href="/specs/java.lang.String" rel="propertyTypeSpec" 
+           rev="property" class="isis-property"&gt;java.lang.String&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-property"&gt;Meeting at clients&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-usable"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p /&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;div class="isis-property"&gt;
+          &lt;form name="property-description"&gt;
+            &lt;input type="value" name="proposedValue" /&gt;
+            &lt;input type="button" value="Set" 
+              onclick="modifyProperty(&amp;quot;/object/OID:C&amp;quot;,&amp;quot;description&amp;quot;,proposedValue.value);" /&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;div class="isis-property"&gt;
+          &lt;form name="property-description"&gt;
+            &lt;input type="button" value="Clear" 
+              onclick="clearProperty(&amp;quot;/object/OID:C&amp;quot;,&amp;quot;description&amp;quot;);" /&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-valid" id="property-invalid-description" /&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    ...
+  &lt;/table&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Some useful XPath expressions are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[1]/a/text()</emphasis>
+            returns the property names</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[2]/a/@href</emphasis>
+            returns links to (resources representing the) property types, in
+            the form
+            <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[3]/p/text()</emphasis>
+            returns whether properties are invisible (N=not invisible)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[4]</emphasis>
+            returns the <sgmltag>&lt;td&gt;</sgmltag> table cells containing
+            the values; the values will either be <sgmltag>&lt;p&gt;</sgmltag>
+            (values) or <sgmltag>&lt;a href=...&gt;</sgmltag>
+            (references)</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>and so on.</para>
+
+        <para>The "modify" and "clear" columns bear further description. These
+        are used to perform <acronym>PUT</acronym>s and
+        <acronym>DELETE</acronym>s on the resources that represent the
+        property. Because XHTML4 does not support <acronym>PUT</acronym> and
+        <acronym>DELETE</acronym> verbs in forms, they actually call
+        Javascript fragments to do these calls. See <xref
+        linkend="sec.Properties" /> for further details of the format of these
+        requests.</para>
+
+        <para>The values that are entered into modify for value properties is
+        the parseable text form (eg TRUE for a boolean); for reference
+        properties it is the <acronym>OID</acronym>.</para>
+
+        <para>If a property is disabled, then the "disabled reason" column
+        will indicate why. If a property is enabled but the proposed property
+        value is invalid, then the "invalid reason" will indicate why. Note
+        that it takes a round-trip to do this validation, because the domain
+        objects are not in any sense serialized into the browser.</para>
+
+        <para>Let's now look at the collections section:</para>
+
+        <screenshot>
+          <screeninfo>Object Resource's Collections section</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/object-claim-collections-section.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> is:</para>
+
+        <programlisting>&lt;div class="isis-collections"&gt;
+  &lt;p class="isis-collections"&gt;Collections&lt;/p&gt;
+  &lt;table border="1"&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Type&lt;/th&gt;
+      &lt;th&gt;Hidden&lt;/th&gt;
+      &lt;th&gt;Disabled&lt;/th&gt;
+      &lt;th&gt;Access&lt;/th&gt;
+      &lt;th&gt;AddTo&lt;/th&gt;
+      &lt;th&gt;RemoveFrom&lt;/th&gt;
+      &lt;th&gt;Invalid Reason&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/collection/items" 
+           rel="propertySpec" rev="collection" class="isis-collection"&gt;
+          Items
+        &lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.ClaimItem" 
+           rel="propertyTypeSpec" rev="property" class="isis-property"&gt;
+          org.apache.isis.examples.claims.dom.claim.ClaimItem
+        &lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-usable"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+       &lt;a href="/object/OID:C/collection/items" 
+          rel="collection" rev="nakedObject" class="isis-collection"&gt;items&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;div class="isis-collection"&gt;
+          &lt;form name="collection-items"&gt;
+            &lt;input type="value" name="proposedValue" /&gt;
+            &lt;input type="button" value="Add" 
+              onclick="addToCollection(&amp;quot;/object/OID:C&amp;quot;, &amp;quot;items&amp;quot;, proposedValue.value);" /&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;div class="isis-collection"&gt;
+          &lt;form name="collection-items"&gt;
+            &lt;input type="value" name="proposedValue" /&gt;
+            &lt;input type="button" value="Remove" 
+              onclick="removeFromCollection(&amp;quot;/object/OID:C&amp;quot;, &amp;quot;items&amp;quot;, proposedValue.value);" /&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-valid" id="collection-invalid-items" /&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>In this particular case there is only a single collection, but
+        in general there could be many.</para>
+
+        <para>Some useful XPath expressions are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-collections']//tr/td[1]/a/text()</emphasis>
+            returns the collection names</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[2]/a/@href</emphasis>
+            returns links to (resources representing the) type of the
+            collection, in the form
+            <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//tr/td[3]/p/text()</emphasis>
+            returns whether collections are invisible (N=not invisible)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-collections']//tr/td[5]/a/@href</emphasis>
+            returns a link to a resource representing the contents of the
+            collection, in the form
+            <emphasis>/object/{oid}/collection/{collectionId}</emphasis></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>and so on. Note that the table doesn't show the contents of each
+        collection, instead it gives us a link to access the contents</para>
+
+        <para>Similar to properties, the "addTo" and "removeFrom" columns are
+        used to submit <acronym>PUT</acronym> or <acronym>DELETE</acronym>s
+        against the collection resource. See <xref
+        linkend="sec.Collections" /> for more details. The arguments provided
+        are the OIDs of objects in the collection.</para>
+
+        <para>Finally, let's look at actions:</para>
+
+        <screenshot>
+          <screeninfo>Object Resource's Actions section</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/object-claim-actions-section.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> (abbreviated; just the first
+        action is listed) is:</para>
+
+        <programlisting>&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;Actions&lt;/p&gt;
+  &lt;table border="1"&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Type&lt;/th&gt;
+      &lt;th&gt;Type&lt;/th&gt;
+      &lt;th&gt;# Params&lt;/th&gt;
+      &lt;th&gt;Hidden&lt;/th&gt;
+      &lt;th&gt;Disabled&lt;/th&gt;
+      &lt;th&gt;Disabled Reason&lt;/th&gt;
+      &lt;th&gt;Real Target&lt;/th&gt;
+      &lt;th&gt;Invoke&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/action/addItem(int,double,java.lang.String)"
+           rel="actionSpec" rev="action" class="isis-action"&gt;Add Item&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-action"&gt;USER&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;a href="/specs/void" rel="actionReturnTypeSpec" rev="action" class="isis-action"&gt;void&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-action"&gt;3&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-visible"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p class="isis-usable"&gt;N&lt;/p&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p /&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;a href="/object/OID:C" rel="actionRealTarget" rev="action" class="isis-action"&gt;OID:C&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;div class="isis-action"&gt;
+          &lt;form name="action-addItem(int,double,java.lang.String)" method="POST" 
+                action="/object/OID:C/action/addItem(int,double,java.lang.String)"&gt;
+            &lt;p&gt;Days since&lt;/p&gt;
+            &lt;input type="value" name="arg0" /&gt;
+            &lt;p&gt;Amount&lt;/p&gt;
+            &lt;input type="value" name="arg1" /&gt;
+            &lt;p&gt;Description&lt;/p&gt;
+            &lt;input type="value" name="arg2" /&gt;
+            &lt;input type="submit" value="Invoke" /&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    ...
+  &lt;/table&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Some useful XPath expressions are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[1]/a/text()</emphasis>
+            returns the names of each action</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[3]/a/@href</emphasis>
+            returns links to (resources representing the) type of the returned
+            result of each action, in the form
+            <emphasis>/specs/{fullyQualifiedClassName}</emphasis></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[5]/p/text()</emphasis>
+            returns whether each action is invisible or not (N=not
+            invisible)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[8]/a/text()</emphasis>
+            returns the <acronym>OID</acronym> of the real target; more on
+            this in a moment</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions']//tr/td[9]//form</emphasis>
+            returns a form to invoke the action using
+            <acronym>POST</acronym></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>and so on. Note that the table doesn't show the contents of each
+        collection, instead it gives us a link to access the contents</para>
+
+        <para>There is no javascript calls this time; invoking actions is just
+        a <acronym>POST</acronym>. The arguments provided are the same as for
+        properties: text for parseable values, or the <acronym>OID</acronym>s
+        of objects for references.</para>
+
+        <para>The "realTarget" column is provided to support contributed
+        actions. For example, here are the actions listed for a domain object
+        (<classname>Employee</classname>) where the
+        <methodname>claimsFor()</methodname> action is contributed (by the
+        <classname>ClaimsRepository</classname>):</para>
+
+        <screenshot>
+          <screeninfo>Contributed Actions</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/object-employee-contributed-actions.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>In the <emphasis>DnD viewer</emphasis> this action would appear
+        to reside on the domain object. In reality though the action resides
+        on the repository, taking a single argument - the domain object
+        (<classname>Employee</classname>).</para>
+
+        <para>And that concludes our run-through of the <acronym>GET</acronym>
+        verb for object resources. Phew!</para>
+
+        <note>
+          <para><acronym>PUT</acronym> and <acronym>DELETE</acronym> verbs for
+          object resources have not yet been implemented.</para>
+        </note>
+      </sect2>
+
+      <sect2 id="sec.Properties">
+        <title>Properties</title>
+
+        <para>The next set of resources exposed by
+        <classname>ObjectResource</classname> are those specific to
+        properties:</para>
+
+        <programlisting>...
+public interface ObjectResource {
+  ...
+  @PUT
+  @Path("/{oid}/property/{propertyId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String modifyProperty(
+    @PathParam("oid") final String oidStr,
+    @PathParam("propertyId") final String propertyId,
+    @QueryParam("proposedValue") final String proposedValue);
+
+  @DELETE
+  @Path("/{oid}/property/{propertyId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String clearProperty(
+    @PathParam("oid") final String oidStr,
+    @PathParam("propertyId") final String propertyId);
+  ...
+}</programlisting>
+
+        <para>This defines
+        <emphasis>/object/{oid}/property/{propertyId}</emphasis> as the
+        <acronym>URL</acronym> supporting:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><acronym>PUT</acronym>, to change the value of a property;
+            the proposedValue should be a query parameter to this
+            <acronym>URL</acronym>;</para>
+          </listitem>
+
+          <listitem>
+            <para><acronym>DELETE</acronym>, to clear the property</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Calling these will first validate the change, and if accepted
+        apply the change:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If the validation fails, then an exception will be thrown.
+            This translates to a response with error code in the range [400,
+            500), and with a response header of "isis-reason".</para>
+          </listitem>
+
+          <listitem>
+            <para>If the validation succeeds, the returned
+            <acronym>XHTML</acronym> is the object's title only.</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2 id="sec.Collections">
+        <title>Collections</title>
+
+        <para>The next set of resources exposed by
+        <classname>ObjectResource</classname> are those for
+        collections:</para>
+
+        <programlisting>...
+public interface ObjectResource {
+  ...
+  @GET
+  @Path("/{oid}/collection/{collectionId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String accessCollection(
+    @PathParam("oid") final String oidStr,
+    @PathParam("collectionId") final String collectionId);
+
+  @PUT
+  @Path("/{oid}/collection/{collectionId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String addToCollection(
+    @PathParam("oid") final String oidStr,
+    @PathParam("collectionId") final String collectionId,
+    @QueryParam("proposedValue") final String proposedValueOidStr);
+
+  @DELETE
+  @Path("/{oid}/collection/{collectionId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String removeFromCollection(
+    @PathParam("oid") final String oidStr,
+    @PathParam("collectionId") final String collectionId,
+    @QueryParam("proposedValue") final String proposedValueOidStr);
+  ...
+}</programlisting>
+
+        <para>This defines
+        <emphasis>/object/{oid}/property/{collectionId}</emphasis> as a
+        <acronym>URL</acronym> supporting:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><acronym>GET</acronym>, to read the contents of this
+            collection.</para>
+          </listitem>
+
+          <listitem>
+            <para><acronym>PUT</acronym>, to add an item to the collection;
+            the proposedValue should be a query parameter to this
+            <acronym>URL</acronym> and contain an OID;</para>
+          </listitem>
+
+          <listitem>
+            <para><acronym>DELETE</acronym>, to remove an item to the
+            collection; the proposedValue should be a query parameter to this
+            <acronym>URL</acronym> and contain an OID;</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The handling of <acronym>PUT</acronym> and the
+        <acronym>DELETE</acronym> is similar to that of properties. The
+        proposed value is validated first, and if invalid then a exception is
+        thrown resulting in a response in range [400, 500) with a response
+        header of "isis-reason". Otherwise the object's title and OID are
+        returned.</para>
+
+        <note>
+          <para>We could perhaps change this to return the new contents of the
+          collection, ie as if a GET had been performed?</para>
+        </note>
+
+        <para>A <acronym>GET</acronym> meanwhile returns the following:</para>
+
+        <screenshot>
+          <screeninfo>Collection Contents</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/collection-items-resource.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> for the contents part of this
+        is:</para>
+
+        <programlisting>&lt;div class="isis-collection"&gt;
+  &lt;p class="isis-collection"&gt;items&lt;/p&gt;
+  &lt;ul class="isis-collection"&gt;
+    &lt;li&gt;
+      &lt;a href="/object/OID:D" rel="object" rev="results" class="isis-action-result"&gt;
+        Car parking
+      &lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="/object/OID:E" rel="object" rev="results" class="isis-action-result"&gt;
+        Reading - London (return)
+      &lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Useful XPath here is:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-collection']//li/a/@href</emphasis>
+            to return the links to object resources in the collection</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2 id="sec.Actions">
+        <title>Actions</title>
+
+        <para>The final set of resources exposed by
+        <classname>ObjectResource</classname> is for actions:</para>
+
+        <programlisting>...
+public interface ObjectResource {
+  ...
+  @POST
+  @Path("/{oid}/action/{actionId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String invokeAction(
+    @PathParam("oid") final String oidStr,
+    @PathParam("actionId") final String actionId, 
+    final InputStream body);
+  ...
+}</programlisting>
+
+        <para>This defines
+        <emphasis>/object/{oid}/property/{actionId}</emphasis> as a
+        <acronym>URL</acronym> supporting a POST. What's noteworthy here is
+        the last argument, an <classname>java.io.InputStream</classname>. This
+        provides a handle to the POST's input stream which contains the
+        parameter/argument pairs.</para>
+
+        <para>The parameters should be named arg0, arg1, arg2 and so on, with
+        the parameter value representing the argument. What this value is will
+        depend on whether the parameter's type is a reference (entity) type or
+        a parseable value type:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>for reference types, the value should be the (string
+            representation of the) <acronym>OID</acronym> of the entity</para>
+          </listitem>
+
+          <listitem>
+            <para>for value types, the value should be in parseable string
+            format. In practical terms, use the same string format as would
+            work in the the DnD viewer. (To be precise, it's the format
+            understood by the <classname>ParseableFacet</classname> for the
+            parameter's type)</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For example, for an action <code>findCustomers(registeredDate,
+        CustomerType)</code> then the parameters would be something
+        like:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>arg0=20090103</para>
+          </listitem>
+
+          <listitem>
+            <para>arg1=CTP|12</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>where <userinput>20090103</userinput> is 3-Jan-2009 in parseable
+        format, and <userinput>CTP|12</userinput> is the
+        <acronym>OID</acronym> (as assigned by the object store) for
+        <classname>CustomerType</classname> with ID=12.</para>
+
+        <para>When an action is invoked, the response always includes the
+        <acronym>OID</acronym> and title of the object on which the action was
+        invoked. In addition:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>if the action returned an object, then the response will
+            include a link to the object</para>
+
+            <note>
+              <para>We could perhaps change this to return the GET of the
+              returned object?</para>
+            </note>
+          </listitem>
+
+          <listitem>
+            <para>if the action returned a collection of objects, then the
+            response will return a list of links to the objects</para>
+          </listitem>
+
+          <listitem>
+            <para>if the action returned void; then nothing further is added
+            to the response</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Metamodel (specs) Resource</title>
+
+      <para>The
+      <emphasis><emphasis>/</emphasis>specs/{fullyQualifedClassName}</emphasis>
+      links indicated in several places in the representations produced by
+      <classname>ObjectResource</classname> corresponds to the
+      <classname>SpecsResource</classname>:</para>
+
+      <programlisting>import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+public interface SpecsResource {
+  ...
+}</programlisting>
+
+      <para>The implementation of this interface in <emphasis>xhtml
+      viewer</emphasis> (<classname>SpecsResourceImpl</classname>) also
+      defines a <code>@Path("/specs")</code> for the class as a whole. This
+      therefore defines a <acronym>URL</acronym> in the form
+      <emphasis>/services</emphasis> supporting the GET method.</para>
+
+      <note>
+        <para>As elsewhere, it would be preferable that the <code>@Path</code>
+        annotation should reside on the interface, not the implementation.
+        This seems to be a limitation with <emphasis>RestEasy</emphasis>, the
+        underlying library used by the <emphasis>xhtml
+        viewer</emphasis>.</para>
+      </note>
+
+      <para>The purpose of the <emphasis>/specs/</emphasis> family of
+      resources is to describe the structure of the domain objects, ie expose
+      a metamodel for the domain objects. Client-side applications might
+      choose to iterate through all the specs resources first and cache them;
+      this would then simplify the task of rendering domain objects.</para>
+
+      <para>Again, let's break the resources provided by
+      <classname>SpecsResource</classname> into sections.</para>
+
+      <sect2>
+        <title>All Classes</title>
+
+        <para>First up, we have a resource to list all classes (or
+        specs):</para>
+
+        <programlisting>import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+public interface SpecsResource {
+
+  @GET
+  @Path("/")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specs();
+
+  ...
+}</programlisting>
+
+        <para>This defines <emphasis>/specs</emphasis> as a
+        <acronym>URL</acronym> accepting <acronym>GET</acronym>. This returns
+        the following:</para>
+
+        <screenshot>
+          <screeninfo>Specs Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/specs-resource.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> produced (abbreviated)
+        is:</para>
+
+        <programlisting>&lt;div class="isis-section"&gt;
+  &lt;p class="isis-section"&gt;Specifications&lt;/p&gt;
+  &lt;ul class="isis-specifications"&gt;
+    ...
+    &lt;li&gt;
+      &lt;a href="/specs/int" rel="spec" rev="specs" 
+         class="isis-specification"&gt;int&lt;/a&gt;
+    &lt;/li&gt;
+    ...
+    &lt;li&gt;
+      &lt;a href="/specs/java.lang.String" rel="spec" rev="specs" 
+         class="isis-specification"&gt;java.lang.String&lt;/a&gt;
+    &lt;/li&gt;
+    ...
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.applib.value.Date" rel="spec" rev="specs" 
+         class="isis-specification"&gt;org.apache.isis.applib.value.Date&lt;/a&gt;
+    &lt;/li&gt;
+    ..
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" rel="spec" rev="specs" 
+         class="isis-specification"&gt;org.apache.isis.examples.claims.dom.claim.Claim&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.ClaimItem" rel="spec" rev="specs" 
+         class="isis-specification"&gt;org.apache.isis.examples.claims.dom.claim.ClaimItem&lt;/a&gt;
+    &lt;/li&gt;
+    ...
+    &lt;li&gt;
+      &lt;a href="/specs/void" rel="spec" rev="specs" 
+         class="isis-specification"&gt;void&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Useful XPath expressions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//a[@class='isis-specification']/@href</emphasis>
+            will give links to resources for all specifications</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Let's look at an individual specification next.</para>
+      </sect2>
+
+      <sect2 id="sec.spec">
+        <title>Class (<classname>ObjectSpecification</classname>)</title>
+
+        <para>The resource for a specification is:</para>
+
+        <programlisting>...
+
+public interface SpecsResource {
+  ...
+  @GET
+  @Path("/{specFullName}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String spec(
+    @PathParam("specFullName") final String specFullName);
+  ...
+}</programlisting>
+
+        <para>This defines <emphasis>/specs/{specFullName}</emphasis> as a
+        <acronym>URL</acronym> accepting <acronym>GET</acronym>. This
+        returns:</para>
+
+        <screenshot>
+          <screeninfo>Spec Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/spec-resource.png" scale="36" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> for this breaks into five
+        regions.</para>
+
+        <para>First (abbreviated) we have the facets, which define additional
+        semantics to the holder (in this case, the spec):</para>
+
+        <programlisting>&lt;div class="isis-facets"&gt;
+  &lt;p class="isis-facets"&gt;Facets&lt;/p&gt;
+  &lt;table border="1"&gt;
+     &lt;tr&gt;
+       &lt;th&gt;FacetType&lt;/th&gt;
+       &lt;th&gt;Implementation&lt;/th&gt;
+       ...
+     &lt;/tr&gt;
+     ...
+     &lt;tr&gt;
+       &lt;td&gt;
+         &lt;a href="org.apache.isis.examples.claims.dom.claim.Claim/facet/org.apache.isis.core.metamodel.facets.object.plural.PluralFacet"
+            rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.object.plural.PluralFacet&lt;/a&gt;
+       &lt;/td&gt;
+       &lt;td&gt;
+         &lt;p&gt;org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred&lt;/p&gt;
+       &lt;/td&gt;
+       ...
+     &lt;/tr&gt;
+     ...
+     &lt;tr&gt;
+       &lt;td&gt;
+         &lt;a href="org.apache.isis.claims.dom.claim.Claim/facet/org.apache.isis.core.metamodel.facets.named.NamedFacet"
+            rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.named.NamedFacet&lt;/a&gt;
+       &lt;/td&gt;
+       &lt;td&gt;
+         &lt;p&gt;org.apache.isis.core.metamodel.facets.named.NamedFacetInferred&lt;/p&gt;
+       &lt;/td&gt;
+       ...
+     &lt;/tr&gt;
+     ...
+     &lt;tr&gt;
+       &lt;td&gt;
+         &lt;a href="org.apache.isis.examples.claims.dom.claim.Claim/facet/org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet&lt;/a&gt;
+       &lt;/td&gt;
+       &lt;td&gt;
+         &lt;p&gt;org.apache.isis.core.progmodel.facets.fallback.DescribedAsFacetNone&lt;/p&gt;
+       &lt;/td&gt;
+       ...
+     &lt;/tr&gt;
+     ...
+   &lt;/table&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Many of the facets listed will not be that relevant to us, but
+        some - such as the singular name of a class
+        (<classname>NamedFacet</classname>), the plural name of a class
+        (<classname>PluralFacet</classname>) and the description of a class
+        (<classname>DescribedAsFacet</classname>) will be useful for
+        presentation purposes. It is also possible to define additional facets
+        that might be relevant to your own client-side application. For
+        example, if you were writing a mash-up <acronym>GUI</acronym> and
+        wanted to render an <classname>Address</classname> domain object
+        within a map, you might want to define a
+        <classname>MapCoordinatesFacet</classname>.</para>
+
+        <note>
+          <para>Actually, this isn't quite true; there is currently no way in
+          the <emphasis>xhtml viewer</emphasis> to evaluate a facet for a
+          particular domain object instance.</para>
+        </note>
+
+        <para>As ever, we can use XPath to pull out values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-facets']//a[.='org.apache.isis.core.metamodel.facets.object.plural.PluralFacet']/@href</emphasis>
+            will pull out the link for the <classname>PluralFacet</classname>,
+            if there is one.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Next we have the (definition of the) properties for a
+        spec:</para>
+
+        <programlisting>&lt;div class="isis-properties"&gt;
+  &lt;p class="isis-properties"&gt;Properties&lt;/p&gt;
+  &lt;ul class="isis-properties"&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/description" 
+         rel="property" rev="spec" class="isis-property"&gt;description&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/date" 
+         rel="property" rev="spec" class="isis-property"&gt;date&lt;/a&gt;
+   &lt;/li&gt;
+   ...
+  &lt;/ul&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Useful XPath queries here:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//a/text()</emphasis>
+            returns the property names</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-properties']//a/@href</emphasis>
+            returns links to the property definitions (see <xref
+            linkend="sec.SpecMembers" />)</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Similarly, we have collections:</para>
+
+        <programlisting>&lt;div class="isis-collections"&gt;
+  &lt;p class="isis-collections"&gt;Collections&lt;/p&gt;
+  &lt;ul class="isis-collections"&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/collection/items"
+         rel="collection" rev="spec" class="isis-collection"&gt;items&lt;/a&gt;
+    &lt;/li&gt;
+    ...
+  &lt;/ul&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Useful XPath queries here:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-collections']//a/text()</emphasis>
+            returns the collection names</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='sis-collections']//a/@href</emphasis>
+            returns links to the collection definitions (see <xref
+            linkend="sec.SpecMembers" />)</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Lastly, the actions. These fall into three groups: regular
+        (USER) actions, debug actions (annotated with
+        <classname>@Debug</classname>) and exploration actions (that are
+        available only in exploration mode):</para>
+
+        <programlisting>&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;USER actions&lt;/p&gt;
+  &lt;ul class="isis-actions"&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/action/addItem(int,double,java.lang.String)"
+         rel="action" rev="spec" class="isis-action"&gt;addItem(int,double,java.lang.String)&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/action/submit(org.apache.isis.examples.claims.dom.claim.Approver)"
+         rel="action" rev="spec" class="isis-action"&gt;submit(org.apache.isis.examples.claims.dom.claim.Approver)&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;DEBUG actions&lt;/p&gt;
+  &lt;ul class="isis-actions" /&gt;
+&lt;/div&gt;
+&lt;div class="isis-actions"&gt;
+  &lt;p class="isis-actions"&gt;EXPLORATION actions&lt;/p&gt;
+  &lt;ul class="isis-actions" /&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>Useful XPath queries here:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions' and p/text()='USER
+            actions']//a/@href</emphasis> returns links to the regular user
+            actions</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions' and p/text()='DEBUG
+            actions']//a/@href</emphasis> returns links to the debug
+            actions</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-actions' and
+            p/text()='EXPLORATION actions']//a/@href</emphasis> returns links
+            to the exploration actions</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2 id="sec.SpecMembers">
+        <title>Class Members (<classname>ObjectMember</classname>)</title>
+
+        <para>The next set of resources provided by SpecsResource are for the
+        individual class members (properties, collections or actions):</para>
+
+        <programlisting>...
+
+public interface SpecsResource {
+  ...
+  @GET
+  @Path("/{specFullName}/property/{propertyName}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specProperty(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("propertyName") final String propertyName);
+
+  @GET
+  @Path("/{specFullName}/collection/{collectionName}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specCollection(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("collectionName") final String collectionName);
+
+  @GET
+  @Path("/{specFullName}/action/{actionId}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specAction(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("actionId") final String actionId);
+  ...
+}</programlisting>
+
+        <para>This defines the following <acronym>URL</acronym>s all accepting
+        <acronym>GET</acronym>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/property/{propertyName}</emphasis>
+            for a resource representing a property definition</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/collection/{propertyName}</emphasis>
+            for a resource representing a collection definition</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/action/{actionId}</emphasis>
+            for a resource representing a action definition</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Each of these resources generates a similar representation,
+        listing the facets for that class member. For example, here is the
+        resource for a property spec:</para>
+
+        <screenshot>
+          <screeninfo>Spec Member Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/spec-member-resource.png" scale="33" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> (abbreviated) is:</para>
+
+        <programlisting>&lt;div&gt;
+  &lt;p&gt;Owners&lt;/p&gt;
+  &lt;ul class="isis-specification"&gt;
+    &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" rel="spec" rev="property" class="isis-specification"&gt;owning spec&lt;/a&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="isis-facets"&gt;
+  &lt;p class="isis-facets"&gt;Facets&lt;/p&gt;
+  &lt;table border="1"&gt;
+    &lt;tr&gt;
+      &lt;th&gt;FacetType&lt;/th&gt;
+      &lt;th&gt;Implementation&lt;/th&gt;
+      ...
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;a href="description/facet/org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p&gt;org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetForPropertyDerivedFromType&lt;/p&gt;
+      &lt;/td&gt;
+      ...
+    &lt;/tr&gt;
+    ...
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;a href="description/facet/org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p&gt;org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacetAnnotation&lt;/p&gt;
+      &lt;/td&gt;
+      ...
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;a href="description/facet/org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet" rel="facet" rev="spec" class="isis-facet"&gt;org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet&lt;/a&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;p&gt;org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault&lt;/p&gt;
+      &lt;/td&gt;
+      ...
+    &lt;/tr&gt;
+    ...
+  &lt;/table&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>As for specifications themselves (see <xref
+        linkend="sec.spec" />), many of the facets will not be that relevant.
+        However, <classname>NamedFacet</classname> and
+        <classname>DescribedAsFacet</classname> mentioned earlier would be,
+        for presentation purposes. In addition, for properties the
+        <classname>TypicalLengthFacet</classname> can be used as a hint for a
+        field in the <acronym>UI</acronym>, and
+        <classname>MemberOrderFacet</classname> annotation can be used to
+        indicate the order of fields in the <acronym>UI</acronym>. The
+        <classname>MandatoryFacet</classname> can be used to indicate
+        mandatory properties.</para>
+
+        <para>As ever, XPath can be used to pull out information from the
+        resource.</para>
+
+        <note>
+          <para>Although actions produce a similar output, they ought to be
+          extended to provide information on action parameters; both how many
+          parameters there are, and also facets associated with those
+          parameters.</para>
+        </note>
+      </sect2>
+
+      <sect2>
+        <title>Facets</title>
+
+        <para>A facet resource allows the value of a facet to be inspected.
+        The resources provided by <classname>SpecsResource</classname>
+        are:</para>
+
+        <programlisting>...
+
+public interface SpecsResource {
+  ...
+  @GET
+  @Path("/{specFullName}/facet/{facetType}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specFacet(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("facetType") final String facetTypeName);
+
+  @GET
+  @Path("/{specFullName}/property/{propertyName}/facet/{facetType}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specPropertyFacet(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("propertyName") final String propertyName,
+    @PathParam("facetType") final String facetTypeName);
+
+  @GET
+  @Path("/{specFullName}/collection/{collectionName}/facet/{facetType}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specCollectionFacet(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("collectionName") final String collectionName,
+    @PathParam("facetType") final String facetTypeName);
+
+  @GET
+  @Path("/{specFullName}/action/{actionId}/facet/{facetType}")
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public abstract String specActionFacet(
+    @PathParam("specFullName") final String specFullName,
+    @PathParam("actionId") final String actionId,
+    @PathParam("facetType") final String facetTypeName);
+  ...
+}</programlisting>
+
+        <para>This defines the following <acronym>URL</acronym>s all accepting
+        <acronym>GET</acronym>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/facet/{facetType}</emphasis>
+            for a facet on a spec</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/property/{propertyName}/facet/{facetType}</emphasis>
+            for a facet on a property</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/collection/{propertyName}/facet/{facetType}</emphasis>
+            for a facet on a collection</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>/specs/{specFullName}/action/{actionId}/facet/{facetType}</emphasis>
+            for a facet on an action</para>
+          </listitem>
+        </itemizedlist>
+
+        <note>
+          <para>The <emphasis>xhtml viewer</emphasis> currently does not
+          provide a resource to allow the facets of an actions parameter to be
+          queried.</para>
+        </note>
+
+        <note>
+          <para>(Mentioned elsewhere), the <emphasis>xhtml viewer</emphasis>
+          currently does not provide the ability to evaluate facets per
+          instance. Although many facets are per class, some (such as
+          <classname>TitleFacet</classname>) will vary by instance. This will
+          (presumably) need some additional resource methods (eg
+          <methodname>specActionFacetFor(...)</methodname>) that take an oid
+          as a parameter.</para>
+        </note>
+
+        <para>Each of these resources generates a similar representation,
+        evaluating a facets for its facet holder. For example, here is the
+        resource for a property spec:</para>
+
+        <screenshot>
+          <screeninfo>Spec Facet Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/spec-member-facet.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The raw <acronym>XHTML</acronym> (abbreviated) is:</para>
+
+        <programlisting>&lt;div&gt;
+  &lt;p&gt;Owners&lt;/p&gt;
+  &lt;ul class="isis-properties"&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim" rel="owning spec" 
+         rev="spec" class="facet"&gt;
+        org.apache.isis.examples.claims.dom.claim.Claim
+      &lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="/specs/org.apache.isis.examples.claims.dom.claim.Claim/property/description"
+         rel="owning property" rev="property" class="facet"&gt;
+        description
+      &lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="isis-facet-elements"&gt;
+  &lt;p class="isis-facet-elements"&gt;Facet Elements&lt;/p&gt;
+  &lt;dl class="isis-facet-elements"&gt;
+    &lt;dt&gt;class&lt;/dt&gt;
+    &lt;dd&gt;class org.apache.isis.core.progmodel.facets.properties.typicallen.fromtype.TypicalLengthFacetDerivedFromType&lt;/dd&gt;
+    &lt;dt&gt;derived&lt;/dt&gt;
+    &lt;dd&gt;false&lt;/dd&gt;
+    &lt;dt&gt;facetHolder&lt;/dt&gt;
+    &lt;dd&gt;Reference Association [name="org.apache.isis.examples.claims.dom.claim.Claim#description(), type=JavaSpecification@9c22ff[class=java.lang.String,type=Object,persistable=User Persistable,superclass=Object] ]&lt;/dd&gt;
+    &lt;dt&gt;identified&lt;/dt&gt;
+    &lt;dd&gt;Reference Association [name="org.apache.isis.examples.claims.dom.claim.Claim#description(), type=JavaSpecification@9c22ff[class=java.lang.String,type=Object,persistable=User Persistable,superclass=Object] ]&lt;/dd&gt;
+    &lt;dt&gt;noop&lt;/dt&gt;
+    &lt;dd&gt;false&lt;/dd&gt;
+    &lt;dt&gt;underlyingFacet&lt;/dt&gt;
+    &lt;dd&gt;(null)&lt;/dd&gt;
+  &lt;/dl&gt;
+&lt;/div&gt;</programlisting>
+
+        <para>This representation is created by applying a JavaBean
+        conventions on the facet (all <methodname>getXxx()</methodname> and
+        <methodname>isXxx()</methodname> methods exposed by the facet
+        itself).</para>
+
+        <note>
+          <para>We need a more general purpose mechanism to query facets. As
+          can be seen, the above doesn't actually expose the typical value of
+          the facet, because the method we want is called
+          <methodname>value()</methodname>, not
+          <methodname>getValue()</methodname>.</para>
+        </note>
+
+        <para>Some XPath queries that might be useful are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>//div[@class='isis-facet-elements']//dt[.='class']/following-sibling::dd[1]</emphasis>
+            will return the <sgmltag>&lt;dd&gt;</sgmltag> element
+            corresponding to the 'class' <sgmltag>&lt;dt&gt;</sgmltag></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>//div[@class='isis-facet-elements']//dt[.='derived']/following-sibling::dd[1]</emphasis>
+            will return the <sgmltag>&lt;dd&gt;</sgmltag> element
+            corresponding to the 'derived'
+            <sgmltag>&lt;dt&gt;d</sgmltag></para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.SecurityResource">
+      <title>Security (user) Resource</title>
+
+      <para>To finish up, the <emphasis>/user</emphasis> link indicated in
+      <xref linkend="sec.HomePageResource" /> corresponds to the
+      <classname>UserResource</classname>:</para>
+
+      <programlisting>import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+public interface UserResource {
+
+  @GET
+  @Produces( { "application/xhtml+xml", "text/html" })
+  public String user();
+}</programlisting>
+
+      <para>The implementation of this interface in <emphasis>Restful
+      Objects</emphasis> viewer (<classname>UserResourceImpl</classname>) also
+      defines a <code>@Path("/user")</code> for the class as a whole. Taken
+      together this therefore defines a <acronym>URL</acronym> in the form
+      <emphasis>/user</emphasis> supporting the <acronym>GET</acronym>
+      method.</para>
+
+      <note>
+        <para>As mentioned elsewhere, it would be preferable if the
+        <code>@Path("/user")</code> annotation resided on the interface, not
+        the implementation. This seems to be a limitation with
+        <emphasis>RestEasy</emphasis>, the underlying library used by the
+        <emphasis>xhtml viewer</emphasis>.</para>
+      </note>
+
+      <para>Here's the resource that's returned, as shown in a browser:</para>
+
+      <para><screenshot>
+          <screeninfo>User Resource</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/user-resource.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>The first section (as ever) lists the current user, while
+      the final section lists out the roles for the current user. The
+      <acronym>XHTML</acronym> for this is:</para>
+
+      <programlisting>&lt;?xml version="1.0"?&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;User&lt;/title&gt;&lt;/head&gt;
+  &lt;body id="body"&gt;
+    &lt;div&gt;
+      &lt;p&gt;Logged in as&lt;/p&gt;
+      &lt;ul class="isis-session"&gt;
+        &lt;li&gt;
+          &lt;a href="/user" rel="user" rev="resource" class="isis-user"&gt;sven&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    ...
+    &lt;div class="isis-section"&gt;
+      &lt;p class="isis-section"&gt;Roles&lt;/p&gt;
+      &lt;ul class="isis-roles"&gt;
+        &lt;li&gt;
+          &lt;p class="isis-role"&gt;role1&lt;/p&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+      <para>Again, we can use XPath to pull back the resources:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>//a[@class="isis-user"]/text()</emphasis> returns
+          the current user name</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>//p[@class="isis-role"]/text()</emphasis> returns
+          the role names</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.WritingClientSideApps">
+    <title>Writing Client-side Applications</title>
+
+    <abstract>
+      <para>How to write custom client-side applications to consume the
+      RESTful resources.</para>
+    </abstract>
+
+    <para>The point of the <emphasis>xhtml viewer</emphasis> is to provide our
+    domain objects as <acronym>REST</acronym>ful resources so that they can be
+    used by any other client application. These applications can be written in
+    any language; so long as they can submit <acronym>HTTP </acronym>requests
+    and can parse <acronym>XHTML</acronym>, they can interact with the
+    resources provided by the viewer.</para>
+
+    <para>That said, if you are writing Java applications, then
+    <emphasis>restful Objects</emphasis> provides an application library
+    (applib) to simplify the task. To reference this applib, add the following
+    to your Maven pom's <sgmltag>&lt;dependencies&gt;</sgmltag>
+    section:</para>
+
+    <programlisting>&lt;properties&gt;
+    &lt;isis.viewer-restful.version&gt;y.y.y&lt;/isis.viewer-restful.version&gt;
+    ....
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+  ...
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis.viewer.restful&lt;/groupId&gt;
+    &lt;artifactId&gt;applib&lt;/artifactId&gt;
+    &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+  &lt;/dependency&gt;
+  ...
+&lt;/dependencies&gt;</programlisting>
+
+    <para>where y.y.y is the version of <emphasis>xhtml viewer</emphasis>
+    module of <emphasis>Isis</emphasis> that you are using.</para>
+
+    <para>You then have a choice of approaches.</para>
+
+    <sect1>
+      <title><classname>AbstractRestfulClient</classname></title>
+
+      <para>To get you started you might want to use the adapter,
+      <classname>AbstractRestfulClient</classname>, available in the
+      <emphasis>xhtml viewer</emphasis>' applib. This exposes some of the
+      <acronym>HTTP</acronym> methods, including <acronym>GET</acronym> and
+      <acronym>POST</acronym>, and serves up resources as
+      <acronym>XML</acronym> documents (using Elliot Rusty Harold's <ulink
+      url="http://www.xom.nu/">XOM</ulink> library). There is also a
+      <classname>XomUtils</classname> class, that provides some
+      pretty-printing support and a couple of other helper methods.</para>
+
+      <note>
+        <para><classname>AbstractRestfulClient</classname> is not particularly
+        comprehensive (at the time of writing it doesn't include support for
+        <acronym>PUT</acronym> or <acronym>DELETE</acronym>, for example). It
+        may well gain extra methods in future releases, however.</para>
+      </note>
+    </sect1>
+
+    <sect1 id="sec.CodingApproaches">
+      <title><emphasis>RestEasy</emphasis>'s Client-side Framework</title>
+
+      <para>Alternatively, you might want to look into JBoss
+      <emphasis>RestEasy</emphasis>, which provides a <ulink
+      url="http://www.jboss.org/file-access/default/members/resteasy/freezone/docs/1.0.2.GA/userguide/html_single/index.html#RESTEasy_Client_Framework">client-side
+      framework</ulink> to eliminate some of the boilerplate. This uses the
+      resource interfaces (see <xref linkend="chp.Resources" />) to create
+      client-side stubs.</para>
+
+      <note>
+        <para>Due to a fact that <classname>@Path</classname> is annotated on
+        the implementations - not the interfaces - of
+        <classname>ObjectResource</classname>,
+        <classname>ServiceResource</classname>,
+        <classname>SpecsResource</classname> and
+        <classname>UserResource</classname>, it's possible that this approach
+        will not work until we upgrade the version of
+        <emphasis>RestEasy</emphasis>.</para>
+      </note>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.DeployingRestfulObjectsWebapps">
+    <title>Deploying XHTML Viewer Webapps</title>
+
+    <abstract>
+      <para>Guidance on how to deploy Isis using the <emphasis>xhtml
+      viewer</emphasis>.</para>
+    </abstract>
+
+    <para>At some point you'll presumably want to deploy your domain object
+    using <emphasis>xhtml viewer</emphasis> as a webapp. The quickstart
+    archetype already sets up the <package>viewer-restful</package> module
+    that will generate a <acronym>WAR</acronym> file; however, you may want to
+    adjust its configuration in terms of two areas: authentication, and
+    persistence. This chapter discusses these points.</para>
+
+    <para><note>
+        <para>These instructions assume that the xhtml viewer is being
+        deployed using the <emphasis>default runtime</emphasis>
+        <package>(oai.runtimes:dflt)</package>. At the time of writing this is
+        the only runtime available; in the future there may be other runtimes
+        which will have their own specific deployment requirements</para>
+      </note></para>
+
+    <sect1 id="sec.DeploymentType">
+      <title>Deployment Modes</title>
+
+      <para>By default the <classname>IsisWebAppBootstrapper</classname>
+      context listener (described in <xref
+      linkend="sec.TheViewerRestfulModule" />) will bootstrap Isis in the
+      "SERVER" deployment type. This means that an authentication is required,
+      that the sessions will be bound as thread-locals, and that the
+      persistence mechanism will be defaulted appropriately.</para>
+
+      <para>The deployment type can be changed to other settings, though; most
+      notably you may wish to change to SERVER_EXPLORATION or
+      SERVER_PROTOTYPE. This is done using a context parameter:</para>
+
+      <programlisting>&lt;context-param&gt;
+  &lt;param-name&gt;deploymentType&lt;/param-name&gt;
+  &lt;param-value&gt;SERVER_EXPLORATION&lt;/param-value&gt;
+&lt;/context-param&gt;</programlisting>
+    </sect1>
+
+    <sect1 id="sec.Authentication">
+      <title>Authentication</title>
+
+      <para>The RESTful architecture doesn't have too much to say about
+      authentication, and (at the time of writing) there are no supplementary
+      standards to define how authentication should be implemented. And
+      because <acronym>REST</acronym> runs over <acronym>HTTP</acronym> we
+      don't get any particular support from the network stack either. In fact,
+      because <acronym>HTTP</acronym> is stateless we don't even get the
+      notion of a session or a connection.</para>
+
+      <para>The <emphasis>xhtml viewer</emphasis> therefore uses
+      <emphasis>Isis</emphasis>' own authentication mechanism, with
+      authentication performed for each RESTful call. What this means depends
+      on the deployment type (see <xref
+      linkend="sec.DeploymentType" />):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>if running in SERVER_EXPLORATION mode, then authentication is
+          in effect switched off; no credentials are supplied, and the
+          framework will use the first exploration user defined in
+          <emphasis>isis.properties</emphasis>, or a fallback "exploration"
+          user otherwise</para>
+
+          <para>For example, if running in SERVER_EXPLORATION mode, then you
+          can specify the user using:</para>
+
+          <programlisting>isis.exploration.users=sven:role1, dick:role2, bob:role1|role2</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>otherwise (if running SERVER_PROTOTYPE or SERVER), then
+          authentication credentials are needed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <note>
+        <para>You can if you want run in EXPLORATION (or PROTOTYPE) mode
+        rather than SERVER_EXPLORATION (or SERVER_PROTOTYPE) mode. The
+        difference is that former only support single-users, while SERVER_*
+        supports multiple concurrent users.</para>
+      </note>
+
+      <para>Running the Restful Objects in SERVER mode with no credentials
+      will result in an exception:</para>
+
+      <screenshot>
+        <screeninfo>Server mode, no credentials</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/server-mode-no-credentials.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>On the other hand, if user and password parameters are supplied,
+      then we can login:</para>
+
+      <screenshot>
+        <screeninfo>Server mode, with credentials</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/server-mode-with-credentials.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>This behaviour is pluggable however, at two levels:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><classname>IsisSessionFilter</classname> uses the
+          <varname>authenticationManagerLookupStrategy</varname> property to
+          specify a strategy for both finding credentials and for validating
+          them against the <emphasis>Apache Isis</emphasis> authentication
+          manager.</para>
+
+          <para>The <emphasis>xhtml viewer</emphasis> provides two additional
+          implementations of this that you can use:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The
+              <classname>oai.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyParams</classname>
+              implementation extends the default behaviour by also looking up
+              credentials using the username and password parameters. Once
+              validated, it also binds the results to the
+              <classname>HttpSession</classname> so that future interactions
+              do not credentials.</para>
+            </listitem>
+
+            <listitem>
+              <para>The
+              <classname>oai.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</classname>
+              implementation ensures that an (exploration) session is always
+              present (if a session isn't available from the default
+              implementation).</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>-
+          <classname>AuthenticationSessionLookupStrategyParams</classname> in
+          the package
+          <classname>org.starobjects.restful.viewer.authentication</classname>
+          -</para>
+
+          <para>In both cases these can be configured using:</para>
+
+          <programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
+    &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>Alternatively, you can change the implementation of
+          <classname>AuthenticationManager</classname> that
+          <emphasis>Isis</emphasis>' delegates to. This is done using the
+          <varname>isis.authentication</varname> key in
+          <filename>isis.properties</filename>:</para>
+
+          <programlisting>isis.authentication=com.mycompany.isis.authentication.MyAuthenticationManagerInstaller</programlisting>
+        </listitem>
+      </itemizedlist>
+
+      <para>In the future there will doubtless be standardized (WS-* style)
+      approaches for RESTful authenticatication, but the above should provide
+      enough flexibility in the meantime.</para>
+
+      <note>
+        <para>Note that the archetype explicitly specifies the authentication
+        mechanism as no-op.</para>
+      </note>
+    </sect1>
+
+    <sect1>
+      <title>Runtime / Persistence</title>
+
+      <para>The persistence mechanism (aka object store) is determined using
+      isis.persistence key in isis.properties. For example, to use the XML
+      object store, you would specify:</para>
+
+      <programlisting>isis.persistor=xml</programlisting>
+
+      <para><note>
+          <para>Note that the archetype explicitly specifies the object store
+          as in-memory.</para>
+        </note></para>
+    </sect1>
+  </chapter>
+</book>

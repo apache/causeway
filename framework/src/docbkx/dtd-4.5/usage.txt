@@ -1,0 +1,15 @@
+"file:///C|/1KevDev/docbook-xml-4.5/docbookx.dtd"
+
+Level 1
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:../../../../../resources/docbook-xml-4.5/docbookx.dtd">
+
+
+Level 2
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:../../../../../../resources/docbook-xml-4.5/docbookx.dtd">
+
+
+Level 3
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:../../../../../../../resources/docbook-xml-4.5/docbookx.dtd">

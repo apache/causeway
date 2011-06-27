@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <toc></toc>
+
+  <chapter>
+    <title>Conventions</title>
+
+    <para>*** change into an appendix?</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>The <emphasis>Isis</emphasis> framework provides a number of tools
+    to help resolve problems and debug the system. These are mainly applicable
+    to issues within system code, but some of them can be useful when
+    developing applications. The framework provides the following:-</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Extensive use of logging through the <ulink
+        url="http://logging.apache.org/log4j/docs/">Log4j</ulink> framework,
+        an open source logging framework made available as part of the Apache
+        Jakarta project ;</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In addition, the DnD viewer provides debug views that display
+    details of components and anything else that implements the
+    <classname>DebugInfo</classname> interface. There is further coverage of
+    this last feature in the DnD viewer's documentation.</para>
+
+    <para></para>
+
+    <sect1>
+      <title>"XxxAware" convention for components</title>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Logging</title>
+
+      <para>Logging using Log4j is used throughout the framework and the
+      components the Isis development team have created, and it is recommended
+      that you use it too. Logging allows you to look what the framework and
+      components have been when you investigate a problem and help to identify
+      what parts of the system where doing what before an problem arose. Often
+      logging alone is enough to pin point a problem, but if not it help you
+      target what to investigate.</para>
+
+      <para>Log4j allows you to log log debug messages, information about the
+      system's state, warnings and errors. These events can be displayed on
+      the console, written to files, or sent out over the network for remote
+      logging. These are output in a user defined format and also can be
+      filtered (so only events from certain components are seen). All this is
+      configured through a set of properties passed to Log4J.</para>
+
+      <sect2>
+        <title>Configuring Logging</title>
+
+        <para>The complete options for outputting and formatting can be found
+        in the relavent Log4J documentation (including the API). However, it
+        crucial to smooth development of an NOF system that will cover some of
+        it here. The NOF configures Log4j using properties files and will
+        generally load <filename class="directory"
+        moreinfo="none">log4j.properties</filename> or retrieve the properties
+        from the that were loaded from <filename class="directory"
+        moreinfo="none">isis.properties</filename> after that is loaded for
+        framework configuration (these files need to be located in the working
+        directory). If you are not using classes within the NOF to start the
+        framework then how these properties are loaded could vary. The
+        downside of putting the logging properities in the framework
+        properties files is that there is no logging until it has been loaded.
+        If this is necessary then it is better to use the separate properties
+        file.</para>
+
+        <para>The following file, or portion of a file, is a basic
+        configuration for logging. It consists of two appenders and a basic
+        logging configuration.</para>
+
+        <programlisting format="linespecific">log4j.rootLogger=INFO, Console, File
+
+# The console appender
+log4j.appender.Console=org.apache.log4j.ConsoleAppender
+log4j.appender.Console.Target=System.out
+log4j.appender.Console.layout=org.apache.log4j.PatternLayout
+log4j.appender.Console.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  \t\t%m%n
+
+# The exploration.log file appender
+log4j.appender.File=org.apache.log4j.FileAppender
+log4j.appender.File.File=exploration.log
+log4j.appender.File.layout=org.apache.log4j.PatternLayout
+log4j.appender.File.layout.ConversionPattern=%-4r %-5p [%t] %37c %3x - %m%n
+log4j.appender.File.Append=false</programlisting>
+
+        <para>The first line sets up logging to show events of level
+        <emphasis>INFO</emphasis> and above through the
+        <emphasis>Console</emphasis> and <emphasis>File</emphasis> appenders,
+        which writes those events to the console and the file <filename
+        class="directory" moreinfo="none">exploration.log</filename>
+        respectively. The two blocks sepcifiy how to write to the console and
+        the file. Other appenders can be used to change where the logs are
+        written to. The number of appenders specified is unlimited, although
+        there should be at least one. The console below (from Eclipse) shows
+        the log. The file will contain the same thing although the formatting
+        will be slightly different as the conversion pattern for the two
+        appenders is different.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/console-log.png" />
+          </imageobject>
+        </mediaobject>
+
+        <sect3>
+          <title>Logging levels</title>
+
+          <para>The types of events that are logged can be changed. This
+          determines how large the files become or how much traffic is put
+          over the network, and is reflected in the amount of processing that
+          needs to be done to process the events into messages that can be
+          written out. Levels in order of increasing verbosity and log size,
+          and is decreasing order of severity are:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>OFF - no logging</para>
+            </listitem>
+
+            <listitem>
+              <para>FATAL - something very serious has happened that requires
+              the system to be shut down.</para>
+            </listitem>
+
+            <listitem>
+              <para>ERROR - something serious has happened that might affect
+              any subsequent actions.</para>
+            </listitem>
+
+            <listitem>
+              <para>WARN - something has not been set up properly, or needs
+              attention. Although subsequent action might function correctly,
+              they might not function as expected.</para>
+            </listitem>
+
+            <listitem>
+              <para>INFO - information to the developer about something that
+              has taken place.</para>
+            </listitem>
+
+            <listitem>
+              <para>DEBUG - detailed information for the developer.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>So in the above example to increase the logging level to debug
+          change the first part of the property to <emphasis>DEBUG</emphasis>
+          from <emphasis>INFO</emphasis> as below:</para>
+
+          <programlisting format="linespecific">log4j.rootLogger=DEBUG, Console, File</programlisting>
+
+          <para>Logging should almost never be set to off, but should at least
+          be set to log the errors (unsing level ERROR). Whilst developing we
+          recommend that you set your basic level to INFO and switch to DEBUG
+          if you need to investigate something.</para>
+
+          <para>Setting the logging level via the properties file applies that
+          level at startup and cannot be changed using the properties, ie,
+          that level will be used to filter all logged event while the system
+          is running. If you are using the Skylark viewer, however, you can
+          use the debug options to change the logging level on the client at
+          any time. By using Ctrl-Shift-right-click on the desktop you will be
+          shown the debug menu and see the following options:-</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="left" fileref="images/logging-debug.png"
+                         format="PNG" />
+            </imageobject>
+          </mediaobject>
+
+          <para>The greyed-out option indicates the current level. Selectiing
+          one of the other levels will change the logging to that
+          level.</para>
+        </sect3>
+
+        <sect3>
+          <title>Limiting logging by class</title>
+
+          <para>As well as limiting the level of events that are logged, we
+          can also specify which classes we are interested in capturing log
+          events for. In Log4j events are organised by loggers, which are set
+          up programmatically, but as we create a logger for each class we
+          talk about classes.</para>
+
+          <para>To change the levels of events captured according to the class
+          where the log event was created we can class based requirements
+          after the root logger is specified. To set a logging level for a
+          class add a property in the form</para>
+
+          <programlisting format="linespecific">log4j.logger.&lt;package to log&gt;=&lt;level for package&gt;
+log4j.logger.&lt;class to log&gt;=&lt;level for class&gt;</programlisting>
+
+          <para>Events for the specified packages or class will be logged at
+          the specified level, overriding the root level set up first. So for
+          example the following configuration:</para>
+
+          <programlisting format="linespecific">log4j.rootLogger=WARN, Console
+
+log4j.logger.org.apache.isis.object=INFO
+log4j.logger.org.apache.isis.object.reflect=DEBUG
+log4j.logger.org.apache.isis.object.persistence=DEBUG
+
+log4j.logger.org.apache.isis.object.loader.ObjectLoaderImpl=OFF</programlisting>
+
+          <para>will capture warning and errors for all classes (as defined by
+          the root logger), and information messages for those classes whose
+          package begins with <classname>org.apache.isis.object</classname>.
+          In addition those classes beginning with
+          <classname>org.apache.isis.object.reflect </classname>or
+          <classname>org.apache.isis.object.persistence</classname> will have
+          their debug events captured as well. Finally, the class
+          <classname>ObjectLoader</classname> will have all of its events
+          ignored.</para>
+
+          <para>It is important to make use of this feature when using the
+          Skylark viewer as it logs events about it rendering. In Java
+          rendering the screen (via the
+          <methodname>paint(Graphics)</methodname> method) happens very often
+          and can cause the logs to be swamped with superflous events. The
+          logger for these events are prepended with the text 'ui.' so we can
+          disable all of these events across all the viewing classes by adding
+          the following to the properties:</para>
+
+          <programlisting format="linespecific">log4j.logger.ui=OFF</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Writing XML log files</title>
+
+          <para>By writing out the logs to a file in XML rather than as text
+          allows you to look at the log using Chainsaw, a Log4j viewer. This
+          tool allows you to quickly look at events in specific classes and
+          hide events that are of no interest by setting up simple
+          conditions.</para>
+
+          <para>To write out an XML file the same appender as before is used,
+          but the layout is changed. The following configuration logs all
+          events (DEBUG and greater) to a file with an XML layout.</para>
+
+          <programlisting format="linespecific">log4j.rootLogger=DEBUG, XmlFile
+
+log4j.appender.XmlFile=org.apache.log4j.FileAppender
+log4j.appender.XmlFile.file=isis.log.xml
+log4j.appender.XmlFile.layout=org.apache.log4j.xml.XMLLayout
+log4j.appender.XmlFile.append=false</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Writing HTML log files</title>
+
+          <para>HTML files can be viewed in a web browser and will display
+          nicely in most email clients. Change the appender to use the
+          <classname>HTMLLayout</classname> class.</para>
+
+          <programlisting format="linespecific">log4j.appender.Snapshot.layout=org.apache.log4j.HTMLLayout</programlisting>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Using logging to get help</title>
+
+        <para>When you are working with someone else it is often useful to
+        send details of what is happening including screenshots, code, and
+        logs. To make the other person's life easier provide as much
+        information as possible:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Detail the version of the framework and the platform (Java
+            or .Net) you are using</para>
+          </listitem>
+
+          <listitem>
+            <para>Describe the problem in detail</para>
+          </listitem>
+
+          <listitem>
+            <para>Provide screenshots (as a <filename class="directory"
+            moreinfo="none">.gif</filename> or <filename class="directory"
+            moreinfo="none">.png</filename>, avoid jpegs and Word documents)
+            that shows the problem</para>
+          </listitem>
+
+          <listitem>
+            <para>Provide log files from both the client and the server in an
+            XML format so they can be viewed using Chainsaw</para>
+          </listitem>
+
+          <listitem>
+            <para>Include your contact details, preferrably you email
+            address</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Collate all this information ensuring each file is clearly
+        named. Then zip up (or tar) the whole set (as the logs, in particular,
+        can be huge) and email the compressed file.</para>
+      </sect2>
+
+      <sect2>
+        <title>Adding logging to your code</title>
+
+        <para>It is recommended that you also add logging to your code,
+        particularly if you are developing a component or extending the
+        framework in some way. This way you will be able to see the
+        interaction of your classes with those of the NOF. The following lays
+        out how the framework uses Log4j, and hence how you should use it to
+        be consistent.</para>
+
+        <para>Simple ensure that any class that does any logging makes a
+        <classname>Logger</classname> available. By convention the name is
+        always <varname>LOG</varname>. The name of the logger should be the
+        name of the class in its fully qualified form. To make this easy use
+        the constructor that takes a <classname>Class</classname> object and
+        pass in your class using as shown here. Don't forget to add an import
+        to <classname>org.apache.log4j.Logger</classname>, not the class of
+        the same name in the NOF or in Java itself.</para>
+
+        <programlisting format="linespecific">private final static Logger LOG = Logger.getLogger(IsisClass.class);</programlisting>
+
+        <para>Where you wish to add log message add a statement like the
+        following, deciding first what level the event should be classified as
+        (see above); the available methods are <methodname>debug</methodname>,
+        <methodname>info</methodname>, <methodname>warn</methodname>,
+        <methodname>error</methodname> and
+        <methodname>fatal</methodname>.</para>
+
+        <programlisting format="linespecific">LOG.debug("mark as dirty " + object);
+
+LOG.error("failed to create instance of " + this, e);</programlisting>
+
+        <para>The first statement in this example contains just a message,
+        while the second version logs a message and, separately, the complete
+        stack trace.</para>
+
+        <sect3>
+          <title>Making you classes useful in logs</title>
+
+          <para>To make the most of logging, even if you don't log anything in
+          you code, make sure that you declare a
+          <methodname>toString</methodname> method in each of you classes.
+          This way when a log message is created that references your object
+          the message will show your object in detail rather than like
+          this:</para>
+
+          <screen format="linespecific">MyObject@33D4</screen>
+
+          <para>A suitable toString can cause it to be rendered more usefully
+          such as:</para>
+
+          <screen format="linespecific">MyObject [name=windows,size=34x20]</screen>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Property naming conventions</title>
+
+      <para>Properties used within the framework start with 'isis', which is
+      available from the <literal moreinfo="none">Configuration.ROOT</literal>
+      constant. Next is the category and optionally a component. Finally is
+      the property name (which can be as many levels as needed) for the
+      component. Examples are:</para>
+
+      <programlisting format="linespecific">isis.viewer.cli.log
+isis.services.prefix
+isis.viewer.dnd.specification.view
+isis.exploration.users
+isis.viewer.html.header</programlisting>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.DeployingIsisApplications">
+    <title>Deployment Principles</title>
+
+    <abstract>
+      <para>*** The principles for deploying an <emphasis>Isis</emphasis>
+      application.</para>
+    </abstract>
+
+    <para>Assuming that you have developed your domain model and tested it as
+    a standalone prototype, this part of the guide describes the basic
+    deployment options.</para>
+
+    <para>Alternative implementations (most notably, remoting for
+    client/server) that allow for different deployments have their own
+    guidance on deployment. The same is also true for viewers that allow for
+    different deployments (eg a viewer that supports a mobile phone or Eclipse
+    OSGi would likely have its own packaging requirements).</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <note>
+      <para>TODO: tidy up the following paras, were just copied/pasted in from
+      APT</para>
+    </note>
+
+    <para></para>
+
+    <para>All the following describe setting up the default security
+    implementations. *** Mention that there are other implementations</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>For desktop-based viewers the framework provides a
+    <classname>ViewerInstaller</classname> <acronym>API</acronym>, defined in
+    the <filename>core/runtime</filename> module. This approach is used by the
+    <acronym>DnD</acronym> viewer and the <acronym>HTML</acronym> viewer, for
+    example.</para>
+
+    <para>Alternatively the viewer can use its own mechanism to get started
+    (eg as a webapp) and then simply bootstrap the Isis runtime with a couple
+    of lines of code. This is the technique used by the Scimpi webapp viewer,
+    by the Wicket viewer and by the Restful viewer.</para>
+
+    <para></para>
+
+    <para>*** x-ref remoting docs as a way of deploying in client/server
+    mode.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <sect1>
+      <title>Adding Security (Authentication and Authorization)</title>
+
+      <para></para>
+
+      <para>x-ref alternatives/security/file</para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Adding support for internationalisation</title>
+
+      <para>All the text that appears to the user comes from the domain object
+      model. Any literal text used within the code may be externalised, and
+      localised using the standard Java mechanism of resource bundles. However
+      as all field and menu names are derived from the method names the
+      framework provides a mechanism to adapt these names using resource
+      bundles as well.</para>
+
+      <para></para>
+
+      <para>*** FacetDecorator</para>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+  </chapter>
+</book>

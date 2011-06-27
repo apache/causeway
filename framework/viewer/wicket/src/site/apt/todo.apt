@@ -1,0 +1,371 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Status
+
+  <Apache Isis Wicket Viewer> provides an implementation of a viewer extension for <Apache Isis>.  From a functional perspective it is mostly complete;
+  undoubtedly though the presentation could be improved of some of the components.
+  
+  On my blog there's a {{{http://danhaywood.com/resources/viewer-stories}list of user stories}} that Isis viewers should implement;
+  the sections below list which stories have been completed, and which are still to do.  
+
+User Stories To Do
+
+  paging
+    
+  * provide an annotation?
+
+  []
+  
+  css class
+
+  * go through widgets and look for CssClassFacet and apply to objects, properties, collections, actions
+
+  []
+
+  choices support (for values; references done)
+
+    * action argument choices (for values)
+
+    * entity property choices (for values)
+  
+  []
+
+  handle actions returning void
+
+    * render a meaningful view for an action returning void
+
+  []
+
+  handle actions returning values
+
+    * display “results” (a meaningful view) for an action returning a value
+
+  []
+
+  honour @Hidden in tables
+
+    * currently @Hidden properties are still shown in tables
+
+  Presentation Candyfloss
+
+    * action dialog should show name
+
+    * alternate field colours in forms, cf NO MVC
+    
+    * suppress title when doing inpage finders
+    
+    * grey out actions on menu item if disabled
+    
+    * don't show action menu if no actions in it
+    
+    * feedback for property validation should be clear:both'd to appear below; probably for action params too.
+    
+    * remove the skanky table in the HTML markup
+
+    * provide spinner for int's
+    
+    * fix the 'off by one' problem for dates
+    
+    * get date widget working for all date types
+    
+  []
+
+  image of inline object should inline should hyperlink to its page
+  
+  disable editing of inline objects
+  
+  add ability to show inline objects within tables
+  
+  next, previous buttons not hidden in wizard
+
+  next, previous buttons probably not disabled in wizard
+
+  recent references
+
+    * For action parameter form for reference parameters, provide drop-down of recently-used entities of correct type
+    * For entity properties form for reference properties, provide drop-down of recently-used entities of correct type
+
+  []
+
+  add/remove from entity collection
+
+    * allow entities to be added to or removed from collection if not @Disabled
+
+  []
+
+  validate add/remove from entity collection
+
+    * validate entities being added to or removed from entity collections, as per validateAddToXxx() and validateRemoveFromXxx()
+
+  []
+
+  immutable
+
+    * do not allow editing of immutable objects
+
+  []
+
+  error handling
+
+    * handle various errors conditions, e.g. optimistic locking
+
+  []
+
+  support image properties
+  
+    * be able to render
+    * be able to upload them
+    
+  []
+
+  support video properties
+  
+    * be able to render
+    * be able to upload them
+    
+  []
+
+  support image gallery (of entities)
+  
+    * be able to render entities that are Imageable within a gallery
+    
+  []
+
+  build a suite of components to help build custom UIs
+  
+    * button for no-arg or 1-arg contributed actions
+    
+    * form for any arg
+    
+    * arbitrary collection, in any state
+
+  []
+
+  remember view selection of collections (or anything else) when returning, to save continually having to select in drop-down
+  
+  Presentation Candyfloss
+
+    * add little icons to indicate the data type
+  
+  []
+
+  Portlet support
+  
+    * using Apache Portal Bridge stuff
+    
+    * native portlet API
+     
+  []
+  
+User Stories Completed
+
+  bootstrap Isis
+
+    * start the app using the viewer technologies normal mechanism (e.g. from web.xml), but bootstrap Isis in its initialisation
+
+  []
+
+  application services
+
+    * provide a representation of application services (as registered via isis.properties file), e.g. as an icon or a link
+
+  []
+
+  application service actions
+
+    * display the actions for application services, e.g. as links or drop-down menu items etc
+
+  []
+
+  invoke no-arg action
+
+    * invoke an (application service) action, taking no arguments
+
+  []
+
+  display entity summary
+
+    * display the icon and title of an entity
+    * i.e. resultant from invoking an action
+
+  []
+
+  display entity properties, read only
+
+    * display the properties of an entity, in read-only mode
+    * just handle basic types (integer, string, date, boolean) initially
+
+  []
+
+  display entity collections, read only
+
+    * display each of the collections of an entity, in read-only mode
+
+  []
+
+  display actions for an entity
+
+    * render actions available for an entity, e.g. as menu items or links
+
+  []
+
+  invoke action on entity
+
+    * invoke a (no-arg) action for entity
+
+  []
+
+  display collection of entities, read only
+
+    * i.e. resultant from invoking an action
+
+  []
+
+  render action with parameters
+
+    * display form to capture arguments
+    * handle basic types only
+
+  []
+
+  invoke action with parameters
+
+    * ... and handle results using existing mechanisms
+
+  []
+
+  handle contributed actions
+
+    * ensure contributed actions invoked on contributor (application service), not entity
+    * automatically default the contributed entity as an action param
+
+  []
+
+  combine infrastructure for action arguments and entity properties
+
+    * they're basically the same thing (scalars)
+
+  []
+
+  validate individual action arguments
+
+    * as per validate[N]Xxx() method for argument N
+
+  []
+
+  validate all action arguments
+
+    * as per validateXxx() method
+
+  []
+
+  display entity for edit
+
+    * editable properties for values
+
+  []
+
+  editable references
+
+    * allow property or parameter that references another object to be set
+    * allow property or parameter that references another object to be cleared
+
+  []
+
+  entity object-level validation
+
+    * validate object prior to saving, as per validate() method
+
+  []
+
+  support all built-in value types
+
+    * remaining built-ins, e.g. java.math.BigDecimal
+
+  []
+
+  support any value objects for action parameter or entity property
+
+    * Support all value types (as per @Value annotation), so long as are parseable/encodable
+
+  []
+
+  lazy/load entity collections
+
+    * Lazy load entity collections rather than eagerly load
+
+  []
+
+  process objects
+
+    * handle actions returning transient objects
+
+  []
+
+  deal with multi-threading
+
+    * ensure multi-threading concerns dealt with (e.g. IsisContext implementation if required)
+
+  []
+
+  extensibility
+
+    * allow new renderers for properties, for entities, for values
+  
+  []
+
+  don't render repositories that are annotated as @Hidden
+
+  default contributed action argument
+  
+  if only single contributed action argument, then skip the action dialog page.
+  
+  action argument defaults
+
+  * when bring up action parameter form, default any action arguments if exist, as per default[N]Xxx()
+
+  []
+
+  action argument choices (for references)
+
+    * in action parameter form, display choices for parameter if exist (as per choices[N]Xxx()]
+
+  []
+
+  entity property choices (for references)
+
+    * in entity edit form, display choices for property if exist (as per choicesXxx())
+
+  []
+ 
+
+  allow property references and action arguments to be viewed inline.
+  
+  allow found objects to be viewed inline.
+
+  Presentation candyfloss
+  
+  * alternate colors for properties vs parameters
+        
+  * push 'find using' over hard right, a la NO MVC
+
+  []
+
+  
