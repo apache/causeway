@@ -92,7 +92,7 @@ public class Dispatcher {
     private final Encoder encoder  = new SimpleEncoder();
 
     public void process(final RequestContext context, final String servletPath) {
-        LOG.info("processing request " + servletPath);
+        LOG.debug("processing request " + servletPath);
         final AuthenticationSession session = UserManager.startRequest(context);
         LOG.debug("exsiting session: " + session);
 

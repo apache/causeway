@@ -77,8 +77,8 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
 
     public final void flush() {
         ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
-        if (LOG.isInfoEnabled()) {
-            LOG.info("flush transaction " + this);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("flush transaction " + this);
         }
 
         try {
@@ -93,8 +93,8 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
     public final void commit() {
         ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("commit transaction " + this);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("commit transaction " + this);
         }
 
         if (getState() == State.COMMITTED) {

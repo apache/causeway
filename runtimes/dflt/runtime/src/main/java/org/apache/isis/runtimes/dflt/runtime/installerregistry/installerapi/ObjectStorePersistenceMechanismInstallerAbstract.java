@@ -68,7 +68,7 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
         ensureThatArg(objectStore, is(not(nullValue())));
 
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
-            final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "info");
+            final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "debug");
             objectStore = new IsisStoreLogger(objectStore, level);
         }
 

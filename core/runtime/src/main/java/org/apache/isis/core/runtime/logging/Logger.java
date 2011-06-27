@@ -30,7 +30,7 @@ public abstract class Logger {
     private final Level level;
 
     public Logger() {
-        this(Level.INFO);
+        this(Level.DEBUG);
     }
 
     public Logger(final String level) {

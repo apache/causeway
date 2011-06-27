@@ -43,9 +43,9 @@ public class UserManager {
         AuthenticationSession session = context.getSession();
         if (session == null) {
             session = new AnonymousSession();
-            LOG.info("start anonymous request: " + session);
+            LOG.debug("start anonymous request: " + session);
         } else {
-            LOG.info("start request for: " + session.getUserName());
+            LOG.debug("start request for: " + session.getUserName());
         }
         IsisContext.closeSession();
         IsisContext.openSession(session);
@@ -64,9 +64,9 @@ public class UserManager {
 
     public static void endRequest(final AuthenticationSession session) {
         if (session == null) {
-            LOG.info("end anonymous request");
+            LOG.debug("end anonymous request");
         } else {
-            LOG.info("end request for: " + session.getUserName());
+            LOG.debug("end request for: " + session.getUserName());
         }
         IsisContext.closeSession();
     }

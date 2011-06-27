@@ -208,7 +208,7 @@ public class FileServer {
                     } catch (InterruptedException ignore) {}
                 }
                 final Socket connection = socket.accept();
-                LOG.info("connection from " + connection);
+                LOG.debug("connection from " + connection);
                 connection.setSoTimeout(readTimeout);
                 serviceConnection(connection, readTimeout);
             } catch (final SocketTimeoutException expected) {} catch (final IOException e) {

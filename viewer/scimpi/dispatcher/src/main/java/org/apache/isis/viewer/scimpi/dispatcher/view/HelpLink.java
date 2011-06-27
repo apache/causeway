@@ -53,8 +53,9 @@ public class HelpLink extends AbstractElementProcessor {
             final String link = site + helpReference + suffix;
             final String linkText = "Help";
             final String target = "scimpi-help";
-            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\""
-                + description + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
+            String titleSection = description == null ? "" : ("\" title=\"" + description);
+            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + titleSection
+                + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
         }
     }
     
@@ -63,7 +64,7 @@ public class HelpLink extends AbstractElementProcessor {
     }
     
     public void process(Request request) {
-        String description = "description...";
+        String description = null;
         String helpReference = request.getRequiredProperty("ref");
         append(request, description, helpReference);
     }

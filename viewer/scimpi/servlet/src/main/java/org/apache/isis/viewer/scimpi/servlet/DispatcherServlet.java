@@ -44,14 +44,14 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
         throws ServletException, IOException {
-        LOG.info("post " + request.getServletPath() + "  " + request.getQueryString());
+        LOG.debug("post " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
         IOException {
-        LOG.info("get  " + request.getServletPath() + "  " + request.getQueryString());
+        LOG.debug("get  " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 

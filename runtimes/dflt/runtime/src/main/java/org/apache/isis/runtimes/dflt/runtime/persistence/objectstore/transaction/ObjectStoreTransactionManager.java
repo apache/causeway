@@ -65,8 +65,8 @@ public class ObjectStoreTransactionManager extends IsisTransactionManagerAbstrac
 
         transactionLevel++;
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("startTransaction: level "
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("startTransaction: level "
                 + (transactionLevel - 1)
                 + "->"
                 + (transactionLevel)
@@ -91,13 +91,13 @@ public class ObjectStoreTransactionManager extends IsisTransactionManagerAbstrac
 
     @Override
     public void endTransaction() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("endTransaction: level " + (transactionLevel) + "->" + (transactionLevel - 1));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("endTransaction: level " + (transactionLevel) + "->" + (transactionLevel - 1));
         }
 
         transactionLevel--;
         if (transactionLevel == 0) {
-            LOG.info("endTransaction: committing");
+            LOG.debug("endTransaction: committing");
             objectPersistor.objectChangedAllDirty();
             getTransaction().commit();
             objectStore.endTransaction();

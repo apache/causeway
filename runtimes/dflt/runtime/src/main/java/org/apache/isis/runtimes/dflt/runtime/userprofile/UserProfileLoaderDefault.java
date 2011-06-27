@@ -189,7 +189,7 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
         for (final Object service : services) {
             profile.getPerspective().addToServices(service);
         }
-        LOG.info("creating exploration UserProfile for " + userName);
+        LOG.debug("creating exploration UserProfile for " + userName);
         return profile;
     }
 

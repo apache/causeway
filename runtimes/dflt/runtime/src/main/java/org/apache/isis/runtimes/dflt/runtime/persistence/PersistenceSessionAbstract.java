@@ -186,8 +186,8 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
             return;
         }
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("closing " + this);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("closing " + this);
         }
 
         doClose();
@@ -402,7 +402,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * representation}.
      */
     protected final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
-        LOG.info("createPersistenceQueryFor: " + query.getDescription());
+        LOG.debug("createPersistenceQueryFor: " + query.getDescription());
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {
             return new PersistenceQueryFindAllInstances(noSpec);

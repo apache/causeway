@@ -46,7 +46,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
 
     public IsisConfigurationDefault(final ResourceStreamSource resourceStreamSource) {
         this.resourceStreamSource = resourceStreamSource;
-        LOG.info("from :" + nameOf(resourceStreamSource));
+        LOG.debug("from :" + nameOf(resourceStreamSource));
     }
 
     private String nameOf(final ResourceStreamSource resourceStreamSource) {

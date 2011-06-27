@@ -132,7 +132,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         synchronized (sessionsByThread) {
             applySessionClosePolicy();
             final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
-            LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
+            LOG.debug("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
                 + authenticationSession.getUserName());
             saveSession(thread, session);
             session.open();
@@ -152,7 +152,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         synchronized (sessionsByThread) {
             sessionsByThread.put(thread, session);
         }
-        LOG.info("  saving session " + session + "; now have " + sessionsByThread.size() + " sessions");
+        LOG.debug("  saving session " + session + "; now have " + sessionsByThread.size() + " sessions");
         return session;
     }
 

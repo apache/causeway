@@ -72,8 +72,8 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
             }
 
             if (alreadyHasDestroy(onObject)) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("ignored command " + command + " as object no longer exists");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ignored command " + command + " as object no longer exists");
                 }
                 return;
             }
@@ -83,22 +83,22 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
         if (command instanceof DestroyObjectCommand) {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("ignored both create and destroy command " + command);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ignored both create and destroy command " + command);
                 }
                 return;
             }
 
             if (alreadyHasSave(onObject)) {
                 removeSave(onObject);
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("removed prior save command " + command);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("removed prior save command " + command);
                 }
             }
 
             if (alreadyHasDestroy(onObject)) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("ignored command " + command + " as command already recorded");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ignored command " + command + " as command already recorded");
                 }
                 return;
             }

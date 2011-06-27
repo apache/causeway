@@ -46,7 +46,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
     @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
         if (object.getSpecification().isCollection()) {
-            LOG.info("persist " + object);
+            LOG.debug("persist " + object);
             if (object.getResolveState() == ResolveState.GHOST) {
                 object.changeState(ResolveState.RESOLVING);
                 object.changeState(ResolveState.RESOLVED);
@@ -70,7 +70,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
 
         final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
         if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
-            LOG.info("make persistent " + object);
+            LOG.debug("make persistent " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
             object.changeState(ResolveState.SERIALIZING_RESOLVED);

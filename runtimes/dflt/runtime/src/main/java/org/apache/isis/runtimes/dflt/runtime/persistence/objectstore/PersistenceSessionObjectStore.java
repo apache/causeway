@@ -158,7 +158,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing object manager");
+        LOG.debug("finalizing object manager");
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -215,9 +215,9 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             Assert.assertFalse("only resolve object that is not yet resolved", adapter, resolveState.isResolved());
             Assert.assertTrue("only resolve object that is persistent", adapter, adapter.isPersistent());
             resolveImmediatelyFromPersistenceLayer(adapter);
-            if (LOG.isInfoEnabled()) {
+            if (LOG.isDebugEnabled()) {
                 // don't log object - its toString() may use the unresolved field, or unresolved collection
-                LOG.info("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code()
+                LOG.debug("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code()
                     + " " + adapter.getOid());
             }
         }
@@ -414,8 +414,8 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
         if (adapter.getSpecification().isAggregated()) {
             return;
         }
-        if (LOG.isInfoEnabled()) {
-            LOG.info("destroyObject " + adapter);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("destroyObject " + adapter);
         }
         destroyObjectInPersistenceLayer(adapter);
     }
@@ -483,8 +483,8 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
 
     @Override
     protected ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("getInstances matching " + persistenceQuery);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getInstances matching " + persistenceQuery);
         }
         return getInstancesFromPersistenceLayer(persistenceQuery);
     }

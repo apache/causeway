@@ -73,7 +73,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing hash of pojos");
+        LOG.debug("finalizing hash of pojos");
     }
 
     // ///////////////////////////////////////////////////////////////////////////

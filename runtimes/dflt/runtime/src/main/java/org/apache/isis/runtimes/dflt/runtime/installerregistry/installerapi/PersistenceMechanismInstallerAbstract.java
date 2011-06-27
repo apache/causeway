@@ -92,8 +92,8 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      */
     @Override
     public PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("installing " + this.getClass().getName());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("installing " + this.getClass().getName());
         }
 
         final AdapterManagerExtended adapterManager = createAdapterManager(getConfiguration());
@@ -130,7 +130,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
                 oidGenerator, servicesInjector);
 
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
-            final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "info");
+            final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "debug");
             persistenceSession = new PersistenceSessionLogger(persistenceSession, level);
         }
 
