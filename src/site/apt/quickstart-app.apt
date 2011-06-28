@@ -114,14 +114,17 @@ App Structure
 | myapp-viewer-html    | Run as a webapp (from web.xml) using the                |
 |                      | {{{./viewer/html/index.html}HTML viewer}}               |
 *----------------------+---------------------------------------------------------+
-| myapp-viewer-restful | Run as a webapp (from web.xml) using the                |
-|                      | {{{./viewer/restful/index.html}RESTful viewer}}         |
+| myapp-viewer-json    | Run as a webapp (from web.xml) using the                |
+|                      | {{{./viewer/json/index.html}JSON (RESTful) viewer}}     |
 *----------------------+---------------------------------------------------------+
 | myapp-viewer-scimpi  | Run as a webapp (from web.xml) using the                |
 |                      | {{{./viewer/scimpi/index.html}Scimpi viewer}}           |
 *----------------------+---------------------------------------------------------+
 | myapp-viewer-wicket  | Run as a webapp (from web.xml) using the                |
 |                      | {{{./viewer/wicket/index.html}Wicket viewer}}           |
+*----------------------+---------------------------------------------------------+
+| myapp-viewer-xhtml   | Run as a webapp (from web.xml) using the                |
+|                      | {{{./viewer/xhtml/index.html}XHTML (RESTful) viewer}}   |
 *----------------------+---------------------------------------------------------+
 
   A typical application will likely only use one or maybe two of the viewers.
@@ -212,29 +215,24 @@ Running the app using the HTML viewer
 
   []
 
-Running the app using the Restful viewer
+Running the app using the JSON (Restful) viewer
 
-  The application can also be run using the {{{./viewer/restful/index.html}RESTful viewer}}.
-  This exposes the domain model as a set of resources, in XHTML format.  This
-  means that the RESTful resources can be consumed directly by a browser as
-  well as by a custom RESTful client.
+  The application can also be run using the {{{./viewer/json/index.html}JSON (RESTful) viewer}}.
+  This exposes the domain model as a set of resources, in a JSON representation.
 
-  As for the HTML viewer, there are two ways to run the same application with the Restful viewer:
+  As for the HTML viewer, there are two ways to run the same application with the JSON viewer:
 
-  * <<<cd quickrun; mvn antrun:run -D exec=restful>>>
+  * <<<cd quickrun; mvn antrun:run -D exec=json>>>
   
-    also runs the application within an embedded Jetty webserver, but using the Restful viewer.
+    also runs the application within an embedded Jetty webserver, but using the JSON viewer.
     The app can be accessed using {{{http://localhost:8080/}http://localhost:8080/}}.
     
-    Note: <only firefox is currently supported as a RESTful client.  HTTP PUTs
-    and DELETEs are supported using a small amount of Javascript>.
-    
-  * <<<cd viewer-restful; mvn jetty:run>>>
+  * <<<cd viewer-json; mvn jetty:run>>>
   
     runs the same application, but this time from a regular WAR archive, and uses
     Maven's jetty plugin to host the WAR.  The app is configured with the in-memory object store.
 
-    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-restful}http://localhost:8080/myapp-quickviewer-restful}} 
+    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-json}http://localhost:8080/myapp-quickviewer-json}} 
     (where 'myapp' is the artifactId that you entered when generating the app).
 
   []
@@ -278,6 +276,34 @@ Running the app using the Wicket viewer
     (where 'myapp' is the artifactId that you entered when generating the app).
   
   []
+
+Running the app using the XHTML (Restful) viewer
+
+  The application can also be run using the {{{./viewer/xhtml/index.html}XHTML (RESTful) viewer}}.
+  This exposes the domain model as a set of resources, in an XHTML representation.  This
+  means that the RESTful resources can be consumed directly by a browser as
+  well as by a custom RESTful client.
+
+  As for the HTML viewer and JSON viewer, there are two ways to run the same application with the XHTML viewer:
+
+  * <<<cd quickrun; mvn antrun:run -D exec=xhtml>>>
+  
+    also runs the application within an embedded Jetty webserver, but using the XHTML viewer.
+    The app can be accessed using {{{http://localhost:8080/}http://localhost:8080/}}.
+    
+  * <<<cd viewer-xhtml; mvn jetty:run>>>
+  
+    runs the same application, but this time from a regular WAR archive, and uses
+    Maven's jetty plugin to host the WAR.  The app is configured with the in-memory object store.
+
+    The app can be accessed using {{{http://localhost:8080/myapp-quickviewer-xhtml}http://localhost:8080/myapp-quickviewer-xhtml}} 
+    (where 'myapp' is the artifactId that you entered when generating the app).
+
+  []
+      
+  Note: <only firefox is currently supported as a RESTful client; other browsers
+  (eg Chrome) render the XHTML just as XML.>
+    
 
 Running the app's JUnit tests
 
