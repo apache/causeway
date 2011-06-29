@@ -5773,8 +5773,7 @@ $ mvn antrun:run -D exec=json</programlisting></entry>
 $ mvn antrun:run -D exec=xhtml</programlisting></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink><para>Use
-                    Firefox to view the XHTML webpages</para></entry>
+                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
                   </row>
                 </tbody>
               </tgroup>
@@ -5868,8 +5867,7 @@ $ mvn jetty:run</programlisting></entry>
 $ mvn jetty:run</programlisting></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-xhtml/">http://localhost:8080/quickstart-viewer-xhtml</ulink><para>Use
-                    Firefox to view the XHTML webpages</para></entry>
+                    url="http://localhost:8080/quickstart-viewer-xhtml/">http://localhost:8080/quickstart-viewer-xhtml</ulink></entry>
                   </row>
                 </tbody>
               </tgroup>
@@ -6093,7 +6091,8 @@ $ mvn jetty:run</programlisting></entry>
                     <entry><filename>viewer-html/ide/eclipse/launch/quickstart-viewer-html.launch</filename></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink></entry>
+                    url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink><para>logon
+                    using <emphasis>sven | pass</emphasis></para></entry>
                   </row>
 
                   <row>
@@ -6102,7 +6101,8 @@ $ mvn jetty:run</programlisting></entry>
                     <entry><filename>viewer-json/ide/eclipse/launch/quickstart-viewer-json.launch</filename></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
+                    url="http://localhost:8080">http://localhost:8080</ulink><para>Use
+                    Chrome to view the JSON</para></entry>
                   </row>
 
                   <row>
@@ -6111,7 +6111,9 @@ $ mvn jetty:run</programlisting></entry>
                     <entry><filename>viewer-scimpi/ide/eclipse/launch/quickstart-viewer-scimpi.launch</filename></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
+                    url="http://localhost:8080">http://localhost:8080</ulink><para>logon
+                    using <emphasis>sven | pass</emphasis> (when required to
+                    do so)</para></entry>
                   </row>
 
                   <row>
