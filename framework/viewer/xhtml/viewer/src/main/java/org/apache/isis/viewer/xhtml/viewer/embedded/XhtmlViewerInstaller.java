@@ -40,12 +40,12 @@ public class XhtmlViewerInstaller extends IsisViewerInstallerAbstract {
     protected static final String[] STATIC_CONTENT = new String[] { "*.js", "*.gif", "*.png" };
 
     public XhtmlViewerInstaller() {
-        super("restful");
+        super("xhtml");
     }
 
     @Override
     protected IsisViewer doCreateViewer() {
-        return new EmbeddedWebViewerRestful();
+        return new EmbeddedWebViewerXhtml();
     }
 
 }

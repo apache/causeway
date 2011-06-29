@@ -40,12 +40,12 @@ public class JsonViewerInstaller extends IsisViewerInstallerAbstract {
     protected static final String[] STATIC_CONTENT = new String[] { "*.js", "*.gif", "*.png" };
 
     public JsonViewerInstaller() {
-        super("restful");
+        super("json");
     }
 
     @Override
     protected IsisViewer doCreateViewer() {
-        return new EmbeddedWebViewerRestful();
+        return new EmbeddedWebViewerJson();
     }
 
 }

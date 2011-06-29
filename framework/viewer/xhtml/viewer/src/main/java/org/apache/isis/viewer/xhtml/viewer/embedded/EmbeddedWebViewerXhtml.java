@@ -24,19 +24,19 @@ import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
-import org.apache.isis.viewer.xhtml.viewer.RestfulApplication;
+import org.apache.isis.viewer.xhtml.viewer.XhtmlApplication;
 import org.apache.isis.viewer.xhtml.viewer.authentication.AuthenticationSessionLookupStrategyTrusted;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
-final class EmbeddedWebViewerRestful extends EmbeddedWebViewer {
+final class EmbeddedWebViewerXhtml extends EmbeddedWebViewer {
     @Override
     public WebAppSpecification getWebAppSpecification() {
         final WebAppSpecification webAppSpec = new WebAppSpecification();
 
-        webAppSpec.addContextParams("isis.viewers", "restful");
+        webAppSpec.addContextParams("isis.viewers", "xhtml");
 
-        webAppSpec.addContextParams(XhtmlViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulApplication.class.getName());
+        webAppSpec.addContextParams(XhtmlViewerInstaller.JAVAX_WS_RS_APPLICATION, XhtmlApplication.class.getName());
 
         webAppSpec.addServletContextListener(ResteasyBootstrap.class);
 
