@@ -36,9 +36,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.resources.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
-import org.apache.isis.viewer.xhtml.applib.resources.DomainObjectResource;
 
 @Path("/objects")
 public class DomainObjectResourceImpl extends ResourceAbstract implements DomainObjectResource {

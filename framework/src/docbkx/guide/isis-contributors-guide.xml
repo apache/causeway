@@ -5596,8 +5596,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
                   at the time of writing there are known issues with the
                   integration between m2eclipse and <acronym>WTP</acronym>: it
                   does not reliably deploy transitive dependencies. For this
-                  reason we omit testing the <acronym>WTP</acronym>
-                  support.</para>
+                  reason we omit testing using <acronym>WTP</acronym>.</para>
                 </note>
               </listitem>
             </itemizedlist>
@@ -5671,10 +5670,15 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
             <para>This command also runs tests, so a successful build means
             that the JUnit tests in the <filename>tests-junit</filename> and
             <filename>tests-bdd</filename> modules have passed. As a
-            side-effect of running the tests, the Concordion BDD tests in
-            tests-bdd will generate a set of annotated <acronym>HTML</acronym>
-            files. These can be found in
-            <filename>tests-bdd/target/concordion</filename>. For example, the
+            side-effect of running the tests, the Concordion
+            <acronym>BDD</acronym> tests in <filename>tests-bdd</filename>
+            will generate a set of annotated <acronym>HTML</acronym> files.
+            These can be found in
+            <filename>tests-bdd/target/concordion</filename> (as defined by
+            the <varname>${concordion.output.dir}</varname> system property
+            for the surefire plugin).</para>
+
+            <para>For example, the
             <filename>tests-bdd/target/concordion/viewer/bdd/stories/todo/ScenarioMarkItemAsDone.html</filename>
             should look something like:</para>
 
@@ -5758,7 +5762,7 @@ $ mvn antrun:run -D exec=html</programlisting></entry>
 $ mvn antrun:run -D exec=json</programlisting></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080/services</ulink><para>Use
+                    url="http://localhost:8080">http://localhost:8080</ulink><para>Use
                     Chrome to view the JSON</para></entry>
                   </row>
 
@@ -5831,7 +5835,7 @@ $ mvn jetty:run</programlisting></entry>
 $ mvn jetty:run</programlisting></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-json/services">http://localhost:8080/quickstart-viewer-json/services</ulink><para>use
+                    url="http://localhost:8080/quickstart-viewer-json">http://localhost:8080/quickstart-viewer-json</ulink><para>use
                     Chrome to view the JSON</para></entry>
                   </row>
 
@@ -6001,7 +6005,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>DnD</entry>
 
-                    <entry><filename>quickstart-quickrun-dnd.launch</filename></entry>
+                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-dnd.launch</filename></entry>
 
                     <entry>n/a</entry>
                   </row>
@@ -6009,7 +6013,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>HTML</entry>
 
-                    <entry><filename>quickstart-quickrun-html.launch</filename></entry>
+                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-html.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink></entry>
@@ -6018,7 +6022,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>JSON (Restful)</entry>
 
-                    <entry><filename>quickstart-quickrun-json.launch</filename></entry>
+                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-json.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080/quickstart-viewer-wicket">http://localhost:8080</ulink></entry>
@@ -6027,7 +6031,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>XHTML (Restful)</entry>
 
-                    <entry><filename>quickstart-quickrun-xhtml.launch</filename></entry>
+                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-xhtml.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080">http://localhost:8080</ulink></entry>
@@ -6076,7 +6080,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>Viewer</entry>
 
-                    <entry align="center">Module</entry>
+                    <entry align="center">Launch Configuration</entry>
 
                     <entry>Browse to</entry>
                   </row>
@@ -6086,7 +6090,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>HTML</entry>
 
-                    <entry>viewer-html</entry>
+                    <entry><filename>viewer-html/ide/eclipse/launch/quickstart-viewer-html.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink></entry>
@@ -6095,7 +6099,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>JSON (Restful)</entry>
 
-                    <entry>viewer-json</entry>
+                    <entry><filename>viewer-json/ide/eclipse/launch/quickstart-viewer-json.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080">http://localhost:8080</ulink></entry>
@@ -6104,7 +6108,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>Scimpi</entry>
 
-                    <entry>viewer-scimpi</entry>
+                    <entry><filename>viewer-scimpi/ide/eclipse/launch/quickstart-viewer-scimpi.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080">http://localhost:8080</ulink></entry>
@@ -6113,7 +6117,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>Wicket</entry>
 
-                    <entry>viewer-wicket</entry>
+                    <entry><filename>viewer-wicket/ide/eclipse/launch/quickstart-viewer-wicket.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080">http://localhost:8080</ulink></entry>
@@ -6122,7 +6126,7 @@ $ mvn jetty:run</programlisting></entry>
                   <row>
                     <entry>XHTML (Restful)</entry>
 
-                    <entry>viewer-xhtml</entry>
+                    <entry><filename>viewer-xhtml/ide/eclipse/launch/quickstart-viewer-xhtml.launch</filename></entry>
 
                     <entry><ulink
                     url="http://localhost:8080">http://localhost:8080</ulink></entry>
@@ -6170,6 +6174,10 @@ $ mvn jetty:run</programlisting></entry>
                 </tbody>
               </tgroup>
             </table>
+
+            <para>When run from within Eclipse, the BDD tests will generate
+            their test script in <filename>/tmp/concordion</filename> (the
+            default location).</para>
           </sect3>
         </sect2>
 

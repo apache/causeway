@@ -16,18 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.xhtml.applib.resources;
+package org.apache.isis.viewer.json.applib.resources;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-public interface ServicesResource {
+public interface BootstrapResource {
 
     @GET
-    @Produces({ MediaType.APPLICATION_JSON })
-    @Path("/")
-    public String services();
+    @Produces({ MediaType.TEXT_HTML })
+    public String bootstrap();
 
 }

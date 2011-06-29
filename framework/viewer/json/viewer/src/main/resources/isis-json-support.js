@@ -1,3 +1,4 @@
+// licensed under ALv2; see full statement at end of file.
 function add_links(ul, linkable) {
     var el = $("<a>", {
          href: linkable.link.url,
@@ -10,7 +11,7 @@ function add_links(ul, linkable) {
 }
 
 function bootstrap_app() {
-    $.getJSON('/index', 
+    $.getJSON('/', 
         undefined,
 		function load_services (data) {
 	        $.getJSON(data.services.url,
@@ -25,10 +26,6 @@ function bootstrap_app() {
 	            });
     });
 }   
-
-
-
-
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
