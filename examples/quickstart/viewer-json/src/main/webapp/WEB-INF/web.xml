@@ -113,5 +113,9 @@
 		<servlet-name>Resource</servlet-name>
 		<url-pattern>*.png</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
 
 </web-app>
