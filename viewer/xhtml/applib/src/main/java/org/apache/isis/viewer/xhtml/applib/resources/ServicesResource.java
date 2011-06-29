@@ -25,8 +25,7 @@ import javax.ws.rs.Produces;
 public interface ServicesResource {
 
     @GET
-    //@Produces({ "application/xhtml+xml", "application/json", "text/html" })
-    @Produces({ "application/json" })
+    @Produces({ "application/xhtml+xml", "text/html" })
     @Path("/")
     public String services();
 

@@ -25,9 +25,9 @@ import org.apache.isis.viewer.xhtml.viewer.resources.services.ServicesResourceIm
 import org.apache.isis.viewer.xhtml.viewer.resources.specs.SpecsResourceImpl;
 import org.apache.isis.viewer.xhtml.viewer.resources.user.UserResourceImpl;
 
-public class RestfulApplication extends AbstractJaxRsApplication {
+public class XhtmlApplication extends AbstractJaxRsApplication {
 
-    public RestfulApplication() {
+    public XhtmlApplication() {
         addSingleton(new HomePageResourceImpl());
         addSingleton(new ObjectResourceImpl());
         addSingleton(new ServicesResourceImpl());

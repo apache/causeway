@@ -29,12 +29,12 @@ import org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLo
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
-final class EmbeddedWebViewerRestful extends EmbeddedWebViewer {
+final class EmbeddedWebViewerJson extends EmbeddedWebViewer {
     @Override
     public WebAppSpecification getWebAppSpecification() {
         final WebAppSpecification webAppSpec = new WebAppSpecification();
 
-        webAppSpec.addContextParams("isis.viewers", "restful");
+        webAppSpec.addContextParams("isis.viewers", "json");
 
         webAppSpec.addContextParams(JsonViewerInstaller.JAVAX_WS_RS_APPLICATION, JsonApplication.class.getName());
 
