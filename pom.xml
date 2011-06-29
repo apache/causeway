@@ -1119,6 +1119,12 @@ archetype includes this explicit dependency.
                 <groupId>org.htmlparser</groupId>
                 <artifactId>htmlparser</artifactId>
                 <version>1.6</version>
+                <exclusions>
+                	<exclusion>
+                		<groupId>com.sun</groupId>
+                		<artifactId>tools</artifactId>
+                	</exclusion>
+                </exclusions>
             </dependency>
 
             <!-- Testing libraries (not scope=test because used by viewer/junit) -->
