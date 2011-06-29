@@ -22,13 +22,14 @@ import java.util.List;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.json.applib.resources.ServicesResource;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
-import org.apache.isis.viewer.xhtml.applib.resources.ServicesResource;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -43,7 +44,7 @@ import com.google.common.collect.Lists;
 public class ServicesResourceImpl extends ResourceAbstract implements ServicesResource {
 
     @Override
-    @Produces({ "application/json" })
+    @Produces({ MediaType.APPLICATION_JSON })
     public String services() {
         init();
 

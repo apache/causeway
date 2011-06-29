@@ -55,7 +55,7 @@ public enum MemberType {
         }
     },
     ACTION("actions/", ImmutableMap.of(
-            "invoke", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke")
+            "invoke", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
             )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {

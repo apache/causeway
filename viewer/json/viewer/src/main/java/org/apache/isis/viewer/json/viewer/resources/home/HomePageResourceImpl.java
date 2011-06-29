@@ -22,16 +22,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.json.applib.resources.HomePageResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.xhtml.applib.resources.HomePageResource;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
  * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
-@Path("/index")
+@Path("/")
 public class HomePageResourceImpl extends ResourceAbstract implements HomePageResource {
 
 

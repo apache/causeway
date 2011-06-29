@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.xhtml.applib.resources;
+package org.apache.isis.viewer.json.applib.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-public interface HomePageResource {
+public interface UserResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public String resources();
+    public String user();
 
 }

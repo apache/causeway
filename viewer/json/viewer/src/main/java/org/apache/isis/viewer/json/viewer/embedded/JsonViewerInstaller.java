@@ -37,7 +37,7 @@ public class JsonViewerInstaller extends IsisViewerInstallerAbstract {
 
     protected static final String EVERYTHING = "*";
     protected static final String ROOT = "/";
-    protected static final String[] STATIC_CONTENT = new String[] { "*.js", "*.gif", "*.png" };
+    protected static final String[] STATIC_CONTENT = new String[] { "*.js", "*.gif", "*.png", "*.html" };
 
     public JsonViewerInstaller() {
         super("json");

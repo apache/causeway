@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.xhtml.applib.resources;
+package org.apache.isis.viewer.json.applib.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

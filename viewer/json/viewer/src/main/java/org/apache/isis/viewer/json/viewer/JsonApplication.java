@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
-import org.apache.isis.viewer.json.viewer.resources.bootstrap.BootstrapResourceImpl;
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageResourceImpl;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectResourceImpl;
 import org.apache.isis.viewer.json.viewer.resources.services.ServicesResourceImpl;
@@ -26,7 +25,6 @@ import org.apache.isis.viewer.json.viewer.resources.services.ServicesResourceImp
 public class JsonApplication extends AbstractJaxRsApplication {
 
     public JsonApplication() {
-        addSingleton(new BootstrapResourceImpl());
         addSingleton(new HomePageResourceImpl());
         addSingleton(new ServicesResourceImpl());
         addSingleton(new DomainObjectResourceImpl());

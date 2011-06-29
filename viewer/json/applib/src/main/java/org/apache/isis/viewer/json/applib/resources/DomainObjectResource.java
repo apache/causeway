@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.xhtml.applib.resources;
+package org.apache.isis.viewer.json.applib.resources;
 
 import java.io.InputStream;
 import java.util.List;

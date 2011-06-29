@@ -2622,11 +2622,10 @@ public interface UserResource {
     and can parse <acronym>XHTML</acronym>, they can interact with the
     resources provided by the viewer.</para>
 
-    <para>That said, if you are writing Java applications, then
-    <emphasis>restful Objects</emphasis> provides an application library
-    (applib) to simplify the task. To reference this applib, add the following
-    to your Maven pom's <sgmltag>&lt;dependencies&gt;</sgmltag>
-    section:</para>
+    <para>That said, if you are writing Java applications, then there is also 
+    an application library (applib) to simplify the task. To reference this 
+    applib, add the following to your Maven pom's 
+    <sgmltag>&lt;dependencies&gt;</sgmltag> section:</para>
 
     <programlisting>&lt;properties&gt;
     &lt;isis.viewer-restful.version&gt;y.y.y&lt;/isis.viewer-restful.version&gt;
