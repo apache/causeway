@@ -205,12 +205,14 @@
       <sect1 id="sec.SettingUpIde">
         <title>IDE</title>
 
-        <para>Apache Isis is built using Maven, so it isn't strictly necessary
-        to use an IDE. However, we do strongly recommend it.</para>
+        <para><emphasis>Apache Isis</emphasis> is built using Maven, so it
+        isn't strictly necessary to use an IDE. However, we do strongly
+        recommend it.</para>
 
-        <para>All of the main IDEs provide Maven support: NetBeans and
-        IntelliJ "natively", while Eclipse provides support through both the
-        m2eclipse or the q4e plugins.</para>
+        <para>All of the main IDEs provide Maven support, NetBeans, IntelliJ
+        "natively" and Eclipse (3.7 and later). This guide is written to
+        target Eclipse 3.7, which uses m2e (a new version of the m2eclipse
+        plugin, and now one of the Eclipse projects).</para>
 
         <para>Install each of these from their respective update sites.</para>
 
@@ -220,59 +222,21 @@
           <sect3>
             <title>Base Install</title>
 
-            <para>Install a recent version of <ulink
-            url="http://eclipse.org">Eclipse</ulink> (eg 3.5 or 3.6). The
-            standard Java edition is sufficient, but you can install the JEE
-            enterprise edition if you wish.</para>
+            <para>As a minimum, Eclipse requires the Subversion and Maven
+            support. These should be installed next.</para>
 
-            <para>As a minimum, Eclipse requires the
-            <emphasis>subclipse</emphasis> and <emphasis>m2eclipse</emphasis>
-            plugins. These should be installed next.</para>
-          </sect3>
+            <para>We recommend that you use <ulink
+            url="http://eclipse.org">Eclipse</ulink> 3.7, because this is
+            bundled with m2e to provide Maven support. If you choose to use a
+            distribution that doesn't include the Maven support, then you can
+            use Help&gt;Install New Software to install the m2e
+            features.</para>
 
-          <sect3>
-            <title>Subclipse</title>
-
-            <para>The <ulink
-            url="http://subclipse.tigris.org">subclipse</ulink> plugin
-            provides <emphasis>Subversion</emphasis> support, and can be
-            installed from its <ulink
+            <para>For Subversion support we recommend you use the <ulink
+            url="http://subclipse.tigris.org">subclipse</ulink> plugin, which
+            can be installed from its <ulink
             url="http://subclipse.tigris.org/update_1.6.x">update
             site</ulink>.</para>
-          </sect3>
-
-          <sect3>
-            <title>m2eclipse</title>
-
-            <para>Normally Eclipse uses its own <filename>.project</filename>
-            and <filename>.classpath</filename> files to (respectively) define
-            the layout of the project and the classpath for a project. With
-            Maven however this same information is available in the
-            <filename>pom.xml</filename>.</para>
-
-            <para>What the <ulink
-            url="http://m2eclipse.codehaus.org">m2eclipse</ulink> plugin does
-            is generate the <filename>.project</filename> and
-            <filename>.classpath</filename> files on-the-fly, and uses
-            Eclipse's own "Classpath Container" to reference
-            <emphasis>Maven</emphasis> modules in the local repository.
-            <emphasis>m2eclipse</emphasis> will also download any referenced
-            modules from remote repositories into the local repository.</para>
-
-            <para><emphasis>m2eclipse</emphasis> can be installed from its
-            <ulink url="http://m2eclipse.sonatype.org/sites/m2e">update
-            site</ulink>.</para>
-
-            <para>Once installed, we recommend that you point m2eclipse back
-            to your local Maven installation, using Windows &gt; Preferences
-            &gt; Maven &gt; Installations:</para>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/dev-env/m2eclipse-preferences-maven-installation.png"
-                           scale="50" />
-              </imageobject>
-            </mediaobject>
           </sect3>
 
           <sect3>
@@ -286,6 +250,12 @@
                 <para><ulink url="???">EasyShell</ulink>, to provide easy
                 integration with the operating system shell and command
                 line.</para>
+              </listitem>
+
+              <listitem>
+                <para><ulink
+                url="http://infinitest.github.com">Infinitest</ulink>, to
+                provide continuous testing support</para>
               </listitem>
 
               <listitem>
@@ -413,11 +383,11 @@
           <title>Other IDEs</title>
 
           <para>All of the committers for <emphasis>Isis</emphasis> use the
-          Eclipse IDE with the m2eclipse plugin, so the instructions provided
-          in this guide reflect our own experience. However, if you use one of
-          the other IDEs, please feel free to contribute patches to this
-          documentation to explain the setup, and we'll add in your words of
-          wisdom here.</para>
+          Eclipse IDE with the m2e/m2eclipse plugin, so the instructions
+          provided in this guide reflect our own experience. However, if you
+          use one of the other IDEs, please feel free to contribute patches to
+          this documentation to explain the setup, and we'll add in your words
+          of wisdom here.</para>
         </sect2>
       </sect1>
     </chapter>
@@ -1542,7 +1512,7 @@ protected IsisConfiguration getConfiguration() {
 
         <para>From the dialog it is also possible to automatically perform the
         same actions as the cleanup (the Configure button). However, it
-        doesn't seem possible (as of Eclipse 3.6) to export/import these
+        doesn't seem possible (as of Eclipse 3.7) to export/import these
         settings within a config file.</para>
 
         <para>Our recommendation for now is just to enable the simple
@@ -5739,7 +5709,7 @@ $ mvn antrun:run -D exec=xxx</programlisting>
                   <row>
                     <entry>DnD</entry>
 
-                    <entry><programlisting>$ cd quickstart/
+                    <entry><programlisting>$ cd quickrun/
 $ mvn antrun:run -D exec=dnd</programlisting></entry>
 
                     <entry>n/a</entry>
@@ -5748,7 +5718,7 @@ $ mvn antrun:run -D exec=dnd</programlisting></entry>
                   <row>
                     <entry>HTML</entry>
 
-                    <entry><programlisting>$ cd quickstart/
+                    <entry><programlisting>$ cd quickrun/
 $ mvn antrun:run -D exec=html</programlisting></entry>
 
                     <entry><ulink
@@ -5758,7 +5728,7 @@ $ mvn antrun:run -D exec=html</programlisting></entry>
                   <row>
                     <entry>JSON (Restful)</entry>
 
-                    <entry><programlisting>$ cd quickstart/
+                    <entry><programlisting>$ cd quickrun/
 $ mvn antrun:run -D exec=json</programlisting></entry>
 
                     <entry><ulink
@@ -5769,7 +5739,7 @@ $ mvn antrun:run -D exec=json</programlisting></entry>
                   <row>
                     <entry>XHTML (Restful)</entry>
 
-                    <entry><programlisting>$ cd quickstart/
+                    <entry><programlisting>$ cd quickrun/
 $ mvn antrun:run -D exec=xhtml</programlisting></entry>
 
                     <entry><ulink
@@ -5888,36 +5858,19 @@ $ mvn jetty:run</programlisting></entry>
           <sect3>
             <title>Prerequisites</title>
 
-            <para>To fully test with Eclipse, the <ulink
-            url="http://m2eclipse.sonatype.org/sites/m2e">m2eclipse</ulink>
-            plugin must be installed:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>m2eclipse is now available in Eclipse 3.7 (indigo)
-                installations</para>
-              </listitem>
-            </itemizedlist>
-
-            <itemizedlist>
-              <listitem>
-                <para>using earlier distributions you can install m2eclipse
-                from its update site.</para>
-
-                <para>You may also find that you need to manually install
-                <ulink
-                url="http://download.eclipse.org/tools/gef/updates/releases/">Zest</ulink>
-                first; see this <ulink
-                url="http://domengrabec.wordpress.com/2010/12/14/installing-maven-on-eclipse/">blog
-                post</ulink> for an explanation as to why.</para>
-              </listitem>
-            </itemizedlist>
+            <para>To fully test with Eclipse, use Eclipse 3.7 with the m2e
+            feature for Maven support. Note that using the m2eclipse with
+            earlier versions of Eclipse may not suffice, because the .launch
+            configuration files that are tested have a reference to
+            <filename>org.eclipse.m2e.launchconfig.classpathProvider</filename>
+            (whereas earlier versions the key was under
+            <filename>org.maven.ide.eclipse</filename>).</para>
 
             <note>
               <para>As noted above, we do not test the webapps using Eclipse's
               WTP (web tooling) support, because their are interoperability
-              problems between WTP and m2eclipse. As and when this improves in
-              the future, we'll update this guide.</para>
+              problems between WTP and m2e. As and when this improves in the
+              future, we'll update this guide.</para>
             </note>
           </sect3>
 
@@ -6193,7 +6146,7 @@ $ mvn jetty:run</programlisting></entry>
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.GenerateArchetypeSource">
         <title>Generate the archetype source</title>
 
         <para>When you are happy that the quickstart prototype app is working
@@ -6203,25 +6156,35 @@ $ mvn jetty:run</programlisting></entry>
         directory:</para>
 
         <programlisting>$ mkdir /tmp/archetype
-$ cd .../framework/examples
-$ svn export quickstart /tmp/archetype</programlisting>
+$ cd .../trunk/examples
+$ svn export quickstart /tmp/archetype/quickstart</programlisting>
 
         <para>This will export all versioned files into
-        <filename>/tmp/archetype/quickstart</filename>. Switch to this
-        directory and then regenerate the archetype:</para>
+        <filename>/tmp/archetype/quickstart</filename>. </para>
+
+        <para>At the same time, copy down the groovy script that will be
+        needed in the next section (<xref
+        linkend="sec.ArchetypeAutomatedEdits" />):</para>
+
+        <programlisting>$ cd ../framework
+$ cp updateGeneratedArchetypeSources.groovy /tmp/archetype/.</programlisting>
+
+        <para>Now switch to this directory and regenerate the
+        archetype:</para>
 
         <programlisting>$ cd /tmp/archetype/quickstart
 $ mvn eclipse:clean clean archetype:create-from-project</programlisting>
+
+        <para>This generates the archetype source in
+        <filename>target/generated-sources/archetype</filename>.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.ArchetypeAutomatedEdits">
         <title>Perform automated edits to the generated archetype
         source</title>
 
-        <para>The archetype source is generated in target (under
-        <filename>target/generated-sources/archetype</filename>). Before it
-        can be used to create the archetype, some of the generated files must
-        be edited. Specifically:</para>
+        <para>Before the archetype source can be used to create the archetype,
+        some of the generated files must be edited. Specifically:</para>
 
         <itemizedlist>
           <listitem>
@@ -6252,7 +6215,11 @@ $ mvn eclipse:clean clean archetype:create-from-project</programlisting>
         </itemizedlist>
 
         <para>Since doing this manually would be rather laborious, this has
-        been scripted using Groovy. To make the change, just use:</para>
+        been scripted using the
+        <filename>updateGeneratedArchetypeSources.groovy</filename> script
+        (copied down in the previous section, <xref
+        linkend="sec.GenerateArchetypeSource" />). So, to make the change,
+        just use:</para>
 
         <programlisting>cd ..
 groovy updateGeneratedArchetypeSource.groovy
@@ -6271,12 +6238,13 @@ cd quickstart</programlisting>
       <sect1>
         <title>Manually edit the generated archetype source</title>
 
-        <para>The <filename>archetype-metadata.xml</filename> file lists each
-        of the files that constitute the archetype, using a wildcard syntax).
-        Given that the archetype is generated by exporting out of the
-        subversion/Eclipse workspace, all files should be relevant. Even then,
-        it is probably worth reviewing to ensure that no files have been
-        accidentally included:</para>
+        <para>The <filename>archetype-metadata.xml</filename> file (in
+        <filename>target/generated-sources/archetype/src/main/resources/META-INF/maven</filename>)
+        lists each of the files that constitute the archetype, using a
+        wildcard syntax). Given that the archetype is generated by exporting
+        out of the subversion/Eclipse workspace, all files should be relevant.
+        Even so, it is probably worth reviewing to ensure that no files have
+        been accidentally included:</para>
 
         <itemizedlist>
           <listitem>
