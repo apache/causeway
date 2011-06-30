@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.support</groupId>
+        <groupId>org.apache.isis</groupId>
         <artifactId>quickstart</artifactId>
         <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
