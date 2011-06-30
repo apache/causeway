@@ -5528,8 +5528,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
 
             <itemizedlist>
               <listitem>
-                <para>from the command line from a shaded
-                <acronym>JAR</acronym>.</para>
+                <para>from a shaded <acronym>JAR</acronym>.</para>
 
                 <para>For convenience the <code>mvn antrun</code> plugin is
                 used to simplify calling the shaded <acronym>JAR</acronym>
@@ -5546,27 +5545,36 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
           <listitem>
             <para>Those viewers which are webapps will have a
             <filename>web.xml</filename> specifying the required
-            servlets/filters/context listeners. For these webapps you can use
-            one of three approaches, all of which are equivalent,
+            servlets/filters/context listeners. For these webapps you can
             either:</para>
 
             <itemizedlist>
               <listitem>
-                <para>using <code>mvn jetty:run</code></para>
+                <para>use <code>mvn jetty:run</code></para>
+
+                <para>In this approach Maven itself starts up a Jetty instance
+                configured to host the webapp defined by the
+                <filename>web.xml</filename>.</para>
               </listitem>
 
               <listitem>
                 <para>(if using Eclipse) using the provided Eclipse
                 <filename>.launch</filename> configuration</para>
 
+                <para>In this approach the <filename>.launch</filename>
+                configuration runs an <emphasis>Isis</emphasis>-provided class
+                that in turn starts a Jetty instance configured to host the
+                webapp defined by the <filename>web.xml</filename>.</para>
+
                 <note>
                   <para>If using Eclipse, then it ought in theory to be
                   possible to use Eclipse <acronym>WTP</acronym> (web tooling
                   platform) support, ie "Run as&gt; Run on server". However,
                   at the time of writing there are known issues with the
-                  integration between m2eclipse and <acronym>WTP</acronym>: it
-                  does not reliably deploy transitive dependencies. For this
-                  reason we omit testing using <acronym>WTP</acronym>.</para>
+                  integration between m2e(clipse) and <acronym>WTP</acronym>:
+                  it does not reliably deploy transitive dependencies. For
+                  this reason we omit testing using
+                  <acronym>WTP</acronym>.</para>
                 </note>
               </listitem>
             </itemizedlist>
@@ -5860,17 +5868,18 @@ $ mvn jetty:run</programlisting></entry>
 
             <para>To fully test with Eclipse, use Eclipse 3.7 with the m2e
             feature for Maven support. Note that using the m2eclipse with
-            earlier versions of Eclipse may not suffice, because the .launch
-            configuration files that are tested have a reference to
+            earlier versions of Eclipse may not suffice, because the
+            <filename>.launch</filename> configuration files that are tested
+            have a reference to
             <filename>org.eclipse.m2e.launchconfig.classpathProvider</filename>
             (whereas earlier versions the key was under
             <filename>org.maven.ide.eclipse</filename>).</para>
 
             <note>
               <para>As noted above, we do not test the webapps using Eclipse's
-              WTP (web tooling) support, because their are interoperability
-              problems between WTP and m2e. As and when this improves in the
-              future, we'll update this guide.</para>
+              WTP (web tooling) support, because there are interoperability
+              problems between <acronym>WTP</acronym> and m2e. As and when
+              this improves in the future, we'll update this guide.</para>
             </note>
           </sect3>
 
@@ -5967,7 +5976,7 @@ $ mvn jetty:run</programlisting></entry>
                     <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-html.launch</filename></entry>
 
                     <entry><ulink
-                    url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink></entry>
+                    url="http://localhost:8080/start.app">http://localhost:8080/start.app</ulink></entry>
                   </row>
 
                   <row>
@@ -6130,9 +6139,10 @@ $ mvn jetty:run</programlisting></entry>
               </tgroup>
             </table>
 
-            <para>When run from within Eclipse, the BDD tests will generate
-            their test script in <filename>/tmp/concordion</filename> (the
-            default location).</para>
+            <para>When run from within Eclipse, the <acronym>BDD</acronym>
+            tests will generate their test script in
+            <filename>/tmp/concordion</filename> (the default
+            location).</para>
           </sect3>
         </sect2>
 
@@ -6221,9 +6231,9 @@ $ mvn eclipse:clean clean archetype:create-from-project</programlisting>
         linkend="sec.GenerateArchetypeSource" />). So, to make the change,
         just use:</para>
 
-        <programlisting>cd ..
-groovy updateGeneratedArchetypeSource.groovy
-cd quickstart</programlisting>
+        <programlisting>$ cd ..
+$ groovy updateGeneratedArchetypeSource.groovy
+$ cd quickstart</programlisting>
 
         <para>If you want to check this has worked, switch into
         <filename>target/generated-sources/archetype/src/main/resources/archetype-resources</filename>
@@ -6315,7 +6325,7 @@ $ svn commit -m "deleting old archetype prior to recreating" quickstart-archetyp
 
           <para>Now, copy down to generated archetype</para>
 
-          <programlisting>cp -R quickstart/target/generated-sources/archetype quickstart-archetype</programlisting>
+          <programlisting>$ cp -R /tmp/archetype/quickstart/target/generated-sources/archetype quickstart-archetype</programlisting>
         </sect2>
 
         <sect2>
@@ -6395,10 +6405,10 @@ $ svn commit -m "deleting old archetype prior to recreating" quickstart-archetyp
 
           <para>Finally, commit the new archetype:</para>
 
-          <programlisting>svn -N add quickstart-archetype
-svn add quickstart-archetype/pom.xml
-svn add quickstart-archetype/src
-svn commit -m "recreated archetype from the 'quickstart' prototype app" quickstart-archetype</programlisting>
+          <programlisting>$ svn -N add quickstart-archetype
+$ svn add quickstart-archetype/pom.xml
+$ svn add quickstart-archetype/src
+$ svn commit -m "recreated archetype from the 'quickstart' prototype app" quickstart-archetype</programlisting>
         </sect2>
       </sect1>
     </appendix>
