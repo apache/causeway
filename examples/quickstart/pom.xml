@@ -21,7 +21,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.apache.isis</groupId>
+    <groupId>org.apache.isis.examples</groupId>
     <artifactId>quickstart</artifactId>
     <version>0.1.2-incubating-SNAPSHOT</version>
 

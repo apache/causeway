@@ -28,7 +28,7 @@
     <!-- mvn antrun:run -D exec=xhtml   : runs JAR as self-hosted webapp using XHTML viewer -->
     
     <parent>
-        <groupId>org.apache.isis</groupId>
+        <groupId>org.apache.isis.examples</groupId>
         <artifactId>quickstart</artifactId>
         <version>0.1.2-incubating-SNAPSHOT</version>
     </parent>
