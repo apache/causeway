@@ -352,13 +352,9 @@ Running the app's BDD (Concordion) tests
 Import into an IDE
 
   You can use any IDE that supports Maven; the Isis developers tend to use
-  Eclipse with the {{{http://m2eclipse.sonatype.org}m2eclipse}} plugin, but 
-  NetBeans and IntelliJ are equally as good. 
-
-  In Eclipse, you can install m2eclipse from the {{{http://m2eclipse.sonatype.org/sites/m2e}m2eclipse update site}};
-  depending on the version of Eclipse you have installed, you might find that
-  you need to install the {{{http://download.eclipse.org/tools/gef/updates/releases/}Zest visualization}}
-  prerequisite.  (It's a bug in m2eclipse that this prerequisite is not bundled up 
+  Eclipse 3.7 (with built-in Maven support through the m2e feature) or the 
+  earlier {{{http://m2eclipse.sonatype.org}m2eclipse}} plugin.  
+  NetBeans and IntelliJ are equally as good, though, at supporting Maven.
 
   In Eclipse, use File > Import > Maven > Existing Maven Project, and navigate
   to the root (myapp) directory.
@@ -392,21 +388,21 @@ Exploring the App
 
   []
     
-Running the app from the IDE
+Running the app from within Eclipse (3.7)
 
   The archetype provides a number of <<<.launch>>> configuration files for Eclipse, making it
   easy to launch the application - with different viewers.
   using the DnD viewer (quickrun module)
 
   The archetype currently does not provide equivalent configuration for other IDEs.  
-  However, if you open the Eclipse .launch file 
+  However, if you open the Eclipse <<<.launch>>> file 
   you'll see that all we are doing is running <<<org.apache.isis.Isis>>> with some 
   command line arguments, so hopefully this is easy enough to reproduce in
   other IDEs.  Alternatively, you can use those IDE's in-built support for Maven
   and have them execute the same Maven goals as documented above for running from
   the command-line.  
 
-  To run each of the viewers in Eclipse:
+  To run each of the viewers in Eclipse (3.7 only):
   
   * to run the DnD viewer,
   
