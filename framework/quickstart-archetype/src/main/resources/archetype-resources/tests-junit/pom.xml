@@ -32,7 +32,7 @@
 
 		<!-- this project's dependencies -->
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
             <artifactId>${rootArtifactId}-quickrun</artifactId>
             <version>${version}</version>
         </dependency>
