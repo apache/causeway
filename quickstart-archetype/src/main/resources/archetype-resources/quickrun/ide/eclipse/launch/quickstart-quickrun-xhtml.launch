@@ -1,20 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/org.apache.isis.runtimes.dflt.runtime/src/main/java/org/apache/isis/Isis.java"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
-</listAttribute>
-<mapAttribute key="org.eclipse.debug.core.preferred_launchers">
-<mapEntry key="[debug]" value="org.eclipse.jdt.launching.localJavaApplication"/>
-<mapEntry key="[run]" value="org.eclipse.jdt.launching.localJavaApplication"/>
-</mapAttribute>
-<stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"/>
-<booleanAttribute key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.isis.Isis"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--type exploration --viewer xhtml"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="quickstart-quickrun"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+    <listEntry value="/org.apache.isis.runtimes.dflt.runtime/src/main/java/org/apache/isis/Isis.java"/>
+  </listAttribute>
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+    <listEntry value="1"/>
+  </listAttribute>
+  <mapAttribute key="org.eclipse.debug.core.preferred_launchers">
+    <mapEntry value="org.eclipse.jdt.launching.localJavaApplication" key="[debug]"/>
+    <mapEntry value="org.eclipse.jdt.launching.localJavaApplication" key="[run]"/>
+  </mapAttribute>
+  <stringAttribute value="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector" key="org.eclipse.debug.core.source_locator_id"/>
+  <booleanAttribute value="true" key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS"/>
+  <stringAttribute value="org.eclipse.m2e.launchconfig.classpathProvider" key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER"/>
+  <stringAttribute value="org.apache.isis.Isis" key="org.eclipse.jdt.launching.MAIN_TYPE"/>
+  <stringAttribute value="--type exploration --viewer xhtml" key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS"/>
+  <stringAttribute value="${rootArtifactId}-quickrun" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
+  <stringAttribute value="org.eclipse.m2e.launchconfig.sourcepathProvider" key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"/>
 </launchConfiguration>
