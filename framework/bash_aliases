@@ -27,6 +27,9 @@ alias mci="mvn clean install -D modules=standard"
 alias msdf="mvn site-deploy -D modules=standard -D site=full -D deploy=local"
 alias msd="mvn site-deploy -D modules=standard -D deploy=local"
 
+alias mssdf="mvn site-deploy -D modules=site -D site=full -D deploy=local"
+alias mssd="mvn site-deploy -D modules=site -D deploy=local"
+
 alias svnst="svn status --ignore-externals | grep -v ^X"
 alias svnup="svn update --ignore-externals | grep -v ^X"
 
