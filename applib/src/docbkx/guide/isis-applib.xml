@@ -815,6 +815,17 @@
             <acronym>JSON</acronym> viewer produces <acronym>JSON</acronym>
             representations.</para>
           </listitem>
+
+          <listitem>
+            <para>The junit viewer (in <filename>viewers/junit</filename>)
+            uses wappers and a custom Isis JUnit test class runner
+            (<code>IsisTestRunner</code>) to let you write tests that interact
+            with the Isis framework as if you were a user, using one of the
+            normal end-user viewers.</para>
+
+            <para>For more information, see <xref
+            linkend="sec.UnitTesting" />)</para>
+          </listitem>
         </itemizedlist>
 
         <para>If deploying with the <acronym>DnD</acronym> viewer you also
@@ -853,7 +864,7 @@
         </sect2>
 
         <sect2 id="sec.UnitTesting">
-          <title>Unit Testing</title>
+          <title xreflabel="ref.unittesting">Unit Testing</title>
 
           <para>Unlike story tests, unit tests are normally written in a
           programming language, typically in a framework such as <ulink
