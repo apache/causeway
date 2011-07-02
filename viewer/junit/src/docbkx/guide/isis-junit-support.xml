@@ -22,13 +22,22 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
+
     <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Dan</firstname>
+
         <surname>Haywood</surname>
+      </author>
+
+      <author>
+        <firstname>Kevin</firstname>
+
+        <surname>Meyer</surname>
       </author>
     </authorgroup>
 
@@ -50,13 +59,11 @@
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores.  Apache 
-    Isis is hosted at the 
-    <ulink url="http://incubator.apache.org/isis">Apache Foundation</ulink>,
-    and is licensed under <ulink
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
-
 
     <para>This guide is written for programmers looking to test
     <emphasis>Apache Isis</emphasis> applications using JUnit.</para>
@@ -68,41 +75,153 @@
     <title>Introduction</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>What's it for?</para>
     </abstract>
 
     <sect1>
-      <title>***</title>
+      <title>Unit tests vs Acceptance tests vs End-to-end tests</title>
 
-      <para><emphasis>*** yada yada</emphasis></para>
+      <para>Pick up any good book on Test Driven Design (TDD) or attend any
+      course of developing software using tests, and you should find a
+      reasonable definition of a "unit test".</para>
+
+      <para>A unit test is usually a simple test that confirms that a
+      particular class method returns an expected value, sometimes based on
+      the class state, sometimes based only on input parameters. The point is
+      that the unit test does not make any assumptions about useability from
+      an end-user's perspective.</para>
+
+      <para>An acceptance test (see GOSS, <footnote>
+          <para>"Growing Object-Oriented Software, Guided By Tests" by Steve
+          Freeman and Nat Pryce, ISBN 987-0-321-50362-6</para>
+        </footnote>) is more about confirming that the customer's (end user /
+      your boss) expectations are being satisfied. As discussed in GOSS [page
+      10], sometimes the role of acceptance tests can be fulfilled by
+      "end-to-end tests", which exercise the entire application.</para>
+
+      <para>A key difference between a unit test and an acceptance test is
+      that the latter test the code from the <emphasis>end-user's
+      perspective</emphasis>.</para>
+
+      <para>The Isis JUnit viewer fulfills this purpose very nicely.</para>
+
+      <para>The JUnit viewer uses JUnit integrations and supporting classes of
+      the Wrapper programming model . The idea of these utilities is to wrap
+      your domain objects in proxies that apply the same rules as an
+      <emphasis>Apache Isis</emphasis> viewer. For example, if you try to
+      change a property or invoke an action that is disabled, then the proxy
+      will throw an exception. You write your test to pass if the exception is
+      thrown, and failed otherwise (e.g. using
+      <code>@Test(expected=DisabledException.class)</code>).</para>
     </sect1>
   </chapter>
 
   <chapter>
-    <title>***</title>
+    <title>The JUnit Viewer</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>blah</para>
     </abstract>
 
     <sect1>
-      <title>***</title>
+      <title>Wrapping your domain classes and injected services </title>
 
-      <para><emphasis>*** yada yada</emphasis></para>
+      <para>To ensure that your domain classes (and injected services) are
+      checked to ensure that "Can you see it, can you use it, can you do it"
+      are enforced, the relevant class instances must be wrapped: </para>
+
+      <para>Include the following in your test class to have the Isis test
+      framework inject a WrapperFactory instance:</para>
+
+      <para><code><code>private WrapperFactory wrapperFactory;
+      </code></code></para>
+
+      <para><code><code>protected WrapperFactory getWrapperFactory() { return
+      wrapperFactory; } </code></code></para>
+
+      <para><code><code>public void setWrapperFactory(WrapperFactory
+      wrapperFactory) { this.wrapperFactory = wrapperFactory; }
+      </code></code></para>
+
+      <para><code><code>protected &lt;T&gt; T wrapped(T obj) { return
+      wrapperFactory.wrap(obj); }</code></code></para>
+
+      <para>Then, to wrap your domain classes:</para>
+
+      <para><code>public Member findMember(String initials, String surname) {
+      Member member = wrapped(members.findMember(initials, surname)); return
+      member; } </code></para>
+
+      <para></para>
     </sect1>
   </chapter>
 
   <appendix>
-    <title>***</title>
+    <title>Example</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>Class Fragments</para>
     </abstract>
 
     <sect1 id="sec.module-ui">
-      <title>***</title>
+      <title>Abstract Test Class</title>
 
-      <para>*** yada yada</para>
+      <para>Specify the testclass to use, and the domain services:</para>
+
+      <para><code>@RunWith(IsisTestRunner.class) </code></para>
+
+      <para><code>@Services({ @Service(MemberRepositoryDefault.class),
+      @Service(ElectionRepositoryDefault.class),
+      @Service(AuthenticationFixtureClass.class),
+      @Service(FinancesRepositoryDefault.class) }) </code></para>
+
+      <para><code>public abstract class AbstractMemberTest { </code></para>
+
+      <para><code>private WrapperFactory wrapperFactory; </code></para>
+
+      <para><code>protected WrapperFactory getWrapperFactory() { return
+      wrapperFactory; } </code></para>
+
+      <para><code>public void setWrapperFactory(WrapperFactory wrapperFactory)
+      { this.wrapperFactory = wrapperFactory; } </code></para>
+
+      <para><code>protected &lt;T&gt; T wrapped(T obj) { return
+      wrapperFactory.wrap(obj); }</code></para>
+
+      <para><code>}</code></para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Domain Test Class</title>
+
+      <para>Specify the fixtures to load:</para>
+
+      <para><code>@Fixtures({
+      @Fixture(MembershipFixture.class)})</code></para>
+
+      <para><code></code></para>
+
+      <para><code>public class MemberNormalTest extends AbstractMemberTest
+      {</code></para>
+
+      <para><code></code></para>
+
+      <para><code>@Test(expected = DisabledException.class) </code></para>
+
+      <para><code>public void memberCanNotChangeOwnInitials() throws Exception
+      { </code></para>
+
+      <para><code>wrappedLoggedInMember.setInitials("X"); </code></para>
+
+      <para><code>fail("Should have been disabled"); </code></para>
+
+      <para><code>}</code></para>
+
+      <para><code>}</code></para>
+
+      <para><code></code></para>
     </sect1>
   </appendix>
 </book>
