@@ -169,21 +169,6 @@
   
   <supplement>
     <project>
-      <groupId>com.sun</groupId>
-      <artifactId>tools</artifactId>
-      <version>1.5.0</version>
-      <licenses>
-        <license>
-            <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1</name>
-            <url>http://www.opensource.org/licenses/cddl1</url>
-            <distribution>repo</distribution>          
-        </license>
-      </licenses>
-    </project>
-  </supplement>
-  
-  <supplement>
-    <project>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
       <version>1.4</version>
