@@ -3945,7 +3945,8 @@ licenses to remove from supplemental-models.xml (are spurious):
           <para>"Release candidate" version numbers (RCx) should NOT be used
           for releases, because once a release has been voted on it must not
           be altered. The corollary of this is that it IS allowed to use the
-          same version number for multiple releases.</para>
+          same version number for multiple release candidates (of course, only
+          the last of these will ever be promoted).</para>
         </note>
 
         <para>In the sections that follow, we use
@@ -3962,7 +3963,7 @@ licenses to remove from supplemental-models.xml (are spurious):
    -m "branching to create x.x.x-incubating"
 
 cd .../trunk/framework   # your local workspace for isis/trunk/framework
-cd ..
+cd ../..
 mkdir -p branches/x.x.x-incubating</programlisting>
 
           <para>Then, perform an <code>svn copy</code> from trunk:</para>
@@ -3971,7 +3972,7 @@ mkdir -p branches/x.x.x-incubating</programlisting>
     https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incubating/framework \
     -m "copying trunk to branches/x.x.x-incubating/framework"
 
-cp -R framework branches/x.x.x-incubating/framework</programlisting>
+cp -R trunk/framework branches/x.x.x-incubating/framework</programlisting>
 
           <para>Finally, use <code>svn switch</code> to update your local
           directory:</para>
