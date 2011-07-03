@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.progmodels</groupId>
         <artifactId>wrapper</artifactId>
-        <version>0.1.2-incubating-SNAPSHOT</version>
+        <version>0.1.2-incubating</version>
 	</parent>
 
 	<artifactId>wrapper-applib</artifactId>
