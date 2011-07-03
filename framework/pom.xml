@@ -20,7 +20,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>isis</artifactId>
-    <version>0.1.2-incubating</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -88,9 +88,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.1.2-incubating</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.1.2-incubating</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.1.2-incubating</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-incubating/framework/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-incubating/framework/</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/branches/0.1.2-incubating/framework/</url>
     </scm>
 
     <!-- used in Site generation for relative references. -->
@@ -910,12 +910,12 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -923,35 +923,35 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>core</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: progmodels -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: security -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>security</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: runtime -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>runtimes</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: viewer -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>viewer</artifactId>
-                <version>0.1.2-incubating</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
 
