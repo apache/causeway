@@ -3673,7 +3673,7 @@ public class FooBar {
 
           <para>First, clean up any generated artifacts:</para>
 
-          <programlisting>mvn clean</programlisting>
+          <programlisting>mvn clean -P integration-tests</programlisting>
 
           <para>Then, run the tool using:</para>
 
@@ -3749,11 +3749,12 @@ public class FooBar {
 
           <programlisting>cat /tmp/rat.txt \
    | grep '^ !???' \
-   | grep -v "jquery*.js" \
+   | grep -v "jquery.*.js" \
    | grep -v "tests-common/.*\.xml" \
    | grep -v "tests-common/.*/tests\..*" \
    | grep -v "tests-common/.*\.xml" \
-   | grep -v "tests/.*\.xml"</programlisting>
+   | grep -v "tests/.*\.xml" \
+   | grep -v "isis.log"</programlisting>
 
           <para>where:</para>
 
