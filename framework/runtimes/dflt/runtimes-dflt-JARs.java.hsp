@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.4.1223" flavor="j2se">
+  <property name="show-needs-to-compile" value="false" />
+  <property name="hide-externals" value="true" />
+  <property name="detail-mode" value="false" />
+  <classpath>
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\bytecode\dflt\target\dflt-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\bytecode\identity\target\identity-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\bytecode\javassist\target\javassist-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\objectstores\dflt\target\dflt-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\objectstores\nosql\target\nosql-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\objectstores\sql\impl\target\sql-impl-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\objectstores\sql\target\sql-0.1.2-incubating-SNAPSHOT-tests.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\objectstores\sql\tests-common\target\sql-tests-common-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\objectstores\xml\target\xml-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\profilestores\dflt\target\dflt-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\profilestores\xml\target\xml-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\common\target\common-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\marshalling-encode\target\marshalling-encode-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\marshalling-serialize\target\marshalling-serialize-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\marshalling-xstream\target\marshalling-xstream-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\target\remoting-0.1.2-incubating-SNAPSHOT-tests.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\transport-http\client\target\transport-http-client-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\transport-http\server\target\transport-http-server-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\remoting\transport-sockets\target\transport-sockets-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\runtime\target\runtime-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\webapp\target\webapp-0.1.2-incubating-SNAPSHOT.jar" />
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\webserver\target\webserver-0.1.2-incubating-SNAPSHOT.jar" />
+  </classpath>
+  <transformations>
+    <transformation in="*" out="{jar}.*" />
+  </transformations>
+  <restructuring>
+    <set version="1" name="Sandbox 1" hiview="Codemap" active="true" todo="false" />
+    <set version="1" name="Flattened to classes" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="true">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+    <set version="1" name="Flattened to leaf packages" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="false">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+  </restructuring>
+</local-project>
+

@@ -1,0 +1,48 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Core Framework
+ 
+  The <core> module is the parent of a set of submodules that collectively 
+  form the core of Apache Isis.
+  Specifically, they provide:
+
+  * JUnit/JMock {{{./testsupport/index.html}testing support}}
+
+  * {{{./commons/index.html}common}} utilities
+ 
+  * a {{{./metamodel/index.html}metamodel}} for domain models
+
+  * reusable {{{./progmodel/index.html}programming model}} elements
+
+  * reusable {{{./runtime/index.html}runtime}} elements (common across any runtime implementation)
+
+  * reusable {{{./webapp/index.html}webapp}} servlets and filters (common across any web-based viewer implementations)
+
+  []
+  
+  Across these modules a number of APIs are defined:  
+  
+  * persistence / entity lifecycle management ({{{../runtimes/index.html}runtimes}} API)  
+
+  * authentication and authorization ({{{../security/index.html}security}} API)
+   
+  * programming model definitions ({{{../progmodels/index.html}progmodel}} API)
+
+  []

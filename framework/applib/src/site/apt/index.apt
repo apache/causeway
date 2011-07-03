@@ -1,0 +1,34 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+Application Library
+ 
+ <Apache Isis> works using convention-over-configuration; you write
+ your domain objects following a set of conventions, and these are interpreted
+ by the framework in order to render, persist, remote or otherwise interact
+ with your domain model.
+ 
+ These conventions are together known as the <Apache Isis Programming Model>.
+ The <Apache Isis Application Library> - or AppLib - constitutes those elements
+ of the programming model that are declarative (such as annotations and 
+ interfaces).  It also contains the <<<DomainObjectContainer>>> interface, 
+ which is normally injected into your domain objects and represents the
+ only point of coupling from your domain into the framework. 
+ 
+ See the AppLib guide ({{{./docbkx/html/guide/isis-applib.html}HTML}}
+ or {{{./docbkx/pdf/isis-applib.pdf}PDF}}) for further details.
+  

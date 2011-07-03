@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.3.722" flavor="j2se">
+   <property name="hide-externals" value="true" />
+   <property name="show-needs-to-compile" value="false" />
+   <property name="detail-mode" value="false" />
+   <classpath>
+      <classpathentry kind="lib" path="target/classes" />
+   </classpath>
+   <sourcepaths>
+      <pathentry type="file" path="src/main/java" />
+   </sourcepaths>
+</local-project>
+
