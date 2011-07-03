@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>The Naked Objects Pattern</title>
+  </properties>
+
+  <body>
+    <section name="The Naked Objects Pattern">
+    
+    <h3>A typical
+    four-layer architecture</h3><img align="left" alt="" class="wrap-left"
+    src="images/architecture_build-up1.gif"
+    style="margin:0 20px 20px 0;" /><p>Most modern applications consist of
+    four or more logical layers: a presentation layer (blue), a controller
+    layer (red), sometimes referred to as the 'process', 'task' or 'use-case
+    controller' layer, a domain model layer (yellow) consisting of domain
+    objects and/or supporting business services, and a persistence layer
+    (green), typically a relational database. Even in a so-called 'thin
+    client' architecture, all four layers typically exist, but all on the
+    server. Each new business concept must typically be implemented in four
+    separate places. And because the linkages between the layers is often
+    complex, a change to an existing business requirement will often entail
+    tracking up and down the layers many
+    times.</p>
+
+<p>&nbsp;</p>
+
+<h3>Object-Relational Mapping</h3><img align="right"
+    alt="" class="wrap-right" src="images/architecture_build-up4.gif"
+    style="margin:0 0 0 20px;" /><p>With Object Relational Mapping (ORM)
+    technologies, it is now possible to auto-generate the persistence layer
+    directly from the domain model definition, thus eliminating the need to
+    define and maintain one whole layer. Naked Objects uses JPA to perform this
+    function.</p><p>The real innovation of Naked Objects, is that we apply the
+    same concept upwards - to eliminate the two other layers
+    also...</p>
+
+<p>&nbsp;</p>
+
+
+<h3>Behaviourally-rich domain objects</h3><img
+    align="left" alt="" class="wrap-left" src="images/architecture_build-up5.gif"
+    style="margin:0 20px 0 0;" /><p>The first step is to ensure that all the
+    business logic is encapsulated as methods on the domain objects. Thus, a
+    Customer object should not just be a collection of data about the
+    customer; it should encapsulate all the behaviours that we need to apply
+    to a customer. This is not a new idea - it is merely a very strong
+    commitment to the principle of encapsulation - but most application
+    developers pay lip-service to it, with the result that most of the
+    behaviour ends up in the controllers. We refer to this as creating
+    'behaviourally-rich' domain objects - which is why the (yellow) domain
+    objects are represented as solid spheres in this diagram and
+    below.</p>
+
+<p>&nbsp;</p>
+
+<h3>Naked Objects</h3><img align="right" alt=""
+    class="wrap-right" src="images/architecture_build-up9.gif"
+    style="margin:0 0 0 20px;" /><p>The conceptual breakthrough is the
+    realisation that once you have behaviourally-complete domain objects, it
+    is possible to auto-create a complete user interface, just by exposing the
+    domain objects (with their methods) directly to the user, in the form of
+    an object-oriented user interface (OOUI). At run-time the Apache Isis
+    framework inspects the domain objects using reflection, and then renders
+    the objects and methods visible to the user. Writing a Apache Isis
+    application therefore consists <em>solely</em> of writing the domain
+    object model, as 'Plain Old Java Objects' (POJOS). This concept has become
+    known as the <a href="http://en.wikipedia.org/wiki/Naked_objects">adapter
+    objects</a> architectural pattern. Apache Isis is the
+    leading open source implementation of this pattern.</p>
+
+<p>&nbsp;</p>
+	</section>
+  </body>
+</document>

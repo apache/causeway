@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>Welcome</title>
+  </properties>
+
+  <body>
+    <section name="Expenses Processing - Demonstration application"><p>This
+    demonstration application, written in [[NAME]], allows you to create
+    and process expense claims. It is a much-simplified version of the kind of
+    expense processing application found in many organisations. (As the full
+    source-code of this demonstration is included with the [[NAME]]
+    download, you might like to consider extending/modifying it to meet your
+    own organisation's expense processing requirements.)</p><subsection
+    name="Registering and logging-in"></subsection><p>To use the application
+    you will first need to <a
+    href="http://demo.isis.apache.org/register/create-user.jsp">register a
+    new user</a>. This will allow you to create a new claim. If you want to be
+    able to submit and approve claims then you will need to register more than
+    one user - however, you can register the additional users at any
+    stage.</p><p>Having registered at least one user, you may use the
+    application through one of two different user interfaces. The first is a
+    pure HTML user interface, run from within your browser (we recommend using
+    <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a> or <a
+    href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">Internet
+    Explorer 7</a>).</p><ul>
+        <li><a href="http://demo.isis.apache.org/expenses/">Login to the HTML
+        demo</a></li>
+      </ul><p>The second is a rich-client interface, which adopts the 'desktop
+    metaphor' and uses 'drag and drop' gestures. It is launched via <a
+    href="http://java.sun.com/products/javawebstart/download.jsp">Java
+    WebStart</a>. (Note: this demo is running client-server over the public
+    internet. Performance is very dependent upon connection speed. The
+    rich-client interface is intended for use primarily within an intranet,
+    where it works very well).</p><ul>
+        <li><a href="http://demo.isis.apache.org/webstart/">Login to the
+        rich-client demo</a></li>
+      </ul><subsection name="Screen movies"></subsection><p>For guidance on
+    how to use the application via each interface, we have provided a series
+    of three short screen-movies for each user interface. These are in <a
+    href="http://www.adobe.com/shockwave/download/">Shockwave</a>
+    format.</p><p>Screen movies for the rich-client user interface:</p><ul>
+        <li><a
+        href="movies/Retrieving and viewing a Claim (DND UI).htm">Retrieving
+        claims</a></li>
+
+        <li><a
+        href="movies/Creating and submitting a new Claim (DND UI).htm">Creating
+        and submitting a new claim</a></li>
+
+        <li><a href="movies/Approving claims (DND UI).htm">Approving a
+        claim</a></li>
+      </ul><p>Screen movies for the HTML user interface:</p><ul>
+        <li><a
+        href="movies/Retrieving and viewing a Claim (HTML UI).htm">Retrieving
+        claims</a></li>
+
+        <li><a
+        href="movies/Creating and submitting a new Claim (HTML UI).htm">Creating
+        and submitting a new claim</a></li>
+
+        <li><a href="movies/Approving claims (HTML UI).htm">Approving a
+        claim</a></li>
+      </ul><subsection name="Administration"></subsection><p><a
+    href="http://demo.isis.apache.org/register/change-password.jsp">Need to
+    change Password?</a></p><p>Forgotten your username(s) or password? <a
+    href="http://demo.isis.apache.org/register/reset-password.jsp">Enter your
+    email address</a> and we'll send you the user name(s) using that email
+    address, with reset passwords.</p></section>
+  </body>
+</document>

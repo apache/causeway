@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="encoding" size="1283,724" id="org.apache.isis.core.commons.encoding" metadata="uml2-1.0" initialized="true" zoom="0.5" tag="1000" key="32303037303533312D31303030206F72672E6170616368652E697369732E636F72652E636F6D6D6F6E732F64616E">
+  <children xsi:type="editmodel:InterfaceEditModel" name="Encodable" location="15,544" size="109,81" id="org.apache.isis.core.commons.encoding/Encodable" runTimeClassModel="encode(Lorg.apache.isis.core.commons.encoding.DataOutputExtended;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="66,18">
+      <children xsi:type="editmodel:MethodEditModel" name="encode" id="org.apache.isis.core.commons.encoding/Encodable#encode(Lorg.apache.isis.core.commons.encoding.DataOutputExtended;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FieldType" location="989,14" size="274,643" id="org.apache.isis.core.commons.encoding/FieldType" runTimeClassModel="uNSIGNED_BYTE,sHORT_ARRAY,lONG_ARRAY,write(Lorg.apache.isis.core.commons.encoding.DataOutputExtended;LT;),eNCODABLE_ARRAY,toString(),fLOAT_ARRAY,getIdx(),sTRING,eNCODABLE,sERIALIZABLE_ARRAY,bYTE,sERIALIZABLE,dOUBLE,read(Lorg.apache.isis.core.commons.encoding.DataInputExtended;),dOUBLE_ARRAY,bOOLEAN_ARRAY,cls,idx,cHAR,org.apache.isis.core.commons.encoding.FieldType.Indenting,readArray(Lorg.apache.isis.core.commons.encoding.DataInputExtended;Ljava.lang.Class;),bOOLEAN,iNTEGER_ARRAY,uNSIGNED_SHORT,bYTE_ARRAY,get(B),getCls(),sTRING_ARRAY,fLOAT,sHORT,iNTEGER,lONG,cHAR_ARRAY">
+    <children xsi:type="editmodel:CompartmentEditModel" size="251,468">
+      <children xsi:type="editmodel:AttributeEditModel" name="bOOLEAN" id="org.apache.isis.core.commons.encoding/FieldType#bOOLEAN"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="bOOLEAN_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#bOOLEAN_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="bYTE" id="org.apache.isis.core.commons.encoding/FieldType#bYTE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="bYTE_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#bYTE_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sHORT" id="org.apache.isis.core.commons.encoding/FieldType#sHORT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sHORT_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#sHORT_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNTEGER" id="org.apache.isis.core.commons.encoding/FieldType#iNTEGER"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="uNSIGNED_BYTE" id="org.apache.isis.core.commons.encoding/FieldType#uNSIGNED_BYTE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="uNSIGNED_SHORT" id="org.apache.isis.core.commons.encoding/FieldType#uNSIGNED_SHORT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNTEGER_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#iNTEGER_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lONG" id="org.apache.isis.core.commons.encoding/FieldType#lONG"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lONG_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#lONG_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="cHAR" id="org.apache.isis.core.commons.encoding/FieldType#cHAR"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="cHAR_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#cHAR_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="fLOAT" id="org.apache.isis.core.commons.encoding/FieldType#fLOAT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="fLOAT_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#fLOAT_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="dOUBLE" id="org.apache.isis.core.commons.encoding/FieldType#dOUBLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="dOUBLE_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#dOUBLE_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sTRING" id="org.apache.isis.core.commons.encoding/FieldType#sTRING"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sTRING_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#sTRING_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="eNCODABLE" id="org.apache.isis.core.commons.encoding/FieldType#eNCODABLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="eNCODABLE_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#eNCODABLE_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sERIALIZABLE" id="org.apache.isis.core.commons.encoding/FieldType#sERIALIZABLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sERIALIZABLE_ARRAY" id="org.apache.isis.core.commons.encoding/FieldType#sERIALIZABLE_ARRAY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="idx" id="org.apache.isis.core.commons.encoding/FieldType#idx"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="cls" id="org.apache.isis.core.commons.encoding/FieldType#cls"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,126">
+      <children xsi:type="editmodel:MethodEditModel" name="get" id="org.apache.isis.core.commons.encoding/FieldType#get(B)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIdx" id="org.apache.isis.core.commons.encoding/FieldType#getIdx()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCls" id="org.apache.isis.core.commons.encoding/FieldType#getCls()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readArray" id="org.apache.isis.core.commons.encoding/FieldType#readArray(Lorg.apache.isis.core.commons.encoding.DataInputExtended;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="read" id="org.apache.isis.core.commons.encoding/FieldType#read(Lorg.apache.isis.core.commons.encoding.DataInputExtended;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="write" id="org.apache.isis.core.commons.encoding/FieldType#write(Lorg.apache.isis.core.commons.encoding.DataOutputExtended;LT;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="org.apache.isis.core.commons.encoding/FieldType#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.5/@sourceConnections.0" name="DataInputExtended" location="676,13" size="163,315" id="org.apache.isis.core.commons.encoding/DataInputExtended" runTimeClassModel="readFloats(),readBytes(),readSerializable(Ljava.lang.Class;),readUTFs(),readEncodable(Ljava.lang.Class;),readChars(),readDoubles(),readEncodables(Ljava.lang.Class;),readInts(),readBooleans(),readShorts(),readSerializables(Ljava.lang.Class;),getDataInputStream(),readLongs()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="134,252">
+      <children xsi:type="editmodel:MethodEditModel" name="getDataInputStream" id="org.apache.isis.core.commons.encoding/DataInputExtended#getDataInputStream()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readBooleans" id="org.apache.isis.core.commons.encoding/DataInputExtended#readBooleans()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readBytes" id="org.apache.isis.core.commons.encoding/DataInputExtended#readBytes()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readChars" id="org.apache.isis.core.commons.encoding/DataInputExtended#readChars()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readDoubles" id="org.apache.isis.core.commons.encoding/DataInputExtended#readDoubles()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readEncodable" id="org.apache.isis.core.commons.encoding/DataInputExtended#readEncodable(Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readEncodables" id="org.apache.isis.core.commons.encoding/DataInputExtended#readEncodables(Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readFloats" id="org.apache.isis.core.commons.encoding/DataInputExtended#readFloats()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readInts" id="org.apache.isis.core.commons.encoding/DataInputExtended#readInts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readLongs" id="org.apache.isis.core.commons.encoding/DataInputExtended#readLongs()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readSerializable" id="org.apache.isis.core.commons.encoding/DataInputExtended#readSerializable(Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readSerializables" id="org.apache.isis.core.commons.encoding/DataInputExtended#readSerializables(Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readShorts" id="org.apache.isis.core.commons.encoding/DataInputExtended#readShorts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readUTFs" id="org.apache.isis.core.commons.encoding/DataInputExtended#readUTFs()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.4/@sourceConnections.0" name="DataInputExtendedDecorator" location="757,388" size="225,29" id="org.apache.isis.core.commons.encoding/DataInputExtendedDecorator" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="org.apache.isis.core.commons.encoding/DataInputExtended&lt;-org.apache.isis.core.commons.encoding/DataInputExtendedDecorator" source="//@children.3" target="//@children.5/@sourceConnections.0" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="112,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DebugDataInputExtended" location="768,448" size="204,29" id="org.apache.isis.core.commons.encoding/DebugDataInputExtended" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="org.apache.isis.core.commons.encoding/DataInputExtendedDecorator&lt;-org.apache.isis.core.commons.encoding/DebugDataInputExtended" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.0/@children.1" sourceEnd="//@children.4/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="101,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="112,29"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DataInputStreamExtended" location="510,388" size="209,57" id="org.apache.isis.core.commons.encoding/DataInputStreamExtended" runTimeClassModel="dataInputStream">
+    <children xsi:type="editmodel:CompartmentEditModel" size="182,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="dataInputStream" id="org.apache.isis.core.commons.encoding/DataInputStreamExtended#dataInputStream"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.3/@sourceConnections.0" autoLocated="true" id="org.apache.isis.core.commons.encoding/DataInputExtended&lt;-org.apache.isis.core.commons.encoding/DataInputStreamExtended" source="//@children.5" target="//@children.2" targetEnd="//@children.5/@sourceConnections.0/@children.1" sourceEnd="//@children.5/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="104,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="81,315" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DataOutputStreamExtended" location="15,435" size="223,57" id="org.apache.isis.core.commons.encoding/DataOutputStreamExtended" runTimeClassModel="dataOutputStream">
+    <children xsi:type="editmodel:CompartmentEditModel" size="200,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="dataOutputStream" id="org.apache.isis.core.commons.encoding/DataOutputStreamExtended#dataOutputStream"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="org.apache.isis.core.commons.encoding/DataOutputExtended&lt;-org.apache.isis.core.commons.encoding/DataOutputStreamExtended" source="//@children.6" target="//@children.9" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="125,-1" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="86,350"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DebugDataOutputExtended" location="281,499" size="214,29" id="org.apache.isis.core.commons.encoding/DebugDataOutputExtended" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="org.apache.isis.core.commons.encoding/DataOutputExtendedDecorator&lt;-org.apache.isis.core.commons.encoding/DebugDataOutputExtended" source="//@children.7" target="//@children.8" targetEnd="//@children.7/@sourceConnections.0/@children.1" sourceEnd="//@children.7/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="106,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="127,29"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.7/@sourceConnections.0" name="DataOutputExtendedDecorator" location="260,435" size="235,29" id="org.apache.isis.core.commons.encoding/DataOutputExtendedDecorator" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="org.apache.isis.core.commons.encoding/DataOutputExtended&lt;-org.apache.isis.core.commons.encoding/DataOutputExtendedDecorator" source="//@children.8" target="//@children.9" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="117,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="86,351" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.8/@sourceConnections.0 //@children.6/@sourceConnections.0" name="DataOutputExtended" location="150,14" size="173,351" id="org.apache.isis.core.commons.encoding/DataOutputExtended" runTimeClassModel="writeByte(I),writeBooleans([Z),writeEncodables([Ljava.lang.Object;),getDataOutputStream(),writeUTFs([Ljava.lang.String;),writeSerializables([Ljava.lang.Object;),writeEncodable(Ljava.lang.Object;),writeShorts([S),writeInts([I),writeLongs([J),writeChars([C),writeSerializable(Ljava.lang.Object;),writeBytes([B),writeFloats([F),write(I),writeDoubles([D)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="133,288">
+      <children xsi:type="editmodel:MethodEditModel" name="getDataOutputStream" id="org.apache.isis.core.commons.encoding/DataOutputExtended#getDataOutputStream()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="write" id="org.apache.isis.core.commons.encoding/DataOutputExtended#write(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeBooleans" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeBooleans([Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeByte" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeByte(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeBytes" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeBytes([B)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeChars" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeChars([C)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeDoubles" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeDoubles([D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeEncodable" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeEncodable(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeEncodables" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeEncodables([Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeFloats" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeFloats([F)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeInts" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeInts([I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeLongs" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeLongs([J)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeSerializable" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeSerializable(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeSerializables" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeSerializables([Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeShorts" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeShorts([S)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeUTFs" id="org.apache.isis.core.commons.encoding/DataOutputExtended#writeUTFs([Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=3;Product=eUML2"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

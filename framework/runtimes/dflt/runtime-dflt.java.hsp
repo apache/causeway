@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.4.1223" flavor="j2se">
+  <property name="hide-externals" value="true" />
+  <property name="show-needs-to-compile" value="false" />
+  <property name="detail-mode" value="false" />
+  <classpath relativeto="D:\SVN\ai\trunk\runtimes\dflt">
+    <classpathentry kind="lib" path="D:\SVN\ai\trunk\runtimes\dflt\runtime\target\classes" />
+  </classpath>
+  <restructuring>
+    <set version="1" name="Sandbox 1" hiview="Codemap" active="true" todo="false" />
+    <set version="1" name="Flattened to classes" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="true">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+    <set version="1" name="Flattened to leaf packages" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="false">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+  </restructuring>
+  <grid-set sep="." version="3.4.1223">
+    <grid name="Diagram 3" enforce="true" strict="false">
+      <row>
+        <cell name="runtime" pattern="org.apache.isis.runtimes.dflt.runtime.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="Isis" pattern="org.apache.isis.runtimes.dflt.runtime.Isis" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="IsisInstallerRegistry" pattern="org.apache.isis.runtimes.dflt.runtime.IsisInstallerRegistry" vexpanded="false" visibility="public" />
+              <cell name="RuntimeBootstrapper" pattern="org.apache.isis.runtimes.dflt.runtime.RuntimeBootstrapper" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="runner" pattern="org.apache.isis.runtimes.dflt.runtime.runner.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="runner" pattern="org.apache.isis.runtimes.dflt.runtime.runner.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisRunner" pattern="org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="Constants" pattern="org.apache.isis.runtimes.dflt.runtime.runner.Constants" vexpanded="false" visibility="public" />
+                    <cell name="IsisBootstrapper" pattern="org.apache.isis.runtimes.dflt.runtime.runner.IsisBootstrapper" vexpanded="false" visibility="public" />
+                    <cell name="IsisModule" pattern="org.apache.isis.runtimes.dflt.runtime.runner.IsisModule" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="opts" pattern="org.apache.isis.runtimes.dflt.runtime.runner.opts.?" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="installers" pattern="org.apache.isis.runtimes.dflt.runtime.installers.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="InstallerLookupDefault" pattern="org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="InstallerVersion" pattern="org.apache.isis.runtimes.dflt.runtime.installers.InstallerVersion" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+        <cell name="systemusinginstallers" pattern="org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="IsisSystemThatUsesInstallersFactory" pattern="org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="IsisSystemUsingInstallers" pattern="org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemUsingInstallers" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="IsisSystemAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemAbstract" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="installerregistry" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="installerapi" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="ObjectStorePersistenceMechanismInstallerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="ClientConnectionInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller" vexpanded="false" visibility="public" />
+                    <cell name="IsisViewerInstallerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceMechanismInstallerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="EmbeddedWebServerInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller" vexpanded="false" visibility="public" />
+                    <cell name="IsisViewerInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceMechanismInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="installerregistry" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="InstallerLookupAware" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="InstallerLookup" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="InstallerRepository" pattern="org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerRepository" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="web" pattern="org.apache.isis.runtimes.dflt.runtime.web.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="EmbeddedWebViewer" pattern="org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="EmbeddedWebServerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServerAbstract" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="EmbeddedWebServer" pattern="org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="viewer" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="viewer" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisViewerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract" vexpanded="false" visibility="public" />
+                    <cell name="IsisViewerNoop" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerNoop" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisViewer" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="web" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.web.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="WebAppSpecification" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="FilterSpecification" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.web.FilterSpecification" vexpanded="false" visibility="public" />
+                    <cell name="ServletSpecification" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.web.ServletSpecification" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="AbstractServletOrFilterMapping" pattern="org.apache.isis.runtimes.dflt.runtime.viewer.web.AbstractServletOrFilterMapping" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="authentication" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="authentication" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="AuthenticationManagerStandardInstallerAbstractForDfltRuntime" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="AuthenticationManagerStandardForDfltRuntime" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardForDfltRuntime" vexpanded="false" visibility="public" />
+                    <cell name="AuthenticatorAbstractForDfltRuntime" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticatorAbstractForDfltRuntime" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="fixture" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.fixture.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="LogonFixtureAuthenticator" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.fixture.LogonFixtureAuthenticator" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+              <cell name="exploration" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.exploration.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="ExplorationAuthenticator" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationAuthenticator" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="AuthenticationRequestExploration" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration" vexpanded="false" visibility="public" />
+                    <cell name="ExplorationAuthenticatorConstants" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationAuthenticatorConstants" vexpanded="false" visibility="public" />
+                    <cell name="ExplorationSession" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession" vexpanded="false" visibility="public" />
+                    <cell name="MultiUserExplorationSession" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.exploration.MultiUserExplorationSession" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+              <cell name="singleuser" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.singleuser.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="AuthenticationRequestSingleUser" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.singleuser.AuthenticationRequestSingleUser" vexpanded="false" visibility="public" />
+                    <cell name="SingleUserSession" pattern="org.apache.isis.runtimes.dflt.runtime.authentication.singleuser.SingleUserSession" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+          </grid>
+        </cell>
+        <cell name="authorization" pattern="org.apache.isis.runtimes.dflt.runtime.authorization.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="AuthorizationFacetFactoryForDfltRuntime" pattern="org.apache.isis.runtimes.dflt.runtime.authorization.AuthorizationFacetFactoryForDfltRuntime" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+        <cell name="bytecode" pattern="org.apache.isis.runtimes.dflt.runtime.bytecode.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="ObjectResolveAndObjectChangedEnhancerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="snapshot" pattern="org.apache.isis.runtimes.dflt.runtime.snapshot.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="XmlSnapshotBuilder" pattern="org.apache.isis.runtimes.dflt.runtime.snapshot.XmlSnapshotBuilder" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+        <cell name="memento" pattern="org.apache.isis.runtimes.dflt.runtime.memento.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="Memento" pattern="org.apache.isis.runtimes.dflt.runtime.memento.Memento" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="CollectionData" pattern="org.apache.isis.runtimes.dflt.runtime.memento.CollectionData" vexpanded="false" visibility="public" />
+              <cell name="ObjectData" pattern="org.apache.isis.runtimes.dflt.runtime.memento.ObjectData" vexpanded="false" visibility="public" />
+              <cell name="StandaloneData" pattern="org.apache.isis.runtimes.dflt.runtime.memento.StandaloneData" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="Data" pattern="org.apache.isis.runtimes.dflt.runtime.memento.Data" vexpanded="false" visibility="public" />
+              <cell name="Null" pattern="org.apache.isis.runtimes.dflt.runtime.memento.Null" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="fixtures" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="fixtures" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="FixturesInstallerFromConfiguration" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerFromConfiguration" vexpanded="false" visibility="public" />
+                    <cell name="FixturesInstallerNoop" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerNoop" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="FixturesInstallerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerAbstract" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="FixturesInstallerDelegate" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerDelegate" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="ProfileServiceImpl" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.ProfileServiceImpl" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="ProfileImpl" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.ProfileImpl" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="FixturesInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller" vexpanded="false" visibility="public" />
+                    <cell name="PerspectiveImpl" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.PerspectiveImpl" vexpanded="false" visibility="public" />
+                    <cell name="SwitchUserServiceImpl" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.SwitchUserServiceImpl" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="authentication" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="AuthenticationRequestLogonFixture" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+              <cell name="domainservice" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.domainservice.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="ObjectLoaderFixture" pattern="org.apache.isis.runtimes.dflt.runtime.fixtures.domainservice.ObjectLoaderFixture" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+          </grid>
+        </cell>
+        <cell name="services" pattern="org.apache.isis.runtimes.dflt.runtime.services.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="ServicesInstallerAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.services.ServicesInstallerAbstract" vexpanded="false" visibility="public" />
+              <cell name="ServicesInstallerFromConfiguration" pattern="org.apache.isis.runtimes.dflt.runtime.services.ServicesInstallerFromConfiguration" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="SimpleRepository" pattern="org.apache.isis.runtimes.dflt.runtime.services.SimpleRepository" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="InitialisationException" pattern="org.apache.isis.runtimes.dflt.runtime.services.InitialisationException" vexpanded="false" visibility="public" />
+              <cell name="RepositoryHelper" pattern="org.apache.isis.runtimes.dflt.runtime.services.RepositoryHelper" vexpanded="false" visibility="public" />
+              <cell name="ServiceException" pattern="org.apache.isis.runtimes.dflt.runtime.services.ServiceException" vexpanded="false" visibility="public" />
+              <cell name="ServicesInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.services.ServicesInstaller" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="fixturedomainservice" pattern="org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="ObjectFixtureService" pattern="org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="ObjectFixtureFilePersistor" pattern="org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureFilePersistor" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="FixtureException" pattern="org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.FixtureException" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="persistence" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="objectstore" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.*" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="objectstore" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.?" vexpanded="false" visibility="public">
+                      <grid>
+                        <row>
+                          <cell name="IsisStoreDelegating" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisStoreDelegating" vexpanded="false" visibility="public" />
+                          <cell name="IsisStoreLogger" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisStoreLogger" vexpanded="false" visibility="public" />
+                        </row>
+                        <row>
+                          <cell name="ObjectStore" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore" vexpanded="false" visibility="public" />
+                          <cell name="PersistenceSessionObjectStore" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore" vexpanded="false" visibility="public" />
+                        </row>
+                        <row>
+                          <cell name="ObjectStorePersistence" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence" vexpanded="false" visibility="public" />
+                          <cell name="ObjectStoreTransactionManagement" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement" vexpanded="false" visibility="public" />
+                        </row>
+                      </grid>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell name="algorithm" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.*" vexpanded="false" visibility="public" />
+                    <cell name="transaction" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.?" vexpanded="false" visibility="public">
+                      <grid>
+                        <row>
+                          <cell name="ObjectStoreTransactionManager" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager" vexpanded="false" visibility="public" />
+                        </row>
+                        <row>
+                          <cell name="ObjectStoreTransaction" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransaction" vexpanded="false" visibility="public" />
+                        </row>
+                        <row>
+                          <cell name="CreateObjectCommand" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand" vexpanded="false" visibility="public" />
+                          <cell name="DestroyObjectCommand" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand" vexpanded="false" visibility="public" />
+                          <cell name="PersistenceCommandAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract" vexpanded="false" visibility="public" />
+                          <cell name="SaveObjectCommand" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand" vexpanded="false" visibility="public" />
+                        </row>
+                        <row>
+                          <cell name="PersistenceCommand" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand" vexpanded="false" visibility="public" />
+                        </row>
+                        <row>
+                          <cell name="PersistenceCommandContext" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext" vexpanded="false" visibility="public" />
+                        </row>
+                      </grid>
+                    </cell>
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="persistence" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="adaptermanager" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.*" vexpanded="false" visibility="public" />
+              <cell name="adapterfactory" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.*" vexpanded="false" visibility="public" />
+              <cell name="internal" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.internal.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="RuntimeContextFromSession" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="container" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.container.?" vexpanded="false" visibility="public" />
+              <cell name="objectfactory" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.?" vexpanded="false" visibility="public" />
+              <cell name="oidgenerator" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.*" vexpanded="false" visibility="public" />
+              <cell name="query" pattern="org.apache.isis.runtimes.dflt.runtime.persistence.query.?" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+        <cell name="userprofile" pattern="org.apache.isis.runtimes.dflt.runtime.userprofile.?" vexpanded="true" visibility="public">
+          <grid>
+            <row>
+              <cell name="UserProfileStoreInstaller" pattern="org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="UserProfileLoaderDefault" pattern="org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoaderDefault" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="UserProfilesDebugUtil" pattern="org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="transaction" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.*" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="facetdecorator" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.*" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="facets" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.facets.?" vexpanded="false" visibility="public" />
+              <cell name="transaction" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.?" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="messagebroker" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.?" vexpanded="false" visibility="public" />
+              <cell name="updatenotifier" pattern="org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.?" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="system" pattern="org.apache.isis.runtimes.dflt.runtime.system.*" vexpanded="true" visibility="public">
+          <grid>
+            <row>
+              <cell name="context" pattern="org.apache.isis.runtimes.dflt.runtime.system.context.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisContextPipe" pattern="org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextPipe" vexpanded="false" visibility="public" />
+                    <cell name="IsisContextThreadLocal" pattern="org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextThreadLocal" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisContextMultiUser" pattern="org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextMultiUser" vexpanded="false" visibility="public" />
+                    <cell name="IsisContextStatic" pattern="org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisContext" pattern="org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="system" pattern="org.apache.isis.runtimes.dflt.runtime.system.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisSystemFactory" pattern="org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFactory" vexpanded="false" visibility="public" />
+                    <cell name="IsisSystemFixturesHookAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFixturesHookAbstract" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisSystem" pattern="org.apache.isis.runtimes.dflt.runtime.system.IsisSystem" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="DeploymentType" pattern="org.apache.isis.runtimes.dflt.runtime.system.DeploymentType" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="ContextCategory" pattern="org.apache.isis.runtimes.dflt.runtime.system.ContextCategory" vexpanded="false" visibility="public" />
+                    <cell name="DebugSelection" pattern="org.apache.isis.runtimes.dflt.runtime.system.DebugSelection" vexpanded="false" visibility="public" />
+                    <cell name="DeploymentCategory" pattern="org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory" vexpanded="false" visibility="public" />
+                    <cell name="IsisSystemException" pattern="org.apache.isis.runtimes.dflt.runtime.system.IsisSystemException" vexpanded="false" visibility="public" />
+                    <cell name="Splash" pattern="org.apache.isis.runtimes.dflt.runtime.system.Splash" vexpanded="false" visibility="public" />
+                    <cell name="SystemConstants" pattern="org.apache.isis.runtimes.dflt.runtime.system.SystemConstants" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+              <cell name="session" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisSessionFactoryDefault" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisSessionFactoryAbstract" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryAbstract" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisSessionDefault" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionDefault" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisSession" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisSessionFactory" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory" vexpanded="false" visibility="public" />
+                    <cell name="SessionFactoryException" pattern="org.apache.isis.runtimes.dflt.runtime.system.session.SessionFactoryException" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="persistence" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="PersistenceSessionFactory" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="PersistenceSession" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="PersistenceSessionContainer" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionContainer" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="AdapterManager" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager" vexpanded="false" visibility="public" />
+                    <cell name="ObjectFactory" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory" vexpanded="false" visibility="public" />
+                    <cell name="OidGenerator" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceQuery" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceSessionAdaptedServiceManager" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionAdaptedServiceManager" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceSessionForceReloader" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionForceReloader" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceSessionHydrator" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceSessionTestSupport" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTestSupport" vexpanded="false" visibility="public" />
+                    <cell name="PersistenceSessionTransactionManagement" pattern="org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTransactionManagement" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="transaction" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="IsisTransactionManagerAware" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="IsisTransactionManager" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager" vexpanded="false" visibility="public" />
+                    <cell name="IsisTransaction" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="MessageBroker" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker" vexpanded="false" visibility="public" />
+                    <cell name="TransactionalClosure" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosure" vexpanded="false" visibility="public" />
+                    <cell name="TransactionalClosureWithReturn" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureWithReturn" vexpanded="false" visibility="public" />
+                    <cell name="UpdateNotifier" pattern="org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="internal" pattern="org.apache.isis.runtimes.dflt.runtime.system.internal.?" vexpanded="false" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="InitialisationSession" pattern="org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession" vexpanded="false" visibility="public" />
+                    <cell name="IsisLocaleInitializer" pattern="org.apache.isis.runtimes.dflt.runtime.system.internal.IsisLocaleInitializer" vexpanded="false" visibility="public" />
+                    <cell name="IsisTimeZoneInitializer" pattern="org.apache.isis.runtimes.dflt.runtime.system.internal.IsisTimeZoneInitializer" vexpanded="false" visibility="public" />
+                    <cell name="SplashWindow" pattern="org.apache.isis.runtimes.dflt.runtime.system.internal.SplashWindow" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+          </grid>
+        </cell>
+        <cell name="systemdependencyinjector" pattern="org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.?" vexpanded="false" visibility="public">
+          <grid>
+            <row>
+              <cell name="SystemDependencyInjectorAware" pattern="org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjectorAware" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="SystemDependencyInjector" pattern="org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+    </grid>
+  </grid-set>
+</local-project>
+

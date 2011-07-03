@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Tutorial Movies</title>
+
+		<author email="isis-contributors@lists.sourceforge.net">[[NAME]] Contributors</author>
+	</properties>
+
+	<body>
+		<section name="Tutorial Movies">
+			<h3>Tutorial Movies</h3>
+			<p>
+				The following movies show briefly how the GUI provided by [[NAME]]
+				Objects relates to the underlying code.
+				In these examples, we show
+				the application running on the
+				<a href="./plugins/dnd-viewer/index.html">DnD viewer</a>
+				for desktop
+				deployments. Remember though that [[NAME]] supports
+				several different
+				viewers, including several different viewers for
+				webapps.
+			</p>
+
+			<ul>
+				<li>
+					<p>
+						<a href="./movies/Anatomy of a [[NAME]].htm">
+							Anatomy of a [[NAME]]</a>
+					</p>
+					<p>
+						Note that the discussion about the
+						<tt>resolve()</tt>
+						and
+						<tt>objectChanged()</tt>
+						calls relates to NOF 3.0; in NOF 4.0 these method calls can be
+						omitted
+						(we use cglib or javassist proxies to do the dirtying and lazy
+						loading
+						instead).
+					</p>
+
+				</li>
+				<li>
+					<p>
+						<a href="./movies/Actions.htm">Actions</a>
+
+					</p>
+				</li>
+			</ul>
+
+
+		</section>
+		<section name="What Next?">
+			<p>
+				Next, you might want to also look at the
+				<a href="./programming-screencasts.html">programming</a>
+				screencasts, or go through a
+				longer description of
+				<a href="./how-it-works.html">how [[NAME]] works</a>
+				. Or, go back to the
+				<a href="./index.html">home page</a>
+				for other resources.
+
+			</p>
+		</section>
+	</body>
+</document>
