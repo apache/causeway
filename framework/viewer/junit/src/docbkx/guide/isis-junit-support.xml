@@ -88,8 +88,8 @@
       <para>A unit test is usually a simple test that confirms that a
       particular class method returns an expected value, sometimes based on
       the class state, sometimes based only on input parameters. The point is
-      that the unit test does not make any assumptions about useability from
-      an end-user's perspective.</para>
+      that the unit test does not make any assumptions about usability from an
+      end-user's perspective.</para>
 
       <para>An acceptance test (see GOSS, <footnote>
           <para>"Growing Object-Oriented Software, Guided By Tests" by Steve
@@ -103,7 +103,7 @@
       that the latter test the code from the <emphasis>end-user's
       perspective</emphasis>.</para>
 
-      <para>The Isis JUnit viewer fulfills this purpose very nicely.</para>
+      <para>The Isis JUnit viewer fulfils this purpose very nicely.</para>
 
       <para>The JUnit viewer uses JUnit integrations and supporting classes of
       the Wrapper programming model . The idea of these utilities is to wrap
@@ -120,7 +120,7 @@
     <title>The JUnit Viewer</title>
 
     <abstract>
-      <para>blah</para>
+      <para>Basics</para>
     </abstract>
 
     <sect1>
@@ -154,6 +154,77 @@
    return member; 
   } </programlisting>
 
+      <para>Now, when your test calls code that the user would not be able to,
+      the wrapped class throws an exception!</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Inspecting Domain Behaviour</title>
+
+    <abstract>
+      <para>Learning from code coverage results</para>
+    </abstract>
+
+    <sect1>
+      <title>A domain example: Member.java</title>
+
+      <para>Consider the following class fragment:</para>
+
+      <programlisting>public class Member {
+    // {{ MemberLevel
+    private MemberLevel memberLevel;
+
+    public MemberLevel getMemberLevel() {
+        return memberLevel;
+    }
+
+    public void setMemberLevel(final MemberLevel memberLevel) {
+        this.memberLevel = memberLevel;
+    }
+
+    public MemberLevel defaultMemberLevel() {
+        return MemberLevel.GUEST;
+    }
+
+    public boolean hideMemberLevel() {
+         if (authentication.hasSecretaryRights()) {
+            return false;
+        }
+        return true;
+   }
+
+    public String disableMemberLevel() {
+        if (this.equals(authentication.loggedInMember())) {
+            if (authentication.hasSecretaryRights()){
+                return "Can not edit own member level";
+            }
+        }
+        return null;
+    }
+}</programlisting>
+
+      <para>ToDo: Unit tests can be written to ensure 100% code coverage
+      without consideration of whether the tests are
+      <emphasis>meaningful</emphasis>. </para>
+
+      <para>In the above example, a unit test with 100% coverage will call the
+      <code>disableMemberLevel</code> metamodel method with
+      <code>authentication.hasSecretaryRights</code> true and false, without
+      possibly realising that the hideMemberLevel will ensure that the
+      property is hidden from non-Secretaries!</para>
+
+      <para>While it is not guaranteed (it depends on how the checks are
+      structured), the JUnit viewer, implementing acceptance tests, will
+      demonstrate, in this case, that the <code>if
+      (authentication.hasSecretaryRights())</code> check is not needed (even
+      though all login combinations are tried, that condition will never be
+      called)!</para>
+    </sect1>
+
+    <sect1>
+      <title>Unit Tests</title>
+
       <para></para>
     </sect1>
   </chapter>
@@ -168,7 +239,7 @@
     <sect1 id="sec.module-ui">
       <title>Abstract Test Class</title>
 
-      <para>Specify the testclass to use, and the domain
+      <para>Specify the test class to use, and the domain
       services:<programlisting>@RunWith(IsisTestRunner.class)
 
 @Services({ @Service(MemberRepositoryDefault.class), @Service(AuthenticationFixtureClass.class) })
