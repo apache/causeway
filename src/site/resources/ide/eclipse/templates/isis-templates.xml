@@ -17,6 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 -->
+<templates><template autoinsert="true" context="java-members" deleted="false" description="Action" enabled="true" name="isa">// {{ ${actionName}&#13;
 ${:import(org.apache.isis.applib.annotation.MemberOrder)}@MemberOrder(sequence="1")&#13;
 public ${ReturnType} ${actionName}(final ${ParameterType} ${parameterType}) {&#13;
 	return ${cursor}null; // TODO: business logic here&#13;
