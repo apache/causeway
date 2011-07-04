@@ -124,33 +124,35 @@
     </abstract>
 
     <sect1>
-      <title>Wrapping your domain classes and injected services </title>
+      <title>Wrapping your domain classes and injected services</title>
 
       <para>To ensure that your domain classes (and injected services) are
       checked to ensure that "Can you see it, can you use it, can you do it"
-      are enforced, the relevant class instances must be wrapped: </para>
+      are enforced, the relevant class instances must be wrapped:</para>
 
       <para>Include the following in your test class to have the Isis test
       framework inject a WrapperFactory instance:</para>
 
-      <para><code><code>private WrapperFactory wrapperFactory;
-      </code></code></para>
+      <para><programlisting>    private WrapperFactory wrapperFactory;
 
-      <para><code><code>protected WrapperFactory getWrapperFactory() { return
-      wrapperFactory; } </code></code></para>
+    protected WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
 
-      <para><code><code>public void setWrapperFactory(WrapperFactory
-      wrapperFactory) { this.wrapperFactory = wrapperFactory; }
-      </code></code></para>
+    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+        this.wrapperFactory = wrapperFactory;
+    }
 
-      <para><code><code>protected &lt;T&gt; T wrapped(T obj) { return
-      wrapperFactory.wrap(obj); }</code></code></para>
+    protected &lt;T&gt; T wrapped(T obj) {
+        return wrapperFactory.wrap(obj);
+    }</programlisting></para>
 
-      <para>Then, to wrap your domain classes:</para>
+      <para>Then, to wrap your domain classes, for example:</para>
 
-      <para><code>public Member findMember(String initials, String surname) {
-      Member member = wrapped(members.findMember(initials, surname)); return
-      member; } </code></para>
+      <programlisting>  public Member findMember(String initials, String surname) {
+   Member member = wrapped(members.findMember(initials, surname)); 
+   return member; 
+  } </programlisting>
 
       <para></para>
     </sect1>
@@ -166,62 +168,106 @@
     <sect1 id="sec.module-ui">
       <title>Abstract Test Class</title>
 
-      <para>Specify the testclass to use, and the domain services:</para>
+      <para>Specify the testclass to use, and the domain
+      services:<programlisting>@RunWith(IsisTestRunner.class)
 
-      <para><code>@RunWith(IsisTestRunner.class) </code></para>
+@Services({ @Service(MemberRepositoryDefault.class), @Service(AuthenticationFixtureClass.class) })
 
-      <para><code>@Services({ @Service(MemberRepositoryDefault.class),
-      @Service(ElectionRepositoryDefault.class),
-      @Service(AuthenticationFixtureClass.class),
-      @Service(FinancesRepositoryDefault.class) }) </code></para>
+public abstract class AbstractMemberTest { 
+    // Test support
+    private WrapperFactory wrapperFactory;
 
-      <para><code>public abstract class AbstractMemberTest { </code></para>
+    protected WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
 
-      <para><code>private WrapperFactory wrapperFactory; </code></para>
+    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+        this.wrapperFactory = wrapperFactory;
+    }
 
-      <para><code>protected WrapperFactory getWrapperFactory() { return
-      wrapperFactory; } </code></para>
+    protected &lt;T&gt; T wrapped(T obj) {
+        return wrapperFactory.wrap(obj);
+    }
 
-      <para><code>public void setWrapperFactory(WrapperFactory wrapperFactory)
-      { this.wrapperFactory = wrapperFactory; } </code></para>
+    // domain specific
+    protected Members members;
+    protected Members unWrappedMembers;
 
-      <para><code>protected &lt;T&gt; T wrapped(T obj) { return
-      wrapperFactory.wrap(obj); }</code></para>
+    protected Member unWrappedLoggedInMember;
+    protected Member wrappedLoggedInMember;
 
-      <para><code>}</code></para>
+    protected Authentication authentication;
+    protected Authentication unWrappedAuthentication;
 
-      <para></para>
+
+    // Test support - domain
+    public void setMemberRepository(final Members members) {
+        this.unWrappedMembers = members;
+    }
+
+    public void setAuthentication(final Authentication authentication) {
+        this.unWrappedAuthentication = authentication;
+    }
+
+
+    @Before
+    public void wrapInjectedServices() throws Exception {
+        members = wrapped(unWrappedMembers);
+        authentication = wrapped(unWrappedAuthentication);
+    }
+
+    // Domain specific - login requires authentication.
+    public Member doLogin(String username) {
+        Member member = unWrappedMembers.findMember(username);
+        unWrappedLoggedInMember = unWrappedAuthentication.login(member);
+        wrappedLoggedInMember = wrapped(unWrappedLoggedInMember);
+        return wrappedLoggedInMember;
+    }
+}</programlisting></para>
+
+      <para>The Isis application framework automatically injects the Members
+      repository and the Authentication class, as specified by the
+      line:</para>
+
+      <programlisting>@Services({ @Service(MemberRepositoryDefault.class), @Service(AuthenticationFixtureClass.class) })</programlisting>
+
+      <para> Then, the test class wraps them (thus enabling enforcement of
+      applib rules):</para>
+
+      <programlisting>    @Before
+    public void wrapInjectedServices() throws Exception {
+        members = wrapped(unWrappedMembers);
+        authentication = wrapped(unWrappedAuthentication);
+    }</programlisting>
+
+      <para>The "doLogin" function is a helper method used by the
+      AbstractMember implementations, to login a specific user (which, in
+      turn, determines the user roles and hence what functionality is to be
+      enabled, etc.).</para>
     </sect1>
 
     <sect1>
       <title>Domain Test Class</title>
 
-      <para>Specify the fixtures to load:</para>
+      <para>A simple domain test to confirm that a "normal" member can not
+      edit their own initials (only the institute secretary can edit certain
+      details, which require proof of identity).<programlisting>// Specify the fixtures to load:
+@Fixtures({ @Fixture(MembershipFixture.class)}) 
 
-      <para><code>@Fixtures({
-      @Fixture(MembershipFixture.class)})</code></para>
+public class MemberNormalTest extends AbstractMemberTest {
 
-      <para><code></code></para>
+    @Before
+    public void setUp() {
+        doLogin("voter@saip");
+    }
 
-      <para><code>public class MemberNormalTest extends AbstractMemberTest
-      {</code></para>
+    @Test(expected = DisabledException.class)
+    public void memberCanNotChangeOwnInitials() throws Exception {
+        wrappedLoggedInMember.setInitials("X");
+        fail("Should have been disabled");
+    }
 
-      <para><code></code></para>
-
-      <para><code>@Test(expected = DisabledException.class) </code></para>
-
-      <para><code>public void memberCanNotChangeOwnInitials() throws Exception
-      { </code></para>
-
-      <para><code>wrappedLoggedInMember.setInitials("X"); </code></para>
-
-      <para><code>fail("Should have been disabled"); </code></para>
-
-      <para><code>}</code></para>
-
-      <para><code>}</code></para>
-
-      <para><code></code></para>
+}</programlisting></para>
     </sect1>
   </appendix>
 </book>
