@@ -33,6 +33,7 @@
             <item name="Default (No-op)" href="../dflt/index.html" />
             <item name="File" href="../file/index.html" />
             <item name="LDAP" href="../ldap/index.html" />
+            <item name="SQL" href="../sql/index.html" />
         </menu>
 
         <menu name="Maven Reports" ref="reports" />

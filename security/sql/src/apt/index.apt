@@ -17,25 +17,27 @@
 
 
 
-Security LDAP Implementation
-
- The <ldap security> module provides an implementation of Isis' authentication and
- authorization APIs where credentials are stored in a well-known LDAP server.
+Security SQL Implementation
  
- This makes the LDAP security implementation suitable for deployment where an
- LDAP exists.  Optionally it may be combined with other implementations (for example
- the authorization might be performed using the file-based implementation).
+ The <SQL security> module is a simple implementation of Isis' authentication and
+ authorization APIs, that uses flat SQL tables to store user/passwords/roles (for authentication)
+ and role-based permissions (for authorization).
  
+ No additional helpers are provided to maintain the SQL tables used, so you will have
+ to find your own table viewers/editors to maintain them.
 
+ At the moment, authorization learning has not been implemented.
+ 
+ 
 Alternatives
 
   Alternatives include:
   
   * the {{{../dflt/index.html}default}} (no-op) security implementation, for prototyping use only
 
-  * the {{{../file/index.html}file-based}} security (reading from simple flat files)
+  * the {{{../file/index.html}file}} security
 
-  * the {{{../sql/index.html}SQL}} security (reading from simple SQL tables)
+  * the {{{../ldap/index.html}LDAP}} security
 
   []
-  
+ 

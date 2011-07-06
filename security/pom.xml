@@ -63,6 +63,7 @@
 		<module>dflt</module>
         <module>file</module>
         <module>ldap</module>
+        <module>sql</module>
 	</modules>
 
 	<reporting>
@@ -130,6 +131,18 @@
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>ldap</artifactId>
+                <version>0.1.2-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.security</groupId>
+                <artifactId>sql</artifactId>
+                <version>0.1.2-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.security</groupId>
+                <artifactId>sql</artifactId>
                 <version>0.1.2-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>

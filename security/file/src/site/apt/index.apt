@@ -37,5 +37,7 @@ Alternatives
 
   * the {{{../ldap/index.html}LDAP}} security
 
+  * the {{{../sql/index.html}SQL}} security (reading from simple SQL tables)
+
   []
  

@@ -21,10 +21,10 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="LDAP" href="index.html"/>
+			<item name="SQL" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="LDAP Security">
+		<menu name="SQL Security">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
