@@ -19,18 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+
 /**
  * Web page representing an entity.
  */
-@AuthorizeInstantiation("org.starobjects.wicket.roles.USER")
+@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class EntityPage extends PageAbstract {
 
     public EntityPage(final PageParameters pageParameters) {
