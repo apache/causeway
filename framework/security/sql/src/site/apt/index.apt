@@ -40,9 +40,12 @@ Alternatives
   * the {{{../ldap/index.html}LDAP}} security
 
 Setup
-
+ 
+ The SQL Authenticator is relatively easy to setup - just add the following to isis.properties:
+ Change the connection, userTable, etc, definitions, to reflect that of your configuration.
+ 
++--
  isis.authentication=sql
- isis.authentication.authenticator=objstore.dflt.saip.authentication.SaipSqlAuthenticator
  isis.authentication.sql.jdbc.driver=org.hsqldb.jdbcDriver
 
  # Connection string: e.g.
@@ -52,16 +55,38 @@ Setup
  isis.authentication.sql.jdbc.user=sa
  isis.authentication.sql.jdbc.password=
 
- isis.authentication.sql.userTable=*Real Name of User Table*
- isis.authentication.sql.userNameField=*Real field that contains username*
- isis.authentication.sql.passwordField=*Real field that contains password*
+ isis.authentication.sql.userTable=RealNameOfUserTable 
+ isis.authentication.sql.userNameField=RealFieldThatContainsUsernames
+ isis.authentication.sql.passwordField=RealFieldThatContainsPassword 
 
  # The following property is optional, for specifying roles:
-
- isis.authentication.sql.roleField=*Real field that contains roles* 
-
  # Roles are of the forms ROLE1|ROLE2|ROLE3
+ isis.authentication.sql.roleField=RealFieldThatContainsRoles
+ 
+  # Optional: If you wish to override the default SqlAuthenticator, you can specify your own,
+  #   with a fully qualified classname:
+  isis.authentication.authenticator=domain.package.MyCustomSqlAuthenticator
++--
 
+  * Custom Authenticator
+  
+  Extend "org.apache.isis.security.sql.authentication.SqlAuthenticator" and override the following methods:
+  
++--
+  protected ResultSet postProcessLogin(String user, String password, ResultSet results)
+  protected String getRoles(final ResultSet results, final String roles)
++--  
+
+  ** postProcessLogin
+  
+  Lets you perform additional processing to see if the found RecordSet (which has already been verified to match the
+  provided username and password, should be allowed to login.
+  
+  Simply return the results RecordSet, if so, else return null.
+  
+  ** getRoles
+  
+  Lets you add additional roles to the default. Simply return your custom roles appended to the provided roles String.   
 
   []
  
