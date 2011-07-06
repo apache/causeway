@@ -4829,7 +4829,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
             <listitem>
               <para>login to <code>people.apache.org</code> using ssh:</para>
 
-              <programlisting>ssh -l xxxxxxxx@people.apache.org</programlisting>
+              <programlisting>ssh -l xxxxxxxx people.apache.org</programlisting>
 
               <para>where xxxxxxx is your apache user Id</para>
             </listitem>

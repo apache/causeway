@@ -48,7 +48,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
 
     private static final long serialVersionUID = 1L;
 
-    private static final String USER_ROLE = "org.starobjects.wicket.roles.USER";
+    public static final String USER_ROLE = "org.apache.isis.viewer.wicket.roles.USER";
 
     public static AuthenticatedWebSessionForIsis get() {
         return (AuthenticatedWebSessionForIsis) Session.get();
