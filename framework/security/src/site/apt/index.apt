@@ -40,4 +40,8 @@ Security
 
    The <ldap> implementation provides integration with an LDAP provider.
 
+ * {{{./sql/index.html}sql}}
+
+   The <sql> implementation provides basic integration with a SQL database.
+
  []

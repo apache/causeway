@@ -39,5 +39,29 @@ Alternatives
 
   * the {{{../ldap/index.html}LDAP}} security
 
+Setup
+
+ isis.authentication=sql
+ isis.authentication.authenticator=objstore.dflt.saip.authentication.SaipSqlAuthenticator
+ isis.authentication.sql.jdbc.driver=org.hsqldb.jdbcDriver
+
+ # Connection string: e.g.
+ isis.authentication.sql.jdbc.connection=jdbc:hsqldb:file:hsql-db/authentication
+
+ # Connection authentication
+ isis.authentication.sql.jdbc.user=sa
+ isis.authentication.sql.jdbc.password=
+
+ isis.authentication.sql.userTable=*Real Name of User Table*
+ isis.authentication.sql.userNameField=*Real field that contains username*
+ isis.authentication.sql.passwordField=*Real field that contains password*
+
+ # The following property is optional, for specifying roles:
+
+ isis.authentication.sql.roleField=*Real field that contains roles* 
+
+ # Roles are of the forms ROLE1|ROLE2|ROLE3
+
+
   []
  
