@@ -1,0 +1,67 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Security SQL Implementation
+ 
+ The <SQL security> module is a simple implementation of Isis' authentication and
+ authorization APIs, that uses flat SQL tables to store user/passwords/roles (for authentication)
+ and role-based permissions (for authorization).
+ 
+ No additional helpers are provided to maintain the SQL tables used, so you will have
+ to find your own table viewers/editors to maintain them.
+
+ At the moment, authorization learning has not been implemented.
+ 
+ 
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}default}} (no-op) security implementation, for prototyping use only
+
+  * the {{{../file/index.html}file}} security
+
+  * the {{{../ldap/index.html}LDAP}} security
+
+Setup
+
+ isis.authentication=sql
+ isis.authentication.authenticator=objstore.dflt.saip.authentication.SaipSqlAuthenticator
+ isis.authentication.sql.jdbc.driver=org.hsqldb.jdbcDriver
+
+ # Connection string: e.g.
+ isis.authentication.sql.jdbc.connection=jdbc:hsqldb:file:hsql-db/authentication
+
+ # Connection authentication
+ isis.authentication.sql.jdbc.user=sa
+ isis.authentication.sql.jdbc.password=
+
+ isis.authentication.sql.userTable=*Real Name of User Table*
+ isis.authentication.sql.userNameField=*Real field that contains username*
+ isis.authentication.sql.passwordField=*Real field that contains password*
+
+ # The following property is optional, for specifying roles:
+
+ isis.authentication.sql.roleField=*Real field that contains roles* 
+
+ # Roles are of the forms ROLE1|ROLE2|ROLE3
+
+
+  []
+ 
