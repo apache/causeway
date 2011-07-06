@@ -22,12 +22,15 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
+
     <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Dan</firstname>
+
         <surname>Haywood</surname>
       </author>
     </authorgroup>
@@ -520,11 +523,11 @@
     <title>Application Walkthrough</title>
 
     <abstract>
-       This chapter is a collection of screenshots to give you an idea of what the 
+      This chapter is a collection of screenshots to give you an idea of what the 
 
       <emphasis>Wicket Viewer</emphasis>
 
-       can do. 
+       can do.
     </abstract>
 
     <para>Most of the screenshots in this chapter require no specific
@@ -1212,7 +1215,7 @@
         mode.</para>
       </sect2>
 
-      <sect2>
+      <sect2 id="sec.Security">
         <title>Security</title>
 
         <para>Since both of the deployment modes supported by <emphasis>Wicket
@@ -2649,6 +2652,8 @@ isis.xmlos.dir=/tmp/xml</programlisting>
       other <emphasis>Apache Isis</emphasis> documentation and in Dan
       Haywood's book. Alternatively, you could always write your own
       implementations to hook into your own security infrastructure.</para>
+
+      <para>See also <xref linkend="sec.Security" />.</para>
     </sect1>
 
     <sect1>
