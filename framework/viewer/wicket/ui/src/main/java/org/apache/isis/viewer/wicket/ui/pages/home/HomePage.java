@@ -29,7 +29,7 @@ import org.apache.wicket.model.IModel;
 /**
  * Web page representing the home page (showing a welcome message).
  */
-@AuthorizeInstantiation("org.starobjects.wicket.roles.USER")
+@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class HomePage extends PageAbstract {
 
     public HomePage() {

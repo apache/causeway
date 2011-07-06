@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
 /**
  * Web page representing an action invocation.
  */
-@AuthorizeInstantiation("org.starobjects.wicket.roles.USER")
+@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class ActionPage extends PageAbstract {
 
     /**

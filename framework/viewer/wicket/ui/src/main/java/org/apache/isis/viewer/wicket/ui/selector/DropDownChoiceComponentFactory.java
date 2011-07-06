@@ -74,8 +74,7 @@ public class DropDownChoiceComponentFactory extends DropDownChoice<ComponentFact
      * @param underlyingId
      *            - the id of the {@link Component} created
      * @param underlyingModel
-     *            - the model for the {@link Component}, ie as passed to
-     *            {@link Components#findComponentFactories(org.starobjects.wicket.viewer.components.ComponentType, IModel)}
+     *            - the model for the {@link Component}
      */
     public DropDownChoiceComponentFactory(final String id, final Model<ComponentFactory> selectedComponentFactoryModel,
         final List<? extends ComponentFactory> componentFactories, final MarkupContainer container,
