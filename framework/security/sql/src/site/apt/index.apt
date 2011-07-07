@@ -41,6 +41,10 @@ Alternatives
   * the {{{../file/index.html}file}} security
 
   * the {{{../ldap/index.html}LDAP}} security
+  
+ See the security 
+ {{{../docbkx/html/guide/isis-security.html}HTML}} or 
+ {{{../docbkx/pdf/isis-security.pdf}PDF}} documentation for more details on these others.
 
 Setup
  

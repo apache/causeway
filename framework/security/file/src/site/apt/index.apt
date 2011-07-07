@@ -28,6 +28,9 @@ Security File Implementation
  up roles/permission sets (eg to be imported into some other implementation).  It is
  also useful as a example implementation that can be enhanced as required.
  
+ See the security 
+ {{{../docbkx/html/guide/isis-security.html}HTML}} or 
+ {{{../docbkx/pdf/isis-security.pdf}PDF}} documentation for more detail.
  
 Alternatives
 
