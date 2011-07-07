@@ -22,6 +22,12 @@ SQL ObjectStore
  The <sql> object store module provides the ability to persist 
  domain objects into an RDBMS.  It has no external dependencies, 
  using simply JDBC.
+
+ For more information, see the 
+ {{{./sql-impl/index.html}Implementation}}, 
+ {{{./sql-tests-common/index.html}Common Tests}} and 
+ {{{./sql-tests-served/index.html}Served Tests}}
+ documentation.
  
  
 Alternatives
