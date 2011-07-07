@@ -49,6 +49,7 @@
 	<modules>
 		<module>dflt</module>
 		<module>xml</module>
+		<module>sql</module>
 	</modules>
 
 	<reporting>
