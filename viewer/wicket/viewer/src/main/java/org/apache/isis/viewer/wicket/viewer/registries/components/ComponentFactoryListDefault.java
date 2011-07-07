@@ -71,6 +71,7 @@ import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFac
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuecollection.ValueCollectionFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryList} that registers a hardcoded set of built-in
@@ -122,6 +123,17 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         addComponentFactoriesForVoidReturn(componentFactories);
         addComponentFactoriesForValue(componentFactories);
         addComponentFactoriesForParameters(componentFactories);
+
+        // TODO: KAM support for value choices:
+        addComponentFactoriesForValueChoices(componentFactories);
+
+    }
+
+    /**
+     * Trying to add support for value choices.
+     */
+    protected void addComponentFactoriesForValueChoices(List<ComponentFactory> componentFactories) {
+        componentFactories.add(new ValueCollectionFactory());
     }
 
     protected void addComponentFactoriesForSpecial(final List<ComponentFactory> componentFactories) {
