@@ -17,16 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.login;
+package org.apache.isis.viewer.wicket.ui.pages.login;
 
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
-import org.apache.wicket.authentication.pages.SignOutPage;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.authentication.pages.SignInPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 
 /**
- * TODO.
+ * Boilerplate, pick up our HTML and CSS.
  */
-public final class WicketSignOutPage extends SignOutPage {
+public final class WicketSignInPage extends SignInPage {
+    public WicketSignInPage() {
+    }
+
+    public WicketSignInPage(final PageParameters parameters) {
+    }
 
     /**
      * Renders the application-supplied CSS, if any.

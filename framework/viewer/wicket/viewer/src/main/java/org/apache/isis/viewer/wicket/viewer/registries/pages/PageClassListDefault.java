@@ -25,8 +25,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.isis.viewer.wicket.viewer.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.viewer.login.WicketSignOutPage;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 
 import com.google.inject.Singleton;
 
@@ -39,7 +38,6 @@ public class PageClassListDefault implements PageClassList {
     @Override
     public void registerPages(final PageRegistrySpi pageRegistry) {
         pageRegistry.registerPage(PageType.SIGN_IN, WicketSignInPage.class);
-        pageRegistry.registerPage(PageType.SIGN_OUT, WicketSignOutPage.class);
         pageRegistry.registerPage(PageType.ENTITY, EntityPage.class);
         pageRegistry.registerPage(PageType.HOME, HomePage.class);
         pageRegistry.registerPage(PageType.ACTION, ActionPage.class);

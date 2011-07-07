@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.integration.nof;
-
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+package org.apache.isis.viewer.wicket.ui.pages.login;
 
 /**
- * {@link DeploymentType} for exploration usage.
- * 
- * <p>
- * TODO: this is currently only partly honoured; exploration actions are shown and the correct object store is defaulted
- * (ie in-memory); however Wicket Objects will always pop up a login dialog.
+ * TODO
  */
-public class WicketServerExploration extends DeploymentTypeAbstract {
+public class UserPanel /* extends PanelAbstract */{
 
-    public WicketServerExploration() {
-        super("WICKET_SERVER_EXPLORATION", DeploymentCategory.EXPLORING);
-    }
+    private static final long serialVersionUID = 1L;
+
+    // public UserPanel(String id, Class<? extends Page> signoutClass) {
+    // super(id);
+    // AuthenticatedWebSessionForIsis session = getIsisAuthenticatedWebSession();
+    // add(new Label("fullname", session.getAuthenticationSession().getUserName()));
+    // add(new BookmarkablePageLink("signout", signoutClass));
+    // }
 
 }

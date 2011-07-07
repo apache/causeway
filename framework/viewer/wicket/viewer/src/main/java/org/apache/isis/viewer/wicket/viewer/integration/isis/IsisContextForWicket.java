@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.integration.nof;
+package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
 import java.util.Collection;
 import java.util.List;

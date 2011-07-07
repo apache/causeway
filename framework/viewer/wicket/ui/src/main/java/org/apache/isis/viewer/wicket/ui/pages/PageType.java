@@ -33,8 +33,7 @@ import org.apache.wicket.markup.html.WebPage;
  * large-scale structure of page layout (eg headers, footers) to be altered.
  */
 public enum PageType {
-    SIGN_IN(WebPage.class), HOME(HomePage.class), ENTITY(EntityPage.class), ACTION(ActionPage.class),
-    SIGN_OUT(WebPage.class);
+    SIGN_IN(WebPage.class), HOME(HomePage.class), ENTITY(EntityPage.class), ACTION(ActionPage.class);
 
     private Class<? extends Page> superClass;
 
