@@ -30,8 +30,8 @@
 		</menu>
 
         <menu name="Scimpi Modules">
-            <item name="Dispatcher" href="../dispatcher/index.html" />
-            <item name="Servlet" href="../servlet/index.html" />
+            <item name="Dispatcher" href="../scimpi-dispatcher/index.html" />
+            <item name="Servlet" href="../scimpi-servlet/index.html" />
         </menu>
 
 		<menu name="Maven Reports" ref="reports"/>

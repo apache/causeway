@@ -44,5 +44,7 @@ Alternatives
  
 Further Info
   
-  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{./docbkx/html/guide/isis-scimpi-viewer.html}user guide}} for more information.
+  See this module's {{{./docbkx/html/guide/isis-scimpi-viewer.html}User Guide}} for more information.
+
+  See the {{{./scimpi-dispatcher/index.html}Dispatcher}} and {{{./scimpi-servlet/index.html}Servlet}} for more information.
       
