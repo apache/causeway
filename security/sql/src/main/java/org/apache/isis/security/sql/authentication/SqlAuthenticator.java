@@ -51,6 +51,11 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
         return instance;
     }
 
+    // Override this method if dbPasswords are encoded.
+    protected boolean verifyPasswordsAreEqual(String loginPassword, String dbPassword) {
+        return dbPassword.equals(loginPassword);
+    }
+
     // Override this method
     protected ResultSet postProcessLogin(final String user, final String password, final ResultSet results) {
         return results;
@@ -214,7 +219,7 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
         try {
             while (results.next()) {
                 String dbPassword = results.getString(passwordField);
-                if (dbPassword.equals(password)) {
+                if (verifyPasswordsAreEqual(password, dbPassword)) {
                     return postProcessLogin(user, password, results);
                 }
             }
