@@ -20,3 +20,8 @@
 SQL ObjectStore Implementation
 
  This module holds the implementation of the {{{../index.html}SQL ObjectStore}}.
+
+Further Info
+  
+ See this module's {{{./apidocs/index.html}Javadoc}} and {{{../docbkx/html/guide/isis-sql-objectstore.html}User Guide}} for more information.
+

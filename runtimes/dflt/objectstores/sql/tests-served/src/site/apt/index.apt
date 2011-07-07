@@ -18,7 +18,12 @@
 
 
 SQL ObjectStore Integration Tests
+  
+  This module runs tests against a few common database servers.
 
-* ALPHA
- 
- This module holds the integration tests for the {{{../index.html}SQL ObjectStore}}.
+  It will need to be configured for your server environment.
+
+Further Info
+  
+ See this module's {{{./apidocs/index.html}Javadoc}} and {{{../docbkx/html/guide/isis-sql-objectstore.html}User Guide}} for more information.
+
