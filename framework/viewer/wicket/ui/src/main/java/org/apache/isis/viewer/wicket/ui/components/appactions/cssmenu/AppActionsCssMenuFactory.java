@@ -97,14 +97,6 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         }
     }
 
-    // @SuppressWarnings("unused")
-    // private void addPlaytimeMenu(List<CssMenuItem> applicationActionMenuItems) {
-    // CssMenuItem menuItem = CssMenuItem.newMenuItem("Playtime")
-    // .build();
-    // applicationActionMenuItems.add(menuItem);
-    // menuItem.newSubMenuItem("Css").link(CssPlaytimePage.class).build();
-    // }
-
     private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento,
         final CssMenuItem serviceMenuItem) {
 

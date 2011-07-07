@@ -125,7 +125,7 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType... type) {
+    public List<ObjectAction> getObjectActions(final ActionType type) {
         return null;
     }
 

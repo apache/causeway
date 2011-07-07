@@ -635,7 +635,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType... requestedTypes) {
+    public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : requestedTypes) {
             addActions(type, actions);
@@ -643,11 +643,18 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return actions;
     }
 
-    private void addActions(final ActionType type, final List<ObjectAction> actions) {
+    @Override
+    public List<ObjectAction> getObjectActions(final ActionType type) {
+        final List<ObjectAction> actions = Lists.newArrayList();
+        return addActions(type, actions);
+    }
+
+    private List<ObjectAction> addActions(final ActionType type, final List<ObjectAction> actionListToAppendTo) {
         if (!isService()) {
-            actions.addAll(getContributedActions(type));
+            actionListToAppendTo.addAll(getContributedActions(type));
         }
-        actions.addAll(getActions(objectActions, type));
+        actionListToAppendTo.addAll(getActions(objectActions, type));
+        return actionListToAppendTo;
     }
 
     private List<ObjectAction> getActions(final List<ObjectAction> availableActions, final ActionType type) {

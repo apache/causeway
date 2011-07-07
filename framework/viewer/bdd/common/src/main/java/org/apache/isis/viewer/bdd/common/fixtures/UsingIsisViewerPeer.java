@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.bdd.common.fixtures;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -243,9 +244,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         objectMembers.addAll(spec.getAssociations());
 
         // see if action (of any type)
-        objectMembers.addAll(spec.getObjectActions(ActionType.USER));
-        objectMembers.addAll(spec.getObjectActions(ActionType.EXPLORATION));
-        objectMembers.addAll(spec.getObjectActions(ActionType.DEBUG));
+        objectMembers.addAll(spec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.DEBUG)));
         for (final ObjectMember member : objectMembers) {
             if (matchesId(member, memberId)) {
                 return member;
