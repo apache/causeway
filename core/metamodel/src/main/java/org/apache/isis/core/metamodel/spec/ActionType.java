@@ -29,6 +29,12 @@ public enum ActionType {
     }
 
     public boolean matchesTypeOf(ObjectAction action) {
-        return this == null || action.getType().equals(this);
+        return action != null && action.getType().equals(this);
     }
+    
+    public boolean isDebug() { return this == DEBUG; }
+    public boolean isSet() { return this == SET; }
+    public boolean isExploration() { return this == EXPLORATION; }
+    public boolean isPrototype() { return this == PROTOTYPE; }
+    public boolean isUser() { return this == USER; }
 }

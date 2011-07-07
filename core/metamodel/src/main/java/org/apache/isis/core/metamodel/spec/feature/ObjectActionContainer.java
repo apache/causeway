@@ -27,6 +27,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectActionContainer {
 
+	public enum Contributed {
+		INCLUDED,
+		EXCLUDED;
+		
+		public boolean isIncluded() { return this == INCLUDED; }
+		public boolean isExcluded() { return this == EXCLUDED; }
+	}
+	
     List<ObjectAction> getServiceActionsReturning(ActionType... type);
 
     /**
@@ -59,13 +67,14 @@ public interface ObjectActionContainer {
     ObjectAction getObjectAction(String id);
 
     /**
-     * Returns an array of actions of the specified type(s), including any contributed actions.
-     * 
-     * <p>
-     * If the type is <tt>null</tt>, then returns all {@link ActionType#USER user}, {@link ActionType#EXPLORATION
-     * exploration} and {@link ActionType#DEBUG debug} actions (but not {@link ActionType#SET action sets}).
+     * Returns an array of actions of the specified type, including any contributed actions.
      */
-    List<ObjectAction> getObjectActions(ActionType... type);
+    List<ObjectAction> getObjectActions(ActionType type);
+
+    /**
+     * Returns an array of actions of the specified types, including any contributed actions.
+     */
+    List<ObjectAction> getObjectActions(List<ActionType> types);
 
     /**
      * Returns an array of all object actions (excluding any contributed actions).

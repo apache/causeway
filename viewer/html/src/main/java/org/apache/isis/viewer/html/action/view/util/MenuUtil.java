@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.html.action.view.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,19 +38,9 @@ public class MenuUtil {
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {
         final ObjectSpecification specification = target.getSpecification();
-        final List<ObjectAction> actions1 = specification.getObjectActions(ActionType.USER);
-        final List<ObjectAction> actions2 = specification.getObjectActions(ActionType.EXPLORATION);
-        final List<ObjectAction> actions3 = specification.getObjectActions(ActionType.PROTOTYPE);
-        final List<ObjectAction> actions = concat(concat(actions1, actions2), actions3);
+        final List<ObjectAction> actions = specification.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE));
         final Component[] menuItems = createMenu("Actions", target, actions, context, targetObjectId);
         return menuItems;
-    }
-
-    private static List<ObjectAction> concat(final List<ObjectAction> actions1, final List<ObjectAction> actions2) {
-        final List<ObjectAction> actions = Lists.newArrayList();
-        actions.addAll(actions1);
-        actions.addAll(actions2);
-        return actions;
     }
 
     private static Component[] createMenu(final String menuName, final ObjectAdapter target,

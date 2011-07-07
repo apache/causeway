@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.util;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -73,8 +74,8 @@ public class MethodsUtils {
         }
 
         final List<ObjectAction> actions =
-            object.getSpecification().getObjectActions(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
-                ActionType.DEBUG);
+            object.getSpecification().getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
+                ActionType.DEBUG));
         final ObjectAction action = findAction(actions, methodName);
         /*
          * if (action == null) { actions = object.getSpecification().getServiceActionsFor(ObjectActionType.USER,

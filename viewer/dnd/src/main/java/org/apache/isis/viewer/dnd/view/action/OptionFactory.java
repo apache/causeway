@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -49,7 +50,7 @@ public class OptionFactory {
 
         final ObjectSpecification noSpec = adapter.getSpecification();
         menuOptions(
-            noSpec.getObjectActions(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG),
+            noSpec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG)),
             adapter, options);
 
         // TODO: this looks like a bit of a hack; can we improve it by looking at the facets?

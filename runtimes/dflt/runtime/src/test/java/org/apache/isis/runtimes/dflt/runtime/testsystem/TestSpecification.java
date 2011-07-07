@@ -185,7 +185,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType... type) {
+    public List<ObjectAction> getObjectActions(final ActionType type) {
         return null;
     }
 
@@ -398,15 +398,14 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer#getObjectActionsAll()
-     */
     @Override
     public List<ObjectAction> getObjectActionsAll() {
-        // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public List<ObjectAction> getObjectActions(List<ActionType> types) {
+		return null;
+	}
 
 }
