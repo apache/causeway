@@ -26,7 +26,10 @@ Security LDAP Implementation
  LDAP exists.  Optionally it may be combined with other implementations (for example
  the authorization might be performed using the file-based implementation).
  
-
+ See the security 
+ {{{../docbkx/html/guide/isis-security.html}HTML}} or 
+ {{{../docbkx/pdf/isis-security.pdf}PDF}} documentation for more detail.
+ 
 Alternatives
 
   Alternatives include:
