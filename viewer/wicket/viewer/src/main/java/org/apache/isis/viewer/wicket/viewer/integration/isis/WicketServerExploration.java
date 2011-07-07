@@ -17,18 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.integration.nof;
+package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
- * {@link DeploymentType} for prototype usage.
+ * {@link DeploymentType} for exploration usage.
+ * 
+ * <p>
+ * TODO: this is currently only partly honoured; exploration actions are shown and the correct object store is defaulted
+ * (ie in-memory); however Wicket Objects will always pop up a login dialog.
  */
-public class WicketServerPrototype extends DeploymentTypeAbstract {
+public class WicketServerExploration extends DeploymentTypeAbstract {
 
-    public WicketServerPrototype() {
-        super("WICKET_SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
+    public WicketServerExploration() {
+        super("WICKET_SERVER_EXPLORATION", DeploymentCategory.EXPLORING);
     }
 
 }

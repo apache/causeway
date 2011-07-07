@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.login;
+package org.apache.isis.viewer.wicket.viewer.integration.isis;
+
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
- * TODO
+ * {@link DeploymentType} for production usage.
  */
-public class UserPanel /* extends PanelAbstract */{
+public class WicketServer extends DeploymentTypeAbstract {
 
-    private static final long serialVersionUID = 1L;
-
-    // public UserPanel(String id, Class<? extends Page> signoutClass) {
-    // super(id);
-    // AuthenticatedWebSessionForIsis session = getIsisAuthenticatedWebSession();
-    // add(new Label("fullname", session.getAuthenticationSession().getUserName()));
-    // add(new BookmarkablePageLink("signout", signoutClass));
-    // }
+    public WicketServer() {
+        super("WICKET_SERVER", DeploymentCategory.PRODUCTION);
+    }
 
 }

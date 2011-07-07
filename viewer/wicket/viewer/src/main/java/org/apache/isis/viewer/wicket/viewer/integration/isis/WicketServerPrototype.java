@@ -17,18 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.integration.nof;
+package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
- * {@link DeploymentType} for production usage.
+ * {@link DeploymentType} for prototype usage.
  */
-public class WicketServer extends DeploymentTypeAbstract {
+public class WicketServerPrototype extends DeploymentTypeAbstract {
 
-    public WicketServer() {
-        super("WICKET_SERVER", DeploymentCategory.PRODUCTION);
+    public WicketServerPrototype() {
+        super("WICKET_SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
     }
 
 }

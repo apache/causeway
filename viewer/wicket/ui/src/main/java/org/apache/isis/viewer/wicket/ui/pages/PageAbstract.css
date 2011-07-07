@@ -91,6 +91,14 @@ div {
 	padding: 0;
 }
 
+#body {
+	min-height: 400px;
+}
+
+#footer {
+    background-color: #C4D9EA;
+}
+
 h3 {
 	margin-top: 9px;
 	margin-bottom: 0px;

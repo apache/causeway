@@ -34,10 +34,15 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -46,6 +51,7 @@ import org.apache.wicket.model.IModel;
 public abstract class PageAbstract extends WebPage {
 
     public static final String ID_MENU_LINK = "menuLink";
+    public static final String ID_LOGOUT_LINK = "logoutLink";
 
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
@@ -54,9 +60,20 @@ public abstract class PageAbstract extends WebPage {
         addApplicationActionsComponent();
         this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
         this.pageParameters = pageParameters;
+        addLogoutLink();
     }
 
-    /**
+    private void addLogoutLink() {
+		add(new Link<Object>(ID_LOGOUT_LINK){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onClick() {
+				getSession().invalidate();
+				throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+			}});
+	}
+
+	/**
      * As provided in the {@link #PageAbstract(ComponentType) constructor}.
      * 
      * <p>
