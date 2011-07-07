@@ -19,8 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
-import org.apache.isis.viewer.wicket.model.util.Strings;
 import org.apache.wicket.Component;
+
+import org.apache.isis.viewer.wicket.model.util.Strings;
 
 /**
  * Enumerates the different types of {@link Component}s that can be constructed using {@link ComponentFactory}.
@@ -111,7 +112,11 @@ public enum ComponentType {
     /**
      * A void result from an action.
      */
-    VOID_RETURN;
+    VOID_RETURN,
+    /**
+     * A collection of values.
+     */
+    VALUE_COLLECTION;
 
     /**
      * Returns the {@link #name()} formatted as {@link Strings#camelCase(String) camel case}.
