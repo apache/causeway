@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.context.Context;
@@ -38,7 +39,7 @@ public class MenuUtil {
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {
         final ObjectSpecification specification = target.getSpecification();
-        final List<ObjectAction> actions = specification.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE));
+        final List<ObjectAction> actions = specification.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE), Contributed.INCLUDED);
         final Component[] menuItems = createMenu("Actions", target, actions, context, targetObjectId);
         return menuItems;
     }

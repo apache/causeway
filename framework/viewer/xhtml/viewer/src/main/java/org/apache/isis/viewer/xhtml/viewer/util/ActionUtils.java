@@ -20,7 +20,6 @@ package org.apache.isis.viewer.xhtml.viewer.util;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -34,7 +33,7 @@ public final class ActionUtils {
     public static List<ObjectAction> flattened(final List<ObjectAction> objectActions) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ObjectAction action : objectActions) {
-            if (action.getType() == ActionType.SET) {
+            if (action.getType().isSet()) {
                 final ObjectActionSet actionSet = (ObjectActionSet) action;
                 final List<ObjectAction> subActions = actionSet.getActions();
                 for (final ObjectAction subAction : subActions) {

@@ -171,7 +171,15 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
      * Review: is it necessary to override for this subclass?
      */
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final ActionType... type) {
+    public List<ObjectAction> getServiceActionsReturning(final ActionType type) {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Review: is it necessary to override for this subclass?
+     */
+    @Override
+    public List<ObjectAction> getServiceActionsReturning(final List<ActionType> type) {
         return Collections.emptyList();
     }
 

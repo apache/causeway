@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -186,7 +187,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         final List<ObjectAction> actions = new ArrayList<ObjectAction>();
         for (final ActionType type : ResourceAbstract.ACTION_TYPES) {
-            final List<ObjectAction> actionsForType = ActionUtils.flattened(noSpec.getObjectActions(type));
+            final List<ObjectAction> actionsForType = ActionUtils.flattened(noSpec.getObjectActions(type, Contributed.INCLUDED));
             actions.addAll(actionsForType);
         }
         final List<ObjectAction> rows = ListUtils.toList(actions.toArray(new ObjectAction[0]));

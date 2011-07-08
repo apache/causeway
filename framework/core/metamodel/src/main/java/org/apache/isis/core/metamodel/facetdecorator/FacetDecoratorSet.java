@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
@@ -103,7 +104,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
         for (final ObjectAssociation objectAssociation : holder.getAssociations()) {
             this.decorateAllFacets(objectAssociation);
         }
-        for (final ObjectAction objectAction : holder.getObjectActionsAll()) {
+        for (final ObjectAction objectAction : holder.getObjectActions(Contributed.EXCLUDED)) {
             decorateAllFacets(objectAction);
             final List<ObjectActionParameter> parameters = objectAction.getParameters();
             for (final ObjectActionParameter parameter : parameters) {

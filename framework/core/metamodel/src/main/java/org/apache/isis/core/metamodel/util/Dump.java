@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtil
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -149,10 +150,10 @@ public final class Dump {
     private static void specificationActionMethods(final ObjectSpecification specification,
         final DebugBuilder debugBuilder) {
         try {
-            final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER);
-            final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION);
-            final List<ObjectAction> prototypeActions = specification.getObjectActions(ActionType.PROTOTYPE);
-            final List<ObjectAction> debActions = specification.getObjectActions(ActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED);
+            final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED);
+            final List<ObjectAction> prototypeActions = specification.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED);
+            final List<ObjectAction> debActions = specification.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED);
             specificationMethods(userActions, explActions, prototypeActions, debActions, debugBuilder);
         } catch (final RuntimeException e) {
             debugBuilder.appendException(e);

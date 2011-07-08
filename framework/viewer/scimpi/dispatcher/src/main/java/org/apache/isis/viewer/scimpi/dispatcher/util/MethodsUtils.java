@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -75,7 +76,7 @@ public class MethodsUtils {
 
         final List<ObjectAction> actions =
             object.getSpecification().getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
-                ActionType.DEBUG));
+                ActionType.DEBUG), Contributed.INCLUDED);
         final ObjectAction action = findAction(actions, methodName);
         /*
          * if (action == null) { actions = object.getSpecification().getServiceActionsFor(ObjectActionType.USER,

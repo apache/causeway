@@ -342,14 +342,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public ObjectAction getObjectAction(final ActionType type, final String id,
         final List<ObjectSpecification> parameters) {
         final List<ObjectAction> availableActions =
-            ListUtils.combine(getObjectActionsAll(), getContributedActions(type));
+            ListUtils.combine(getObjectActions(Contributed.EXCLUDED), getContributedActions(type));
         return getAction(availableActions, type, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
         final List<ObjectAction> availableActions =
-            ListUtils.combine(getObjectActions(type), getContributedActions(type));
+            ListUtils.combine(getObjectActions(type, Contributed.INCLUDED), getContributedActions(type));
         return getAction(availableActions, type, id);
     }
 
@@ -506,7 +506,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void catalogueActions(final Map<Method, ObjectMember> membersByMethod) {
-        final List<ObjectAction> userActions = getObjectActions(ActionType.USER);
+        final List<ObjectAction> userActions = getObjectActions(ActionType.USER, Contributed.INCLUDED);
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction userAction = userActions.get(i);
             final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);

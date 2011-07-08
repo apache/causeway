@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -151,7 +152,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     private Element asDivActions(final ObjectSpecification noSpec, final ActionType type) {
         final Element div = xhtmlRenderer.div_p(type.name() + " actions", HtmlClass.ACTIONS);
 
-        final List<ObjectAction> actions = ActionUtils.flattened(noSpec.getObjectActions(type));
+        final List<ObjectAction> actions = ActionUtils.flattened(noSpec.getObjectActions(type, Contributed.INCLUDED));
         final Element ul = xhtmlRenderer.ul(HtmlClass.ACTIONS);
         div.appendChild(ul);
         for (final ObjectAction action : actions) {

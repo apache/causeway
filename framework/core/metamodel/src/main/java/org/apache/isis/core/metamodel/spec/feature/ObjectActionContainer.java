@@ -35,8 +35,6 @@ public interface ObjectActionContainer {
 		public boolean isExcluded() { return this == EXCLUDED; }
 	}
 	
-    List<ObjectAction> getServiceActionsReturning(ActionType... type);
-
     /**
      * Returns the action of the specified type with the specified signature.
      */
@@ -67,18 +65,25 @@ public interface ObjectActionContainer {
     ObjectAction getObjectAction(String id);
 
     /**
-     * Returns an array of actions of the specified type, including any contributed actions.
+     * Returns an array of actions of the specified type, including or excluding contributed actions as required.
      */
-    List<ObjectAction> getObjectActions(ActionType type);
+    List<ObjectAction> getObjectActions(ActionType type, Contributed contributed);
 
     /**
-     * Returns an array of actions of the specified types, including any contributed actions.
+     * Returns an array of actions of the specified types, including or excluding contributed actions as required.
      */
-    List<ObjectAction> getObjectActions(List<ActionType> types);
+    List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed);
 
     /**
-     * Returns an array of all object actions (excluding any contributed actions).
+     * Returns a list of all object actions, including or excluding contributed actions as required.
      */
-    List<ObjectAction> getObjectActionsAll();
+    List<ObjectAction> getObjectActions(Contributed contributed);
+
+    
+    List<ObjectAction> getServiceActionsReturning(ActionType type);
+
+    List<ObjectAction> getServiceActionsReturning(List<ActionType> type);
+
+    
 
 }
