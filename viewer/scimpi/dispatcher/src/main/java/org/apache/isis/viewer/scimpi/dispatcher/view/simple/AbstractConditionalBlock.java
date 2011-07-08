@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -341,7 +342,7 @@ class TestMethodExists extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
-        final List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ActionType.USER);
+        final List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
         boolean methodExists = false;
         for (final ObjectAction objectAssociation : objectActions) {
             if (objectAssociation.getId().equals(attributeName)) {

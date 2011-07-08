@@ -73,6 +73,7 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -619,8 +620,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     @SuppressWarnings("unchecked")
     public List<OneToManyAssociation> getCollections() {
-        final List<OneToManyAssociation> list = new ArrayList<OneToManyAssociation>();
-        final List associationList = getAssociations(ObjectAssociationFilters.COLLECTIONS);
+        final List<OneToManyAssociation> list = Lists.newArrayList();
+        @SuppressWarnings("rawtypes")
+		final List associationList = getAssociations(ObjectAssociationFilters.COLLECTIONS);
         list.addAll(associationList);
         return list;
     }
@@ -630,45 +632,47 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAction> getObjectActionsAll() {
-        return Collections.unmodifiableList(objectActions);
+    public List<ObjectAction> getObjectActions(Contributed contributed) {
+    	if(contributed.isExcluded()) {
+    		// REVIEW: this special case almost certainly isn't required
+    		return Collections.unmodifiableList(objectActions);
+    	} else {
+    		return getObjectActions(ActionType.ALL_EXCEPT_SET, Contributed.INCLUDED);
+    	}
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes) {
+    public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes, Contributed contributed) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : requestedTypes) {
-            addActions(type, actions);
+            addActions(type, actions, contributed);
         }
         return actions;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type) {
+    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
         final List<ObjectAction> actions = Lists.newArrayList();
-        return addActions(type, actions);
+        return addActions(type, actions, contributed);
     }
 
-    private List<ObjectAction> addActions(final ActionType type, final List<ObjectAction> actionListToAppendTo) {
-        if (!isService()) {
+    private List<ObjectAction> addActions(final ActionType type, final List<ObjectAction> actionListToAppendTo, Contributed contributed) {
+        if (!isService() && contributed.isIncluded()) {
             actionListToAppendTo.addAll(getContributedActions(type));
         }
-        actionListToAppendTo.addAll(getActions(objectActions, type));
+        actionListToAppendTo.addAll(getFlattenedActions(objectActions, type));
         return actionListToAppendTo;
     }
 
-    private List<ObjectAction> getActions(final List<ObjectAction> availableActions, final ActionType type) {
+    private List<ObjectAction> getFlattenedActions(final List<ObjectAction> objectActions, final ActionType type) {
         final List<ObjectAction> actions = Lists.newArrayList();
-        for (final ObjectAction action : availableActions) {
-            final ActionType actionType = action.getType();
-            if (actionType == ActionType.SET) {
+        for (final ObjectAction action : objectActions) {
+            if (action.getType().isSet()) {
                 final ObjectActionSet actionSet = (ObjectActionSet) action;
                 final List<ObjectAction> subActions = actionSet.getActions();
                 for (final ObjectAction subAction : subActions) {
                     if (type.matchesTypeOf(subAction)) {
                         actions.add(subAction);
-                        // REVIEW: why was there a break here?
-                        // break;
                     }
                 }
             } else {
@@ -681,12 +685,18 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return actions;
     }
 
+    
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final ActionType... types) {
+    public List<ObjectAction> getServiceActionsReturning(final ActionType type) {
+    	return getServiceActionsReturning(Collections.singletonList(type));
+    }
+
+    @Override
+    public List<ObjectAction> getServiceActionsReturning(final List<ActionType> types) {
         final List<ObjectAction> serviceActions = Lists.newArrayList();
         final List<ObjectAdapter> services = getServicesProvider().getServices();
         for (final ObjectAdapter serviceAdapter : services) {
-            appendServiceActionsReturning(serviceAdapter, Arrays.asList(types), serviceActions);
+            appendServiceActionsReturning(serviceAdapter, types, serviceActions);
         }
         return serviceActions;
     }
@@ -695,7 +705,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAction> relatedActionsToAppendTo) {
         final List<ObjectAction> matchingActionsToAppendTo = Lists.newArrayList();
         for (final ActionType type : types) {
-            final List<ObjectAction> serviceActions = serviceAdapter.getSpecification().getObjectActions(type);
+            final List<ObjectAction> serviceActions = serviceAdapter.getSpecification().getObjectActions(type, Contributed.INCLUDED);
             for (final ObjectAction serviceAction : serviceActions) {
                 addIfReturnsSubtype(serviceAction, matchingActionsToAppendTo);
             }
@@ -781,7 +791,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private List<ObjectAction> findContributedActions(final ObjectSpecification specification,
         final ActionType actionType) {
         final List<ObjectAction> contributedActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType);
+        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED);
         for (final ObjectAction serviceAction : serviceActions) {
             if (serviceAction.isAlwaysHidden()) {
                 continue;

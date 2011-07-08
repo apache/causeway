@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -244,7 +245,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         objectMembers.addAll(spec.getAssociations());
 
         // see if action (of any type)
-        objectMembers.addAll(spec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.DEBUG)));
+        objectMembers.addAll(spec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.DEBUG), Contributed.INCLUDED));
         for (final ObjectMember member : objectMembers) {
             if (matchesId(member, memberId)) {
                 return member;

@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -96,7 +97,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final ActionType... type) {
+    public List<ObjectAction> getServiceActionsReturning(final ActionType type) {
+        return null;
+    }
+
+    @Override
+    public List<ObjectAction> getServiceActionsReturning(final List<ActionType> type) {
         return null;
     }
 
@@ -185,7 +191,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type) {
+    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
         return null;
     }
 
@@ -399,12 +405,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getObjectActionsAll() {
+    public List<ObjectAction> getObjectActions(Contributed contributed) {
         return null;
     }
 
 	@Override
-	public List<ObjectAction> getObjectActions(List<ActionType> types) {
+	public List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed) {
 		return null;
 	}
 

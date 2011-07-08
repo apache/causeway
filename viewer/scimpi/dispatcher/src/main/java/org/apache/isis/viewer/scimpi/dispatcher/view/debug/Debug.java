@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -298,11 +299,11 @@ public class Debug extends AbstractElementProcessor {
 
         final List<ObjectAssociation> fields = spec.getAssociations();
         specificationMembers(view, "Fields", fields);
-        final List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER);
+        final List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER, Contributed.INCLUDED);
         specificationMembers(view, "User Actions", userActions);
-        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION));
-        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE));
-        specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG));
+        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED));
+        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED));
+        specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED));
         view.endSection();
 
         view.startSection("Fields");

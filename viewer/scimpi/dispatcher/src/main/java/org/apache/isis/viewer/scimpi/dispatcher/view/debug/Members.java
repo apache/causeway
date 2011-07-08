@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -74,7 +75,7 @@ public class Members extends AbstractElementProcessor {
                 }
             }
             request.appendHtml("   --------------\n");
-            final List<ObjectAction> actions = specification.getObjectActions(ActionType.USER);
+            final List<ObjectAction> actions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED);
             ;
             for (final ObjectAction action : actions) {
                 request.appendHtml("   " + action.getId() + " (");

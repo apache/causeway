@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.option.DisposeObjectOption;
@@ -38,8 +39,8 @@ public class OptionFactory {
         // TODO do the same as addObjectMenuOptions and collect together all the
         // actions for all the types
         final List<ObjectAction> actions =
-            specification.getServiceActionsReturning(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
-                ActionType.DEBUG);
+            specification.getServiceActionsReturning(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
+                ActionType.DEBUG));
         menuOptions(actions, null, options);
     }
 
@@ -50,7 +51,7 @@ public class OptionFactory {
 
         final ObjectSpecification noSpec = adapter.getSpecification();
         menuOptions(
-            noSpec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG)),
+            noSpec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG), Contributed.INCLUDED),
             adapter, options);
 
         // TODO: this looks like a bit of a hack; can we improve it by looking at the facets?

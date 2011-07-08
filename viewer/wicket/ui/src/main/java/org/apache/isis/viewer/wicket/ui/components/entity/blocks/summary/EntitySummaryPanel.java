@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -122,7 +123,7 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
         final ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            final List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER);
+            final List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
 
             final CssMenuBuilder cssMenuBuilder =
                 new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);

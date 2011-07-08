@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -101,7 +102,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
             }
         }
         
-        List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActionsAll();
+        List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.EXCLUDED);
         for (ObjectAction action : actions) {
             Consent visibility = action.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {

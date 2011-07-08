@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
@@ -62,16 +63,16 @@ public class Methods extends AbstractElementProcessor {
 
     public static void writeMethods(final Request request, final String objectId, final ObjectAdapter adapter,
         final boolean showForms, final InclusionList inclusionList) {
-        List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ActionType.USER);
+        List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
         writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
         // TODO determine if system is set up to display exploration methods
         if (true) {
-            actions = adapter.getSpecification().getObjectActions(ActionType.EXPLORATION);
+            actions = adapter.getSpecification().getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED);
             writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
         }
         // TODO determine if system is set up to display debug methods
         if (true) {
-            actions = adapter.getSpecification().getObjectActions(ActionType.DEBUG);
+            actions = adapter.getSpecification().getObjectActions(ActionType.DEBUG, Contributed.INCLUDED);
             writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
         }
     }

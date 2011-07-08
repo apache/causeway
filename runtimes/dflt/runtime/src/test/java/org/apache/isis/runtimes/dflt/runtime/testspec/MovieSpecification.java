@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.testsupport.testdomain.Movie;
@@ -213,7 +214,7 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type) {
+    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
         return null;
     }
 

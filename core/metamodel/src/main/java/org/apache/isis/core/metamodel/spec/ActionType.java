@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public enum ActionType {
@@ -37,4 +40,6 @@ public enum ActionType {
     public boolean isExploration() { return this == EXPLORATION; }
     public boolean isPrototype() { return this == PROTOTYPE; }
     public boolean isUser() { return this == USER; }
+    
+    public static final List<ActionType> ALL_EXCEPT_SET = Arrays.asList(DEBUG, EXPLORATION, PROTOTYPE, USER);
 }

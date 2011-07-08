@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -142,7 +143,7 @@ public class DebugAction implements Action {
         final List<String> fullIdentifierList = Lists.newArrayList(Collections2.transform(specs, className));
         for (final String fullIdentifier : fullIdentifierList) {
             final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
-            if (spec.getAssociations().size() == 0 && spec.getObjectActionsAll().size() == 0) {
+            if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
                 continue;
             }
             final String name = spec.getIdentifier().toClassIdentityString();
@@ -152,7 +153,7 @@ public class DebugAction implements Action {
                 context.getWriter().append("#" + name + ".property." + assoc.getId() + ".description" + "=\n");
                 context.getWriter().append("#" + name + ".property." + assoc.getId() + ".help" + "=\n");
             }
-            for (final ObjectAction action : spec.getObjectActionsAll()) {
+            for (final ObjectAction action : spec.getObjectActions(Contributed.EXCLUDED)) {
                 context.getWriter().append("#" + name + ".action." + action.getId() + ".name" + "=\n");
                 context.getWriter().append("#" + name + ".action." + action.getId() + ".description" + "=\n");
                 context.getWriter().append("#" + name + ".action." + action.getId() + ".help" + "=\n");
@@ -174,7 +175,7 @@ public class DebugAction implements Action {
         final List<String> fullIdentifierList = Lists.newArrayList(Collections2.transform(specs, className));
         for (final String fullIdentifier : fullIdentifierList) {
             final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
-            if (spec.getAssociations().size() == 0 && spec.getObjectActionsAll().size() == 0) {
+            if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
                 continue;
             }
             final String name = spec.getIdentifier().toClassIdentityString();
@@ -185,7 +186,7 @@ public class DebugAction implements Action {
                 // context.getWriter().append("#" + name + ".property." + assoc.getId() + ".description" + "=\n");
                 // context.getWriter().append("#" + name + ".property." + assoc.getId() + ".help" + "=\n");
             }
-            for (final ObjectAction action : spec.getObjectActionsAll()) {
+            for (final ObjectAction action : spec.getObjectActions(Contributed.EXCLUDED)) {
                 context.getWriter().append("#" + name + "#" + action.getId() + "():roles\n");
                 // context.getWriter().append("#" + name + ".action." + action.getId() + ".description" + "=\n");
                 // context.getWriter().append("#" + name + ".action." + action.getId() + ".help" + "=\n");
