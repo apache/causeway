@@ -85,7 +85,8 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
             @Override
             public Boolean getObject() {
-                final ObjectAdapter adapter = getModel().getObject();
+                final ScalarModel model = getModel();
+                final ObjectAdapter adapter = model.getObject();
                 return (Boolean) adapter.getObject();
             }
 
