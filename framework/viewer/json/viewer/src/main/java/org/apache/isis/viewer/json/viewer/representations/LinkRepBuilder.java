@@ -16,26 +16,33 @@
  */
 package org.apache.isis.viewer.json.viewer.representations;
 
-import java.util.List;
-
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 
 public class LinkRepBuilder extends RepresentationBuilder {
 
     public static LinkRepBuilder newBuilder(RepContext repContext, String relSuffix, String url) {
         return new LinkRepBuilder(repContext, relSuffix, url);
     }
-    public static TypeBuilder newTypeBuilder(RepContext repContext, String relSuffix, ObjectSpecification objectSpec) {
-        return new TypeBuilder(repContext, relSuffix, objectSpec);
+    public static TypeBuilder newTypeBuilder(RepContext repContext, ObjectSpecification objectSpec) {
+        return new TypeBuilder(repContext, objectSpec);
     }
+
+	public static LinkRepBuilder newObjectBuilder(RepContext repContext,
+			ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
+    	String url = DomainObjectRepBuilder.urlFor(elementAdapter, oidStringifier);
+        return LinkRepBuilder.newBuilder(repContext, "object", url);
+	}
 
     private final String relSuffix;
     private final String url;
     
     private HttpMethod method = HttpMethod.GET;
     private String title;
-    private List<String> body;
+    private Object body;
     
     public LinkRepBuilder(RepContext repContext, String relSuffix, String url) {
         super(repContext);
@@ -50,12 +57,12 @@ public class LinkRepBuilder extends RepresentationBuilder {
         this.title = title;
         return this;
     }
-    public LinkRepBuilder withBody(List<String> body) {
+    public LinkRepBuilder withBody(Object body) {
         this.body = body;
         return this;
     }
     public Representation build() {
-        representation.put("rel", repContext.relFor(relSuffix));
+        representation.put("rel", relSuffix);
         representation.put("url", repContext.urlFor(url));
         representation.put("method", method);
         representation.put("title", title);

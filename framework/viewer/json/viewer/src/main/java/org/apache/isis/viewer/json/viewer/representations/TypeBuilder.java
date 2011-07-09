@@ -33,14 +33,15 @@ public class TypeBuilder extends LinkRepBuilder {
             java.lang.Short.class.getName(), "short",
             java.lang.Integer.class.getName(), "int",
             java.lang.Long.class.getName(), "long",
+            java.lang.Boolean.class.getName(), "boolean",
             java.lang.Float.class.getName(), "float",
             java.lang.Double.class.getName(), "double",
             java.math.BigInteger.class.getName(), "bigint",
             java.math.BigDecimal.class.getName(), "bigdec"
             );
 
-    public TypeBuilder(RepContext repContext, String relSuffix, ObjectSpecification objectSpec) {
-        super(repContext, relSuffix, urlFor(objectSpec));
+    public TypeBuilder(RepContext repContext, ObjectSpecification objectSpec) {
+        super(repContext, "type", urlFor(objectSpec));
     }
     
     private static String urlFor(ObjectSpecification objectSpec) {

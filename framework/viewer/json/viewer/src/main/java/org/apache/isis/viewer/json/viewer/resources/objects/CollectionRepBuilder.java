@@ -49,12 +49,6 @@ public class CollectionRepBuilder extends AbstractMemberRepBuilder<OneToManyAsso
         return representation;
     }
 
-    protected List<String> mutatorArgValues(MutatorSpec mutatorSpec) {
-        List<String> values = Lists.newArrayList();
-        values.add(null);
-        return values;
-    }
-
     @Override
     protected Object valueRep() {
         ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
@@ -64,8 +58,10 @@ public class CollectionRepBuilder extends AbstractMemberRepBuilder<OneToManyAsso
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
         List<Representation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
-            String url = DomainObjectRepBuilder.urlFor(elementAdapter, getOidStringifier());
-            list.add(LinkRepBuilder.newBuilder(repContext, "value", url).build());
+
+            LinkRepBuilder newBuilder = LinkRepBuilder.newObjectBuilder(repContext, elementAdapter, getOidStringifier());
+
+			list.add(newBuilder.build());
         }
         
         return list;

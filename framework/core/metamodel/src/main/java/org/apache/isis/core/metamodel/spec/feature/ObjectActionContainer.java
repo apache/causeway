@@ -78,7 +78,6 @@ public interface ObjectActionContainer {
      * Returns a list of all object actions, including or excluding contributed actions as required.
      */
     List<ObjectAction> getObjectActions(Contributed contributed);
-
     
     List<ObjectAction> getServiceActionsReturning(ActionType type);
 
