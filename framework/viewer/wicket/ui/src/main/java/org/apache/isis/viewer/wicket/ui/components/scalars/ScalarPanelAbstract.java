@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as their backing model.
@@ -77,10 +78,12 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
     protected Component componentIfCompact;
     private Component componentIfRegular;
+    protected final ScalarModel scalarModel;
 
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         setFormat(Format.REGULAR);
+        this.scalarModel = scalarModel;
     }
 
     protected Format getFormat() {
