@@ -112,11 +112,7 @@ public enum ComponentType {
     /**
      * A void result from an action.
      */
-    VOID_RETURN,
-    /**
-     * A collection of values.
-     */
-    VALUE_COLLECTION;
+    VOID_RETURN;
 
     /**
      * Returns the {@link #name()} formatted as {@link Strings#camelCase(String) camel case}.
