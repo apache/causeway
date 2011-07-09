@@ -37,23 +37,15 @@ public enum MemberRepType {
     STANDALONE,
     INLINE;
 
-    public boolean hasSelf() {
-        return this == STANDALONE;
+    public boolean isInline() {
+		return this == INLINE;
+	}
+
+    public boolean hasValueFor(MemberType memberType) {
+        return memberType.isProperty() || memberType.isCollection() && isStandalone();  
     }
 
-    public boolean hasMutators() {
-        return this == STANDALONE;
-    }
-
-    public boolean hasLinkToDetails() {
-        return this == INLINE;
-    }
-
-    public boolean hasValue(MemberType memberType) {
-        return memberType.isProperty() || memberType.isCollection() && isStandalone();
-    }
-
-    private boolean isStandalone() {
+	public boolean isStandalone() {
         return this == STANDALONE;
     }
 

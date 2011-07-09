@@ -48,12 +48,11 @@ public class MemberSelfRepBuilder extends RepresentationBuilder {
 
     private Representation memberLinkRep() {
         String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        return LinkRepBuilder.newBuilder(repContext, "link", url).build();
+        return LinkRepBuilder.newBuilder(repContext, "member", url).build();
     }
     
     private Representation domainObjectLinkRep() {
-        String url = DomainObjectRepBuilder.urlFor(objectAdapter, getOidStringifier());
-        return LinkRepBuilder.newBuilder(repContext, "object", url).build();
+        return LinkRepBuilder.newObjectBuilder(repContext, objectAdapter, getOidStringifier()).build();
     }
 
 }

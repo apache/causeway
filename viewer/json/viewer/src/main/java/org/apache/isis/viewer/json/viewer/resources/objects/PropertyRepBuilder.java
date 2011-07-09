@@ -16,14 +16,15 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
+
+import com.google.common.collect.Lists;
 
 public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssociation> {
 
@@ -41,26 +42,40 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssocia
         putMemberTypeRep();
         putValueIfRequired();
         putDisabledReason();
+        putChoices();
         putMutatorsIfRequired();
         putDetailsIfRequired();
         return representation;
     }
 
 
-    @Override
+	@Override
     protected Object valueRep() {
         ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
         if(valueAdapter == null) {
-            return null;
-        } 
-        ValueFacet valueFacet = getMemberSpecFacet(ValueFacet.class);
-        if(valueFacet != null) {
-            EncodableFacet encodableFacet = getMemberSpecFacet(EncodableFacet.class);
-            return encodableFacet.toEncodedString(valueAdapter);
-        } 
-        TitleFacet titleFacet = getMemberSpecFacet(TitleFacet.class);
-        String title = titleFacet.title(valueAdapter, getLocalization());
-        return LinkRepBuilder.newBuilder(repContext, "value", urlForObject()).withTitle(title).build();
+		    return null;
+		}
+        return DomainObjectRepBuilder.valueOrRef(repContext, valueAdapter, objectMember.getSpecification(), getOidStringifier(), getLocalization());
     }
+
+    private void putChoices() {
+		Object propertyChoices = propertyChoices();
+		if(propertyChoices != null) {
+			representation.put("choices", propertyChoices);
+		}
+	}
+
+	private Object propertyChoices() {
+		ObjectAdapter[] choiceAdapters = objectMember.getChoices(objectAdapter);
+		if(choiceAdapters == null || choiceAdapters.length == 0) {
+			return null;
+		}
+        List<Object> list = Lists.newArrayList();
+        for (final ObjectAdapter choiceAdapter : choiceAdapters) {
+        	ObjectSpecification objectSpec = objectMember.getSpecification();
+        	list.add(DomainObjectRepBuilder.valueOrRef(repContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
+        }
+        return list;
+	}
 
 }

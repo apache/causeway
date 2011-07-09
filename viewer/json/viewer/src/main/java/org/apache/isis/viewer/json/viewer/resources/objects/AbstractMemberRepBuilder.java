@@ -16,7 +16,6 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,8 +28,6 @@ import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
-
-import com.google.common.collect.Lists;
 
 public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends RepresentationBuilder {
 
@@ -48,23 +45,23 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
     }
 
     protected void putSelfIfRequired() {
-        if(memberRepType.hasSelf()) {
+        if(memberRepType.isStandalone()) {
             Representation selfRep = MemberSelfRepBuilder.newBuilder(repContext, objectAdapter, memberType, objectMember).build();
             representation.put("self", selfRep);
         }
     }
 
     protected void putMemberTypeRep() {
-        representation.put("memberType", memberType);
+        representation.put("memberType", memberType.name().toLowerCase());
     }
 
     protected void putTypeRep() {
-        Representation typeRep = LinkRepBuilder.newTypeBuilder(repContext, "type", memberType.specFor(objectMember)).build();
+        Representation typeRep = LinkRepBuilder.newTypeBuilder(repContext, memberType.specFor(objectMember)).build();
         representation.put("type", typeRep);
     }
 
     protected void putMutatorsIfRequired() {
-        if(!memberRepType.hasMutators() || usability().isVetoed()) {
+        if(!memberRepType.isStandalone() || usability().isVetoed()) {
             return;
         }
         Map<String, MutatorSpec> mutators = memberType.getMutators();
@@ -72,7 +69,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
             MutatorSpec mutatorSpec = mutators.get(mutator);
             if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
                 String urlForMember = urlForMember(mutatorSpec.suffix);
-                List<String> body = mutatorArgValues(mutatorSpec);
+                Object body = mutatorArgs(mutatorSpec);
                 Representation detailsLink = 
                     LinkRepBuilder.newBuilder(repContext, mutator, urlForMember)
                         .withHttpMethod(mutatorSpec.httpMethod)
@@ -83,21 +80,21 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
         }
     }
 
-    /**
-     * Can be optionally overridden by members that are able
-     * to provide argument values (eg contributed actions).
-     */
-    protected List<String> mutatorArgValues(MutatorSpec mutatorSpec) {
-        List<String> values = Lists.newArrayList();
-        if(mutatorSpec.argSpec.isOne()) {
-            values.add("{arg}");
+    protected Object mutatorArgs(MutatorSpec mutatorSpec) {
+    	if(mutatorSpec.bodyArgs.isNone()) {
+    		return null;
+    	}
+        if(mutatorSpec.bodyArgs.isOne()) {
+    		final Representation argRep = new Representation();
+    		argRep.put("arg", null);
+            return argRep;
         }
-        return values;
+        throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
     }
 
-
+    
     protected void putValueIfRequired() {
-        if(!memberRepType.hasValue(memberType)) {
+        if(!memberRepType.hasValueFor(memberType)) {
             return;
         } 
         representation.put("value", valueRep());
@@ -118,11 +115,11 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
     }
 
     protected void putDetailsIfRequired() {
-        if(!memberRepType.hasLinkToDetails()) {
+        if(!memberRepType.isInline()) {
             return;
         } 
         String urlForMember = urlForMember();
-        Representation detailsLink = LinkRepBuilder.newBuilder(repContext, "details", urlForMember).build();
+        Representation detailsLink = LinkRepBuilder.newBuilder(repContext, memberType.name().toLowerCase(), urlForMember).build();
         representation.put("details", detailsLink);
     }
 

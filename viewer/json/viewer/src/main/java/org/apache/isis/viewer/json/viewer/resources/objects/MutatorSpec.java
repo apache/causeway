@@ -34,13 +34,13 @@ public class MutatorSpec {
     public final Class<? extends Facet> mutatorFacetType;
     public final HttpMethod httpMethod;
     public final String suffix;
-    public final BodyArgs argSpec;
+    public final BodyArgs bodyArgs;
 
-    private MutatorSpec(Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec, String suffix) {
+    private MutatorSpec(Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs bodyArgs, String suffix) {
         this.validationFacetType = validationFacetType;
         this.mutatorFacetType = mutatorFacetType;
         this.httpMethod = httpMethod;
-        this.argSpec = argSpec;
+        this.bodyArgs = bodyArgs;
         this.suffix = suffix;
     }
 

@@ -19,9 +19,15 @@ package org.apache.isis.viewer.json.viewer.resources.objects;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.spec.ObjectActionSet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -51,8 +57,8 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     
     public Representation build() {
         RepContext repContext = this.repContext.underAttribute("_self");
-        Representation selfLink = LinkRepBuilder.newBuilder(repContext, "link", url()).build();
-        Representation selfType = LinkRepBuilder.newTypeBuilder(repContext, "type", objectAdapter.getSpecification()).build();
+        Representation selfLink = LinkRepBuilder.newBuilder(repContext, "object", url()).build();
+        Representation selfType = LinkRepBuilder.newTypeBuilder(repContext, objectAdapter.getSpecification()).build();
         String title = objectAdapter.titleString();
         Representation iconLink = LinkRepBuilder.newBuilder(repContext, "icon", icon()).build();
         Representation self = new Representation();
@@ -78,8 +84,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     }
 
     private String url() {
-        OidStringifier oidStringifier = getOidStringifier();
-        return urlFor(objectAdapter, oidStringifier);
+        return urlFor(objectAdapter, getOidStringifier());
     }
 
     private void withAllMembers(final ObjectAdapter objectAdapter) {
@@ -102,17 +107,28 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
             }
         }
         
-        List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.EXCLUDED);
-        for (ObjectAction action : actions) {
+        List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
+        withActions(objectAdapter, actions);
+    }
+
+	private void withActions(final ObjectAdapter objectAdapter,
+			List<ObjectAction> actions) {
+		for (ObjectAction action : actions) {
             Consent visibility = action.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {
                 continue;
             } 
-            String id = action.getId();
-            Representation actionRep = ActionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, action).build();
-            withMember(id, actionRep);
+        	if(action.getType().isSet()) {
+        		ObjectActionSet objectActionSet = (ObjectActionSet) action;
+        		List<ObjectAction> subactions = objectActionSet.getActions();
+        		withActions(objectAdapter, subactions);
+        	} else {
+                final String id = action.getId();
+                Representation actionRep = ActionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, action).build();
+                withMember(id, actionRep);
+        	}
         }
-    }
+	}
 
     private void withMember(String id, Representation propertyRep) {
         members.put(id, propertyRep);
@@ -123,7 +139,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     //
     /////////////////////////////////////////////////////////////////////
     
-    public static String urlFor(ObjectAdapter objectAdapter, OidStringifier oidStringifier) {
+	public static String urlFor(ObjectAdapter objectAdapter, OidStringifier oidStringifier) {
         String oidStr = oidStringifier.enString(objectAdapter.getOid());
         return "objects/" + oidStr;
     }
@@ -150,5 +166,23 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
             }
         };
     }
+
+
+    /////////////////////////////////////////////////////////////////////
+    //
+    /////////////////////////////////////////////////////////////////////
+
+    public static Object valueOrRef(RepContext repContext,
+			final ObjectAdapter objectAdapter, ObjectSpecification objectSpec, OidStringifier oidStringifier, Localization localization) {
+		ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
+		if(valueFacet != null) {
+			EncodableFacet encodeableFacet = objectSpec.getFacet(EncodableFacet.class);
+			return encodeableFacet.toEncodedString(objectAdapter);
+		}
+		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
+		String title = titleFacet.title(objectAdapter, localization);
+		return LinkRepBuilder.newObjectBuilder(repContext, objectAdapter, oidStringifier).withTitle(title).build();
+	}
+
 
 }

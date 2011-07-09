@@ -18,11 +18,8 @@
  */
 package org.apache.isis.viewer.json.applib;
 
-import org.apache.log4j.Logger;
 
 public abstract class AbstractRestfulClient {
-
-    private static Logger LOG = Logger.getLogger(AbstractRestfulClient.class);
 
     private final String hostUri;
 

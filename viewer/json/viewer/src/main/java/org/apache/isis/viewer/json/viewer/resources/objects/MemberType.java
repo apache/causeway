@@ -94,4 +94,7 @@ public enum MemberType {
         return this == MemberType.ACTION;
     }
 
+    public static MemberType lookup(final String memberType) {
+    	return valueOf(memberType.toUpperCase());
+    }
 }
