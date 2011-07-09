@@ -66,7 +66,6 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     protected FormComponentLabel addComponentForRegular() {
         // buildGui);
         valueIdField = createField();
-        syncWithInput();
         // }}
 
         addStandardSemantics();
@@ -74,6 +73,8 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         addOrReplace(labelIfRegular);
+
+        syncWithInput();
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueIdField));
         return labelIfRegular;
@@ -176,7 +177,6 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     // }
 
     private TextField<ObjectAdapterMemento> valueIdField;
-    static final String ID_VALUE_DETAILS = "valueDetails";
     private ObjectAdapterMemento pending;
 
     // private void addOrReplaceIdField() {
@@ -214,8 +214,6 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         if (adapter != null && scalarModel.isEntityDetailsVisible()) {
             // final ScalarModel entityModel = new ScalarModel(adapter);
             // addOrReplace(new EntityCombinedPanel(ID_VALUE_DETAILS, entityModel));
-        } else {
-            permanentlyHide(ID_VALUE_DETAILS);
         }
     }
 
