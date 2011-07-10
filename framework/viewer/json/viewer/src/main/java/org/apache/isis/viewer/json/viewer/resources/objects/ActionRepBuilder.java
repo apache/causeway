@@ -142,7 +142,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
     			return LinkRepBuilder.newObjectBuilder(repContext, objectAdapter, getOidStringifier()).build();
     		}
     	}
-    	return null;
+    	return "{value}";
 	}
 
 }

@@ -97,4 +97,12 @@ public enum MemberType {
     public static MemberType lookup(final String memberType) {
     	return valueOf(memberType.toUpperCase());
     }
+
+	public static MemberType of(ObjectMember objectMember) {
+		return objectMember.isAction()?
+				ACTION:
+					objectMember.isOneToOneAssociation()?
+						PROPERTY:
+						COLLECTION;
+	}
 }

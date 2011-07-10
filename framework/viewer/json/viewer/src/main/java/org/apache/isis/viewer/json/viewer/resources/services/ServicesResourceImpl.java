@@ -48,19 +48,9 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
     public String services() {
         init();
 
-        return asJson(serviceSelfRepresentations());
+        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+		return jsonRepresentationOf(serviceAdapters);
     }
 
-    protected List<Representation> serviceSelfRepresentations() {
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        RepContext representationContext = getResourceContext().repContext();
-        
-        Function<ObjectAdapter, Representation> objectSelfRepresentation = 
-            Functions.compose(
-                DomainObjectRepBuilder.selfOf(), 
-                DomainObjectRepBuilder.fromAdapter(representationContext));
-        return Lists.newArrayList(
-            Collections2.transform(serviceAdapters, objectSelfRepresentation));
-    }
 
 }
