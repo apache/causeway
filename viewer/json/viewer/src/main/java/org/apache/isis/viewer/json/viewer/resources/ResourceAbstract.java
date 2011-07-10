@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.json.viewer.resources;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.Status.Family;
+import javax.ws.rs.core.Response.StatusType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
@@ -38,13 +42,17 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -52,9 +60,14 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 public abstract class ResourceAbstract {
 
-    public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
+	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
     // SET is excluded; we simply flatten contributed actions.
         };
 
@@ -99,6 +112,18 @@ public abstract class ResourceAbstract {
         return asJson(representation);
     }
 
+	protected String jsonRepresentationOf(
+			final Collection<ObjectAdapter> collectionAdapters) {
+		return asJson(Lists.newArrayList(
+            Collections2.transform(collectionAdapters, toObjectSelfRepresentation())));
+	}
+
+	protected String jsonRepresentationOf(
+			final ObjectAdapter objectAdapter) {
+		return asJson(toObjectSelfRepresentation().apply(objectAdapter));
+	}
+
+
     protected String asJson(final Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
@@ -113,6 +138,16 @@ public abstract class ResourceAbstract {
         }
     }
 
+	private Function<ObjectAdapter, Representation> toObjectSelfRepresentation() {
+		final RepContext representationContext = getResourceContext().repContext();
+        
+        Function<ObjectAdapter, Representation> objectSelfRepresentation = 
+            Functions.compose(
+                DomainObjectRepBuilder.selfOf(), 
+                DomainObjectRepBuilder.fromAdapter(representationContext));
+		return objectSelfRepresentation;
+	}
+
 
     // //////////////////////////////////////////////////////////////
     // Isis integration
@@ -123,6 +158,8 @@ public abstract class ResourceAbstract {
     }
 
     protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
+        init();
+
         final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidEncodedStr, getOidStringifier());
         
         if (objectAdapter == null) {
@@ -131,6 +168,7 @@ public abstract class ResourceAbstract {
         }
         return objectAdapter;
     }
+
 
     protected String getOidStr(final ObjectAdapter objectAdapter) {
         return OidUtils.getOidStr(objectAdapter, getOidStringifier());
@@ -142,39 +180,43 @@ public abstract class ResourceAbstract {
     // Responses
     // //////////////////////////////////////////////////////////////
 
-    protected Response responseOfOk() {
+    protected static Response responseOfOk() {
         return Response.ok().build();
     }
 
-    protected Response responseOfGone(final String reason) {
+    protected static Response responseOfGone(final String reason) {
         return Response.status(Status.GONE).header("isis-reason", reason).build();
     }
 
-    protected Response responseOfBadRequest(final Consent consent) {
+    protected static Response responseOfBadRequest(final Consent consent) {
         return responseOfBadRequest(consent.getReason());
     }
 
-    protected Response responseOfNoContent(final String reason) {
+    protected static Response responseOfNoContent(final String reason) {
         return Response.status(Status.NO_CONTENT).header("isis-reason", reason).build();
     }
 
-    protected Response responseOfBadRequest(final String reason) {
+    protected static Response responseOfBadRequest(final String reason) {
         return Response.status(Status.BAD_REQUEST).header("isis-reason", reason).build();
     }
 
-    protected Response responseOfNotFound(final IllegalArgumentException e) {
+    protected static Response responseOfNotFound(final IllegalArgumentException e) {
         return responseOfNotFound(e.getMessage());
     }
 
-    protected Response responseOfNotFound(final String reason) {
+    protected static Response responseOfNotFound(final String reason) {
         return Response.status(Status.NOT_FOUND).header("isis-reason", reason).build();
     }
 
-    protected Response responseOfInternalServerError(final Exception ex) {
+    protected static Response responseOfPreconditionFailed(final String reason) {
+        return Response.status(StatusTypes.PRECONDITION_FAILED).header("isis-reason", reason).build();
+    }
+
+    protected static Response responseOfInternalServerError(final Exception ex) {
         return responseOfInternalServerError(ex.getMessage());
     }
 
-    protected Response responseOfInternalServerError(final String reason) {
+    protected static Response responseOfInternalServerError(final String reason) {
         return Response.status(Status.INTERNAL_SERVER_ERROR).header("isis-reason", reason).build();
     }
 

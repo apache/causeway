@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -30,15 +31,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.resources.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 
 @Path("/objects")
 public class DomainObjectResourceImpl extends ResourceAbstract implements DomainObjectResource {
@@ -46,11 +51,12 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     @GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String object(@PathParam("oid") final String oidStr) {
-        init();
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+    public String object(
+    		@PathParam("oid") final String oidStr) {
 
-        DomainObjectRepBuilder builder = DomainObjectRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter);
+    	final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+
+    	final DomainObjectRepBuilder builder = DomainObjectRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter);
         return jsonRepresentionFrom(builder);
     }
 
@@ -60,33 +66,104 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     public String propertyDetails(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId) {
-
-        init();
+    	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        ObjectAssociation association = objectAdapter.getSpecification().getAssociation(propertyId);
-        if(association == null || !association.isOneToOneAssociation()) { 
-            throwPropertyNotFoundException(propertyId);
-        }
-        OneToOneAssociation property = (OneToOneAssociation) association;
-        PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, property);
-        if(!builder.isMemberVisible()) {
-            throwPropertyNotFoundException(propertyId);
-        }
+        final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.ACCESS);
+        
+        final PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, property);
 
         return jsonRepresentionFrom(builder);
     }
+
+    @GET
+    @Path("/{oid}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String accessCollection(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId){
+    	
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.ACCESS);
+        
+        final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, collection);
+
+        return jsonRepresentionFrom(builder);
+    }
+
+    @GET
+    @Path("/{oid}/actions/{actionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String actionPrompt(
+        @PathParam("oid") final String oidStr, 
+        @PathParam("actionId") final String actionId) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.ACCESS);
+        
+        ActionRepBuilder builder = ActionRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, action);
+
+        return jsonRepresentionFrom(builder);
+    }
+
+    @GET
+    @Path("/{oid}/actions/{actionId}/invoke")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Object invokeActionIdempotent(
+        @PathParam("oid") String oidStr, 
+        @PathParam("actionId") String actionId, 
+        @QueryParam("argument") List<String> arguments) {
+
+    	final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+    	final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.ACCESS);
+    	
+    	if(action.isContributed()) {
+    		throw new NotYetImplementedException();
+    	}
+    	if(action.getParameterCount() > 0) {
+    		throw new NotYetImplementedException();
+    	}
+    	// TODO: check action is idempotent, else throw exception
+    	
+    	ObjectAdapter[] parameters = new ObjectAdapter[0];
+		ObjectAdapter returnedAdapter = action.execute(objectAdapter, parameters);
+		if(returnedAdapter == null) {
+	        return responseOfOk();
+		}
+		CollectionFacet facet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
+		if(facet != null) {
+			Collection<ObjectAdapter> collectionAdapters = facet.collection(returnedAdapter);
+			return jsonRepresentationOf(collectionAdapters);
+		} else {
+			return jsonRepresentationOf(returnedAdapter);
+		}
+    }
+
 
     @PUT
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
     public String modifyProperty(
-        @PathParam("oid") final String oidEncodedStr,
+        @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId, 
         @FormParam("proposedValue") final String proposedValue) {
+    	
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.MUTATE);
 
-        init();
-        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        return null;
+    }
 
+    @PUT
+    @Path("/{oid}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String addToSet(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId,
+        @FormParam("proposedValue") final String proposedValueOidStr){
+    	
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.MUTATE);
+        
         return null;
     }
 
@@ -96,39 +173,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     public String clearProperty(
         @PathParam("oid") final String oidStr, 
         @PathParam("propertyId") final String propertyId){
-        
-        return null;
-    }
-
-    @GET
-    @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String accessCollection(
-        @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId){
-        
-        init();
+    	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        ObjectAssociation association = objectAdapter.getSpecification().getAssociation(collectionId);
-        if(association == null || !association.isOneToManyAssociation()) {
-            throwCollectionNotFoundException(collectionId);
-        }
-        OneToManyAssociation collection = (OneToManyAssociation) association;
-        CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, collection);
-        if(!builder.isMemberVisible()) {
-            throwCollectionNotFoundException(collectionId);
-        }
-
-        return jsonRepresentionFrom(builder);
-    }
-
-    @PUT
-    @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String addToCollection(
-        @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr){
+        final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.MUTATE);
         
         return null;
     }
@@ -140,30 +187,28 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
         @FormParam("proposedValue") final String proposedValueOidStr){
+
+    	final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+    	final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.MUTATE);
         
         return null;
     }
 
-    @GET
-    @Path("/{oid}/actions/{actionId}")
+
+    @POST
+    @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String actionPrompt(
-        @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId) {
+    public String addToList(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId,
+        @FormParam("proposedValue") final String proposedValueOidStr){
 
-        init();
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
-        if(action == null) {
-            throwActionNotFoundException(actionId);
-        }
-        ActionRepBuilder builder = ActionRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, action);
-        if(!builder.isMemberVisible()) {
-            throwActionNotFoundException(actionId);
-        }
+        final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.MUTATE);
+        
+        return null;
+	}
 
-        return jsonRepresentionFrom(builder);
-    }
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
@@ -173,46 +218,72 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @PathParam("actionId") final String actionId,
         final InputStream body){
 
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.MUTATE);
+        
         return null;
     }
-
-
-    @GET
-    @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String invokeActionIdempotent(
-        @PathParam("oid") String oidStr, 
-        @PathParam("actionId") String actionId, 
-        @QueryParam("argument") List<String> arguments) {
-
-        return null;
-    }
-
 
     
     /////////////////////////////////////////////////////////////////////
-    
-    private void throwPropertyNotFoundException(final String propertyId) {
-        throwNotFoundException(propertyId, MemberType.PROPERTY);
-    }
 
-    private void throwCollectionNotFoundException(final String collectionId) {
-        throwNotFoundException(collectionId, MemberType.COLLECTION);
-    }
+	private enum Intent {
+		ACCESS,
+		MUTATE;
 
-    private void throwActionNotFoundException(final String actionId) {
-        throwNotFoundException(actionId, MemberType.ACTION);
-    }
+		public boolean isMutate() {
+			return this == MUTATE;
+		}
+	}
+
+	private OneToOneAssociation getProperty(
+			final ObjectAdapter objectAdapter, final String propertyId, final Intent intent) {
+		ObjectAssociation association = objectAdapter.getSpecification().getAssociation(propertyId);
+        if(association == null || !association.isOneToOneAssociation()) { 
+            throwNotFoundException(propertyId, MemberType.PROPERTY);
+        }
+        OneToOneAssociation property = (OneToOneAssociation) association;
+        return ensureVisibleAndUsableForIntent(objectAdapter, property, MemberType.PROPERTY, intent);
+	}
+
+	private OneToManyAssociation getCollection(
+			final ObjectAdapter objectAdapter, final String collectionId, final Intent intent) {
+		ObjectAssociation association = objectAdapter.getSpecification().getAssociation(collectionId);
+        if(association == null || !association.isOneToManyAssociation()) {
+            throwNotFoundException(collectionId, MemberType.COLLECTION);
+        }
+        OneToManyAssociation collection = (OneToManyAssociation) association;
+        return ensureVisibleAndUsableForIntent(objectAdapter, collection, MemberType.COLLECTION, intent);
+	}
+
+	private ObjectAction getObjectAction(final ObjectAdapter objectAdapter,
+			final String actionId, Intent intent) {
+		ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
+		return ensureVisibleAndUsableForIntent(objectAdapter, action, MemberType.ACTION, intent);
+	}
+
+	public <T extends ObjectMember> T ensureVisibleAndUsableForIntent(
+			final ObjectAdapter objectAdapter, T objectMember, MemberType memberType, Intent intent) {
+		String memberId = objectMember.getId();
+        if(objectMember.isVisible(getSession(), objectAdapter).isVetoed()) {
+            throwNotFoundException(memberId, memberType);
+        }
+        if(intent.isMutate() && objectMember.isUsable(getSession(), objectAdapter).isVetoed()) {
+        	throwPreconditionFailedException(memberId, memberType);
+        }
+        return objectMember;
+	}
 
 
-    private void throwNotFoundException(final String propertyId, MemberType memberType) {
+    private static void throwNotFoundException(final String memberId, MemberType memberType) {
         String memberTypeStr = memberType.name().toLowerCase();
-        throw new WebApplicationException(responseOfNotFound("No such " +
-                memberTypeStr +
-                "/" +
-                memberTypeStr +
-                " not visible: '" + propertyId + "'"));
+        throw new WebApplicationException(responseOfNotFound(
+                memberTypeStr + " '" + memberId + "' either does not exist or is not visible"));
     }
 
-
+    private static void throwPreconditionFailedException(final String memberId, final MemberType memberType) {
+        String memberTypeStr = memberType.name().toLowerCase();
+        throw new WebApplicationException(responseOfPreconditionFailed(
+                memberTypeStr + " is not usable: '" + memberId + "'"));
+    }
 }

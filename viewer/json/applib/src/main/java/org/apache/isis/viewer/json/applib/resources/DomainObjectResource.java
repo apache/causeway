@@ -31,6 +31,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 // under /objects
 public interface DomainObjectResource {
@@ -47,6 +48,28 @@ public interface DomainObjectResource {
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId);
 
+    @GET
+    @Path("/{oid}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String accessCollection(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId);
+
+    @GET
+    @Path("/{oid}/actions/{actionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String actionPrompt(
+        @PathParam("oid") final String oidStr, 
+        @PathParam("actionId") final String actionId);
+
+    @GET
+    @Path("/{oid}/actions/{actionId}/invoke")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Object invokeActionIdempotent(
+        @PathParam("oid") final String oidStr, 
+        @PathParam("actionId") final String actionId,
+        @QueryParam("argument") final List<String> arguments);
+
     @PUT
     @Path("/{oid}/properties{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
@@ -55,27 +78,20 @@ public interface DomainObjectResource {
         @PathParam("propertyId") final String propertyId, 
         @FormParam("proposedValue") final String proposedValue);
 
+    @PUT
+    @Path("/{oid}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String addToSet(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId,
+        @FormParam("proposedValue") final String proposedValueOidStr);
+
     @DELETE
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
     public String clearProperty(
         @PathParam("oid") final String oidStr, 
         @PathParam("propertyId") final String propertyId);
-
-    @GET
-    @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String accessCollection(
-        @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId);
-
-    @PUT
-    @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String addToCollection(
-        @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr);
 
     @DELETE
     @Path("/{oid}/collections/{collectionId}")
@@ -85,12 +101,14 @@ public interface DomainObjectResource {
         @PathParam("collectionId") final String collectionId,
         @FormParam("proposedValue") final String proposedValueOidStr);
 
-    @GET
-    @Path("/{oid}/actions/{actionId}")
+    @POST
+    @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String actionPrompt(
-        @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId);
+    public String addToList(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId,
+        @FormParam("proposedValue") final String proposedValueOidStr);
+
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
@@ -100,12 +118,6 @@ public interface DomainObjectResource {
         @PathParam("actionId") final String actionId,
         final InputStream body);
 
-    @GET
-    @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String invokeActionIdempotent(
-        @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId,
-        @QueryParam("argument") final List<String> arguments);
 
+    
 }
