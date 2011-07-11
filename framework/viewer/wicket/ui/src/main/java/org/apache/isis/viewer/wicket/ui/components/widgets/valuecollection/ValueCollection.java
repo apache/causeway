@@ -65,8 +65,8 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     protected FormComponentLabel addComponentForRegular() {
         // buildGui);
         valueIdField = createField();
+        // pending.setAdapter(scalarModel.getObject());
         valueIdField.setEnabled(false); // the value field is never directly editable.
-        // }}
 
         addStandardSemantics();
         // addSemantics();
@@ -100,6 +100,10 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
             @Override
             public void setObject(final ObjectAdapterMemento adapterMemento) {
                 pending = adapterMemento;
+                if (scalarModel != null && pending != null) {
+                    scalarModel.setObject(pending.getObjectAdapter());
+                }
+
             }
 
         }) {
