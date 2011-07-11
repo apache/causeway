@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.Generics;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropDownChoicesForValueMementos;
@@ -53,7 +52,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     private static final String ID_FEEDBACK = "feedback";
 
     private static final String ID_SCALAR_NAME = "scalarName";
-    private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final String ID_SCALAR_VALUE_CHOICES = "scalarChoices";
 
     private static final String ID_VALUE_ID = "valueId";
 
@@ -74,7 +73,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         addOrReplace(labelIfRegular);
 
-        syncWithInput();
+        // syncWithInput();
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueIdField));
         return labelIfRegular;
@@ -106,7 +105,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
             @Override
             protected void onModelChanged() {
                 super.onModelChanged();
-                syncWithInput();
+                // syncWithInput();
             }
 
         };
@@ -166,24 +165,8 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         return labelIfCompact;
     }
 
-    /**
-     * Builds the parts of the GUI that are not dynamic.
-     * 
-     * @return
-     */
-    // private void buildGui() {
-    // addOrReplaceIdField();
-    // syncWithInput();
-    // }
-
     private TextField<ObjectAdapterMemento> valueIdField;
     private ObjectAdapterMemento pending;
-
-    // private void addOrReplaceIdField() {
-    // valueIdField.setType(ObjectAdapterMemento.class);
-    // // addOrReplace(valueIdField);
-    // valueIdField.setVisible(false);
-    // }
 
     protected ObjectAdapter getModelValue() {
         return scalarModel.getObject();
@@ -194,20 +177,37 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         return memento != null ? memento.getObjectAdapter() : null;
     }
 
-    private void syncWithInput() {
-        final ObjectAdapter adapter = Generics.coalesce(getPendingAdapter(), scalarModel.getObject());
+    private void syncWithInput(boolean readonlyMode) {
 
         // choices drop-down
         final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
 
         final IModel<ObjectAdapterMemento> modelObject = valueIdField.getModel();
         final DropDownChoicesForValueMementos dropDownChoicesForValueMementos =
-            new DropDownChoicesForValueMementos(ID_SCALAR_VALUE, modelObject, choicesMementos);
+            new DropDownChoicesForValueMementos(ID_SCALAR_VALUE_CHOICES, modelObject, choicesMementos);
         addOrReplace(dropDownChoicesForValueMementos);
 
-        // link
-        // syncEntityDetailsButtonWithInput(adapter);
-        syncValueDetailsWithInput(adapter);
+        if (readonlyMode /* scalarModel.isEditMode() */) {
+            // show value as (disabled) string
+            permanentlyHide(ID_SCALAR_VALUE_CHOICES);
+            valueIdField.setVisible(true);
+            valueIdField.setEnabled(false);
+        } else {
+            // Show drop-down list of values
+            valueIdField.setVisible(false);
+        }
+    }
+
+    @Override
+    protected void onBeforeRenderWhenViewMode() { // View: Read only
+        // valueIdField.setEnabled(false); // Text field
+        syncWithInput(true);
+    }
+
+    @Override
+    protected void onBeforeRenderWhenEnabled() { // Edit: read/write
+        // permanentlyHide(ID_VALUE_ID);
+        syncWithInput(false);
     }
 
     private void syncValueDetailsWithInput(final ObjectAdapter adapter) {

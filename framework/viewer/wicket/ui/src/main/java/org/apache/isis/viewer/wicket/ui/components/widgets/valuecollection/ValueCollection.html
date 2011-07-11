@@ -26,36 +26,12 @@
 	<body>
 		<wicket:panel>
 			<div class="string scalarPanel">
-				<select for="scalarValue" wicket:id="scalarValue"/>
+				<select for="scalarValue" wicket:id="scalarChoices"/>
 				<label for="scalarValue" wicket:id="scalarIfRegular">
 				<input type="text" wicket:id="valueId"/>
 					<span wicket:id="scalarName" class="scalarName">[Label text]</span>
 				</label>
 			
-			<!--
-			<span class="entityLink">
-				<input type="text" wicket:id="valueId"/>
-				<select wicket:id="choices"/>
-			</span>
-			-->
-			
-			
-			<!--
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-					<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-					<select wicket:id="valueId"/>
-				</label>
-			-->
-				
-			<!-- works - sort of 
-				<select wicket:id="choices"/>
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-	      			<span class="scalarValue">
-	      				<input type="text" name="scalarValue" id="scalarValue" wicket:id="scalarValue" />
-	      			</span>
-				</label>
-			-->
 				<label wicket:id="scalarIfCompact"></label>
       			<span wicket:id="feedback"></span>
 				
@@ -63,10 +39,3 @@
 		</wicket:panel>
 	</body>
 </html>
-<!-- 
-	<wicket:head>
-		<wicket:link>
-			<link href="ValueCollection.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</wicket:head>
--->
