@@ -71,10 +71,12 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         addStandardSemantics();
         // addSemantics();
 
+        syncWithInput(true);
+
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         addOrReplace(labelIfRegular);
 
-        syncWithInput(true);
+        addOrReplace(dropDownChoicesForValueMementos);
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueIdField));
         return labelIfRegular;
@@ -151,10 +153,11 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
         final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueIdField);
 
-        scalarNameAndValue.add(valueIdField);
-
         final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(valueIdField));
         scalarNameAndValue.add(scalarName);
+        scalarNameAndValue.add(valueIdField);
+
+        // scalarNameAndValue.add(dropDownChoicesForValueMementos);
 
         return scalarNameAndValue;
     }
@@ -184,7 +187,6 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
         dropDownChoicesForValueMementos =
             new DropDownChoicesForValueMementos(ID_SCALAR_VALUE_CHOICES, modelObject, choicesMementos);
-        addOrReplace(dropDownChoicesForValueMementos);
 
     }
 

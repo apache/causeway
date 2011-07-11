@@ -19,12 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuecollection.ValueCollection;
 
 public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbstract {
 
@@ -51,15 +55,15 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         final ScalarModel scalarModel = (ScalarModel) model;
-        return createComponent(id, scalarModel);
+        // return createComponent(id, scalarModel);
 
         // TODO: This is where the ValueCollection panel gets created.
-        // final List<ObjectAdapter> choices = scalarModel.getChoices();
-        // if (choices.size() > 0) {
-        // return new ValueCollection(id, scalarModel);
-        // } else {
-        // return createComponent(id, scalarModel);
-        // }
+        final List<ObjectAdapter> choices = scalarModel.getChoices();
+        if (choices.size() > 0) {
+            return new ValueCollection(id, scalarModel);
+        } else {
+            return createComponent(id, scalarModel);
+        }
     }
 
     protected abstract Component createComponent(String id, ScalarModel scalarModel);
