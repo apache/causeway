@@ -65,6 +65,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     protected FormComponentLabel addComponentForRegular() {
         // buildGui);
         valueIdField = createField();
+        valueIdField.setEnabled(false); // the value field is never directly editable.
         // }}
 
         addStandardSemantics();
@@ -73,7 +74,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         addOrReplace(labelIfRegular);
 
-        // syncWithInput();
+        syncWithInput(true);
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueIdField));
         return labelIfRegular;
@@ -172,10 +173,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         return scalarModel.getObject();
     }
 
-    private ObjectAdapter getPendingAdapter() {
-        final ObjectAdapterMemento memento = valueIdField.getModelObject();
-        return memento != null ? memento.getObjectAdapter() : null;
-    }
+    DropDownChoicesForValueMementos dropDownChoicesForValueMementos;
 
     private void syncWithInput(boolean readonlyMode) {
 
@@ -183,38 +181,25 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
 
         final IModel<ObjectAdapterMemento> modelObject = valueIdField.getModel();
-        final DropDownChoicesForValueMementos dropDownChoicesForValueMementos =
+
+        dropDownChoicesForValueMementos =
             new DropDownChoicesForValueMementos(ID_SCALAR_VALUE_CHOICES, modelObject, choicesMementos);
         addOrReplace(dropDownChoicesForValueMementos);
 
-        if (readonlyMode /* scalarModel.isEditMode() */) {
-            // show value as (disabled) string
-            permanentlyHide(ID_SCALAR_VALUE_CHOICES);
-            valueIdField.setVisible(true);
-            valueIdField.setEnabled(false);
-        } else {
-            // Show drop-down list of values
-            valueIdField.setVisible(false);
-        }
     }
 
     @Override
     protected void onBeforeRenderWhenViewMode() { // View: Read only
-        // valueIdField.setEnabled(false); // Text field
-        syncWithInput(true);
+        // show value as (disabled) string
+        dropDownChoicesForValueMementos.setVisible(false);
+        valueIdField.setVisible(true);
     }
 
     @Override
     protected void onBeforeRenderWhenEnabled() { // Edit: read/write
-        // permanentlyHide(ID_VALUE_ID);
-        syncWithInput(false);
-    }
-
-    private void syncValueDetailsWithInput(final ObjectAdapter adapter) {
-        if (adapter != null && scalarModel.isEntityDetailsVisible()) {
-            // final ScalarModel entityModel = new ScalarModel(adapter);
-            // addOrReplace(new EntityCombinedPanel(ID_VALUE_DETAILS, entityModel));
-        }
+        // Show drop-down list of values
+        dropDownChoicesForValueMementos.setVisible(true);
+        valueIdField.setVisible(false);
     }
 
     private IModel<List<? extends ObjectAdapterMemento>> getChoicesModel() {
