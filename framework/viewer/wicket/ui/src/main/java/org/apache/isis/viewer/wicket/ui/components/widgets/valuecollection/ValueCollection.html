@@ -26,11 +26,15 @@
 	<body>
 		<wicket:panel>
 			<div class="string scalarPanel">
-				<select for="scalarValue" wicket:id="scalarChoices"/>
 				<label for="scalarValue" wicket:id="scalarIfRegular">
-				<input type="text" wicket:id="valueId"/>
 					<span wicket:id="scalarName" class="scalarName">[Label text]</span>
+	      			<span class="scalarValue">
+						<input type="text" wicket:id="valueId"/>
+					</span>
 				</label>
+	      			<span class="scalarValue">
+						<select wicket:id="scalarChoices"/>
+					</span>
 			
 				<label wicket:id="scalarIfCompact"></label>
       			<span wicket:id="feedback"></span>

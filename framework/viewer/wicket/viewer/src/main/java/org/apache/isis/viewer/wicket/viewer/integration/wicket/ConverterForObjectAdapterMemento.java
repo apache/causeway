@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.util.convert.IConverter;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
@@ -29,7 +31,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapterMemento}s, converting to-and-from their
@@ -64,8 +65,10 @@ public class ConverterForObjectAdapterMemento implements IConverter {
         final Oid oid = memento.getObjectAdapter().getOid();
         if (oid == null) {
             // values don't have an Oid, but we don't support 'em
-            throw new IllegalStateException(
-                "cannot convert memento to OBJECT_OID; memento's adapter is a value so has no OBJECT_OID");
+            return memento.toString();
+
+            // throw new IllegalStateException(
+            // "cannot convert memento to OBJECT_OID; memento's adapter is a value so has no OBJECT_OID");
         }
         return getOidStringifier().enString(oid);
     }
