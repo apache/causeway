@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -45,6 +46,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropD
  * @version $Rev$ $Date$
  */
 public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
+    private static final Logger LOG = Logger.getLogger(ValueCollection.class);
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
@@ -56,17 +59,18 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
     private static final String ID_VALUE_ID = "valueId";
 
+    private TextField<ObjectAdapterMemento> valueField;
+    private ObjectAdapterMemento pending;
+
     public ValueCollection(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-        // this.idTextField = ID_SCALAR_VALUE;
+        pending = scalarModel.getObjectAdapterMemento();
     }
 
     @Override
     protected FormComponentLabel addComponentForRegular() {
-        // buildGui);
-        valueIdField = createField();
-        // pending.setAdapter(scalarModel.getObject());
-        valueIdField.setEnabled(false); // the value field is never directly editable.
+        valueField = createField();
+        valueField.setEnabled(false); // the value field is never directly editable.
 
         addStandardSemantics();
         // addSemantics();
@@ -78,7 +82,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
         addOrReplace(dropDownChoicesForValueMementos);
 
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueIdField));
+        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueField));
         return labelIfRegular;
     }
 
@@ -91,14 +95,17 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
             @Override
             public ObjectAdapterMemento getObject() {
                 if (pending != null) {
+                    LOG.info("TextField: pending not null: " + pending.toString());
                     return pending;
                 }
+                LOG.info("TextField: pending is null");
                 final ObjectAdapter adapter = ValueCollection.this.getModelValue();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
 
             @Override
             public void setObject(final ObjectAdapterMemento adapterMemento) {
+                LOG.info("TextField: setting to: " + adapterMemento.toString());
                 pending = adapterMemento;
                 if (scalarModel != null && pending != null) {
                     scalarModel.setObject(pending.getObjectAdapter());
@@ -108,13 +115,6 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
         }) {
             private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onModelChanged() {
-                super.onModelChanged();
-                // syncWithInput();
-            }
-
         };
     }
 
@@ -126,13 +126,13 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     private void setRequiredIfSpecified() {
         final ScalarModel scalarModel = getModel();
         final boolean required = scalarModel.isRequired();
-        valueIdField.setRequired(required);
+        valueField.setRequired(required);
     }
 
     private void setTextFieldSizeIfSpecified() {
         final int size = determineSize();
         if (size != -1) {
-            valueIdField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
+            valueField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
         }
     }
 
@@ -153,13 +153,13 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
     protected FormComponentLabel createFormComponentLabel() {
         final String name = getModel().getName();
-        valueIdField.setLabel(Model.of(name));
+        valueField.setLabel(Model.of(name));
 
-        final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueIdField);
+        final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueField);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(valueIdField));
+        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(valueField));
         scalarNameAndValue.add(scalarName);
-        scalarNameAndValue.add(valueIdField);
+        scalarNameAndValue.add(valueField);
 
         // scalarNameAndValue.add(dropDownChoicesForValueMementos);
 
@@ -173,10 +173,8 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         return labelIfCompact;
     }
 
-    private TextField<ObjectAdapterMemento> valueIdField;
-    private ObjectAdapterMemento pending;
-
     protected ObjectAdapter getModelValue() {
+        pending = scalarModel.getObjectAdapterMemento();
         return scalarModel.getObject();
     }
 
@@ -187,7 +185,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
         // choices drop-down
         final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
 
-        final IModel<ObjectAdapterMemento> modelObject = valueIdField.getModel();
+        final IModel<ObjectAdapterMemento> modelObject = valueField.getModel();
 
         dropDownChoicesForValueMementos =
             new DropDownChoicesForValueMementos(ID_SCALAR_VALUE_CHOICES, modelObject, choicesMementos);
@@ -198,14 +196,14 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     protected void onBeforeRenderWhenViewMode() { // View: Read only
         // show value as (disabled) string
         dropDownChoicesForValueMementos.setVisible(false);
-        valueIdField.setVisible(true);
+        valueField.setVisible(true);
     }
 
     @Override
     protected void onBeforeRenderWhenEnabled() { // Edit: read/write
         // Show drop-down list of values
         dropDownChoicesForValueMementos.setVisible(true);
-        valueIdField.setVisible(false);
+        valueField.setVisible(false);
     }
 
     private IModel<List<? extends ObjectAdapterMemento>> getChoicesModel() {
