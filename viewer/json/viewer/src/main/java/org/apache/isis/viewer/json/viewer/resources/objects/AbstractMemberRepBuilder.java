@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,6 +29,8 @@ import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+
+import com.google.common.collect.Lists;
 
 public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends RepresentationBuilder {
 
@@ -80,17 +83,23 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
         }
     }
 
-    protected Object mutatorArgs(MutatorSpec mutatorSpec) {
-    	if(mutatorSpec.bodyArgs.isNone()) {
-    		return null;
+    private List<Object> mutatorArgs(MutatorSpec mutatorSpec) {
+		final List<Object> argValues = Lists.newArrayList();
+    	appendMutatorArgs(mutatorSpec, argValues);
+    	return argValues;
+    }
+
+    protected void appendMutatorArgs(MutatorSpec mutatorSpec,
+			final List<Object> argRep) {
+		if(mutatorSpec.bodyArgs.isNone()) {
+    		return;
     	}
         if(mutatorSpec.bodyArgs.isOne()) {
-    		final Representation argRep = new Representation();
-    		argRep.put("arg", null);
-            return argRep;
+    		argRep.add(null);
+            return;
         }
         throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
-    }
+	}
 
     
     protected void putValueIfRequired() {

@@ -38,16 +38,16 @@ public class LinkRepBuilder extends RepresentationBuilder {
 	}
 
     private final String relSuffix;
-    private final String url;
+    private final String href;
     
     private HttpMethod method = HttpMethod.GET;
     private String title;
     private Object body;
     
-    public LinkRepBuilder(RepContext repContext, String relSuffix, String url) {
+    public LinkRepBuilder(RepContext repContext, String relSuffix, String href) {
         super(repContext);
         this.relSuffix = relSuffix;
-        this.url = url;
+        this.href = href;
     }
     public LinkRepBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
@@ -63,7 +63,7 @@ public class LinkRepBuilder extends RepresentationBuilder {
     }
     public Representation build() {
         representation.put("rel", relSuffix);
-        representation.put("url", repContext.urlFor(url));
+        representation.put("href", repContext.urlFor(href));
         representation.put("method", method);
         representation.put("title", title);
         representation.put("body", body);

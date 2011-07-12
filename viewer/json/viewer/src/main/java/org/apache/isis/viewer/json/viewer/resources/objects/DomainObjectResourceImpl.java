@@ -16,9 +16,13 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -31,24 +35,33 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.resources.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
 
 @Path("/objects")
 public class DomainObjectResourceImpl extends ResourceAbstract implements DomainObjectResource {
 
-    @GET
+
+	@GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON })
     public String object(
@@ -109,37 +122,69 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
     public Object invokeActionIdempotent(
-        @PathParam("oid") String oidStr, 
-        @PathParam("actionId") String actionId, 
-        @QueryParam("argument") List<String> arguments) {
+        @PathParam("oid") final String oidStr, 
+        @PathParam("actionId") final String actionId, 
+        @QueryParam("arg") final List<String> arguments) {
 
     	final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
     	final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.ACCESS);
     	
-    	if(action.isContributed()) {
-    		throw new NotYetImplementedException();
+    	if(!isIdempotent(action)) {
+            throw new WebApplicationException(responseOfMethodNotAllowed(
+                     "Method not allowed; action '" + action.getId() + "' is not idempotent"));
     	}
-    	if(action.getParameterCount() > 0) {
-    		throw new NotYetImplementedException();
+    	int numParameters = action.getParameterCount();
+		int numArguments = arguments.size();
+		if(numArguments != numParameters) {
+            throw new WebApplicationException(responseOfBadRequest(
+                     "Action '" + action.getId() + "' has " + numParameters + " parameters but received " + numArguments + " arguments"));
     	}
-    	// TODO: check action is idempotent, else throw exception
     	
-    	ObjectAdapter[] parameters = new ObjectAdapter[0];
-		ObjectAdapter returnedAdapter = action.execute(objectAdapter, parameters);
-		if(returnedAdapter == null) {
-	        return responseOfOk();
-		}
-		CollectionFacet facet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
-		if(facet != null) {
-			Collection<ObjectAdapter> collectionAdapters = facet.collection(returnedAdapter);
-			return jsonRepresentationOf(collectionAdapters);
-		} else {
-			return jsonRepresentationOf(returnedAdapter);
-		}
+    	final List<ObjectAdapter> parameters = argumentAdaptersFor(action, arguments);
+		return invokeActionUsingAdapters(action, objectAdapter, parameters);
     }
 
+    private boolean isIdempotent(final ObjectAction action) {
+    	// TODO: determine whether action is idempotent
+		return true;
+	}
 
-    @PUT
+	private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action, List<String> arguments) {
+		List<ObjectActionParameter> parameters = action.getParameters();
+    	List<ObjectAdapter> argumentAdapters = Lists.newArrayList(); 
+    	for(int i=0; i<parameters.size(); i++) {
+    		ObjectActionParameter parameter = parameters.get(i);
+    		ObjectSpecification paramSpc = parameter.getSpecification();
+    		String argument = arguments.get(i);
+			argumentAdapters.add(objectAdapterFor(paramSpc, argument));
+    	}
+    	
+		return argumentAdapters;
+	}
+
+	/**
+	 * Similar to {@link #objectAdapterFor(ObjectSpecification, Object)}, however the object
+	 * being interpreted is a String holding URL encoded JSON (rather than having already been
+	 * parsed into a List/Map representation).
+	 */
+	private ObjectAdapter objectAdapterFor(ObjectSpecification spec, String urlEncodedJson) {
+        final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
+        if(spec.containsFacet(EncodableFacet.class)) {
+        	EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
+        	return encodableFacet.fromEncodedString(json);
+        } else {
+			@SuppressWarnings("unchecked")
+			Map<String,Object> representation = objectMapper.convertValue(json, LinkedHashMap.class);
+            return objectAdapterFor(spec, representation);
+        }
+	}
+
+	
+	///////////////////////////////////////////////////////////////////
+	// put
+	///////////////////////////////////////////////////////////////////
+	
+	@PUT
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
     public String modifyProperty(
@@ -149,6 +194,10 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.MUTATE);
+        
+        ObjectSpecification objectSpec = property.getSpecification();
+        
+		objectAdapterFor(objectSpec, proposedValue);
 
         return null;
     }
@@ -166,6 +215,10 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         
         return null;
     }
+
+	///////////////////////////////////////////////////////////////////
+	// delete
+	///////////////////////////////////////////////////////////////////
 
     @DELETE
     @Path("/{oid}/properties/{propertyId}")
@@ -194,6 +247,10 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         return null;
     }
 
+    
+	///////////////////////////////////////////////////////////////////
+	// post
+	///////////////////////////////////////////////////////////////////
 
     @POST
     @Path("/{oid}/collections/{collectionId}")
@@ -213,19 +270,96 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String invokeAction(
+    public Object invokeAction(
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId,
         final InputStream body){
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.MUTATE);
-        
-        return null;
+
+		List<ObjectAdapter> argumentAdapters = parseBody(action, body);
+		return invokeActionUsingAdapters(action, objectAdapter, argumentAdapters);
     }
 
-    
-    /////////////////////////////////////////////////////////////////////
+	private List<ObjectAdapter> parseBody(final ObjectAction action, final InputStream body) {
+		List<ObjectAdapter> argAdapters = Lists.newArrayList();
+		try {
+			byte[] byteArray = ByteStreams.toByteArray(body);
+			String bodyAsString = new String(byteArray, Charsets.UTF_8);
+			
+			List<?> arguments = objectMapper.readValue(bodyAsString, ArrayList.class);
+			
+	    	int numParameters = action.getParameterCount();
+			int numArguments = arguments.size();
+			if(numArguments != numParameters) {
+	            throw new WebApplicationException(responseOfBadRequest(
+	                     "Action '" + action.getId() + "' has " + numParameters + " parameters but received " + numArguments + " arguments"));
+	    	}
+
+			for(int i=0; i<numParameters; i++) {
+				ObjectAdapter argAdapter = toObjectAdapter(action, arguments, i);
+				argAdapters.add(argAdapter);
+			}
+	        return argAdapters;
+
+		} catch (JsonParseException e) {
+			throw new WebApplicationException(e, responseOfBadRequest("could not parse body"));
+		} catch (JsonMappingException e) {
+			throw new WebApplicationException(e, responseOfBadRequest("could not map body to a Map structure"));
+		} catch (IOException e) {
+			throw new WebApplicationException(e, responseOfBadRequest("could not read body"));
+		}
+	}
+
+	private ObjectAdapter toObjectAdapter(final ObjectAction action, List<?> arguments, int i) {
+		List<ObjectActionParameter> parameters = action.getParameters();
+
+		ObjectSpecification paramSpec = parameters.get(i).getSpecification();
+		Object arg = arguments.get(i);
+		
+		ObjectAdapter objectAdapter = toObjectAdapter(action, i, paramSpec, arg);
+		return objectAdapter;
+	}
+
+	private ObjectAdapter toObjectAdapter(final ObjectAction action, int i, ObjectSpecification paramSpec, Object arg) {
+		try {
+			return objectAdapterFor(paramSpec, arg);
+		} catch (ExpectedStringRepresentingValueException e) {
+			throw new WebApplicationException(responseOfBadRequest("Action '" + action.getId() + "', argument " + i + " should be a URL encoded string representing a value of type " + resourceFor(paramSpec)));
+		} catch (ExpectedMapRepresentingReferenceException e) {
+			throw new WebApplicationException(responseOfBadRequest("Action '" + action.getId() + "', argument " + i + " should be a map representing a link to reference of type " + resourceFor(paramSpec)));
+		}
+	}
+
+
+
+	/////////////////////////////////////////////////////////////////////
+	// helpers
+	/////////////////////////////////////////////////////////////////////
+
+	private Object invokeActionUsingAdapters(final ObjectAction action,
+			final ObjectAdapter objectAdapter,
+			final List<ObjectAdapter> parameterAdapters) {
+		ObjectAdapter[] parameterArray = parameterAdapters.toArray(new ObjectAdapter[0]);
+		final ObjectAdapter returnedAdapter = action.execute(objectAdapter, parameterArray);
+		if(returnedAdapter == null) {
+	        return responseOfOk();
+		}
+		final CollectionFacet facet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
+		if(facet != null) {
+			final Collection<ObjectAdapter> collectionAdapters = facet.collection(returnedAdapter);
+			return jsonRepresentationOf(collectionAdapters);
+		} else {
+			return jsonRepresentationOf(returnedAdapter);
+		}
+	}
+
+
+	private static String resourceFor(ObjectSpecification paramSpec) {
+		// TODO: should return a string in the form http://localhost:8080/types/xxx
+		return paramSpec.getFullIdentifier();
+	}
 
 	private enum Intent {
 		ACCESS,
@@ -268,12 +402,16 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         if(objectMember.isVisible(getSession(), objectAdapter).isVetoed()) {
             throwNotFoundException(memberId, memberType);
         }
-        if(intent.isMutate() && objectMember.isUsable(getSession(), objectAdapter).isVetoed()) {
-        	throwPreconditionFailedException(memberId, memberType);
+		if(intent.isMutate()) {
+	        Consent usable = objectMember.isUsable(getSession(), objectAdapter);
+			if(usable.isVetoed()) {
+				String memberTypeStr = memberType.name().toLowerCase();
+				throw new WebApplicationException(responseOfPreconditionFailed(
+				        memberTypeStr + " is not usable: '" + memberId + "' (" + usable.getReason() + ")"));
+			}
         }
         return objectMember;
 	}
-
 
     private static void throwNotFoundException(final String memberId, MemberType memberType) {
         String memberTypeStr = memberType.name().toLowerCase();
@@ -281,9 +419,4 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
                 memberTypeStr + " '" + memberId + "' either does not exist or is not visible"));
     }
 
-    private static void throwPreconditionFailedException(final String memberId, final MemberType memberType) {
-        String memberTypeStr = memberType.name().toLowerCase();
-        throw new WebApplicationException(responseOfPreconditionFailed(
-                memberTypeStr + " is not usable: '" + memberId + "'"));
-    }
 }

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.restful.viewer2;
+package org.apache.isis.viewer.json.viewer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
