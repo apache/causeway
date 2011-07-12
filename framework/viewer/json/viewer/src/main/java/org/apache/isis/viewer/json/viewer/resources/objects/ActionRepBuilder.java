@@ -75,13 +75,14 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
 	}
 
     private void putParameterDetailsIfRequired() {
-    	Representation parameters = new Representation();
-    	if (memberRepType.isStandalone()) {
-    		for (int i=0; i< objectMember.getParameterCount(); i++) {
-    			ObjectActionParameter param = objectMember.getParameters().get(i);
-				parameters.put("param" + i, paramDetails(param));
-			}
-    	}
+    	if (!memberRepType.isStandalone()) {
+    		return;
+    	} 
+    	List<Object> parameters = Lists.newArrayList();
+		for (int i=0; i< objectMember.getParameterCount(); i++) {
+			ObjectActionParameter param = objectMember.getParameters().get(i);
+			parameters.add(paramDetails(param));
+		}
 		representation.put("parameters", parameters);
 	}
 
@@ -125,14 +126,10 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
 	}
 
 	@Override
-	protected Object mutatorArgs(MutatorSpec mutatorSpec) {
-        List<Object> values = Lists.newArrayList();
+	protected void appendMutatorArgs(MutatorSpec mutatorSpec, List<Object> values) {
         for(int i=0; i<objectMember.getParameterCount(); i++) {
-    		final Representation argRep = new Representation();
-    		argRep.put("arg" + i, argValueFor(i));
-            values.add(argRep); 
+            values.add(argValueFor(i)); 
         }
-        return values;
     }
 
 	private Object argValueFor(int i) {

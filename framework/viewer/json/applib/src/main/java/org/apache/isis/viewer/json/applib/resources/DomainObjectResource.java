@@ -31,7 +31,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 // under /objects
 public interface DomainObjectResource {
@@ -68,7 +67,7 @@ public interface DomainObjectResource {
     public Object invokeActionIdempotent(
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId,
-        @QueryParam("argument") final List<String> arguments);
+        @QueryParam("arg") final List<String> arguments);
 
     @PUT
     @Path("/{oid}/properties{propertyId}")
@@ -113,7 +112,7 @@ public interface DomainObjectResource {
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String invokeAction(
+    public Object invokeAction(
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId,
         final InputStream body);

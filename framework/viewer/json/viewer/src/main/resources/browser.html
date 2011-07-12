@@ -12,10 +12,34 @@
     <head>
         <title>JSON Objects</title>
         <script type="text/javascript" src="jquery-1.6.1.js"></script>
-        <script type="text/javascript" src="isis-json-support.js"></script>
+        <script type="text/javascript" src="browser-support.js"></script>
     </head>
     <body>
         <div id="services">
+            <p>Services</p>
+            <ul></ul>
+        </div>
+        <div id="breadcrumbs">
+            <ul></ul>
+        </div>
+        <div id="current">
+	        <div id="object">
+                <div id="summary">
+                    <ul></ul>
+                </div>
+		        <div id="properties">
+                    <ul></ul>
+		        </div>
+		        <div id="collections">
+                    <ul></ul>
+		        </div>
+	        </div>
+	        <div id="collection">
+                <ul></ul>
+	        </div>
+        </div>
+        <div id="actions">
+            <ul></ul>
         </div>
         <script>
             bootstrap_app();
