@@ -65,7 +65,10 @@ import com.google.common.collect.Lists;
 
 public abstract class ResourceAbstract {
 
-    protected final static ObjectMapper objectMapper = new ObjectMapper();
+    private static final String HEADER_X_RESTFUL_OBJECTS_REASON = "X-RestfulObjects-Reason";
+
+
+	protected final static ObjectMapper objectMapper = new ObjectMapper();
     static {
         objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
     }
@@ -237,7 +240,7 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfGone(final String reason) {
-        return Response.status(Status.GONE).header("isis-reason", reason).build();
+        return Response.status(Status.GONE).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfBadRequest(final Consent consent) {
@@ -245,11 +248,11 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfNoContent(final String reason) {
-        return Response.status(Status.NO_CONTENT).header("isis-reason", reason).build();
+        return Response.status(Status.NO_CONTENT).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfBadRequest(final String reason) {
-        return Response.status(Status.BAD_REQUEST).header("isis-reason", reason).build();
+        return Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfNotFound(final IllegalArgumentException e) {
@@ -257,15 +260,15 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfNotFound(final String reason) {
-        return Response.status(Status.NOT_FOUND).header("isis-reason", reason).build();
+        return Response.status(Status.NOT_FOUND).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfPreconditionFailed(final String reason) {
-        return Response.status(StatusTypes.PRECONDITION_FAILED).header("isis-reason", reason).build();
+        return Response.status(StatusTypes.PRECONDITION_FAILED).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfMethodNotAllowed(final String reason) {
-        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header("isis-reason", reason).build();
+        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfInternalServerError(final Exception ex) {
@@ -273,7 +276,7 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfInternalServerError(final String reason) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).header("isis-reason", reason).build();
+        return Response.status(Status.INTERNAL_SERVER_ERROR).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     // //////////////////////////////////////////////////////////////
