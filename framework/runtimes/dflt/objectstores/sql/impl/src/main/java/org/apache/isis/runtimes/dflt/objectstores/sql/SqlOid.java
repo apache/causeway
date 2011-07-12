@@ -20,13 +20,14 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-public final class SqlOid implements Oid {
+public final class SqlOid implements Oid, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static enum State {
