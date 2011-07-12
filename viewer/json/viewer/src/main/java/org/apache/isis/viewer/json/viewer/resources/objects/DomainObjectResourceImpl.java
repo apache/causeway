@@ -38,8 +38,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -47,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.properties.modify.PropertyModifyFacetFactory;
 import org.apache.isis.viewer.json.applib.resources.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -81,10 +85,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @PathParam("propertyId") final String propertyId) {
     	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.ACCESS);
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(objectAdapter, propertyId, Intent.ACCESS);
         
         final PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, property);
-
         return jsonRepresentionFrom(builder);
     }
 
@@ -96,10 +99,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @PathParam("collectionId") final String collectionId){
     	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.ACCESS);
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(objectAdapter, collectionId, Intent.ACCESS);
         
         final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, collection);
-
         return jsonRepresentionFrom(builder);
     }
 
@@ -111,10 +113,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @PathParam("actionId") final String actionId) {
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.ACCESS);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(objectAdapter, actionId, Intent.ACCESS);
         
         ActionRepBuilder builder = ActionRepBuilder.newBuilder(getResourceContext().repContext(), objectAdapter, action);
-
         return jsonRepresentionFrom(builder);
     }
 
@@ -127,7 +128,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @QueryParam("arg") final List<String> arguments) {
 
     	final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-    	final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.ACCESS);
+    	final ObjectAction action = getObjectActionThatIsVisibleAndUsable(objectAdapter, actionId, Intent.ACCESS);
     	
     	if(!isIdempotent(action)) {
             throw new WebApplicationException(responseOfMethodNotAllowed(
@@ -187,19 +188,29 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
 	@PUT
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String modifyProperty(
+    public Object modifyProperty(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId, 
-        @FormParam("proposedValue") final String proposedValue) {
-    	
+        @FormParam("arg") final String proposedValue) {
+
+		// TODO: replace @FormParam with body inputstream
+		
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.MUTATE);
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(objectAdapter, propertyId, Intent.MUTATE);
         
         ObjectSpecification objectSpec = property.getSpecification();
         
-		objectAdapterFor(objectSpec, proposedValue);
+		ObjectAdapter proposedValueAdapter = objectAdapterFor(objectSpec, proposedValue);
+		
+		Consent consent = property.isAssociationValid(objectAdapter, proposedValueAdapter);
+		if(consent.isVetoed()) {
+			throw new WebApplicationException(responseOfPreconditionFailed(consent.getReason()));
+		}
 
-        return null;
+		PropertySetterFacet setterFacet = property.getFacet(PropertySetterFacet.class);
+		setterFacet.setProperty(objectAdapter, proposedValueAdapter);
+
+        return responseOfOk();
     }
 
     @PUT
@@ -208,10 +219,10 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     public String addToSet(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr){
+        @FormParam("arg") final String proposedValueOidStr){
     	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.MUTATE);
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(objectAdapter, collectionId, Intent.MUTATE);
         
         return null;
     }
@@ -228,7 +239,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         @PathParam("propertyId") final String propertyId){
     	
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getProperty(objectAdapter, propertyId, Intent.MUTATE);
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(objectAdapter, propertyId, Intent.MUTATE);
         
         return null;
     }
@@ -239,10 +250,10 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     public String removeFromCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr){
+        @FormParam("arg") final String proposedValueOidStr){
 
     	final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-    	final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.MUTATE);
+    	final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(objectAdapter, collectionId, Intent.MUTATE);
         
         return null;
     }
@@ -258,10 +269,10 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
     public String addToList(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr){
+        @FormParam("arg") final String proposedValueOidStr){
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollection(objectAdapter, collectionId, Intent.MUTATE);
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(objectAdapter, collectionId, Intent.MUTATE);
         
         return null;
 	}
@@ -276,7 +287,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         final InputStream body){
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final ObjectAction action = getObjectAction(objectAdapter, actionId, Intent.MUTATE);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(objectAdapter, actionId, Intent.MUTATE);
 
 		List<ObjectAdapter> argumentAdapters = parseBody(action, body);
 		return invokeActionUsingAdapters(action, objectAdapter, argumentAdapters);
@@ -340,9 +351,27 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
 
 	private Object invokeActionUsingAdapters(final ObjectAction action,
 			final ObjectAdapter objectAdapter,
-			final List<ObjectAdapter> parameterAdapters) {
-		ObjectAdapter[] parameterArray = parameterAdapters.toArray(new ObjectAdapter[0]);
-		final ObjectAdapter returnedAdapter = action.execute(objectAdapter, parameterArray);
+			final List<ObjectAdapter> argAdapters) {
+		
+		List<ObjectActionParameter> parameters = action.getParameters();
+		for(int i=0; i<parameters.size(); i++) {
+			ObjectActionParameter parameter = parameters.get(i);
+			ObjectAdapter paramAdapter = argAdapters.get(i);
+			if(paramAdapter.getSpecification().containsFacet(ValueFacet.class)) {
+				Object arg = paramAdapter.getObject();
+				String reasonNotValid = parameter.isValid(objectAdapter, arg);
+				if(reasonNotValid != null) {
+					throw new WebApplicationException(responseOfPreconditionFailed(reasonNotValid));
+				}
+			}
+		}
+		ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
+		Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
+		if(consent.isVetoed()) {
+			throw new WebApplicationException(responseOfPreconditionFailed(consent.getReason()));
+		}
+		
+		final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
 		if(returnedAdapter == null) {
 	        return responseOfOk();
 		}
@@ -370,7 +399,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
 		}
 	}
 
-	private OneToOneAssociation getProperty(
+	private OneToOneAssociation getPropertyThatIsVisibleAndUsable(
 			final ObjectAdapter objectAdapter, final String propertyId, final Intent intent) {
 		ObjectAssociation association = objectAdapter.getSpecification().getAssociation(propertyId);
         if(association == null || !association.isOneToOneAssociation()) { 
@@ -380,7 +409,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         return ensureVisibleAndUsableForIntent(objectAdapter, property, MemberType.PROPERTY, intent);
 	}
 
-	private OneToManyAssociation getCollection(
+	private OneToManyAssociation getCollectionThatIsVisibleAndUsable(
 			final ObjectAdapter objectAdapter, final String collectionId, final Intent intent) {
 		ObjectAssociation association = objectAdapter.getSpecification().getAssociation(collectionId);
         if(association == null || !association.isOneToManyAssociation()) {
@@ -390,7 +419,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements Domain
         return ensureVisibleAndUsableForIntent(objectAdapter, collection, MemberType.COLLECTION, intent);
 	}
 
-	private ObjectAction getObjectAction(final ObjectAdapter objectAdapter,
+	private ObjectAction getObjectActionThatIsVisibleAndUsable(final ObjectAdapter objectAdapter,
 			final String actionId, Intent intent) {
 		ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
 		return ensureVisibleAndUsableForIntent(objectAdapter, action, MemberType.ACTION, intent);

@@ -72,7 +72,7 @@ public interface DomainObjectResource {
     @PUT
     @Path("/{oid}/properties{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String modifyProperty(
+    public Object modifyProperty(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId, 
         @FormParam("proposedValue") final String proposedValue);
