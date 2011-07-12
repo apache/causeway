@@ -105,9 +105,12 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
 
             @Override
             public void setObject(final ObjectAdapterMemento adapterMemento) {
-                LOG.info("TextField: setting to: " + adapterMemento.toString());
-                pending = adapterMemento;
+                if (adapterMemento != null) {
+                    LOG.info("TextField: setting to: " + adapterMemento.toString());
+                    pending = adapterMemento;
+                }
                 if (scalarModel != null && pending != null) {
+                    LOG.info("TextField: setting to pending: " + pending.toString());
                     scalarModel.setObject(pending.getObjectAdapter());
                 }
 
