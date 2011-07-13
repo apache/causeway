@@ -33,6 +33,10 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
@@ -49,9 +53,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.Num
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Test;
 
 /**
  * @author Kevin kevin@kmz.co.za
@@ -359,16 +360,15 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     public void testApplibDate() {
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
-        // LOG.log(Level.INFO, "Test: testDate() '2010-3-5' = 1267747200000");
+        LOG.log(Level.INFO, "Test: testDate() '2010-3-5' = 1267747200000");
 
         // 2010-3-5 = 1267747200000
-        // LOG.log(Level.INFO, "applibDate.dateValue() as String: " + applibDate);
-        // LOG.log(Level.INFO, "applibDate.dateValue() as Long: " + applibDate.getMillisSinceEpoch());
+        LOG.log(Level.INFO, "applibDate.dateValue() as String: " + applibDate);
+        LOG.log(Level.INFO, "applibDate.dateValue() as Long: " + applibDate.getMillisSinceEpoch());
 
         // 2010-3-5 = 1267747200000
-        // LOG.log(Level.INFO, "sqlDataClass.getDate() as String: " + sqlDataClass.getDate());
-        // LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: " +
-        // sqlDataClass.getDate().getMillisSinceEpoch());
+        LOG.log(Level.INFO, "sqlDataClass.getDate() as String: " + sqlDataClass.getDate());
+        LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: " + sqlDataClass.getDate().getMillisSinceEpoch());
 
         if (!applibDate.isEqualTo(sqlDataClass.getDate())) {
             fail("Applib date: Test '2010-3-5', expected " + applibDate.toString() + ", but got "
@@ -391,16 +391,16 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     public void testSqlDate() {
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
 
-        // LOG.log(Level.INFO, "Test: testSqlDate() '2011-4-8' == 1302220800000");
+        LOG.log(Level.INFO, "Test: testSqlDate() '2011-4-8' == 1302220800000");
 
         // 2011-4-8 = 1302220800000
-        // LOG.log(Level.INFO, "sqlDate.toString() as String:" + sqlDate); // shows as 2011-04-07
-        // LOG.log(Level.INFO, "sqlDate.getTime() as Long:" + sqlDate.getTime());
+        LOG.log(Level.INFO, "sqlDate.toString() as String:" + sqlDate); // shows as 2011-04-07
+        LOG.log(Level.INFO, "sqlDate.getTime() as Long:" + sqlDate.getTime());
 
         // 2011-4-8 = 1302220800000
-        // LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:" + sqlDataClass.getSqlDate()); // shows as
+        LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:" + sqlDataClass.getSqlDate()); // shows as
         // 2011-04-07
-        // LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:" + sqlDataClass.getSqlDate().getTime());
+        LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:" + sqlDataClass.getSqlDate().getTime());
 
         if (sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0) {
             fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got "
