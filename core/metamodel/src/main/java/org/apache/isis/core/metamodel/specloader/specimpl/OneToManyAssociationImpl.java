@@ -54,6 +54,12 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
             facetedMethod.getType()), objectMemberContext);
     }
 
+    @Override
+    public CollectionSemantics getCollectionSemantics() {
+        Class<?> underlyingClass = getSpecification().getCorrespondingClass();
+        return getCollectionTypeRegistry().semanticsOf(underlyingClass);
+    }
+
     // /////////////////////////////////////////////////////////////
     // Hidden (or visible)
     // /////////////////////////////////////////////////////////////
@@ -262,5 +268,6 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
     }
+
 
 }

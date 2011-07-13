@@ -159,28 +159,47 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public void set(final ObjectAdapter ownerAdapter, final ObjectAdapter newReferencedAdapter) {
         if (newReferencedAdapter != null) {
-            setAssociation(ownerAdapter, newReferencedAdapter);
+            setValue(ownerAdapter, newReferencedAdapter);
         } else {
-            clearAssociation(ownerAdapter);
+            clearValue(ownerAdapter);
         }
     }
 
+    /**
+     * @see #set(ObjectAdapter, ObjectAdapter)
+     */
+    @Deprecated
     @Override
     public void setAssociation(final ObjectAdapter ownerAdapter, final ObjectAdapter newReferencedAdapter) {
-        final PropertySetterFacet setterFacet = getFacet(PropertySetterFacet.class);
-        if (setterFacet != null) {
-            if (ownerAdapter.isPersistent() && newReferencedAdapter != null && newReferencedAdapter.isTransient()
-                && !newReferencedAdapter.getSpecification().isAggregated()) {
-                // TODO: move to facet ?
-                throw new IsisException("can't set a reference to a transient object from a persistent one: "
-                    + newReferencedAdapter.titleString() + " (transient)");
-            }
-            setterFacet.setProperty(ownerAdapter, newReferencedAdapter);
-        }
+        setValue(ownerAdapter, newReferencedAdapter);
     }
 
+    private void setValue(final ObjectAdapter ownerAdapter, final ObjectAdapter newReferencedAdapter) {
+        final PropertySetterFacet setterFacet = getFacet(PropertySetterFacet.class);
+        if (setterFacet == null) {
+            return;
+        } 
+        if (ownerAdapter.isPersistent() && 
+                newReferencedAdapter != null && 
+                newReferencedAdapter.isTransient() && 
+                !newReferencedAdapter.getSpecification().isAggregated()) {
+            // TODO: move to facet ?
+            throw new IsisException("can't set a reference to a transient object from a persistent one: "
+                + newReferencedAdapter.titleString() + " (transient)");
+        }
+        setterFacet.setProperty(ownerAdapter, newReferencedAdapter);
+    }
+
+    /**
+     * @see #set(ObjectAdapter, ObjectAdapter)
+     */
+    @Deprecated
     @Override
     public void clearAssociation(final ObjectAdapter ownerAdapter) {
+        clearValue(ownerAdapter);
+    }
+
+    private void clearValue(final ObjectAdapter ownerAdapter) {
         final PropertyClearFacet facet = getFacet(PropertyClearFacet.class);
         facet.clearProperty(ownerAdapter);
     }

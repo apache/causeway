@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.collectiontyperegistry;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature.CollectionSemantics;
 
 /**
  * TODO: plan is to allow new collection types to be installed dynamically, allowing the domain programmer to declare
@@ -38,5 +39,7 @@ public interface CollectionTypeRegistry extends Injectable, ApplicationScopedCom
     public boolean isArrayType(Class<?> cls);
 
     public Class<?>[] getCollectionType();
+
+    public CollectionSemantics semanticsOf(Class<?> cls);
 
 }

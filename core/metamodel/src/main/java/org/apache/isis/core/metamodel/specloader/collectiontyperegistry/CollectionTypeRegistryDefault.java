@@ -22,6 +22,9 @@ package org.apache.isis.core.metamodel.specloader.collectiontyperegistry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature.CollectionSemantics;
 
 public class CollectionTypeRegistryDefault extends CollectionTypeRegistryAbstract {
 
@@ -60,5 +63,19 @@ public class CollectionTypeRegistryDefault extends CollectionTypeRegistryAbstrac
     public Class<?>[] getCollectionType() {
         return collectionTypesAsArray;
     }
+
+    public CollectionSemantics semanticsOf(Class<?> underlyingClass) {
+        if(!Collection.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.ARRAY;
+        }
+        if(List.class.isAssignableFrom(underlyingClass)) {
+           return CollectionSemantics.LIST; 
+        }
+        if(Set.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.SET; 
+        }
+        return CollectionSemantics.OTHER;
+    }
+
 
 }

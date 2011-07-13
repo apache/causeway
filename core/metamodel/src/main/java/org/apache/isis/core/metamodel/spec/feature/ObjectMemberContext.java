@@ -20,6 +20,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public class ObjectMemberContext {
 
@@ -27,14 +28,20 @@ public class ObjectMemberContext {
     private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterManager;
     private final QuerySubmitter querySubmitter;
+    private final CollectionTypeRegistry collectionTypeRegistry;
 
-    public ObjectMemberContext(final AuthenticationSessionProvider authenticationSessionProvider,
-        final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
-        final QuerySubmitter querySubmitter) {
+    public ObjectMemberContext(
+        final AuthenticationSessionProvider authenticationSessionProvider,
+        final SpecificationLookup specificationLookup, 
+        final AdapterMap adapterManager,
+        final QuerySubmitter querySubmitter, 
+        final CollectionTypeRegistry collectionTypeRegistry) {
+        
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
         this.querySubmitter = querySubmitter;
+        this.collectionTypeRegistry = collectionTypeRegistry;
     }
 
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
@@ -51,5 +58,9 @@ public class ObjectMemberContext {
 
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
+    }
+    
+    public CollectionTypeRegistry getCollectionTypeRegistry() {
+        return collectionTypeRegistry;
     }
 }

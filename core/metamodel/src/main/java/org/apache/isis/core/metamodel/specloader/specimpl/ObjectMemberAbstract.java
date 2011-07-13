@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
@@ -65,9 +66,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterMap;
     private final QuerySubmitter querySubmitter;
+    private final CollectionTypeRegistry collectionTypeRegistry;
 
     protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType,
-        final ObjectMemberContext objectMembercontext) {
+        final ObjectMemberContext objectMemberContext) {
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Name must always be set");
@@ -77,10 +79,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.id = id;
         this.defaultName = NameUtils.naturalName(this.id);
 
-        this.authenticationSessionProvider = objectMembercontext.getAuthenticationSessionProvider();
-        this.specificationLookup = objectMembercontext.getSpecificationLookup();
-        this.adapterMap = objectMembercontext.getAdapterManager();
-        this.querySubmitter = objectMembercontext.getQuerySubmitter();
+        this.authenticationSessionProvider = objectMemberContext.getAuthenticationSessionProvider();
+        this.specificationLookup = objectMemberContext.getSpecificationLookup();
+        this.adapterMap = objectMemberContext.getAdapterManager();
+        this.querySubmitter = objectMemberContext.getQuerySubmitter();
+        this.collectionTypeRegistry = objectMemberContext.getCollectionTypeRegistry();
     }
 
     // /////////////////////////////////////////////////////////////
@@ -302,4 +305,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return querySubmitter;
     }
 
+    public CollectionTypeRegistry getCollectionTypeRegistry() {
+        return collectionTypeRegistry;
+    }
 }

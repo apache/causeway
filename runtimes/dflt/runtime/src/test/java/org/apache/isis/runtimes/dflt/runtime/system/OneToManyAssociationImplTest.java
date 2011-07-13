@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -78,6 +79,7 @@ public class OneToManyAssociationImplTest {
 
     private NamedFacet mockNamedFacet;
     private CollectionAddToFacet mockCollectionAddToFacet;
+    private CollectionTypeRegistry mockCollectionTypeRegistry;
 
     @Before
     public void setUp() {
@@ -89,6 +91,7 @@ public class OneToManyAssociationImplTest {
         mockSpecificationLookup = context.mock(SpecificationLookup.class);
         mockAdapterManager = context.mock(AdapterMap.class);
         mockQuerySubmitter = context.mock(QuerySubmitter.class);
+        mockCollectionTypeRegistry = context.mock(CollectionTypeRegistry.class);
         mockPeer = context.mock(FacetedMethod.class);
 
         mockNamedFacet = context.mock(NamedFacet.class);
@@ -99,7 +102,7 @@ public class OneToManyAssociationImplTest {
         allowingSpecLoaderToReturnSpecs();
         association =
             new OneToManyAssociationImpl(mockPeer, new ObjectMemberContext(mockAuthenticationSessionProvider,
-                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter));
+                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry));
     }
 
     private void allowingSpecLoaderToReturnSpecs() {

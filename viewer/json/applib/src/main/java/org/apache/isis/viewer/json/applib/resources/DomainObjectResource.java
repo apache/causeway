@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -31,6 +30,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 // under /objects
 public interface DomainObjectResource {
@@ -72,42 +72,41 @@ public interface DomainObjectResource {
     @PUT
     @Path("/{oid}/properties{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Object modifyProperty(
+    public Response modifyProperty(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId, 
-        @FormParam("proposedValue") final String proposedValue);
+        final InputStream body);
 
     @PUT
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String addToSet(
+    public Response addToSet(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr);
+        final InputStream body);
 
     @DELETE
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String clearProperty(
+    public Response clearProperty(
         @PathParam("oid") final String oidStr, 
         @PathParam("propertyId") final String propertyId);
 
     @DELETE
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String removeFromCollection(
+    public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr);
+        final InputStream body);
 
     @POST
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String addToList(
+    public Response addToList(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        @FormParam("proposedValue") final String proposedValueOidStr);
-
+        final InputStream body);
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
@@ -116,7 +115,4 @@ public interface DomainObjectResource {
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId,
         final InputStream body);
-
-
-    
 }
