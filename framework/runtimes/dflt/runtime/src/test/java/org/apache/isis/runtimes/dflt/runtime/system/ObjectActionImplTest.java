@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
@@ -68,6 +69,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
     private AdapterMap mockAdapterManager;
     private ServicesProvider mockServicesProvider;
     private QuerySubmitter mockQuerySubmitter;
+    private CollectionTypeRegistry mockCollectionTypeRegistry;
 
     @Override
     @Before
@@ -80,6 +82,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
         mockAdapterManager = mockery.mock(AdapterMap.class);
         mockServicesProvider = mockery.mock(ServicesProvider.class);
         mockQuerySubmitter = mockery.mock(QuerySubmitter.class);
+        mockCollectionTypeRegistry = mockery.mock(CollectionTypeRegistry.class);
 
         mockery.checking(new Expectations() {
             {
@@ -90,7 +93,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
 
         action =
             new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(mockAuthenticationSessionProvider,
-                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter), mockServicesProvider);
+                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry), mockServicesProvider);
     }
 
     @Test

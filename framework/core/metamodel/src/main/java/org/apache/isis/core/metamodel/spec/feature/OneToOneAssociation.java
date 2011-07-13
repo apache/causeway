@@ -69,8 +69,10 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * back-links or bidirectional association). To initialise a recreated object to this logical state the
      * <code>initAssociation</code> method should be used on each of the objects.
      * 
+     * @deprecated - see {@link #set(ObjectAdapter, ObjectAdapter)}
      * @see #initAssociation(ObjectAdapter, ObjectAdapter)
      */
+    @Deprecated
     void setAssociation(ObjectAdapter inObject, ObjectAdapter associate);
 
     /**
@@ -78,7 +80,9 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * back-link.
      * 
      * @see #setAssociation(ObjectAdapter, ObjectAdapter)
+     * @deprecated - see {@link #set(ObjectAdapter, ObjectAdapter)}
      */
+    @Deprecated
     void clearAssociation(ObjectAdapter inObject);
 
 }

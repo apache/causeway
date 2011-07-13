@@ -395,7 +395,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
             final AdapterMap adapterMap = getRuntimeContext().getAdapterMap();
             final ObjectMemberContext objectMemberContext =
                 new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap,
-                    getRuntimeContext().getQuerySubmitter());
+                    getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
             final IntrospectionContext introspectionContext =
                 new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
             final DependencyInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
