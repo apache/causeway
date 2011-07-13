@@ -28,7 +28,7 @@
 
 	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
 	<artifactId>sql</artifactId>
-	<name>Sql ProfileStore (jdbc)</name>
+	<name>Default Runtime SQL ProfileStore (jdbc)</name>
 
 	<properties>
         <siteBaseDir>../../../..</siteBaseDir>
