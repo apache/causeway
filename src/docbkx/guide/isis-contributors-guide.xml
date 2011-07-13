@@ -4643,12 +4643,25 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
         <title>Promoting Release to Distribution</title>
 
         <sect2>
+          <title>Release Binaries to Maven Central Repo</title>
+
+          <para>From the <ulink
+          url="https://repository.apache.org/index.html#stagingRepositories">Nexus
+          pages</ulink>, select the staging repository and select 'release'
+          from the top menu.</para>
+
+          <para>This moves the release artifacts into an Apache releases
+          repository, from there they will be automatically moved to the Maven
+          repository.</para>
+        </sect2>
+
+        <sect2>
           <title>Release Source Zip</title>
 
           <para>Releasing the source <acronym>ZIP</acronym> is a matter of
           copying the <acronym>ZIP</acronym> into the
           <filename>/www/www.apache.org/dist/incubator/isis</filename>
-          directory on people.apache.org.</para>
+          directory on <emphasis>people.apache.org</emphasis>.</para>
 
           <note>
             <para>There is an alternative and newer approach, namely to check
@@ -4664,20 +4677,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
         </sect2>
 
         <sect2>
-          <title>Release Binaries to Maven Central Repo</title>
-
-          <para>From the <ulink
-          url="https://repository.apache.org/index.html#stagingRepositories">Nexus
-          pages</ulink>, select the staging repository and select 'release'
-          from the top menu.</para>
-
-          <para>This moves the release artifacts into an Apache releases
-          repository, from there they will be automatically moved to the Maven
-          repository.</para>
-        </sect2>
-
-        <sect2>
-          <title>Manually Deploy the Release Website</title>
+          <title>Promote and update the Website</title>
 
           <para>The mechanics of deploying the release site is the same as
           deploying a snapshot site, however there is the complication of
@@ -4686,10 +4686,69 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           <filename>trunk</filename>) as well as ensuring that the released
           binaries are correctly referenced on the downloads page.</para>
         </sect2>
+
+        <sect2>
+          <title>Announce the release</title>
+
+          <para>Announce the release to
+          <emphasis>isis-dev@incubator.a.o</emphasis> mailing list.</para>
+
+          <para>Use the following subject:</para>
+
+          <programlisting>Subject: [ANN] Apache Isis version 0.x.x-incubating Released</programlisting>
+
+          <para>And use the following body:</para>
+
+          <programlisting>The Isis team is pleased to announce the release of Apache Isis version 0.x.x-incubating
+
+  http://incubator.apache.org/isis
+
+&lt;&lt;summary of the main points of the release&gt;&gt;
+
+Full release notes are available at [1] on the Isis website.
+
+You can access this release directly from the Maven central repo, for example using
+the Maven archetype [2], or by downloading and building from source [3].
+
+Enjoy!
+
+-The Isis team
+
+[1] http://incubator.apache.org/isis/release-notes-0.x.x-incubating.html
+[2] http://incubator.apache.org/isis/quickstart-app.html
+[3] http://incubator.apache.org/isis/downloads.html</programlisting>
+        </sect2>
       </sect1>
 
       <sect1 id="sec.ManuallyDeployReleaseSite">
         <title>Prepare for next iteration</title>
+
+        <sect2>
+          <title>Merge changes from branch back into trunk</title>
+
+          <para>Because we release from a branch, the changes made in the
+          branch (changes to <filename>pom.xml</filename> made automatically
+          by the release-plugin, or any manual edits) should be merged back
+          from the release branch back into trunk.</para>
+
+          <para>You can if you wish use <acronym>SVN</acronym>'s
+          <code>merge</code> command for this (using the "reintegrate"
+          flag):</para>
+
+          <programlisting>$ cd .../trunk/framework
+$ svn merge --reintegrate https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-incubating/framework .
+$ svn commit -m "reintegrating release branch 0.x.x-incubating ready for next iteration"</programlisting>
+
+          <para>Alternatively, you may well find it easy just to use a
+          directory comparison tool such as <emphasis>Beyond
+          Compare</emphasis> or <emphasis>WinMerge</emphasis>.</para>
+
+          <para>Finally, remember that the version in the
+          <filename>pom.xml</filename> for any modules that are not part of
+          the release (in particular, the <filename>examples</filename> and
+          <filename>domain-libs</filename> modules) should be manually updated
+          also.</para>
+        </sect2>
 
         <sect2>
           <title>Manually update versions to snapshot versions</title>
@@ -4723,32 +4782,11 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
 
             <programlisting>&lt;skin&gt;
     ...
-    &lt;version&gt;0.x.x-incubating-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;0.x.y-incubating-SNAPSHOT&lt;/version&gt;
 &lt;/skin&gt;</programlisting>
 
             <para>Then commit the <filename>site.xml</filename> file.</para>
           </sect3>
-        </sect2>
-
-        <sect2>
-          <title>Merge changes from branch back into trunk</title>
-
-          <para>Because we release from a branch, the changes made in the
-          branch (changes to <filename>pom.xml</filename> made automatically
-          by the release-plugin, or any manual edits) should be merged back
-          from the release branch back into trunk.</para>
-
-          <para>You can if you wish use <acronym>SVN</acronym>'s
-          <code>merge</code> command for this (using the "reintegrate" flag).
-          However, you may well find it easy just to use a directory
-          comparison tool such as <emphasis>Beyond Compare</emphasis> or
-          <emphasis>WinMerge</emphasis>.</para>
-
-          <para>Finally, remember that the version in the
-          <filename>pom.xml</filename> for any modules that are not part of
-          the release (in particular, the <filename>examples</filename> and
-          <filename>domain-libs</filename> modules) should be manually updated
-          also.</para>
         </sect2>
       </sect1>
     </chapter>
