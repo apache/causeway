@@ -23,12 +23,12 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>bytecode</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.2.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
 	<artifactId>javassist</artifactId>
-	<version>0.1.2-incubating-SNAPSHOT</version>
+	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime Javassist Bytecode Implementation</name>
 
@@ -38,9 +38,9 @@
 	</properties>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</connection>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/${relativeUrl}</url>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</url>
     </scm>
 
     <!-- used in Site generation for relative references. -->
