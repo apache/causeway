@@ -16,7 +16,7 @@
 #  under the License.
 
 echo mvn site-deploy -D modules=site -D deploy=local -D site=full $*
-     mvn site-deploy -D modules=site -D deploy=local -D site=full $*
+#     mvn site-deploy -D modules=site -D deploy=local -D site=full $*
 root=`pwd`
 for a in `cat modules | grep -v ^# | grep ^.*[:].*$`
 do
