@@ -41,11 +41,11 @@
         </menu>
 
         <menu name="Wicket Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Metamodel" href="./metamodel/index.html" />
-            <item name="Model" href="./model/index.html" />
-            <item name="UI" href="./ui/index.html" />
-            <item name="Viewer" href="./viewer/index.html" />
+            <item name="Applib" href="./wicket-applib/index.html" />
+            <item name="Metamodel" href="./wicket-metamodel/index.html" />
+            <item name="Model" href="./wicket-model/index.html" />
+            <item name="UI" href="./wicket-ui/index.html" />
+            <item name="Viewer" href="./wicket-viewer/index.html" />
         </menu>
         
 		<menu name="Documentation">

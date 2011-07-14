@@ -20,7 +20,7 @@
 Facets
 
   The <facets> module for the <wicket> Viewer extends the standard Apache Isis programming model so 
-  that it picks up annotations defined in Wicket's own {{{../applib/index.html}applib}}.
+  that it picks up annotations defined in Wicket's own {{{../wicket-applib/index.html}applib}}.
   
 Further Info
   
