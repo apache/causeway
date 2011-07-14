@@ -17,7 +17,7 @@
  *  under the License.
  */
 #header {
-    background: url('images/banner.png') no-repeat scroll left center transparent;
+    background: url('images/app-banner.png') no-repeat scroll left center transparent;
 }
 div.entitySummary > label.entityTitle {
 	color: maroon;

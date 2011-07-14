@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.examples.apps</groupId>
 	    <artifactId>groovy-claims</artifactId>
-		<version>0.1.2-incubating-SNAPSHOT</version>
+		<version>0.2.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>groovy-claims-fixture</artifactId>

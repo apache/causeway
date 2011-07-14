@@ -22,7 +22,7 @@
 
 	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>shoppingcart</artifactId>
-	<version>0.1.2-incubating-SNAPSHOT</version>
+	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Example Shopping Cart</name>
 	<description>Scimpi example of an shopping cart application</description>
@@ -30,7 +30,7 @@
 	<packaging>pom</packaging>
 	
 	<properties>
-		<isis.version>0.1.2-incubating-SNAPSHOT</isis.version>
+		<isis.version>0.2.0-incubating-SNAPSHOT</isis.version>
 	</properties>
 
 	<build>

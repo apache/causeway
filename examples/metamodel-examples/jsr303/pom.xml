@@ -26,7 +26,7 @@
     <parent>
 	    <groupId>org.apache.isis.distribution</groupId>
 	    <artifactId>examples</artifactId>
-	    <version>0.1.2-incubating-SNAPSHOT</version>
+	    <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
 	<dependencies>

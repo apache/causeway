@@ -23,14 +23,14 @@
 
     <groupId>org.apache.isis.examples</groupId>
     <artifactId>quickstart</artifactId>
-    <version>0.1.2-incubating-SNAPSHOT</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <name>Quickstart App</name>
 
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.1.2-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.2.0-incubating-SNAPSHOT</isis.version>
     </properties>
 
     <repositories>

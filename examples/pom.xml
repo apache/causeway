@@ -22,7 +22,7 @@
 
 	<groupId>org.apache.isis</groupId>
 	<artifactId>examples</artifactId>
-    <version>0.1.2-incubating-SNAPSHOT</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
     
     <name>Isis Examples</name>
     
