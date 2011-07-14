@@ -19,20 +19,19 @@
 -->
 <project name="${project.name}">
     <version position="right"/>
-
 	<body>
 		<breadcrumbs>
 			<item name="Applib" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Restful Applib">
+		<menu name="XHTML Applib">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Restful Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Viewer" href="./viewer/index.html" />
+        <menu name="XHTML Modules">
+            <item name="Applib" href="../xhtml-applib/index.html" />
+            <item name="Viewer" href="../xhtml-viewer/index.html" />
         </menu>
 
 		<menu name="Maven Reports" ref="reports" />

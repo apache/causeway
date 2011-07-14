@@ -41,9 +41,9 @@
             <item name="BDD Integration" href="../bdd/index.html" />
         </menu>
 
-        <menu name="Restful Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Viewer" href="./viewer/index.html" />
+        <menu name="XHTML Modules">
+            <item name="Applib" href="./xhtml-applib/index.html" />
+            <item name="Viewer" href="./xhtml-viewer/index.html" />
         </menu>
 
 		<menu name="Documentation">

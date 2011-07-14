@@ -25,14 +25,14 @@
 			<item name="Applib" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Restful Applib">
+		<menu name="JSON Applib">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Restful Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Viewer" href="./viewer/index.html" />
+        <menu name="JSON Modules">
+            <item name="Applib" href="../json-applib/index.html" />
+            <item name="Viewer" href="../json-viewer/index.html" />
         </menu>
 
 		<menu name="Maven Reports" ref="reports" />

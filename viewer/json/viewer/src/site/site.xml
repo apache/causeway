@@ -30,8 +30,8 @@
 		</menu>
 
         <menu name="JSON Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Viewer" href="./viewer/index.html" />
+            <item name="Applib" href="../json-applib/index.html" />
+            <item name="Viewer" href="../json-viewer/index.html" />
         </menu>
         
 		<menu name="Maven Reports" ref="reports" />
