@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.valuecollection.ValueCollection;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueCollection;
 
 public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbstract {
 
