@@ -19,7 +19,7 @@
 
 BDD Concordion support
 
- The <concordion> module provides an integration between the Isis (via {{{../common/index.html}common})
+ The <concordion> module provides an integration between the Isis (via {{{../bdd-common/index.html}common})
  and the {{{http://concordion.org}Concordion}} framework itself.
  
 Further Info

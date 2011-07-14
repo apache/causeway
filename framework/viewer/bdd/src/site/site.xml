@@ -41,8 +41,8 @@
         </menu>
         
         <menu name="BDD Modules">
-            <item name="Common" href="./common/index.html" />
-            <item name="Concordion" href="./concordion/index.html" />
+            <item name="Common" href="./bdd-common/index.html" />
+            <item name="Concordion" href="./bdd-concordion/index.html" />
         </menu>
 
 		<menu name="Documentation">

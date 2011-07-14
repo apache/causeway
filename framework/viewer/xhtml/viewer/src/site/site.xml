@@ -30,8 +30,8 @@
 		</menu>
 
         <menu name="XHTML Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Viewer" href="./viewer/index.html" />
+            <item name="Applib" href="../xhtml-applib/index.html" />
+            <item name="Viewer" href="../xhtml-viewer/index.html" />
         </menu>
         
 		<menu name="Maven Reports" ref="reports" />
