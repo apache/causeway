@@ -64,8 +64,8 @@
                 <item name="HTML" href="viewer/html/index.html" />
                 <item name="Scimpi" href="viewer/scimpi/index.html" />
                 <item name="Wicket" href="viewer/wicket/index.html" />
-                <item name="XHTML" href="viewer/restful/index.html" />
-                <item name="JSON" href="viewer/restful/index.html" />
+                <item name="XHTML" href="viewer/xhtml/index.html" />
+                <item name="JSON" href="viewer/json/index.html" />
                 <item name="BDD (Concordion)" href="viewer/bdd/index.html" />
                 <item name="JUnit" href="viewer/junit/index.html" />
             </item>
