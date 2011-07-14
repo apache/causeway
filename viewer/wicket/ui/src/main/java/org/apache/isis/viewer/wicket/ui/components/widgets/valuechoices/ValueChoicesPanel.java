@@ -45,8 +45,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropD
  * 
  * @version $Rev$ $Date$
  */
-public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
-    private static final Logger LOG = Logger.getLogger(ValueCollection.class);
+public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
+    private static final Logger LOG = Logger.getLogger(ValueChoicesPanel.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +62,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
     private TextField<ObjectAdapterMemento> valueField;
     private ObjectAdapterMemento pending;
 
-    public ValueCollection(final String id, final ScalarModel scalarModel) {
+    public ValueChoicesPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         pending = scalarModel.getObjectAdapterMemento();
     }
@@ -99,7 +99,7 @@ public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFie
                     return pending;
                 }
                 LOG.info("TextField: pending is null");
-                final ObjectAdapter adapter = ValueCollection.this.getModelValue();
+                final ObjectAdapter adapter = ValueChoicesPanel.this.getModelValue();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
 

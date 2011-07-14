@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueCollection;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesPanel;
 
 public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbstract {
 
@@ -57,10 +57,10 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
         final ScalarModel scalarModel = (ScalarModel) model;
         // return createComponent(id, scalarModel);
 
-        // TODO: This is where the ValueCollection panel gets created.
+        // TODO: This is where the ValueChoicesPanel panel gets created.
         final List<ObjectAdapter> choices = scalarModel.getChoices();
         if (choices.size() > 0) {
-            return new ValueCollection(id, scalarModel);
+            return new ValueChoicesPanel(id, scalarModel);
         } else {
             return createComponent(id, scalarModel);
         }
